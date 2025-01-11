@@ -26,10 +26,16 @@ nodes:
   - hostname: "bonds"
     ipAddress: "10.0.30.25"
     installDiskSelector:
-      serial: "S7KGNJ0X102492D"
+      model: "QEMU*"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/990731763242a6b3cf735e49d0f550ce4068b4d0e7f4dfbb49a31799b698877e
+    schematic:
+      customization:
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/nvidia-container-toolkit-production
+            - siderolabs/nonfree-kmod-nvidia-production
+            - siderolabs/qemu-guest-agent
     controlPlane: true
     networkInterfaces:
       - deviceSelector:

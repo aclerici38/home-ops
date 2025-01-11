@@ -8,7 +8,7 @@ cgroup:
   automount:
     enabled: false
   hostRoot: /sys/fs/cgroup
-devices: "eth0"
+devices: "ens18"
 endpointRoutes:
   enabled: true
 envoy:
@@ -33,22 +33,22 @@ hubble:
     rollOutPods: true
     prometheus:
       enabled: true
-  ui:
-    enabled: true
-    replicas: 1
-    baseUrl: "/"
-    rollOutPods: true
-    ingress:
-      enabled: true
-      annotations:
-        cert-manager.io/cluster-issuer: "letsencrypt-production"
-      className: internal
-      hosts:
-        - &fqdn "hubble.${SECRET_DOMAIN}"
-      tls:
-        - hosts:
-          - *fqdn
-          secretName: hubble-tls
+  # ui:
+  #   enabled: true
+  #   replicas: 1
+  #   baseUrl: "/"
+  #   rollOutPods: true
+  #   ingress:
+  #     enabled: true
+  #     annotations:
+  #       cert-manager.io/cluster-issuer: "letsencrypt-production"
+  #     className: internal
+  #     hosts:
+  #       - &fqdn "hubble.${SECRET_DOMAIN}"
+  #     tls:
+  #       - hosts:
+  #         - *fqdn
+  #         secretName: hubble-tls
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: "172.16.0.0/16"
