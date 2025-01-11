@@ -29,6 +29,8 @@ nodes:
       model: "QEMU*"
     machineSpec:
       secureboot: false
+    nodeLabels:
+      nvidia.com/gpu.present: "true"
     schematic:
       customization:
         systemExtensions:
