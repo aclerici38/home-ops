@@ -34,11 +34,11 @@ spec:
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     pruneIntervalDays: 14
     repository: "${APP}-volsync-r2-secret"
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-nvme-snapshot}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-local-hostpath}"
     cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:-2Gi}"
-    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-nvme}"
+    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-local-hostpath}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]
-    storageClassName: "${VOLSYNC_STORAGECLASS:-nvme}"
+    storageClassName: "${VOLSYNC_STORAGECLASS:-local-hostpath}"
     accessModes: ["${VOLSYNC_SNAP_ACCESSMODES:-ReadWriteOnce}"]
     moverSecurityContext:
       runAsUser: ${VOLSYNC_PUID:-1000}

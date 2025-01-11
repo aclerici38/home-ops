@@ -1,13 +1,13 @@
 machine:
   kubelet:
-    extraMounts:
-      - destination: /var/lib/csi-local-hostpath
-        type: bind
-        source: /var/lib/csi-local-hostpath
-        options:
-          - bind
-          - rshared
-          - rw
+    # extraMounts:
+    #   - destination: /var/lib/csi-local-hostpath
+    #     type: bind
+    #     source: /var/lib/csi-local-hostpath
+    #     options:
+    #       - bind
+    #       - rshared
+    #       - rw
     nodeIP:
       validSubnets:
         - 10.0.30.0/24
