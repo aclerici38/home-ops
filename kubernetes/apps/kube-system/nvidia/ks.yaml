@@ -2,10 +2,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: nvidia-device-plugin
+  name: &app nvidia-device-plugin
   namespace: flux-system
 spec:
   path: ./kubernetes/apps/kube-system/nvidia/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
   prune: true
   sourceRef:
     kind: GitRepository

@@ -10,8 +10,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: local-path
   path: ./kubernetes/apps/storage/snapshot-controller/app
   prune: true
   sourceRef:
