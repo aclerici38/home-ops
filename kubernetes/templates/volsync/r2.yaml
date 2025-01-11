@@ -58,7 +58,7 @@ spec:
   trigger:
     manual: restore-once
   restic:
-    repository: "${APP}-volsync-r2"
+    repository: "${APP}-volsync-r2-secret"
     copyMethod: Snapshot
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-local-hostpath}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-local-hostpath}"
