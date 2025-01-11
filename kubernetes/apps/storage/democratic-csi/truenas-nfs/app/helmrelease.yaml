@@ -76,7 +76,7 @@ spec:
           apiVersion: 2
         zfs:
           cli:
-            sudoEnabled: true
+            sudoEnabled: false
             paths:
               zfs: /usr/sbin/zfs
               zpool: /usr/sbin/zpool
