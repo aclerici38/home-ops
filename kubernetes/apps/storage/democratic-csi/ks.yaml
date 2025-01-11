@@ -10,12 +10,14 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/storage/democratic-csi/local-path/app
+  path: ./kubernetes/apps/storage/democratic-csi/local-path
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-  wait: false # no flux ks dependents
+  dependsOn:
+    - name: snapshot-controller
+      namespace: storage
   interval: 30m
   timeout: 5m
 
@@ -32,11 +34,13 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/storage/democratic-csi/truenas-nfs/app
+  path: ./kubernetes/apps/storage/democratic-csi/truenas-nfs
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-  wait: false
+  dependsOn:
+    - name: snapshot-controller
+      namespace: storage
   interval: 30m
   timeout: 5m
