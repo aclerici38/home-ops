@@ -33,9 +33,24 @@ spec:
           repository: ghcr.io/muhlba91/external-dns-provider-adguard
           tag: v8.0.0
           pullPolicy: IfNotPresent
-        envFrom:
-          - secretKeyRef:
-              name: adguard-secret
+        env:
+          - name: LOG_LEVEL
+            value: debug
+          - name: ADGUARD_URL
+            valueFrom:
+              secretKeyRef:
+                name: adguard-secret
+                key: ADGUARD_URL
+          - name: ADGUARD_USER
+            valueFrom:
+              secretKeyRef:
+                name: adguard-secret
+                key: ADGUARD_USER
+          - name: ADGUARD_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: adguard-secret
+                key: ADGUARD_PASSWORD
 
         livenessProbe:
           httpGet:
