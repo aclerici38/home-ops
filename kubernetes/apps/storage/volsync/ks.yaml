@@ -6,11 +6,11 @@ metadata:
   name: &app volsync
   namespace: flux-system
 spec:
-  targetNamespace: volsync-system
+  targetNamespace: storage
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/volsync-system/volsync/app
+  path: ./kubernetes/apps/storage/volsync/app
   prune: true
   sourceRef:
     kind: GitRepository
