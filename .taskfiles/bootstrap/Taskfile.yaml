@@ -7,6 +7,8 @@ vars:
   TALHELPER_CLUSTER_DIR: '{{.KUBERNETES_DIR}}/bootstrap/talos/clusterconfig'
   TALHELPER_SECRET_FILE: '{{.KUBERNETES_DIR}}/bootstrap/talos/talsecret.sops.yaml'
   TALHELPER_CONFIG_FILE: '{{.KUBERNETES_DIR}}/bootstrap/talos/talconfig.yaml'
+  CLUSTER_DIR: '{{.ROOT_DIR}}/kubernetes'
+  KUBE_BOOTSTRAP_DIR: '{{.CLUSTER_DIR}}/bootstrap'
 
 env:
   TALOSCONFIG: '{{.TALHELPER_CLUSTER_DIR}}/talosconfig'
@@ -34,7 +36,7 @@ tasks:
       - which talhelper sops
 
   apps:
-    desc: Bootstrap Apps [MODEL=required]
+    desc: Bootstrap Apps
     prompt: Bootstrap apps into the Talos cluster?
     cmds:
       - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
@@ -43,16 +45,13 @@ tasks:
     env:
       FLUX_GITHUB_PUBLIC_KEYS:
         sh: curl -fsSL https://api.github.com/meta | jq --raw-output '"github.com "+.ssh_keys[]'
-      MODEL: '{{.MODEL}}'
       NODE_COUNT:
         sh: talosctl config info --output json | jq --raw-output '.nodes | length'
       VAULT: kubernetes
-    requires:
-      vars: [MODEL]
     preconditions:
       - op user get --me
       - talosctl config info
-      - test -f {{.CLUSTER_DIR}}/talosconfig
-      - test -f {{.BOOTSTRAP_DIR}}/apps/helmfile.yaml
-      - test -f {{.BOOTSTRAP_DIR}}/apps/templates/resources.yaml.j2
+      - test -f {{.TALHELPER_CLUSTER_DIR}}/talosconfig
+      - test -f {{.KUBE_BOOTSTRAP_DIR}}/apps/helmfile.yaml
+      - test -f {{.KUBE_BOOTSTRAP_DIR}}/apps/templates/resources.yaml.j2
       - which curl jq helmfile kubectl op talosctl
