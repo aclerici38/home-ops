@@ -1,4 +1,5 @@
 machine:
   sysctls:
+    net.core.bpf_jit_harden: 1
     fs.inotify.max_user_watches: "1048576" # Watchdog
     fs.inotify.max_user_instances: "8192"  # Watchdog
