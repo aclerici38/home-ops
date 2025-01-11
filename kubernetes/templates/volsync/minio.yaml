@@ -68,7 +68,7 @@ spec:
   trigger:
     manual: restore-once
   restic:
-    repository: "${APP}-volsync-secret"
+    repository: "${APP}-volsync-minio-secret"
     copyMethod: Snapshot
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-nvme-snapshot}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-nvme}"
