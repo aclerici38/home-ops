@@ -81,7 +81,6 @@ spec:
           allowInsecure: true
           apiVersion: 2
         sshConnection:
-          protocol: http
           host: *tnas-ip
           port: 22
           username: ${TRUENAS_USER}
