@@ -10,7 +10,7 @@ metadata:
   name: onepassword-connect-secret
   namespace: external-secrets
 stringData:
-  1password-credentials.json: {{ ENV.ONEPASSWORD_CREDENTIALS }}
+  1password-credentials.json: {{ ENV.ONEPASSWORD_CREDENTIALS_B64 }}
   token: {{ ENV.ONEPASSWORD_CONNECT_TOKEN }}
 ---
 apiVersion: v1
