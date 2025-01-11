@@ -33,6 +33,7 @@ spec:
       strategy: node
       externalAttacher:
         enabled: true
+        image: registry.k8s.io/sig-storageexternalAttacher:v4.8.0
         extraArgs:
           - --leader-election=false
       externalProvisioner:
@@ -42,7 +43,11 @@ spec:
           - --leader-election=false
           - --node-deployment=true
       externalResizer:
-        enabled: false
+        enabled: true
+        image: registry.k8s.io/sig-storage/external-resizer:v1.13.1
+        extraArgs:
+          - --leader-election=false
+          - --node-deployment=true
       externalSnapshotter:
         enabled: true
         image: registry.k8s.io/sig-storage/csi-snapshotter:v8.2.0
@@ -92,8 +97,8 @@ spec:
           shareAlldirs: false
           shareAllowedHosts: []
           shareAllowedNetworks: []
-          shareMaprootUser: root
-          shareMaprootGroup: root
+          shareMaprootUser: 1000
+          shareMaprootGroup: 1000
           shareMapallUser: ""
           shareMapallGroup: ""
 
