@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  #% if bgp.enabled %#
+  - ./bgppeeringpolicy.yaml
+  - ./loadbalancerippool.yaml
+  #% elif not feature_gates.dual_stack_ipv4_first %#
+  - ./l2announcementpolicy.yaml
+  - ./loadbalancerippool.yaml
+  #% else %#
+  []
+  #% endif %#
