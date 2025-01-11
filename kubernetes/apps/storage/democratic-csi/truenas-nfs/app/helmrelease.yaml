@@ -41,8 +41,6 @@ spec:
         extraArgs:
           - --leader-election=false
           - --node-deployment=true
-          - --enable-capacity=true
-          - --capacity-ownerref-level=1
       externalResizer:
         enabled: false
       externalSnapshotter:
