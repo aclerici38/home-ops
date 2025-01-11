@@ -94,7 +94,7 @@ tasks:
     preconditions:
       - test -d {{.ROOT_DIR}}/.github/tests
       - test -d {{.ROOT_DIR}}/.taskfiles/template
-      - test -d {{.TEMPLATE_DIR}}
+      # - test -d {{.TEMPLATE_DIR}}
       - test -f {{.MAKEJINJA_CONFIG_FILE}}
       - test -f {{.ROOT_DIR}}/.github/renovate.json5
       - test -f {{.ROOT_DIR}}/requirements.txt
