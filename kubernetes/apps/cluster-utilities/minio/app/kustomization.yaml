@@ -5,3 +5,5 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./minio-secret.yaml
+  - ../../../../templates/volsync/claim.yaml
+  - ../../../../templates/volsync/r2.yaml

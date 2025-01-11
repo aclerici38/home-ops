@@ -122,6 +122,6 @@ spec:
                   port: s3
     persistence:
       data:
-        existingClaim: minio-storage
+        existingClaim: minio
         globalMounts:
           - path: /data
