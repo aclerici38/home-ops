@@ -33,7 +33,7 @@ spec:
       strategy: node
       externalAttacher:
         enabled: true
-        image: registry.k8s.io/sig-storage/external-attacher:v4.8.0
+        image: registry.k8s.io/sig-storage/csi-attacher:v4.8.0
         extraArgs:
           - --leader-election=false
       externalProvisioner:
