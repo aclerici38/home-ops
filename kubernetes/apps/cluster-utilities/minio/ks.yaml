@@ -12,7 +12,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: volsync
-  path: ./kubernetes/apps/media/minio/app
+  path: ./kubernetes/apps/cluster-utilities/minio/app
   prune: true
   sourceRef:
     kind: GitRepository
