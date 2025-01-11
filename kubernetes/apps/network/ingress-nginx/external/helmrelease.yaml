@@ -30,7 +30,7 @@ spec:
       service:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "external.${SECRET_DOMAIN}"
-          lbipam.cilium.io/ips: ""
+          lbipam.cilium.io/ips: "10.0.30.102"
         externalTrafficPolicy: "Cluster"
       ingressClassResource:
         name: external
