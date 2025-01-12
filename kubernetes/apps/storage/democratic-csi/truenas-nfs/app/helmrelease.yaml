@@ -44,7 +44,7 @@ spec:
           - --node-deployment=true
       externalResizer:
         enabled: true
-        image: registry.k8s.io/sig-storage/csi-resizer:v1.13.1
+        image: k8s.gcr.io/sig-storage/csi-resizer:v1.13.1
         extraArgs:
           - --leader-election=false
           - --node-deployment=true
@@ -85,7 +85,7 @@ spec:
           privateKey: ${TRUENAS_SSH_KEY}
         zfs:
           cli:
-            sudoEnabled: false
+            sudoEnabled: true
             paths:
               zfs: /usr/sbin/zfs
               zpool: /usr/sbin/zpool
