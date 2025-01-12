@@ -3,10 +3,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./helmrelease.yaml
   - ./qbittorrent-secret.yaml
   - ../../../../templates/volsync/claim.yaml
   - ../../../../templates/volsync/minio.yaml
+  - ./config/qbitrr/pvc.yaml
+  - ./helmrelease.yaml
 configMapGenerator:
   - name: qbitrr-config
     files:
