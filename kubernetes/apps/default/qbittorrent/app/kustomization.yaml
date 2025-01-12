@@ -17,3 +17,30 @@ configMapGenerator:
       - ./config/gluetun/config.toml
 generatorOptions:
   disableNameSuffixHash: true
+replacements:
+  - source:
+      kind: Secret
+      name: sonarr-secret
+      fieldPath: data.SONARR_API_KEY
+    targets:
+      - select:
+          kind: ConfigMap
+          name: qbitrr-config
+        fieldPaths:
+          - data.config.toml
+        options:
+          delimiter: __SONARR_API_KEY__
+          create: true
+  - source:
+      kind: Secret
+      name: radarr-secret
+      fieldPath: data.RADARR_API_KEY
+    targets:
+      - select:
+          kind: ConfigMap
+          name: qbitrr-config
+        fieldPaths:
+          - data.config.toml
+        options:
+          delimiter: __RADARR_API_KEY__
+          create: true
