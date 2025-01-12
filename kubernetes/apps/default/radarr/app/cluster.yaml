@@ -1,9 +1,11 @@
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.ok8.sh/postgresql.cnpg.io/cluster_v1.json
+
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: &cluster radarr-db
+  name: radarr-db
+  namespace: media
 spec:
   instances: 1
   imageName: ghcr.io/cloudnative-pg/postgresql:16
@@ -57,4 +59,4 @@ spec:
   immediate: true
   backupOwnerReference: self
   cluster:
-    name: *cluster
+    name: radarr-db
