@@ -149,8 +149,6 @@ spec:
               capabilities:
                 drop:
                   - ALL
-                add:
-                  - MKDIR
               seccompProfile: { type: RuntimeDefault }
 
 
@@ -212,27 +210,18 @@ spec:
               - path: /tmp/webui
             qbit:
               - path: /webui
-    # qbitrr
-      config-file:
-        name: qbitrr-config
-        type: configMap
-        advancedMounts:
-          qbit:
-            qbitrr:
-              - path: /config/.config/config.toml
-                subPath: config.toml
       qbitrr-config:
         type: emptyDir
         advancedMounts:
           qbit:
             qbitrr:
               - path: /config
-      qbitmanager:
+      dockerenv:
         type: emptyDir
         advancedMounts:
           qbit:
             qbitrr:
-              - path: /config/.config/qBitManager
+              - path: /.dockerenv
       # Gluetun auth
       gluetun-config-file:
         name: gluetun-config
