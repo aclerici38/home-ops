@@ -34,20 +34,14 @@ spec:
       externalAttacher:
         enabled: true
         image: registry.k8s.io/sig-storage/csi-attacher:v4.8.0
-        extraArgs:
-          - --leader-election=false
       externalProvisioner:
         enabled: true
         image: registry.k8s.io/sig-storage/csi-provisioner:v5.1.0
         extraArgs:
-          - --leader-election=false
           - --node-deployment=true
       externalResizer:
         enabled: true
-        # image: k8s.gcr.io/sig-storage/csi-resizer:v1.13.1
-        extraArgs:
-          - --leader-election=false
-          - --node-deployment=true
+        image: registry.k8s.io/sig-storage/csi-resizer:v1.13.1
       externalSnapshotter:
         enabled: true
         image: registry.k8s.io/sig-storage/csi-snapshotter:v8.2.0
@@ -56,9 +50,8 @@ spec:
           - --node-deployment=true
     csiDriver:
       name: truenas-nfs
-      attachRequired: false
+      attachRequired: true
       storageCapacity: true
-      fsGroupPolicy: File
     storageClasses:
       - name: truenas-nfs
         defaultClass: false
@@ -101,8 +94,8 @@ spec:
           shareAlldirs: false
           shareAllowedHosts: []
           shareAllowedNetworks: []
-          shareMaprootUser: 0
-          shareMaprootGroup: 0
+          shareMaprootUser: root
+          shareMaprootGroup: root
           shareMapallUser: ""
           shareMapallGroup: ""
 
