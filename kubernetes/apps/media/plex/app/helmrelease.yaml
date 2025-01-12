@@ -93,7 +93,7 @@ spec:
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         className: external
         hosts:
-          - host: "{{ .Release.Name }}.devbu.io"
+          - host: "plex.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
