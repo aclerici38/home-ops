@@ -220,7 +220,7 @@ spec:
               - path: /config/.config/config.toml
                 subPath: config.toml
       qbitrr-cache:
-        existingClaim: qbitrr-cache
+        type: emptyDir
         advancedMounts:
           qbit:
             qbitrr:
