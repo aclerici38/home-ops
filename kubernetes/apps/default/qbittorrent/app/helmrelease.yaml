@@ -217,7 +217,7 @@ spec:
         advancedMounts:
           qbit:
             qbitrr:
-              - path: /config/.config/config.toml
+              - path: /config/config.toml
                 subPath: config.toml
       qbitrr-cache:
         existingClaim: qbitrr-cache
