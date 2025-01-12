@@ -5,7 +5,6 @@ kind: Kustomization
 resources:
   - ./pvc.yaml
   - ./recyclarr-secret.yaml
-  - ./cluster.yaml
   - ./helmrelease.yaml
 configMapGenerator:
   - name: recyclarr-configmap
