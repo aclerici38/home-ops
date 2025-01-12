@@ -221,6 +221,12 @@ spec:
             qbitrr:
               - path: /config/.config/config.toml
                 subPath: config.toml
+      qbitrr-config:
+        type: emptyDir
+        advancedMounts:
+          qbit:
+            qbitrr:
+              - path: /config
       qbitmanager:
         type: emptyDir
         advancedMounts:
