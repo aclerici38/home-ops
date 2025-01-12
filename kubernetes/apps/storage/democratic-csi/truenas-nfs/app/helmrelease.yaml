@@ -4,7 +4,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: &name truenas-nfs
-
 spec:
   interval: 30m
   chart:
@@ -38,7 +37,7 @@ spec:
         enabled: true
         image: registry.k8s.io/sig-storage/csi-provisioner:v5.1.0
       externalResizer:
-        enabled: true
+        enabled: false
         image: registry.k8s.io/sig-storage/csi-resizer:v1.13.1
       externalSnapshotter:
         enabled: true
