@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: radarr-metadata
 spec:
-  storageClassName: local-path
+  storageClassName: local-hostpath
   resources:
     requests:
       storage: 5Gi
