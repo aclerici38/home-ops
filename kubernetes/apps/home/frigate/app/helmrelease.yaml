@@ -1,0 +1,110 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: frigate
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  dependsOn:
+    - name: nvidia-device-plugin
+      namespace: kube-system
+    - name: truenas-nfs
+      namespace: storage
+  values:
+    controllers:
+      frigate:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/blakeblackshear/frigate
+              tag: 0.15.0-beta5-tensorrt@sha256:d5b6369c66a17dc60b5a7cd5314a55bd08a5415c3d79ce3f5e1f203e40ba4f37
+            env:
+              TZ: ${TZ}
+              YOLO_MODELS: yolov7x-320
+            envFrom:
+              - secretRef:
+                  name: frigate-secret
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              privileged: true
+            resources:
+              requests:
+                cpu: 1000m
+                memory: 2Gi
+              limits:
+                nvidia.com/gpu: 1
+                memory: 6Gi
+    defaultPodOptions:
+      runtimeClassName: nvidia
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      main:
+        controller: *app
+        type: ClusterIP
+        ports:
+          http-auth:
+            port: &http-auth 8971
+            targetPort: *http-auth
+          http:
+            primary: true
+            port: &http 5000
+            targetPort: *http
+          rtsp:
+            port: &rtsp 8554
+            targetPort: *rtsp
+          webrtc:
+            port: &webrtc 8555
+            targetPort: *webrtc
+    persistence:
+      config:
+        existingClaim: frigate-config
+        globalMounts:
+          - path: /config
+      config-file:
+        enabled: true
+        name: frigate-config
+        type: configMap
+        globalMounts:
+          - path: /config/config.yml
+            subPath: frigate-config.yml
+            readOnly: true
+      media:
+        existingClaim: frigate-media
+        globalMounts:
+          - path: /media/frigate
+      shm:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /dev/shm
+
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp/cache
