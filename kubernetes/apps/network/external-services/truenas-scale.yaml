@@ -15,7 +15,7 @@ apiVersion: v1
 kind: Endpoints
 metadata:
   name: truenas-service
-  namespace: networking
+  namespace: network
 subsets:
   - addresses:
       - ip: 10.0.30.10
@@ -26,7 +26,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: truenas-ingress
-  namespace: networking
+  namespace: network
 spec:
   ingressClassName: internal
   rules:
