@@ -26,7 +26,7 @@ spec:
         compression: bzip2
         maxParallel: 8
       destinationPath: s3://backups/cnpg
-      endpointURL: http://minio.utilities:9000
+      endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
       serverName: &currentCluster radarr-db-v1
       s3Credentials:
         accessKeyId:
