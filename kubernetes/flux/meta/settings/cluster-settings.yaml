@@ -5,4 +5,5 @@ kind: ConfigMap
 metadata:
   name: cluster-settings
   namespace: flux-system
-data: {}
+data:
+  TZ: America/Los_Angeles
