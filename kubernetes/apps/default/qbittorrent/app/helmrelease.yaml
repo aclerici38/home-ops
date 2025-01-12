@@ -210,8 +210,17 @@ spec:
               - path: /tmp/webui
             qbit:
               - path: /webui
-      qbitrr-config:
-        type: emptyDir
+    # qbitrr
+      config-file:
+        name: qbitrr-config
+        type: configMap
+        advancedMounts:
+          qbit:
+            qbitrr:
+              - path: /config/.config/config.toml
+                subPath: config.toml
+      qbitrr-cache:
+        existingClaim: qbitrr-cache
         advancedMounts:
           qbit:
             qbitrr:
