@@ -27,7 +27,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
-      serverName: &currentCluster radarr-db-v1
+      serverName: &currentCluster radarr-db-v2
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
