@@ -1,0 +1,146 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: radarr
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    controllers:
+      radarr:
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 16
+            env:
+              - name: INIT_POSTGRES_SUPER_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: cnpg-secret
+                    key: username
+              - name: INIT_POSTGRES_SUPER_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: cnpg-secret
+                    key: password
+              - name: INIT_POSTGRES_DBNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr-secret
+                    key: RADARR__POSTGRES__MAINDB
+              - name: INIT_POSTGRES_HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr-secret
+                    key: RADARR__POSTGRES__HOST
+              - name: INIT_POSTGRES_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr-secret
+                    key: RADARR__POSTGRES__USER
+              - name: INIT_POSTGRES_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr-secret
+                    key: RADARR__POSTGRES__PASSWORD
+        containers:
+          radarr:
+            image:
+              repository: ghcr.io/onedr0p/radarr
+              tag:  5.16.3.9541
+            env:
+              RADARR__APP__INSTANCENAME: Radarr
+              RADARR__APP__THEME: dark
+              RADARR__AUTH__METHOD: External
+              RADARR__LOG__DBENABLED: "False"
+              RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              RADARR__LOG__LEVEL: info
+              RADARR__SERVER__PORT: &port 7878
+              TZ: America/Los_Angeles
+            envFrom:
+              - secretRef:
+                  name: radarr-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+              limits:
+                memory: 4Gi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      radarr:
+        controller: radarr
+        ports:
+          http:
+            port: *port
+    ingress:
+      radarr:
+        className: internal
+        hosts:
+          - host: radarr.${SECRET_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  identifier: radarr
+                  port: http
+    persistence:
+      config:
+        existingClaim: radarr-metadata
+        globalMounts:
+          - path: /config
+
+      temp:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+
+      media:
+        enabled: true
+        type: nfs
+        server: 10.0.30.10
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /allMedia
