@@ -56,13 +56,13 @@ spec:
           httpGet:
             path: /healthz
             port: http-webhook
-          initialDelaySeconds: 10
+          initialDelaySeconds: 20
           timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: /healthz
             port: http-webhook
-          initialDelaySeconds: 10
+          initialDelaySeconds: 20
           timeoutSeconds: 5
 
         securityContext:
