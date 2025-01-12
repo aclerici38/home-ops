@@ -19,6 +19,8 @@ spec:
     controllers:
       qbit:
         pod:
+          annotations:
+            configmap.reloader.stakater.com/reload: qbitrr-config
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"

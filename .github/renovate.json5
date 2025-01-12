@@ -323,5 +323,18 @@
       ],
       datasourceTemplate: '{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}',
     },
+    {
+      customType: 'regex',
+      description: [
+        'Process downloads in github releases',
+      ],
+      fileMatch: [
+        '(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$',
+      ],
+      matchStrings: [
+        'https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/v?(?<currentValue>\\d+\\.\\d+\\.\\d+)/(?<packageName>[^/\\s]+)'
+      ],
+      datasourceTemplate: 'github-release-attachments',
+    }
   ],
 }

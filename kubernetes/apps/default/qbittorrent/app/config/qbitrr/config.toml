@@ -77,7 +77,7 @@ v5 = true
 Managed = true
 
 # The URL used to access Servarr interface (if you use a domain enter the domain without a port)
-URI = "http://sonarr.media:8989"
+URI = "http://sonarr:8989"
 
 # The Servarr API Key, Can be found it Settings > General > Security
 APIKey = "${SONARR_API_KEY}"
@@ -264,7 +264,7 @@ RemoveTrackerWithMessage = ["skipping tracker announce (unreachable)", "No such 
 Managed = true
 
 # The URL used to access Servarr interface (if you use a domain enter the domain without a port)
-URI = "http://radarr.media:7878"
+URI = "http://radarr:7878"
 
 # The Servarr API Key, Can be found it Settings > General > Security
 APIKey = "${RADARR_API_KEY}"
