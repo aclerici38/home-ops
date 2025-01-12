@@ -56,7 +56,7 @@ spec:
           - --node-deployment=true
     csiDriver:
       name: truenas-nfs
-      attachRequired: true
+      attachRequired: false
       storageCapacity: true
       fsGroupPolicy: File
     storageClasses:
