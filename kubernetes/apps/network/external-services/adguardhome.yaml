@@ -1,0 +1,46 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: adguard-home-service
+  namespace: networking
+spec:
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  clusterIP: None
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: adguard-home-service
+  namespace: networking
+subsets:
+  - addresses:
+      - ip: 10.0.10.1
+    ports:
+      - port: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: adguard-home-ingress
+  namespace: networking
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+spec:
+  ingressClassName: internal
+  rules:
+    - host: adguard.${SECRET_DOMAIN}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: adguard-home-service
+                port:
+                  number: 3000
