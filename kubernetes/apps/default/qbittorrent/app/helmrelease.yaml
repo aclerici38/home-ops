@@ -221,12 +221,12 @@ spec:
             qbitrr:
               - path: /config/.config/config.toml
                 subPath: config.toml
-      qbitrr-cache:
+      qbitmanager:
         type: emptyDir
         advancedMounts:
           qbit:
             qbitrr:
-              - path: /config
+              - path: /config/.config/qBitManager
       # Gluetun auth
       gluetun-config-file:
         name: gluetun-config
