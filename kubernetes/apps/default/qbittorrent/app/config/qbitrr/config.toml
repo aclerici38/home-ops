@@ -80,7 +80,7 @@ Managed = true
 URI = "http://sonarr.media:8989"
 
 # The Servarr API Key, Can be found it Settings > General > Security
-APIKey = "__SONARR_API_KEY__"
+APIKey = "$(SONARR_API_KEY)"
 
 # Category applied by Servarr to torrents in qBitTorrent, can be found in Settings > Download Clients > qBit > Category
 Category = "tv-sonarr"
@@ -267,7 +267,7 @@ Managed = true
 URI = "http://radarr.media:7878"
 
 # The Servarr API Key, Can be found it Settings > General > Security
-APIKey = "__RADARR_API_KEY__"
+APIKey = "$(RADARR_API_KEY)"
 
 # Category applied by Servarr to torrents in qBitTorrent, can be found in Settings > Download Clients > qBit > Category
 Category = "radarr"
