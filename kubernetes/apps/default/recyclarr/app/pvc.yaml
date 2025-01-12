@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: recyclarr-config
+spec:
+  storageClassName: local-hostpath
+  resources:
+    requests:
+      storage: 2Gi
+  accessModes:
+    - ReadWriteOnce

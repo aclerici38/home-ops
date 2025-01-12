@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: radarr
+  name: bazarr
 spec:
   interval: 30m
   chart:
@@ -24,7 +24,7 @@ spec:
       retries: 3
   values:
     controllers:
-      radarr:
+      main:
         initContainers:
           init-db:
             image:
@@ -44,48 +44,48 @@ spec:
               - name: INIT_POSTGRES_DBNAME
                 valueFrom:
                   secretKeyRef:
-                    name: radarr-secret
-                    key: RADARR__POSTGRES__MAINDB
+                    name: bazarr-secret
+                    key: POSTGRES_DATABASE
               - name: INIT_POSTGRES_HOST
                 valueFrom:
                   secretKeyRef:
-                    name: radarr-secret
-                    key: RADARR__POSTGRES__HOST
+                    name: bazarr-secret
+                    key: POSTGRES_HOST
               - name: INIT_POSTGRES_USER
                 valueFrom:
                   secretKeyRef:
-                    name: radarr-secret
-                    key: RADARR__POSTGRES__USER
+                    name: bazarr-secret
+                    key: POSTGRES_USERNAME
               - name: INIT_POSTGRES_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: radarr-secret
-                    key: RADARR__POSTGRES__PASSWORD
+                    name: bazarr-secret
+                    key: POSTGRES_PASSWORD
         containers:
-          radarr:
+          app:
             image:
-              repository: ghcr.io/onedr0p/radarr
-              tag:  5.16.3.9541
+              repository: ghcr.io/onedr0p/bazarr
+              tag: 1.5.0
             env:
-              RADARR__APP__INSTANCENAME: Radarr
-              RADARR__APP__THEME: dark
-              RADARR__AUTH__METHOD: External
-              RADARR__LOG__DBENABLED: "False"
-              RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
-              RADARR__LOG__LEVEL: info
-              RADARR__SERVER__PORT: &port 7878
+              BAZARR__APP__INSTANCENAME: Bazarr
+              BAZARR__APP__THEME: dark
+              BAZARR__AUTH__METHOD: External
+              BAZARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              BAZARR__LOG__DBENABLED: "False"
+              BAZARR__LOG__LEVEL: info
               TZ: ${TZ}
+              POSTGRES_ENABLED: "true"
             envFrom:
               - secretRef:
-                  name: radarr-secret
+                  name: bazarr-secret
             probes:
               liveness: &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /ping
-                    port: *port
+                    path: /health
+                    port: &port 6767
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -110,31 +110,26 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     service:
-      radarr:
-        controller: radarr
+      app:
+        controller: main
         ports:
           http:
             port: *port
     ingress:
-      radarr:
+      app:
         className: internal
         hosts:
-          - host: radarr.${SECRET_DOMAIN}
+          - host: bazarr.${SECRET_DOMAIN}
             paths:
               - path: /
                 service:
-                  identifier: radarr
+                  identifier: app
                   port: http
     persistence:
       config:
-        existingClaim: radarr-metadata
+        existingClaim: bazarr-metadata
         globalMounts:
           - path: /config
-      temp:
-        enabled: true
-        type: emptyDir
-        globalMounts:
-          - path: /tmp
       media:
         enabled: true
         type: nfs

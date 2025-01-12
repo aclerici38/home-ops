@@ -36,12 +36,12 @@ spec:
               repository: quay.io/minio/minio
               tag:  RELEASE.2024-12-18T13-15-44Z
             env:
-              MINIO_API_CORS_ALLOW_ORIGIN: https://minio.bochybarks.work,https://s3.bochybarks.work
-              MINIO_BROWSER_REDIRECT_URL: https://minio.bochybarks.work
+              MINIO_API_CORS_ALLOW_ORIGIN: https://minio.${SECRET_DOMAIN},https://s3.${SECRET_DOMAIN}
+              MINIO_BROWSER_REDIRECT_URL: https://minio.${SECRET_DOMAIN}
               # MINIO_PROMETHEUS_JOB_ID: minio
-              # MINIO_PROMETHEUS_URL: https://prometheus.bochybarks.work
+              # MINIO_PROMETHEUS_URL: https://prometheus.${SECRET_DOMAIN}
               # MINIO_PROMETHEUS_AUTH_TYPE: public
-              MINIO_SERVER_URL: https://s3.bochybarks.work
+              MINIO_SERVER_URL: https://s3.${SECRET_DOMAIN}
               MINIO_STORAGE_CLASS_RRS: EC:0
               MINIO_STORAGE_CLASS_STANDARD: EC:0
               MINIO_UPDATE: "off"
@@ -108,13 +108,13 @@ spec:
             proxy_set_header X-Forwarded-Proto $scheme;
             proxy_set_header X-Forwarded-Ssl on;
         hosts:
-          - host: &fqdn "{{ .Release.Name }}.bochybarks.work"
+          - host: &fqdn "{{ .Release.Name }}.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
                   identifier: app
                   port: http
-          - host: s3.bochybarks.work
+          - host: s3.${SECRET_DOMAIN}
             paths:
               - path: /
                 service:
