@@ -44,7 +44,7 @@ spec:
           - --node-deployment=true
       externalResizer:
         enabled: true
-        image: k8s.gcr.io/sig-storage/csi-resizer:v1.13.1
+        # image: k8s.gcr.io/sig-storage/csi-resizer:v1.13.1
         extraArgs:
           - --leader-election=false
           - --node-deployment=true
@@ -101,8 +101,8 @@ spec:
           shareAlldirs: false
           shareAllowedHosts: []
           shareAllowedNetworks: []
-          shareMaprootUser: 1000
-          shareMaprootGroup: 1000
+          shareMaprootUser: 0
+          shareMaprootGroup: 0
           shareMapallUser: ""
           shareMapallGroup: ""
 
