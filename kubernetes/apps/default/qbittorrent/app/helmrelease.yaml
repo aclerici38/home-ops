@@ -149,6 +149,8 @@ spec:
               capabilities:
                 drop:
                   - ALL
+                add:
+                  - MKDIR
               seccompProfile: { type: RuntimeDefault }
 
 
