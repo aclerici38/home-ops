@@ -6,7 +6,7 @@ resources:
   - ./qbittorrent-secret.yaml
   - ../../../../templates/volsync/claim.yaml
   - ../../../../templates/volsync/minio.yaml
-  - ./config/qbitrr/pvc.yaml
+  - ./qbitrr-pvc.yaml
   - ./helmrelease.yaml
 configMapGenerator:
   - name: qbitrr-config

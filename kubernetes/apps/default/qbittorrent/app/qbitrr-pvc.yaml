@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: qbitrr-cache
 spec:
-  storageClassName: nvme
+  storageClassName: local-hostpath
   resources:
     requests:
       storage: 5Gi
