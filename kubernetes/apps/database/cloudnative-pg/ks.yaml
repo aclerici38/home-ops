@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: local-path
-  path: ./kubernetes/apps/database/cloudnaitve-pg/app
+  path: ./kubernetes/apps/database/cloudnative-pg/app
   prune: false
   sourceRef:
     kind: GitRepository
