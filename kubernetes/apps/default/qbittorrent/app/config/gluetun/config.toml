@@ -1,0 +1,7 @@
+[[roles]]
+name = "qbittorrent-port-forward"
+routes = [
+  "GET /v1/openvpn/portforwarded",
+  "GET /v1/publicip/ip"
+]
+auth = "none"

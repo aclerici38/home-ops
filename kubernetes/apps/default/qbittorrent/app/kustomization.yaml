@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./qbottorrent-secret.yaml
+  - ./helmrelease.yaml
+  - ../../../../templates/volsync/claim.yaml
+  - ../../../../templates/volsync/minio.yaml
+configMapGenerator:
+  - name: qbitrr-config
+    files:
+      - ./config/qbitrr/config.toml
+  - name: gluetun-config
+    files:
+      - ./config/gluetun/config.toml
+generatorOptions:
+  disableNameSuffixHash: true
