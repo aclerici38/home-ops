@@ -30,8 +30,7 @@ spec:
       namespace: database
   values:
     nodeSelector: &nodeSelector
-      matchLabels:
-        nvidia.com/gpu.model: "4090"
+      nvidia.com/gpu.model: "4090"
     env:
       TZ: ${TZ}
       IMMICH_LOG_LEVEL: debug
