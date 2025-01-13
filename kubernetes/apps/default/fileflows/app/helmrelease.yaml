@@ -38,7 +38,7 @@ spec:
               ASPNETCORE_URLS: "http://*:5001"
             resources:
               requests:
-                cpu: 100mm
+                cpu: 100m
                 memory: 350M
               limits:
                 memory: 6Gi
@@ -61,7 +61,7 @@ spec:
               hostname: local-node
             resources:
               requests:
-                cpu: 100mm
+                cpu: 100m
                 memory: 350M
               limits:
                 memory: 6Gi
