@@ -100,7 +100,6 @@ spec:
       app:
         className: internal
         annotations:
-          cert-manager.io/cluster-issuer: "letsencrypt-production"
           nginx.ingress.kubernetes.io/proxy-body-size: '0'
           nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
           nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
@@ -108,7 +107,7 @@ spec:
             proxy_set_header X-Forwarded-Proto $scheme;
             proxy_set_header X-Forwarded-Ssl on;
         hosts:
-          - host: &fqdn "{{ .Release.Name }}.${SECRET_DOMAIN}"
+          - host: "minio.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
