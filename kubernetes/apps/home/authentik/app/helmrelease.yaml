@@ -1,0 +1,126 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: authentik
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: authentik
+      version: 2024.12.2
+      sourceRef:
+        kind: HelmRepository
+        name: authentik
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    global:
+      image:
+        repository: ghcr.io/goauthentik/server
+      envFrom:
+        - secretRef:
+            name: authentik-secret
+
+    authentik:
+      log_level: info
+      error_reporting:
+        enable: false
+        send_pii: false
+
+    server:
+      initContainers:
+        - name: init-db
+          image: ghcr.io/onedr0p/postgres-init
+          tag: 16.6@sha256:5c98db91663fa586c4905a0c91ab4159e6a5e9a8718cf2cb1e82c9d510392498
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: INIT_POSTGRES_SUPER_USER
+              valueFrom:
+                secretKeyRef:
+                  name: cnpg-secret
+                  key: username
+            - name: INIT_POSTGRES_SUPER_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: cnpg-secret
+                  key: password
+            - name: INIT_POSTGRES_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: authentik-secret
+                  key: AUTHENTIK_POSTGRESQL__NAME
+            - name: INIT_POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: authentik-secret
+                  key: AUTHENTIK_POSTGRESQL__HOST
+            - name: INIT_POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: authentik-secret
+                  key: AUTHENTIK_POSTGRESQL__USER
+            - name: INIT_POSTGRES_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: authentik-secret
+                  key: AUTHENTIK_POSTGRESQL__PASSWORD
+
+      replicas: &replicas 3
+      pdb:
+        enabled: true
+        minAvailable: 1
+        maxUnavailable: ""
+      ingress:
+        enabled: true
+        ingressClassName: external
+        hosts:
+          - &host "auth.${SECRET_DOMAIN}"
+        paths:
+          - /
+      metrics:
+        serviceMonitor:
+          enabled: true
+      resources:
+        requests:
+          cpu: 100m
+          memory: 512Mi
+        limits:
+          memory: 2Gi
+
+      volumeMounts:
+        - name: custom
+          mountPath: /custom
+
+      volumes:
+        - name: custom
+          emptyDir: {}
+    worker:
+      envFrom:
+      - secretRef:
+          name: authentik-secret
+      replicas: *replicas
+      pdb:
+        enabled: true
+      resources:
+        requests:
+          cpu: 50m
+          memory: 512Mi
+        limits:
+          memory: 1Gi
+    prometheus:
+      rules:
+        enabled: true
+
+    postgresql:
+      enabled: false
+    redis:
+      enabled: true

@@ -1,0 +1,61 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.ok8.sh/postgresql.cnpg.io/cluster_v1.json
+
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authentik-db
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.6@sha256:5815f70ae438221b358b31f0231dc9e269e58dc651be2ecba1bd0c6cb29f9acd
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 2Gi
+    storageClass: local-hostpath
+  superuserSecret:
+    name: cnpg-secret
+  enableSuperuserAccess: true
+
+  backup:
+    retentionPolicy: 7d
+    barmanObjectStore: &barmanObjectStore
+      data:
+        compression: bzip2
+      wal:
+        compression: bzip2
+        maxParallel: 8
+      destinationPath: s3://backups/cnpg
+      endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
+      serverName: &currentCluster authentik-db-v2
+      s3Credentials:
+        accessKeyId:
+          name: cnpg-secret
+          key: minio-access-key-id
+        secretAccessKey:
+          name: cnpg-secret
+          key: minio-secret-access-key
+
+  bootstrap:
+    recovery:
+      source: &previousCluster authentik-db-v1
+  externalClusters:
+    - name: *previousCluster
+      barmanObjectStore:
+        <<: *barmanObjectStore
+        serverName: *previousCluster
+
+  monitoring:
+    enablePodMonitor: true
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/postgresql.cnpg.io/scheduledbackup_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: authentik
+spec:
+  schedule: "0 0 4 * * *"
+  immediate: true
+  backupOwnerReference: self
+  cluster:
+    name: authentik-db
