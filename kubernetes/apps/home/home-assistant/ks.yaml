@@ -12,7 +12,7 @@ spec:
   dependsOn:
     - name: cloudnative-pg
     - name: volsync
-  path: ./kubernetes/apps/home/home-assistant/fam/napa
+  path: ./kubernetes/apps/home/home-assistant/fam
   prune: true
   sourceRef:
     kind: GitRepository
