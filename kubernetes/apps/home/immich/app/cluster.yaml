@@ -36,7 +36,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
-      serverName: &currentCluster immich-db-v2
+      serverName: &currentCluster immich-db-v3
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -47,7 +47,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster immich-db-v1
+      source: &previousCluster immich-db-v2
     # initdb:
     #   database: immich
     #   owner: immich
