@@ -29,6 +29,9 @@ spec:
     - name: cloudnative-pg
       namespace: database
   values:
+    nodeSelector: &nodeSelector
+      matchLabels:
+        nvidia.com/gpu.model: "4090"
     env:
       TZ: ${TZ}
       IMMICH_LOG_LEVEL: debug
@@ -140,6 +143,7 @@ spec:
       enabled: true
       architecture: standalone
       master:
+        nodeSelector: *nodeSelector
         resources:
           requests:
             cpu: 500m
@@ -152,11 +156,6 @@ spec:
         enabled: false
 
     server:
-      annotations:
-        reloader.stakater.com/auto: "true"
-      nodeSelector:
-        matchLabels:
-          nvidia.com/gpu.model: "4090"
       service:
         main:
           type: ClusterIP
@@ -196,11 +195,6 @@ spec:
           memory: 4Gi
 
     machine-learning:
-      annotations:
-        reloader.stakater.com/auto: "true"
-      nodeSelector:
-        matchLabels:
-          nvidia.com/gpu.model: "4090"
       enabled: true
       runtimeClassName: nvidia
       image:
