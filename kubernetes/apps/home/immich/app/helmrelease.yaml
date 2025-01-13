@@ -152,6 +152,9 @@ spec:
     server:
       annotations:
         reloader.stakater.com/auto: "true"
+      nodeSelector:
+        matchLabels:
+          nvidia.com/gpu.model: "4090"
       service:
         main:
           type: ClusterIP
@@ -176,7 +179,6 @@ spec:
             nginx.ingress.kubernetes.io/client-body-buffer-size: "8k"
             nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
             nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
-            cert-manager.io/cluster-issuer: "letsencrypt-production"
             external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
           hosts:
             - host: &fqdn immich.${SECRET_DOMAIN}
@@ -194,6 +196,9 @@ spec:
     machine-learning:
       annotations:
         reloader.stakater.com/auto: "true"
+      nodeSelector:
+        matchLabels:
+          nvidia.com/gpu.model: "4090"
       enabled: true
       runtimeClassName: nvidia
       image:
