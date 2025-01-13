@@ -31,13 +31,13 @@ spec:
               repository: docker.io/busybox
               tag: latest
             env:
-              # renovate: datasource=github-release-attachments depName=VueTorrent/VueTorrent packageName=vuetorrent.zip
-              VUETORENT_VERSION: v2.19.0
+              # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
+              VUETORRENT_VERSION: v2.19.0
             command:
               - sh
               - -c
               - |
-                wget -qO /tmp/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/${VUETORENT_VERSION}/vuetorrent.zip
+                wget -qO /tmp/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/${VUETORRENT_VERSION}/vuetorrent.zip
                 mkdir -p /tmp/VueTorrent
                 unzip /tmp/vuetorrent.zip -d /tmp/webui
             securityContext:
