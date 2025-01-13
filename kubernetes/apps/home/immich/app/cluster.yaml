@@ -1,0 +1,78 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.ok8.sh/postgresql.cnpg.io/cluster_v1.json
+
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-db
+spec:
+  instances: 3
+  imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.6@sha256:30065f928c9d7a6f71382c53d416db708ecb7eeefb70d81182cb2668a1b53d56
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 10Gi
+    storageClass: local-hostpath
+  superuserSecret:
+    name: cnpg-secret
+  enableSuperuserAccess: true
+
+  postgresql:
+    shared_preload_libraries:
+      - "vectors.so"
+    parameters:
+      search_path: '"$user", public, vectors'
+      logging_collector: 'on'
+      max_wal_size: '2GB'
+      shared_buffers: '512MB'
+      wal_compression: 'on'
+
+  backup:
+    retentionPolicy: 7d
+    barmanObjectStore: &barmanObjectStore
+      data:
+        compression: bzip2
+      wal:
+        compression: bzip2
+        maxParallel: 8
+      destinationPath: s3://backups/cnpg
+      endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
+      serverName: &currentCluster immich-db-v2
+      s3Credentials:
+        accessKeyId:
+          name: cnpg-secret
+          key: minio-access-key-id
+        secretAccessKey:
+          name: cnpg-secret
+          key: minio-secret-access-key
+
+  bootstrap:
+    recovery:
+      source: &previousCluster immich-db-v1
+    # initdb:
+    #   database: immich
+    #   owner: immich
+    #   secret:
+    #     name: immich-secret
+    #   postInitSQL:
+    #     - ALTER ROLE immich WITH SUPERUSER;
+  externalClusters:
+    - name: *previousCluster
+      barmanObjectStore:
+        <<: *barmanObjectStore
+        serverName: *previousCluster
+
+  monitoring:
+    enablePodMonitor: true
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/postgresql.cnpg.io/scheduledbackup_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: immich
+spec:
+  schedule: "0 0 4 * * *"
+  immediate: true
+  backupOwnerReference: self
+  cluster:
+    name: immich-db

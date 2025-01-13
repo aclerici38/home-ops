@@ -1,0 +1,217 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: minio
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: immich
+      version: 0.9.0
+      sourceRef:
+        kind: HelmRepository
+        name: immich
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  dependsOn:
+    - name: nvidia-device-plugin
+      namespace: kube-system
+    - name: local-path
+      namespace: storage
+    - name: cloudnative-pg
+      namespace: database
+  values:
+    env:
+      TZ: America/Los_Angeles
+      IMMICH_LOG_LEVEL: debug
+      DB_HOSTNAME:
+        valueFrom:
+          secretKeyRef:
+            name: immich-secret
+            key: DB_HOSTNAME
+      DB_USERNAME:
+        valueFrom:
+          secretKeyRef:
+            name: immich-secret
+            key: DB_USERNAME
+      DB_DATABASE_NAME:
+        valueFrom:
+          secretKeyRef:
+            name: immich-secret
+            key: DB_DATABASE_NAME
+      DB_PASSWORD:
+        valueFrom:
+          secretKeyRef:
+            name: immich-secret
+            key: DB_PASSWORD
+    immich:
+      metrics:
+        enabled: true
+
+      persistence:
+        library:
+          existingClaim: immich
+
+      configuration:
+        trash:
+          enabled: true
+          days: 30
+        ffmpeg:
+          preset: veryslow
+          crf: 18
+          bframes: -1
+          refs: 0
+          gopSize: 0
+          twoPass: true
+          preferredHwDevice: cuda
+          accel: nvenc
+          accelDecode: true
+          tonemap: "reinhard"
+          temporalAQ: true
+          targetResolution: "1080"
+
+        job:
+          backgroundTask:
+            concurrency: 10
+          smartSearch:
+            concurrency: 4
+          metadataExtraction:
+            concurrency: 10
+          faceDetection:
+            concurrency: 4
+          search:
+            concurrency: 10
+          sidecar:
+            concurrency: 10
+          library:
+            concurrency: 10
+          migration:
+            concurrency: 10
+          thumbnailGeneration:
+            concurrency: 6
+          videoConversion:
+            concurrency: 2
+          notifications:
+            concurrency: 10
+
+        machineLearning:
+          clip:
+            modelName: ViT-H-14-378-quickgelu__dfn5b
+          facialRecognition:
+            modelName: buffalo_l
+            minFaces: 1
+
+        oauth:
+          enabled: true
+          issuerUrl: https://auth.${SECRET_DOMAIN}/application/o/immich/
+          autoLaunch: false
+          autoRegister: true
+          buttonText: Login with Authentik
+          clientId: ${CLIENT_ID}
+          clientSecret: ${CLIENT_SECRET}
+
+        storageTemplate:
+          enabled: true
+          hashVerificationEnabled: true
+          template: "{{album}}/{{y}}/{{MM}}/{{filename}}"
+
+        passwordLogin:
+          enabled: false
+
+        backup:
+          database:
+            enabled: false
+
+      resources:
+        limits:
+          nvidia.com/gpu: 1
+
+    redis:
+      enabled: true
+      architecture: standalone
+      master:
+        resources:
+          requests:
+            cpu: 500m
+            memory: 256Mi
+          limits:
+            cpu: 3
+            memory: 1Gi
+
+      auth:
+        enabled: false
+
+    server:
+      service:
+        main:
+          type: ClusterIP
+      enabled: true
+      runtimeClassName: nvidia
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+
+      image:
+        repository: ghcr.io/immich-app/immich-server
+        tag: v1.124.2
+        pullPolicy: IfNotPresent
+      ingress:
+        main:
+          enabled: true
+          ingressClassName: external
+          annotations:
+            nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+            nginx.ingress.kubernetes.io/proxy-buffering: "off"
+            nginx.ingress.kubernetes.io/proxy-body-size: "0"
+            nginx.ingress.kubernetes.io/client-body-buffer-size: "8k"
+            nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+            nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+            cert-manager.io/cluster-issuer: "letsencrypt-production"
+            external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+          hosts:
+            - host: &fqdn immich.${SECRET_DOMAIN}
+              paths:
+                - path: /
+
+      resources:
+        requests:
+          cpu: 500m
+          memory: 500Mi
+        limits:
+          nvidia.com/gpu: 1
+          memory: 4Gi
+
+    machine-learning:
+      enabled: true
+      runtimeClassName: nvidia
+      image:
+        repository: ghcr.io/immich-app/immich-machine-learning
+        tag: v1.124.2-cuda
+        pullPolicy: IfNotPresent
+      env:
+        MACHINE_LEARNING_ANN_TUNING_LEVEL: 3
+        TRANSFORMERS_CACHE: /cache
+      volumeMounts:
+        - name: cache
+          mountPath: /cache
+      persistence:
+        cache:
+          enabled: true
+          size: 50Gi
+          accessMode: ReadWriteOnce
+          storageClass: nvme
+      resources:
+        requests:
+          cpu: 500m
+          memory: 500Mi
+        limits:
+          nvidia.com/gpu: 1
+          memory: 8Gi
