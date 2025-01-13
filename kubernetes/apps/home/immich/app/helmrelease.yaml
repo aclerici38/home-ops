@@ -150,6 +150,8 @@ spec:
         enabled: false
 
     server:
+      annotations:
+        reloader.stakater.com/auto: "true"
       service:
         main:
           type: ClusterIP
@@ -190,6 +192,8 @@ spec:
           memory: 4Gi
 
     machine-learning:
+      annotations:
+        reloader.stakater.com/auto: "true"
       enabled: true
       runtimeClassName: nvidia
       image:
