@@ -30,7 +30,7 @@ spec:
       namespace: database
   values:
     env:
-      TZ: America/Los_Angeles
+      TZ: ${TZ}
       IMMICH_LOG_LEVEL: debug
       DB_HOSTNAME:
         valueFrom:
@@ -61,6 +61,8 @@ spec:
           existingClaim: immich
 
       configuration:
+        server:
+          externalDomain: "https://immich.${SECRET_DOMAIN}"
         trash:
           enabled: true
           days: 30
