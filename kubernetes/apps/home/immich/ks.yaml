@@ -24,6 +24,7 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 2Ti
+      VOLSYNC_STORAGECLASS: truenas-nfs
       VOLSYNC_SNAPSHOTCLASS: truenas-nfs
     substituteFrom:
       - kind: Secret
