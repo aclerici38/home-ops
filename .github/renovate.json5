@@ -323,20 +323,5 @@
       ],
       datasourceTemplate: '{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}',
     },
-    {
-      customType: 'regex',
-      description: [
-        'Process GitHub release assets',
-      ],
-      fileMatch: [
-        '(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$',
-      ],
-      matchStrings: [
-        'https://github\\.com/(?<packageName>[^/]+)/(?<repo>[^/]+)/releases/download/v?(?<currentValue>\\d+\\.\\d+\\.\\d+)/(?<assetName>[^/\\s]+)'
-      ],
-      datasourceTemplate: 'github-release-attachments',
-      depNameTemplate: '{{packageName}}/{{repo}}',
-      packageNameTemplate: '{{assetName}}'
-    }
   ],
 }
