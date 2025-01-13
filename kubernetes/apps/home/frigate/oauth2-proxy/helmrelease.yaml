@@ -41,9 +41,6 @@ spec:
         nginx.ingress.kubernetes.io/proxy-connect-timeout: "20"
         nginx.ingress.kubernetes.io/proxy-read-timeout: "14400"
         nginx.ingress.kubernetes.io/proxy-send-timeout: "14400"
-      tls:
-        - secretName: frigate-proxy-tls
-          hosts: *hosts
 
     config:
       existingSecret: frigate-secret
@@ -61,6 +58,6 @@ spec:
         pass_basic_auth = true
         silence_ping_logging = true
         skip_provider_button = true
-        whitelist_domains = ".z${SECRET_DOMAIN}"
+        whitelist_domains = ".${SECRET_DOMAIN}"
         pass_authorization_header = true
 
