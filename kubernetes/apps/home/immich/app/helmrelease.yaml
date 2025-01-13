@@ -110,7 +110,7 @@ spec:
             minFaces: 1
 
         oauth:
-          enabled: true
+          enabled: false
           issuerUrl: https://auth.${SECRET_DOMAIN}/application/o/immich/
           autoLaunch: false
           autoRegister: true
@@ -124,7 +124,7 @@ spec:
           template: "{{album}}/{{y}}/{{MM}}/{{filename}}"
 
         passwordLogin:
-          enabled: false
+          enabled: true
 
         backup:
           database:
