@@ -51,6 +51,7 @@ spec:
                   - ALL
                 add:
                   - CHOWN
+                  - SETUID
                   - SETGID
           node:
             image:
@@ -78,6 +79,7 @@ spec:
                   - ALL
                 add:
                   - CHOWN
+                  - SETUID
                   - SETGID
 
     defaultPodOptions:
@@ -119,6 +121,7 @@ spec:
           fileflows:
             fileflows:
               - path: /app/Logs
+
       node-logs:
         enabled: true
         type: emptyDir
