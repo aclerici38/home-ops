@@ -10,6 +10,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: cloudnative-pg
+    - name: local-path
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -20,6 +21,3 @@ spec:
     name: flux-system
   wait: false
   interval: 30m
-  postBuild:
-    substitute:
-      APP: *app

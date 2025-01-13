@@ -8,8 +8,7 @@ metadata:
 spec:
   targetNamespace: default
   dependsOn:
-    - name: external-secrets-stores
-    - name: cloudnative-pg
+    - name: local-path
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
