@@ -43,25 +43,6 @@ spec:
                   "ips": ["10.0.90.15/24"]
                 }
               ]
-        initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/onedr0p/postgres-init
-              tag: 16
-            env:
-              - name: INIT_POSTGRES_SUPER_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: username
-              - name: INIT_POSTGRES_SUPER_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: password
-            envFrom: &envFrom
-              - secretRef:
-                  name: fam-hass-secret
         containers:
           *app :
             image:
@@ -69,7 +50,9 @@ spec:
               tag: 2025.1.2
             env:
               TZ: ${TZ}
-            envFrom: *envFrom
+            envFrom: &envFrom
+              - secretRef:
+                  name: fam-hass-secret
             securityContext:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
