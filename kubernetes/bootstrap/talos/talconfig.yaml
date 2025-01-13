@@ -30,7 +30,8 @@ nodes:
     machineSpec:
       secureboot: false
     nodeLabels:
-      nvidia.com/gpu.present: "true"
+      nvidia.com/gpu: "present"
+      nvidia.com/gpu/model: "4090"
     kernelModules:
       - name: nvidia
       - name: nvidia_uvm
@@ -70,7 +71,8 @@ nodes:
     machineSpec:
       secureboot: false
     nodeLabels:
-      nvidia.com/gpu.present: "true"
+      nvidia.com/gpu: "present"
+      nvidia.com/gpu/model: "p400"
     kernelModules:
       - name: nvidia
       - name: nvidia_uvm
