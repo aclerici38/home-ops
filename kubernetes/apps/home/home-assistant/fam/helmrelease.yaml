@@ -68,7 +68,7 @@ spec:
               repository: ghcr.io/home-assistant/home-assistant
               tag: 2025.1.2
             env:
-              TZ: America/Los_Angeles
+              TZ: ${TZ}
             envFrom: *envFrom
             securityContext:
               allowPrivilegeEscalation: true
@@ -115,7 +115,7 @@ spec:
       *app :
         className: external
         hosts:
-          - host: &fqdn "fam-hass.bochybarks.work"
+          - host: &fqdn "fam-hass.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
@@ -124,20 +124,16 @@ spec:
       code-server:
         className: internal
         hosts:
-          - host: &code-fqdn code-fam-hass.bochybarks.work
+          - host: &code-fqdn code-fam-hass.${SECRET_DOMAIN}
             paths:
               - path: /
                 service:
                   identifier: *app
                   port: code-server
-        tls:
-          - hosts:
-            - *code-fqdn
-            secretName: "code-{{ .Release.Name }}-tls"
 
     persistence:
       config:
-        existingClaim: home-assistant-config
+        existingClaim: fam-hass
         globalMounts:
           - path: /config
 
