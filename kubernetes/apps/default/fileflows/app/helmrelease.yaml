@@ -51,6 +51,7 @@ spec:
                   - ALL
                 add:
                   - CHOWN
+                  - SETGID
           node:
             image:
               repository: docker.io/revenz/fileflows
@@ -77,6 +78,7 @@ spec:
                   - ALL
                 add:
                   - CHOWN
+                  - SETGID
 
     defaultPodOptions:
       securityContext:
