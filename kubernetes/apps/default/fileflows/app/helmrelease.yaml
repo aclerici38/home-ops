@@ -1,0 +1,146 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: fileflows
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    controllers:
+      fileflows:
+        containers:
+          server:
+            image:
+              repository: docker.io/revenz/fileflows
+              tag: 24.12@sha256:a67938664e82d3eeadfcc238d63552ccd9b88cfb40a7c341d5b90b11843ec7ad
+            env:
+              TZ: "${TZ}"
+              PUID: 1000
+              PGID: 1000
+              hostname: server
+              ASPNETCORE_URLS: "http://*:5001"
+            resources:
+              requests:
+                cpu: 100mm
+                memory: 350M
+              limits:
+                memory: 6Gi
+                nvidia.com/gpu: 1
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+          node:
+            image:
+              repository: docker.io/revenz/fileflows
+              tag: 24.12@sha256:a67938664e82d3eeadfcc238d63552ccd9b88cfb40a7c341d5b90b11843ec7ad
+            env:
+              TZ: "${TZ}"
+              PUID: 1000
+              PGID: 1000
+              FFNODE: 1
+              ServerUrl: http://fileflows:5001
+              hostname: local-node
+            resources:
+              requests:
+                cpu: 100mm
+                memory: 350M
+              limits:
+                memory: 6Gi
+                nvidia.com/gpu: 1
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      fileflows:
+        controller: fileflows
+        ports:
+          http:
+            port: 5001
+    ingress:
+      app:
+        className: internal
+        hosts:
+          - host: "fileflows.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: server
+                  port: http
+    persistence:
+      config:
+        existingClaim: fileflows
+        advancedMounts:
+          fileflows:
+            fileflows:
+              - path: /app/Data
+      server-logs:
+        enabled: true
+        type: emptyDir
+        sizeLimit: 1Gi
+        advancedMounts:
+          fileflows:
+            fileflows:
+              - path: /app/Logs
+      node-logs:
+        enabled: true
+        type: emptyDir
+        sizeLimit: 1Gi
+        advancedMounts:
+          fileflows:
+            node:
+              - path: /app/Logs
+      server-temp:
+        enabled: true
+        type: emptyDir
+        advancedMounts:
+          fileflows:
+            fileflows:
+              - path: /temp
+      node-temp:
+        enabled: true
+        type: emptyDir
+        advancedMounts:
+          fileflows:
+            node:
+              - path: /temp
+      common:
+        existingClaim: fileflows-common
+        globalMounts:
+          - path: /app/common
+      media:
+        enabled: true
+        type: nfs
+        server: 10.0.30.10
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /allMedia
