@@ -139,10 +139,10 @@ spec:
           fileflows:
             node:
               - path: /temp
-      common:
-        existingClaim: fileflows-common
-        globalMounts:
-          - path: /app/common
+      # common:
+      #   existingClaim: fileflows-common
+      #   globalMounts:
+      #     - path: /app/common
       media:
         enabled: true
         type: nfs
