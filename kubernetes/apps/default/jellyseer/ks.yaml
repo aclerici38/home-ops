@@ -21,3 +21,6 @@ spec:
     name: flux-system
   wait: false
   interval: 30m
+  postBuild:
+    substitute:
+      APP: *app
