@@ -32,7 +32,7 @@ spec:
       frigate:
         pod:
           nodeSelector:
-            nvidia.com/gpu/model: "4090"
+            nvidia.com/gpu.model: "4090"
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
