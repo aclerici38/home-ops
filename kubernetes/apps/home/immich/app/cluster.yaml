@@ -6,7 +6,7 @@ kind: Cluster
 metadata:
   name: immich-db
 spec:
-  instances: 3
+  instances: 1
   imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.6@sha256:30065f928c9d7a6f71382c53d416db708ecb7eeefb70d81182cb2668a1b53d56
   primaryUpdateStrategy: unsupervised
   storage:
