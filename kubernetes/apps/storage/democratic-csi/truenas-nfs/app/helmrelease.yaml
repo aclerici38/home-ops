@@ -32,16 +32,16 @@ spec:
       strategy: node
       externalAttacher:
         enabled: true
-        image: registry.k8s.io/sig-storage/csi-attacher:v4.8.0
+        image: registry.k8s.io/sig-storage/csi-attacher:v4.8.0@sha256:a399393ff5bd156277c56bae0c08389b1a1b95b7fd6ea44a316ce55e0dd559d7
       externalProvisioner:
         enabled: true
-        image: registry.k8s.io/sig-storage/csi-provisioner:v5.1.0
+        image: registry.k8s.io/sig-storage/csi-provisioner:v5.1.0@sha256:672e45d6a55678abc1d102de665b5cbd63848e75dc7896f238c8eaaf3c7d322f
       externalResizer:
         enabled: true
-        image: registry.k8s.io/sig-storage/csi-resizer:v1.12.0
+        image: registry.k8s.io/sig-storage/csi-resizer:v1.12.0@sha256:ab774734705a906561e15b67f6a96538f3ad520335d636f793aaafe87a3b5200
       externalSnapshotter:
         enabled: true
-        image: registry.k8s.io/sig-storage/csi-snapshotter:v8.2.0
+        image: registry.k8s.io/sig-storage/csi-snapshotter:v8.2.0@sha256:dd788d79cf4c1b8edee6d9b80b8a1ebfc51a38a365c5be656986b129be9ac784
     csiDriver:
       name: truenas-nfs
       attachRequired: true
@@ -96,8 +96,8 @@ spec:
     node:
       enabled: true
       driver:
-        image: democraticcsi/democratic-csi:v1.9.3
+        image: ghcr.io/democraticcsi/democratic-csi:v1.9.3@sha256:8ce65ce5bd9b9cdd79ace0e94b6652a233cfbfb26af177fb7912c1217a3f2c19
 
     csiProxy:
       enabled: true
-      image: ghcr.io/democratic-csi/csi-grpc-proxy:v0.5.6
+      image: ghcr.io/democratic-csi/csi-grpc-proxy:v0.5.6@sha256:fc5fc1fe9c682463fe8b219db070930e77067d76449749ef5ba99cedd30fa437

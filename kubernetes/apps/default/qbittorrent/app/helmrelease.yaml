@@ -29,7 +29,7 @@ spec:
             dependsOn: gluetun
             image:
               repository: docker.io/busybox
-              tag: latest
+              tag: 1.37.0@sha256:2919d0172f7524b2d8df9e50066a682669e6d170ac0f6a49676d54358fe970b5
             command:
               - sh
               - -c
@@ -48,7 +48,7 @@ spec:
           gluetun:
             image:
               repository: ghcr.io/qdm12/gluetun
-              tag: v3.40.0
+              tag: v3.40.0@sha256:2b42bfa046757145a5155acece417b65b4443c8033fb88661a8e9dcf7fda5a00
             env:
               LOG_LEVEL: debug
               VPN_SERVICE_PROVIDER: custom
@@ -78,7 +78,7 @@ spec:
           qbit:
             image:
               repository: ghcr.io/onedr0p/qbittorrent
-              tag: 5.0.3
+              tag: 5.0.3@sha256:3d62f065290ae77a10c7f7deaef7bc857068feff89503773707d2dae339b66c6
             env:
               TZ: ${TZ}
             probes:
@@ -111,7 +111,7 @@ spec:
           port-forward:
             image:
               repository: ghcr.io/bjw-s-labs/gluetun-qb-port-sync
-              tag: 0.0.2
+              tag: 0.0.2@sha256:23f3d00b21b879ead89dba97114b63930ec050c1780aa0b01062052a5925d197
             env:
               GLUETUN_CONTROL_SERVER_HOST: localhost
               GLUETUN_CONTROL_SERVER_PORT: 8000
@@ -134,7 +134,7 @@ spec:
             dependsOn: qbit
             image:
               repository: docker.io/feramance/qbitrr
-              tag: v4.10.10
+              tag: v4.10.10@sha256:32e011672a7fe1aefa575c909cf5c728116a99e1721d52d5957c1477ad8e3065
             env:
               TZ: ${TZ}
             resources:
