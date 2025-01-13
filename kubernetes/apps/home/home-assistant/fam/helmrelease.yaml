@@ -26,6 +26,8 @@ spec:
     controllers:
       &app home-assistant:
         pod:
+          nodeSelector:
+            kubernetes.io/hostname: "posey"
           hostname: fam-hass-home
           annotations:
             k8s.v1.cni.cncf.io/networks: |
