@@ -1,0 +1,16 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: truenas-nfs
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+provisioner: truenas-nfs
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+mountOptions:
+  - nfsvers=4.2
+  - hard
+  - nconnect=16
+  - noatime

@@ -46,18 +46,6 @@ spec:
       name: truenas-nfs
       attachRequired: true
       storageCapacity: true
-    storageClasses:
-      - name: truenas-nfs
-        defaultClass: false
-        reclaimPolicy: Delete
-        volumeBindingMode: Immediate
-        allowVolumeExpansion: true
-        annotations:
-          kustomize.toolkit.fluxcd.io/prune: disabled
-    volumeSnapshotClasses:
-      - name: truenas-nfs
-        deletionPolicy: Delete
-        parameters: {}
     driver:
       config:
         driver: freenas-api-nfs
