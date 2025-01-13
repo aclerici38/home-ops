@@ -44,10 +44,13 @@ spec:
                 memory: 6Gi
                 nvidia.com/gpu: 1
             securityContext:
+              readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
               capabilities:
                 drop:
                   - ALL
+                add:
+                  - CHOWN
           node:
             image:
               repository: docker.io/revenz/fileflows
@@ -67,10 +70,13 @@ spec:
                 memory: 6Gi
                 nvidia.com/gpu: 1
             securityContext:
+              readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
               capabilities:
                 drop:
                   - ALL
+                add:
+                  - CHOWN
 
     defaultPodOptions:
       securityContext:
