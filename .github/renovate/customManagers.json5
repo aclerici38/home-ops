@@ -29,15 +29,5 @@
       "matchStrings": ["imageName: (?<depName>[^\\s:]+):(?<currentValue>\\S+)(@(?<currentDigest>sha256:\\S+)?)"],
       "datasourceTemplate": "docker"
     },
-    {
-      "customType": "regex",
-      "description": ["Process vuetorrent"],
-      "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml$"],
-      "matchStrings": [
-        "https://github\\.com/VueTorrent/VueTorrent/releases/download/(?<currentValue>v\\d+\\.\\d+\\.\\d+)/vuetorrent\\.zip"
-      ],
-      "datasourceTemplate": "github-releases",
-      "depNameTemplate": "VueTorrent/VueTorrent"
-    }
   ]
 }

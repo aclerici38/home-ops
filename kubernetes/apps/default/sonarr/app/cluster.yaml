@@ -7,7 +7,7 @@ metadata:
   name: sonarr-db
 spec:
   instances: 1
-  imageName: ghcr.io/cloudnative-pg/postgresql:16
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.6@sha256:5815f70ae438221b358b31f0231dc9e269e58dc651be2ecba1bd0c6cb29f9acd
   primaryUpdateStrategy: unsupervised
   storage:
     size: 2Gi
