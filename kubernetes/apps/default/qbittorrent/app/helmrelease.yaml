@@ -30,9 +30,6 @@ spec:
             image:
               repository: docker.io/busybox
               tag: latest
-            env:
-              # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
-              VUETORRENT_VERSION: v2.19.0
             command:
               - sh
               - -c
