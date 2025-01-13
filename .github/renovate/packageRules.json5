@@ -13,6 +13,11 @@
       "allowedVersions": "<=16"
     },
     {
+      "matchDatasources": ["docker"],
+      "matchPackagePatterns": ["cloudnative-pgvecto.rs"],
+      "allowedVersions": "==16"
+    },
+    {
       "description": ["Custom versioning for minio"],
       "matchDatasources": ["docker"],
       "matchPackagePatterns": ["minio"],
