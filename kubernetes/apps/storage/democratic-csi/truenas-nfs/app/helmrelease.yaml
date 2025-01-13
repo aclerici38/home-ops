@@ -49,12 +49,14 @@ spec:
     storageClasses:
       - name: truenas-nfs
         defaultClass: false
-        reclaimPolicy: Retain
+        reclaimPolicy: Delete
         volumeBindingMode: Immediate
         allowVolumeExpansion: true
+        annotations:
+          kustomize.toolkit.fluxcd.io/prune: disabled
     volumeSnapshotClasses:
       - name: truenas-nfs
-        deletionPolicy: Retain
+        deletionPolicy: Delete
         parameters: {}
     driver:
       config:
