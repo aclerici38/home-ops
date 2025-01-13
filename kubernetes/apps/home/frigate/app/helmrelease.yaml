@@ -44,7 +44,7 @@ spec:
               - secretRef:
                   name: frigate-secret
             securityContext:
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: true
               privileged: true
             resources:
