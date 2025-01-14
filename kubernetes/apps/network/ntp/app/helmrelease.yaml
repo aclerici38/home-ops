@@ -39,8 +39,9 @@ spec:
               limits:
                 memory: 500Mi
             securityContext:
-              runAsUser: 65534
-              runAsGroup: 65534
+              runAsUser: 1000
+              runAsGroup: 1000
+              fsGroup: 1000
               runAsNonRoot: true
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
