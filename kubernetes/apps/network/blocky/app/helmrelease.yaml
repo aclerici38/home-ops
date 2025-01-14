@@ -113,6 +113,6 @@ spec:
         type: configMap
         name: blocky-configmap
         globalMounts:
-          - path: /app/config.yaml
-            subPath: config.yaml
+          - path: /app/config.yml
+            subPath: config.yml
             readOnly: true

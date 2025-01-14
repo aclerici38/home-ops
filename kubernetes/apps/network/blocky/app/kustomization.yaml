@@ -9,7 +9,7 @@ resources:
 configMapGenerator:
   - name: blocky-configmap
     files:
-      - ./config/config.yaml
+      - ./config/config.yml
 generatorOptions:
   disableNameSuffixHash: true
   annotations:
