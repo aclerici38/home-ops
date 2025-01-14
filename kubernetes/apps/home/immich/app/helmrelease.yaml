@@ -34,6 +34,7 @@ spec:
         kubernetes.io/hostname: "bonds"
     env:
       TZ: ${TZ}
+      REDIS_HOSTNAME: immich-dragonfly.home.svc.cluster.local
       IMMICH_LOG_LEVEL: debug
       DB_HOSTNAME:
         valueFrom:
@@ -156,8 +157,6 @@ spec:
         enabled: false
 
     server:
-      env:
-        REDIS_URL: immich-dragonfly.home.svc.cluster.local
       service:
         main:
           type: ClusterIP
