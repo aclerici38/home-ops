@@ -1,0 +1,25 @@
+# https://0xerr0r.github.io/blocky/latest/configuration/
+
+bootstrapDns:
+  - "1.1.1.1"
+  - "1.0.0.1"
+upstreams:
+  groups:
+    default:
+      - "https://dns.cloudflare.com/dns-query"
+      - "https://1.1.1.1/dns-query"
+      - "https://1.0.0.1/dns-query"
+      - "https://dns.google/dns-query"
+      - "1.1.1.1"
+      - "1.0.0.1"
+  init:
+    strategy: failOnError
+  strategy: strict
+ports:
+  dns: 53
+  http: 4000
+prometheus:
+  enable: true
+  path: "/metrics"
+redis:
+  address: "blocky-drafonfly.network.svc.cluster.local:6379"
