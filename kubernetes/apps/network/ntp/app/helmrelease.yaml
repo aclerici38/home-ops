@@ -51,6 +51,7 @@ spec:
                 add:
                   - CHOWN
                   - CHMOD
+                  - SYS_CHROOT
     defaultPodOptions:
       topologySpreadConstraints:
         - maxSkew: 1
@@ -74,4 +75,4 @@ spec:
       run:
         type: emptyDir
         globalMounts:
-          - path: /var/run
+          - path: /var/run/chrony
