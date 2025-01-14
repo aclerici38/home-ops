@@ -34,9 +34,6 @@ servers:
       - name: loop
       - name: reload
       - name: loadbalance
-podDisruptionBudget:
-  enabled: true
-  minAvailable: "50%"
 affinity:
   podAntiAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
@@ -45,14 +42,14 @@ affinity:
         - key: k8s-app
           operator: In
           values:
-          - coredns
-      topologyKey: "kubernetes.io/hostname"
+          - kube-dns
+      topologyKey: kubernetes.io/hostname
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
 tolerations:
   - key: CriticalAddonsOnly
     operator: Exists
-  # - key: node-role.kubernetes.io/control-plane
-  #   operator: Exists
-  #   effect: NoSchedule
 # Graceful Helmfile to HelmRelease takeover
 customLabels:
   helm.toolkit.fluxcd.io/name: coredns
