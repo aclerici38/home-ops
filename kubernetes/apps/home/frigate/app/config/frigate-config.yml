@@ -76,13 +76,12 @@ detectors:
     device: GPU
 
 model:
-  model_type: yolonas
-  width: 320 # <--- should match whatever was set in notebook
-  height: 320 # <--- should match whatever was set in notebook
-  input_tensor: nchw
+  width: 300
+  height: 300
+  input_tensor: nhwc
   input_pixel_format: bgr
-  path: /config/yolo_nas_s.onnx
-  labelmap_path: /labelmap/coco-80.txt
+  path: /openvino-model/ssdlite_mobilenet_v2.xml
+  labelmap_path: /openvino-model/coco_91cl_bkgr.txt
 
 semantic_search:
   enabled: True
