@@ -60,7 +60,7 @@ spec:
                     command:
                     - /bin/sh
                     - -c
-                    - '[ "$(curl -s ip.me)" = "${WIREGUARD_ENDPOINT_IP}" ]'
+                    - '[ "$(curl -s ip.me)" = "$(WIREGUARD_ENDPOINT_IP)" ]'
                   failureThreshold: 30
                   periodSeconds: 10
                   successThreshold: 1
