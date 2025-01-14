@@ -7,7 +7,8 @@ service:
   name: kube-dns
   clusterIP: "172.17.0.10"
 replicaCount: 1
-deployment: false
+deployment:
+  enabled: false
 servers:
   - zones:
       - zone: .
