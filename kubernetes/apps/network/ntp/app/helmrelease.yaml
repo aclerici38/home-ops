@@ -78,3 +78,7 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /var/run/chrony
+      lib:
+        type: emptyDir
+        globalMounts:
+          - path: /var/lib/chrony
