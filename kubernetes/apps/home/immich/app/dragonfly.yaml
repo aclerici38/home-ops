@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://lds-schemas.pages.dev/dragonflydb.io/dragonfly_v1alpha1.json
+apiVersion: dragonflydb.io/v1alpha1
+kind: Dragonfly
+metadata:
+  name: immich-dragonfly
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: "bonds"
+  image: ghcr.io/dragonflydb/dragonfly:v1.26.1@sha256:eb2dbfb94f6712c709b0261e2d46c9e437b3e67720bdfe05121f1f06c2abe3aa
+  replicas: 1
+  env:
+    - name: MAX_MEMORY
+      valueFrom:
+        resourceFieldRef:
+          resource: limits.memory
+          divisor: 1Mi
+  args:
+    - --maxmemory=$(MAX_MEMORY)Mi
+    - --proactor_threads=2
+    - --cluster_mode=emulated
+    - --lock_on_hashtags
+    - --default_lua_flags=allow-undeclared-keys
+  resources:
+    requests:
+      cpu: 50m
+    limits:
+      memory: 1Gi

@@ -10,6 +10,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: cloudnative-pg
+    - name: dragonfly
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

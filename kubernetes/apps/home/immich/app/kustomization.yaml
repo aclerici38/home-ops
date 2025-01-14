@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./immich-secret.yaml
   - ./cluster.yaml
+  - ./dragonfly.yaml
   - ../../../../templates/volsync/claim.yaml
   - ../../../../templates/volsync/r2.yaml
   - ./helmrelease.yaml

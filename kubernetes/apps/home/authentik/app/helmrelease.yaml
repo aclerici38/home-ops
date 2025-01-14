@@ -26,6 +26,8 @@ spec:
     global:
       image:
         repository: ghcr.io/goauthentik/server
+      env:
+        AUTHENTIK_REDIS__HOST: authentik-dragonfly.home.svc.cluster.local
       envFrom:
         - secretRef:
             name: authentik-secret
@@ -104,8 +106,8 @@ spec:
           emptyDir: {}
     worker:
       envFrom:
-      - secretRef:
-          name: authentik-secret
+        - secretRef:
+            name: authentik-secret
       replicas: *replicas
       pdb:
         enabled: true
@@ -122,4 +124,4 @@ spec:
     postgresql:
       enabled: false
     redis:
-      enabled: true
+      enabled: false
