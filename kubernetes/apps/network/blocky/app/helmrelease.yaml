@@ -28,7 +28,7 @@ spec:
         replicas: 1
         strategy: RollingUpdate
         containers:
-          app:
+          *app :
             image:
               repository: ghcr.io/0xerr0r/blocky
               tag: v0.24@sha256:9a82e0235c52ef3048586f8006add06e52132adaae70d02f980569dae16421a2
@@ -71,7 +71,7 @@ spec:
             matchLabels:
               app.kubernetes.io/name: *app
     service:
-      app:
+      *app :
         controller: *app
         nameOverride: *app
         ports:
@@ -90,7 +90,7 @@ spec:
             port: *port
             protocol: UDP
     serviceMonitor:
-      app:
+      *app :
         serviceName: *app
         endpoints:
           - port: http
@@ -99,19 +99,19 @@ spec:
             interval: 1m
             scrapeTimeout: 10s
     ingress:
-      app:
+      *app :
         className: internal
         hosts:
-          - host: dns.${SECRET_DOMAIN}"
+          - host: "dns.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
-                  identifier: app
+                  identifier: *app
                   port: http
     persistence:
       config:
         type: configMap
-        name: blocky-configmap # overriden by kustomizeconfig
+        name: blocky-configmap
         globalMounts:
           - path: /app/config.yml
             subPath: config.yml
