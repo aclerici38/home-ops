@@ -52,21 +52,18 @@ spec:
                 squat.ai/tun: 1
             restartPolicy: Always
             probes:
-              readiness: &probes
+              startup: &probes
                 enabled: true
                 custom: true
                 spec:
                   exec:
                     command:
-                      - curl
-                      - -f
-                      - http://localhost
-                  initialDelaySeconds: 120
-                  periodSeconds: 90
-                  timeoutSeconds: 10
-                  failureThreshold: 3
-              liveness: *probes
-
+                    - /bin/sh
+                    - -c
+                    - '[ "$(curl -s ip.me)" = "${WIREGUARD_ENDPOINT_IP}" ]'
+                  failureThreshold: 30
+                  periodSeconds: 10
+                  successThreshold: 1
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
