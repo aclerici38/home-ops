@@ -57,12 +57,12 @@ nodes:
         mtu: 1500
         vip:
           ip: "10.0.30.38"
-      - deviceSelector:
-          hardwareAddr: BC:24:11:AF:15:25
-        ignore: true
-      - deviceSelector:
-          hardwareAddr: BC:24:11:93:06:84
-        ignore: true
+      # - deviceSelector:
+      #     hardwareAddr: BC:24:11:AF:15:25
+      #   ignore: true
+      # - deviceSelector:
+      #     hardwareAddr: BC:24:11:93:06:84
+      #   ignore: true
 
   - hostname: "posey"
     ipAddress: "10.0.30.28"
