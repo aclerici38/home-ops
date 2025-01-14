@@ -39,11 +39,10 @@ spec:
               limits:
                 memory: 500Mi
             securityContext:
-              runAsUser: 1000
-              runAsGroup: 1000
-              fsGroup: 1000
-              runAsNonRoot: true
-              allowPrivilegeEscalation: false
+              runAsUser: 0
+              runAsGroup: 0
+              runAsNonRoot: false
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
               seccompProfile: { type: RuntimeDefault }
               capabilities:
