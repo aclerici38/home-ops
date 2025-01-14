@@ -160,7 +160,7 @@ spec:
         main:
           type: ClusterIP
       enabled: true
-      runtimeClassName: nvidia
+      # runtimeClassName: nvidia
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
@@ -196,7 +196,7 @@ spec:
 
     machine-learning:
       enabled: true
-      runtimeClassName: nvidia
+      # runtimeClassName: nvidia
       image:
         repository: ghcr.io/immich-app/immich-machine-learning
         tag: v1.124.2-cuda

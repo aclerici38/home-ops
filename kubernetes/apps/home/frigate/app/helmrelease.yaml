@@ -56,7 +56,7 @@ spec:
                 # nvidia.com/gpu: 1
                 memory: 6Gi
     defaultPodOptions:
-      runtimeClassName: nvidia
+      # runtimeClassName: nvidia
       securityContext:
         runAsNonRoot: false
         runAsUser: 0
