@@ -54,14 +54,13 @@ spec:
             probes:
               startup: &probes
                 enabled: true
-                custom: true
                 spec:
                   httpGet:
                     path: /
                     port: 80
-                  initialDelaySeconds: 0
+                  initialDelaySeconds: 10
                   periodSeconds: 10
-                  timeoutSeconds: 1
+                  timeoutSeconds: 5
                   failureThreshold: 3
               readiness: *probes
               liveness: *probes
