@@ -25,26 +25,6 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
         initContainers:
-          vuetorrent:
-            dependsOn: gluetun
-            image:
-              repository: docker.io/busybox
-              tag: 1.37.0@sha256:a5d0ce49aa801d475da48f8cb163c354ab95cab073cd3c138bd458fc8257fbf1
-            command:
-              - sh
-              - -c
-              # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
-              - |
-                wget -qO /tmp/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/v2.19.0/vuetorrent.zip
-                mkdir -p /tmp/VueTorrent
-                unzip /tmp/vuetorrent.zip -d /tmp/webui
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              runAsUser: 1000
-              runAsGroup: 1000
           gluetun:
             image:
               repository: ghcr.io/qdm12/gluetun
@@ -67,6 +47,22 @@ spec:
               limits:
                 squat.ai/tun: 1
             restartPolicy: Always
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - curl
+                      - -f
+                      - http://localhost
+                  initialDelaySeconds: 120
+                  periodSeconds: 90
+                  timeoutSeconds: 10
+                  failureThreshold: 3
+              liveness: *probes
+
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
@@ -78,6 +74,17 @@ spec:
 
         containers:
           qbit:
+            lifecycle:
+              preStart:
+                exec:
+                  command:
+                    - sh
+                    - -c
+                    # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
+                    - |
+                      wget -qO /tmp/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/v2.19.0/vuetorrent.zip
+                      mkdir -p /tmp/VueTorrent
+                      unzip /tmp/vuetorrent.zip -d /tmp/webui
             image:
               repository: ghcr.io/onedr0p/qbittorrent
               tag: 5.0.3@sha256:19597e4a5c5e52702ff6b4ea5c4b5f9f42433d6c2f1ef1d2db5964938bf44557
