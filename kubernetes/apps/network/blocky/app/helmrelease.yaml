@@ -28,7 +28,7 @@ spec:
   values:
     controllers:
       blocky:
-        replicas: 3
+        replicas: 1
         strategy: RollingUpdate
         containers:
           *app :

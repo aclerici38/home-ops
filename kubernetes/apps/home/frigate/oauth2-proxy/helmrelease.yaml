@@ -26,12 +26,9 @@ spec:
     - name: authentik
       namespace: home
   values:
+    strategy: RollingUpdate
     nodeSelector:
       kubernetes.io/hostname: "posey"
-    image:
-      repository: "quay.io/oauth2-proxy/oauth2-proxy"
-      tag: v7.8.0@sha256:d73ce980a96ec1143901a4676eaf0d148ae1dc965a59d3a3e5cf626cc84350aa
-
     ingress:
       enabled: true
       className: external
