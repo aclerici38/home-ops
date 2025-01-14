@@ -65,7 +65,7 @@ review:
   #   enabled: True
 
 birdseye:
-  enabled: true
+  enabled: false
   restream: true
   # -- objects, motion, continuous
   mode: motion
@@ -117,11 +117,11 @@ go2rtc:
       - "ffmpeg:https://10.0.50.50/flv?port=1935&app=bcs&stream=channel2_ext.bcs&user={FRIGATE_CAM_USER}&password={FRIGATE_NVR_PASS}"
 
 camera_groups:
-  "Birdseye":
-    cameras:
-      - birdseye
-    icon: LuBird
-    order: 0
+  # "Birdseye":
+  #   cameras:
+  #     - birdseye
+  #   icon: LuBird
+  #   order: 0
   "House":
     cameras:
       - Garage
@@ -285,8 +285,8 @@ cameras:
     enabled: True
     genai:
       use_snapshot: True
-    birdseye:
-      mode: continuous
+    # birdseye:
+    #   mode: continuous
     zones:
       driveway_back:
         coordinates: 0.47,0.74,0.676,0.716,0.714,0.731,0.735,0.729,0.735,0.78,0.671,0.787,0.639,0.816,0.406,0.806
