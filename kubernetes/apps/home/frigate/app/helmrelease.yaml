@@ -23,8 +23,8 @@ spec:
       strategy: rollback
       retries: 3
   dependsOn:
-    # - name: nvidia-device-plugin
-    #   namespace: kube-system
+    - name: nvidia-device-plugin
+      namespace: kube-system
     - name: truenas-nfs
       namespace: storage
   values:

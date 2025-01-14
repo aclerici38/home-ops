@@ -15,7 +15,7 @@ auth:
   enabled: False
 
 ffmpeg:
-  # hwaccel_args: preset-nvidia
+  hwaccel_args: preset-nvidia
   input_args: preset-rtsp-restream
   output_args:
     record: preset-record-generic-audio-copy
@@ -82,9 +82,9 @@ model:
 semantic_search:
   enabled: True
   reindex: False
-  model_size: large
+  model_size: small
 genai:
-  enabled: True
+  enabled: False
   provider: ollama
   base_url: http://ollama.utilities:11434
   model: minicpm-v:8b
