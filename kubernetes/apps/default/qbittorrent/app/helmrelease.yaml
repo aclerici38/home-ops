@@ -52,9 +52,7 @@ spec:
                 squat.ai/tun: 1
             restartPolicy: Always
             probes:
-              startup: &probes
-                enabled: true
-              readiness:
+              startup:
                 enabled: true
               liveness:
                 enabled: true
