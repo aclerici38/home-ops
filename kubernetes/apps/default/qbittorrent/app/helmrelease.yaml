@@ -23,6 +23,7 @@ spec:
   values:
     controllers:
       qbit:
+        type: statefulset
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
