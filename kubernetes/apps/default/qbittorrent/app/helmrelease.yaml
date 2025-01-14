@@ -15,11 +15,6 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  dependsOn:
-    - name: truenas-nfs
-      namespace: storage
-    - name: local-path
-      namespace: storage
   values:
     controllers:
       qbit:
@@ -31,12 +26,32 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
         initContainers:
+          vuetorrent:
+            dependsOn: gluetun
+            image:
+              repository: docker.io/busybox
+              tag: 1.37.0@sha256:a5d0ce49aa801d475da48f8cb163c354ab95cab073cd3c138bd458fc8257fbf1
+            command:
+              - sh
+              - -c
+              # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
+              - |
+                wget -qO /tmp/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/v2.19.0/vuetorrent.zip
+                mkdir -p /tmp/VueTorrent
+                unzip /tmp/vuetorrent.zip -d /tmp/webui
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              runAsUser: 1000
+              runAsGroup: 1000
           gluetun:
             image:
               repository: ghcr.io/qdm12/gluetun
               tag: v3.40.0@sha256:2b42bfa046757145a5155acece417b65b4443c8033fb88661a8e9dcf7fda5a00
             env:
-              DOT: off
+              DOT: "off"
               LOG_LEVEL: debug
               VPN_SERVICE_PROVIDER: custom
               VPN_TYPE: wireguard
@@ -63,17 +78,6 @@ spec:
 
         containers:
           qbit:
-            lifecycle:
-              preStart:
-                exec:
-                  command:
-                    - sh
-                    - -c
-                    # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
-                    - |
-                      wget -qO /tmp/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/v2.19.0/vuetorrent.zip
-                      mkdir -p /tmp/VueTorrent
-                      unzip /tmp/vuetorrent.zip -d /tmp/webui
             image:
               repository: ghcr.io/onedr0p/qbittorrent
               tag: 5.0.3@sha256:19597e4a5c5e52702ff6b4ea5c4b5f9f42433d6c2f1ef1d2db5964938bf44557
