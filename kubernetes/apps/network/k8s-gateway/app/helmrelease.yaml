@@ -29,7 +29,6 @@ spec:
     service:
       type: ClusterIP
       port: 53
-      externalTrafficPolicy: Cluster
     watchedResources: ["Ingress", "Service"]
     topologySpreadConstraints:
       - maxSkew: 1
