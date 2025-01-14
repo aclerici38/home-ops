@@ -1,42 +1,15 @@
 ---
-blocking:
-  loading:
-    downloads:
-      timeout: 30s
-  denylists:
-    ads:
-      # PiHole default
-      - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
-      # via onedr0p
-      # - https://raw.githubusercontent.com/ookangzheng/dbl-oisd-nl/master/dbl.txt
-      # This list is now empty, but the oisd.nl team has their own source:
-      - https://big.oisd.nl/domainswild
-      # trying to block iOS game ads
-      - https://raw.githubusercontent.com/BlackJack8/iOSAdblockList/master/Regular%20Hosts.txt
-    youtube:
-      - |
-        youtube.com
-        www.youtube.com
-        m.youtube.com
-        youtubei.googleapis.com
-        youtube.googleapis.com
-        www.youtube-nocookie.com
-
-  allowlists:
-    ads:
-      - https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt
-  clientGroupsBlock:
-    default:
-      - ads
-      - youtube
-
 caching:
-  minTime: 15m
-  prefetching: true
-  prefetchExpires: 2h
+  minTime: 1m
+  maxTime: 1h
+  maxItemsCount: 0
+  prefetchExpires: 1h
+  prefetchThreshold: 3
+  prefetchMaxItemsCount: 0
+  cacheTimeNegative: 5m
 
 clientLookup:
-  upstream: tcp+udp:10.0.0.254
+  upstream: 10.0.30.1
 
 log:
   level: info
@@ -53,7 +26,5 @@ upstreams:
   groups:
     default:
       - 1.1.1.1:53
-      #- tcp-tls:one.one.one.one
-      #- tcp-tls:dns.quad9.net
-      #- https://cloudflare-dns.com/dns-query
-      #- https://dns.quad9.net/dns-query
+redis:
+  address: blocky-dragonfly.network.svc.cluster.local
