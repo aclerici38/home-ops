@@ -32,17 +32,17 @@ nodes:
     nodeLabels:
       nvidia.com/gpu: "present"
       nvidia.com/gpu.model: "4090"
-    kernelModules:
-      - name: nvidia
-      - name: nvidia_uvm
-      - name: nvidia_drm
-      - name: nvidia_modeset
+    # kernelModules:
+    #   - name: nvidia
+    #   - name: nvidia_uvm
+    #   - name: nvidia_drm
+    #   - name: nvidia_modeset
     schematic:
       customization:
         systemExtensions:
           officialExtensions:
-            - siderolabs/nvidia-container-toolkit-production
-            - siderolabs/nonfree-kmod-nvidia-production
+            # - siderolabs/nvidia-container-toolkit-production
+            # - siderolabs/nonfree-kmod-nvidia-production
             - siderolabs/qemu-guest-agent
     controlPlane: true
     networkInterfaces:

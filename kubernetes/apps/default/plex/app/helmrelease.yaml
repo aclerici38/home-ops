@@ -23,15 +23,17 @@ spec:
       strategy: rollback
       retries: 3
   dependsOn:
-    - name: nvidia-device-plugin
-      namespace: kube-system
+    # - name: nvidia-device-plugin
+    #   namespace: kube-system
     - name: local-path
       namespace: storage
   values:
     controllers:
       plex:
-        annotations:
-          reloader.stakater.com/auto: "true"
+
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
         containers:
           app:
             image:
@@ -67,7 +69,7 @@ spec:
               requests:
                 cpu: 100m
               limits:
-                nvidia.com/gpu: 1
+                # nvidia.com/gpu: 1
                 memory: 16Gi
     defaultPodOptions:
       runtimeClassName: nvidia

@@ -25,6 +25,9 @@ spec:
   values:
     controllers:
       prowlarr:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
         initContainers:
           init-db:
             image:

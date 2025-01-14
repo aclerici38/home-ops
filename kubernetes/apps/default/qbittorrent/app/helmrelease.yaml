@@ -19,8 +19,8 @@ spec:
     controllers:
       qbit:
         pod:
-          annotations:
-            configmap.reloader.stakater.com/reload: qbitrr-config
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"

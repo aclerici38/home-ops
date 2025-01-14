@@ -63,7 +63,7 @@ loadBalancer:
   mode: "dsr"
 localRedirectPolicy: true
 operator:
-  replicas: 1
+  replicas: 3
   rollOutPods: true
   prometheus:
     enabled: true

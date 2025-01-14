@@ -27,10 +27,6 @@ kind: Ingress
 metadata:
   name: adguard-home-ingress
   namespace: network
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-production"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
   ingressClassName: internal
   rules:

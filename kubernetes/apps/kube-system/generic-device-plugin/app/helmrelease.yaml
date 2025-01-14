@@ -23,10 +23,11 @@ spec:
       priorityClassName: system-node-critical
     controllers:
       generic-device-plugin:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
         type: daemonset
         strategy: RollingUpdate
-        annotations:
-          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:

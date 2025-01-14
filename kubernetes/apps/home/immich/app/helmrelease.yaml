@@ -22,15 +22,16 @@ spec:
       strategy: rollback
       retries: 3
   dependsOn:
-    - name: nvidia-device-plugin
-      namespace: kube-system
+    # - name: nvidia-device-plugin
+    #   namespace: kube-system
     - name: local-path
       namespace: storage
     - name: cloudnative-pg
       namespace: database
   values:
-    nodeSelector: &nodeSelector
-      nvidia.com/gpu.model: "4090"
+    pod:
+      nodeSelector: &nodeSelector
+        kubernetes.io/hostname: "bonds"
     env:
       TZ: ${TZ}
       IMMICH_LOG_LEVEL: debug
@@ -136,7 +137,7 @@ spec:
 
       resources:
         limits:
-          nvidia.com/gpu: 1
+          # nvidia.com/gpu: 1
 
     redis:
       enabled: true
@@ -190,7 +191,7 @@ spec:
           cpu: 500m
           memory: 500Mi
         limits:
-          nvidia.com/gpu: 1
+          # nvidia.com/gpu: 1
           memory: 4Gi
 
     machine-learning:
@@ -217,5 +218,5 @@ spec:
           cpu: 500m
           memory: 500Mi
         limits:
-          nvidia.com/gpu: 1
+          # nvidia.com/gpu: 1
           memory: 8Gi

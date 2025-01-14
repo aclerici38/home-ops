@@ -25,6 +25,9 @@ spec:
   values:
     controllers:
       recyclarr:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
         containers:
           app:
             env:

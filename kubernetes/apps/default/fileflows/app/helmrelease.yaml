@@ -25,6 +25,9 @@ spec:
   values:
     controllers:
       fileflows:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
         containers:
           server:
             image:
@@ -42,7 +45,7 @@ spec:
                 memory: 350M
               limits:
                 memory: 6Gi
-                nvidia.com/gpu: 1
+                # nvidia.com/gpu: 1
             securityContext:
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
@@ -70,7 +73,7 @@ spec:
                 memory: 350M
               limits:
                 memory: 6Gi
-                nvidia.com/gpu: 1
+                # nvidia.com/gpu: 1
             securityContext:
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
