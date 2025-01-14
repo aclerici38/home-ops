@@ -6,7 +6,8 @@ serviceAccount:
 service:
   name: kube-dns
   clusterIP: "172.17.0.10"
-replicaCount: 2
+replicaCount: 1
+deployment: false
 servers:
   - zones:
       - zone: .
@@ -34,19 +35,25 @@ servers:
       - name: loop
       - name: reload
       - name: loadbalance
+podDisruptionBudget:
+  enabled: true
+  minAvailable: "50%"
 affinity:
-  nodeAffinity:
+  podAntiAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: node-role.kubernetes.io/control-plane
-              operator: Exists
+    - labelSelector:
+        matchExpressions:
+        - key: k8s-app
+          operator: In
+          values:
+          - coredns
+      topologyKey: "kubernetes.io/hostname"
 tolerations:
   - key: CriticalAddonsOnly
     operator: Exists
-  - key: node-role.kubernetes.io/control-plane
-    operator: Exists
-    effect: NoSchedule
+  # - key: node-role.kubernetes.io/control-plane
+  #   operator: Exists
+  #   effect: NoSchedule
 # Graceful Helmfile to HelmRelease takeover
 customLabels:
   helm.toolkit.fluxcd.io/name: coredns
