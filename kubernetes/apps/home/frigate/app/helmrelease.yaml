@@ -122,7 +122,7 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp/cache
-      yolo_nas_script:
+      yolo-nas-script:
         enabled: true
         name: yolo-nas-download
         type: configMap
