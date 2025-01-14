@@ -43,10 +43,14 @@ spec:
               runAsGroup: 65534
               runAsNonRoot: true
               allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
               seccompProfile: { type: RuntimeDefault }
               capabilities:
                 drop:
                   - ALL
+                add:
+                  - CHOWN
+                  - CHMOD
     defaultPodOptions:
       topologySpreadConstraints:
         - maxSkew: 1
