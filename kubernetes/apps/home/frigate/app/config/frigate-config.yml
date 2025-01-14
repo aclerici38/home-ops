@@ -1,7 +1,7 @@
 ---
 mqtt:
   enabled: true
-  host: mosquitto.utilities
+  host: mosquitto.cluster-utilities.svc.cluster.local
   port: 1883
   user: "{FRIGATE_MQTT_USER}"
   password: "{FRIGATE_MQTT_PASS}"
@@ -71,14 +71,19 @@ birdseye:
   mode: motion
 
 detectors:
-  tensorrt:
-    type: tensorrt
+  ov:
+    type: openvino
+    device: GPU
+
 model:
-  path: /config/model_cache/tensorrt/yolov7x-320.trt
+  model_type: yolonas
+  width: 320 # <--- should match whatever was set in notebook
+  height: 320 # <--- should match whatever was set in notebook
   input_tensor: nchw
-  input_pixel_format: rgb
-  width: 320
-  height: 320
+  input_pixel_format: bgr
+  path: /config/yolo_nas_s.onnx
+  labelmap_path: /labelmap/coco-80.txt
+
 semantic_search:
   enabled: True
   reindex: False

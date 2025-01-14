@@ -10,5 +10,8 @@ configMapGenerator:
   - name: frigate-config
     files:
       - ./config/frigate-config.yml
+  - name: yolo-nas-download
+    files:
+      - ./config/yolo_nas.py
 generatorOptions:
   disableNameSuffixHash: true

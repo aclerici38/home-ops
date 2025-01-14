@@ -33,6 +33,21 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: "posey"
+        initContainers:
+          yolo-nas-download:
+            image:
+              repository: docker.io/library/python
+              tag: slim@sha256:a324f7281085d13bfaae2f322a148f3ac458fca26d1243d508de49b3185281bd
+            command:
+              - /bin/bash
+              - -c
+              - |
+                if [ ! -f "/config/yolo_nas_s.onnx" ]; then
+                  pip install -q super_gradients==3.7.1
+                  python3 /tmp/setup.py
+                else
+                  echo "Model already exists at /config/yolo_nas_s.onnx"
+                fi
         containers:
           app:
             image:
@@ -103,8 +118,16 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /dev/shm
-
       cache:
         type: emptyDir
         globalMounts:
           - path: /tmp/cache
+      yolo_nas_script:
+        enabled: true
+        name: yolo-nas-download
+        type: configMap
+        advancedMounts:
+          frigate:
+            yolo-nas-download:
+              - path: /tmp/setup.py
+                subPath: yolo_nas.py
