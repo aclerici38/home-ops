@@ -51,19 +51,6 @@ spec:
               limits:
                 squat.ai/tun: 1
             restartPolicy: Always
-            probes:
-              startup: &probes
-                enabled: true
-                spec:
-                  httpGet:
-                    path: /
-                    port: 80
-                  initialDelaySeconds: 10
-                  periodSeconds: 10
-                  timeoutSeconds: 5
-                  failureThreshold: 3
-              readiness: *probes
-              liveness: *probes
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
