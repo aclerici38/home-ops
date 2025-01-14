@@ -1,0 +1,114 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mosquitto
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    controllers:
+      mosquitto:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "posey"
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+
+        initContainers:
+          init-config:
+            image:
+              repository: public.ecr.aws/docker/library/eclipse-mosquitto
+              tag: 2.0.20
+            command:
+              - "/bin/sh"
+              - "-c"
+            args:
+              - |
+                cp /tmp/secret/* /mosquitto/external_config/;
+                mosquitto_passwd -U /mosquitto/external_config/mosquitto_pwd;
+                chmod 0600 /mosquitto/external_config/mosquitto_pwd;
+
+        containers:
+          app:
+            image:
+              repository: public.ecr.aws/docker/library/eclipse-mosquitto
+              tag: 2.0.20@sha256:deae95623b9d5c6ca5e264380629db53b992106d436b56d42f7c8df46b41b96f
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            resources:
+              requests:
+                cpu: 5m
+                memory: 10M
+              limits:
+                memory: 10M
+
+    service:
+      app:
+        controller: mosquitto
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: "10.0.30.107"
+        ports:
+          mqtt:
+            enabled: true
+            port: 1883
+
+    persistence:
+      data:
+        existingClaim: mosquitto
+        advancedMounts:
+          mosquitto:
+            app:
+              - path: /data
+
+      mosquitto-configfile:
+        type: configMap
+        name: mosquitto-configmap
+        advancedMounts:
+          mosquitto:
+            app:
+              - path: /mosquitto/config/mosquitto.conf
+                subPath: mosquitto.conf
+                readOnly: true
+
+      mosquitto-secret:
+        type: secret
+        name: mosquitto-secret
+        advancedMounts:
+          mosquitto:
+            init-config:
+              - path: /tmp/secret
+                readOnly: true
+
+      mosquitto-externalconfig:
+        type: emptyDir
+        globalMounts:
+          - path: /mosquitto/external_config
