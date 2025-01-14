@@ -30,6 +30,7 @@ spec:
   values:
     controllers:
       frigate:
+        strategy: RollingUpdate
         pod:
           nodeSelector:
             kubernetes.io/hostname: "posey"
