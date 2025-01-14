@@ -19,8 +19,6 @@ spec:
     name: flux-system
   wait: true
   dependsOn:
-    - name: local-path
-    - name: generic-device-plugin
     - name: volsync
     - name: external-secrets-stores
   postBuild:
