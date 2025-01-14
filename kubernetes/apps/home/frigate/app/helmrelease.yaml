@@ -43,7 +43,8 @@ spec:
               - -c
               - |
                 if [ ! -f "/config/yolo_nas_s.onnx" ]; then
-                  pip install -q super_gradients==3.7.1
+                  pip install -q torch torchvision --index-url https://download.pytorch.org/whl/cpu
+                  pip install -q super_gradients
                   python3 /tmp/setup.py
                 else
                   echo "Model already exists at /config/yolo_nas_s.onnx"
