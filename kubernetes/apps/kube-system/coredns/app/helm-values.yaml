@@ -3,6 +3,13 @@ fullnameOverride: coredns
 k8sAppLabelOverride: kube-dns
 serviceAccount:
   create: true
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: DoNotSchedule
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/name: coredns
 service:
   name: kube-dns
   clusterIP: "172.17.0.10"
@@ -36,19 +43,9 @@ servers:
       - name: loop
       - name: reload
       - name: loadbalance
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: node-role.kubernetes.io/control-plane
-              operator: Exists
 tolerations:
   - key: CriticalAddonsOnly
     operator: Exists
-  - key: node-role.kubernetes.io/control-plane
-    operator: Exists
-    effect: NoSchedule
 # Graceful Helmfile to HelmRelease takeover
 customLabels:
   helm.toolkit.fluxcd.io/name: coredns
