@@ -64,6 +64,10 @@ spec:
                   failureThreshold: 30
                   periodSeconds: 10
                   successThreshold: 1
+              readiness:
+                enabled: true
+              liveness:
+                enabled: true
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
