@@ -54,8 +54,6 @@ spec:
             probes:
               startup:
                 enabled: true
-              liveness:
-                enabled: true
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
