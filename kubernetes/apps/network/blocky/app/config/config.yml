@@ -25,6 +25,6 @@ prometheus:
 upstreams:
   groups:
     default:
-      - 1.1.1.1:53
+      - dnscrypt-proxy.network.svc.cluster.local:53
 redis:
   address: blocky-dragonfly.network.svc.cluster.local

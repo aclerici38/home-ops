@@ -14,6 +14,9 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  dependsOn:
+    - name: dnscrypt-proxy
+      namespace: network
   install:
     remediation:
       retries: 3
@@ -61,8 +64,8 @@ spec:
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
+        runAsUser: 65534
+        runAsGroup: 65534
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
