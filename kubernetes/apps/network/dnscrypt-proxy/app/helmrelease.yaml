@@ -26,6 +26,7 @@ spec:
     controllers:
       *app :
         replicas: 3
+        strategy: RollingUpdate
         containers:
           *app :
             image:
@@ -76,7 +77,7 @@ spec:
         ports:
           dns-tcp:
             targetPort: &targetPort 5053
-            port: *port
+            port: &port 53
             protocol: TCP
           dns-udp:
             targetPort: *targetPort
