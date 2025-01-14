@@ -30,9 +30,7 @@ servers:
           pods insecure
           fallthrough in-addr.arpa ip6.arpa
       - name: forward
-        parameters: . /etc/resolv.conf
-      - name: cache
-        parameters: 30
+        parameters: . blocky.network.svc.cluster.local
       - name: loop
       - name: reload
       - name: loadbalance
