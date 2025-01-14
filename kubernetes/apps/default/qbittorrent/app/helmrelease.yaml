@@ -54,16 +54,6 @@ spec:
             probes:
               startup: &probes
                 enabled: true
-                custom: true
-                spec:
-                  exec:
-                    command:
-                    - /bin/sh
-                    - -c
-                    - '[ "$(curl -s ip.me)" = "$(WIREGUARD_ENDPOINT_IP)" ]'
-                  failureThreshold: 30
-                  periodSeconds: 10
-                  successThreshold: 1
               readiness:
                 enabled: true
               liveness:
