@@ -30,7 +30,7 @@ spec:
   values:
     controllers:
       blocky:
-        replicas: 1
+        type: daemonset
         strategy: RollingUpdate
         containers:
           *app :
@@ -68,13 +68,6 @@ spec:
         runAsNonRoot: true
         runAsUser: 65534
         runAsGroup: 65534
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: DoNotSchedule
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: *app
     service:
       *app :
         controller: *app

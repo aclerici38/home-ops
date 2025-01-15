@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: ingress-nginx-internal
+  name: &app ingress-nginx-internal
 spec:
   interval: 30m
   chart:
@@ -24,8 +24,16 @@ spec:
     remediation:
       retries: 1
   values:
-    fullnameOverride: ingress-nginx-internal
+    fullnameOverride: *app
     controller:
+      replicaCount: 3
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: *app
       service:
         annotations:
           lbipam.cilium.io/ips: "10.0.30.101"
