@@ -49,8 +49,10 @@ spec:
     - patch: |-
         - op: add
           path: /spec/postBuild
-          value:
-            substituteFrom: []
+          value: {}
+        - op: add
+          path: /spec/postBuild/substituteFrom
+          value: []
         - op: add
           path: /spec/postBuild/substituteFrom/-
           value:
