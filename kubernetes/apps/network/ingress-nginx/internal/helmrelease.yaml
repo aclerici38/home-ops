@@ -26,14 +26,7 @@ spec:
   values:
     fullnameOverride: *app
     controller:
-      replicaCount: 3
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: DoNotSchedule
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: *app
+      kind: DaemonSet
       service:
         annotations:
           lbipam.cilium.io/ips: "10.0.30.101"
