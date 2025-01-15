@@ -44,8 +44,6 @@ spec:
         operations: ["CREATE", "UPDATE"]
         resources: ["kustomizations"]
   matchConditions:
-    - name: skip-flux-system
-      expression: '!(object.metadata.name == "flux-system")'
     - name: not-has-postBuild
       expression: "!has(object.spec.postBuild)"
   failurePolicy: Fail

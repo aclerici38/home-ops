@@ -7,6 +7,9 @@ metadata:
   name: prowlarr-db
 spec:
   instances: 1
+  affinity:
+    nodeSelector:
+      kubernetes.io/hostname: bonds
   imageName: ghcr.io/cloudnative-pg/postgresql:16.6@sha256:5815f70ae438221b358b31f0231dc9e269e58dc651be2ecba1bd0c6cb29f9acd
   primaryUpdateStrategy: unsupervised
   storage:
