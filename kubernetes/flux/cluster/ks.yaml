@@ -33,6 +33,14 @@ spec:
     provider: sops
     secretRef:
       name: sops-age
+  postBuild:
+    substituteFrom:
+      - name: cluster-settings
+        kind: ConfigMap
+        optional: true
+      - name: cluster-secrets
+        kind: Secret
+        optional: true
   patches:
     - patch: |-
         apiVersion: kustomize.toolkit.fluxcd.io/v1
