@@ -15,7 +15,6 @@ auth:
   enabled: False
 
 ffmpeg:
-  hwaccel_args: preset-nvidia
   input_args: preset-rtsp-restream
   output_args:
     record: preset-record-generic-audio-copy
