@@ -27,7 +27,7 @@ spec:
       # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
       VUETORRENT_VERSION: v2.21.0
   patches:
-    - patch: |
+    - patch: |-
         - op: add
           path: /spec/postBuild/substituteFrom/-
           value:
