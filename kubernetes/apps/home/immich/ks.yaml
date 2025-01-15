@@ -28,7 +28,7 @@ spec:
       VOLSYNC_STORAGECLASS: truenas-nfs
       VOLSYNC_SNAPSHOTCLASS: truenas-nfs
   patches:
-    - patch: |-
+    - patch: |
         - op: add
           path: /spec/postBuild/substituteFrom/-
           value:
