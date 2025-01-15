@@ -11,6 +11,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: volsync
+    - name: external-secrets-stores
   path: ./kubernetes/apps/home/home-assistant/fam
   prune: true
   sourceRef:

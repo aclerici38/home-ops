@@ -15,11 +15,11 @@ spec:
         name: jetstack
         namespace: flux-system
   install:
-    timeout: 1m
+    timeout: 5m
     remediation:
       retries: 1
   upgrade:
-    timeout: 1m
+    timeout: 5m
     cleanupOnFail: true
     remediation:
       retries: 1
