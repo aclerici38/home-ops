@@ -48,6 +48,10 @@ spec:
   patches:
     - patch: |-
         - op: add
+          path: /spec/postBuild
+          value:
+            substituteFrom: []
+        - op: add
           path: /spec/postBuild/substituteFrom/-
           value:
             name: cluster-settings
