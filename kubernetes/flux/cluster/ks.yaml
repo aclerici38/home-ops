@@ -47,25 +47,34 @@ spec:
         optional: true
   patches:
     - patch: |-
-        - op: add
-          path: /spec/postBuild
-          value: {}
-        - op: add
-          path: /spec/postBuild/substituteFrom
-          value: []
-        - op: add
-          path: /spec/postBuild/substituteFrom/-
-          value:
-            name: cluster-settings
-            kind: ConfigMap
-            optional: true
-        - op: add
-          path: /spec/postBuild/substituteFrom/-
-          value:
-            name: cluster-secrets
-            kind: Secret
-            optional: true
+        apiVersion: kustomize.toolkit.fluxcd.io/v1
+        kind: Kustomization
+        metadata:
+          name: not-used
+        spec:
+          decryption:
+            provider: sops
+            secretRef:
+              name: sops-age
+          postBuild:
+            substituteFrom:
+              - name: cluster-settings
+                kind: ConfigMap
+                optional: true
+              - name: cluster-secrets
+                kind: Secret
+                optional: true
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
         labelSelector: substitution.flux.home.arpa/disabled notin (true)
+    - patch: |-
+        apiVersion: apps/v1
+        kind: Secret
+        metadata:
+          name: not-used
+          annotations:
+            reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+            reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      target:
+        kind: Secret
