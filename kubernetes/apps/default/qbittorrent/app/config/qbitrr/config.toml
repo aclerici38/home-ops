@@ -210,13 +210,13 @@ IgnoreTorrentsYoungerThan = 1200
 
 # Maximum allowed remaining ETA for torrent completion (in seconds: 3600 = 1 Hour)
 # Note that if you set the MaximumETA on a tracker basis that value is favoured over this value
-MaximumETA = 604800
+MaximumETA = 172800
 
 # Do not delete torrents with higher completion percentage than this setting (0.5 = 50%, 1.0 = 100%)
 MaximumDeletablePercentage = 0.99
 
 # Ignore slow torrents.
-DoNotRemoveSlow = true
+DoNotRemoveSlow = false
 
 # Re-search stalled torrents
 ReSearchStalled = true
@@ -245,7 +245,7 @@ MaxUploadRatio = -1
 # Set the maximum seeding time in seconds for torrents
 # Set this value to -1 to disabled it
 # Note that if you set the MaxSeedingTime on a tracker basis that value is favoured over this value
-MaxSeedingTime = 604800
+MaxSeedingTime = 600
 
 # Remove torrent condition (-1=Do not remove, 1=Remove on MaxUploadRatio, 2=Remove on MaxSeedingTime, 3=Remove on MaxUploadRatio or MaxSeedingTime, 4=Remove on MaxUploadRatio and MaxSeedingTime)
 RemoveTorrent = 2
@@ -393,7 +393,7 @@ IgnoreTorrentsYoungerThan = 1200
 
 # Maximum allowed remaining ETA for torrent completion (in seconds: 3600 = 1 Hour)
 # Note that if you set the MaximumETA on a tracker basis that value is favoured over this value
-MaximumETA = 604800
+MaximumETA = 172800
 
 # Do not delete torrents with higher completion percentage than this setting (0.5 = 50%, 1.0 = 100%)
 MaximumDeletablePercentage = 0.99
@@ -427,7 +427,7 @@ MaxUploadRatio = -1
 # Set the maximum seeding time in seconds for torrents
 # Set this value to -1 to disabled it
 # Note that if you set the MaxSeedingTime on a tracker basis that value is favoured over this value
-MaxSeedingTime = 604800
+MaxSeedingTime = 600
 
 # Remove torrent condition (-1=Do not remove, 1=Remove on MaxUploadRatio, 2=Remove on MaxSeedingTime, 3=Remove on MaxUploadRatio or MaxSeedingTime, 4=Remove on MaxUploadRatio and MaxSeedingTime)
 RemoveTorrent = 2

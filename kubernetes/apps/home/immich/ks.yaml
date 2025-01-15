@@ -12,7 +12,6 @@ spec:
   dependsOn:
     - name: cloudnative-pg
     - name: volsync
-    - name: dragonfly
   path: ./kubernetes/apps/home/immich/app
   prune: true
   sourceRef:
@@ -27,14 +26,6 @@ spec:
       VOLSYNC_CAPACITY: 2Ti
       VOLSYNC_STORAGECLASS: truenas-nfs
       VOLSYNC_SNAPSHOTCLASS: truenas-nfs
-  patches:
-    - patch: |
-        - op: add
-          path: /spec/postBuild/substituteFrom/-
-          value:
-            kind: Secret
-            name: immich-secret
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        name: *app
+    substituteFrom:
+      - kind: Secret
+        name: immich-secret
