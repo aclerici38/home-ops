@@ -13,7 +13,7 @@ spec:
     - name: cloudnative-pg
     - name: volsync
   path: ./kubernetes/apps/home/immich/app
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
