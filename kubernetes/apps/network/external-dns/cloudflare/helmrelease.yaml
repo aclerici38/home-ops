@@ -15,12 +15,12 @@ spec:
         name: external-dns
         namespace: flux-system
   install:
-    timeout: 1m
+    timeout: 2m
     crds: CreateReplace
     remediation:
       retries: 1
   upgrade:
-    timeout: 1m
+    timeout: 2m
     cleanupOnFail: true
     crds: CreateReplace
     remediation:

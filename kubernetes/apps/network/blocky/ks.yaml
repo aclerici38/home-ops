@@ -14,7 +14,7 @@ spec:
     kind: GitRepository
     name: flux-system
   interval: 30m
-  retryInterval: 1m
+  retryInterval: 2m
   timeout: 3m
   targetNamespace: network
   commonMetadata:
@@ -33,7 +33,7 @@ spec:
 #     kind: GitRepository
 #     name: home-ops
 #   interval: 30m
-#   retryInterval: 1m
+#   retryInterval: 2m
 #   timeout: 3m
 #   targetNamespace: network
 #   commonMetadata:

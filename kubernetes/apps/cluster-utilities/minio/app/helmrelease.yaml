@@ -15,11 +15,11 @@ spec:
         name: bjw-s
         namespace: flux-system
   install:
-    timeout: 1m
+    timeout: 2m
     remediation:
       retries: 1
   upgrade:
-    timeout: 1m
+    timeout: 2m
     cleanupOnFail: true
     remediation:
       strategy: rollback
@@ -99,7 +99,7 @@ spec:
           - port: s3
             scheme: http
             path: /minio/v2/metrics/cluster
-            interval: 1m
+            interval: 2m
             scrapeTimeout: 10s
     ingress:
       app:

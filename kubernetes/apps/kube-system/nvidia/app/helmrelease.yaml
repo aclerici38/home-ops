@@ -15,11 +15,11 @@ spec:
         name: nvidia-dvp
         namespace: flux-system
   install:
-    timeout: 1m
+    timeout: 2m
     remediation:
       retries: 1
   upgrade:
-    timeout: 1m
+    timeout: 2m
     cleanupOnFail: true
     remediation:
       strategy: rollback

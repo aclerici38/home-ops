@@ -15,11 +15,11 @@ spec:
         name: external-secrets
         namespace: flux-system
   install:
-    timeout: 1m
+    timeout: 2m
     remediation:
       retries: 1
   upgrade:
-    timeout: 1m
+    timeout: 2m
     cleanupOnFail: true
     remediation:
       strategy: rollback
@@ -38,13 +38,13 @@ spec:
         repository: ghcr.io/external-secrets/external-secrets
       serviceMonitor:
         enabled: true
-        interval: 1m
+        interval: 2m
     certController:
       image:
         repository: ghcr.io/external-secrets/external-secrets
       serviceMonitor:
         enabled: true
-        interval: 1m
+        interval: 2m
     serviceMonitor:
       enabled: true
-      interval: 1m
+      interval: 2m
