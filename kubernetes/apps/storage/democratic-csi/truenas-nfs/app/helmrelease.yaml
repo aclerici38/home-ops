@@ -28,6 +28,8 @@ spec:
     - name: snapshot-controller
       namespace: storage
   values:
+    nodeselector:
+      kubernetes.io/hostname: bonds
     controller:
       fullnameOverride: *name
       enabled: true
