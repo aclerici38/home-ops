@@ -68,13 +68,3 @@ spec:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
         labelSelector: substitution.flux.home.arpa/disabled notin (true)
-    - patch: |-
-        apiVersion: apps/v1
-        kind: Secret
-        metadata:
-          name: not-used
-          annotations:
-            reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
-            reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
-      target:
-        kind: Secret
