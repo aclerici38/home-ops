@@ -15,12 +15,14 @@ spec:
         name: stakater
         namespace: flux-system
   install:
+    timeout: 1m
     remediation:
-      retries: 3
+      retries: 1
   upgrade:
+    timeout: 1m
     cleanupOnFail: true
     remediation:
-      retries: 3
+      retries: 1
   values:
     fullnameOverride: reloader
     reloader:

@@ -17,13 +17,13 @@ spec:
   install:
     crds: CreateReplace
     remediation:
-      retries: 3
+      retries: 1
   upgrade:
     cleanupOnFail: true
     crds: CreateReplace
     remediation:
       strategy: rollback
-      retries: 3
+      retries: 1
   values:
     fullnameOverride: *app
     provider:
