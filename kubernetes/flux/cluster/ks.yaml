@@ -57,9 +57,7 @@ spec:
             secretRef:
               name: sops-age
           postBuild:
-            # Note: remove the existing substituteFrom section
-            # and use the substitute section to add new sources
-            +substituteFrom:
+            substituteFrom:
               - name: cluster-settings
                 kind: ConfigMap
                 optional: true
