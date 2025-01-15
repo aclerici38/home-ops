@@ -30,8 +30,6 @@ spec:
   values:
     controller:
       fullnameOverride: *name
-      nodeselector:
-        kubernetes.io/hostname: bonds
       enabled: true
       strategy: node
       externalAttacher:
@@ -51,6 +49,8 @@ spec:
       attachRequired: true
       storageCapacity: true
     driver:
+      nodeselector:
+        kubernetes.io/hostname: bonds
       config:
         driver: freenas-api-nfs
         httpConnection:
