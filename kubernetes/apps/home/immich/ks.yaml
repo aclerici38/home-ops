@@ -27,6 +27,10 @@ spec:
       VOLSYNC_CAPACITY: 2Ti
       VOLSYNC_STORAGECLASS: truenas-nfs
       VOLSYNC_SNAPSHOTCLASS: truenas-nfs
-    substituteFrom:
-      - kind: Secret
-        name: immich-secret
+  patches:
+    - patch: |-
+        - op: add
+          path: /spec/postBuild/substituteFrom/-
+          value:
+            kind: Secret
+            name: immich-secret
