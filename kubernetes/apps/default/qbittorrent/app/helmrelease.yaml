@@ -19,6 +19,9 @@ spec:
     timeout: 2m
   upgrade:
     timeout: 2m
+    remediation:
+      strategy: rollback
+      retries: 1
   values:
     controllers:
       qbit:
