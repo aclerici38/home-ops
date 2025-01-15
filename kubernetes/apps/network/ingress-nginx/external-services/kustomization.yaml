@@ -1,0 +1,8 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./external-services/opnsense.yaml
+  - ./external-services/proxmox.yaml
+  - ./external-services/truenas-scale.yaml
