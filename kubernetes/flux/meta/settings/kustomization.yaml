@@ -3,5 +3,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./cluster-settings.sops.yaml
-  - ./helmrelease.yaml
+  - ./cluster-settings.yaml
+  - ./cluster-secrets.sops.yaml
+
+  - ./mutatingadmissionpolicy.yaml
