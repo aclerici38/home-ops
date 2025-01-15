@@ -24,7 +24,7 @@ spec:
     remediation:
       retries: 1
   values:
-    type: DaemonSet
+    replicaCount: 2
     fullnameOverride: k8s-gateway
     domain: "${SECRET_DOMAIN}"
     ttl: 1
@@ -32,3 +32,10 @@ spec:
       type: ClusterIP
       port: 53
     watchedResources: ["Ingress", "Service"]
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: k8s-gateway
