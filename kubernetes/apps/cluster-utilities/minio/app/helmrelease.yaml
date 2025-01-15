@@ -25,16 +25,11 @@ spec:
       strategy: rollback
       retries: 1
   dependsOn:
-    # - name: nvidia-device-plugin
-    #   namespace: kube-system
     - name: truenas-nfs
       namespace: storage
   values:
     controllers:
       minio:
-        pod:
-          nodeSelector:
-            kubernetes.io/hostname: "posey"
         containers:
           app:
             image:
