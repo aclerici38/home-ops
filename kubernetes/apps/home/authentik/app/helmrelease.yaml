@@ -30,9 +30,6 @@ spec:
         repository: ghcr.io/goauthentik/server
       env:
         AUTHENTIK_REDIS__HOST: authentik-dragonfly.home.svc.cluster.local
-      envFrom:
-        - secretRef:
-            name: authentik-secret
 
     authentik:
       log_level: info
@@ -41,6 +38,9 @@ spec:
         send_pii: false
 
     server:
+      envFrom:
+        - secretRef:
+            name: authentik-secret
       initContainers:
         - name: init-db
           image: ghcr.io/onedr0p/postgres-init:16.6@sha256:a37bbb04a0ea3f15b505c6f97637e7ae89bc66541ae23b8d3848024087980e76
