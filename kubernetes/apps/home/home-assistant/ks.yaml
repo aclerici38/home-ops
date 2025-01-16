@@ -12,6 +12,7 @@ spec:
   dependsOn:
     - name: volsync
     - name: external-secrets-stores
+    - name: minio
   path: ./kubernetes/apps/home/home-assistant/fam
   prune: true
   sourceRef:
