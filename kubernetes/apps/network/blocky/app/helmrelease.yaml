@@ -48,6 +48,9 @@ spec:
                   secretKeyRef:
                     name: cnpg-secret
                     key: password
+            envFrom:
+              - secretRef:
+                  name: cnpg-secret
               - secretRef:
                   name: blocky-secret
         containers:
