@@ -28,7 +28,6 @@ spec:
     - name: authentik
       namespace: home
   values:
-    strategy: RollingUpdate
     nodeSelector:
       kubernetes.io/hostname: "posey"
     ingress:
