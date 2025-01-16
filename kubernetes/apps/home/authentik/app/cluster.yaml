@@ -15,6 +15,13 @@ spec:
   superuserSecret:
     name: cnpg-secret
   enableSuperuserAccess: true
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: "kubernetes.io/hostname"
+      whenUnsatisfiable: "DoNotSchedule"
+      labelSelector:
+        matchLabels:
+          app.kubernetes.io/part-of: authentik-db
 
   backup:
     retentionPolicy: 7d

@@ -12,15 +12,20 @@ spec:
       valueFrom:
         resourceFieldRef:
           resource: limits.memory
-          divisor: 1m
+          divisor: 1Mi
   args:
     - --maxmemory=$(MAX_MEMORY)Mi
     - --proactor_threads=2
     - --cluster_mode=emulated
-    - --lock_on_hashtags
-    - --default_lua_flags=allow-undeclared-keys
   resources:
     requests:
-      cpu: 50m
+      cpu: 100m
     limits:
-      memory: 1Gi
+      memory: 512Mi
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: "kubernetes.io/hostname"
+      whenUnsatisfiable: "DoNotSchedule"
+      labelSelector:
+        matchLabels:
+          app.kubernetes.io/part-of: blocky-dragonfly

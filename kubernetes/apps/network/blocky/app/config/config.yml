@@ -29,3 +29,17 @@ conditional:
     ${SECRET_DOMAIN}: k8s-gateway.network.svc.cluster.local:53
 redis:
   address: blocky-dragonfly.network.svc.cluster.local
+
+queryLog:
+  type: postgresql
+  target: ${PG_STRING}
+  logRetentionDays: 0
+  creationAttempts: 3
+  creationCooldown: 5s
+  # optional: Which fields should be logged. You can choose one or more from: clientIP, clientName, responseReason, responseAnswer, question, duration. If not defined, it logs all fields
+  fields:
+    - clientIP
+    - duration
+    - question
+    - responseReason
+    - responseAnswer
