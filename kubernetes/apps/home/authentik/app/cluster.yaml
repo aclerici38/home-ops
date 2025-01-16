@@ -26,7 +26,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
-      serverName: &currentCluster authentik-db-v3
+      serverName: &currentCluster authentik-db-v2
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -37,7 +37,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster authentik-db-v2
+      source: &previousCluster authentik-db-v1
   externalClusters:
     - name: *previousCluster
       barmanObjectStore:
