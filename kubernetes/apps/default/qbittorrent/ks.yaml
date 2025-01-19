@@ -21,7 +21,6 @@ spec:
   dependsOn:
     - name: volsync
     - name: external-secrets-stores
-    - name: minio
   postBuild:
     substitute:
       APP: *app

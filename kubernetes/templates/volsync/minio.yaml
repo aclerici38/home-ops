@@ -14,10 +14,11 @@ spec:
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: "s3:http://minio.cluster-utilities.svc.cluster.local:9000/backups/${APP}"
+        RESTIC_REPOSITORY: "{{ .RESTIC_REPOSITORY }}/${BUCKET}/${APP}"
         RESTIC_PASSWORD: "{{ .RESTIC_PASSWORD }}"
         AWS_ACCESS_KEY_ID: "{{ .AWS_ACCESS_KEY_ID }}"
         AWS_SECRET_ACCESS_KEY: "{{ .AWS_SECRET_ACCESS_KEY }}"
+        BUCKET: "{{ .BUCKET }}"
   data:
     - secretKey: AWS_ACCESS_KEY_ID
       remoteRef:
@@ -31,6 +32,14 @@ spec:
       remoteRef:
         key: "minio"
         property: "RESTIC_PASSWORD"
+    - secretKey: BUCKET
+      remoteRef:
+        key: "minio"
+        property: "BUCKET"
+    - secretKey: RESTIC_REPOSITORY
+      remoteRef:
+        key: "minio"
+        property: "RESTIC_REPOSITORY"
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/volsync.backube/replicationsource_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1

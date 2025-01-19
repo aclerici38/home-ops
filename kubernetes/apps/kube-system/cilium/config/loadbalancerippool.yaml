@@ -3,8 +3,18 @@
 apiVersion: cilium.io/v2alpha1
 kind: CiliumLoadBalancerIPPool
 metadata:
-  name: "vlan30-pool"
+  name: "apartment-pool"
 spec:
   blocks:
-    - start: "10.0.30.100"
-      stop: "10.0.30.200"
+    - start: "192.168.1.201"
+      stop: "192.168.1.250"
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/cilium.io/ciliumloadbalancerippool_v2alpha1.json
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: "house-pool"
+spec:
+  blocks:
+    - start: "10.0.40.250"
+      stop: "10.0.40.254"

@@ -14,6 +14,9 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  dependsOn:
+    - name: nvidia-device-plugin
+      namespace: kube-system
   install:
     timeout: 2m
     remediation:
@@ -24,9 +27,6 @@ spec:
     remediation:
       strategy: rollback
       retries: 1
-  dependsOn:
-    - name: truenas-nfs
-      namespace: storage
   values:
     controllers:
       frigate:

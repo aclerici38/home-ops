@@ -10,8 +10,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: cloudnative-pg
-    - name: local-path
-    - name: minio
+    - name: volsync
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

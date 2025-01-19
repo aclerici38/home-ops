@@ -13,7 +13,6 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: volsync
-    - name: minio
   path: ./kubernetes/apps/default/plex/app
   prune: true
   sourceRef:

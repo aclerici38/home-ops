@@ -6,7 +6,7 @@ talosVersion: v1.9.2
 kubernetesVersion: v1.32.1
 
 clusterName: kubernetes
-endpoint: https://10.0.30.38:6443
+endpoint: https://192.168.1.38:6443
 
 clusterPodNets:
   - "172.16.0.0/16"
@@ -14,7 +14,7 @@ clusterSvcNets:
   - "172.17.0.0/16"
 
 additionalApiServerCertSans: &sans
-  - "10.0.30.38"
+  - "192.168.1.38"
   - "127.0.0.1"
 additionalMachineCertSans: *sans
 
@@ -24,7 +24,7 @@ cniConfig:
 
 nodes:
   - hostname: "bonds"
-    ipAddress: "10.0.30.25"
+    ipAddress: "192.168.1.25"
     installDiskSelector:
       model: "QEMU*"
     machineSpec:
@@ -32,17 +32,17 @@ nodes:
     nodeLabels:
       nvidia.com/gpu: "present"
       nvidia.com/gpu.model: "4090"
-    # kernelModules:
-    #   - name: nvidia
-    #   - name: nvidia_uvm
-    #   - name: nvidia_drm
-    #   - name: nvidia_modeset
+    kernelModules:
+      - name: nvidia
+      - name: nvidia_uvm
+      - name: nvidia_drm
+      - name: nvidia_modeset
     schematic:
       customization:
         systemExtensions:
           officialExtensions:
-            # - siderolabs/nvidia-container-toolkit-production
-            # - siderolabs/nonfree-kmod-nvidia-production
+            - siderolabs/nvidia-container-toolkit-production
+            - siderolabs/nonfree-kmod-nvidia-production
             - siderolabs/qemu-guest-agent
     controlPlane: true
     networkInterfaces:
@@ -50,22 +50,27 @@ nodes:
           hardwareAddr: "bc:24:11:58:64:7d"
         dhcp: false
         addresses:
-          - "10.0.30.25/24"
+          - "192.168.1.25/24"
         routes:
           - network: "0.0.0.0/0"
-            gateway: "10.0.30.1"
+            gateway: "192.168.1.1"
         mtu: 1500
         vip:
-          ip: "10.0.30.38"
-      # - deviceSelector:
-      #     hardwareAddr: BC:24:11:AF:15:25
-      #   ignore: true
-      # - deviceSelector:
-      #     hardwareAddr: BC:24:11:93:06:84
-      #   ignore: true
-
+          ip: "192.168.1.38"
+      - interface: wg0
+        mtu: 1500
+        addresses:
+          - 10.100.0.25/24
+        wireguard:
+          privateKey: ${BONDS_WG_PRIVATE_KEY}
+          listenPort: 51821
+          peers:
+            - publicKey: ${POSEY_WG_PUBLIC_KEY}
+              endpoint: ${NAPA_WG_ENDPOINT}
+              allowedIPs:
+                - 10.100.0.28/32
   - hostname: "posey"
-    ipAddress: "10.0.30.28"
+    ipAddress: "10.0.40.28"
     installDiskSelector:
       model: "KINGSTON SNV2S1000G"
     machineSpec:
@@ -90,10 +95,10 @@ nodes:
           hardwareAddr: "c4:62:37:01:8c:cf"
         dhcp: false
         addresses:
-          - "10.0.30.28/24"
+          - "10.0.40.28/24"
         routes:
           - network: "0.0.0.0/0"
-            gateway: "10.0.30.1"
+            gateway: 10.0.40.1"
         mtu: 1500
       - deviceSelector:
           hardwareAddr: c4:62:37:01:8c:ce
@@ -101,6 +106,18 @@ nodes:
       - deviceSelector:
           hardwareAddr: a8:5e:45:9c:d0:99
         ignore: true
+      - interface: wg0
+        mtu: 1500
+        addresses:
+          - 10.100.0.28/24
+        wireguard:
+          privateKey: ${POSEY_WG_PRIVATE_KEY}
+          listenPort: 51821
+          peers:
+            - publicKey: ${BONDS_WG_PUBLIC_KEY}
+              endpoint: ${APARTMENT_WG_ENDPOINT}
+              allowedIPs:
+                - 10.100.0.25/32
 
 # Global patches
 patches:

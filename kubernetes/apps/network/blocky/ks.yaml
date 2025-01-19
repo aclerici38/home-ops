@@ -10,6 +10,7 @@ spec:
   prune: true
   dependsOn:
     - name: dragonfly
+    - name: cloudnative-pg
   sourceRef:
     kind: GitRepository
     name: flux-system

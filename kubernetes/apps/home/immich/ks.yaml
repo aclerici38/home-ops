@@ -11,8 +11,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: cloudnative-pg
-    - name: volsync
-    - name: minio
+    - name: dragonfly
   path: ./kubernetes/apps/home/immich/app
   prune: false
   sourceRef:

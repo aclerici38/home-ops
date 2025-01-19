@@ -8,8 +8,7 @@ metadata:
 spec:
   targetNamespace: default
   dependsOn:
-    - name: local-path
-    - name: minio
+    - name: volsync
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

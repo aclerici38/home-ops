@@ -1,0 +1,27 @@
+BONDS_WG_PRIVATE_KEY: ENC[AES256_GCM,data:sLJ14uIyTfIL72RuWcK5YQdRqOIQHOu5sUzbL4Ook8UuIEDdgxrdI3MGBxg=,iv:0WQqImNVlCeHvlLMNM25N4XAlZly2ttn/PNO4iiAtvI=,tag:Yvpq/oEWyLI5oYXTOjM2nQ==,type:str]
+BONDS_WG_PUBLIC_KEY: ENC[AES256_GCM,data:fkId3b5z6yCWYn2LRr4rf6mB3hT/7UpsDGKzThq8+u38+7mYZk5CeICZIlk=,iv:zmz/idnTUUC41tAKw3dFt5QnsVYyS62gSTWKih+R59Q=,tag:akgaakiqmWdeRIYe1rjfnQ==,type:str]
+POSEY_WG_PRIVATE_KEY: ENC[AES256_GCM,data:dfGiYsqZP+jWcT4S3C0FztQIcMM+2lyF+2mtEzCzLpBkcwp4/W5Xk2yn9ZA=,iv:e+q6Himq++OGx7/gQO+JfIvF/0JnqQFOE1rpRSHjL9k=,tag:WnN8dEymR03U5bj7019gsw==,type:str]
+POSEY_WG_PUBLIC_KEY: ENC[AES256_GCM,data:iGlOxBONcuYaLbKXBpuhURfdF22T/vWkF95Y//6ZbyeSeOqqgdWCZzaroGg=,iv:VwBvT6+Ko8uQhrTNI7uCon/Zd0NoUEjYTt33R8bkly0=,tag:mH0l0Zv3wrFkWG2TA/bSSw==,type:str]
+NAPA_WG_ENDPOINT: ENC[AES256_GCM,data:QYZbu3eGfnUdOw/28slk/fJBAMm+6L9yYQXomg==,iv:eQoW7RnXzmJZzpy0aDUXt3/AXmO4+yXrg6fyDMC1xXM=,tag:Hw8LtKoKwWtVzOGNIY2Qcw==,type:str]
+APARTMENT_WG_ENDPOINT: ENC[AES256_GCM,data:lQZ3TxKZcq6dnjayakQinCjgK51HSOIZ78rit9g1PQ==,iv:JXb9ENYWY/cCwe551Gs7zBkv4VI53gjCl0+PJ7VrL9w=,tag:IeNRXsTYwHfWU3dnhfSAIQ==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age13azafagpe0l7unvutqcm699w4jukxsdvn8a9mc3njd0lcx7pkfxqpnz643
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBUOE1pU01lYlduaXNpbE9n
+            WnVWelZxdXptUXVTQTVHV0JqNXhwQjlzZkVRCnNTeGtMRDFFN0VSUE5KSUQySmxp
+            VE0ybGhRSmVCNDlQR0docGpmZVBPZk0KLS0tIFUwWE5rc1Z3UUR6N2YvQTMrUW00
+            aDZ4VTJXa3FKQmw5OUlNLzBaRDhoc1EKKzxPdq8vzs5afQ50uZuc+PjtC07C2dti
+            KvkrjQtKZTGkbb2bUBqpTyCdbEh2uFDWLfGiJ2qRt4CT+ZyipyGO6Q==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-01-19T20:13:04Z"
+    mac: ENC[AES256_GCM,data:qQ/Xk3g9npqEvw9a4lK3ILS+ECaVCTvVUJZrE84f4oZjasqc8Of/Ws95CepMdlIFP2CeG/3H9ySbnmk1lImOv91DMd/erO02XMvLjFe3DiNTs1VGH+LM5r4M9r5kDE43/xSHLHfHywcY7LpVs1MC3S6HPKiqXHGRx059zOq3p9s=,iv:tLRBA2EXCa3FNJgap39+G2Y4IuTHdZbP0oQ2ENJipS0=,tag:eqe8F0YlsPxuD4gibs/4bA==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    mac_only_encrypted: true
+    version: 3.9.3

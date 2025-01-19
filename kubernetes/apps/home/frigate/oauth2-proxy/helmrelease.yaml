@@ -23,8 +23,6 @@ spec:
       strategy: rollback
       retries: 1
   dependsOn:
-    - name: external-secrets
-      namespace: external-secrets
     - name: authentik
       namespace: home
   values:
