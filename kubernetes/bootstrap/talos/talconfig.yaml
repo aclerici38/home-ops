@@ -6,7 +6,7 @@ talosVersion: v1.9.2
 kubernetesVersion: v1.32.1
 
 clusterName: kubernetes
-endpoint: https://192.168.1.38:6443
+endpoint: https://192.168.1.25:6443
 
 clusterPodNets:
   - "172.16.0.0/16"
@@ -14,7 +14,7 @@ clusterSvcNets:
   - "172.17.0.0/16"
 
 additionalApiServerCertSans: &sans
-  - "192.168.1.38"
+  - "192.168.1.25"
   - "127.0.0.1"
 additionalMachineCertSans: *sans
 
@@ -55,8 +55,8 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
         mtu: 1500
-        vip:
-          ip: "192.168.1.38"
+        # vip:
+        #   ip: "192.168.1.38"
       - interface: wg0
         mtu: 1500
         addresses:
@@ -98,7 +98,7 @@ nodes:
           - "10.0.40.28/24"
         routes:
           - network: "0.0.0.0/0"
-            gateway: 10.0.40.1"
+            gateway: "10.0.40.1"
         mtu: 1500
       - deviceSelector:
           hardwareAddr: c4:62:37:01:8c:ce
@@ -133,4 +133,3 @@ controlPlane:
   patches:
     - "@./patches/controller/admission-controller-patch.yaml"
     - "@./patches/controller/cluster.yaml"
-

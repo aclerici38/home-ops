@@ -15,7 +15,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: frigate-media
 spec:
-  storageClassName: truenas-nfs
+  storageClassName: synology-nfs
   resources:
     requests:
       storage: 2Ti
