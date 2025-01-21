@@ -1,12 +1,12 @@
 ---
 fullnameOverride: coredns
+replicaCount: 2
 k8sAppLabelOverride: kube-dns
 serviceAccount:
   create: true
 service:
   name: kube-dns
-  clusterIP: "172.17.0.10"
-replicaCount: 2
+  clusterIP: 10.43.0.10
 servers:
   - zones:
       - zone: .
@@ -30,26 +30,19 @@ servers:
           pods insecure
           fallthrough in-addr.arpa ip6.arpa
       - name: forward
-        parameters: . blocky.network.svc.cluster.local:53
+        parameters: . 192.168.1.250
       - name: reload
       - name: loadbalance
 affinity:
-  podAntiAffinity:
+  nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
-    - labelSelector:
-        matchExpressions:
-        - key: k8s-app
-          operator: In
-          values:
-          - kube-dns
-      topologyKey: kubernetes.io/hostname
-podDisruptionBudget:
-  enabled: true
-  minAvailable: 1
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: Exists
 tolerations:
   - key: CriticalAddonsOnly
     operator: Exists
-# Graceful Helmfile to HelmRelease takeover
-customLabels:
-  helm.toolkit.fluxcd.io/name: coredns
-  helm.toolkit.fluxcd.io/namespace: kube-system
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
