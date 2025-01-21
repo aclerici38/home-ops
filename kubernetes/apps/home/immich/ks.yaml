@@ -12,6 +12,7 @@ spec:
   dependsOn:
     - name: cloudnative-pg
     - name: dragonfly
+    - name: reflector
   path: ./kubernetes/apps/home/immich/app
   prune: false
   sourceRef:

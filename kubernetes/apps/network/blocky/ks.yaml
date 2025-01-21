@@ -11,6 +11,7 @@ spec:
   dependsOn:
     - name: dragonfly
     - name: cloudnative-pg
+    - name: reflector
   sourceRef:
     kind: GitRepository
     name: flux-system
