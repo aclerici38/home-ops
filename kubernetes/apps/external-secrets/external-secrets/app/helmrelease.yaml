@@ -29,7 +29,7 @@ spec:
       namespace: external-secrets
   values:
     installCRDs: true
-    replicaCount: 3
+    replicaCount: 1
     leaderElect: true
     image:
       repository: ghcr.io/external-secrets/external-secrets
