@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://lds-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -88,8 +88,6 @@ spec:
         runAsGroup: 65534
     service:
       *app :
-        clusterIP: 172.17.0.11
-        externalTrafficPolicy: Local
         controller: *app
         nameOverride: *app
         ports:
@@ -107,6 +105,8 @@ spec:
           dns-udp:
             port: *port
             protocol: UDP
+        clusterIP: 172.17.0.11
+        externalTrafficPolicy: Local
     serviceMonitor:
       *app :
         serviceName: *app
