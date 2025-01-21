@@ -4,6 +4,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ./namespace.yaml
+  - ./secrets
+  
   - ./mosquitto/ks.yaml
   - ./reflector/ks.yaml
   - ./reloader/ks.yaml
