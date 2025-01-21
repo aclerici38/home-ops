@@ -25,8 +25,8 @@ spec:
       strategy: rollback
       retries: 1
   dependsOn:
-    # - name: nvidia-device-plugin
-    #   namespace: kube-system
+    - name: nvidia-device-plugin
+      namespace: kube-system
     - name: local-path
       namespace: storage
   values:
@@ -71,10 +71,10 @@ spec:
               requests:
                 cpu: 100m
               limits:
-                # nvidia.com/gpu: 1
+                nvidia.com/gpu: 1
                 memory: 16Gi
     defaultPodOptions:
-      # runtimeClassName: nvidia
+      runtimeClassName: nvidia
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
