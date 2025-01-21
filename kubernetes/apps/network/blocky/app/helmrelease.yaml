@@ -111,7 +111,6 @@ spec:
         type: ClusterIP
         ports: *dnsPorts
         clusterIP: "172.17.0.11"
-        externalTrafficPolicy: Local
     serviceMonitor:
       *app :
         serviceName: *app
