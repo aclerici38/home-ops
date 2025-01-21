@@ -98,13 +98,18 @@ spec:
         type: LoadBalancer
         annotations:
           io.cilium/lb-ipam-ips: 192.168.1.250,10.0.40.250
-        ports:
+        ports: &dnsPorts
           dns-tcp:
             port: *port
             protocol: TCP
           dns-udp:
             port: *port
             protocol: UDP
+        externalTrafficPolicy: Local
+      internal-dns:
+        controller: *app
+        type: ClusterIP
+        ports: *dnsPorts
         clusterIP: "172.17.0.11"
         externalTrafficPolicy: Local
     serviceMonitor:
