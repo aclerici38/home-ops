@@ -30,7 +30,7 @@ servers:
           pods insecure
           fallthrough in-addr.arpa ip6.arpa
       - name: forward
-        parameters: . 192
+        parameters: . 172.17.0.11
       - name: reload
       - name: loadbalance
 affinity:
