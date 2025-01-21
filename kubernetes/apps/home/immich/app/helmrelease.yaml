@@ -136,7 +136,7 @@ spec:
 
       resources:
         limits:
-          # nvidia.com/gpu: 1
+          nvidia.com/gpu: 1
 
     redis:
       enabled: false
@@ -159,7 +159,7 @@ spec:
         main:
           type: ClusterIP
       enabled: true
-      # runtimeClassName: nvidia
+      runtimeClassName: nvidia
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
@@ -190,12 +190,12 @@ spec:
           cpu: 500m
           memory: 500Mi
         limits:
-          # nvidia.com/gpu: 1
+          nvidia.com/gpu: 1
           memory: 4Gi
 
     machine-learning:
       enabled: true
-      # runtimeClassName: nvidia
+      runtimeClassName: nvidia
       image:
         repository: ghcr.io/immich-app/immich-machine-learning
         tag: v1.124.2-cuda
@@ -217,5 +217,5 @@ spec:
           cpu: 500m
           memory: 500Mi
         limits:
-          # nvidia.com/gpu: 1
+          nvidia.com/gpu: 1
           memory: 8Gi
