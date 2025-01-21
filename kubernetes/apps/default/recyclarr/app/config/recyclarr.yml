@@ -11,7 +11,7 @@ sonarr:
         daily: default
         anime: default
     base_url: http://sonarr:8989
-    api_key: !env_var SONARR_API_KEY
+    api_key: ${SONARR_API_KEY}
 
     # Custom Format Configuration
     delete_old_custom_formats: true
@@ -140,7 +140,7 @@ radarr:
         standard: standard
 
     base_url: http://radarr:7878
-    api_key: !env_var RADARR_API_KEY
+    api_key: ${RADARR_API_KEY}
 
     # Custom Format Configuration
     delete_old_custom_formats: true
