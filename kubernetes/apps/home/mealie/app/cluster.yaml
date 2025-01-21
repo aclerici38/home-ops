@@ -1,0 +1,61 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.ok8.sh/postgresql.cnpg.io/cluster_v1.json
+
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: mealie-db
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.6@sha256:79a7bea85765cd242ce154ba3d183d2a5bd53702dca4c6f968e1c4d621891c0e
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 2Gi
+    storageClass: local-hostpath
+  superuserSecret:
+    name: cnpg-secret
+  enableSuperuserAccess: true
+
+  backup:
+    retentionPolicy: 7d
+    barmanObjectStore: &barmanObjectStore
+      data:
+        compression: bzip2
+      wal:
+        compression: bzip2
+        maxParallel: 8
+      destinationPath: s3://backups/cnpg
+      endpointURL: http://192.168.1.10:9000
+      serverName: &currentCluster mealie-db-v2
+      s3Credentials:
+        accessKeyId:
+          name: cnpg-secret
+          key: minio-access-key-id
+        secretAccessKey:
+          name: cnpg-secret
+          key: minio-secret-access-key
+
+  bootstrap:
+    recovery:
+      source: &previousCluster mealie-db-v1
+  externalClusters:
+    - name: *previousCluster
+      barmanObjectStore:
+        <<: *barmanObjectStore
+        serverName: *previousCluster
+
+  monitoring:
+    enablePodMonitor: true
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/postgresql.cnpg.io/scheduledbackup_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: mealie
+spec:
+  schedule: "0 0 4 * * *"
+  immediate: true
+  backupOwnerReference: self
+  cluster:
+    name: mealie-db
