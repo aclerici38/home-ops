@@ -88,6 +88,8 @@ spec:
         runAsGroup: 65534
     service:
       *app :
+        clusterIP: 172.17.0.11
+        externalTrafficPolicy: Local
         controller: *app
         nameOverride: *app
         ports:
