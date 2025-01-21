@@ -50,7 +50,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: mealie-secret
-                    key: POSTGRES_DATABASE
+                    key: POSTGRES_DB
               - name: INIT_POSTGRES_HOST
                 valueFrom:
                   secretKeyRef:
