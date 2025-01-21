@@ -19,10 +19,11 @@ spec:
     name: flux-system
   wait: false
   interval: 30m
-substituteFrom:
-  - kind: Secret
-    name: sonarr-secret
-    optional: false
-  - kind: Secret
-    name: radarr-secret
-    optional: false
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: sonarr-secret
+        optional: false
+      - kind: Secret
+        name: radarr-secret
+        optional: false
