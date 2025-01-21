@@ -28,8 +28,8 @@ spec:
         compression: bzip2
         maxParallel: 8
       destinationPath: s3://backups/cnpg
-      endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
-      serverName: &currentCluster bazarr-db-v2
+      endpointURL: http://192.168.1.10:9000
+      serverName: &currentCluster bazarr-db-v3
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -40,7 +40,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster bazarr-db-v1
+      source: &previousCluster bazarr-db-v2
   externalClusters:
     - name: *previousCluster
       barmanObjectStore:
