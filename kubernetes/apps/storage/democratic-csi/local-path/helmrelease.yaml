@@ -37,7 +37,7 @@ spec:
         enabled: false
       externalProvisioner:
         enabled: true
-        image: registry.k8s.io/sig-storage/csi-provisioner:v5.1.0@sha256:672e45d6a55678abc1d102de665b5cbd63848e75dc7896f238c8eaaf3c7d322f
+        image: registry.k8s.io/sig-storage/csi-provisioner:v5.2.0@sha256:d5e46da8aff7d73d6f00c761dae94472bcda6e78f4f17b3802dc89d44de0111b
         extraArgs:
           - --leader-election=false
           - --node-deployment=true
