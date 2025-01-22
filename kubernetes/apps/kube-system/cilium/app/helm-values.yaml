@@ -10,7 +10,7 @@ cgroup:
   hostRoot: /sys/fs/cgroup
 # devices: "ens18,enp*"
 endpointRoutes:
-  enabled: false
+  enabled: true
 envoy:
   enabled: false
 dashboards:
@@ -77,6 +77,8 @@ prometheus:
     enabled: true
     trustCRDsExist: true
 rollOutCiliumPods: true
+# For kubespan
+directRoutingSkipUnreachable: true
 routingMode: native
 securityContext:
   capabilities:
