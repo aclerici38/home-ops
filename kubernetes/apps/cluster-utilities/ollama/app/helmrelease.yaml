@@ -67,3 +67,7 @@ spec:
         existingClaim: ollama
         globalMounts:
           - path: /.ollama
+      nonexistent:
+        type: emptyDir
+        globalMounts:
+          - /nonexistent
