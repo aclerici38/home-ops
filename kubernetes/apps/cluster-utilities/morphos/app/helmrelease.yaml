@@ -1,0 +1,67 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app morphos
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 1
+  values:
+    controllers:
+      main:
+        containers:
+          *app :
+            image:
+              repository: ghcr.io/danvergara/morphos-server
+              tag: 0.6.0@sha256:3d6f64ef386cbb6a7c5d55526e1a69da2d3661a1996d757897e92bf4369088f5
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 500Mi
+            securityContext:
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      *app :
+        controller: main
+        ports:
+          http:
+            port: 8080
+    ingress:
+      *app :
+        className: internal
+        hosts:
+          - host: "morphos.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: *app
+                  port: http
+    persistence:
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
