@@ -1,0 +1,68 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app it-tools
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 1
+  values:
+    controllers:
+      main:
+        containers:
+          *app :
+            image:
+              repository: ghcr.io/bjw-s-labs/it-tools
+              tag: 2024.5.13@sha256:96408cf7d103a5a7bdbdc8d1fe23dfb95b721ca7bbdbb2507b3a7ac28416eb77
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 500Mi
+            securityContext:
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      *app :
+        controller: main
+        ports:
+          http:
+            port: 80
+    ingress:
+      *app :
+        className: internal
+        hosts:
+          - host: "it-tools.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: *app
+                  port: http
+    persistence:
+      cache:
+        type: emptyDir
+        sizeLimit: 2Gi
+        globalMounts:
+          - path: /var/cache/nginx
