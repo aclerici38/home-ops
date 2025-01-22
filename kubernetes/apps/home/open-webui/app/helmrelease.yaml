@@ -46,6 +46,28 @@ spec:
       existingClaim: *app
 
     extraEnvVars:
+      - name: ENABLE_LOGIN_FORM
+        value: false
+      - name: ENABLE_OAUTH_SIGNUP
+        value: true
+      - name: OAUTH_MERGE_ACCOUNTS_BY_EMAIL
+        value: true
+      - name: OAUTH_PROVIDER_NAME
+        value: Authentik
+      - name: OPENID_REDIRECT_URI
+        value: https://ai.${SECRET_DOMAIN}/oauth/oidc/callback
+      - name: OPENID_PROVIDER_URL
+        value: https://auth.${SECRET_DOMAIN}/application/o/open-webui/.well-known/openid-configuration
+      - name: OAUTH_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            name: open-webui-secret
+            key: OAUTH_CLIENT_ID
+      - name: OAUTH_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: open-webui-secret
+            key: OAUTH_CLIENT_SECRET
       - name: OPENAI_API_KEY
         valueFrom:
           secretKeyRef:
@@ -54,6 +76,8 @@ spec:
 
     containerSecurityContext:
       privileged: false
+      runAsUser: 65534
+      runAsGroup: 65534
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: false
       capabilities:

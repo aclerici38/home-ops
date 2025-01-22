@@ -36,6 +36,9 @@ spec:
       runtimeClassName: nvidia
     controllers:
       main:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
         containers:
           *app :
             image:
