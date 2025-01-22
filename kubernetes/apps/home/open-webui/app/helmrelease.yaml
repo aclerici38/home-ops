@@ -47,11 +47,11 @@ spec:
 
     extraEnvVars:
       - name: ENABLE_LOGIN_FORM
-        value: False
+        value: "False"
       - name: ENABLE_OAUTH_SIGNUP
-        value: True
+        value: "True"
       - name: OAUTH_MERGE_ACCOUNTS_BY_EMAIL
-        value: True
+        value: "True"
       - name: OAUTH_PROVIDER_NAME
         value: Authentik
       - name: OPENID_REDIRECT_URI
