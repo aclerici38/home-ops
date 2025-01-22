@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app morphos
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: openspeedtest
+      version: 0.1.2
+      sourceRef:
+        kind: HelmRepository
+        name: openspeedtest
+        namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 1
+  values:
+    image:
+      repository: docker.io/openspeedtest/latest
+      tag: v2.0.5@sha256:bbddd8eda80cc4deb2a5702efd0acd826137650ba0bfcc6720f896c74bca02ee
+    service:
+      type: ClusterIP
+    ingress:
+      enabled: true
+      className: internal
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-body-size: "35m"
+      hosts:
+        - host: speedtest.${SECRET_DOMAIN}
+          paths:
+            - path: /
+              pathType: Prefix
