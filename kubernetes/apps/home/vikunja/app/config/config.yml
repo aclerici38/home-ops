@@ -1,0 +1,14 @@
+auth:
+  local:
+    enabled: false
+  openid:
+    enabled: true
+    redirecturl: "https://vikunja.${SECRET_DOMAIN}/auth/openid/"
+
+    providers:
+      - name: Authentik
+        authurl: "https://auth.${SECRET_DOMAIN}/application/o/vikunja/"
+        logouturl: "https://auth.${SECRET_DOMAIN}/application/o/vikunja/end-session/"
+        clientid: "${CLIENT_ID}"
+        clientsecret: "${CLIENT_SECRET}"
+        scope: openid profile email
