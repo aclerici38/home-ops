@@ -47,9 +47,9 @@ spec:
 
     extraEnvVars:
       - name: ENABLE_LOGIN_FORM
-        value: "False"
-      - name: ENABLE_OAUTH_SIGNUP
         value: "True"
+      - name: ENABLE_OAUTH_SIGNUP
+        value: "False"
       - name: OAUTH_MERGE_ACCOUNTS_BY_EMAIL
         value: "True"
       - name: OAUTH_PROVIDER_NAME
