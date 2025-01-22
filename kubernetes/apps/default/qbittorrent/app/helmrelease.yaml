@@ -42,6 +42,7 @@ spec:
               - sh
               - -c
               - |
+                echo "Downloading Vuetorrent version ${VUETORRENT_VERSION}"
                 wget -qO /tmp/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/${VUETORRENT_VERSION}/vuetorrent.zip
                 mkdir -p /tmp/VueTorrent
                 unzip /tmp/vuetorrent.zip -d /tmp/webui
