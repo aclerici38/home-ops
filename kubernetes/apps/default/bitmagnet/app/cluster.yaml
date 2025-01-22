@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.ok8.sh/postgresql.cnpg.io/cluster_v1.json
+
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: bitmagnet-db
+spec:
+  instances: 1
+  affinity:
+    nodeSelector:
+      kubernetes.io/hostname: bonds
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.6@sha256:79a7bea85765cd242ce154ba3d183d2a5bd53702dca4c6f968e1c4d621891c0e
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 300Gi
+    storageClass: local-hostpath
+  superuserSecret:
+    name: cnpg-secret
+  enableSuperuserAccess: true

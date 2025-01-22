@@ -1,0 +1,162 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: bitmagnet
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 1
+  values:
+    controllers:
+      main:
+        type: statefulset
+        initContainers:
+          init-db:
+            dependsOn: gluetun
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 16
+            env:
+              - name: INIT_POSTGRES_SUPER_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: cnpg-secret
+                    key: username
+              - name: INIT_POSTGRES_SUPER_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: cnpg-secret
+                    key: password
+              - name: INIT_POSTGRES_DBNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: bitmagnet-secret
+                    key: POSTGRES_NAME
+              - name: INIT_POSTGRES_HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: bitmagnet-secret
+                    key: POSTGRES_HOST
+              - name: INIT_POSTGRES_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: bitmagnet-secret
+                    key: POSTGRES_USER
+              - name: INIT_POSTGRES_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: bitmagnet-secret
+                    key: POSTGRES_PASSWORD
+          gluetun:
+            image:
+              repository: ghcr.io/qdm12/gluetun
+              tag: v3.40.0@sha256:2b42bfa046757145a5155acece417b65b4443c8033fb88661a8e9dcf7fda5a00
+            env:
+              DOT: "off"
+              DNS_ADDRESS: 172.17.0.11
+              VPN_SERVICE_PROVIDER: custom
+              VPN_TYPE: wireguard
+              VPN_INTERFACE: wg0
+              WIREGUARD_ENDPOINT_PORT: 51820
+              FIREWALL_INPUT_PORTS: "3333,3334"
+              FIREWALL_OUTBOUND_SUBNETS: 172.16.0.0/16,172.17.0.0/16
+              DNS_KEEP_NAMESERVER: on
+            envFrom: &envFrom
+              - secretRef:
+                  name: bitmagnet-secret
+            resources:
+              limits:
+                squat.ai/tun: 1
+            restartPolicy: Always
+            securityContext:
+              capabilities:
+                add:
+                  - NET_ADMIN
+              allowPrivilegeEscalation: false
+        containers:
+          bitmagnet:
+            image:
+              repository: ghcr.io/bitmagnet-io/bitmagnet
+              tag: v0.10.0-beta.5@sha256:b419bd3af3f5cc79d9e3151b8ac4c36c6cf68a2680a3e1439d57d95474913c63
+            env:
+              TZ: ${TZ}
+              CLASSIFIER_DELETE_XXX: true
+              LOG_LEVEL: 'info'
+              METAINFO_REQUESTER_REQUEST_TIMEOUT: 10s
+              DHT_SERVER_QUERY_TIMEOUT: 10s
+            envFrom: *envFrom
+            command:
+              - bitmagnet
+              - worker
+              - run
+              - --all
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+              limits:
+                cpu: 4000m
+                memory: 4Gi
+            securityContext:
+              runAsUser: 65534
+              runAsGroup: 65534
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+              allowPrivilegeEscalation: false
+              runAsNonRoot: true
+              seccompProfile: { type: RuntimeDefault }
+
+    service:
+      ui:
+        controller: main
+        ports:
+          http:
+            port: 3333
+      bittorrent:
+        controller: main
+        ports:
+          tcp:
+            protocol: TCP
+            port: &torrentPort 3334
+          udp:
+            protocol: UDP
+            port: *torrentPort
+
+    ingress:
+      app:
+        className: internal
+        hosts:
+          - host: bitmagnet.${SECRET_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  identifier: ui
+                  port: http
+    persistence:
+      qbtun:
+        type: hostPath
+        hostPath: /dev/net
+        advancedMounts:
+          main:
+            gluetun:
+              - path: /dev/net
