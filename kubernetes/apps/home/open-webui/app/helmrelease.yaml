@@ -1,0 +1,63 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app open-webui
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: open-webui
+      version: 5.4.0
+      sourceRef:
+        kind: HelmRepository
+        name: open-webui
+        namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 1
+  values:
+    ollama:
+      enabled: false
+    pipelines:
+      enabled: false
+
+    image:
+      repository: ghcr.io/open-webui/open-webui
+
+    ingress:
+      enabled: true
+      class: internal
+      host: ai.${SECRET_DOMAIN}
+      tls: true
+
+    ollamaUrls:
+      - http://ollama.cluster-utilities.svc.cluster.local:11434
+    persistence:
+      enabled: true
+      existingClaim: *app
+
+    extraEnvVars:
+      - name: OPENAI_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: open-webui-secret
+            key: OPENAI_API_KEY
+
+    containerSecurityContext:
+      privileged: false
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: false
+      capabilities:
+        drop:
+          - ALL
+      seccompProfile:
+        type: "RuntimeDefault"
