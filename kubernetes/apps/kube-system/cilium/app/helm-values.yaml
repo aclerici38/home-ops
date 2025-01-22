@@ -77,8 +77,6 @@ prometheus:
     enabled: true
     trustCRDsExist: true
 rollOutCiliumPods: true
-# For kubespan
-directRoutingSkipUnreachable: true
 routingMode: native
 securityContext:
   capabilities:
