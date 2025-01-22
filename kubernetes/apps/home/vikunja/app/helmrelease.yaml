@@ -114,7 +114,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     service:
-      app:
+      *app :
         controller: main
         ports:
           http:
