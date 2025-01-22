@@ -32,12 +32,16 @@ spec:
             image:
               repository: ghcr.io/danvergara/morphos-server
               tag: 0.6.0@sha256:3d6f64ef386cbb6a7c5d55526e1a69da2d3661a1996d757897e92bf4369088f5
+            env:
+              TZ: ${TZ}
             resources:
               requests:
                 cpu: 100m
               limits:
                 memory: 500Mi
             securityContext:
+              runAsUser: 65534
+              runAsGroup: 65534
               runAsNonRoot: true
               allowPrivilegeEscalation: false
               seccompProfile: { type: RuntimeDefault }
