@@ -41,9 +41,8 @@ spec:
             command:
               - sh
               - -c
-              # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
               - |
-                wget -qO /tmp/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/v2.19.0/vuetorrent.zip
+                wget -qO /tmp/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/${VUETORRENT_VERSION}/vuetorrent.zip
                 mkdir -p /tmp/VueTorrent
                 unzip /tmp/vuetorrent.zip -d /tmp/webui
             securityContext:
