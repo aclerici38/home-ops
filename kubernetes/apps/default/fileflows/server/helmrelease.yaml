@@ -82,7 +82,7 @@ spec:
       config:
         existingClaim: *app
         globalMounts:
-          - /app/Data
+          - path: /app/Data
       logs:
         enabled: true
         type: emptyDir

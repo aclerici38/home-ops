@@ -71,7 +71,7 @@ spec:
         size: 5Gi
         accessMode: ReadWriteOnce
         globalMounts:
-          - /app/Data
+          - path: /app/Data
       logs:
         enabled: true
         type: emptyDir
