@@ -12,7 +12,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/default/fileflows/app
+  path: ./kubernetes/apps/default/fileflows/server
   prune: true
   sourceRef:
     kind: GitRepository
@@ -22,3 +22,25 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_CAPACITY: 5Gi
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app fileflows-node
+  namespace: flux-system
+spec:
+  targetNamespace: default
+  dependsOn:
+    - name: volsync
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/apps/default/fileflows/node
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: false
+  interval: 30m

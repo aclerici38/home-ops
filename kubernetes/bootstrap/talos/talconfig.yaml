@@ -24,7 +24,7 @@ cniConfig:
 
 nodes:
   - hostname: "bonds"
-    ipAddress: "10.100.0.25"
+    ipAddress: "192.168.1.25"
     installDiskSelector:
       model: "QEMU*"
     machineSpec:
@@ -55,25 +55,10 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
         mtu: 1500
-
         # vip:
         #   ip: "192.168.1.38"
-      - interface: wg0
-        mtu: 1500
-        addresses:
-          - 10.100.0.25/24
-        wireguard:
-          privateKey: ${BONDS_WG_PRIVATE_KEY}
-          listenPort: 51822
-          peers:
-            - publicKey: ${POSEY_WG_PUBLIC_KEY}
-              endpoint: ${NAPA_WG_ENDPOINT}
-              allowedIPs:
-                - 10.100.0.28/32
-                - *podNet
-                - *svcNet
   - hostname: "posey"
-    ipAddress: "10.100.0.28"
+    ipAddress: "10.0.40.28"
     installDiskSelector:
       model: "KINGSTON SNV2S1000G"
     machineSpec:
@@ -109,20 +94,6 @@ nodes:
       - deviceSelector:
           hardwareAddr: a8:5e:45:9c:d0:99
         ignore: true
-      - interface: wg0
-        mtu: 1500
-        addresses:
-          - 10.100.0.28/24
-        wireguard:
-          privateKey: ${POSEY_WG_PRIVATE_KEY}
-          listenPort: 51823
-          peers:
-            - publicKey: ${BONDS_WG_PUBLIC_KEY}
-              endpoint: ${APARTMENT_WG_ENDPOINT}
-              allowedIPs:
-                - 10.100.0.25/32
-                - *podNet
-                - *svcNet
 
 # Global patches
 patches:

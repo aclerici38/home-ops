@@ -1,4 +1,9 @@
 cluster:
+  discovery:
+    enabled: true
+    registries:
+      kubernetes: # Kubernetes registry is problematic with KubeSpan, if the control plane endpoint is routeable itself via KubeSpan.
+        disabled: true
   allowSchedulingOnControlPlanes: true
   controllerManager:
     extraArgs:
@@ -10,7 +15,6 @@ cluster:
       listen-metrics-urls: http://0.0.0.0:2381
     advertisedSubnets:
       - 192.168.1.0/24
-      - 10.100.0.0/24
   proxy:
     disabled: true
   scheduler:
