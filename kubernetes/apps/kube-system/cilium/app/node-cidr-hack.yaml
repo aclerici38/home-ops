@@ -15,10 +15,7 @@ spec:
     spec:
       hostNetwork: true
       tolerations:
-        - key: "node-role.kubernetes.io/master"
-          operator: Exists
-        - key: "node-role.kubernetes.io/control-plane"
-          operator: Exists
+        - operator: Exists
       containers:
         - name: cilium-host-node-cidr
           image: alpine
