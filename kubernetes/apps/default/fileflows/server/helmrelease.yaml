@@ -80,7 +80,7 @@ spec:
                   port: http
     persistence:
       config:
-        existingClaim: *app
+        existingClaim: fileflows
         globalMounts:
           - path: /app/Data
       logs:
