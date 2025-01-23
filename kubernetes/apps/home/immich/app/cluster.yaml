@@ -1,6 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.ok8.sh/postgresql.cnpg.io/cluster_v1.json
-
+# yaml-language-server: $schema=https://crd.movishell.pl/postgresql.cnpg.io/cluster_v1.json
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
@@ -36,7 +35,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://192.168.1.10:9000
-      serverName: &currentCluster immich-db-v5
+      serverName: &currentCluster immich-db-v6
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -47,7 +46,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster immich-db-v4
+      source: &previousCluster immich-db-v5
     # initdb:
     #   database: immich
     #   owner: immich
