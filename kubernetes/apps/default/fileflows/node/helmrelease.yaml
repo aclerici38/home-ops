@@ -17,6 +17,8 @@ spec:
   dependsOn:
     - name: nvidia-device-plugin
       namespace: kube-system
+    - name: fileflows-server
+      namespace: default
   install:
     timeout: 2m
     remediation:
