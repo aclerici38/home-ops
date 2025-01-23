@@ -55,6 +55,14 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
         mtu: 1500
+    # patches:
+      # - |-
+      #   machine:
+      #     disks:
+      #     - device: /dev/sda
+      #       partitions:
+      #         - mountpoint: /var/lib/csi-local-hostpath
+
         # vip:
         #   ip: "192.168.1.38"
   - hostname: "posey"
@@ -103,6 +111,7 @@ patches:
   - "@./patches/global/machine-sysctls.yaml"
   - "@./patches/global/machine-time.yaml"
   - "@./patches/global/machine-install.yaml"
+  - "@./patches/global/machine-features.yaml"
 
 # Controller patches
 controlPlane:
