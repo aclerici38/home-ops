@@ -52,9 +52,13 @@ nodes:
         addresses:
           - &aptNet "192.168.1.25/24"
         routes:
+          - network: &officeNet "10.0.40.28/24"
+            gateway: "192.168.1.25"
+            metric: 1
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
-        mtu: 1500
+            metric: 10
+        mtu: 1420
         vip:
           ip: "192.168.1.38"
         wireguard:
@@ -64,9 +68,9 @@ nodes:
             - publicKey: ${POSEY_WG_PUBLIC_KEY}
               endpoint: ${OFFICE_WG_ENDPOINT}
               allowedIPs:
-                # - *podNet
-                # - *svcNet
-                - &officeNet "10.0.40.28/24"
+                - *podNet
+                - *svcNet
+                - *officeNet
               persistentKeepaliveInterval: 10s
   - hostname: "posey"
     ipAddress: "10.0.40.28"
@@ -96,9 +100,13 @@ nodes:
         addresses:
           - *officeNet
         routes:
+          - network: *aptNet
+            gateway: "10.0.40.28"
+            metric: 1
           - network: "0.0.0.0/0"
             gateway: "10.0.40.1"
-        mtu: 1500
+            metric: 10
+        mtu: 1420
         wireguard:
           privateKey: ${POSEY_WG_PRIVATE_KEY}
           listenPort: 51820
@@ -106,8 +114,8 @@ nodes:
             - publicKey: ${BONDS_WG_PUBLIC_KEY}
               endpoint: ${APARTMENT_WG_ENDPOINT}
               allowedIPs:
-                # - *podNet
-                # - *svcNet
+                - *podNet
+                - *svcNet
                 - *aptNet
               persistentKeepaliveInterval: 10s
       - deviceSelector:
