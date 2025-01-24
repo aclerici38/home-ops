@@ -105,6 +105,7 @@ securityContext:
       - SYS_RESOURCE
 cni:
   exclusive: false
+  enableRouteMTUForCNIChaining: true
 socketLB:
   hostNamespaceOnly: true
 # Graceful Helmfile to HelmRelease takeover
