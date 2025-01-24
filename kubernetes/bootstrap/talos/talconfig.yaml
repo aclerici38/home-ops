@@ -64,8 +64,8 @@ nodes:
             - publicKey: ${POSEY_WG_PUBLIC_KEY}
               endpoint: ${OFFICE_WG_ENDPOINT}
               allowedIPs:
-                - *podNet
-                - *svcNet
+                # - *podNet
+                # - *svcNet
                 - &officeNet "10.0.40.28/24"
               persistentKeepaliveInterval: 10s
   - hostname: "posey"
@@ -106,8 +106,8 @@ nodes:
             - publicKey: ${BONDS_WG_PUBLIC_KEY}
               endpoint: ${APARTMENT_WG_ENDPOINT}
               allowedIPs:
-                - *podNet
-                - *svcNet
+                # - *podNet
+                # - *svcNet
                 - *aptNet
               persistentKeepaliveInterval: 10s
       - deviceSelector:

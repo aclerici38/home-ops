@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json
 autoDirectNodeRoutes: true
 bpf:
   masquerade: true
@@ -78,6 +79,7 @@ prometheus:
     trustCRDsExist: true
 rollOutCiliumPods: true
 routingMode: native
+directRoutingSkipUnreachable: true
 # tunnelProtocol: geneve
 securityContext:
   capabilities:
