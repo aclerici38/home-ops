@@ -1,8 +1,8 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json
 autoDirectNodeRoutes: false
 bpf:
   masquerade: true
+  hostLegacyRouting: false
 cgroup:
   automount:
     enabled: false
@@ -77,16 +77,8 @@ prometheus:
     enabled: true
     trustCRDsExist: true
 rollOutCiliumPods: true
-directRoutingSkipUnreachable: false
-encryption:
-  enabled: true
-  type: wireguard
-  wireguard:
-    persistentKeepalive: 20s
-
 routingMode: tunnel
 tunnelProtocol: geneve
-
 securityContext:
   capabilities:
     ciliumAgent:
@@ -107,9 +99,8 @@ securityContext:
       - SYS_RESOURCE
 cni:
   exclusive: false
-  enableRouteMTUForCNIChaining: false
 socketLB:
-  hostNamespaceOnly: false
+  hostNamespaceOnly: true
 # Graceful Helmfile to HelmRelease takeover
 commonLabels:
   helm.toolkit.fluxcd.io/name: cilium
