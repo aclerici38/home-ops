@@ -1,5 +1,5 @@
 ---
-autoDirectNodeRoutes: false
+autoDirectNodeRoutes: true
 bpf:
   masquerade: true
   hostLegacyRouting: false
@@ -60,7 +60,7 @@ l2announcements:
 loadBalancer:
   algorithm: maglev
   mode: "dsr"
-  dsrDispatch: geneve
+  # dsrDispatch: geneve
 localRedirectPolicy: true
 operator:
   replicas: 2
@@ -77,8 +77,8 @@ prometheus:
     enabled: true
     trustCRDsExist: true
 rollOutCiliumPods: true
-routingMode: tunnel
-tunnelProtocol: geneve
+routingMode: native
+# tunnelProtocol: geneve
 securityContext:
   capabilities:
     ciliumAgent:

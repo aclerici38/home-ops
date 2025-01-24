@@ -6,7 +6,7 @@ talosVersion: v1.9.2
 kubernetesVersion: v1.32.1
 
 clusterName: kubernetes
-endpoint: https://192.168.1.25:6443
+endpoint: https://192.168.1.38:6443
 
 clusterPodNets:
   - &podNet "172.16.0.0/16"
@@ -14,7 +14,7 @@ clusterSvcNets:
   - &svcNet "172.17.0.0/16"
 
 additionalApiServerCertSans: &sans
-  - "192.168.1.25"
+  - "192.168.1.38"
   - "127.0.0.1"
 additionalMachineCertSans: *sans
 
@@ -50,13 +50,24 @@ nodes:
           hardwareAddr: "bc:24:11:58:64:7d"
         dhcp: false
         addresses:
-          - "192.168.1.25/24"
+          - &aptNet "192.168.1.25/24"
         routes:
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
         mtu: 1500
-        # vip:
-        #   ip: "192.168.1.38"
+        vip:
+          ip: "192.168.1.38"
+        wireguard:
+          privateKey: ${BONDS_WG_PRIVATE_KEY}
+          listenPort: 51820
+          peers:
+            - publicKey: ${POSEY_WG_PUBLIC_KEY}
+              endpoint: ${OFFICE_WG_ENDPOINT}
+              allowedIPs:
+                - *podNet
+                - *svcNet
+                - &officeNet "10.0.40.28/24"
+              persistentKeepaliveInterval: 10s
   - hostname: "posey"
     ipAddress: "10.0.40.28"
     installDiskSelector:
@@ -83,18 +94,28 @@ nodes:
           hardwareAddr: "c4:62:37:01:8c:cf"
         dhcp: false
         addresses:
-          - "10.0.40.28/24"
+          - *officeNet
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.0.40.1"
         mtu: 1500
+        wireguard:
+          privateKey: ${POSEY_WG_PRIVATE_KEY}
+          listenPort: 51820
+          peers:
+            - publicKey: ${BONDS_WG_PUBLIC_KEY}
+              endpoint: ${APARTMENT_WG_ENDPOINT}
+              allowedIPs:
+                - *podNet
+                - *svcNet
+                - *aptNet
+              persistentKeepaliveInterval: 10s
       - deviceSelector:
           hardwareAddr: c4:62:37:01:8c:ce
         ignore: true
       - deviceSelector:
           hardwareAddr: a8:5e:45:9c:d0:99
         ignore: true
-
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
