@@ -59,7 +59,7 @@ l2announcements:
   enabled: true
 loadBalancer:
   algorithm: maglev
-  mode: "dsr"
+  mode: "hybrid"
 localRedirectPolicy: true
 operator:
   replicas: 2
@@ -84,7 +84,7 @@ directRoutingSkipUnreachable: false
 #     persistentKeepalive: 20s
 
 routingMode: tunnel
-tunnelProtocol: vxlan
+tunnelProtocol: geneve
 
 securityContext:
   capabilities:
