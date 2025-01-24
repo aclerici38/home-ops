@@ -77,12 +77,15 @@ prometheus:
     trustCRDsExist: true
 rollOutCiliumPods: true
 directRoutingSkipUnreachable: false
-encryption:
-  enabled: true
-  type: wireguard
-  wireguard:
-    persistentKeepalive: 20s
-routingMode: native
+# encryption:
+#   enabled: true
+#   type: wireguard
+#   wireguard:
+#     persistentKeepalive: 20s
+
+routingMode: tunnel
+tunnelProtocol: geneve
+
 securityContext:
   capabilities:
     ciliumAgent:
