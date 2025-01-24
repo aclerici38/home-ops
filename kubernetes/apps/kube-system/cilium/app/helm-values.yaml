@@ -79,6 +79,11 @@ prometheus:
 rollOutCiliumPods: true
 # For kubespan
 directRoutingSkipUnreachable: true
+encryption:
+  enabled: true
+  type: wireguard
+  wireguard:
+    persistentKeepalive: 20s
 routingMode: native
 securityContext:
   capabilities:
