@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json
 autoDirectNodeRoutes: true
 bpf:
   masquerade: true
@@ -52,7 +53,7 @@ ipam:
 ipv4NativeRoutingCIDR: "172.16.0.0/16"
 k8sServiceHost: 127.0.0.1
 k8sServicePort: 7445
-kubeProxyReplacement: true
+kubeProxyReplacement: false
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 l2announcements:
   enabled: true
