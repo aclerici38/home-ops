@@ -76,8 +76,7 @@ prometheus:
     enabled: true
     trustCRDsExist: true
 rollOutCiliumPods: true
-# For kubespan
-directRoutingSkipUnreachable: true
+directRoutingSkipUnreachable: false
 encryption:
   enabled: true
   type: wireguard

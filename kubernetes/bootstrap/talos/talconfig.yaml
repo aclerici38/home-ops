@@ -14,8 +14,6 @@ clusterSvcNets:
   - &svcNet "172.17.0.0/16"
 
 additionalApiServerCertSans: &sans
-  - "10.0.40.28"
-  - "172.17.0.1"
   - "192.168.1.25"
   - "127.0.0.1"
 additionalMachineCertSans: *sans
@@ -57,14 +55,6 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
         mtu: 1500
-    # patches:
-      # - |-
-      #   machine:
-      #     disks:
-      #     - device: /dev/sda
-      #       partitions:
-      #         - mountpoint: /var/lib/csi-local-hostpath
-
         # vip:
         #   ip: "192.168.1.38"
   - hostname: "posey"
