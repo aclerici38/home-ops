@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json
-autoDirectNodeRoutes: false
+autoDirectNodeRoutes: true
 bpf:
   masquerade: true
 cgroup:
@@ -61,7 +61,7 @@ loadBalancer:
   algorithm: maglev
   mode: "dsr"
   dsrDispatch: geneve
-localRedirectPolicy: true
+localRedirectPolicy: false
 operator:
   replicas: 2
   rollOutPods: true
