@@ -60,6 +60,8 @@ l2announcements:
 loadBalancer:
   algorithm: maglev
   mode: "dsr"
+nodePort:
+  enabled: true
 localRedirectPolicy: true
 operator:
   replicas: 2
