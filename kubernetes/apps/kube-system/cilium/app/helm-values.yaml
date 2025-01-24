@@ -59,7 +59,8 @@ l2announcements:
   enabled: true
 loadBalancer:
   algorithm: maglev
-  mode: "hybrid"
+  mode: "dsr"
+  dsrDispatch: always
 localRedirectPolicy: true
 operator:
   replicas: 2
