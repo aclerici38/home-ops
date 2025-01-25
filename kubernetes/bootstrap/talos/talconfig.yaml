@@ -5,7 +5,7 @@ talosVersion: v1.9.2
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
 kubernetesVersion: v1.32.1
 
-clusterName: kubernetes
+clusterName: dormammu
 endpoint: https://192.168.1.25:6443
 
 clusterPodNets:
@@ -94,6 +94,8 @@ nodes:
         ignore: true
   - hostname: "timmy"
     ipAddress: "192.168.1.55"
+    nodeTaints:
+      scheduler: "disabled:NoSchedule"
     installDiskSelector:
       size: ">= 200GB"
     machineSpec:
