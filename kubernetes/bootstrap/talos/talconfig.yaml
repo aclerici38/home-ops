@@ -6,7 +6,7 @@ talosVersion: v1.9.2
 kubernetesVersion: v1.32.1
 
 clusterName: kubernetes
-endpoint: https://192.168.1.38:6443
+endpoint: https://192.168.1.25:6443
 
 clusterPodNets:
   - &podNet "172.16.0.0/16"
@@ -14,7 +14,7 @@ clusterSvcNets:
   - &svcNet "172.17.0.0/16"
 
 additionalApiServerCertSans: &sans
-  - "192.168.1.38"
+  - "192.168.1.25"
   - "127.0.0.1"
 additionalMachineCertSans: *sans
 
@@ -55,8 +55,6 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
         mtu: 1500
-        vip:
-          ip: "192.168.1.38"
   - hostname: "posey"
     ipAddress: "10.0.40.28"
     installDiskSelector:
@@ -77,7 +75,7 @@ nodes:
           officialExtensions:
             - siderolabs/nvidia-container-toolkit-production
             - siderolabs/nonfree-kmod-nvidia-production
-    controlPlane: false
+    controlPlane: true
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "c4:62:37:01:8c:cf"
@@ -94,27 +92,28 @@ nodes:
       - deviceSelector:
           hardwareAddr: a8:5e:45:9c:d0:99
         ignore: true
-  # - hostname: "timmy"
-  #   ipAddress: "192.168.1.55"
-  #   installDiskSelector:
-  #     model: "KINGSTON SNV2S1000G"
-  #   machineSpec:
-  #     secureboot: false
-  #   schematic:
-  #     overlay:
-  #       image: ghcr.io/skyssolutions/sbc-raspberrypi:v1.9.2-skylab.30
-  #       name: rpi_generic
-  #   controlPlane: false
-  #   networkInterfaces:
-  #     - deviceSelector:
-  #         hardwareAddr: "c4:62:37:01:8c:cf"
-  #       dhcp: false
-  #       addresses:
-  #         - "192.168.1.55/24"
-  #       routes:
-  #         - network: "0.0.0.0/0"
-  #           gateway: "192.168.1.1"
-  #       mtu: 1500
+  - hostname: "timmy"
+    ipAddress: "192.168.1.55"
+    installDiskSelector:
+      size: ">= 200GB"
+    machineSpec:
+      secureboot: false
+    schematic:
+      customization:
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/qemu-guest-agent
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "52:54:00:74:e5:09"
+        dhcp: false
+        addresses:
+          - "192.168.1.55/24"
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "192.168.1.1"
+        mtu: 1500
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
