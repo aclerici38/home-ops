@@ -61,7 +61,7 @@ l2announcements:
 loadBalancer:
   algorithm: maglev
   mode: "dsr"
-  dsrDispatch: geneve
+  # dsrDispatch: geneve
 localRedirectPolicy: true
 operator:
   replicas: 2
@@ -78,9 +78,9 @@ prometheus:
     enabled: true
     trustCRDsExist: true
 rollOutCiliumPods: true
-routingMode: tunnel
-directRoutingSkipUnreachable: false
-tunnelProtocol: geneve
+routingMode: native
+directRoutingSkipUnreachable: true
+# tunnelProtocol: geneve
 securityContext:
   capabilities:
     ciliumAgent:

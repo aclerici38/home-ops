@@ -1,9 +1,10 @@
 cluster:
   discovery:
-    enabled: false
+    enabled: true
     registries:
       kubernetes:
         disabled: true
+      service: {}
   allowSchedulingOnControlPlanes: true
   controllerManager:
     extraArgs:

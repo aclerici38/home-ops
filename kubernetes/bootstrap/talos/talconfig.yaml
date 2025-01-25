@@ -50,28 +50,13 @@ nodes:
           hardwareAddr: "bc:24:11:58:64:7d"
         dhcp: false
         addresses:
-          - &aptNet "192.168.1.25/24"
+          - "192.168.1.25/24"
         routes:
-          - network: &officeNet "10.0.40.28/24"
-            gateway: "192.168.1.25"
-            metric: 1
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
-            metric: 10
-        mtu: 1420
+        mtu: 1500
         vip:
           ip: "192.168.1.38"
-        wireguard:
-          privateKey: ${BONDS_WG_PRIVATE_KEY}
-          listenPort: 51820
-          peers:
-            - publicKey: ${POSEY_WG_PUBLIC_KEY}
-              endpoint: ${OFFICE_WG_ENDPOINT}
-              allowedIPs:
-                - *podNet
-                - *svcNet
-                - *officeNet
-              persistentKeepaliveInterval: 10s
   - hostname: "posey"
     ipAddress: "10.0.40.28"
     installDiskSelector:
@@ -98,32 +83,38 @@ nodes:
           hardwareAddr: "c4:62:37:01:8c:cf"
         dhcp: false
         addresses:
-          - *officeNet
+          - "10.0.40.28/24"
         routes:
-          - network: *aptNet
-            gateway: "10.0.40.28"
-            metric: 1
           - network: "0.0.0.0/0"
             gateway: "10.0.40.1"
-            metric: 10
-        mtu: 1420
-        wireguard:
-          privateKey: ${POSEY_WG_PRIVATE_KEY}
-          listenPort: 51820
-          peers:
-            - publicKey: ${BONDS_WG_PUBLIC_KEY}
-              endpoint: ${APARTMENT_WG_ENDPOINT}
-              allowedIPs:
-                - *podNet
-                - *svcNet
-                - *aptNet
-              persistentKeepaliveInterval: 10s
+        mtu: 1500
       - deviceSelector:
           hardwareAddr: c4:62:37:01:8c:ce
         ignore: true
       - deviceSelector:
           hardwareAddr: a8:5e:45:9c:d0:99
         ignore: true
+  - hostname: "timmy"
+    ipAddress: "192.168.1.55"
+    installDiskSelector:
+      model: "KINGSTON SNV2S1000G"
+    machineSpec:
+      secureboot: false
+    schematic:
+      overlay:
+        image: ghcr.io/skyssolutions/sbc-raspberrypi:v1.9.2-skylab.30
+        name: rpi_generic
+    controlPlane: false
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "c4:62:37:01:8c:cf"
+        dhcp: false
+        addresses:
+          - "192.168.1.55/24"
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "192.168.1.1"
+        mtu: 1500
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
