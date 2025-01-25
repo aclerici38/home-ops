@@ -94,27 +94,27 @@ nodes:
       - deviceSelector:
           hardwareAddr: a8:5e:45:9c:d0:99
         ignore: true
-  - hostname: "timmy"
-    ipAddress: "192.168.1.55"
-    installDiskSelector:
-      model: "KINGSTON SNV2S1000G"
-    machineSpec:
-      secureboot: false
-    schematic:
-      overlay:
-        image: ghcr.io/skyssolutions/sbc-raspberrypi:v1.9.2-skylab.30
-        name: rpi_generic
-    controlPlane: false
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "c4:62:37:01:8c:cf"
-        dhcp: false
-        addresses:
-          - "192.168.1.55/24"
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "192.168.1.1"
-        mtu: 1500
+  # - hostname: "timmy"
+  #   ipAddress: "192.168.1.55"
+  #   installDiskSelector:
+  #     model: "KINGSTON SNV2S1000G"
+  #   machineSpec:
+  #     secureboot: false
+  #   schematic:
+  #     overlay:
+  #       image: ghcr.io/skyssolutions/sbc-raspberrypi:v1.9.2-skylab.30
+  #       name: rpi_generic
+  #   controlPlane: false
+  #   networkInterfaces:
+  #     - deviceSelector:
+  #         hardwareAddr: "c4:62:37:01:8c:cf"
+  #       dhcp: false
+  #       addresses:
+  #         - "192.168.1.55/24"
+  #       routes:
+  #         - network: "0.0.0.0/0"
+  #           gateway: "192.168.1.1"
+  #       mtu: 1500
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
