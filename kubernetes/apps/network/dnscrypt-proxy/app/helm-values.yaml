@@ -10,7 +10,7 @@ controllers:
     type: daemonset
     strategy: RollingUpdate
     containers:
-      *app :
+      &app dnscrypt-proxy :
         image:
           repository: ghcr.io/klutchell/dnscrypt-proxy
           tag: v2.1.7@sha256:a52ca5522d8fbb3847f13a51e0987e9b92f40e451f6c612cceb41643c7c18620
