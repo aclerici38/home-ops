@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: cilium-node-proxy-access
+  name: apiserver-kubelet-access
 rules:
 - apiGroups: [""]
   resources: ["nodes/proxy"]
@@ -10,11 +10,11 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: cilium-node-proxy-binding
+  name: apiserver-kubelet-access-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: cilium-node-proxy-access
+  name: apiserver-kubelet-access
 subjects:
 - kind: User
   name: apiserver-kubelet-client
