@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./config/config-configmap.yaml
-  - ./config/forwarding-rules.txt
+  - ./config/forwarding-rules-configmap.txt
 configMapGenerator:
   - name: kubelet-csr-approver-helm-values
     files:
