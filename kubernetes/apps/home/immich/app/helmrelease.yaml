@@ -198,7 +198,7 @@ spec:
       runtimeClassName: nvidia
       image:
         repository: ghcr.io/immich-app/immich-machine-learning
-        tag: v1.125.1-cuda@sha256:0f107aec469c248c2a5dcd5164a6e03ee24a2033752f46215582065936769ea0
+        tag: v1.125.3-cuda@sha256:35b380c999185012bf884d01d95324f2533c31b4aaf2ed60f6803c92b221d374
         pullPolicy: IfNotPresent
       env:
         MACHINE_LEARNING_ANN_TUNING_LEVEL: 3
