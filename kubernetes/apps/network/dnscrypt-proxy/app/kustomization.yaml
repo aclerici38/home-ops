@@ -5,15 +5,15 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
 configMapGenerator:
-  - name: kubelet-csr-approver-helm-values
-    files:
-      - values.yaml=./helm-values.yaml
   - name: dnscrypt-proxy-config-configmap
     files:
       - ./config/config.toml
   - name: dnscrypt-proxy-forwarder-configmap
     files:
       - ./config/config.toml
+  - name: kubelet-csr-approver-helm-values
+    files:
+      - values.yaml=./helm-values.yaml
 generatorOptions:
   disableNameSuffixHash: true
 configurations:
