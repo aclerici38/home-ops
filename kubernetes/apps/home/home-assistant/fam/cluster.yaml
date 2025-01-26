@@ -29,7 +29,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://192.168.1.10:9000
-      serverName: &currentCluster home-assistant-db-v2
+      serverName: &currentCluster home-assistant-db-v3
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -40,7 +40,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster home-assistant-db-v1
+      source: &previousCluster home-assistant-db-v2
   externalClusters:
     - name: *previousCluster
       barmanObjectStore:

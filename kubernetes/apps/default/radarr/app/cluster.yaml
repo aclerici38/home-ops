@@ -29,7 +29,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://192.168.1.10:9000
-      serverName: &currentCluster radarr-db-v3
+      serverName: &currentCluster radarr-db-v4
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -40,7 +40,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster radarr-db-v2
+      source: &previousCluster radarr-db-v3
   externalClusters:
     - name: *previousCluster
       barmanObjectStore:
