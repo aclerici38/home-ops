@@ -110,11 +110,6 @@ spec:
             port: *port
             protocol: UDP
         externalTrafficPolicy: Local
-      internal-dns:
-        controller: *app
-        type: ClusterIP
-        ports: *dnsPorts
-        clusterIP: "172.17.0.11"
     serviceMonitor:
       *app :
         serviceName: *app

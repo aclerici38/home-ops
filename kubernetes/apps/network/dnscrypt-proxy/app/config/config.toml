@@ -1,4 +1,4 @@
-# listen_addresses = ['10.0.10.1:5053']
+listen_addresses = ['127.0.0.1:53', '[::1]:53']
 
 max_clients = 500
 
@@ -22,8 +22,10 @@ force_tcp = false
 timeout = 2500
 keepalive = 30
 
-# log_level = 2
-# use_syslog = false
+lb_strategy = 'p2'
+lb_estimator = true
+
+log_level = 2
 
 cert_refresh_delay = 240
 
@@ -41,6 +43,9 @@ block_ipv6 = false
 
 cache = false
 
+file = '/dev/stdout'
+
+forwarding_rules = ''
 
 [sources]
   [sources.public-resolvers]

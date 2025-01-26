@@ -15,36 +15,13 @@ spec:
         name: external-secrets
         namespace: flux-system
   install:
-    timeout: 2m
     remediation:
-      retries: 1
+      retries: 3
   upgrade:
-    timeout: 2m
     cleanupOnFail: true
     remediation:
       strategy: rollback
-      retries: 1
-  dependsOn:
-    - name: onepassword-connect
-      namespace: external-secrets
-  values:
-    installCRDs: true
-    replicaCount: 1
-    leaderElect: true
-    image:
-      repository: ghcr.io/external-secrets/external-secrets
-    webhook:
-      image:
-        repository: ghcr.io/external-secrets/external-secrets
-      serviceMonitor:
-        enabled: true
-        interval: 2m
-    certController:
-      image:
-        repository: ghcr.io/external-secrets/external-secrets
-      serviceMonitor:
-        enabled: true
-        interval: 2m
-    serviceMonitor:
-      enabled: true
-      interval: 2m
+      retries: 3
+  valuesFrom:
+    - kind: ConfigMap
+      name: external-secrets-helm-values

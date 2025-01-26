@@ -14,6 +14,12 @@ repositories:
   - name: coredns
     url: https://coredns.github.io/helm
 
+  - name: jetstack
+    url: https://charts.jetstack.io
+
+  - name: postfinance
+    url: https://postfinance.github.io/kubelet-csr-approver
+
 releases:
   - name: prometheus-operator-crds
     namespace: observability
@@ -29,6 +35,15 @@ releases:
     needs:
       - observability/prometheus-operator-crds
 
+  - name: dnscrypt-proxy
+    namespace: network
+    chart: oci://ghcr.io/bjw-s/helm/app-template
+    version: 3.6.1
+    values:
+      - ../../apps/network/dnscrypt-proxy/app/helm-values.yaml
+    needs:
+      - kube-system/cilium
+
   - name: coredns
     namespace: kube-system
     chart: coredns/coredns
@@ -36,7 +51,34 @@ releases:
     values:
       - ../../apps/kube-system/coredns/app/helm-values.yaml
     needs:
-      - kube-system/cilium
+      - network/dnscrypt-proxy
+
+  - name: kubelet-csr-approver
+    namespace: kube-system
+    chart: postfinance/kubelet-csr-approver
+    version: 1.2.5
+    values:
+      - ../apps/kube-system/kubelet-csr-approver/app/helm-values.yaml
+    needs:
+      - kube-system/coredns
+
+  - name: cert-manager
+    namespace: cert-manager
+    chart: jetstack/cert-manager
+    version: v1.16.3
+    values:
+      - ../apps/cert-manager/cert-manager/app/helm-values.yaml
+    needs:
+      - kube-system/coredns
+
+  - name: external-secrets
+    namespace: external-secrets
+    chart: oci://ghcr.io/external-secrets/charts/external-secrets
+    version: 0.13.0
+    values:
+      - ../apps/external-secrets/external-secrets/app/helm-values.yaml
+    needs:
+      - kube-system/coredns
 
   - name: flux-operator
     namespace: flux-system
