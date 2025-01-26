@@ -27,9 +27,6 @@ spec:
     - name: nvidia-device-plugin
       namespace: kube-system
   values:
-    pod:
-      nodeSelector: &nodeSelector
-        kubernetes.io/hostname: "bonds"
     env:
       TZ: ${TZ}
       REDIS_HOSTNAME: immich-dragonfly.home.svc.cluster.local
@@ -142,7 +139,8 @@ spec:
       enabled: false
       architecture: standalone
       master:
-        nodeSelector: *nodeSelector
+        nodeSelector: &nodeSelector
+          kubernetes.io/hostname: "bonds"
         resources:
           requests:
             cpu: 500m
@@ -155,6 +153,7 @@ spec:
         enabled: false
 
     server:
+      nodeSelector: *nodeSelector
       service:
         main:
           type: ClusterIP
@@ -194,6 +193,7 @@ spec:
           memory: 4Gi
 
     machine-learning:
+      nodeSelector: *nodeSelector
       enabled: true
       runtimeClassName: nvidia
       image:
