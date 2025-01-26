@@ -6,11 +6,11 @@ metadata:
   name: &app reflector
   namespace: flux-system
 spec:
-  targetNamespace: cluster-utilities
+  targetNamespace: kube-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/cluster-utilities/reflector/app
+  path: ./kubernetes/apps/kube-system/reflector/app
   prune: true
   sourceRef:
     kind: GitRepository
