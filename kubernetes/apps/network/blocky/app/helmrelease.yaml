@@ -101,7 +101,7 @@ spec:
         controller: *app
         type: LoadBalancer
         annotations:
-          io.cilium/lb-ipam-ips: 192.168.1.250,10.0.40.250
+          io.cilium/lb-ipam-ips: 192.168.1.250
         ports: &dnsPorts
           dns-tcp:
             port: *port
