@@ -27,6 +27,8 @@ spec:
     - name: external-dns
       namespace: network
   values:
+    nodeSelector:
+      kubernetes.io/hostname: "bonds"
     fullnameOverride: ingress-nginx-external
     controller:
       service:

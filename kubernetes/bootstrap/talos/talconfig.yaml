@@ -98,8 +98,8 @@ nodes:
         ignore: true
   - hostname: "timmy"
     ipAddress: "192.168.1.55"
-    nodeTaints:
-      scheduler: "disabled:NoSchedule"
+    # nodeTaints:
+    #   scheduler: "disabled:NoSchedule"
     installDiskSelector:
       size: ">= 200GB"
     machineSpec:
