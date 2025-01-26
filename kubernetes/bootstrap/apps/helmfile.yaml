@@ -24,11 +24,12 @@ hooks:
   - events: ["prepare"]
     showlogs: true
     command: "kubectl"
-    args: ["apply", "-f", "./../apps/network/dnscrypt-proxy/app/config/config-configmap.yaml"]
+    args: ["apply", "-f", "../../apps/network/dnscrypt-proxy/app/config/config-configmap.yaml"]
   - events: ["prepare"]
     showlogs: true
     command: "kubectl"
-    args: ["apply", "-f", "./../apps/network/dnscrypt-proxy/app/config/forwarding-rules-configmap.yaml"]
+    args: ["apply", "-f", "../../apps/network/dnscrypt-proxy/app/config/forwarding-rules-configmap.yaml"]
+
 releases:
   - name: prometheus-operator-crds
     namespace: observability
