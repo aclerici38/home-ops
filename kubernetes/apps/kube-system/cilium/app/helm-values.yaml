@@ -8,7 +8,7 @@ cgroup:
   automount:
     enabled: false
   hostRoot: /sys/fs/cgroup
-# devices: "enp*,ens18"
+devices: "enp1s0 ens* enp11s0"
 endpointRoutes:
   enabled: true
 envoy:
