@@ -58,7 +58,7 @@ releases:
     chart: postfinance/kubelet-csr-approver
     version: 1.2.5
     values:
-      - ../apps/kube-system/kubelet-csr-approver/app/helm-values.yaml
+      - ../../apps/kube-system/kubelet-csr-approver/app/helm-values.yaml
     needs:
       - kube-system/coredns
 
@@ -67,7 +67,7 @@ releases:
     chart: jetstack/cert-manager
     version: v1.16.3
     values:
-      - ../apps/cert-manager/cert-manager/app/helm-values.yaml
+      - ../../apps/cert-manager/cert-manager/app/helm-values.yaml
     needs:
       - kube-system/coredns
 
@@ -76,7 +76,7 @@ releases:
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
     version: 0.13.0
     values:
-      - ../apps/external-secrets/external-secrets/app/helm-values.yaml
+      - ../../apps/external-secrets/external-secrets/app/helm-values.yaml
     needs:
       - kube-system/coredns
 

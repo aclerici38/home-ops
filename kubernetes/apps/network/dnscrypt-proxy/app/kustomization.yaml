@@ -4,13 +4,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ./helmrelease.yaml
+  - ./config/config-configmap.yaml
 configMapGenerator:
-  - name: dnscrypt-proxy-config-configmap
-    files:
-      - ./config/config.toml
   - name: dnscrypt-proxy-forwarder-configmap
     files:
-      - ./config/config.toml
+      - ./config/forwarding-rules.txt
   - name: kubelet-csr-approver-helm-values
     files:
       - values.yaml=./helm-values.yaml
