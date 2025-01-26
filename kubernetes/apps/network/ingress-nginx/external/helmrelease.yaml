@@ -27,10 +27,10 @@ spec:
     - name: external-dns
       namespace: network
   values:
-    nodeSelector:
-      kubernetes.io/hostname: "bonds"
     fullnameOverride: ingress-nginx-external
     controller:
+      nodeSelector:
+        kubernetes.io/hostname: "bonds"
       service:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "external.${SECRET_DOMAIN}"
