@@ -6,7 +6,7 @@ talosVersion: v1.9.2
 kubernetesVersion: v1.32.1
 
 clusterName: dormammu
-endpoint: https://192.168.1.25:6443
+endpoint: https://192.168.1.99:6443
 
 clusterPodNets:
   - &podNet "172.16.0.0/16"
@@ -15,6 +15,7 @@ clusterSvcNets:
 
 additionalApiServerCertSans: &sans
   - "192.168.1.25"
+  - "192.168.1.99"
   - "127.0.0.1"
 additionalMachineCertSans: *sans
 
@@ -55,6 +56,8 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
         mtu: 1500
+        vip:
+          ip: "192.168.1.99"
   - hostname: "posey"
     ipAddress: "10.0.40.28"
     installDiskSelector:
@@ -116,6 +119,8 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
         mtu: 1500
+        vip:
+          ip: "192.168.1.99"
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
