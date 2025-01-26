@@ -15,20 +15,6 @@ spec:
         kind: HelmRepository
         name: fluxcd-kustomize-mutating-webhook
         namespace: flux-system
-  values:
-    certManager:
-      enabled: false
-
-    podSecurityContext:
-      runAsNonRoot: true
-      runAsUser: 65534
-      runAsGroup: 65534
-
-    configMaps:
-      - create: false
-        name: cluster-settings
-        optional: false
-
-    secrets:
-      - name: cluster-secrets
-        optional: false
+  valuesFrom:
+    - kind: ConfigMap
+      name: kustomize-mutating-webhook-helm-values
