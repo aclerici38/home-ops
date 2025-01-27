@@ -32,6 +32,7 @@ nodes:
     machineSpec:
       secureboot: false
     nodeLabels:
+      location: "apartment"
       nvidia.com/gpu.present: "true"
       nvidia.com/gpu.model: "4090"
     kernelModules:
@@ -66,6 +67,7 @@ nodes:
     machineSpec:
       secureboot: false
     nodeLabels:
+      location: "house"
       nvidia.com/gpu.present: "true"
       nvidia.com/gpu.model: "p400"
     kernelModules:
@@ -104,6 +106,8 @@ nodes:
       size: ">= 200GB"
     machineSpec:
       secureboot: false
+    nodeLabels:
+      location: "apartment"
     schematic:
       customization:
         systemExtensions:
