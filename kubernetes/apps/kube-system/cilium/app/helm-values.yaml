@@ -61,7 +61,7 @@ l2announcements:
 loadBalancer:
   algorithm: maglev
   mode: "hybrid"
-  # dsrDispatch: geneve
+  dsrDispatch: geneve
 localRedirectPolicy: true
 operator:
   replicas: 2
