@@ -27,9 +27,6 @@ spec:
   values:
     controllers:
       radarr:
-        pod:
-          nodeSelector:
-            kubernetes.io/hostname: "bonds"
         initContainers:
           init-db:
             image:

@@ -27,9 +27,6 @@ spec:
   values:
     controllers:
       sonarr:
-        pod:
-          nodeSelector:
-            kubernetes.io/hostname: "bonds"
         initContainers:
           init-db:
             image:

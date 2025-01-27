@@ -26,15 +26,21 @@ spec:
     - name: authentik
       namespace: home
   values:
-    nodeSelector:
-      kubernetes.io/hostname: "posey"
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: location
+              operator: In
+              values:
+                - "house"
     ingress:
       enabled: true
       className: external
       hosts: &hosts
         - frigate.${SECRET_DOMAIN}
       annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-production
         nginx.ingress.kubernetes.io/proxy-body-size: 1024m
         nginx.ingress.kubernetes.io/proxy-connect-timeout: "20"
         nginx.ingress.kubernetes.io/proxy-read-timeout: "14400"

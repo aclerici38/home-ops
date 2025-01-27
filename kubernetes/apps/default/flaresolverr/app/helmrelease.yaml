@@ -27,9 +27,6 @@ spec:
   values:
     controllers:
       flaresolverr:
-        pod:
-          nodeSelector:
-            kubernetes.io/hostname: "bonds"
         containers:
           app:
             image:

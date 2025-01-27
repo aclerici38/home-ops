@@ -27,9 +27,6 @@ spec:
   values:
     controllers:
       jellyseerr:
-        pod:
-          nodeSelector:
-            kubernetes.io/hostname: "bonds"
         initContainers:
           init-db:
             image:

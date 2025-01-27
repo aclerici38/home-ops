@@ -29,8 +29,15 @@ spec:
   values:
     fullnameOverride: ingress-nginx-external
     controller:
-      nodeSelector:
-        kubernetes.io/hostname: "bonds"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: location
+                operator: In
+                values:
+                  - "apartment"
       service:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "external.${SECRET_DOMAIN}"
