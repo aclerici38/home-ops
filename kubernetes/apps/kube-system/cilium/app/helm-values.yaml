@@ -62,6 +62,9 @@ loadBalancer:
   algorithm: maglev
   mode: "hybrid"
   dsrDispatch: geneve
+nodePort:
+  enabled: true
+  dsrDispatch: geneve
 localRedirectPolicy: true
 operator:
   replicas: 2
