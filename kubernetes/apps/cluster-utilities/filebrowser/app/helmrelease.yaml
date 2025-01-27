@@ -1,0 +1,87 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app filebrowser
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 1
+  values:
+    controllers:
+      main:
+        containers:
+          *app :
+            image:
+              repository: docker.io/filebrowser/filebrowser
+              tag: v2.31.2@sha256:a4da9ca8364b0a1fc5dd36f7add92582bf673c0ae0bda8dd9bd13062c41d1715
+            env:
+              FB_DATABASE: /config/filebrowser.db
+              FB_LOG: stdout
+              FB_ROOT: /allMedia
+              TZ: ${TZ}
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: &port 80
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+              limits:
+                memory: 800Mi
+    service:
+      *app :
+        controller: main
+        ports:
+          http:
+            port: 80
+    ingress:
+      *app :
+        className: internal
+        hosts:
+          - host: &host "filebrowser.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: main
+                  port: http
+    persistence:
+      config:
+        existingClaim: filebrowser
+      data:
+        type: nfs
+        server: 192.168.1.10
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /allMedia
