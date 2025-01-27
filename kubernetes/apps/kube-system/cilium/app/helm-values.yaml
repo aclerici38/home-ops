@@ -60,7 +60,7 @@ l2announcements:
   enabled: true
 loadBalancer:
   algorithm: maglev
-  mode: "hybrid"
+  mode: "snat"
   dsrDispatch: geneve
 nodePort:
   enabled: true
