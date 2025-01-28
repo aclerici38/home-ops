@@ -70,7 +70,7 @@ spec:
               FIREWALL_INPUT_PORTS: &port 8080
               FIREWALL_OUTBOUND_SUBNETS: 172.16.0.0/16,172.17.0.0/16
               DNS_KEEP_NAMESERVER: on
-              VPN_PORT_FORWARDING_UP_COMMAND: /bin/sh -c '/usr/bin/wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{`{{PORTS}}`}}}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'
+              # VPN_PORT_FORWARDING_UP_COMMAND: /bin/sh -c '/usr/bin/wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{`{{PORTS}}`}}}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'
             resources:
               limits:
                 squat.ai/tun: 1
@@ -118,28 +118,28 @@ spec:
                 drop:
                   - ALL
 
-          # port-forward:
-          #   image:
-          #     repository: ghcr.io/bjw-s-labs/gluetun-qb-port-sync
-          #     tag: 0.0.2@sha256:23f3d00b21b879ead89dba97114b63930ec050c1780aa0b01062052a5925d197
-          #   env:
-          #     GLUETUN_CONTROL_SERVER_HOST: localhost
-          #     GLUETUN_CONTROL_SERVER_PORT: 8000
-          #     QBITTORRENT_HOST: localhost
-          #     QBITTORRENT_WEBUI_PORT: *port
-          #     CRON_ENABLED: true
-          #     CRON_SCHEDULE: "*/5 * * * *"
-          #     LOG_TIMESTAMP: false
-          #   securityContext:
-          #     runAsUser: 1000
-          #     runAsGroup: 1000
-          #     runAsNonRoot: true
-          #     allowPrivilegeEscalation: false
-          #     readOnlyRootFilesystem: true
-          #     seccompProfile: { type: RuntimeDefault }
-          #     capabilities:
-          #       drop:
-          #         - ALL
+          port-forward:
+            image:
+              repository: ghcr.io/bjw-s-labs/gluetun-qb-port-sync
+              tag: 0.0.2@sha256:23f3d00b21b879ead89dba97114b63930ec050c1780aa0b01062052a5925d197
+            env:
+              GLUETUN_CONTROL_SERVER_HOST: localhost
+              GLUETUN_CONTROL_SERVER_PORT: 8000
+              QBITTORRENT_HOST: localhost
+              QBITTORRENT_WEBUI_PORT: *port
+              CRON_ENABLED: true
+              CRON_SCHEDULE: "*/5 * * * *"
+              LOG_TIMESTAMP: false
+            securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              seccompProfile: { type: RuntimeDefault }
+              capabilities:
+                drop:
+                  - ALL
           qbitrr:
             dependsOn: qbit
             image:
