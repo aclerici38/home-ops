@@ -8,7 +8,7 @@ cgroup:
   automount:
     enabled: false
   hostRoot: /sys/fs/cgroup
-devices: "enp1s0 ens18 enp11s0"
+devices: "enp1s0 ens18 eth0 enp11s0"
 endpointRoutes:
   enabled: true
 envoy:
@@ -60,7 +60,7 @@ l2announcements:
   enabled: true
 loadBalancer:
   algorithm: maglev
-  mode: "snat"
+  mode: "hybrid"
   dsrDispatch: geneve
 nodePort:
   enabled: true

@@ -3,3 +3,7 @@ machine:
     net.core.bpf_jit_harden: 1
     fs.inotify.max_user_watches: "1048576" # Watchdog
     fs.inotify.max_user_instances: "8192"  # Watchdog
+    # Wireguard
+    net.ipv4.ip_forward: 1
+    net.ipv6.conf.all.forwarding: 1
+    net.ipv4.conf.all.src_valid_mark: 1

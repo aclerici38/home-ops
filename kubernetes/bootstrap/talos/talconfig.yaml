@@ -6,7 +6,7 @@ talosVersion: v1.9.2
 kubernetesVersion: v1.32.1
 
 clusterName: dormammu
-endpoint: https://10.0.40.28:6443
+endpoint: https://192.168.1.25:6443
 
 clusterPodNets:
   - &podNet "172.16.0.0/16"
@@ -15,8 +15,9 @@ clusterSvcNets:
 
 additionalApiServerCertSans: &sans
   - "192.168.1.25"
-  - "192.168.1.99"
   - "10.0.40.28"
+  - "155.248.199.104"
+  - "10.40.40.40"
   - "127.0.0.1"
 additionalMachineCertSans: *sans
 
@@ -31,6 +32,7 @@ nodes:
       model: "QEMU*"
     machineSpec:
       secureboot: false
+      mode: metal
     nodeLabels:
       location: "apartment"
       nvidia.com/gpu.present: "true"
@@ -53,79 +55,79 @@ nodes:
           hardwareAddr: "bc:24:11:58:64:7d"
         dhcp: false
         addresses:
-          - "192.168.1.25/24"
+          - &bondsNet "192.168.1.25/24"
         routes:
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
         mtu: 1500
-        # vip:
-        #   ip: "192.168.1.99"
-  - hostname: "posey"
-    ipAddress: "10.0.40.28"
+  # - hostname: "posey"
+  #   ipAddress: "10.0.40.28"
+  #   installDiskSelector:
+  #     model: "KINGSTON SNV2S1000G"
+  #   machineSpec:
+  #     secureboot: false
+  #     mode: metal
+  #   nodeLabels:
+  #     location: "house"
+  #     nvidia.com/gpu.present: "true"
+  #     nvidia.com/gpu.model: "p400"
+  #   kernelModules:
+  #     - name: nvidia
+  #     - name: nvidia_uvm
+  #     - name: nvidia_drm
+  #     - name: nvidia_modeset
+  #   schematic:
+  #     customization:
+  #       systemExtensions:
+  #         officialExtensions:
+  #           - siderolabs/nvidia-container-toolkit-production
+  #           - siderolabs/nonfree-kmod-nvidia-production
+  #   controlPlane: true
+  #   networkInterfaces:
+  #     - deviceSelector:
+  #         hardwareAddr: "c4:62:37:01:8c:cf"
+  #       dhcp: false
+  #       addresses:
+  #         - 10.0.40.28/24
+  #       routes:
+  #         - network: "0.0.0.0/0"
+  #           gateway: "10.0.40.1"
+  #       mtu: 1500
+  #     - deviceSelector:
+  #         hardwareAddr: c4:62:37:01:8c:ce
+  #       ignore: true
+  #     - deviceSelector:
+  #         hardwareAddr: a8:5e:45:9c:d0:99
+  #       ignore: true
+  - hostname: "madbum"
+    ipAddress: "10.40.40.40"
+    nodeTaints:
+      scheduler: "disabled:NoSchedule"
     installDiskSelector:
-      model: "KINGSTON SNV2S1000G"
+      size: ">= 10GB"
     machineSpec:
       secureboot: false
+      mode: cloud
+    patches:
+      - |-
+        machine:
+          time:
+            servers:
+              - 169.254.169.254
     nodeLabels:
-      location: "house"
-      nvidia.com/gpu.present: "true"
-      nvidia.com/gpu.model: "p400"
-    kernelModules:
-      - name: nvidia
-      - name: nvidia_uvm
-      - name: nvidia_drm
-      - name: nvidia_modeset
-    schematic:
-      customization:
-        systemExtensions:
-          officialExtensions:
-            - siderolabs/nvidia-container-toolkit-production
-            - siderolabs/nonfree-kmod-nvidia-production
+      location: "cloud"
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: "c4:62:37:01:8c:cf"
+          hardwareAddr: "02:00:17:01:5b:14"
         dhcp: false
         addresses:
-          - "10.0.40.28/24"
+          - 10.40.40.40/24
         routes:
           - network: "0.0.0.0/0"
-            gateway: "10.0.40.1"
+            gateway: "10.40.40.1"
         mtu: 1500
-      - deviceSelector:
-          hardwareAddr: c4:62:37:01:8c:ce
-        ignore: true
-      - deviceSelector:
-          hardwareAddr: a8:5e:45:9c:d0:99
-        ignore: true
-  - hostname: "timmy"
-    ipAddress: "192.168.1.55"
-    # nodeTaints:
-    #   scheduler: "disabled:NoSchedule"
-    installDiskSelector:
-      size: ">= 200GB"
-    machineSpec:
-      secureboot: false
-    nodeLabels:
-      location: "apartment"
-    schematic:
-      customization:
-        systemExtensions:
-          officialExtensions:
-            - siderolabs/qemu-guest-agent
-    controlPlane: true
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "52:54:00:74:e5:09"
-        dhcp: false
-        addresses:
-          - "192.168.1.55/24"
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "192.168.1.1"
-        mtu: 1500
-        vip:
-          ip: "192.168.1.99"
+
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
