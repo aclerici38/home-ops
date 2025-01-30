@@ -89,6 +89,15 @@ releases:
     needs:
       - kube-system/coredns
 
+  - name: onepassword-connect
+    namespace: external-secrets
+    chart: oci://ghcr.io/bjw-s/helm/app-template
+    version: 3.6.1
+    values:
+      - ../../apps/external-secrets/onepassword-connect/app/helm-values.yaml
+    needs:
+      - kube-system/cilium
+
   - name: external-secrets
     namespace: external-secrets
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
