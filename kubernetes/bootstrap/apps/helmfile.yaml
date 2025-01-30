@@ -106,6 +106,12 @@ releases:
       - ../../apps/external-secrets/external-secrets/app/helm-values.yaml
     needs:
       - kube-system/coredns
+      - onepassword-connect
+    hooks:
+      - events: ["postsync"]
+        showlogs: true
+        command: "kubectl"
+        args: ["apply", "-f", "../../apps/external-secrets/external-secrets/stores/clustersecretstore.yaml"]
 
   - name: flux-operator
     namespace: flux-system
