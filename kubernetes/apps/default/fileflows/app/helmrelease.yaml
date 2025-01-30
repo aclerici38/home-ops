@@ -34,7 +34,7 @@ spec:
           server:
             image:
               repository: docker.io/revenz/fileflows
-              tag: 25.01@sha256:45f45dafe69fb696ab153352fb5e6016f7c300ebd94e0071b5f5c2ab8fc7a39f
+              tag: 25.01@sha256:b4d83ca91cc3ea335b1f713d10e99d0cb2dccd3ec36ce1e725aa3d69c3fe2ed2
             env:
               TZ: "${TZ}"
               PUID: 1000
@@ -61,7 +61,7 @@ spec:
           node:
             image:
               repository: docker.io/revenz/fileflows
-              tag: 25.01@sha256:45f45dafe69fb696ab153352fb5e6016f7c300ebd94e0071b5f5c2ab8fc7a39f
+              tag: 25.01@sha256:b4d83ca91cc3ea335b1f713d10e99d0cb2dccd3ec36ce1e725aa3d69c3fe2ed2
             env:
               TZ: "${TZ}"
               PUID: 1000
