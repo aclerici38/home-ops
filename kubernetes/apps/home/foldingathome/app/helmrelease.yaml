@@ -60,4 +60,5 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     persistence:
       config:
-        existingClaim: foldingathome
+        # existingClaim: foldingathome
+        type: emptyDir
