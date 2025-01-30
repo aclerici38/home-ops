@@ -42,7 +42,9 @@ spec:
               - secretRef:
                   name: foldingathome-secret
             securityContext:
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
+              allowPrivilegeEscalation: true
+              privileged: true
             resources:
               requests:
                 cpu: 100m
