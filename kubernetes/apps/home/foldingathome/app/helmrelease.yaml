@@ -56,7 +56,6 @@ spec:
       securityContext:
         runAsNonRoot: false
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
     persistence:
       config:
         # existingClaim: foldingathome
