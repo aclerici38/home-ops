@@ -101,8 +101,6 @@ nodes:
   #       ignore: true
   - hostname: "madbum"
     ipAddress: "10.40.40.40"
-    nodeTaints:
-      scheduler: "disabled:NoSchedule"
     installDiskSelector:
       size: ">= 10GB"
     machineSpec:
