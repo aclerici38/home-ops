@@ -60,45 +60,45 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
         mtu: 1500
-  # - hostname: "posey"
-  #   ipAddress: "10.0.40.28"
-  #   installDiskSelector:
-  #     model: "KINGSTON SNV2S1000G"
-  #   machineSpec:
-  #     secureboot: false
-  #     mode: metal
-  #   nodeLabels:
-  #     location: "house"
-  #     nvidia.com/gpu.present: "true"
-  #     nvidia.com/gpu.model: "p400"
-  #   kernelModules:
-  #     - name: nvidia
-  #     - name: nvidia_uvm
-  #     - name: nvidia_drm
-  #     - name: nvidia_modeset
-  #   schematic:
-  #     customization:
-  #       systemExtensions:
-  #         officialExtensions:
-  #           - siderolabs/nvidia-container-toolkit-production
-  #           - siderolabs/nonfree-kmod-nvidia-production
-  #   controlPlane: true
-  #   networkInterfaces:
-  #     - deviceSelector:
-  #         hardwareAddr: "c4:62:37:01:8c:cf"
-  #       dhcp: false
-  #       addresses:
-  #         - 10.0.40.28/24
-  #       routes:
-  #         - network: "0.0.0.0/0"
-  #           gateway: "10.0.40.1"
-  #       mtu: 1500
-  #     - deviceSelector:
-  #         hardwareAddr: c4:62:37:01:8c:ce
-  #       ignore: true
-  #     - deviceSelector:
-  #         hardwareAddr: a8:5e:45:9c:d0:99
-  #       ignore: true
+  - hostname: "posey"
+    ipAddress: "10.0.40.28"
+    installDiskSelector:
+      model: "KINGSTON SNV2S1000G"
+    machineSpec:
+      secureboot: false
+      mode: metal
+    nodeLabels:
+      location: "house"
+      nvidia.com/gpu.present: "true"
+      nvidia.com/gpu.model: "p400"
+    kernelModules:
+      - name: nvidia
+      - name: nvidia_uvm
+      - name: nvidia_drm
+      - name: nvidia_modeset
+    schematic:
+      customization:
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/nvidia-container-toolkit-production
+            - siderolabs/nonfree-kmod-nvidia-production
+    controlPlane: true
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "c4:62:37:01:8c:cf"
+        dhcp: false
+        addresses:
+          - 10.0.40.28/24
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "10.0.40.1"
+        mtu: 1500
+      - deviceSelector:
+          hardwareAddr: c4:62:37:01:8c:ce
+        ignore: true
+      - deviceSelector:
+          hardwareAddr: a8:5e:45:9c:d0:99
+        ignore: true
   - hostname: "madbum"
     ipAddress: "10.40.40.40"
     installDiskSelector:
