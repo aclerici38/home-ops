@@ -16,9 +16,13 @@ clusterSvcNets:
 additionalApiServerCertSans: &sans
   - "192.168.1.25"
   - "10.0.40.28"
-  - "155.248.199.104"
   - "10.40.40.40"
+  - "192.168.1.55"
   - "127.0.0.1"
+  - "posey"
+  - "timmy"
+  - "bonds"
+  - "madbum"
 additionalMachineCertSans: *sans
 
 # Disable built-in Flannel to use Cilium
@@ -56,6 +60,31 @@ nodes:
         dhcp: false
         addresses:
           - &bondsNet "192.168.1.25/24"
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "192.168.1.1"
+        mtu: 1500
+  - hostname: "timmy"
+    ipAddress: "192.168.1.55"
+    installDiskSelector:
+      size: '> 100GB'
+    machineSpec:
+      secureboot: false
+      mode: metal
+    nodeLabels:
+      location: "apartment"
+    schematic:
+      customization:
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/qemu-guest-agent
+    controlPlane: false
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "52:54:00:b4:0d:37"
+        dhcp: false
+        addresses:
+          - "192.168.1.55/24"
         routes:
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"

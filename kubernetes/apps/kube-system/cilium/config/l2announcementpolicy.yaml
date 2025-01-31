@@ -10,6 +10,7 @@ spec:
   interfaces:
     - ^ens[0-9]+
     - ^enp11s0$
+    - ^enp1s0$
   nodeSelector:
     matchLabels:
       kubernetes.io/os: linux
