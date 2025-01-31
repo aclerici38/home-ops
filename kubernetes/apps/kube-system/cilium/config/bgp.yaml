@@ -1,38 +1,32 @@
 apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPClusterConfig
 metadata:
-  name: apartment-bgp
+  name: cilium-bgp
 spec:
   nodeSelector:
-    matchLabels:
-      location: apartment
+    matchExpressions:
+      - key: location
+        operator: In
+        values:
+          - house
+          - apartment
   bgpInstances:
-    - name: "apartment-instance"
-      localASN: 64513
-      peers:
-        - name: "opnsense-apartment"
-          peerASN: 64523
-          peerAddress: 192.168.1.1
-          peerConfigRef:
-            name: "cilium-peer"
----
-apiVersion: cilium.io/v2alpha1
-kind: CiliumBGPClusterConfig
-metadata:
-  name: house-bgp
-spec:
-  nodeSelector:
-    matchLabels:
-      location: house
-  bgpInstances:
-    - name: "house-instance"
-      localASN: 64514
-      peers:
-        - name: "opnsense-home"
-          peerASN: 64524
-          peerAddress: 10.0.40.1
-          peerConfigRef:
-            name: "cilium-peer"
+  - name: "apartment-instance"
+    localASN: 65551
+    peers:
+    - name: "opnsense-apartment"
+      peerASN: 65551
+      peerAddress: 192.168.1.1
+      peerConfigRef:
+        name: "cilium-peer"
+  - name: "home-instance"
+    localASN: 65551
+    peers:
+    - name: "opnsense-home"
+      peerASN: 65552
+      peerAddress: 10.0.40.1
+      peerConfigRef:
+        name: "cilium-peer"
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPPeerConfig
