@@ -6,7 +6,7 @@ kind: Cluster
 metadata:
   name: blocky-db
 spec:
-  instances: 3
+  instances: 1
   imageName: ghcr.io/cloudnative-pg/postgresql:16.6@sha256:61be9bbd99c582f2e5e81a826f277a27e2d7e4326ffcd9231472ecf58a10e97a
   primaryUpdateStrategy: unsupervised
   storage:
