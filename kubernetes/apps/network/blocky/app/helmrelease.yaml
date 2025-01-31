@@ -96,8 +96,9 @@ spec:
       dns:
         controller: *app
         type: LoadBalancer
+        externalTrafficPolicy: Local
         annotations:
-          io.cilium/lb-ipam-ips: 192.168.1.250
+          io.cilium/lb-ipam-ips: 10.38.55.50
         ports: &dnsPorts
           dns-tcp:
             port: *port
@@ -105,7 +106,6 @@ spec:
           dns-udp:
             port: *port
             protocol: UDP
-        externalTrafficPolicy: Local
     serviceMonitor:
       *app :
         serviceName: *app
