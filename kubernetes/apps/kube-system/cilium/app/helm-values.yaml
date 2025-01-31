@@ -20,7 +20,7 @@ envoy:
 dashboards:
   enabled: true
 hubble:
-  enabled: false
+  enabled: true
   listenAddress: ":4244"
   metrics:
     enabled:
@@ -33,20 +33,20 @@ hubble:
     dashboards:
       enabled: true
   relay:
-    enabled: false
+    enabled: true
     rollOutPods: true
     prometheus:
       enabled: true
-  # ui:
-  #   enabled: true
-  #   replicas: 1
-  #   baseUrl: "/"
-  #   rollOutPods: true
-  #   ingress:
-  #     enabled: true
-  #     className: internal
-  #     hosts:
-  #       - &fqdn "hubble.${SECRET_DOMAIN}"
+  ui:
+    enabled: true
+    replicas: 1
+    baseUrl: "/"
+    rollOutPods: true
+    ingress:
+      enabled: true
+      className: internal
+      hosts:
+        - &fqdn "hubble.${SECRET_DOMAIN}"
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: "172.16.0.0/16"
