@@ -98,7 +98,7 @@ spec:
         type: LoadBalancer
         externalTrafficPolicy: Local
         annotations:
-          io.cilium/lb-ipam-ips: 10.38.55.50
+          io.cilium/lb-ipam-ips: 10.38.55.250
         ports: &dnsPorts
           dns-tcp:
             port: *port

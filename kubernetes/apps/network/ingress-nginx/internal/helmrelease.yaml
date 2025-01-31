@@ -29,7 +29,7 @@ spec:
       kind: DaemonSet
       service:
         annotations:
-          lbipam.cilium.io/ips: "10.38.55.4"
+          lbipam.cilium.io/ips: "10.38.55.202"
         externalTrafficPolicy: "Cluster"
       ingressClassResource:
         name: internal
