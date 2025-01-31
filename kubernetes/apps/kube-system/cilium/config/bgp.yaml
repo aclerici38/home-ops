@@ -12,21 +12,21 @@ spec:
           - apartment
   bgpInstances:
   - name: "apartment-instance"
-    localASN: 65551
+    localASN: 64513
     peers:
     - name: "opnsense-apartment"
-      peerASN: 65551
+      peerASN: 64512
       peerAddress: 192.168.1.1
       peerConfigRef:
         name: "cilium-peer"
-  - name: "home-instance"
-    localASN: 65552
-    peers:
-    - name: "opnsense-home"
-      peerASN: 65552
-      peerAddress: 10.0.40.1
-      peerConfigRef:
-        name: "cilium-peer"
+  # - name: "home-instance"
+  #   localASN: 65552
+  #   peers:
+  #   - name: "opnsense-home"
+  #     peerASN: 65552
+  #     peerAddress: 10.0.40.1
+  #     peerConfigRef:
+  #       name: "cilium-peer"
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPPeerConfig
