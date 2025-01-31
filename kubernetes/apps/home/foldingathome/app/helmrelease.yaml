@@ -58,5 +58,4 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     persistence:
       config:
-        # existingClaim: foldingathome
-        type: emptyDir
+        existingClaim: foldingathome
