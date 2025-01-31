@@ -44,15 +44,9 @@ hubble:
   #   rollOutPods: true
   #   ingress:
   #     enabled: true
-  #     annotations:
-  #       cert-manager.io/cluster-issuer: "letsencrypt-production"
   #     className: internal
   #     hosts:
   #       - &fqdn "hubble.${SECRET_DOMAIN}"
-  #     tls:
-  #       - hosts:
-  #         - *fqdn
-  #         secretName: hubble-tls
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: "172.16.0.0/16"

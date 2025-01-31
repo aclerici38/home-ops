@@ -1,0 +1,54 @@
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  name: cilium-bgp
+spec:
+  nodeSelector:
+    matchExpressions:
+      - key: location
+        operator: In
+        values:
+          - house
+          - apartment
+  bgpInstances:
+  - name: "apartment-instance"
+    localASN: 64514
+    peers:
+    - name: "opnsense-apartment"
+      peerASN: 64513
+      peerAddress: 192.168.1.1
+      peerConfigRef:
+        name: "cilium-peer"
+  - name: "home-instance"
+    localASN: 64515
+    peers:
+    - name: "opnsense-home"
+      peerASN: 65551
+      peerAddress: 10.0.40.1
+      peerConfigRef:
+        name: "cilium-peer"
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeerConfig
+metadata:
+  name: cilium-peer
+spec:
+  families:
+    - afi: ipv4
+      safi: unicast
+      advertisements:
+        matchLabels:
+          advertise: "bgp"
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPAdvertisement
+metadata:
+  name: lb-advertisement
+  labels:
+    advertise: bgp
+spec:
+  advertisements:
+    - advertisementType: "Service"
+      service:
+        addresses:
+          - LoadBalancerIP
