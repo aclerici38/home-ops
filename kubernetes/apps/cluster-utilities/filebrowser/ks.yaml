@@ -12,10 +12,12 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-utilities/filebrowser/app
   prune: true
+  dependsOn:
+    - name: volsync
   sourceRef:
     kind: GitRepository
     name: flux-system
-  wait: false
+  wait: true
   interval: 30m
   postBuild:
     substitute:

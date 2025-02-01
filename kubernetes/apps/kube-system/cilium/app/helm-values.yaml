@@ -46,7 +46,7 @@ hubble:
       enabled: true
       className: internal
       hosts:
-        - &fqdn "hubble.${SECRET_DOMAIN}"
+        - &fqdn "hubble.${SECRET_DOMAIN:-example.com}"
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: "172.16.0.0/16"
