@@ -6,7 +6,7 @@ talosVersion: v1.9.3
 kubernetesVersion: v1.32.1
 
 clusterName: dormammu
-endpoint: https://192.168.9.25:6443
+endpoint: https://192.168.1.25:6443
 
 clusterPodNets:
   - &podNet "172.16.0.0/16"
@@ -14,10 +14,10 @@ clusterSvcNets:
   - &svcNet "172.17.0.0/16"
 
 additionalApiServerCertSans: &sans
-  - "192.168.9.25"
+  - "192.168.1.25"
   - "10.0.40.28"
   - "10.40.40.40"
-  - "192.168.9.55"
+  - "192.168.1.55"
   - "127.0.0.1"
   - "posey"
   - "timmy"
@@ -31,7 +31,7 @@ cniConfig:
 
 nodes:
   - hostname: "bonds"
-    ipAddress: "192.168.9.25"
+    ipAddress: "192.168.1.25"
     installDiskSelector:
       size: '> 100GB'
     machineSpec:
@@ -59,10 +59,10 @@ nodes:
           hardwareAddr: "bc:24:11:58:64:7d"
         dhcp: false
         addresses:
-          - &bondsNet "192.168.9.25/24"
+          - &bondsNet "192.168.1.25/24"
         routes:
           - network: "0.0.0.0/0"
-            gateway: "192.168.9.1"
+            gateway: "192.168.1.1"
         mtu: 1500
   - hostname: "posey"
     ipAddress: "10.0.30.28"
