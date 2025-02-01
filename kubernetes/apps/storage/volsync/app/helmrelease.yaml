@@ -36,3 +36,5 @@ spec:
       runAsUser: 1000
       runAsGroup: 1000
       seccompProfile: { type: RuntimeDefault }
+    nodeselector:
+      kubernetes.io/arch: amd64
