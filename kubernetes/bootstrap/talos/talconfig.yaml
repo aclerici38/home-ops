@@ -60,7 +60,7 @@ nodes:
           hardwareAddr: "bc:24:11:58:64:7d"
         dhcp: false
         addresses:
-          - &bondsNet "192.168.1.25/24"
+          - "192.168.1.25/24"
         routes:
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
@@ -128,6 +128,30 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "10.40.40.1"
         mtu: 1500
+      - interface: wg0
+        addresses:
+          - 10.10.10.3/24
+        mtu: 1420
+        routes:
+          - network: 192.168.1.0/24
+            gateway: 10.10.10.1
+          - network: 10.0.30.0/24
+            gateway: 10.10.10.2
+        wireguard:
+          privateKey: ${MADBUM_WG_PRIVATE_KEY}
+          peers:
+            - publicKey: ${APARTMENT_WG_PUBKEY}
+              endpoint: ${APARTMENT_WG_ENDPOINT}
+              allowedIPs:
+                - 192.168.1.0/24
+                - 10.10.10.1/32
+              persistentKeepaliveInterval: 10s
+            - publicKey: ${OFFICE_WG_PUBKEY}
+              endpoint: ${OFFICE_WG_ENDPOINT}
+              allowedIPs:
+                - 10.0.30.0/24
+                - 10.10.10.2/32
+              persistentKeepaliveInterval: 10s
 
 # Global patches
 patches:
