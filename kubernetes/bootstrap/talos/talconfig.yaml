@@ -91,9 +91,7 @@ nodes:
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "c4:62:37:01:8c:cf"
-        dhcp: false
-        addresses:
-          - 10.0.30.28/24
+        dhcp: true
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.0.30.1"
