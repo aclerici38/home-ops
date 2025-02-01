@@ -33,7 +33,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://192.168.1.10:9000
-      serverName: &currentCluster authentik-db-v5
+      serverName: &currentCluster authentik-db-v6
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -44,7 +44,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster authentik-db-v4
+      source: &previousCluster authentik-db-v5
   externalClusters:
     - name: *previousCluster
       barmanObjectStore:

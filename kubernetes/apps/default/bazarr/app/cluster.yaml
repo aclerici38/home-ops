@@ -29,7 +29,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://192.168.1.10:9000
-      serverName: &currentCluster bazarr-db-v5
+      serverName: &currentCluster bazarr-db-v6
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -40,7 +40,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster bazarr-db-v4
+      source: &previousCluster bazarr-db-v5
   externalClusters:
     - name: *previousCluster
       barmanObjectStore:
