@@ -63,7 +63,7 @@ spec:
         driver: freenas-api-nfs
         httpConnection:
           protocol: http
-          host: &tnas-ip 192.168.1.10
+          host: &tnas-ip 192.168.9.10
           port: 80
           apiKey: ${TRUENAS_API_KEY}
           allowInsecure: true
