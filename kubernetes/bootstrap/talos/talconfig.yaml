@@ -6,7 +6,7 @@ talosVersion: v1.9.3
 kubernetesVersion: v1.32.1
 
 clusterName: dormammu
-endpoint: https://192.168.1.25:6443
+endpoint: https://192.168.9.25:6443
 
 clusterPodNets:
   - &podNet "172.16.0.0/16"
@@ -14,10 +14,10 @@ clusterSvcNets:
   - &svcNet "172.17.0.0/16"
 
 additionalApiServerCertSans: &sans
-  - "192.168.1.25"
+  - "192.168.9.25"
   - "10.0.40.28"
   - "10.40.40.40"
-  - "192.168.1.55"
+  - "192.168.9.55"
   - "127.0.0.1"
   - "posey"
   - "timmy"
@@ -31,9 +31,9 @@ cniConfig:
 
 nodes:
   - hostname: "bonds"
-    ipAddress: "192.168.1.25"
+    ipAddress: "192.168.9.25"
     installDiskSelector:
-      model: "QEMU*"
+      size: '> 100GB'
     machineSpec:
       secureboot: false
       mode: metal
@@ -59,38 +59,13 @@ nodes:
           hardwareAddr: "bc:24:11:58:64:7d"
         dhcp: false
         addresses:
-          - &bondsNet "192.168.1.25/24"
+          - &bondsNet "192.168.9.25/24"
         routes:
           - network: "0.0.0.0/0"
-            gateway: "192.168.1.1"
-        mtu: 1500
-  - hostname: "timmy"
-    ipAddress: "192.168.1.55"
-    installDiskSelector:
-      size: '> 100GB'
-    machineSpec:
-      secureboot: false
-      mode: metal
-    nodeLabels:
-      location: "apartment"
-    schematic:
-      customization:
-        systemExtensions:
-          officialExtensions:
-            - siderolabs/qemu-guest-agent
-    controlPlane: false
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "52:54:00:b4:0d:37"
-        dhcp: false
-        addresses:
-          - "192.168.1.55/24"
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "192.168.1.1"
+            gateway: "192.168.9.1"
         mtu: 1500
   - hostname: "posey"
-    ipAddress: "10.0.40.28"
+    ipAddress: "10.0.30.28"
     installDiskSelector:
       model: "KINGSTON SNV2S1000G"
     machineSpec:
@@ -117,10 +92,10 @@ nodes:
           hardwareAddr: "c4:62:37:01:8c:cf"
         dhcp: false
         addresses:
-          - 10.0.40.28/24
+          - 10.0.30.28/24
         routes:
           - network: "0.0.0.0/0"
-            gateway: "10.0.40.1"
+            gateway: "10.0.30.1"
         mtu: 1500
       - deviceSelector:
           hardwareAddr: c4:62:37:01:8c:ce
