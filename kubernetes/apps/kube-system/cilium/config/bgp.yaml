@@ -1,65 +1,7 @@
-# apiVersion: cilium.io/v2alpha1
-# kind: CiliumBGPClusterConfig
-# metadata:
-#   name: cilium-bgp
-# spec:
-#   nodeSelector:
-#     matchExpressions:
-#       - key: location
-#         operator: In
-#         values:
-#           - house
-#           - apartment
-#   bgpInstances:
-#   - name: "apartment-instance"
-#     localASN: 64513
-#     peers:
-#     - name: "opnsense-apartment"
-#       peerASN: 64523
-#       peerAddress: 192.168.1.1
-#       peerConfigRef:
-#         name: "cilium-peer"
-#     - name: "opnsense-home"
-#       peerASN: 64524
-#       peerAddress: 10.0.30.1
-#       peerConfigRef:
-#         name: "cilium-peer"
-# ---
-# apiVersion: cilium.io/v2alpha1
-# kind: CiliumBGPPeerConfig
-# metadata:
-#   name: cilium-peer
-# spec:
-#   ebgpMultihop: 255
-#   families:
-#     - afi: ipv4
-#       safi: unicast
-#       advertisements:
-#         matchLabels:
-#           advertise: "bgp"
-# ---
-# apiVersion: cilium.io/v2alpha1
-# kind: CiliumBGPAdvertisement
-# metadata:
-#   name: lb-advertisement
-#   labels:
-#     advertise: bgp
-# spec:
-#   advertisements:
-#     - advertisementType: "Service"
-#       service:
-#         addresses:
-#           - LoadBalancerIP
-#       selector:
-#         matchExpressions:
-#         - {key: somekey, operator: NotIn, values: ['never-used-value']}
-
----
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumbgppeeringpolicy_v2alpha1.json
 apiVersion: cilium.io/v2alpha1
-kind: CiliumBGPPeeringPolicy
+kind: CiliumBGPClusterConfig
 metadata:
-  name: lb-bgp-policy
+  name: cilium-bgp
 spec:
   nodeSelector:
     matchExpressions:
@@ -68,19 +10,46 @@ spec:
         values:
           - house
           - apartment
-  virtualRouters:
-    - localASN: 64514
-      exportPodCIDR: false
-      serviceSelector:
+  bgpInstances:
+  - name: "apartment-instance"
+    localASN: 64513
+    peers:
+    - name: "opnsense-apartment"
+      peerASN: 64523
+      peerAddress: 192.168.1.1
+      peerConfigRef:
+        name: "cilium-peer"
+    - name: "opnsense-home"
+      peerASN: 64524
+      peerAddress: 10.0.30.1
+      peerConfigRef:
+        name: "cilium-peer"
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeerConfig
+metadata:
+  name: cilium-peer
+spec:
+  ebgpMultihop: 255
+  families:
+    - afi: ipv4
+      safi: unicast
+      advertisements:
+        matchLabels:
+          advertise: "bgp"
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPAdvertisement
+metadata:
+  name: lb-advertisement
+  labels:
+    advertise: bgp
+spec:
+  advertisements:
+    - advertisementType: "Service"
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
         matchExpressions:
-          - key: thisFakeSelector
-            operator: NotIn
-            values:
-              - will-match-and-announce-all-services
-      neighbors:
-        - peerAddress: 192.168.1.1/32
-          peerASN: 64523
-          eBGPMultihopTTL: 255
-        - peerAddress: 10.0.30.1/32
-          peerASN: 64524
-          eBGPMultihopTTL: 255
+        - {key: somekey, operator: NotIn, values: ['never-used-value']}
