@@ -13,6 +13,7 @@ cgroup:
     enabled: false
   hostRoot: /sys/fs/cgroup
 devices: "enp1s0 ens18 eth0 enp11s0"
+logOptions: "level=debug"
 endpointRoutes:
   enabled: true
 envoy:
