@@ -16,12 +16,12 @@ spec:
     peers:
     - name: "opnsense-apartment"
       peerASN: 64523
-      peerAddress: 192.168.1.1
+      peerAddress: 10.10.10.1
       peerConfigRef:
         name: "cilium-peer"
     - name: "opnsense-home"
       peerASN: 64524
-      peerAddress: 10.0.30.1
+      peerAddress: 10.10.10.2
       peerConfigRef:
         name: "cilium-peer"
 ---
