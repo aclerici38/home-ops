@@ -74,6 +74,7 @@ spec:
       app:
         controller: mosquitto
         type: LoadBalancer
+        externalTrafficPolicy: Local
         annotations:
           io.cilium/lb-ipam-ips: "10.38.55.5"
         ports:

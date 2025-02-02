@@ -86,6 +86,7 @@ spec:
       app:
         controller: plex
         type: LoadBalancer
+        externalTrafficPolicy: Local
         annotations:
           lbipam.cilium.io/ips: 10.38.55.2
         ports:
