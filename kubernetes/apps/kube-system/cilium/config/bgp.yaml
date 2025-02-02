@@ -73,8 +73,10 @@ spec:
       exportPodCIDR: false
       serviceSelector:
         matchExpressions:
-          - key: lbipam.cilium.io/ips
-            operator: Exists
+          - key: thisFakeSelector
+            operator: NotIn
+            values:
+              - will-match-and-announce-all-services
       neighbors:
         - peerAddress: 192.168.1.1/32
           peerASN: 64523
