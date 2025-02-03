@@ -27,6 +27,16 @@ spec:
   values:
     controllers:
       main:
+        pod:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: location
+                    operator: In
+                    values:
+                      - "apartment"
         containers:
           *app :
             image:
@@ -60,22 +70,13 @@ spec:
                 memory: 100Mi
               limits:
                 memory: 800Mi
-    pod:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: location
-                operator: In
-                values:
-                  - "apartment"
+    defaultPodOptions:
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
-        fsGroupChangePolicy: Always
+        fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     service:
       *app :
