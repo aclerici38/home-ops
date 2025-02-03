@@ -60,7 +60,7 @@ spec:
                 memory: 100Mi
               limits:
                 memory: 800Mi
-    defaultPodOptions:
+    pod:
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
