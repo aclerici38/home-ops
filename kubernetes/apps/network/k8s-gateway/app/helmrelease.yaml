@@ -50,9 +50,6 @@ spec:
         parameters: 0.0.0.0:9153
       - name: forward
         parameters: . 1.1.1.1
-      - name: loop
-      - name: reload
-      - name: loadbalance
     probes:
       liveness:
         enabled: true
