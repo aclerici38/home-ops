@@ -58,7 +58,7 @@ spec:
       - name: OPENID_REDIRECT_URI
         value: https://ai.${SECRET_DOMAIN}/oauth/oidc/callback
       - name: OPENID_PROVIDER_URL
-        value: http://authentik-server.home.svc.cluster.local:80/application/o/open-webui/.well-known/openid-configuration
+        value: https://auth.${SECRET_DOMAIN}/application/o/open-webui/.well-known/openid-configuration
       - name: OAUTH_CLIENT_ID
         valueFrom:
           secretKeyRef:
