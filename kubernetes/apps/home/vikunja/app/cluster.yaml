@@ -35,14 +35,14 @@ spec:
           name: cnpg-secret
           key: minio-secret-access-key
 
-  bootstrap:
-    recovery:
-      source: &previousCluster vikunja-db-v3
-  externalClusters:
-    - name: *previousCluster
-      barmanObjectStore:
-        <<: *barmanObjectStore
-        serverName: *previousCluster
+  # bootstrap:
+  #   recovery:
+  #     source: &previousCluster vikunja-db-v3
+  # externalClusters:
+  #   - name: *previousCluster
+  #     barmanObjectStore:
+  #       <<: *barmanObjectStore
+  #       serverName: *previousCluster
 
   monitoring:
     enablePodMonitor: true
