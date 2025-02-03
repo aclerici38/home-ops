@@ -60,7 +60,7 @@ l2announcements:
   enabled: true
 loadBalancer:
   algorithm: maglev
-  mode: "snat"
+  mode: "dsr"
   dsrDispatch: geneve
 cluster:
   id: 1
