@@ -20,6 +20,9 @@ additionalApiServerCertSans: &sans
   - "192.168.1.55"
   - "127.0.0.1"
   - "155.248.199.104"
+  - "10.10.0.1"
+  - "10.10.0.2"
+  - "10.10.0.3"
   - "posey"
   - "timmy"
   - "bonds"
@@ -65,8 +68,33 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
         mtu: 1500
+      - interface: wg0
+        addresses:
+          - 10.10.0.1/24
+        mtu: 1420
+        routes:
+          - network: 10.0.0.0/16
+            gateway: 10.10.0.2
+          - network: 10.40.40.0/24
+            gateway: 10.10.0.3
+        wireguard:
+          privateKey: ${BONDS_WG_PRIVATE_KEY}
+          listenPort: 51820
+          peers:
+            - publicKey: ${POSEY_WG_PUBLIC_KEY}
+              endpoint: ${OFFICE_WG_ENDPOINT}
+              allowedIPs:
+                - 10.0.0.0/16
+                - 10.10.0.2/32
+              persistentKeepaliveInterval: 10s
+            - publicKey: ${MADBUM_WG_PUBLIC_KEY}
+              endpoint: ${MADBUM_WG_ENDPOINT}
+              allowedIPs:
+                - 10.40.40.0/24
+                - 10.10.0.3/32
+              persistentKeepaliveInterval: 10s
   - hostname: "posey"
-    ipAddress: "10.0.30.28"
+    ipAddress: "10.0.30.100"
     installDiskSelector:
       model: "KINGSTON SNV2S1000G"
     machineSpec:
@@ -102,6 +130,31 @@ nodes:
       - deviceSelector:
           hardwareAddr: a8:5e:45:9c:d0:99
         ignore: true
+      - interface: wg0
+        addresses:
+          - 10.10.0.2/24
+        mtu: 1420
+        routes:
+          - network: 192.168.1.0/24
+            gateway: 10.10.0.1
+          - network: 10.40.40.0/24
+            gateway: 10.10.0.3
+        wireguard:
+          privateKey: ${POSEY_WG_PRIVATE_KEY}
+          listenPort: 51820
+          peers:
+            - publicKey: ${BONDS_WG_PUBLIC_KEY}
+              endpoint: ${APARTMENT_WG_ENDPOINT}
+              allowedIPs:
+                - 192.168.1.0/24
+                - 10.10.0.1/32
+              persistentKeepaliveInterval: 10s
+            - publicKey: ${MADBUM_WG_PUBLIC_KEY}
+              endpoint: ${MADBUM_WG_ENDPOINT}
+              allowedIPs:
+                - 10.40.40.0/24
+                - 10.10.0.3/32
+              persistentKeepaliveInterval: 10s
   - hostname: "madbum"
     ipAddress: "10.40.40.40"
     installDiskSelector:
@@ -130,27 +183,28 @@ nodes:
         mtu: 1500
       - interface: wg0
         addresses:
-          - 10.10.10.3/24
+          - 10.10.0.3/24
         mtu: 1420
         routes:
           - network: 192.168.1.0/24
-            gateway: 10.10.10.1
-          - network: 10.0.30.0/24
-            gateway: 10.10.10.2
+            gateway: 10.10.0.1
+          - network: 10.0.0.0/16
+            gateway: 10.10.0.2
         wireguard:
           privateKey: ${MADBUM_WG_PRIVATE_KEY}
+          listenPort: 51820
           peers:
-            - publicKey: ${APARTMENT_WG_PUBKEY}
+            - publicKey: ${BONDS_WG_PUBLIC_KEY}
               endpoint: ${APARTMENT_WG_ENDPOINT}
               allowedIPs:
                 - 192.168.1.0/24
-                - 10.10.10.1/32
+                - 10.10.0.1/32
               persistentKeepaliveInterval: 10s
-            - publicKey: ${OFFICE_WG_PUBKEY}
+            - publicKey: ${POSEY_WG_PUBLIC_KEY}
               endpoint: ${OFFICE_WG_ENDPOINT}
               allowedIPs:
-                - 10.0.30.0/24
-                - 10.10.10.2/32
+                - 10.0.0.0/16
+                - 10.10.0.2/32
               persistentKeepaliveInterval: 10s
 
 # Global patches
