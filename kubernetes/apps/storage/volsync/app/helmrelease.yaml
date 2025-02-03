@@ -36,5 +36,8 @@ spec:
       runAsUser: 1000
       runAsGroup: 1000
       seccompProfile: { type: RuntimeDefault }
-    nodeSelector:
-      kubernetes.io/arch: amd64
+    image: &image
+      repository: ghcr.io/onedr0p/volsync
+      tag: 0.11.0@sha256:dc8523e533cc4665757b9e841238707710c136ea62be756fbca4f5923972e0ea
+    restic: *image
+    rclone: *image
