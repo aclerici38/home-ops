@@ -32,7 +32,7 @@ controllers:
             drop:
               - ALL
         probes:
-          readiness: &probes
+          liveness: &probes
             enabled: true
             custom: true
             spec:
@@ -40,11 +40,10 @@ controllers:
                 command:
                   - /usr/local/bin/dnsprobe
                   - google.com
-                  - 127.0.0.1:5053
+                  - 127.0.0.1:53
               initialDelaySeconds: 15
               periodSeconds: 30
               failureThreshold: 3
-          liveness: *probes
 service:
   *app :
     controller: main
