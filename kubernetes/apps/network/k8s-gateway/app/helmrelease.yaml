@@ -35,6 +35,7 @@ spec:
     service:
       type: ClusterIP
       port: 53
+      clusterIP: 172.17.0.12
     watchedResources: ["Ingress", "Service"]
     extraZonePlugins:
       - name: log
