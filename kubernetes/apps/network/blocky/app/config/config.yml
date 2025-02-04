@@ -24,7 +24,7 @@ upstreams:
     default:
       - dnscrypt-proxy.network.svc.cluster.local:53
 conditional:
-  fallbackUpstream: true
+  fallbackUpstream: false
   mapping:
     ${SECRET_DOMAIN}: k8s-gateway.network.svc.cluster.local:53
 redis:
