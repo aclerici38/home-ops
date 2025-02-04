@@ -50,11 +50,9 @@ service:
     controller: main
     ports:
       dns-tcp:
-        targetPort: &targetPort 5053
         port: &port 53
         protocol: TCP
       dns-udp:
-        targetPort: *targetPort
         port: *port
         protocol: UDP
     clusterIP: "172.17.0.11"
