@@ -63,7 +63,7 @@ persistence:
     type: configMap
     name: dnscrypt-proxy-config-configmap
     globalMounts:
-      - path: /config/config.toml
+      - path: /config/dnscrypt-proxy.toml
         subPath: config.toml
         readOnly: true
   forwarders:
