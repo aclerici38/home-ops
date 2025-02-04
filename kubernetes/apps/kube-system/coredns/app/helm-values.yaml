@@ -1,6 +1,6 @@
 ---
 fullnameOverride: coredns
-replicaCount: 2
+replicaCount: 3
 k8sAppLabelOverride: kube-dns
 serviceAccount:
   create: true
@@ -31,9 +31,10 @@ servers:
           fallthrough in-addr.arpa ip6.arpa
       - name: forward
         parameters: . 172.17.0.11
-        # Enable recursion https://github.com/coredns/coredns/issues/3690#issuecomment-1573865953
+      # Enable recursion https://github.com/coredns/coredns/issues/3690#issuecomment-1573865953
       - name: header
-        configBlock: { response set ra }
+        configBlock: |-
+          response set ra
       - name: reload
       - name: loadbalance
 affinity:
