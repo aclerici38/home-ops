@@ -48,8 +48,6 @@ spec:
       # Serves a /metrics endpoint on :9153, required for serviceMonitor
       - name: prometheus
         parameters: 0.0.0.0:9153
-      - name: forward
-        parameters: . 1.1.1.1
     probes:
       liveness:
         enabled: true
