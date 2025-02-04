@@ -70,6 +70,6 @@ persistence:
     type: configMap
     name: dnscrypt-proxy-forwarding-rules-configmap
     globalMounts:
-      - path: /config/forwarding-rules.txt
+      - path: /forwarding-rules.txt
         subPath: forwarding-rules.txt
         readOnly: true
