@@ -66,3 +66,10 @@ persistence:
       - path: /config.toml
         subPath: config.toml
         readOnly: true
+  forwarders:
+    type: configMap
+    name: dnscrypt-proxy-forwarding-rules-configmap
+    globalMounts:
+      - path: /config/forwarding-rules.txt
+        subPath: forwarding-rules.txt
+        readOnly: true
