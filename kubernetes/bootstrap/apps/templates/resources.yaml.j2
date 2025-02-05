@@ -8,7 +8,7 @@ spec:
     resourceRules:
       - apiGroups: ["apps"]
         apiVersions: ["v1"]
-        resources: ["deployments", "statefulsets", "daemonsets", "pods"]
+        resources: ["deployments", "statefulsets", "daemonsets", "pods", "replicasets", "jobs", "cronjobs"]
         operations:  ["CREATE", "UPDATE"]
   reinvocationPolicy: IfNeeded
   mutations:
