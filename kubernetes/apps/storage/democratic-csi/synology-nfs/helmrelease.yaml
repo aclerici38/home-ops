@@ -29,10 +29,21 @@ spec:
       fullnameOverride: *name
       enabled: true
       strategy: node
+      externalResizer:
+        enabled: false
+      externalAttacher:
+        enabled: true
+        image: registry.k8s.io/sig-storage/csi-attacher:v4.8.0@sha256:a399393ff5bd156277c56bae0c08389b1a1b95b7fd6ea44a316ce55e0dd559d7
+      externalProvisioner:
+        enabled: true
+        image: registry.k8s.io/sig-storage/csi-provisioner:v5.2.0@sha256:d5e46da8aff7d73d6f00c761dae94472bcda6e78f4f17b3802dc89d44de0111b
+      externalSnapshotter:
+        enabled: false
     csiDriver:
       name: synology-nfs
     node:
       driver:
+        image: ghcr.io/democratic-csi/democratic-csi:v1.9.3@sha256:8ce65ce5bd9b9cdd79ace0e94b6652a233cfbfb26af177fb7912c1217a3f2c19
         lifecycle:
           postStart:
             exec:
@@ -40,9 +51,11 @@ spec:
           preStop:
             exec:
               command: ["/bin/sh", "-c", "umount /mnt/pvc"]
-    driver:
-      config:
-        driver: nfs-client
-        nfs:
-          shareHost: 10.0.30.101
-          shareBasePath: "/mnt/pvc"
+        config:
+          driver: nfs-client
+          nfs:
+            shareHost: 10.0.30.101
+            shareBasePath: "/mnt/pvc"
+    csiProxy:
+      enabled: true
+      image: ghcr.io/democratic-csi/csi-grpc-proxy:v0.5.6@sha256:fc5fc1fe9c682463fe8b219db070930e77067d76449749ef5ba99cedd30fa437
