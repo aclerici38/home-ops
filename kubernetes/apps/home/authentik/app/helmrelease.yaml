@@ -78,7 +78,7 @@ spec:
                   name: authentik-secret
                   key: AUTHENTIK_POSTGRESQL__PASSWORD
 
-      replicas: &replicas 3
+      replicas: 2
       pdb:
         enabled: true
         minAvailable: 1
@@ -108,7 +108,7 @@ spec:
         - name: custom
           emptyDir: {}
     worker:
-      replicas: *replicas
+      replicas: 1
       pdb:
         enabled: true
       resources:
