@@ -31,6 +31,7 @@ spec:
         annotations:
           lbipam.cilium.io/ips: "10.38.55.4"
         externalTrafficPolicy: Local
+        internalTrafficPolicy: Local
       ingressClassResource:
         name: internal
         default: true
