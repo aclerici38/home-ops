@@ -1,0 +1,92 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name truenas-iscsi
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: democratic-csi
+      version: 0.14.7
+      sourceRef:
+        kind: HelmRepository
+        name: democratic-csi
+        namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 1
+  dependsOn:
+    - name: snapshot-controller
+      namespace: storage
+  values:
+    controller:
+      fullnameOverride: *name
+      enabled: true
+      strategy: node
+      externalAttacher:
+        enabled: true
+        image: registry.k8s.io/sig-storage/csi-attacher:v4.8.0@sha256:a399393ff5bd156277c56bae0c08389b1a1b95b7fd6ea44a316ce55e0dd559d7
+      externalProvisioner:
+        enabled: true
+        image: registry.k8s.io/sig-storage/csi-provisioner:v5.2.0@sha256:d5e46da8aff7d73d6f00c761dae94472bcda6e78f4f17b3802dc89d44de0111b
+      externalResizer:
+        enabled: true
+        image: registry.k8s.io/sig-storage/csi-resizer:v1.13.1@sha256:2a0b297cc7c4cd376ac7413df339ff2fdaa1ec9d099aed92b5ea1f031ef7f639
+      externalSnapshotter:
+        enabled: true
+        image: registry.k8s.io/sig-storage/csi-snapshotter:v8.2.0@sha256:dd788d79cf4c1b8edee6d9b80b8a1ebfc51a38a365c5be656986b129be9ac784
+    csiDriver:
+      name: truenas-iscsi
+      attachRequired: true
+      storageCapacity: true
+    driver:
+      config:
+        driver: freenas-api-iscsi
+        httpConnection:
+          protocol: http
+          host: &tnas-ip 192.168.9.10
+          port: 80
+          apiKey: ${TRUENAS_API_KEY}
+          allowInsecure: true
+          apiVersion: 2
+        zfs:
+          cli:
+            sudoEnabled: true
+            paths:
+              zfs: /usr/sbin/zfs
+              zpool: /usr/sbin/zpool
+              sudo: /usr/bin/sudo
+              chroot: /usr/sbin/chroot
+          datasetParentName: ssd/pvc
+          detachedSnapshotsDatasetParentName: ssd/pvc-snapshots
+          datasetEnableQuotas: true
+        iscsi:
+          targetPortal: "192.168.9.10:3260"
+          namePrefix: "iqn.2025-01.com.home-ops:k8s-csi-"
+          nameSuffix: "-clustera"
+          targetGroups:
+            - targetPortalGroup: 1
+              targetGroupInitiatorGroup: 1
+              targetGroupAuthType: None
+          extentInsecureTpc: true
+          extentXenCompat: false
+          extentDisablePhysicalBlocksize: true
+          extentBlocksize: 4096
+          extentRpm: "SSD"
+          extentAvailThreshold: 0
+    node:
+      enabled: true
+      driver:
+        image: ghcr.io/democratic-csi/democratic-csi:v1.9.3@sha256:8ce65ce5bd9b9cdd79ace0e94b6652a233cfbfb26af177fb7912c1217a3f2c19
+    csiProxy:
+      enabled: true
+      image: ghcr.io/democratic-csi/csi-grpc-proxy:v0.5.6@sha256:fc5fc1fe9c682463fe8b219db070930e77067d76449749ef5ba99cedd30fa437
