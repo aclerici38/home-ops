@@ -16,7 +16,7 @@ clusterSvcNets:
 additionalApiServerCertSans: &sans
   - "192.168.9.25"
   - "10.0.30.28"
-  - "10.40.40.40"
+  - "10.40.40.41"
   - "192.168.9.55"
   - "127.0.0.1"
   - "155.248.199.104"
@@ -57,6 +57,7 @@ nodes:
             - siderolabs/nvidia-container-toolkit-production
             - siderolabs/nonfree-kmod-nvidia-production
             - siderolabs/qemu-guest-agent
+            - siderolabs/iscsi-tools
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -75,7 +76,7 @@ nodes:
         routes:
           - network: 10.0.0.0/16
             gateway: 10.10.0.2
-          - network: 10.40.40.0/24
+          - network: 10.40.41.0/24
             gateway: 10.10.0.3
         wireguard:
           privateKey: ${BONDS_WG_PRIVATE_KEY}
@@ -90,7 +91,7 @@ nodes:
             - publicKey: ${MADBUM_WG_PUBLIC_KEY}
               endpoint: ${MADBUM_WG_ENDPOINT}
               allowedIPs:
-                - 10.40.40.0/24
+                - 10.40.41.0/24
                 - 10.10.0.3/32
               persistentKeepaliveInterval: 10s
   - hostname: "posey"
@@ -115,6 +116,7 @@ nodes:
           officialExtensions:
             - siderolabs/nvidia-container-toolkit-production
             - siderolabs/nonfree-kmod-nvidia-production
+            - siderolabs/iscsi-tools
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -137,7 +139,7 @@ nodes:
         routes:
           - network: 192.168.9.0/24
             gateway: 10.10.0.1
-          - network: 10.40.40.0/24
+          - network: 10.40.41.0/24
             gateway: 10.10.0.3
         wireguard:
           privateKey: ${POSEY_WG_PRIVATE_KEY}
@@ -152,11 +154,11 @@ nodes:
             - publicKey: ${MADBUM_WG_PUBLIC_KEY}
               endpoint: ${MADBUM_WG_ENDPOINT}
               allowedIPs:
-                - 10.40.40.0/24
+                - 10.40.41.0/24
                 - 10.10.0.3/32
               persistentKeepaliveInterval: 10s
   - hostname: "madbum"
-    ipAddress: "10.40.40.40"
+    ipAddress: "10.40.40.41"
     installDiskSelector:
       size: ">= 10GB"
     machineSpec:
@@ -170,13 +172,17 @@ nodes:
               - 169.254.169.254
     nodeLabels:
       location: "cloud"
+    schematic:
+      customization:
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/iscsi-tools
     controlPlane: true
     networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "02:00:17:01:5b:14"
+      - interface: eth0
         dhcp: false
         addresses:
-          - 10.40.40.40/24
+          - 10.40.40.41/24
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.40.40.1"
