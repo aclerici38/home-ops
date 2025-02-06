@@ -43,7 +43,7 @@ spec:
       - --events
       - --ignore-ingress-tls-spec
       - --ingress-class=external
-      - --default-targets=apartment.${SECRET_DOMAIN}
+      - --default-targets=cloud.${SECRET_DOMAIN}
     policy: sync
     sources: ["crd", "ingress"]
     txtPrefix: k8s.
