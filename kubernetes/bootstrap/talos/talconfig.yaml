@@ -6,7 +6,7 @@ talosVersion: v1.9.3
 kubernetesVersion: v1.32.1
 
 clusterName: dormammu
-endpoint: https://192.168.1.25:6443
+endpoint: https://192.168.9.25:6443
 
 clusterPodNets:
   - &podNet "172.16.0.0/16"
@@ -14,10 +14,10 @@ clusterSvcNets:
   - &svcNet "172.17.0.0/16"
 
 additionalApiServerCertSans: &sans
-  - "192.168.1.25"
+  - "192.168.9.25"
   - "10.0.30.28"
   - "10.40.40.40"
-  - "192.168.1.55"
+  - "192.168.9.55"
   - "127.0.0.1"
   - "155.248.199.104"
   - "10.10.0.1"
@@ -35,7 +35,7 @@ cniConfig:
 
 nodes:
   - hostname: "bonds"
-    ipAddress: "192.168.1.25"
+    ipAddress: "192.168.9.25"
     installDiskSelector:
       size: '> 100GB'
     machineSpec:
@@ -63,10 +63,10 @@ nodes:
           hardwareAddr: "bc:24:11:58:64:7d"
         dhcp: false
         addresses:
-          - "192.168.1.25/24"
+          - "192.168.9.25/24"
         routes:
           - network: "0.0.0.0/0"
-            gateway: "192.168.1.1"
+            gateway: "192.168.9.1"
         mtu: 1500
       - interface: wg0
         addresses:
@@ -135,7 +135,7 @@ nodes:
           - 10.10.0.2/24
         mtu: 1420
         routes:
-          - network: 192.168.1.0/24
+          - network: 192.168.9.0/24
             gateway: 10.10.0.1
           - network: 10.40.40.0/24
             gateway: 10.10.0.3
@@ -146,7 +146,7 @@ nodes:
             - publicKey: ${BONDS_WG_PUBLIC_KEY}
               endpoint: ${APARTMENT_WG_ENDPOINT}
               allowedIPs:
-                - 192.168.1.0/24
+                - 192.168.9.0/24
                 - 10.10.0.1/32
               persistentKeepaliveInterval: 10s
             - publicKey: ${MADBUM_WG_PUBLIC_KEY}
@@ -186,7 +186,7 @@ nodes:
           - 10.10.0.3/24
         mtu: 1420
         routes:
-          - network: 192.168.1.0/24
+          - network: 192.168.9.0/24
             gateway: 10.10.0.1
           - network: 10.0.0.0/16
             gateway: 10.10.0.2
@@ -197,7 +197,7 @@ nodes:
             - publicKey: ${BONDS_WG_PUBLIC_KEY}
               endpoint: ${APARTMENT_WG_ENDPOINT}
               allowedIPs:
-                - 192.168.1.0/24
+                - 192.168.9.0/24
                 - 10.10.0.1/32
               persistentKeepaliveInterval: 10s
             - publicKey: ${POSEY_WG_PUBLIC_KEY}
