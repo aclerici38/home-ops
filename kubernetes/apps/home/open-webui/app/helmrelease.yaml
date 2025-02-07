@@ -47,10 +47,6 @@ spec:
       existingClaim: *app
 
     extraEnvVars:
-      - name: PUID
-        value: "65543"
-      - name: PGID
-        value: "65543"
       - name: ENABLE_LOGIN_FORM
         value: "False"
       - name: ENABLE_OAUTH_SIGNUP
@@ -78,9 +74,7 @@ spec:
           secretKeyRef:
             name: open-webui-secret
             key: OPENAI_API_KEY
-    podSecurityContext:
-      fsGroupChangePolicy: Always
-      fsGroup: 65543
+
     containerSecurityContext:
       privileged: false
       allowPrivilegeEscalation: false
@@ -88,7 +82,5 @@ spec:
       capabilities:
         drop:
           - ALL
-      runAsUser: 65543
-      runAsGroup: 65543
       seccompProfile:
         type: "RuntimeDefault"
