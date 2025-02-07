@@ -35,7 +35,6 @@ spec:
           external-dns.alpha.kubernetes.io/hostname: "external.${SECRET_DOMAIN}"
           lbipam.cilium.io/ips: "10.38.55.3"
         externalTrafficPolicy: Local
-        internalTrafficPolicy: Local
       ingressClassResource:
         name: external
         default: false
