@@ -82,5 +82,8 @@ spec:
       capabilities:
         drop:
           - ALL
+      runAsUser: 65543
+      runAsGroup: 65543
+      fsGroup: 65543
       seccompProfile:
         type: "RuntimeDefault"
