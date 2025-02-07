@@ -74,7 +74,9 @@ spec:
           secretKeyRef:
             name: open-webui-secret
             key: OPENAI_API_KEY
-
+    podSecurityContext:
+      fsGroupChangePolicy: Always
+      fsGroup: 65543
     containerSecurityContext:
       privileged: false
       allowPrivilegeEscalation: false
@@ -84,6 +86,5 @@ spec:
           - ALL
       runAsUser: 65543
       runAsGroup: 65543
-      fsGroup: 65543
       seccompProfile:
         type: "RuntimeDefault"
