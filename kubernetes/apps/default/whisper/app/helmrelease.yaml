@@ -1,0 +1,51 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app whisper
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 1
+  values:
+    controllers:
+      main:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
+        containers:
+          *app :
+            image:
+              repository: onerahmet/openai-whisper-asr-webservice
+              tag: v1.7.1-gpu@sha256:9c2d9b93137067377044928ebd0766b747283c7f1416a85e05b0eb97998ddfe0
+            env:
+              TZ: ${TZ}
+              ASR_MODEL: large # tiny, base, small, medium, large, large-v1, large-v2 and large-v3
+              ASR_ENGINEL: faster_whisper # openai_whisper, faster_whisper
+            resources:
+              requests:
+                cpu: 500m
+                memory: 500Mi
+              limits:
+                memory: 6Gi
+                nvidia.com/gpu: 1
+    service:
+      app:
+        controller: main
+        ports:
+          http:
+            port: 9000
