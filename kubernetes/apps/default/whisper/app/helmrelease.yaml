@@ -34,14 +34,14 @@ spec:
               tag: v1.7.1-gpu@sha256:9c2d9b93137067377044928ebd0766b747283c7f1416a85e05b0eb97998ddfe0
             env:
               TZ: ${TZ}
-              ASR_MODEL: large # tiny, base, small, medium, large, large-v1, large-v2 and large-v3
+              ASR_MODEL: medium # tiny, base, small, medium, large, large-v1, large-v2 and large-v3
               ASR_ENGINEL: faster_whisper # openai_whisper, faster_whisper
             resources:
               requests:
                 cpu: 500m
                 memory: 500Mi
               limits:
-                memory: 6Gi
+                memory: 12Gi
                 nvidia.com/gpu: 1
     service:
       app:
