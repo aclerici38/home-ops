@@ -29,7 +29,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://192.168.9.10:9000
-      serverName: &currentCluster sonarr-db-v6
+      serverName: &currentCluster sonarr-db-v7
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -40,7 +40,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster sonarr-db-v5
+      source: &previousCluster sonarr-db-v6
   externalClusters:
     - name: *previousCluster
       barmanObjectStore:

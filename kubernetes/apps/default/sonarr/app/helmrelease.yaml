@@ -132,7 +132,7 @@ spec:
                   port: http
     persistence:
       config:
-        existingClaim: sonarr-metadata
+        existingClaim: *app
         globalMounts:
           - path: /config
       temp:

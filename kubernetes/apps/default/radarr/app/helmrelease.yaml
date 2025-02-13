@@ -27,6 +27,9 @@ spec:
   values:
     controllers:
       radarr:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
         initContainers:
           init-db:
             image:
@@ -129,7 +132,7 @@ spec:
                   port: http
     persistence:
       config:
-        existingClaim: radarr-metadata
+        existingClaim: *app
         globalMounts:
           - path: /config
       temp:
