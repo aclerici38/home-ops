@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: bazarr-metadata
 spec:
-  storageClassName: local-hostpath
+  storageClassName: truenas-iscsi
   resources:
     requests:
       storage: 5Gi
