@@ -24,4 +24,5 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 10Gi
-
+      VOLSYNC_STORAGECLASS: truenas-iscsi
+      VOLSYNC_SNAPSHOTCLASS: truenas-iscsi
