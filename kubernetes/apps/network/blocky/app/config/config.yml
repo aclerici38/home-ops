@@ -6,7 +6,7 @@ caching:
   prefetchExpires: 1h
   prefetchThreshold: 3
   prefetchMaxItemsCount: 0
-  cacheTimeNegative: 5m
+  cacheTimeNegative: -1
 
 log:
   level: info
@@ -23,7 +23,7 @@ upstreams:
   groups:
     default:
       - dnscrypt-proxy.network.svc.cluster.local:53
-      
+
 redis:
   address: blocky-dragonfly.network.svc.cluster.local
 
