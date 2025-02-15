@@ -22,3 +22,5 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_STORAGECLASS: truenas-iscsi
+      VOLSYNC_SNAPSHOTCLASS: truenas-iscsi
