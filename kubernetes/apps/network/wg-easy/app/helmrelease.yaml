@@ -52,7 +52,7 @@ spec:
                 memory: 256Mi
             securityContext:
               allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities:
                 add:
                   - NET_ADMIN
