@@ -42,7 +42,7 @@ spec:
               WG_PORT: &wgPort 51821
               WG_DEFAULT_DNS: https://dns.${SECRET_DOMAIN}
               WG_PERSISTENT_KEEPALIVE: 25
-              WG_ALLOWED_IPS: 10.0.9.0/24
+              WG_ALLOWED_IPS: 0.0.0.0/0
               UI_TRAFFIC_STATS: "true"
               UI_CHART_TYPE: 1
             resources:
