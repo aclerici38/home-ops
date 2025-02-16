@@ -3,6 +3,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./rbac.yaml
   - ./config/provider-config.yaml
-  - ./oci-cloud-controller-manager.yaml
+  - https://github.com/oracle/oci-cloud-controller-manager/releases/download/v1.30.0/oci-cloud-controller-manager-rbac.yaml
+  - https://github.com/oracle/oci-cloud-controller-manager/releases/download/v1.30.0/oci-cloud-controller-manager.yaml
