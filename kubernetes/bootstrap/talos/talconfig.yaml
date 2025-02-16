@@ -170,9 +170,6 @@ nodes:
           time:
             servers:
               - 169.254.169.254
-          kubelet:
-            extraArgs:
-              provider-id: ${MADBUM_OCID}
     nodeLabels:
       location: "cloud"
     schematic:
