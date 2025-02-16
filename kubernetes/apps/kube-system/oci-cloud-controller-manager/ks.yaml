@@ -17,8 +17,3 @@ spec:
     name: flux-system
   wait: false
   interval: 30m
-  postBuild:
-    substituteFrom:
-      - kind: Secret
-        name: oci-cloud-controller-manager-secret
-        optional: true
