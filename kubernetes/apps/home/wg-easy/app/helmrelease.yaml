@@ -73,7 +73,7 @@ spec:
             port: *uiPort
       wg:
         controller: main
-        type: nodePort
+        type: NodePort
         ports:
           http:
             port: *wgPort
