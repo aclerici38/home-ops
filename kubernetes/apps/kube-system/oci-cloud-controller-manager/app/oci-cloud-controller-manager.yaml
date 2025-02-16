@@ -50,8 +50,7 @@ spec:
             - --cloud-provider=oci
             - --leader-elect-resource-lock=leases
             - --concurrent-service-syncs=3
-            - --v=2
-            - --address="10.40.40.41"
+            - --v=5
           volumeMounts:
             - name: cfg
               mountPath: /etc/oci
