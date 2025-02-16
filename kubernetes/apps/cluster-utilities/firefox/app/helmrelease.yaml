@@ -40,7 +40,7 @@ spec:
         containers:
           *app :
             image:
-              repository: ghcr.io/jlesage/firefox:v25.02.1
+              repository: ghcr.io/jlesage/firefox
               tag: v25.02.1@sha256:710b4a645ecb2586f8864c458ed34d086683f90ea35baaa846fb68ab3960f6f6
             env:
               USER_ID: &id 1000
