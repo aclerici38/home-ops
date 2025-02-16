@@ -6,4 +6,9 @@ resources:
   - ./config/provider-config.sops.yaml
   - ./rbac.yaml
   - ./oci-cloud-controller-manager.yaml
-
+secretGenerator:
+  - name: oci-cloud-controller-manager
+    files:
+      - cloud-provider.yaml=./config/provider-config.yaml
+generatorOptions:
+  disableNameSuffixHash: true
