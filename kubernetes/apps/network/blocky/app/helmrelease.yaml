@@ -98,7 +98,7 @@ spec:
       dns:
         controller: *app
         type: LoadBalancer
-        clusterIP: 172.17.0.12
+        clusterIP: 172.17.0.13
         annotations:
           io.cilium/lb-ipam-ips: 10.38.55.25
         externalTrafficPolicy: Local
