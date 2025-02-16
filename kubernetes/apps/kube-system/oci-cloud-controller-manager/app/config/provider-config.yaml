@@ -3,8 +3,6 @@ auth:
   tenancy: ${tenancy}
   user: ${user}
   key: ${oci_api_key.pem}
-  # Omit if there is not a password for the key
-  passphrase: ${passphrase}
   fingerprint: ${fingerprint}
   useInstancePrincipals: false
 
