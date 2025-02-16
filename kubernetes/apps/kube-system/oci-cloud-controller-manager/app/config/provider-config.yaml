@@ -1,19 +1,22 @@
-auth:
-  region: us-phoenix-1
-  tenancy: "${tenancy}"
-  user: "${user}"
-  key: "${oci_api_key.pem}"
-  fingerprint: "${fingerprint}"
-  useInstancePrincipals: false
+apiVersion: v1
+kind: Secret
+metadata:
+  name: oci-cloud-controller-manager
+type: Opaque
+stringData:
+  cloud-provider.yaml: |-
+    auth:
+      region: us-phoenix-1
+      tenancy: ${tenancy}
+      user: ${user}
+      key: ${oci_api_key.pem}
+      fingerprint: ${fingerprint}
+      useInstancePrincipals: false
 
-# compartment configures Compartment within which the cluster resides.
-compartment: "${compartment}"
+    compartment: ${compartment}
 
-# vcn configures the Virtual Cloud Network (VCN) within which the cluster resides.
-vcn: "${VCN}"
+    vcn: ${VCN}
 
-loadBalancer:
-  # subnet1 configures one of two subnets to which load balancers will be added.
-  # OCI load balancers require two subnets to ensure high availability.
-  subnet1: "${subnet1}"
-  securityListManagementMode: None
+    loadBalancer:
+      subnet1: ${subnet1}
+      securityListManagementMode: None
