@@ -64,7 +64,7 @@ spec:
                 spec:
                   httpGet:
                     path: /healthz
-                    port: *port
+                    port: &DnsPort 53
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -103,7 +103,7 @@ spec:
         externalTrafficPolicy: Local
         ports:
           dns-tcp:
-            port: &DnsPort 63
+            port: *DnsPort
             protocol: TCP
           dns-udp:
             port: *DnsPort
