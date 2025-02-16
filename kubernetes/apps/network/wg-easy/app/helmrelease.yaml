@@ -51,7 +51,7 @@ spec:
               limits:
                 memory: 256Mi
             securityContext:
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: true
               capabilities:
                 add:
@@ -62,9 +62,7 @@ spec:
                   - ALL
     defaultPodOptions:
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
+        runAsNonRoot: false
     service:
       ui:
         controller: main
