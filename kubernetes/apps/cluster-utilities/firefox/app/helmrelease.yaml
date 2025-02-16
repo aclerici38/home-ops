@@ -90,6 +90,10 @@ spec:
         existingClaim: firefox
       tmp:
         type: emptyDir
+      var-tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /var/tmp
       data:
         type: nfs
         server: 192.168.9.10
