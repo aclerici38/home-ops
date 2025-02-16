@@ -51,7 +51,7 @@ spec:
               DARK_MODE: 1
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
@@ -88,12 +88,12 @@ spec:
     persistence:
       config:
         existingClaim: firefox
-      tmp:
-        type: emptyDir
-      var-tmp:
-        type: emptyDir
-        globalMounts:
-          - path: /var/tmp
+      # tmp:
+      #   type: emptyDir
+      # var-tmp:
+      #   type: emptyDir
+      #   globalMounts:
+      #     - path: /var/tmp
       data:
         type: nfs
         server: 192.168.9.10
