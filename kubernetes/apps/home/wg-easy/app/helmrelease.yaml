@@ -76,8 +76,9 @@ spec:
         type: NodePort
         ports:
           http:
-            port: *wgPort
-            nodePort: *wgPort
+            targetPort: *wgPort
+            port: 31821
+            nodePort: 31821
             protocol: UDP
     ingress:
       *app :
