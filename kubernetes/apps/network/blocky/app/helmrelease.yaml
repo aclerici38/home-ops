@@ -67,7 +67,6 @@ spec:
                     command:
                       - /app/blocky
                       - healthcheck
-                      - 127.0.0.1:5053
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
