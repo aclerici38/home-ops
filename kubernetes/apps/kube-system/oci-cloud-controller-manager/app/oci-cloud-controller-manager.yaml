@@ -23,6 +23,7 @@ spec:
       hostNetwork: true
       nodeSelector:
         node-role.kubernetes.io/control-plane: ""
+        location: cloud
       tolerations:
       - key: node.cloudprovider.kubernetes.io/uninitialized
         value: "true"
@@ -50,6 +51,7 @@ spec:
             - --leader-elect-resource-lock=leases
             - --concurrent-service-syncs=3
             - --v=2
+            - --address="10.40.40.41"
           volumeMounts:
             - name: cfg
               mountPath: /etc/oci
