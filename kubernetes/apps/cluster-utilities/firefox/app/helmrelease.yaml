@@ -88,6 +88,8 @@ spec:
     persistence:
       config:
         existingClaim: firefox
+      tmp:
+        type: emptyDir
       data:
         type: nfs
         server: 192.168.9.10
