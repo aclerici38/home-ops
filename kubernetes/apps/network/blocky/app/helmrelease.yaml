@@ -121,19 +121,10 @@ spec:
             interval: 2m
             scrapeTimeout: 10s
     ingress:
-      ui:
+      *app :
         className: internal
         hosts:
-          - host: "blocky.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: http
-      dns:
-        className: internal
-        hosts:
-          - host: "blocky.${SECRET_DOMAIN}"
+          - host: "dns.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
