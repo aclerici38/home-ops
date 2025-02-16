@@ -7,16 +7,16 @@ stringData:
   cloud-provider.yaml: |-
     auth:
       region: us-sanjose-1
-      tenancy: ${tenancy}
-      user: ${user}
+      tenancy: ${TENANCY}
+      user: ${USER}
       key: ${OCI_PRIV_KEY}
-      fingerprint: ${fingerprint}
+      fingerprint: ${FINGERPRINT}
       useInstancePrincipals: false
 
-    compartment: ${compartment}
+    compartment: ${COMPARTMENT}
 
     vcn: ${VCN}
 
     loadBalancer:
-      subnet1: ${subnet1}
+      subnet1: ${SUBNET_1}
       securityListManagementMode: None
