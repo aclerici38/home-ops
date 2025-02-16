@@ -6,13 +6,13 @@ metadata:
   name: &app wg-easy
   namespace: flux-system
 spec:
-  targetNamespace: home
+  targetNamespace: network
   dependsOn:
     - name: volsync
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/home/wg-easy/app
+  path: ./kubernetes/apps/network/wg-easy/app
   prune: true
   sourceRef:
     kind: GitRepository
