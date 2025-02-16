@@ -73,7 +73,7 @@ spec:
         controller: main
         type: NodePort
         ports:
-          http:
+          vpn:
             targetPort: *wgPort
             port: 31821
             nodePort: 31821
