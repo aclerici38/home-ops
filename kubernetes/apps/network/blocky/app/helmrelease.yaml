@@ -62,10 +62,12 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  tcpSocket:
-                    port: &port 53
-                  initialDelaySeconds: 15
-                  periodSeconds: 30
+                  httpGet:
+                    path: /healthz
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
             resources:
@@ -99,13 +101,16 @@ spec:
         annotations:
           io.cilium/lb-ipam-ips: 10.38.55.25
         externalTrafficPolicy: Local
-        ports: &dnsPorts
+        ports:
           dns-tcp:
             port: *port
             protocol: TCP
           dns-udp:
             port: *port
             protocol: UDP
+          dns-tls:
+            port: 853
+            protocol: TCP
     serviceMonitor:
       *app :
         serviceName: *app
@@ -116,10 +121,19 @@ spec:
             interval: 2m
             scrapeTimeout: 10s
     ingress:
-      *app :
+      ui:
         className: internal
         hosts:
-          - host: "dns.${SECRET_DOMAIN}"
+          - host: "blocky.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: *app
+                  port: http
+      dns:
+        className: internal
+        hosts:
+          - host: "blocky.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:

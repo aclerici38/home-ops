@@ -11,8 +11,10 @@ caching:
 log:
   level: info
 
+minTlsServeVersion: 1.3
 ports:
   dns: 53
+  tls: 853
   http: 4000
 
 prometheus:
