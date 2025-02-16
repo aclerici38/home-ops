@@ -103,10 +103,10 @@ spec:
         externalTrafficPolicy: Local
         ports:
           dns-tcp:
-            port: *port
+            port: &DnsPort 63
             protocol: TCP
           dns-udp:
-            port: *port
+            port: *DnsPort
             protocol: UDP
           dns-tls:
             port: 853
