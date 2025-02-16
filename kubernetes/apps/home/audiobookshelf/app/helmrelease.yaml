@@ -30,6 +30,11 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
+          securityContext:
+            runAsUser: &id 1000
+            runAsGroup: *id
+            fsGroup: *id
+            fsGroupChangePolicy: OnRootMismatch
         containers:
           *app :
             image:
