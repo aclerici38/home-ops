@@ -97,7 +97,7 @@ spec:
         nameOverride: *app
         ports:
           http:
-            port: *httpPort
+            port: 4000
       dns:
         controller: *app
         type: LoadBalancer
