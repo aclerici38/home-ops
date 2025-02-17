@@ -60,6 +60,7 @@ spec:
                 memory: 100Mi
               limits:
                 memory: 800Mi
+                nvidia.com/gpu: 1
     service:
       *app :
         controller: main
