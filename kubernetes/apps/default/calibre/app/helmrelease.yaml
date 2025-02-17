@@ -50,6 +50,10 @@ spec:
                 memory: 200Mi
               limits:
                 memory: 600Mi
+            securityContext:
+              allowPrivilegeEscalation: true
+              readOnlyRootFilesystem: false
+              privileged: true
     service:
       *app :
         controller: main
