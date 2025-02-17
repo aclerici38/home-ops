@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: ebook2audiobook
+  name: &app ebook2audiobook
 spec:
   interval: 30m
   chart:
@@ -29,7 +29,7 @@ spec:
       namespace: kube-system
   values:
     controllers:
-      ebook2audiobook:
+      main:
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
@@ -42,7 +42,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          *app :
             image:
               repository: docker.io/athomasson2/ebook2audiobook
               tag: v2.0@sha256:e5e1d7b0f51456dfb9216689cd4126304f51a946c7d9d97d6064cf7e3a7d13aa
@@ -60,12 +60,12 @@ spec:
                 memory: 8Gi
     service:
       *app :
-        controller: ebook2audiobook
+        controller: *app
         ports:
           http:
             port: 7860
     ingress:
-      app:
+      *app :
         className: internal
         hosts:
           - host: "ebook2audiobook.${SECRET_DOMAIN}"
@@ -76,7 +76,7 @@ spec:
                   port: http
     persistence:
       config:
-        existingClaim: ebook2audiobook
+        existingClaim: *app
         globalMounts:
           - path: /home/user/app
       media:
