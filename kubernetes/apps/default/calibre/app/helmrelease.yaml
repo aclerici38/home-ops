@@ -30,6 +30,8 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
+          securityContext:
+            fsGroup: 1000
         containers:
           *app :
             image:
