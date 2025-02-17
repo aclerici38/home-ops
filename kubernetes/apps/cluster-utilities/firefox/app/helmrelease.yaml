@@ -53,7 +53,7 @@ spec:
               S6_READ_ONLY_ROOT: 1
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities:
                 add: ["CHOWN"]
                 drop: ["ALL"]
