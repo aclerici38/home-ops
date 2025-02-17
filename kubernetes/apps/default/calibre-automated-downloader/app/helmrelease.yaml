@@ -30,8 +30,6 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
-          securityContext:
-            fsGroup: 1000
         containers:
           *app :
             image:
@@ -65,14 +63,9 @@ spec:
               limits:
                 memory: 2Gi
             securityContext:
-              runAsUser: 1000
-              runAsGroup: 1000
-              runAsNonRoot: true
-              allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
-              capabilities:
-                drop:
-                  - ALL
+              readOnlyRootFilesystem: false
+              allowPrivilegeEscalation: true
+              privileged: true
     service:
       *app :
         controller: main
