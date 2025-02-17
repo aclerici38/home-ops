@@ -32,7 +32,7 @@ spec:
           *app :
             image:
               repository: onerahmet/openai-whisper-asr-webservice
-              tag: v1.7.1-gpu@sha256:f90aec56a50c7cb3be52074498954aaef0db56280aa762ba7724992bb7b8f294
+              tag: v1.8.0-gpu@sha256:08595c01deca3ac93ea7e97e82d34288119ebb0c871badef969cb0019c85c21b
             env:
               TZ: ${TZ}
               ASR_MODEL: medium # tiny, base, small, medium, large, large-v1, large-v2 and large-v3
