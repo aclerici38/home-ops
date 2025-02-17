@@ -77,7 +77,7 @@ spec:
                   port: http
     persistence:
       cahce:
-        existingClaim: *app
+        existingClaim: ebook2audiobook-cache
         globalMounts:
           - path: /home/user/app/models
       tmp:
