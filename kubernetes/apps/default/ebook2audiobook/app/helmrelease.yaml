@@ -45,7 +45,7 @@ spec:
           *app :
             image:
               repository: docker.io/athomasson2/ebook2audiobook
-              tag: v2.0@sha256:e5e1d7b0f51456dfb9216689cd4126304f51a946c7d9d97d6064cf7e3a7d13aa
+              tag: latest@sha256:d91dc9e5ec8b06d70311eb47f66161166d8ad753ae0a6d8ad18377cfe41248f7
             env:
               TZ: ${TZ}
             securityContext:
