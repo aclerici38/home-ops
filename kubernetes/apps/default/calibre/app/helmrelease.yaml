@@ -29,7 +29,7 @@ spec:
       main:
         pod:
           nodeSelector:
-            kubernetes.io/hostname: "Bonds"
+            kubernetes.io/hostname: "bonds"
         containers:
           *app :
             image:
