@@ -88,12 +88,18 @@ spec:
     persistence:
       config:
         existingClaim: firefox
-      # tmp:
-      #   type: emptyDir
-      # var-tmp:
-      #   type: emptyDir
-      #   globalMounts:
-      #     - path: /var/tmp
+      passwd:
+        type: emptyDir
+        globalMounts:
+          - path: /etc/passwd
+      group:
+        type: emptyDir
+        globalMounts:
+          - path: /etc/group
+      shadow:
+        type: emptyDir
+        globalMounts:
+          - path: /etc/shadow
       data:
         type: nfs
         server: 192.168.9.10
