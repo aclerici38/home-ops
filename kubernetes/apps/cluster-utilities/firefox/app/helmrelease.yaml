@@ -40,8 +40,6 @@ spec:
           securityContext:
             seccompProfile: { type: RuntimeDefault }
             fsGroup: &id 1000
-            runAsUser: *id
-            runAsGroup: *id
           runtimeClassName: nvidia
         containers:
           *app :
@@ -50,13 +48,12 @@ spec:
               tag: 0.24.04@sha256:8865d68e1c4df1743a21476df343af152637d2728c8e8c287d04aafedc19d297
             env:
               TZ: ${TZ}
-              S6_READ_ONLY_ROOT: 1
+              PUID: *id
+              PGID: *id
             securityContext:
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
-              capabilities:
-                add: ["CHOWN"]
-                drop: ["ALL"]
+              privileged: true
             resources:
               requests:
                 cpu: 100m
