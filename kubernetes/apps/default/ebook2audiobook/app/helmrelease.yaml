@@ -35,7 +35,9 @@ spec:
             kubernetes.io/hostname: "bonds"
           runtimeClassName: nvidia
           securityContext:
-            runAsNonRoot: false
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
@@ -48,8 +50,8 @@ spec:
               TZ: ${TZ}
               MPLCONFIGDIR: /home/user/app/models/matplotlib
             securityContext:
-              allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
@@ -68,7 +70,7 @@ spec:
       *app :
         className: internal
         hosts:
-          - host: "ebook2audio.${SECRET_DOMAIN}"
+          - host: "ebook2audiobook.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
