@@ -40,18 +40,16 @@ spec:
           securityContext:
             seccompProfile: { type: RuntimeDefault }
             fsGroup: &id 1000
+            runAsUser: *id
+            runAsGroup: *id
+          runtimeClassName: nvidia
         containers:
           *app :
             image:
-              repository: ghcr.io/jlesage/firefox
-              tag: v25.02.1@sha256:710b4a645ecb2586f8864c458ed34d086683f90ea35baaa846fb68ab3960f6f6
+              repository: ghcr.io/linuxserver/firefox
+              tag: 0.24.04@sha256:8865d68e1c4df1743a21476df343af152637d2728c8e8c287d04aafedc19d297
             env:
-              USER_ID: *id
-              GROUP_ID: *id
               TZ: ${TZ}
-              KEEP_APP_RUNNING: 1
-              CONTAINER_DEBUG: 1
-              DARK_MODE: 1
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
@@ -69,9 +67,7 @@ spec:
         controller: main
         ports:
           http:
-            port: 5800
-          vnc:
-            port: 5900
+            port: 3000
     ingress:
       *app :
         className: internal
