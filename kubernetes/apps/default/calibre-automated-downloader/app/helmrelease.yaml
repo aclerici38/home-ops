@@ -72,6 +72,16 @@ spec:
         ports:
           http:
             port: 8084
+    ingress:
+      *app :
+        className: internal
+        hosts:
+          - host: &fqdn "book-download.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: *app
+                  port: http
     persistence:
       ingest:
         type: nfs
