@@ -83,7 +83,7 @@ spec:
       tmp:
         type: emptyDir
         globalMounts:
-          - /home/user/app/tmp
+          - path: /home/user/app/tmp
       media:
         type: nfs
         server: 192.168.9.10
