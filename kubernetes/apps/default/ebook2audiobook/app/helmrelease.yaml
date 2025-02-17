@@ -60,7 +60,7 @@ spec:
                 memory: 8Gi
     service:
       *app :
-        controller: *app
+        controller: main
         ports:
           http:
             port: 7860
@@ -72,7 +72,7 @@ spec:
             paths:
               - path: /
                 service:
-                  identifier: app
+                  identifier: *app
                   port: http
     persistence:
       config:
