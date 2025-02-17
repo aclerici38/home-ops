@@ -40,7 +40,6 @@ spec:
               PUID: 1000
               PGID: 1000
               CACHE_DIR: /cache
-              CALIBRE_OVERRIDE_DATABASE_PATH: /config
             probes:
               liveness: &probes
                 enabled: true
@@ -150,9 +149,8 @@ spec:
         path: /mnt/tank/media/books/calibre/ingest
         globalMounts:
           - path: /cwa-book-ingest
+      # Temporarily use iscsi share til v3.1
       library:
-        type: nfs
-        server: 192.168.9.10
-        path: /mnt/tank/media/books/calibre/library
+        existingClaim: calibre-library
         globalMounts:
           - path: /calibre-library
