@@ -38,7 +38,9 @@ spec:
             env:
               FLASK_PORT: 8084
               FLASK_DEBUG: false
-              CLOUDFLARE_PROXY_URL: http://cloudflarebypassforscraping:8000
+              AA_BASE_URL: annas-archive.li
+              USE_CF_BYPASS: true
+              CLOUDFLARE_PROXY_URL: http://127.0.0.1:8000
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
               UID: 1000
@@ -67,6 +69,16 @@ spec:
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: true
               privileged: true
+          cloudflare-bypass:
+            image:
+              repository: ghcr.io/sarperavci/cloudflarebypassforscraping
+              tag: latest@sha256:e937223b9321168efec4ce4b60958d399b6dde37791ea6dc67d05b057c0f167e
+            resources:
+              requests:
+                cpu: 10m
+                memory: 150Mi
+              limits:
+                memory: 2Gi
     service:
       *app :
         controller: main
