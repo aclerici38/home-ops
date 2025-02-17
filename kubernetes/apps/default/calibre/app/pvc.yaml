@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: calibre-library
 spec:
-  storageClassName: truenas-iscsi
+  storageClassName: local-hostpath
   resources:
     requests:
       storage: 100Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany

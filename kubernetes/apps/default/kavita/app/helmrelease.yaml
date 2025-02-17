@@ -1,0 +1,78 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app kavita
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 1
+  values:
+    controllers:
+      main:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          *app :
+            image:
+              repository: ghcr.io/kareadita/kavita
+              tag: 0.8.4@sha256:07393ed7d6860e7312c0197b8c1ebcd4d53c52b7cabd542db08613410ff22c69
+            env:
+              TZ: ${TZ}
+            resources:
+              requests:
+                cpu: 15m
+                memory: 300Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+    service:
+      app:
+        controller: main
+        ports:
+          http:
+            port: 5000
+    ingress:
+      app:
+        className: internal
+        hosts:
+          - host: "kavita.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+    persistence:
+      config:
+        existingClaim: *app
+      books:
+        existingClaim: calibre-library
+
