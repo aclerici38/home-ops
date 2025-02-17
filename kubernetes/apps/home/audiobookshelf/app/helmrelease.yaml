@@ -34,7 +34,7 @@ spec:
             runAsUser: &id 1000
             runAsGroup: *id
             fsGroup: *id
-            fsGroupChangePolicy: OnRootMismatch
+            fsGroupChangePolicy: Always
         containers:
           *app :
             image:
