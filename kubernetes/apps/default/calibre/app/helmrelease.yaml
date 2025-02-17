@@ -153,7 +153,7 @@ spec:
         globalMounts:
           - path: /cwa-book-ingest
       # Temporarily use iscsi share til v3.1
-      library:
-        existingClaim: calibre-library
-        globalMounts:
-          - path: /calibre-library
+      # library:
+      #   existingClaim: calibre-library
+      #   globalMounts:
+      #     - path: /calibre-library
