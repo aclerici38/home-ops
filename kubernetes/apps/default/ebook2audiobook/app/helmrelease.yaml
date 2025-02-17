@@ -19,7 +19,7 @@ spec:
     remediation:
       retries: 1
   upgrade:
-    timeout: 2m
+    timeout: 5m
     cleanupOnFail: true
     remediation:
       strategy: rollback
@@ -76,10 +76,14 @@ spec:
                   identifier: *app
                   port: http
     persistence:
-      config:
+      cahce:
         existingClaim: *app
         globalMounts:
-          - path: /home/user/app
+          - path: /home/user/app/models
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - /home/user/app/tmp
       media:
         type: nfs
         server: 192.168.9.10

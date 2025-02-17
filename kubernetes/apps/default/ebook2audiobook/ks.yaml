@@ -10,19 +10,11 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: volsync
   path: ./kubernetes/apps/default/ebook2audiobook/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-  wait: true
+  wait: false
   interval: 30m
-  timeout: 5m
-  postBuild:
-    substitute:
-      APP: *app
-      VOLSYNC_STORAGECLASS: truenas-iscsi
-      VOLSYNC_SNAPSHOTCLASS: truenas-iscsi
-      VOLSYNC_CAPACITY: 50Gi
+  timeout: 10m
