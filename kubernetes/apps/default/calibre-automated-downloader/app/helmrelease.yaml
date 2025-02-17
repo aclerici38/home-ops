@@ -35,8 +35,8 @@ spec:
         containers:
           *app :
             image:
-              repository: ghcr.io/sarperavci/calibre-automated-downloader
-              tag: 20250214@sha256:90d16b6d27c054f607a17ad47d99944e474b5957be5a43400e9341af52c5c3f7
+              repository: ghcr.io/calibrain/calibre-web-automated-book-downloader
+              tag: latest@sha256:90d16b6d27c054f607a17ad47d99944e474b5957be5a43400e9341af52c5c3f7
             env:
               FLASK_PORT: 8084
               FLASK_DEBUG: false
