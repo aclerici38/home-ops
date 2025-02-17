@@ -54,6 +54,9 @@ spec:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
               privileged: true
+              capabilities:
+                add:
+                  - CHOWN
           calibre-downloader:
             image:
               repository: ghcr.io/calibrain/calibre-web-automated-book-downloader
