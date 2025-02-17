@@ -80,9 +80,9 @@ spec:
           http:
             port: 8084
     persistence:
-      media:
+      ingest:
         type: nfs
         server: 192.168.9.10
-        path: /mnt/tank/media/books/calibre
+        path: /mnt/tank/media/books/calibre/ingest
         globalMounts:
           - path: *ingest

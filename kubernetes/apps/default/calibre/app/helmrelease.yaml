@@ -75,9 +75,15 @@ spec:
         existingClaim: *app
       cache:
         type: emptyDir
-      media:
+      ingest:
         type: nfs
         server: 192.168.9.10
-        path: /mnt/tank/media/books/calibre
+        path: /mnt/tank/media/books/calibre/ingest
         globalMounts:
           - path: /cwa-book-ingest
+      library:
+        type: nfs
+        server: 192.168.9.10
+        path: /mnt/tank/media/books/calibre/library
+        globalMounts:
+          - path: /calibre-library
