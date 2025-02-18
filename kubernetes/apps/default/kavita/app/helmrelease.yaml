@@ -73,6 +73,8 @@ spec:
     persistence:
       config:
         existingClaim: *app
+        globalMounts:
+          - path: /kavita/config
       books:
         existingClaim: calibre-library
 
