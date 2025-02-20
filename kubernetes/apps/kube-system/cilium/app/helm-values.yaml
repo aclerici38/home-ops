@@ -1,9 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json
 autoDirectNodeRoutes: false
-# try to fix geneve over non-cilium-managed wireguard
-pmtuDiscovery:
-  enabled: true
 bpf:
   datapathMode: netkit
   masquerade: true
@@ -15,7 +12,6 @@ cgroup:
   automount:
     enabled: false
   hostRoot: /sys/fs/cgroup
-devices: "wg0"
 debug:
   enabled: true
 endpointRoutes:
