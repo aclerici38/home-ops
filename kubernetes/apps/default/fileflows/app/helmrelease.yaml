@@ -143,10 +143,18 @@ spec:
           node:
             app:
               - path: /temp
-      common:
-        existingClaim: fileflows-common
-        globalMounts:
-          - path: /app/common
+      server-common:
+        existingClaim: fileflows-server-common
+        advancedMounts:
+          server:
+            app:
+              - path: /app/common
+      node-common:
+        existingClaim: fileflows-node-common
+        advancedMounts:
+          node:
+            app:
+              - path: /app/common
       media:
         enabled: true
         type: nfs
