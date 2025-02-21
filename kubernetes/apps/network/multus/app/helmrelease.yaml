@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: multus
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.1
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+
+  values:
+    controllers:
+      multus:
+        type: daemonset
+
+        pod:
+          hostNetwork: true
+
+        initContainers:
+          cni-plugins:
+            image:
+              repository: ghcr.io/buroa/cni-plugins
+              tag: 1.6.2
+
+        containers:
+          multus:
+            image:
+              repository: ghcr.io/k8snetworkplumbingwg/multus-cni
+              tag: v4.1.4
+            command:
+              - /thin_entrypoint
+            args:
+              - --cleanup-config-on-exit=true
+            resources:
+              requests:
+                cpu: "10m"
+              limits:
+                memory: "512Mi"
+            securityContext:
+              privileged: true
+
+    persistence:
+      etc-cni-net-d:
+        type: hostPath
+        hostPath: /etc/cni/net.d
+        globalMounts:
+          - path: /host/etc/cni/net.d
+      opt-cni-bin:
+        type: hostPath
+        hostPath: /opt/cni/bin
+        globalMounts:
+          - path: /host/opt/cni/bin
+
+    serviceAccount:
+      create: true
+      name: multus

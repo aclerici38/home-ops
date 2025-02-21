@@ -36,20 +36,15 @@ spec:
             fsGroup: 65533
             fsGroupChangePolicy: OnRootMismatch
           hostname: apt-hass
-          # annotations:
-          #   k8s.v1.cni.cncf.io/networks: |
-          #     [
-          #       {
-          #         "name":"vlan40",
-          #         "namespace": "networking",
-          #         "ips": ["10.0.40.15/24"]
-          #       },
-          #       {
-          #         "name":"vlan90",
-          #         "namespace": "networking",
-          #         "ips": ["10.0.90.15/24"]
-          #       }
-          #     ]
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name":"apt",
+                  "namespace": "network",
+                  "ips": ["192.168.9.30/24"]
+                }
+              ]
         containers:
           *app :
             image:
