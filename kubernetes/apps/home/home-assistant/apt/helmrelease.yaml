@@ -28,16 +28,14 @@ spec:
     controllers:
       main:
         pod:
-          affinity:
-            nodeAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                nodeSelectorTerms:
-                - matchExpressions:
-                  - key: location
-                    operator: In
-                    values:
-                      - "house"
-          hostname: apt-hass-home
+          nodeSelector:
+            kubernetes.io/hostname: bonds
+          securityContext:
+            runAsUser: 65534
+            runAsGroup: 65533
+            fsGroup: 65533
+            fsGroupChangePolicy: OnRootMismatch
+          hostname: apt-hass
           # annotations:
           #   k8s.v1.cni.cncf.io/networks: |
           #     [
@@ -55,43 +53,45 @@ spec:
         containers:
           *app :
             image:
-              repository: ghcr.io/home-assistant/home-assistant
-              tag: 2025.2.4@sha256:dae013e0bd935bf8dc500adef771604a3fd03dc5f2ca13b9566f51a094e3f8bf
+              repository: ghcr.io/onedr0p/home-assistant
+              tag: 2025.2.4@sha256:31873c4f634edb4c988d9536219ee32af68f904e0a6913589cb95cffa51ec00c
             env:
-              TZ: ${TZ}
+              VENV_FOLDER: /venv
+            resources:
+              requests:
+                cpu: 47m
+                memory: 2Gi
+              limits:
+                memory: 2Gi
             securityContext:
-              allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: false
-              capabilities: { drop: ["ALL"] }
-              privileged: true
-              seccompProfile: { type: RuntimeDefault }
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+          code-server:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.97.2@sha256:6ff0e9cf5a553b3961ece200be75e21e8c887ed0ae28a7c28213722dccf74b0c
+            args:
+              - --auth
+              - none
+              - --disable-telemetry
+              - --disable-update-check
+              - --user-data-dir
+              - /config/.code-server
+              - --extensions-dir
+              - /config/.code-server
+              - --port
+              - "12321"
+              - /config
+            env:
+              HASS_SERVER: http://localhost:8123
             resources:
               requests:
                 cpu: 10m
               limits:
-                memory: 2Gi
-          code-server:
-                image:
-                  repository: ghcr.io/coder/code-server
-                  tag: 4.97.2@sha256:6ff0e9cf5a553b3961ece200be75e21e8c887ed0ae28a7c28213722dccf74b0c
-                args:
-                  - --auth
-                  - none
-                  - --disable-telemetry
-                  - --disable-update-check
-                  - --user-data-dir
-                  - /config/.code-server
-                  - --extensions-dir
-                  - /config/.code-server
-                  - --port
-                  - "12321"
-                  - /config
-                resources:
-                  requests:
-                    cpu: 10m
-                  limits:
-                    memory: 4Gi
-
+                memory: 1Gi
     service:
       *app :
         controller: main
