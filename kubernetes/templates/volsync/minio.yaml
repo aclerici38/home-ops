@@ -78,7 +78,7 @@ spec:
   restic:
     repository: "${APP}-volsync-minio-secret"
     copyMethod: Snapshot
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:truenas-iscsi}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-truenas-iscsi}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-truenas-iscsi}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]
     storageClassName: "${VOLSYNC_STORAGECLASS:-truenas-iscsi}"
