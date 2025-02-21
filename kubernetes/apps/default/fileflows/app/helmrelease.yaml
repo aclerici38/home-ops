@@ -51,13 +51,7 @@ spec:
             securityContext: &secOps
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-                add:
-                  - CHOWN
-                  - SETUID
-                  - SETGID
+              privileged: true
       node:
         pod:
           hostname: ff-local-node
