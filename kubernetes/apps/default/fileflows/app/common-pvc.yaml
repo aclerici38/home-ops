@@ -6,6 +6,6 @@ spec:
   storageClassName: local-hostpath
   resources:
     requests:
-      storage: 25Gi
+      storage: 50Gi
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce

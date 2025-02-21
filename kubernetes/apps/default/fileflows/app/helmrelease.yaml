@@ -14,8 +14,11 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  dependsOn:
+    - name: nvidia-device-plugin
+      namespace: kube-system
   install:
-    timeout: 2m
+    timeout: 5m
     remediation:
       retries: 1
   upgrade:
@@ -26,29 +29,26 @@ spec:
       retries: 1
   values:
     controllers:
-      fileflows:
+      server:
         pod:
-          nodeSelector:
-            kubernetes.io/hostname: "bonds"
+          hostname: ff-server
         containers:
-          server:
-            image:
+          app:
+            image: &image
               repository: docker.io/revenz/fileflows
               tag: 25.02@sha256:2379e777eabc6a002d6f9107938d43e59ffc7c5311fc031e39340205a6802427
             env:
               TZ: "${TZ}"
               PUID: 1000
               PGID: 1000
-              hostname: server
-              ASPNETCORE_URLS: "http://*:5001"
-            resources:
+            resources: &resources
               requests:
                 cpu: 100m
                 memory: 350M
               limits:
                 memory: 6Gi
-                # nvidia.com/gpu: 1
-            securityContext:
+                nvidia.com/gpu: 1
+            securityContext: &secOps
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
               capabilities:
@@ -58,34 +58,20 @@ spec:
                   - CHOWN
                   - SETUID
                   - SETGID
-          node:
-            image:
-              repository: docker.io/revenz/fileflows
-              tag: 25.02@sha256:2379e777eabc6a002d6f9107938d43e59ffc7c5311fc031e39340205a6802427
+      node:
+        pod:
+          hostname: ff-local-node
+        containers:
+          app:
+            image: *image
             env:
               TZ: "${TZ}"
               PUID: 1000
               PGID: 1000
               FFNODE: 1
-              ServerUrl: http://fileflows:5001
-              hostname: local-node
-            resources:
-              requests:
-                cpu: 100m
-                memory: 350M
-              limits:
-                memory: 6Gi
-                # nvidia.com/gpu: 1
-            securityContext:
-              readOnlyRootFilesystem: false
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-                add:
-                  - CHOWN
-                  - SETUID
-                  - SETGID
+              ServerUrl: http://fileflows:5000
+            resources: *resources
+            securityContext: *secOps
 
     defaultPodOptions:
       securityContext:
@@ -95,12 +81,14 @@ spec:
         fsGroup: 0
         fsGroupChangePolicy: Always
         seccompProfile: { type: RuntimeDefault }
+      nodeSelector:
+        kubernetes.io/hostname: "bonds"
     service:
       fileflows:
-        controller: fileflows
+        controller: server
         ports:
           http:
-            port: 5001
+            port: 5000
     ingress:
       app:
         className: internal
@@ -115,16 +103,22 @@ spec:
       config:
         existingClaim: fileflows
         advancedMounts:
-          fileflows:
-            fileflows:
+          server:
+            app:
+              - path: /app/Data
+      node-data:
+        type: emptyDir
+        advancedMounts:
+          node:
+            app:
               - path: /app/Data
       server-logs:
         enabled: true
         type: emptyDir
         sizeLimit: 1Gi
         advancedMounts:
-          fileflows:
-            fileflows:
+          server:
+            app:
               - path: /app/Logs
 
       node-logs:
@@ -132,27 +126,27 @@ spec:
         type: emptyDir
         sizeLimit: 1Gi
         advancedMounts:
-          fileflows:
-            node:
+          node:
+            app:
               - path: /app/Logs
       server-temp:
         enabled: true
         type: emptyDir
         advancedMounts:
-          fileflows:
-            fileflows:
+          server:
+            app:
               - path: /temp
       node-temp:
         enabled: true
         type: emptyDir
         advancedMounts:
-          fileflows:
-            node:
+          node:
+            app:
               - path: /temp
-      # common:
-      #   existingClaim: fileflows-common
-      #   globalMounts:
-      #     - path: /app/common
+      common:
+        existingClaim: fileflows-common
+        globalMounts:
+          - path: /app/common
       media:
         enabled: true
         type: nfs
