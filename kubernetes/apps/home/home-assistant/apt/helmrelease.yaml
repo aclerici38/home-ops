@@ -125,14 +125,19 @@ spec:
         existingClaim: apt-hass
         globalMounts:
           - path: /config
-
+      hass-cache:
+        existingClaim: hass-cache
+        advancedMounts:
+          main:
+            *app :
+              - path: /venv
+                subPath: hass-venv
       dockerenv:
         # Because of https://github.com/home-assistant/core/blob/0d66d298ec57b8e50379cc2ec31cbebf771705c3/homeassistant/util/package.py#L29
         enabled: true
         type: emptyDir
         globalMounts:
           - path: /.dockerenv
-
       logs:
         type: emptyDir
         globalMounts:
