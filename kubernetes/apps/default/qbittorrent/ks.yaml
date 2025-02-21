@@ -25,6 +25,8 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_STORAGECLASS: local-hostpath
+      VOLSYNC_SNAPSHOTCLASS: csi-local-hostpath
       # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
       VUETORRENT_VERSION: v2.22.0
     substituteFrom:

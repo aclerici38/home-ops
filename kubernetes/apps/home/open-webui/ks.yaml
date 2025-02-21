@@ -22,3 +22,5 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_STORAGECLASS: local-hostpath
+      VOLSYNC_SNAPSHOTCLASS: csi-local-hostpath
