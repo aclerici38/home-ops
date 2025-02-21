@@ -1,7 +1,19 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: fileflows-common
+  name: fileflows-server-common
+spec:
+  storageClassName: local-hostpath
+  resources:
+    requests:
+      storage: 50Gi
+  accessModes:
+    - ReadWriteOnce
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fileflows-node-common
 spec:
   storageClassName: local-hostpath
   resources:
