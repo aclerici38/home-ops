@@ -95,7 +95,7 @@ spec:
                   port: http
     persistence:
       config:
-        existingClaim: fileflows
+        existingClaim: temp-data
         advancedMounts:
           server:
             app:
