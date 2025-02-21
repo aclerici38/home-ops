@@ -51,7 +51,6 @@ spec:
             securityContext: &secOps
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
-              privileged: true
       node:
         pod:
           hostname: ff-local-node
