@@ -61,8 +61,6 @@ spec:
             image: *image
             env:
               TZ: "${TZ}"
-              PUID: 1000
-              PGID: 1000
               FFNODE: 1
               ServerUrl: http://fileflows:5000
             resources: *resources
