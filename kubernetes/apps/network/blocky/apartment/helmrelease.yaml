@@ -35,27 +35,6 @@ metadata:
             runAsGroup: 65534
         strategy: RollingUpdate
         replicas: 2
-        initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/onedr0p/postgres-init
-              tag: 16.8@sha256:31864a9350264f10f25dae1e90db3c6705a9bbb90644a28600afe197b3bf917f
-            env:
-              - name: INIT_POSTGRES_SUPER_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: username
-              - name: INIT_POSTGRES_SUPER_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: password
-            envFrom:
-              - secretRef:
-                  name: cnpg-secret
-              - secretRef:
-                  name: blocky-secret
         containers:
           *app :
             image:
