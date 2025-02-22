@@ -148,6 +148,10 @@ spec:
           node:
             app:
               - path: /app/common
+      shm:
+        type: emptyDir
+        globalMounts:
+          - path: /dev/shm
       media:
         enabled: true
         type: nfs
