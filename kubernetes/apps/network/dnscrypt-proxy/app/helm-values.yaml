@@ -1,13 +1,26 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
-defaultPodOptions:
-  tolerations:
-    - key: "node-role.kubernetes.io/control-plane"
-      operator: "Exists"
-      effect: "NoSchedule"
 controllers:
   main:
-    type: daemonset
+    replicas: 5
+    pod:
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: Exists
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: my-app
+              topologyKey: "kubernetes.io/hostname"
     strategy: RollingUpdate
     containers:
       &app dnscrypt-proxy :
@@ -48,6 +61,7 @@ controllers:
 service:
   *app :
     controller: main
+    internalTrafficPolicy: Local
     ports:
       dns-tcp:
         targetPort: &targetPort 5053
