@@ -140,29 +140,29 @@ spec:
               capabilities:
                 drop:
                   - ALL
-          qbitrr:
-            dependsOn: qbit
-            image:
-              repository: docker.io/feramance/qbitrr
-              tag: v4.10.11@sha256:b5182d131cf0c1bc969c1400c51e9ab0a249cb7560f815422ba9d0ba836188c4
-            env:
-              TZ: ${TZ}
-            resources:
-              requests:
-                cpu: 5m
-                memory: 36M
-              limits:
-                memory: 8000M
-            securityContext:
-              allowPrivilegeEscalation: false
-              runAsNonRoot: true
-              readOnlyRootFilesystem: true
-              runAsUser: 1000
-              runAsGroup: 1000
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile: { type: RuntimeDefault }
+          # qbitrr:
+          #   dependsOn: qbit
+          #   image:
+          #     repository: docker.io/feramance/qbitrr
+          #     tag: v4.10.11@sha256:b5182d131cf0c1bc969c1400c51e9ab0a249cb7560f815422ba9d0ba836188c4
+          #   env:
+          #     TZ: ${TZ}
+          #   resources:
+          #     requests:
+          #       cpu: 5m
+          #       memory: 36M
+          #     limits:
+          #       memory: 8000M
+          #   securityContext:
+          #     allowPrivilegeEscalation: false
+          #     runAsNonRoot: true
+          #     readOnlyRootFilesystem: true
+          #     runAsUser: 1000
+          #     runAsGroup: 1000
+          #     capabilities:
+          #       drop:
+          #         - ALL
+          #     seccompProfile: { type: RuntimeDefault }
 
 
     service:
@@ -223,27 +223,27 @@ spec:
               - path: /tmp/webui
             qbit:
               - path: /webui
-    # qbitrr
-      config-file:
-        name: qbitrr-config
-        type: configMap
-        advancedMounts:
-          qbit:
-            qbitrr:
-              - path: /config/config.toml
-                subPath: config.toml
-      qbitrr-cache:
-        existingClaim: qbitrr-cache
-        advancedMounts:
-          qbit:
-            qbitrr:
-              - path: /config
-      dockerenv:
-        type: emptyDir
-        advancedMounts:
-          qbit:
-            qbitrr:
-              - path: /.dockerenv
+    # # qbitrr
+    #   config-file:
+    #     name: qbitrr-config
+    #     type: configMap
+    #     advancedMounts:
+    #       qbit:
+    #         qbitrr:
+    #           - path: /config/config.toml
+    #             subPath: config.toml
+    #   qbitrr-cache:
+    #     existingClaim: qbitrr-cache
+    #     advancedMounts:
+    #       qbit:
+    #         qbitrr:
+    #           - path: /config
+    #   dockerenv:
+    #     type: emptyDir
+    #     advancedMounts:
+    #       qbit:
+    #         qbitrr:
+    #           - path: /.dockerenv
       # Gluetun auth
       gluetun-config-file:
         name: gluetun-config
