@@ -148,10 +148,14 @@ spec:
           node:
             app:
               - path: /app/common
-      shm:
+      dockermods:
         type: emptyDir
         globalMounts:
-          - path: /dev/shm
+          - path: /app/Dockermods
+      manuallyAdded:
+        type: emptyDir
+        globalMounts:
+          - path: /app/ManuallyAdded
       media:
         enabled: true
         type: nfs
