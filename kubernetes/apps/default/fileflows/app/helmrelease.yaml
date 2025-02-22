@@ -49,7 +49,7 @@ spec:
                 nvidia.com/gpu: 1
             securityContext: &secOps
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
@@ -151,7 +151,7 @@ spec:
       dockermods:
         type: emptyDir
         globalMounts:
-          - path: /app/Dockermods
+          - path: /app/DockerMods
       manually-added:
         type: emptyDir
         globalMounts:
