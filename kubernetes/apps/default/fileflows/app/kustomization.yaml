@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./common-pvc.yaml
   - ./logs-pvc.yaml
+  - ./ebook2audio-cache-pvc.yaml
   - ../../../../templates/volsync/claim.yaml
   - ../../../../templates/volsync/minio.yaml
   - ./helmrelease.yaml

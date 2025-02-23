@@ -32,7 +32,6 @@ spec:
       server:
         pod:
           hostname: ff-server
-          runtimeClassName: nvidia
         containers:
           app:
             image: &image
@@ -58,7 +57,7 @@ spec:
       node:
         pod:
           hostname: ff-local-node
-          runtimeClassName: nvidia
+          shareProcessNamespace: true
         containers:
           app:
             image: *image
@@ -68,7 +67,27 @@ spec:
               ServerUrl: http://fileflows:5000
             resources: *resources
             securityContext: *secOps
+          # Run ebook2audiobook in same pod until api exists
+          ebook2audiobook:
+            image:
+              repository: docker.io/athomasson2/ebook2audiobook
+              tag: 25.2.18@sha256:91ada375aba9c60a719905ea91950be83d0de25ea3c84fecf6f86a76ae1d4a6f
+            env:
+              TZ: ${TZ}
+              MPLCONFIGDIR: /home/user/app/models/matplotlib
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 4Gi
+              limits:
+                nvidia.com/gpu: 1
+                memory: 12Gi
     defaultPodOptions:
+      runtimeClassName: nvidia
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -84,6 +103,11 @@ spec:
         ports:
           http:
             port: 5000
+      ebook2audiobook:
+        controller: node
+        ports:
+          http:
+            port: 7860
     ingress:
       *app :
         className: internal
@@ -93,6 +117,15 @@ spec:
               - path: /
                 service:
                   identifier: *app
+                  port: http
+      ebook2audiobook:
+        className: internal
+        hosts:
+          - host: "ebook2audio.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: ebook2audiobook
                   port: http
     persistence:
       config:
@@ -152,10 +185,12 @@ spec:
         medium: Memory
         globalMounts:
           - path: *sqliteTmp
-      calibre-library:
-        existingClaim: calibre-library
-        globalMounts:
-          - path: /calibre-library
+      ebook2audio-cache:
+        existingClaim: ebook2audiobook-cache
+        advancedMounts:
+          node:
+            ebook2audiobook:
+              - path: /home/user/app/models
       media:
         enabled: true
         type: nfs
