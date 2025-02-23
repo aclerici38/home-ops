@@ -41,7 +41,7 @@ spec:
               pullPolicy: Always
             env:
               TZ: "${TZ}"
-              SQLITE_TMPDIR: &sqliteTmp /temp/sqlite/
+              SQLITE_TMPDIR: &sqliteTmp /tmp/sqlite/
             resources: &resources
               requests:
                 cpu: 100m
