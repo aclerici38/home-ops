@@ -160,11 +160,11 @@ spec:
       ebook2audio-output:
         existingClaim: ebook2audiobook-output
         globalMounts:
-          - /mnt/ebook2audio/output
+          - path: /mnt/ebook2audio/output
       ebook2audio-ingest:
         existingClaim: ebook2audiobook-ingest
         globalMounts:
-          - /mnt/ebook2audio/ingest
+          - path: mnt/ebook2audio/ingest
       media:
         enabled: true
         type: nfs
