@@ -7,6 +7,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30m
+  timeout: 5m
   path: ./kubernetes/flux/meta
   prune: true
   wait: true
@@ -22,6 +23,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30m
+  timeout: 10m
   dependsOn:
     - name: cluster-meta
   path: ./kubernetes/apps
