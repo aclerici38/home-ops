@@ -95,7 +95,7 @@ spec:
                   port: http
     persistence:
       config:
-        existingClaim: temp-data
+        existingClaim: *app
         advancedMounts:
           server:
             app:
@@ -108,8 +108,7 @@ spec:
               - path: /app/Data
       server-logs:
         enabled: true
-        type: emptyDir
-        sizeLimit: 1Gi
+        existingClaim: fileflows-logs
         advancedMounts:
           server:
             app:
@@ -122,20 +121,11 @@ spec:
           node:
             app:
               - path: /app/Logs
-      server-temp:
+      temp:
         enabled: true
         type: emptyDir
-        advancedMounts:
-          server:
-            app:
-              - path: /temp
-      node-temp:
-        enabled: true
-        type: emptyDir
-        advancedMounts:
-          node:
-            app:
-              - path: /temp
+        globalMounts:
+          - path: /temp
       server-common:
         existingClaim: fileflows-server-common
         advancedMounts:
