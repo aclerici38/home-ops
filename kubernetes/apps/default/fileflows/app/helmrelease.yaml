@@ -41,6 +41,7 @@ spec:
               pullPolicy: Always
             env:
               TZ: "${TZ}"
+              SQLITE_TMPDIR: &sqliteTmp /temp/sqlite/
             resources: &resources
               requests:
                 cpu: 100m
@@ -146,6 +147,11 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /app/ManuallyAdded
+      sqlite-tmp:
+        type: emptyDir
+        medium: memory
+        globalMounts:
+          - path: *sqliteTmp
       media:
         enabled: true
         type: nfs
