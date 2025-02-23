@@ -152,6 +152,10 @@ spec:
         medium: Memory
         globalMounts:
           - path: *sqliteTmp
+      calibre-library:
+        existingClaim: calibre-library
+        globalMounts:
+          - path: /calibre-library
       media:
         enabled: true
         type: nfs
