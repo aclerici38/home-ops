@@ -35,7 +35,7 @@ spec:
     pruneIntervalDays: 14
     repository: "${APP}-volsync-r2-secret"
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-truenas-iscsi}"
-    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-truenas-iscsi}"
+    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-local-hostpath}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]
     storageClassName: "${VOLSYNC_STORAGECLASS:-truenas-iscsi}"
     accessModes: ["${VOLSYNC_SNAP_ACCESSMODES:-ReadWriteOnce}"]
@@ -60,7 +60,7 @@ spec:
     repository: "${APP}-volsync-r2-secret"
     copyMethod: Snapshot
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-truenas-iscsi}"
-    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-truenas-iscsi}"
+    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-local-hostpath}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]
     cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:-2Gi}"
     storageClassName: "${VOLSYNC_STORAGECLASS:-truenas-iscsi}"
