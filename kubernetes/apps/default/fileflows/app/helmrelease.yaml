@@ -149,7 +149,7 @@ spec:
           - path: /app/ManuallyAdded
       sqlite-tmp:
         type: emptyDir
-        medium: memory
+        medium: Memory
         globalMounts:
           - path: *sqliteTmp
       media:
