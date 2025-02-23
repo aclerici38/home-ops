@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: fileflows
+  name: &app fileflows
 spec:
   interval: 30m
   chart:
@@ -50,7 +50,7 @@ spec:
                 nvidia.com/gpu: 1
             securityContext: &secOps
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
@@ -78,20 +78,20 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: "bonds"
     service:
-      fileflows:
+      *app :
         controller: server
         ports:
           http:
             port: 5000
     ingress:
-      app:
+      *app :
         className: internal
         hosts:
           - host: "fileflows.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
-                  identifier: fileflows
+                  identifier: *app
                   port: http
     persistence:
       config:
