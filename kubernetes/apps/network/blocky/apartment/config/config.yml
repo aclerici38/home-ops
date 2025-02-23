@@ -3,8 +3,9 @@ caching:
   minTime: 2m
   maxTime: 1h
   maxItemsCount: 0
+  prefetching: true
   prefetchExpires: 1h
-  prefetchThreshold: 3
+  prefetchThreshold: 10
   prefetchMaxItemsCount: 0
   cacheTimeNegative: -1
 
@@ -25,6 +26,14 @@ upstreams:
   groups:
     default:
       - dnscrypt-proxy.network.svc.cluster.local:53
+
+blocking:
+  denylists:
+    global:
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/multi.txt
+  clientGroupsBlock:
+    default:
+      - global
 
 redis:
   address: blocky-dragonfly.network.svc.cluster.local
