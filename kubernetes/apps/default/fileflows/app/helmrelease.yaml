@@ -34,8 +34,8 @@ spec:
           hostname: ff-server
         containers:
           app:
-            image: &image
-              repository: docker.io/ant385525/fileflows
+            image:
+              repository: docker.io/ant385525/fileflows-server
               tag: latest
               pullPolicy: Always
             env:
@@ -60,10 +60,12 @@ spec:
           shareProcessNamespace: true
         containers:
           app:
-            image: *image
+            image:
+              repository: docker.io/ant385525/fileflows-node
+              tag: latest
+              pullPolicy: Always
             env:
               TZ: "${TZ}"
-              FFNODE: 1
               ServerUrl: http://fileflows:5000
             resources: *resources
             securityContext: *secOps
