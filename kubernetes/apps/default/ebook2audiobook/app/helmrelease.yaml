@@ -59,7 +59,7 @@ spec:
                 memory: 4Gi
               limits:
                 nvidia.com/gpu: 1
-                memory: 8Gi
+                memory: 12Gi
     service:
       *app :
         controller: main
