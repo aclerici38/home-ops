@@ -22,7 +22,7 @@ spec:
     remediation:
       retries: 1
   upgrade:
-    timeout: 5m
+    timeout: 2m
     cleanupOnFail: true
     remediation:
       strategy: rollback
@@ -57,7 +57,6 @@ spec:
       node:
         pod:
           hostname: ff-local-node
-          shareProcessNamespace: true
         containers:
           app:
             image:
@@ -69,25 +68,6 @@ spec:
               ServerUrl: http://fileflows:5000
             resources: *resources
             securityContext: *secOps
-          # Run ebook2audiobook in same pod until api exists
-          ebook2audiobook:
-            image:
-              repository: docker.io/athomasson2/ebook2audiobook
-              tag: 25.2.18@sha256:daaf42fe320b83ab1be77ae2b1b88741e25a77fa35e532b42fb60fa17adcb29c
-            env:
-              TZ: ${TZ}
-              MPLCONFIGDIR: /home/user/app/models/matplotlib
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
-              capabilities: { drop: ["ALL"] }
-            resources:
-              requests:
-                cpu: 100m
-                memory: 4Gi
-              limits:
-                nvidia.com/gpu: 1
-                memory: 12Gi
     defaultPodOptions:
       runtimeClassName: nvidia
       securityContext:
@@ -105,11 +85,6 @@ spec:
         ports:
           http:
             port: 5000
-      ebook2audiobook:
-        controller: node
-        ports:
-          http:
-            port: 7860
     ingress:
       *app :
         className: internal
@@ -119,15 +94,6 @@ spec:
               - path: /
                 service:
                   identifier: *app
-                  port: http
-      ebook2audiobook:
-        className: internal
-        hosts:
-          - host: "ebook2audio.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: ebook2audiobook
                   port: http
     persistence:
       config:
@@ -187,12 +153,18 @@ spec:
         medium: Memory
         globalMounts:
           - path: *sqliteTmp
-      ebook2audio-cache:
-        existingClaim: ebook2audiobook-cache
-        advancedMounts:
-          node:
-            ebook2audiobook:
-              - path: /home/user/app/models
+      calibre-library:
+        existingClaim: calibre-library
+        globalMounts:
+          - path: /mnt/calibre-library
+      ebook2audio-output:
+        existingClaim: ebook2audiobook-output
+        globalMounts:
+          - /mnt/ebook2audio/output
+      ebook2audio-ingest:
+        existingClaim: ebook2audiobook-ingest
+        globalMounts:
+          - /mnt/ebook2audio/ingest
       media:
         enabled: true
         type: nfs
