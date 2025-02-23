@@ -77,9 +77,17 @@ spec:
                   identifier: *app
                   port: http
     persistence:
-      cahce:
+      cache:
         existingClaim: ebook2audiobook-cache
         globalMounts:
           - path: /home/user/app/models
+      ingest-folder:
+        existingClaim: ebook2audiobook-ingest
+        globalMounts:
+          - path: /home/user/app/input_folder
+      output-folder:
+        existingClaim: ebook2audiobook-output
+        globalMounts:
+          - path: /home/user/app/audiobooks
       tmp:
         type: emptyDir
