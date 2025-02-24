@@ -75,7 +75,7 @@ spec:
                   port: http
     persistence:
       config:
-        existingClaim: *app
+        existingClaim: calibre
         advancedMounts:
           main:
             *app :
