@@ -1,0 +1,95 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app calibre-web-automated
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 1
+  values:
+    controllers:
+      main:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
+        containers:
+          *app :
+            image:
+              repository: docker.io/crocodilestick/calibre-web-automated
+              tag: V3.0.4@sha256:e602e73b6fd50c3ba389b38acb701205976a05b650898f615f93bd7e3537a827
+            env:
+              TZ: "${TZ}"
+              PUID: 1000
+              PGID: 1000
+              CACHE_DIR: /cache
+            probes:
+              liveness: &probes
+                enabled: true
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 50m
+                memory: 200Mi
+              limits:
+                memory: 600Mi
+            securityContext:
+              allowPrivilegeEscalation: true
+              readOnlyRootFilesystem: false
+              privileged: true
+              capabilities:
+                add:
+                  - CHOWN
+    service:
+      *app :
+        controller: main
+        ports:
+          http:
+            port: 8083
+    ingress:
+      *app :
+        className: internal
+        hosts:
+          - host: &fqdn "calibre.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: *app
+                  port: http
+    persistence:
+      config:
+        existingClaim: *app
+        advancedMounts:
+          main:
+            *app :
+              - path: /config
+      cache:
+        type: emptyDir
+      ingest:
+        type: nfs
+        server: 192.168.9.10
+        path: /mnt/tank/media/books/calibre/ingest
+        globalMounts:
+          - path: /cwa-book-ingest
+      # Temporarily use local-path library til v3.1
+      library:
+        existingClaim: calibre-library
+        globalMounts:
+          - path: /calibre-library

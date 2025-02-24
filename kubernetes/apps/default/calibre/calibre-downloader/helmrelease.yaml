@@ -1,9 +1,8 @@
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app calibre
+  name: &app calibre-web-automated-downloader
 spec:
   interval: 30m
   chart:
@@ -15,7 +14,7 @@ spec:
         name: bjw-s
         namespace: flux-system
   install:
-    timeout: 5m
+    timeout: 2m
     remediation:
       retries: 1
   upgrade:
@@ -32,32 +31,6 @@ spec:
             kubernetes.io/hostname: "bonds"
         containers:
           *app :
-            image:
-              repository: docker.io/crocodilestick/calibre-web-automated
-              tag: V3.0.4@sha256:e602e73b6fd50c3ba389b38acb701205976a05b650898f615f93bd7e3537a827
-            env:
-              TZ: "${TZ}"
-              PUID: 1000
-              PGID: 1000
-              CACHE_DIR: /cache
-            probes:
-              liveness: &probes
-                enabled: true
-              readiness: *probes
-            resources:
-              requests:
-                cpu: 50m
-                memory: 200Mi
-              limits:
-                memory: 600Mi
-            securityContext:
-              allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: false
-              privileged: true
-              capabilities:
-                add:
-                  - CHOWN
-          calibre-downloader:
             image:
               repository: ghcr.io/calibrain/calibre-web-automated-book-downloader
               tag: latest@sha256:90d16b6d27c054f607a17ad47d99944e474b5957be5a43400e9341af52c5c3f7
@@ -110,40 +83,18 @@ spec:
         controller: main
         ports:
           http:
-            port: 8083
-      calibre-downloader:
-        controller: main
-        ports:
-          http:
             port: 8084
     ingress:
       *app :
-        className: internal
-        hosts:
-          - host: &fqdn "calibre.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: http
-      calibre-downloader:
         className: internal
         hosts:
           - host: &fqdn "download-books.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
-                  identifier: calibre-downloader
+                  identifier: *app
                   port: http
     persistence:
-      config:
-        existingClaim: *app
-        advancedMounts:
-          main:
-            *app :
-              - path: /config
-      cache:
-        type: emptyDir
       tmp:
         type: emptyDir
       ingest:
@@ -152,8 +103,4 @@ spec:
         path: /mnt/tank/media/books/calibre/ingest
         globalMounts:
           - path: /cwa-book-ingest
-      # Temporarily use iscsi share til v3.1
-      library:
-        existingClaim: calibre-library
-        globalMounts:
-          - path: /calibre-library
+
