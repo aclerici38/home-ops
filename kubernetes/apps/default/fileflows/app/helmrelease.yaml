@@ -35,9 +35,8 @@ spec:
         containers:
           app:
             image:
-              repository: docker.io/ant385525/fileflows-server
-              tag: latest
-              pullPolicy: Always
+              repository: ghcr.io/ant385525/fileflows-server
+              tag: 25.2.3.4462@sha256:4ff0c3cd6e30d8566fc6bdf0cf7876d35ea229d1e3a5cf2b6a98a1aeebf3f231
             env:
               TZ: "${TZ}"
               SQLITE_TMPDIR: &sqliteTmp /tmp/sqlite/
@@ -60,9 +59,8 @@ spec:
         containers:
           app:
             image:
-              repository: docker.io/ant385525/fileflows-node
-              tag: latest
-              pullPolicy: Always
+              repository: ghcr.io/ant385525/fileflows-node
+              tag: 25.2.3.4462@sha256:8c584ae51ee3dcaeffe4498ac95c27e67963b7af3fec995df0dacc87b9f16a70
             env:
               TZ: "${TZ}"
               ServerUrl: http://fileflows:5000
