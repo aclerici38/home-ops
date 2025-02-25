@@ -34,7 +34,7 @@ spec:
           init-db:
             image:
               repository: ghcr.io/onedr0p/postgres-init
-              tag: 16.8@sha256:31864a9350264f10f25dae1e90db3c6705a9bbb90644a28600afe197b3bf917f
+              tag: 16.8@sha256:7c339ac0b2eb88ab41878ac3a71d342343fe7e830b7ccd2adb6c7b5bbee8d66b
             env:
               - name: INIT_POSTGRES_SUPER_USER
                 valueFrom:
@@ -70,7 +70,7 @@ spec:
           sonarr:
             image:
               repository: ghcr.io/onedr0p/sonarr
-              tag: 4.0.13.2932@sha256:b9f76d8f542f9783c24cec4d26dc5fffcb2fca8eae1bc3170eadc0cf9d74120e
+              tag: 4.0.13.2932@sha256:5b04da7c3c5abcfffaddb96cd1b6fbb09312d93f0dacc2624f811c4b6a48ea03
             env:
               SONARR__APP__INSTANCENAME: Sonarr
               SONARR__APP__THEME: dark
