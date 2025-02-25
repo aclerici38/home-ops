@@ -36,7 +36,7 @@ spec:
           app:
             image:
               repository: ghcr.io/ant385525/fileflows-server
-              tag: 25.2.3.4462@sha256:4ff0c3cd6e30d8566fc6bdf0cf7876d35ea229d1e3a5cf2b6a98a1aeebf3f231
+              tag: 25.2.3.4462@sha256:5f3685f2e6233e6c7f5633e8a4b7a3bd8282b67e79bdb424b20912b267170b40
             env:
               TZ: "${TZ}"
               SQLITE_TMPDIR: &sqliteTmp /tmp/sqlite/
@@ -155,14 +155,6 @@ spec:
         existingClaim: calibre-library
         globalMounts:
           - path: /mnt/calibre-library
-      ebook2audio-output:
-        existingClaim: ebook2audiobook-output
-        globalMounts:
-          - path: /mnt/ebook2audio/output
-      ebook2audio-ingest:
-        existingClaim: ebook2audiobook-ingest
-        globalMounts:
-          - path: mnt/ebook2audio/ingest
       media:
         enabled: true
         type: nfs
