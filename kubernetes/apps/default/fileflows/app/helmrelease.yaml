@@ -35,14 +35,14 @@ spec:
         initContainers:
           homebrew:
             image:
-              repository: ghcr.io/homebrew/brew
+              repository: curlimages/curl
               tag: latest
             resources:
               requests:
-                cpu: 20m
-                memory: 50M
+                cpu: "20m"
+                memory: "50Mi"
               limits:
-                memory: 400M
+                memory: "400Mi"
             securityContext: &secOps
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
@@ -50,13 +50,21 @@ spec:
                 drop:
                   - ALL
             command:
-              - /bin/sh
+              - /bin/bash
               - -c
               - |
-                brew install curl calibre node mecab espeak-ng rust && \
+                # Install Homebrew noninteractively
+                export NONINTERACTIVE=1 && \
+                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
+                \
+                # Use the installed brew (located in /home/linuxbrew/.linuxbrew/bin) to install packages
+                /home/linuxbrew/.linuxbrew/bin/brew install curl calibre node mecab espeak-ng rust && \
+                \
+                # Download and unpack the ebook2audio assets
                 curl -fsSL -o /tmp/ebook2audio/ebook2audio.zip https://github.com/DrewThomasson/ebook2audiobook/archive/refs/tags/${EBOOK2AUDIO_VERSION}.zip && \
                 unzip /tmp/ebook2audio/ebook2audio.zip -d /tmp/ebook2audio && \
                 mv /tmp/ebook2audio/ebook2audiobook-${EBOOK2AUDIO_VERSION}/* /app/ebook2audio/
+
         containers:
           app:
             lifecycle:
@@ -193,7 +201,7 @@ spec:
       homebrew:
         existingClaim: ff-homebrew
         globalMounts:
-          - path: /home/linuxbrew
+          - path: /home/linuxbrew/
       media:
         enabled: true
         type: nfs
