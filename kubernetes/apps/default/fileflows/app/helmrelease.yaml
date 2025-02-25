@@ -32,34 +32,34 @@ spec:
       server:
         pod:
           hostname: ff-server
-    initContainers:
-      homebrew:
-        image:
-          repository: ubuntu
-          tag: "latest"
-        resources:
-          requests:
-            cpu: "20m"
-            memory: "50Mi"
-          limits:
-            memory: "400Mi"
-        securityContext: &secOps
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: false
-          capabilities:
-            drop:
-              - ALL
-        command:
-          - /bin/bash
-          - -c
-          - |
-            apt-get update && apt-get install -y curl unzip && \
-            export NONINTERACTIVE=1 && \
-            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
-            /home/linuxbrew/.linuxbrew/bin/brew install curl calibre node mecab espeak-ng rust && \
-            curl -fsSL -o /tmp/ebook2audio/ebook2audio.zip https://github.com/DrewThomasson/ebook2audiobook/archive/refs/tags/${EBOOK2AUDIO_VERSION}.zip && \
-            unzip /tmp/ebook2audio/ebook2audio.zip -d /tmp/ebook2audio && \
-            mv /tmp/ebook2audio/ebook2audiobook-${EBOOK2AUDIO_VERSION}/* /app/ebook2audio/
+        initContainers:
+          homebrew:
+            image:
+              repository: ubuntu
+              tag: "latest"
+            resources:
+              requests:
+                cpu: "20m"
+                memory: "50Mi"
+              limits:
+                memory: "400Mi"
+            securityContext: &secOps
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+            command:
+              - /bin/bash
+              - -c
+              - |
+                apt-get update && apt-get install -y curl unzip && \
+                export NONINTERACTIVE=1 && \
+                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
+                /home/linuxbrew/.linuxbrew/bin/brew install curl calibre node mecab espeak-ng rust && \
+                curl -fsSL -o /tmp/ebook2audio/ebook2audio.zip https://github.com/DrewThomasson/ebook2audiobook/archive/refs/tags/${EBOOK2AUDIO_VERSION}.zip && \
+                unzip /tmp/ebook2audio/ebook2audio.zip -d /tmp/ebook2audio && \
+                mv /tmp/ebook2audio/ebook2audiobook-${EBOOK2AUDIO_VERSION}/* /app/ebook2audio/
         containers:
           app:
             lifecycle:
