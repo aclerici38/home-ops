@@ -53,18 +53,13 @@ spec:
               - /bin/bash
               - -c
               - |
-                # Install Homebrew noninteractively
+                apk add --no-cache bash && \
                 export NONINTERACTIVE=1 && \
                 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
-                \
-                # Use the installed brew (located in /home/linuxbrew/.linuxbrew/bin) to install packages
                 /home/linuxbrew/.linuxbrew/bin/brew install curl calibre node mecab espeak-ng rust && \
-                \
-                # Download and unpack the ebook2audio assets
                 curl -fsSL -o /tmp/ebook2audio/ebook2audio.zip https://github.com/DrewThomasson/ebook2audiobook/archive/refs/tags/${EBOOK2AUDIO_VERSION}.zip && \
                 unzip /tmp/ebook2audio/ebook2audio.zip -d /tmp/ebook2audio && \
                 mv /tmp/ebook2audio/ebook2audiobook-${EBOOK2AUDIO_VERSION}/* /app/ebook2audio/
-
         containers:
           app:
             lifecycle:
