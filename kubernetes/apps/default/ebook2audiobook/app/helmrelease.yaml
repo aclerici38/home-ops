@@ -81,10 +81,10 @@ spec:
         existingClaim: ebook2audiobook-cache
         globalMounts:
           - path: /home/user/app/models
-      ingest-folder:
+      calibre-library:
         existingClaim: calibre-library
         globalMounts:
-          - path: /home/user/app/input_folder
+          - path: /mnt/calibre-library
       output-folder:
         existingClaim: ebook2audiobook-output
         globalMounts:

@@ -158,10 +158,10 @@ spec:
         existingClaim: calibre-library
         globalMounts:
           - path: /mnt/calibre-library
-      ebook2audio:
-        type: emptyDir
+      ebook2audiobook-output:
+        existingClaim: ebook2audiobook-output
         globalMounts:
-          - path: /app/ebook2audio
+          - path: /mnt/ebook2audio
       media:
         enabled: true
         type: nfs
