@@ -38,6 +38,6 @@ spec:
       seccompProfile: { type: RuntimeDefault }
     image: &image
       repository: ghcr.io/onedr0p/volsync
-      tag: 0.11.0@sha256:70e84fd858b81ced5eff1209108e821811c4a3da2d3462a32bc8c21173b896c9
+      tag: 0.11.0@sha256:1c8dc36975a080818780526b8e9ea2b99f46c1eb6a8c1397571456e1b1dad4ef
     restic: *image
     rclone: *image
