@@ -48,7 +48,7 @@ spec:
                       rm -rf /tmp/ebook2audio
             image:
               repository: ghcr.io/ant385525/fileflows-server
-              tag: 25.2.3.4462@sha256:7e5a7abf4facac58a5746d638c195e21b1c4e2eb7433b5554f20951dd547ad5f
+              tag: 25.2.3.4462@sha256:471b29ff32fa5ad7d2feee5eba99fb2e8cdd0d1817844b200a9473c30b3a1a96
             env:
               TZ: "${TZ}"
               SQLITE_TMPDIR: &sqliteTmp /tmp/sqlite/
