@@ -53,7 +53,6 @@ spec:
               - /bin/bash
               - -c
               - |
-                apt-get update && apt-get install -y curl unzip && \
                 export NONINTERACTIVE=1 && \
                 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
                 /home/linuxbrew/.linuxbrew/bin/brew install curl calibre node mecab espeak-ng rust && \
