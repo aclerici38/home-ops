@@ -7,7 +7,7 @@ metadata:
   name: authentik-db
 spec:
   instances: 1
-  imageName: ghcr.io/cloudnative-pg/postgresql:16.6@sha256:53be6d727c7b3cf0df2b147f7ce7cdd31d37fd285314294871a4ccc3837b6872
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.8@sha256:968fde47c946fcc86b2005f49eaf98f8e47e2a168eadc95880d60cf87fa526c6
   primaryUpdateStrategy: unsupervised
   storage:
     size: 2Gi
