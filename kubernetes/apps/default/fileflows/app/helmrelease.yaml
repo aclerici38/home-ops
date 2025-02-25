@@ -45,7 +45,7 @@ spec:
                       echo "Downloading ebook2audiobook version {}" && \
                       curl -L -o /tmp/ebook2audio/ebook2audio.zip https://github.com/DrewThomasson/ebook2audiobook/archive/refs/tags/25.2.18.zip && \
                       unzip /tmp/ebook2audio/ebook2audio.zip -d /tmp/ebook2audio && \
-                      mv /tmp/ebook2audio/ebook2audio-*/* /app/ebook2audio/
+                      mv /tmp/ebook2audio/ebook2audio-*/* /app/ebook2audio/ && \
                       rm -rf /tmp/ebook2audio && \
                       echo "ebook2audio downloaded successfully into /app/ebook2audio"
             image:
