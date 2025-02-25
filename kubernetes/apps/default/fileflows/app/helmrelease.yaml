@@ -34,6 +34,16 @@ spec:
           hostname: ff-server
         containers:
           app:
+            lifecycle:
+              postStart:
+                exec:
+                  command:
+                    - "bin/sh"
+                    - "-c"
+                    - |
+                      mkdir /tmp/ebook2audio && \
+                      curl -L -o /tmp/ebook2audio/ebook2audio.zip https://github.com/DrewThomasson/ebook2audiobook/archive/refs/tags/25.2.18.zip && \
+                      unzip /tmp/ebook2audio/ebook2audio.zip -d /app/ebook2audio && rm -rf /tmp/ebook2audio
             image:
               repository: ghcr.io/ant385525/fileflows-server
               tag: 25.2.3.4462@sha256:5f3685f2e6233e6c7f5633e8a4b7a3bd8282b67e79bdb424b20912b267170b40
