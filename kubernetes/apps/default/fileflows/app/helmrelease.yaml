@@ -35,8 +35,8 @@ spec:
         initContainers:
           homebrew:
             image:
-              repository: ubuntu
-              tag: "latest"
+              repository: nicolaka/netshoot
+              tag: latest
             resources:
               requests:
                 cpu: "20m"
