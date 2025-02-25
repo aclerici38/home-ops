@@ -35,7 +35,7 @@ spec:
         initContainers:
           homebrew:
             image:
-              repository: nicolaka/netshoot
+              repository: ghcr.io/homebrew/brew
               tag: latest
             resources:
               requests:
@@ -53,9 +53,7 @@ spec:
               - /bin/bash
               - -c
               - |
-                export NONINTERACTIVE=1 && \
-                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
-                /home/linuxbrew/.linuxbrew/bin/brew install curl calibre node mecab espeak-ng rust && \
+                brew install curl calibre node mecab espeak-ng rust unzip && \
                 curl -fsSL -o /tmp/ebook2audio/ebook2audio.zip https://github.com/DrewThomasson/ebook2audiobook/archive/refs/tags/${EBOOK2AUDIO_VERSION}.zip && \
                 unzip /tmp/ebook2audio/ebook2audio.zip -d /tmp/ebook2audio && \
                 mv /tmp/ebook2audio/ebook2audiobook-${EBOOK2AUDIO_VERSION}/* /app/ebook2audio/
@@ -192,10 +190,14 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /app/ebook2audio
-      homebrew:
-        existingClaim: ff-homebrew
+      homebrew-cellar:
+        type: emptyDir
         globalMounts:
-          - path: /home/linuxbrew/
+          - path: /home/linuxbrew/.linuxbrew/Cellar
+      homebrew-bin:
+        type: emptyDir
+        globalMounts:
+          - path: /home/linuxbrew/.linuxbrew/bin
       media:
         enabled: true
         type: nfs
