@@ -48,7 +48,7 @@ spec:
                       rm -rf /tmp/ebook2audio
             image:
               repository: ghcr.io/ant385525/fileflows-server
-              tag: 25.2.3.4462@sha256:036d80a9c1dca9a08e6ca1b8c215bbdb2a14d6f47747952502e1bb36aa46178b
+              tag: 25.2.3.4462@sha256:7e5a7abf4facac58a5746d638c195e21b1c4e2eb7433b5554f20951dd547ad5f
             env:
               TZ: "${TZ}"
               SQLITE_TMPDIR: &sqliteTmp /tmp/sqlite/
@@ -105,6 +105,9 @@ spec:
                 service:
                   identifier: *app
                   port: http
+    serviceAccount:
+      create: false
+      name: *app
     persistence:
       config:
         existingClaim: *app
