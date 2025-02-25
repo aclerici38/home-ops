@@ -189,11 +189,11 @@ spec:
       ebook2audiobook:
         type: emptyDir
         globalMounts:
-          - /app/ebook2audio
+          - path: /app/ebook2audio
       homebrew:
         existingClaim: ff-homebrew
         globalMounts:
-          - /home/linuxbrew
+          - path: /home/linuxbrew
       media:
         enabled: true
         type: nfs
