@@ -32,49 +32,26 @@ spec:
       server:
         pod:
           hostname: ff-server
-        initContainers:
-          homebrew:
-            image:
-              repository: ghcr.io/homebrew/brew
-              tag: latest
-            resources:
-              requests:
-                cpu: "20m"
-                memory: "50Mi"
-              limits:
-                memory: "400Mi"
-            securityContext: &secOps
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
-              capabilities:
-                drop:
-                  - ALL
-            command:
-              - /bin/bash
-              - -c
-              - |
-                brew install curl calibre node mecab espeak-ng rust unzip && \
-                curl -fsSL -o /tmp/ebook2audio/ebook2audio.zip https://github.com/DrewThomasson/ebook2audiobook/archive/refs/tags/${EBOOK2AUDIO_VERSION}.zip && \
-                unzip /tmp/ebook2audio/ebook2audio.zip -d /tmp/ebook2audio && \
-                mv /tmp/ebook2audio/ebook2audiobook-${EBOOK2AUDIO_VERSION}/* /app/ebook2audio/
         containers:
           app:
             lifecycle:
               postStart:
                 exec:
                   command:
-                    - /bin/sh
-                    - -c
+                    - "/bin/sh"
+                    - "-c"
                     - |
-                      cd /app/ebook2audio && \
-                      pip3 install --user --no-cache-dir -r requirements.txt
+                      mkdir -p /tmp/ebook2audio && \
+                      curl -L -o /tmp/ebook2audio/ebook2audio.zip https://github.com/DrewThomasson/ebook2audiobook/archive/refs/tags/${EBOOK2AUDIO_VERSION}.zip && \
+                      unzip /tmp/ebook2audio/ebook2audio.zip -d /tmp/ebook2audio && \
+                      mv /tmp/ebook2audio/ebook2audiobook-${EBOOK2AUDIO_VERSION}/* /app/ebook2audio/ && \
+                      rm -rf /tmp/ebook2audio
             image:
               repository: ghcr.io/ant385525/fileflows-server
               tag: 25.2.9.4516@sha256:4923f29393530e192d97c2e5623a33aeead4a0750c39a969b28efb18b543c4a6
             env:
               TZ: "${TZ}"
               SQLITE_TMPDIR: &sqliteTmp /tmp/sqlite/
-              PATH: /home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH
             resources: &resources
               requests:
                 cpu: 100m
@@ -82,7 +59,12 @@ spec:
               limits:
                 memory: 6Gi
                 nvidia.com/gpu: 1
-            securityContext: *secOps
+            securityContext: &secOps
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
       node:
         pod:
           hostname: ff-local-node
@@ -94,7 +76,6 @@ spec:
             env:
               TZ: "${TZ}"
               ServerUrl: http://fileflows:5000
-              PATH: /home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH
             resources: *resources
             securityContext: *secOps
     defaultPodOptions:
@@ -124,6 +105,9 @@ spec:
                 service:
                   identifier: *app
                   port: http
+    serviceAccount:
+      create: false
+      name: *app
     persistence:
       config:
         existingClaim: *app
@@ -186,18 +170,10 @@ spec:
         existingClaim: calibre-library
         globalMounts:
           - path: /mnt/calibre-library
-      ebook2audiobook:
+      ebook2audio:
         type: emptyDir
         globalMounts:
           - path: /app/ebook2audio
-      homebrew-cellar:
-        type: emptyDir
-        globalMounts:
-          - path: /home/linuxbrew/.linuxbrew/Cellar
-      homebrew-bin:
-        type: emptyDir
-        globalMounts:
-          - path: /home/linuxbrew/.linuxbrew/bin
       media:
         enabled: true
         type: nfs
