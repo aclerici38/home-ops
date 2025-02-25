@@ -124,9 +124,6 @@ spec:
                 service:
                   identifier: *app
                   port: http
-    serviceAccount:
-      create: false
-      name: *app
     persistence:
       config:
         existingClaim: *app
