@@ -5,13 +5,13 @@ metadata:
   name: &app audiobookshelf
   namespace: flux-system
 spec:
-  targetNamespace: home
+  targetNamespace: default
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: volsync
-  path: ./kubernetes/apps/home/audiobookshelf/app
+  path: ./kubernetes/apps/default/audiobookshelf/app
   prune: true
   sourceRef:
     kind: GitRepository
