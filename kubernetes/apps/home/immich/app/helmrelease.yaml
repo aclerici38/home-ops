@@ -192,9 +192,9 @@ spec:
         MACHINE_LEARNING_CACHE_FOLDER: /cache
         MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: *clip
         MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: *clip
-      volumeMounts:
-        - name: immich-ml-cache
-          mountPath: /cache
+      persistence:
+        cache:
+          existingClaim: immich-ml-cache
       resources:
         requests:
           cpu: 500m
