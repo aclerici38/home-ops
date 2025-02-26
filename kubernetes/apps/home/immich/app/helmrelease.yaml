@@ -31,6 +31,7 @@ spec:
       TZ: ${TZ}
       REDIS_HOSTNAME: immich-dragonfly.home.svc.cluster.local
       IMMICH_LOG_LEVEL: debug
+      IMMICH_MODEL_PRELOAD: ViT-H-14-378-quickgelu__dfn5b
       DB_HOSTNAME:
         valueFrom:
           secretKeyRef:
