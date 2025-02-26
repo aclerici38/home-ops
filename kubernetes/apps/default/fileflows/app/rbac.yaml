@@ -6,7 +6,7 @@ metadata:
   namespace: default
 rules:
   - apiGroups: [""]
-    resources: ["pods"]
+    resources: ["pods", "pods/attach", "pods/log"]
     verbs: ["create", "get", "list", "watch", "delete"]
 ---
 apiVersion: v1
@@ -28,4 +28,3 @@ roleRef:
   kind: Role
   name: kubectl-run-role
   apiGroup: rbac.authorization.k8s.io
-
