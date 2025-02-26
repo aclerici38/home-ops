@@ -87,6 +87,10 @@ spec:
     persistence:
       config:
         existingClaim: audiobookshelf
+      calibre:
+        existingClaim: calibre-library
+        globalMounts:
+          - /mnt/calibre
       media:
         type: nfs
         server: 192.168.9.10
