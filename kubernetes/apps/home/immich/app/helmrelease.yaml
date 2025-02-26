@@ -14,11 +14,11 @@ spec:
         name: immich
         namespace: flux-system
   install:
-    timeout: 2m
+    timeout: 5m
     remediation:
       retries: 1
   upgrade:
-    timeout: 2m
+    timeout: 3m
     cleanupOnFail: true
     remediation:
       strategy: rollback
