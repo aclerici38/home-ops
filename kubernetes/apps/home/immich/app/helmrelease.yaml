@@ -189,7 +189,7 @@ spec:
         pullPolicy: IfNotPresent
       env:
         MACHINE_LEARNING_ANN_TUNING_LEVEL: 3
-        TRANSFORMERS_CACHE: /cache
+        MACHINE_LEARNING_CACHE_FOLDER: /cache
         MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: *clip
         MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: *clip
       volumeMounts:
