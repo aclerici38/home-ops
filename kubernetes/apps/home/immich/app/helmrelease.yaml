@@ -139,7 +139,8 @@ spec:
       enabled: false
 
     server:
-      nodeSelector: *nodeSelector
+      nodeSelector: &nodeSelector
+        kubernetes.io/hostname: "bonds"
       service:
         main:
           type: ClusterIP
