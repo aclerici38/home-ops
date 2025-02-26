@@ -103,3 +103,7 @@ spec:
         path: /mnt/tank/media
         globalMounts:
           - path: /allMedia
+      calibre:
+        existingClaim: calibre-library
+        globalMounts:
+          - path: /calibre
