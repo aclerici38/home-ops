@@ -194,6 +194,8 @@ spec:
         MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: *clip
       persistence:
         cache:
+          enabled: true
+          type: pvc
           existingClaim: immich-ml-cache
       resources:
         requests:
