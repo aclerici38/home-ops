@@ -1,12 +1,11 @@
----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: kubectl-run-role
+  name: job-runner-role
   namespace: default
 rules:
-  - apiGroups: [""]
-    resources: ["pods", "pods/attach", "pods/log"]
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
     verbs: ["create", "get", "list", "watch", "delete"]
 ---
 apiVersion: v1
@@ -18,7 +17,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: kubectl-run-rolebinding
+  name: job-runner-rolebinding
   namespace: default
 subjects:
   - kind: ServiceAccount
@@ -26,5 +25,5 @@ subjects:
     namespace: default
 roleRef:
   kind: Role
-  name: kubectl-run-role
+  name: job-runner-role
   apiGroup: rbac.authorization.k8s.io
