@@ -193,14 +193,8 @@ spec:
         MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: *clip
         MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: *clip
       volumeMounts:
-        - name: cache
+        - name: immich-ml-cache
           mountPath: /cache
-      persistence:
-        cache:
-          enabled: true
-          size: 50Gi
-          accessMode: ReadWriteMany
-          storageClass: local-hostpath
       resources:
         requests:
           cpu: 500m
