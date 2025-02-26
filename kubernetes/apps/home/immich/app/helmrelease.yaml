@@ -31,7 +31,6 @@ spec:
       TZ: ${TZ}
       REDIS_HOSTNAME: immich-dragonfly.home.svc.cluster.local
       IMMICH_LOG_LEVEL: debug
-      IMMICH_MODEL_PRELOAD: ViT-H-14-378-quickgelu__dfn5b
       DB_HOSTNAME:
         valueFrom:
           secretKeyRef:
@@ -106,7 +105,7 @@ spec:
 
         machineLearning:
           clip:
-            modelName: ViT-H-14-378-quickgelu__dfn5b
+            modelName: &clip ViT-H-14-378-quickgelu__dfn5b
           facialRecognition:
             modelName: buffalo_l
             minFaces: 1
@@ -126,7 +125,7 @@ spec:
           template: "{{album}}/{{y}}/{{MM}}/{{filename}}"
 
         passwordLogin:
-          enabled: true
+          enabled: false
 
         backup:
           database:
@@ -138,20 +137,6 @@ spec:
 
     redis:
       enabled: false
-      architecture: standalone
-      master:
-        nodeSelector: &nodeSelector
-          kubernetes.io/hostname: "bonds"
-        resources:
-          requests:
-            cpu: 500m
-            memory: 256Mi
-          limits:
-            cpu: 3
-            memory: 1Gi
-
-      auth:
-        enabled: false
 
     server:
       nodeSelector: *nodeSelector
@@ -204,6 +189,8 @@ spec:
       env:
         MACHINE_LEARNING_ANN_TUNING_LEVEL: 3
         TRANSFORMERS_CACHE: /cache
+        MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: *clip
+        MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: *clip
       volumeMounts:
         - name: cache
           mountPath: /cache
@@ -211,8 +198,8 @@ spec:
         cache:
           enabled: true
           size: 50Gi
-          accessMode: ReadWriteOnce
-          storageClass: nvme
+          accessMode: ReadWriteMany
+          storageClass: local-hostpath
       resources:
         requests:
           cpu: 500m
