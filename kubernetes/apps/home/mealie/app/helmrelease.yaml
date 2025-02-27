@@ -67,7 +67,7 @@ spec:
           *app :
             image:
               repository: ghcr.io/mealie-recipes/mealie
-              tag: v2.6.0@sha256:500e42e59eb89c7837d3b17274c99f0126de607a9c545b616d13eeb7d7df0cd3
+              tag: v2.7.0@sha256:affaef50d3e763f96c95c48b42c4483313e42afea4668cc5db95c95d6823881c
             env:
               DB_ENGINE: postgres
               BASE_URL: https://mealie.${SECRET_DOMAIN}
