@@ -11,6 +11,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   interval: 5m
+  dependsOn:
+    - name: cdi
   prune: true
   wait: true
   path: "./deploy"
