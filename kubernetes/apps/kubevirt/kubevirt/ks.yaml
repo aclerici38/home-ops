@@ -16,7 +16,7 @@ spec:
   path: "./deploy"
   sourceRef:
     kind: GitRepository
-    name: vm-1-kubevirt-app
+    name: kubevirt-flux
   patches:
     - patch: |
         apiVersion: kubevirt.io/v1
