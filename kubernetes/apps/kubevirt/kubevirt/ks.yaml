@@ -10,20 +10,19 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/kubevirt/kubevirt/app
+  interval: 5m
   prune: true
+  wait: true
+  path: "./deploy"
   sourceRef:
     kind: GitRepository
-    name: flux-system
-  wait: false # no flux ks dependents
-  interval: 30m
-  timeout: 5m
+    name: vm-1-kubevirt-app
   patches:
     - patch: |
         apiVersion: kubevirt.io/v1
         kind: KubeVirt
         metadata:
-          name: kubevirt-nodeselector
+          name: kubevirt
         spec:
           infra:
             nodePlacement:
