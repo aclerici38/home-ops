@@ -105,12 +105,12 @@ nodes:
           disks:
             - device: /dev/disk/by-id/nvme-eui.00253841414031f0
               partitions:
-                - mountpoint: /var/mnt/csi-local-hostpath
+                - mountpoint: &mountPath /var/lib/csi-local-hostpath
           kubelet:
             extraMounts:
-              - destination: /var/mnt/csi-local-hostpath
+              - destination: *mountPath
                 type: bind
-                source: /var/mnt/csi-local-hostpath
+                source: *mountPath
                 options: ["bind", "rshared", "rw"]
   - hostname: "posey"
     ipAddress: "10.0.30.28"
