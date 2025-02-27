@@ -99,6 +99,19 @@ nodes:
       - deviceSelector:
           hardwareAddr: a8:a1:59:dd:87:18
         ignore: true
+    patches:
+      - |-
+        machine:
+          disks:
+            - device: /dev/disk/by-id/nvme-eui.00253841414031f0
+              partitions:
+                - mountpoint: /var/mnt/csi-local-hostpath
+          kubelet:
+            extraMounts:
+              - destination: /var/mnt/csi-local-hostpath
+                type: bind
+                source: /var/mnt/csi-local-hostpath
+                options: ["bind", "rshared", "rw"]
   - hostname: "posey"
     ipAddress: "10.0.30.28"
     installDiskSelector:

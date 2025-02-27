@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app kubevirt
+  namespace: flux-system
+spec:
+  targetNamespace: kubevirt
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/apps/kubevirt/kubevirt/app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: false # no flux ks dependents
+  interval: 30m
+  timeout: 5m
+  postBuild:
+    substitute:
+      # renovate: datasource=github-releases depName=kubevirt/kubevirt
+      KUBEVIRT_VERSION: 1.4.0
+  patches:
+    - patch: |
+        apiVersion: kubevirt.io/v1
+        kind: KubeVirt
+        metadata:
+          name: kubevirt-nodeselector
+        spec:
+          infra:
+            nodePlacement:
+              nodeSelector:
+                "kubernetes.io/hostname": "bonds"
+          workloads:
+            nodePlacement:
+              nodeSelector:
+                "kubernetes.io/hostname": "bonds"
+      target:
+        group: kubevirt.io
+        kind: KubeVirt
