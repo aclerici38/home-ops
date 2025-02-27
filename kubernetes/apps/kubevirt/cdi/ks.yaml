@@ -43,25 +43,3 @@ spec:
       target:
         group: cdi.kubevirt.io
         kind: CDI
----
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app cdi-datavolume
-  namespace: flux-system
-spec:
-  targetNamespace: cdi
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-  dependsOn:
-    - name: cdi
-  path: ./kubernetes/apps/kubevirt/cdi/datavolume
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  wait: true
-  interval: 30m
-  timeout: 5m
