@@ -18,20 +18,38 @@ spec:
     kind: GitRepository
     name: kubevirt-flux
   patches:
+    # namespace is managed separately by main ks, no need for this ks to also manage it, KubeVirt bundles namespace into kubevirt-operator.yaml
+    - patch: |
+        $patch: delete
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: kubevirt
+      target:
+        kind: Namespace
+        name: kubevirt
     - patch: |
         apiVersion: kubevirt.io/v1
         kind: KubeVirt
         metadata:
-          name: kubevirt
+          name: not-used
         spec:
           infra:
             nodePlacement:
               nodeSelector:
-                "kubernetes.io/hostname": "bonds"
+              kubernetes.io/hostname: "bonds"
           workloads:
             nodePlacement:
               nodeSelector:
-                "kubernetes.io/hostname": "bonds"
+              kubernetes.io/hostname: "bonds"
+
+          configuration:
+            vmStateStorageClass: "local-hostpath-bonds"
+            developerConfiguration:
+              featureGates:
+                - VMPersistentState
+                - DataVolumes
+                - AutoResourceLimitsGate
       target:
         group: kubevirt.io
         kind: KubeVirt
