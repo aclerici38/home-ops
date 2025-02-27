@@ -7,3 +7,15 @@ metadata:
     pod-security.kubernetes.io/enforce: "privileged"
     pod-security.kubernetes.io/warn: "privileged"
     kubevirt.io: ""
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cdi
+  labels:
+    kubevirt.io: ""
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: truenas-scale
