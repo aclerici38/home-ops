@@ -18,10 +18,6 @@ spec:
   wait: false # no flux ks dependents
   interval: 30m
   timeout: 5m
-  postBuild:
-    substitute:
-      # renovate: datasource=github-releases depName=kubevirt/kubevirt
-      KUBEVIRT_VERSION: 1.4.0
   patches:
     - patch: |
         apiVersion: kubevirt.io/v1
