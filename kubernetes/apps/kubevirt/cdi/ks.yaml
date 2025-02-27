@@ -10,7 +10,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  interval: 5m
+  interval: 30m
+  timeout: 5m
   prune: true
   wait: true
   path: "./deploy"
