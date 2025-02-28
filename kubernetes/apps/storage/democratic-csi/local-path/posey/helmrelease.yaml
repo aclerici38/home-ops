@@ -63,14 +63,12 @@ spec:
       fsGroupPolicy: File
     storageClasses:
       - name: &sc local-hostpath-posey
-        defaultClass: true
+        defaultClass: false
         reclaimPolicy: Delete
         volumeBindingMode: WaitForFirstConsumer
         allowVolumeExpansion: true
     volumeSnapshotClasses:
       - name: *sc
-        annotations:
-          snapshot.storage.kubernetes.io/is-default-class: "true"
         deletionPolicy: Delete
         parameters: {}
     driver:

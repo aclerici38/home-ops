@@ -7,7 +7,7 @@ spec:
     http:
       url: "https://download.sys.truenas.net/TrueNAS-SCALE-ElectricEel/24.10.2/TrueNAS-SCALE-24.10.2.iso"
   pvc:
-    storageClassName: local-hostpath-bonds
+    storageClassName: local-hostpath
     accessModes:
       - ReadWriteOnce
     resources:
