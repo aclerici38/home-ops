@@ -21,6 +21,9 @@ spec:
     remediation:
       strategy: rollback
       retries: 1
+  dependsOn:
+    - name: nvidia-device-plugin
+      namespace: kube-system
   values:
     controllers:
       main:

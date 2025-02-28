@@ -27,8 +27,6 @@ spec:
   dependsOn:
     - name: nvidia-device-plugin
       namespace: kube-system
-    - name: local-path
-      namespace: storage
   values:
     controllers:
       plex:
