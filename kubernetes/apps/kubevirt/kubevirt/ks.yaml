@@ -52,10 +52,10 @@ spec:
                   resourceName: "amd.com/sata-controller"
                 - pciVendorSelector: "1022:7901"
                   resourceName: "amd.com/sata-controller"
-                # - pciVendorSelector: "1022:57a4"
-                #   resourceName: "amd.com/pci-bridge"
-                # - pciVendorSelector: "1022:57a4"
-                #   resourceName: "amd.com/pci-bridge"
+                - pciVendorSelector: "1022:57a4"
+                  resourceName: "amd.com/pci-bridge"
+                - pciVendorSelector: "1022:57a4"
+                  resourceName: "amd.com/pci-bridge"
             vmStateStorageClass: "local-hostpath"
             developerConfiguration:
               featureGates:
