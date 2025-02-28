@@ -54,8 +54,6 @@ spec:
         extraArgs:
           - --leader-election=false
           - --node-deployment=true
-          - --feature-gates=Topology=true
-          - --strict-topology=true
     csiDriver:
       name: local-hostpath.cluster.local
       attachRequired: false
