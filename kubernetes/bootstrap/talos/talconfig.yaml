@@ -108,14 +108,41 @@ nodes:
             extraKernelArgs:
               - amd_iommu=on
               - amd_pstate=active
-              - modprobe.blacklist=ahci
-              - vfio-pci.ids=1022:7901,1022:57a4
-          udev:
-            rules:
-              - SUBSYSTEM=="pci", KERNELS=="0000:08:00.0", DRIVER=="", ATTR{driver_override}="vfio-pci"
-              - SUBSYSTEM=="pci", KERNELS=="0000:09:00.0", DRIVER=="", ATTR{driver_override}="vfio-pci"
-              - SUBSYSTEM=="pci", KERNELS=="0000:02:0a.0", DRIVER=="", ATTR{driver_override}="vfio-pci"
-              - SUBSYSTEM=="pci", KERNELS=="0000:02:09.0", DRIVER=="", ATTR{driver_override}="vfio-pci"
+          pods:
+            - apiVersion: v1
+              kind: Pod
+              metadata:
+                name: vfio-bind
+                namespace: kube-system
+              spec:
+                restartPolicy: Never
+                hostNetwork: true
+                hostPID: true
+                containers:
+                  - name: vfio-bind
+                    image: busybox:latest
+                    securityContext:
+                      privileged: true
+                    command:
+                      - /bin/sh
+                      - -c
+                      - |
+                        # Unbind each SATA controller from the AHCI driver
+                        echo -n "0000:02:09.0" > /sys/bus/pci/drivers/ahci/unbind
+                        echo -n "0000:08:00.0" > /sys/bus/pci/drivers/ahci/unbind
+                        echo -n "0000:02:0a.0" > /sys/bus/pci/drivers/ahci/unbind
+                        echo -n "0000:09:00.0" > /sys/bus/pci/drivers/ahci/unbind
+                        # Bind the controllers to vfio-pci by registering the device/vendor IDs
+                        echo "1022 7901" > /sys/bus/pci/drivers/vfio-pci/new_id
+                        echo "1022 57a4" > /sys/bus/pci/drivers/vfio-pci/new_id
+                        sleep infinity
+                    volumeMounts:
+                      - name: sys
+                        mountPath: /sys
+                volumes:
+                  - name: sys
+                    hostPath:
+                      path: /sys
           disks:
             - device: /dev/disk/by-id/nvme-eui.00253841414031f0
               partitions:
