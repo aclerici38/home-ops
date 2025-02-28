@@ -28,7 +28,7 @@ metadata:
   name: truenas-scale-config
   namespace: flux-system
 spec:
-  targetNamespace: *vm
+  targetNamespace: &vm truenas-scale
   commonMetadata:
     labels:
       app.kubernetes.io/name: truenas-scale-config
