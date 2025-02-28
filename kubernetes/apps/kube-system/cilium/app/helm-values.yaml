@@ -50,6 +50,13 @@ hubble:
         - &fqdn "hubble.${SECRET_DOMAIN}"
 ipam:
   mode: kubernetes
+# So I don't have to worry about this again
+k8sClientRateLimit:
+  qps: 20
+  burst: 40
+  operator:
+    qps: 200
+    burst: 400
 ipv4NativeRoutingCIDR: "172.16.0.0/16"
 k8sServiceHost: 127.0.0.1
 k8sServicePort: 7445
