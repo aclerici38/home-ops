@@ -46,7 +46,7 @@ spec:
                 kubernetes.io/hostname: "bonds"
 
           configuration:
-            permitterHostDevices:
+            permittedHostDevices:
               pciHostDevices:
                 - pciVendorSelector: "1022:7901"
                   resourceName: "amd.com/sata-controller"
