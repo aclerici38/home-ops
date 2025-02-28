@@ -15,8 +15,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  dependsOn:
-    - name: snapshot-controller
   interval: 30m
   timeout: 5m
 ---
@@ -80,6 +78,7 @@ spec:
     name: flux-system
   dependsOn:
     - name: snapshot-controller
+    - name: truenas-scale
   interval: 30m
   timeout: 5m
 ---
@@ -120,5 +119,6 @@ spec:
     name: flux-system
   dependsOn:
     - name: snapshot-controller
+    - name: truenas-scale
   interval: 30m
   timeout: 5m

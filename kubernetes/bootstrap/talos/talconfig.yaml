@@ -185,12 +185,6 @@ nodes:
     machineSpec:
       secureboot: false
       mode: cloud
-    patches:
-      - |-
-        machine:
-          time:
-            servers:
-              - 169.254.169.254
     nodeLabels:
       location: "cloud"
     schematic:
