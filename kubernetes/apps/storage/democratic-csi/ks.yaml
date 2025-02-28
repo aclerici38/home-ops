@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/storage/democratic-csi/local-path/global
+  path: ./kubernetes/apps/storage/democratic-csi/local-path
   prune: true
   sourceRef:
     kind: GitRepository
