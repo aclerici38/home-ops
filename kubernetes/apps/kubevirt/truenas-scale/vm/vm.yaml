@@ -12,19 +12,12 @@ spec:
     metadata:
       labels:
         kubevirt.io/domain: truenas-scale
-      annotations:
-        k8s.v1.cni.cncf.io/networks: |
-          [{
-              "name":"multus-apt",
-              "namespace": "network",
-              "ips": ["192.168.9.10/24"]
-            }]
     spec:
       hostname: truenas-scale
       networks:
         - name: "lab"
           multus:
-            networkName: multus-apt
+            networkName: multus-lab-truenas
       volumes:
         - name: cdrom
           dataVolume:
