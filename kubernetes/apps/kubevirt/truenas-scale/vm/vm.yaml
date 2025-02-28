@@ -49,8 +49,8 @@ spec:
               bootOrder: 2
           hostDevices:
             - name: sata-controller-1
-              deviceName: "0000:08:00.0"
+              deviceName: "amd.com/sata-controller"
             - name: sata-controller-2
-              deviceName: "0000:09:00.0"
+              deviceName: "amd.com/sata-controller"
       nodeSelector:
         kubernetes.io/hostname: bonds
