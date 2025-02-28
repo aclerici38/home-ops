@@ -64,7 +64,7 @@ spec:
       - name: &sc local-hostpath-bonds
         defaultClass: false
         reclaimPolicy: Delete
-        volumeBindingMode: WaitForFirstConsumer
+        volumeBindingMode: Immediate
         allowVolumeExpansion: true
     volumeSnapshotClasses:
       - name: *sc
@@ -74,7 +74,7 @@ spec:
       config:
         driver: local-hostpath
         local-hostpath:
-          shareBasePath: &storagePath /var/lib/csi-local-hostpath-bonds
+          shareBasePath: &storagePath /var/lib/csi-local-hostpath/bonds
           controllerBasePath: *storagePath
           dirPermissionsMode: "0770"
           dirPermissionsUser: 0

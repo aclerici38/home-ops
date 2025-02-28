@@ -71,7 +71,7 @@ spec:
       config:
         driver: local-hostpath
         local-hostpath:
-          shareBasePath: &storagePath /var/lib/csi-local-hostpath-posey
+          shareBasePath: &storagePath /var/lib/csi-local-hostpath/posey
           controllerBasePath: *storagePath
           dirPermissionsMode: "0770"
           dirPermissionsUser: 0
