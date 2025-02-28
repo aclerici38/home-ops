@@ -51,7 +51,11 @@ spec:
       externalResizer:
         enabled: false
       externalSnapshotter:
-        enabled: false
+        enabled: true
+        image: registry.k8s.io/sig-storage/csi-snapshotter:v8.2.0@sha256:dd788d79cf4c1b8edee6d9b80b8a1ebfc51a38a365c5be656986b129be9ac784
+        extraArgs:
+          - --leader-election=false
+          - --node-deployment=true
     csiDriver:
       name: local-hostpath-posey.cluster.local
       attachRequired: false

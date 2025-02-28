@@ -64,7 +64,7 @@ spec:
       - name: &sc local-hostpath-bonds
         defaultClass: false
         reclaimPolicy: Delete
-        volumeBindingMode: Immediate
+        volumeBindingMode: WaitForFirstConsumer
         allowVolumeExpansion: true
     volumeSnapshotClasses:
       - name: *sc
