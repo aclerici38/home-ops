@@ -102,6 +102,10 @@ nodes:
     patches:
       - |-
         machine:
+          install:
+            extraKernelArgs:
+              - amd_iommu=on
+              - amd_pstate=active
           disks:
             - device: /dev/disk/by-id/nvme-eui.00253841414031f0
               partitions:
@@ -178,6 +182,12 @@ nodes:
                 - 10.40.41.0/24
                 - 10.10.0.3/32
               persistentKeepaliveInterval: 10s
+    patches:
+      - |-
+        machine:
+          install:
+            extraKernelArgs:
+              - amd_pstate=active
   - hostname: "madbum"
     ipAddress: "10.40.40.41"
     installDiskSelector:
