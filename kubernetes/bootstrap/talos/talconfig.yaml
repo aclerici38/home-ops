@@ -50,6 +50,8 @@ nodes:
       - name: nvidia_uvm
       - name: nvidia_drm
       - name: nvidia_modeset
+      # kubevirt
+      - name: vfio_pci
     schematic:
       customization:
         systemExtensions:
@@ -106,6 +108,14 @@ nodes:
             extraKernelArgs:
               - amd_iommu=on
               - amd_pstate=active
+              - modprobe.blacklist=ahci
+              - vfio-pci.ids=1022:7901,1022:57a4
+          udev:
+            rules:
+              - SUBSYSTEM=="pci", KERNELS=="0000:08:00.0", DRIVER=="", ATTR{driver_override}="vfio-pci"
+              - SUBSYSTEM=="pci", KERNELS=="0000:09:00.0", DRIVER=="", ATTR{driver_override}="vfio-pci"
+              - SUBSYSTEM=="pci", KERNELS=="0000:02:0a.0", DRIVER=="", ATTR{driver_override}="vfio-pci"
+              - SUBSYSTEM=="pci", KERNELS=="0000:02:09.0", DRIVER=="", ATTR{driver_override}="vfio-pci"
           disks:
             - device: /dev/disk/by-id/nvme-eui.00253841414031f0
               partitions:
