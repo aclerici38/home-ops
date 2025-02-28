@@ -52,5 +52,9 @@ spec:
               deviceName: "amd.com/sata-controller"
             - name: sata-controller-2
               deviceName: "amd.com/sata-controller"
+            - name: pci-bridge-1
+              deviceName: "amd.com/pci-bridge"
+            - name: pci-bridge-2
+              deviceName: "amd.com/pci-bridge"
       nodeSelector:
         kubernetes.io/hostname: bonds
