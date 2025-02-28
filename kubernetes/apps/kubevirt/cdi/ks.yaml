@@ -40,6 +40,10 @@ spec:
           workload:
             nodeSelector:
               kubernetes.io/hostname: "bonds"
+          config:
+            podResourceRequirements:
+              limits:
+                memory: "1G"
       target:
         group: cdi.kubevirt.io
         kind: CDI
