@@ -46,7 +46,7 @@ spec:
                 kubernetes.io/hostname: "bonds"
 
           configuration:
-            vmStateStorageClass: "local-hostpath-bonds"
+            vmStateStorageClass: "local-hostpath"
             developerConfiguration:
               featureGates:
                 - VMPersistentState

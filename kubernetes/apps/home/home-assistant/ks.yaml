@@ -24,7 +24,7 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 25Gi
-      VOLSYNC_STORAGECLASS: local-hostpath-posey
+      VOLSYNC_STORAGECLASS: local-hostpath
       VOLSYNC_SNAPSHOTCLASS: csi-local-hostpath
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
@@ -53,5 +53,5 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 25Gi
-      VOLSYNC_STORAGECLASS: &sc local-hostpath-bonds
+      VOLSYNC_STORAGECLASS: &sc local-hostpath
       VOLSYNC_SNAPSHOTCLASS: *sc
