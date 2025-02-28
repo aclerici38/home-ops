@@ -5,3 +5,5 @@ kind: Kustomization
 resources:
   - ./config
   - ./vm.yaml
+  - ../../../../templates/volsync/claim.yaml
+  - ../../../../templates/volsync/r2.yaml
