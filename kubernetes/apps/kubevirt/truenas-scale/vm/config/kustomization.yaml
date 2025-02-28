@@ -3,9 +3,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./ns.yaml
-
-  - ./cdi/ks.yaml
-  - ./kubevirt/ks.yaml
-
-  - ./truenas-scale/ks.yaml
+  - ./boot-pvc.yaml
+  - ./datavolume.yaml
+  - ./preference.yaml
+  - ./type.yaml

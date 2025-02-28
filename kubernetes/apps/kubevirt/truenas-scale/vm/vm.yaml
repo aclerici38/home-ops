@@ -1,37 +1,66 @@
+---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
-  name: testvm
+  name: truenas-scale
 spec:
-  runStrategy: Halted
+  preference:
+    kind: "VirtualMachinePreference"
+    name: truenas-scale
+  instanceType:
+    kind: VirtualMachineInstancetype
+    name: truenas-scale
   template:
     metadata:
       labels:
-        kubevirt.io/size: small
-        kubevirt.io/domain: testvm
+        kubevirt.io/domain: truenas-scale
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |
+          [{
+              "name":"multus-apt",
+              "namespace": "network",
+              "ips": ["192.168.9.10/24"]
+            }]
     spec:
+      runStrategy: Always
+      hostname: truenas-scale
+      networks:
+        - name: "lab"
+          multus:
+            networkName: multus-apt
+      volumes:
+        - name: cdrom
+          dataVolume:
+            name: truenas-scale-iso
+        - name: boot
+          persistentVolumeClaim:
+            claimName: truenas-scale-boot
       domain:
-        devices:
-          disks:
-            - name: containerdisk
-              disk:
-                bus: virtio
-            - name: cloudinitdisk
-              disk:
-                bus: virtio
-          interfaces:
-          - name: default
-            masquerade: {}
+        firmware:
+          bootloader:
+            efi:
+              persistent: true
+              secureBoot: false
+        cpu:
+          cores: 4
+          mode: host-passthrough
         resources:
           requests:
-            memory: 64M
-      networks:
-      - name: default
-        pod: {}
-      volumes:
-        - name: containerdisk
-          containerDisk:
-            image: quay.io/kubevirt/cirros-container-disk-demo
-        - name: cloudinitdisk
-          cloudInitNoCloud:
-            userDataBase64: SGkuXG4=
+            memory: 8192Mi
+        devices:
+          interfaces:
+            - name: lab
+          disks:
+            - name: cdrom
+              cdrom: {}
+              bootOrder: 1
+            - name: boot
+              disk: {}
+              bootOrder: 2
+          hostDevices:
+            - name: sata-controller-1
+              deviceName: "0000:08:00.0"
+            - name: sata-controller-2
+              deviceName: "0000:09:00.0"
+      nodeSelector:
+        kubernetes.io/hostname: bonds
