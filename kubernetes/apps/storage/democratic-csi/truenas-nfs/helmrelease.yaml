@@ -43,7 +43,7 @@ spec:
         image: registry.k8s.io/sig-storage/csi-resizer:v1.13.1@sha256:2a0b297cc7c4cd376ac7413df339ff2fdaa1ec9d099aed92b5ea1f031ef7f639
       externalSnapshotter:
         enabled: true
-        image: registry.k8s.io/sig-storage/csi-snapshotter:v8.2.0@sha256:dd788d79cf4c1b8edee6d9b80b8a1ebfc51a38a365c5be656986b129be9ac784
+        image: registry.k8s.io/sig-storage/csi-snapshotter:v8.2.1@sha256:5f4bb469fec51147ce157329dab598c758da1b018bad6dad26f0ff469326d769
     csiDriver:
       name: truenas-nfs
       attachRequired: true
