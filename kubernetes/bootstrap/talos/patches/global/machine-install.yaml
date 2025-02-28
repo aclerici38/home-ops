@@ -1,5 +1,6 @@
 machine:
   install:
+    wipe: true
     extraKernelArgs:
       - apparmor=0
       - init_on_alloc=0
