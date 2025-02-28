@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &vm truenas-scale
+  name: &vm truenas-scale-config
   namespace: flux-system
 spec:
   targetNamespace: *vm
@@ -13,6 +13,28 @@ spec:
   dependsOn:
     - name: volsync
     - name: multus
+  path: ./kubernetes/apps/kubevirt/truenas-scale/config
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+  interval: 30m
+  timeout: 5m
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &vm truenas-scale
+  namespace: flux-system
+spec:
+  targetNamespace: *vm
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *vm
+  dependsOn:
+    - name: truenas-scale-config
   path: ./kubernetes/apps/kubevirt/truenas-scale/vm
   prune: true
   sourceRef:
