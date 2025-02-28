@@ -49,6 +49,7 @@ spec:
             vmStateStorageClass: "local-hostpath"
             developerConfiguration:
               featureGates:
+                - HostDevices
                 - VMPersistentState
                 - DataVolumes
                 - AutoResourceLimitsGate
