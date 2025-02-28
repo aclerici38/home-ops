@@ -7,9 +7,10 @@ spec:
   preference:
     kind: "VirtualMachinePreference"
     name: truenas-scale
-  instanceType:
+  instancetype:
     kind: VirtualMachineInstancetype
     name: truenas-scale
+  runStrategy: Always
   template:
     metadata:
       labels:
@@ -22,7 +23,6 @@ spec:
               "ips": ["192.168.9.10/24"]
             }]
     spec:
-      runStrategy: Always
       hostname: truenas-scale
       networks:
         - name: "lab"
@@ -43,7 +43,7 @@ spec:
               secureBoot: false
         cpu:
           cores: 4
-          mode: host-passthrough
+          model: host-passthrough
         resources:
           requests:
             memory: 8192Mi
