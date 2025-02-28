@@ -39,11 +39,11 @@ spec:
           infra:
             nodePlacement:
               nodeSelector:
-              kubernetes.io/hostname: "bonds"
+                kubernetes.io/hostname: "bonds"
           workloads:
             nodePlacement:
               nodeSelector:
-              kubernetes.io/hostname: "bonds"
+                kubernetes.io/hostname: "bonds"
 
           configuration:
             vmStateStorageClass: "local-hostpath-bonds"
