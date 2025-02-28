@@ -33,6 +33,7 @@ spec:
     labels:
       app.kubernetes.io/name: truenas-scale-config
   dependsOn:
+    - name: kubevirt
     - name: volsync
     - name: multus
   path: ./kubernetes/apps/kubevirt/truenas-scale/config
