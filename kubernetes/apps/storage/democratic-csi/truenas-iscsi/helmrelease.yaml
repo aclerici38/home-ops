@@ -42,7 +42,7 @@ spec:
           - --volume-name-uuid-length=8
       externalResizer:
         enabled: true
-        image: registry.k8s.io/sig-storage/csi-resizer:v1.13.1@sha256:2a0b297cc7c4cd376ac7413df339ff2fdaa1ec9d099aed92b5ea1f031ef7f639
+        image: registry.k8s.io/sig-storage/csi-resizer:v1.13.2@sha256:8ddd178ba5d08973f1607f9b84619b58320948de494b31c9d7cd5375b316d6d4
       externalSnapshotter:
         enabled: true
         image: registry.k8s.io/sig-storage/csi-snapshotter:v8.2.1@sha256:5f4bb469fec51147ce157329dab598c758da1b018bad6dad26f0ff469326d769
