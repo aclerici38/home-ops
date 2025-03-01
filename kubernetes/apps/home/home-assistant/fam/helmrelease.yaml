@@ -29,7 +29,7 @@ spec:
       main:
         pod:
           nodeSelector:
-            kubernetes.io/hostname: bonds
+            kubernetes.io/hostname: posey
           securityContext:
             runAsUser: 65534
             runAsGroup: 65533
