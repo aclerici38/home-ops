@@ -36,11 +36,8 @@ spec:
         cpu:
           model: host-passthrough
         resources:
-          requests:
-            memory: 8192Mi
-            cpu: 4
           limits:
-            cpu: 0
+            memory: 8192Mi
         devices:
           interfaces:
             - cluster:
