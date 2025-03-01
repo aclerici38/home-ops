@@ -28,15 +28,13 @@ spec:
     controllers:
       main:
         pod:
-          affinity:
-            nodeAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                nodeSelectorTerms:
-                - matchExpressions:
-                  - key: location
-                    operator: In
-                    values:
-                      - "house"
+          nodeSelector:
+            kubernetes.io/hostname: bonds
+          securityContext:
+            runAsUser: 65534
+            runAsGroup: 65533
+            fsGroup: 65533
+            fsGroupChangePolicy: OnRootMismatch
           hostname: fam-hass-home
           # annotations:
           #   k8s.v1.cni.cncf.io/networks: |
@@ -55,46 +53,45 @@ spec:
         containers:
           *app :
             image:
-              repository: ghcr.io/home-assistant/home-assistant
-              tag: 2025.2.5@sha256:a81e875974c909957da5407a85d42409581a1f3c1ae202642519430389baf1ad
+              repository: ghcr.io/onedr0p/home-assistant
+              tag: 2025.2.5@sha256:3ffef764606b1eb13bb9d4e902b23859ae192a00196e2f275fb5d2b845b520d5
             env:
-              TZ: ${TZ}
-            envFrom: &envFrom
-              - secretRef:
-                  name: fam-hass-secret
+              VENV_FOLDER: /venv
+            resources:
+              requests:
+                cpu: 47m
+                memory: 2Gi
+              limits:
+                memory: 2Gi
             securityContext:
-              allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: false
-              capabilities: { drop: ["ALL"] }
-              privileged: true
-              seccompProfile: { type: RuntimeDefault }
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+          code-server:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.97.2@sha256:6ff0e9cf5a553b3961ece200be75e21e8c887ed0ae28a7c28213722dccf74b0c
+            args:
+              - --auth
+              - none
+              - --disable-telemetry
+              - --disable-update-check
+              - --user-data-dir
+              - /config/.code-server
+              - --extensions-dir
+              - /config/.code-server
+              - --port
+              - "12321"
+              - /config
+            env:
+              HASS_SERVER: http://localhost:8123
             resources:
               requests:
                 cpu: 10m
               limits:
-                memory: 2Gi
-          code-server:
-                image:
-                  repository: ghcr.io/coder/code-server
-                  tag: 4.97.2@sha256:6ff0e9cf5a553b3961ece200be75e21e8c887ed0ae28a7c28213722dccf74b0c
-                args:
-                  - --auth
-                  - none
-                  - --disable-telemetry
-                  - --disable-update-check
-                  - --user-data-dir
-                  - /config/.code-server
-                  - --extensions-dir
-                  - /config/.code-server
-                  - --port
-                  - "12321"
-                  - /config
-                resources:
-                  requests:
-                    cpu: 10m
-                  limits:
-                    memory: 4Gi
-
+                memory: 1Gi
     service:
       *app :
         controller: main
@@ -128,7 +125,13 @@ spec:
         existingClaim: fam-hass
         globalMounts:
           - path: /config
-
+      hass-cache:
+        existingClaim: hass-cache
+        advancedMounts:
+          main:
+            *app :
+              - path: /venv
+                subPath: hass-venv
       dockerenv:
         # Because of https://github.com/home-assistant/core/blob/0d66d298ec57b8e50379cc2ec31cbebf771705c3/homeassistant/util/package.py#L29
         enabled: true
