@@ -40,7 +40,7 @@ spec:
             memory: 8192Mi
         devices:
           interfaces:
-            - cluster:
+            - name: cluster
               masquerade: {}
             - name: lab
               bridge: {}
