@@ -49,7 +49,7 @@ metadata:
 spec:
   sourcePVC: "${APP}"
   trigger:
-    schedule: "0 3 * * *"
+    schedule: "${VOLSYNC_SCHEDULE:-0 3 * * *}"
   restic:
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     pruneIntervalDays: 14

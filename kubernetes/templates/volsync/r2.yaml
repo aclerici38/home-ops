@@ -29,7 +29,7 @@ spec:
 
   sourcePVC: "${APP}"
   trigger:
-    schedule: "30 0 * * 1"
+    schedule: "${VOLSYNC_SCHEDULE:-30 0 * * 1}"
   restic:
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     pruneIntervalDays: 14
