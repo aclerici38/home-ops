@@ -62,6 +62,9 @@ nodes:
             - siderolabs/iscsi-tools
     controlPlane: true
     networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "a0:36:9f:09:4c:8f"
+        ignore: true
       - interface: br0
         dhcp: false
         addresses:

@@ -25,8 +25,8 @@ spec:
         compression: bzip2
         maxParallel: 8
       destinationPath: s3://backups/cnpg
-      endpointURL: http://192.168.9.10:9000
-      serverName: &currentCluster atuin-db-v1
+      endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
+      serverName: &currentCluster atuin-db-v2
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -35,14 +35,14 @@ spec:
           name: cnpg-secret
           key: minio-secret-access-key
 
-  # bootstrap:
-  #   recovery:
-  #     source: &previousCluster atuin-db-v4
-  # externalClusters:
-  #   - name: *previousCluster
-  #     barmanObjectStore:
-  #       <<: *barmanObjectStore
-  #       serverName: *previousCluster
+  bootstrap:
+    recovery:
+      source: &previousCluster atuin-db-v1
+  externalClusters:
+    - name: *previousCluster
+      barmanObjectStore:
+        <<: *barmanObjectStore
+        serverName: *previousCluster
 
   monitoring:
     enablePodMonitor: true

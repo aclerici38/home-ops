@@ -25,8 +25,8 @@ spec:
         compression: bzip2
         maxParallel: 8
       destinationPath: s3://backups/cnpg
-      endpointURL: http://192.168.9.10:9000
-      serverName: &currentCluster mealie-db-v5
+      endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
+      serverName: &currentCluster mealie-db-v6
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -37,7 +37,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster mealie-db-v4
+      source: &previousCluster mealie-db-v5
   externalClusters:
     - name: *previousCluster
       barmanObjectStore:
