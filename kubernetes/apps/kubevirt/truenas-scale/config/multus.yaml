@@ -13,12 +13,7 @@ spec:
           "type": "macvlan",
           "master": "enp4s0f0",
           "mode": "bridge",
-          "ipam": {
-            "type": "static",
-            "addresses": [
-              { "address": "192.168.9.10/24", "gateway": "192.168.9.1" }
-            ]
-          }
+          "ipam": {}
         }
       ]
     }
