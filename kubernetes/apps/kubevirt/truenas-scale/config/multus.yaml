@@ -10,9 +10,9 @@ spec:
       "name": "multus-lab-truenas",
       "plugins": [
         {
-          "type": "macvlan",
-          "master": "enp4s0f0",
-          "mode": "bridge",
+          "type": "bridge",
+          "bridge": "br0",
+          "capabilities": { "mac": true },
           "ipam": {}
         }
       ]

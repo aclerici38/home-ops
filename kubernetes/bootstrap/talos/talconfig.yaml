@@ -62,8 +62,7 @@ nodes:
             - siderolabs/iscsi-tools
     controlPlane: true
     networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "a0:36:9f:09:4c:8f"
+      - interface: br0
         dhcp: false
         addresses:
           - "192.168.9.25/24"
@@ -71,6 +70,11 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
         mtu: 1500
+        bridge:
+          interfaces:
+            - enp4s0f0
+          stp:
+            enabled: true
       - interface: wg0
         addresses:
           - 10.10.0.1/24
@@ -118,7 +122,6 @@ nodes:
                 namespace: kube-system
               spec:
                 restartPolicy: Never
-                hostNetwork: true
                 hostPID: true
                 containers:
                   - name: vfio-bind
