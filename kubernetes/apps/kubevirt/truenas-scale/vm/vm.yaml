@@ -32,11 +32,13 @@ spec:
               persistent: true
               secureBoot: false
         cpu:
-          cores: 4
           model: host-passthrough
         resources:
           requests:
             memory: 8192Mi
+            cpu: 4
+          limits:
+            cpu: 0
         devices:
           interfaces:
             - name: lab
