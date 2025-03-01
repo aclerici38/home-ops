@@ -44,6 +44,23 @@ spec:
             podResourceRequirements:
               limits:
                 memory: "1G"
-        target:
-          group: cdi.kubevirt.io
-          kind: CDI
+      target:
+        group: cdi.kubevirt.io
+        kind: CDI
+    - patch: |-
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: cdi-operator
+          namespace: cdi
+        spec:
+          template:
+            spec:
+              nodeSelector:
+                kubernetes.io/os: linux
+                kubernetes.io/arch: amd64
+      target:
+        group: apps
+        kind: Deployment
+        name: cdi-operator
+        namespace: cdi
