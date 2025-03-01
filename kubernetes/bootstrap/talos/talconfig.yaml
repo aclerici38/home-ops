@@ -128,13 +128,10 @@ nodes:
                       - -c
                       - |
                         # Unbind each SATA controller from the AHCI driver
-                        echo -n "0000:02:09.0" > /sys/bus/pci/drivers/ahci/unbind
                         echo -n "0000:08:00.0" > /sys/bus/pci/drivers/ahci/unbind
-                        echo -n "0000:02:0a.0" > /sys/bus/pci/drivers/ahci/unbind
                         echo -n "0000:09:00.0" > /sys/bus/pci/drivers/ahci/unbind
                         # Bind the controllers to vfio-pci by registering the device/vendor IDs
                         echo "1022 7901" > /sys/bus/pci/drivers/vfio-pci/new_id
-                        echo "1022 57a4" > /sys/bus/pci/drivers/vfio-pci/new_id
                         sleep infinity
                     volumeMounts:
                       - name: sys
