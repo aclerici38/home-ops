@@ -50,12 +50,8 @@ spec:
               bootOrder: 2
           hostDevices:
             - name: sata-controller-1
-              deviceName: "amd.com/sata-controller-1"
+              deviceName: "amd.com/sata-controller"
             - name: sata-controller-2
-              deviceName: "amd.com/sata-controller-2"
-            # - name: pci-bridge-1
-            #   deviceName: "amd.com/pci-bridge"
-            # - name: pci-bridge-2
-            #   deviceName: "amd.com/pci-bridge"
+              deviceName: "amd.com/sata-controller"
       nodeSelector:
         kubernetes.io/hostname: bonds

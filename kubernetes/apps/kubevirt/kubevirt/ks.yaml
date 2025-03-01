@@ -49,10 +49,7 @@ spec:
             permittedHostDevices:
               pciHostDevices:
                 - pciVendorSelector: "1022:7901"
-                  resourceName: "amd.com/sata-controller-1"
-                - pciVendorSelector: "1022:7901"
-                  resourceName: "amd.com/sata-controller-2"
-            vmStateStorageClass: "local-hostpath"
+                  resourceName: "amd.com/sata-controller"
             developerConfiguration:
               featureGates:
                 - HostDevices
