@@ -15,6 +15,8 @@ spec:
     spec:
       hostname: truenas-scale
       networks:
+        - name: cluster
+          pod: {}
         - name: "lab"
           multus:
             networkName: multus-lab-truenas
@@ -41,6 +43,8 @@ spec:
             cpu: 0
         devices:
           interfaces:
+            - cluster:
+              masquerade: {}
             - name: lab
               bridge: {}
           disks:
