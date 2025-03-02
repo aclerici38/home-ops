@@ -52,14 +52,14 @@ spec:
       config:
         driver: freenas-api-nfs
         httpConnection:
-          protocol: https
-          host: truenas.${SECRET_DOMAIN}
-          port: 443
+          protocol: http
+          host: 10.38.55.50
+          port: 80
           apiKey: ${TRUENAS_API_KEY}
           allowInsecure: true
           apiVersion: 2
         sshConnection:
-          host: truenas-ssh.truenas-scale.svc.cluster.local
+          host: 10.38.55.50
           port: 22
           privateKey: ${TRUENAS_SSH_KEY}
         zfs:
