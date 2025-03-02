@@ -126,7 +126,7 @@ spec:
         globalMounts:
           - path: /config
       hass-cache:
-        existingClaim: hass-cache
+        existingClaim: fam-hass-cache
         advancedMounts:
           main:
             *app :
