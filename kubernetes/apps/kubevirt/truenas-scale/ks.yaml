@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: truenas-scale-config
   dependsOn:
     - name: kubevirt
-    - name: multus
+    # - name: multus
   path: ./kubernetes/apps/kubevirt/truenas-scale/config
   prune: true
   sourceRef:
