@@ -24,8 +24,8 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 25Gi
-      VOLSYNC_STORAGECLASS: local-hostpath
-      VOLSYNC_SNAPSHOTCLASS: local-hostpath
+      VOLSYNC_STORAGECLASS: &sc local-hostpath-posey
+      VOLSYNC_SNAPSHOTCLASS: *sc
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -53,5 +53,5 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 25Gi
-      VOLSYNC_STORAGECLASS: &sc local-hostpath-posey
+      VOLSYNC_STORAGECLASS: &sc local-hostpath
       VOLSYNC_SNAPSHOTCLASS: *sc
