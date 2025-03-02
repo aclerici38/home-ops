@@ -93,7 +93,7 @@ spec:
           - path: /mnt/calibre
       media:
         type: nfs
-        server: 192.168.9.10
+        server: truenas-nfs.truenas-scale.svc.cluster.local
         path: /mnt/tank/media
         globalMounts:
           - path: /allMedia

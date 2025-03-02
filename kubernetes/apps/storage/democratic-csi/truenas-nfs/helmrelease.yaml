@@ -53,13 +53,13 @@ spec:
         driver: freenas-api-nfs
         httpConnection:
           protocol: http
-          host: &tnas-ip 192.168.9.10
+          host: truenas-http.truenas-scale.svc.cluster.local
           port: 80
           apiKey: ${TRUENAS_API_KEY}
           allowInsecure: true
           apiVersion: 2
         sshConnection:
-          host: *tnas-ip
+          host: truenas-ssh.truenas-scale.svc.cluster.local
           port: 22
           privateKey: ${TRUENAS_SSH_KEY}
         zfs:
@@ -76,7 +76,7 @@ spec:
           datasetEnableQuotas: true
 
         nfs:
-          shareHost: *tnas-ip
+          shareHost: truenas-nfs.truenas-scale.svc.cluster.local
           shareAlldirs: false
           shareAllowedHosts: []
           shareAllowedNetworks: []

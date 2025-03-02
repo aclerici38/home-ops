@@ -41,6 +41,20 @@ spec:
             - name: cluster
               macAddress: 64:16:7F:D1:8A:C7
               masquerade: {}
+              ports:
+                - name: http
+                  port: 80
+                  protocol: TCP
+                - name: ssh
+                  port: 22
+                  protocol: TCP
+                - name: iscsi
+                  port: 3260
+                  protocol: TCP
+                - name: nfs
+                  port: 2049
+                - name: rcpbind
+                  port: 111
           disks:
             # - name: cdrom
             #   cdrom: {}

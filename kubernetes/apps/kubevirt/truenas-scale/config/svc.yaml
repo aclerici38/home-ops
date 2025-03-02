@@ -15,6 +15,32 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  name: truenas-ssh
+spec:
+  selector:
+    kubevirt.io/domain: truenas-scale
+  ports:
+    - protocol: TCP
+      port: 22
+      targetPort: 22
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: truenas-iscsi
+spec:
+  selector:
+    kubevirt.io/domain: truenas-scale
+  ports:
+    - protocol: TCP
+      port: 3260
+      targetPort: 3260
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: truenas-nfs
   annotations:
     io.cilium/lb-ipam-ips: 10.38.55.50
