@@ -54,9 +54,9 @@ spec:
       config:
         driver: freenas-api-iscsi
         httpConnection:
-          protocol: http
-          host: truenas-http.truenas-scale.svc.cluster.local
-          port: 80
+          protocol: https
+          host: truenas.${SECRET_DOMAIN}
+          port: 443
           apiKey: ${TRUENAS_API_KEY}
           allowInsecure: true
           apiVersion: 2
@@ -72,7 +72,7 @@ spec:
           detachedSnapshotsDatasetParentName: ssd/pvc-snapshots
           datasetEnableQuotas: true
         iscsi:
-          targetPortal: "truenas-iscsi.truenas-scale.svc.cluster.local:3260"
+          targetPortal: "10.38.55.51:3260"
           namePrefix: "iqn.2025-01.com.home-ops:k8s-csi-"
           nameSuffix: "-clustera"
           targetGroups:

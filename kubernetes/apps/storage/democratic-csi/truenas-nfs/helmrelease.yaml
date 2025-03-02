@@ -52,9 +52,9 @@ spec:
       config:
         driver: freenas-api-nfs
         httpConnection:
-          protocol: http
-          host: truenas-http.truenas-scale.svc.cluster.local
-          port: 80
+          protocol: https
+          host: truenas.${SECRET_DOMAIN}
+          port: 443
           apiKey: ${TRUENAS_API_KEY}
           allowInsecure: true
           apiVersion: 2
@@ -76,7 +76,7 @@ spec:
           datasetEnableQuotas: true
 
         nfs:
-          shareHost: truenas-nfs.truenas-scale.svc.cluster.local
+          shareHost: 10.38.55.50
           shareAlldirs: false
           shareAllowedHosts: []
           shareAllowedNetworks: []
