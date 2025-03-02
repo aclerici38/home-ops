@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name local-path
+  name: &name local-path-bonds
 
 spec:
   interval: 30m
@@ -30,6 +30,8 @@ spec:
       namespace: storage
   values:
     controller:
+      nodeSelector: &ns
+        kubernetes.io/hostname: bonds
       fullnameOverride: *name
       enabled: true
       strategy: node
@@ -55,40 +57,39 @@ spec:
           - --leader-election=false
           - --node-deployment=true
     csiDriver:
-      name: local-hostpath.cluster.local
+      name: local-hostpath-bonds.cluster.local
       attachRequired: false
       storageCapacity: true
       fsGroupPolicy: File
     storageClasses:
-      - name: &sc local-hostpath
-        defaultClass: true
+      - name: &sc local-hostpath-bonds
+        defaultClass: false
         reclaimPolicy: Delete
         volumeBindingMode: WaitForFirstConsumer
         allowVolumeExpansion: true
     volumeSnapshotClasses:
       - name: *sc
-        annotations:
-          snapshot.storage.kubernetes.io/is-default-class: "true"
         deletionPolicy: Delete
         parameters: {}
     driver:
       config:
-        driver: local-hostpath
+        driver: local-hostpath-bonds
         local-hostpath:
-          shareBasePath: &storagePath /var/lib/csi-local-hostpath/global
+          shareBasePath: &storagePath /var/lib/csi-local-hostpath/bonds
           controllerBasePath: *storagePath
           dirPermissionsMode: "0770"
           dirPermissionsUser: 0
           dirPermissionsGroup: 0
     node:
+      nodeSelector: *ns
       driver:
         image: ghcr.io/democratic-csi/democratic-csi:v1.9.3@sha256:8ce65ce5bd9b9cdd79ace0e94b6652a233cfbfb26af177fb7912c1217a3f2c19
         extraVolumeMounts:
-          - name: local-hostpath
+          - name: local-hostpath-bonds
             mountPath: *storagePath
             mountPropagation: Bidirectional
       extraVolumes:
-        - name: local-hostpath
+        - name: local-hostpath-bonds
           hostPath:
             path: *storagePath
             type: DirectoryOrCreate
