@@ -10,6 +10,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: cloudnative-pg
+    - name: truenas-scale
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

@@ -22,6 +22,7 @@ spec:
     - name: volsync
     - name: external-secrets-stores
     - name: reflector
+    - name: truenas-scale
   postBuild:
     substitute:
       APP: *app

@@ -9,6 +9,7 @@ spec:
   targetNamespace: default
   dependsOn:
     - name: volsync
+    - name: truenas-scale
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -34,6 +35,8 @@ metadata:
   namespace: flux-system
 spec:
   targetNamespace: default
+  dependsOn:
+    - name: truenas-scale
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
