@@ -25,7 +25,7 @@ spec:
     - protocol: TCP
       port: 22
       targetPort: 22
-  type: ClusterIP
+  type: LoadBalancer
 ---
 apiVersion: v1
 kind: Service
@@ -40,7 +40,7 @@ spec:
     - protocol: TCP
       port: 3260
       targetPort: 3260
-  type: ClusterIP
+  type: LoadBalancer
 ---
 apiVersion: v1
 kind: Service
