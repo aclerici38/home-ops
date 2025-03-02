@@ -138,7 +138,11 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /.dockerenv
-
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+          - path: /nonexistent
       logs:
         type: emptyDir
         globalMounts:
