@@ -17,13 +17,10 @@ spec:
       networks:
         - name: cluster
           pod: {}
-        # - name: "lab"
-        #   multus:
-        #     networkName: multus-lab-truenas
       volumes:
-        - name: cdrom
-          dataVolume:
-            name: truenas-scale-iso
+        # - name: cdrom
+        #   dataVolume:
+        #     name: truenas-scale-iso
         - name: boot
           persistentVolumeClaim:
             claimName: truenas-scale
@@ -44,8 +41,6 @@ spec:
             - name: cluster
               macAddress: 64:16:7F:D1:8A:C7
               masquerade: {}
-            # - name: lab
-            #   bridge: {}
           disks:
             # - name: cdrom
             #   cdrom: {}
