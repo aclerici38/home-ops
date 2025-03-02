@@ -21,17 +21,17 @@ metadata:
 spec:
   selector:
     kubevirt.io/domain: truenas-scale
-    ports:
-      - protocol: TCP
-        port: 2049
-        targetPort: 2049
-      - protocol: UDP
-        port: 2049
-        targetPort: 2049
-      - protocol: TCP
-        port: 111
-        targetPort: 111
-      - protocol: UDP
-        port: 111
-        targetPort: 111
+  ports:
+    - protocol: TCP
+      port: 2049
+      targetPort: 2049
+    - protocol: UDP
+      port: 2049
+      targetPort: 2049
+    - protocol: TCP
+      port: 111
+      targetPort: 111
+    - protocol: UDP
+      port: 111
+      targetPort: 111
   type: LoadBalancer

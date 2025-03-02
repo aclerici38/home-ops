@@ -1,18 +1,18 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app open-webui
+  name: &app mealie
 spec:
   interval: 30m
   chart:
     spec:
-      chart: open-webui
-      version: 5.19.0
+      chart: app-template
+      version: 3.7.1
       sourceRef:
         kind: HelmRepository
-        name: open-webui
+        name: bjw-s
         namespace: flux-system
   install:
     timeout: 2m
@@ -25,62 +25,120 @@ spec:
       strategy: rollback
       retries: 1
   values:
-    ollama:
-      enabled: false
-    pipelines:
-      enabled: false
+    controllers:
+      main:
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 16.8@sha256:217c47c886965474f5c234b5a35ed008f53b39ea90a3088b31c0da98e1f9284d
+            env:
+              - name: INIT_POSTGRES_SUPER_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: cnpg-secret
+                    key: username
+              - name: INIT_POSTGRES_SUPER_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: cnpg-secret
+                    key: password
+              - name: INIT_POSTGRES_DBNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: mealie-secret
+                    key: POSTGRES_DB
+              - name: INIT_POSTGRES_HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: mealie-secret
+                    key: POSTGRES_SERVER
+              - name: INIT_POSTGRES_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: mealie-secret
+                    key: POSTGRES_USER
+              - name: INIT_POSTGRES_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: mealie-secret
+                    key: POSTGRES_PASSWORD
+        containers:
+          *app :
+            image:
+              repository: ghcr.io/mealie-recipes/mealie
+              tag: v2.7.1@sha256:708e9ffb843bafdcebf46ee35bb45d1b003518e8c204483a1da039b4076ef980
+            env:
+              DB_ENGINE: postgres
+              BASE_URL: https://mealie.${SECRET_DOMAIN}
+              TZ: ${TZ}
+              DAILY_SCHEDULE_TIME: 05:00
+              ALLOW_SIGNUP: "false"
+              LOG_LEVEL: debug
 
-    image:
-      repository: ghcr.io/open-webui/open-webui
-      tag: 0.5.16@sha256:aeb69f75b1a841780c3275637b7fc4e53defcbff22c6bbb6fceb4f3511736436
+              # OIDC
+              OIDC_AUTH_ENABLED: "true"
+              OIDC_SIGNUP_ENABLED: "true"
+              OIDC_PROVIDER_NAME: Authentik
+              OIDC_REMEMBER_ME: "true"
+              OIDC_USER_GROUP: "mealie_users"
+              OIDC_ADMIN_GROUP: "mealie_admins"
+              OIDC_USER_CLAIM: email
+              OIDC_AUTO_REDIRECT: 'false'
 
+              # ollama
+              # OPENAI_BASE_URL: http://ollama.utilities:11434/v1
+              # OPENAI_MODEL: llama3.2-vision-custom
+              # OPENAI_WORKERS: 1
+              # OPENAI_SEND_DATABASE_DATA: 'false'
+              # OPENAI_REQUEST_TIMEOUT: 120
+
+            envFrom:
+              - secretRef:
+                  name: mealie-secret
+            securityContext:
+              readOnlyRootFilesystem: true
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+              limits:
+                memory: 2Gi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      *app :
+        controller: main
+        ports:
+          http:
+            port: 9000
     ingress:
-      enabled: true
-      class: internal
-      host: ai.${SECRET_DOMAIN}
-      tls: true
+      *app :
+        className: external
+        annotations:
+          nginx.ingress.kubernetes.io/proxy-body-size: "1g"
+        hosts:
+          - host: "mealie.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: *app
+                  port: http
 
-    ollamaUrls:
-      - http://ollama.cluster-utilities.svc.cluster.local:11434
     persistence:
-      enabled: true
-      existingClaim: *app
-
-    extraEnvVars:
-      - name: ENABLE_LOGIN_FORM
-        value: "False"
-      - name: ENABLE_OAUTH_SIGNUP
-        value: "True"
-      - name: OAUTH_MERGE_ACCOUNTS_BY_EMAIL
-        value: "True"
-      - name: OAUTH_PROVIDER_NAME
-        value: Authentik
-      - name: OPENID_REDIRECT_URI
-        value: https://ai.${SECRET_DOMAIN}/oauth/oidc/callback
-      - name: OPENID_PROVIDER_URL
-        value: https://auth.${SECRET_DOMAIN}/application/o/open-webui/.well-known/openid-configuration
-      - name: OAUTH_CLIENT_ID
-        valueFrom:
-          secretKeyRef:
-            name: open-webui-secret
-            key: OAUTH_CLIENT_ID
-      - name: OAUTH_CLIENT_SECRET
-        valueFrom:
-          secretKeyRef:
-            name: open-webui-secret
-            key: OAUTH_CLIENT_SECRET
-      - name: OPENAI_API_KEY
-        valueFrom:
-          secretKeyRef:
-            name: open-webui-secret
-            key: OPENAI_API_KEY
-
-    containerSecurityContext:
-      privileged: false
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: false
-      capabilities:
-        drop:
-          - ALL
-      seccompProfile:
-        type: "RuntimeDefault"
+      config:
+        existingClaim: mealie-data
+        globalMounts:
+          - path: /app/data
+      # Needed for recipe parser
+      tmp:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
