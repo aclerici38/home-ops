@@ -22,16 +22,20 @@ spec:
   selector:
     kubevirt.io/domain: truenas-scale
   ports:
-    - protocol: TCP
+    - name: nfs-tcp
+      protocol: TCP
       port: 2049
       targetPort: 2049
-    - protocol: UDP
+    - name: nfs-udp
+      protocol: UDP
       port: 2049
       targetPort: 2049
-    - protocol: TCP
+    - name: rpcbind-tcp
+      protocol: TCP
       port: 111
       targetPort: 111
-    - protocol: UDP
+    - name: rpcbind-udp
+      protocol: UDP
       port: 111
       targetPort: 111
   type: LoadBalancer
