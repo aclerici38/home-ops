@@ -29,9 +29,19 @@ spec:
       retries: 1
   values:
     controllers:
-      server:
+      main:
         pod:
           hostname: ff-server
+          runtimeClassName: nvidia
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            seccompProfile: { type: RuntimeDefault }
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
         containers:
           app:
             image:
@@ -53,33 +63,9 @@ spec:
               capabilities:
                 drop:
                   - ALL
-      node:
-        pod:
-          hostname: ff-local-node
-        containers:
-          app:
-            image:
-              repository: ghcr.io/ant385525/fileflows-node
-              tag: 25.2.9.4516@sha256:9efa4f0dd51c3c3fd4c3e830e86eb38b062dce3e651c7ea1605c9d8c8336fbf8
-            env:
-              TZ: "${TZ}"
-              ServerUrl: http://fileflows:5000
-            resources: *resources
-            securityContext: *secOps
-    defaultPodOptions:
-      runtimeClassName: nvidia
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: Always
-        seccompProfile: { type: RuntimeDefault }
-      nodeSelector:
-        kubernetes.io/hostname: "bonds"
     service:
       *app :
-        controller: server
+        controller: main
         ports:
           http:
             port: 5000
@@ -99,48 +85,22 @@ spec:
     persistence:
       config:
         existingClaim: *app
-        advancedMounts:
-          server:
-            app:
-              - path: /app/Data
-      node-data:
-        type: emptyDir
-        advancedMounts:
-          node:
-            app:
-              - path: /app/Data
-      server-logs:
+        globalMounts:
+          - path: /app/Data
+      logs:
         enabled: true
         existingClaim: fileflows-logs
-        advancedMounts:
-          server:
-            app:
-              - path: /app/Logs
-      node-logs:
-        enabled: true
-        type: emptyDir
-        sizeLimit: 1Gi
-        advancedMounts:
-          node:
-            app:
-              - path: /app/Logs
+        globalMounts:
+          - path: /app/Logs
       temp:
         enabled: true
         type: emptyDir
         globalMounts:
           - path: /temp
-      server-common:
-        existingClaim: fileflows-server-common
-        advancedMounts:
-          server:
-            app:
-              - path: /app/common
-      node-common:
-        existingClaim: fileflows-node-common
-        advancedMounts:
-          node:
-            app:
-              - path: /app/common
+      common:
+        existingClaim: fileflows-common
+        globalMounts:
+          - path: /app/common
       dockermods:
         type: emptyDir
         globalMounts:
