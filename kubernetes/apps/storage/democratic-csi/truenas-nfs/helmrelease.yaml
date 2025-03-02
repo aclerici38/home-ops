@@ -53,13 +53,13 @@ spec:
         driver: freenas-api-nfs
         httpConnection:
           protocol: http
-          host: 10.38.55.50
+          host: 127.0.0.1
           port: 80
           apiKey: ${TRUENAS_API_KEY}
           allowInsecure: true
           apiVersion: 2
         sshConnection:
-          host: 10.38.55.50
+          host: 127.0.0.1
           port: 22
           privateKey: ${TRUENAS_SSH_KEY}
         zfs:
@@ -76,7 +76,7 @@ spec:
           datasetEnableQuotas: true
 
         nfs:
-          shareHost: 10.38.55.50
+          shareHost: 127.0.0.1
           shareAlldirs: false
           shareAllowedHosts: []
           shareAllowedNetworks: []
