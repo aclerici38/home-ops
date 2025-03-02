@@ -17,9 +17,9 @@ spec:
       networks:
         - name: cluster
           pod: {}
-        - name: "lab"
-          multus:
-            networkName: multus-lab-truenas
+        # - name: "lab"
+        #   multus:
+        #     networkName: multus-lab-truenas
       volumes:
         - name: cdrom
           dataVolume:
@@ -44,8 +44,8 @@ spec:
             - name: cluster
               masquerade: {}
               macAddress: "02:00:00:00:00:02"
-            - name: lab
-              bridge: {}
+            # - name: lab
+            #   bridge: {}
           disks:
             # - name: cdrom
             #   cdrom: {}
