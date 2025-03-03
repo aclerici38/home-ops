@@ -59,7 +59,7 @@ spec:
               ENABLE_AUTOCOMPLETE_GENERATION: false # annoying
               WEBUI_URL: &host ai.${SECRET_DOMAIN}
               CORS_ALLOW_ORIGIN: *host
-              SEARXNG_QUERY_URL: searxng.home.svc.cluster.local:8080/search?q=<query>
+              SEARXNG_QUERY_URL: http://searxng.home.svc.cluster.local:8080/search?q=<query>
 
               ENABLE_RAG_WEB_SEARCH: true
               RAG_WEB_SEARCH_ENGINE: searxng
