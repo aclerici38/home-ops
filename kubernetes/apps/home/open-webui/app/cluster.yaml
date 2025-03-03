@@ -35,9 +35,16 @@ spec:
           name: cnpg-secret
           key: minio-secret-access-key
 
-  # bootstrap:
+  bootstrap:
   #   recovery:
   #     source: &previousCluster open-webui-db-v1
+    initdb:
+      database: open-webui
+      owner: open-webui_user
+      secret:
+        name: open-webui-secret
+      postInitSQL:
+        - ALTER ROLE open-webui_user WITH SUPERUSER;
   # externalClusters:
   #   - name: *previousCluster
   #     barmanObjectStore:
