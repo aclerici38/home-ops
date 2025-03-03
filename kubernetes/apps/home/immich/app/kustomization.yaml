@@ -6,8 +6,6 @@ resources:
   - ./cluster.yaml
   - ./dragonfly.yaml
   - ./cache-pvc.yaml
-  # - ../../../../templates/volsync/claim.yaml
-  # use temp library since I have the files local already
-  - ./temp-library.yaml
+  - ../../../../templates/volsync/claim.yaml
   - ../../../../templates/volsync/r2.yaml
   - ./helmrelease.yaml
