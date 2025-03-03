@@ -113,4 +113,7 @@ spec:
           - path: /app/backend/data
       tmp:
         type: emptyDir
-      
+      postgres:
+        type: emptyDir
+        globalMounts:
+          - path: /root/.postgresql
