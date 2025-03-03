@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app mealie
+  name: &app open-webui
 spec:
   interval: 30m
   chart:
@@ -43,67 +43,43 @@ spec:
                   secretKeyRef:
                     name: cnpg-secret
                     key: password
-              - name: INIT_POSTGRES_DBNAME
-                valueFrom:
-                  secretKeyRef:
-                    name: mealie-secret
-                    key: POSTGRES_DB
-              - name: INIT_POSTGRES_HOST
-                valueFrom:
-                  secretKeyRef:
-                    name: mealie-secret
-                    key: POSTGRES_SERVER
-              - name: INIT_POSTGRES_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: mealie-secret
-                    key: POSTGRES_USER
-              - name: INIT_POSTGRES_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: mealie-secret
-                    key: POSTGRES_PASSWORD
+            envFrom: &envFrom
+              - secretRef:
+                  name: open-webui-secret
         containers:
           *app :
             image:
-              repository: ghcr.io/mealie-recipes/mealie
+              repository: ghcr.io/open-webui-recipes/open-webui
               tag: v2.7.1@sha256:708e9ffb843bafdcebf46ee35bb45d1b003518e8c204483a1da039b4076ef980
             env:
-              DB_ENGINE: postgres
-              BASE_URL: https://mealie.${SECRET_DOMAIN}
-              TZ: ${TZ}
-              DAILY_SCHEDULE_TIME: 05:00
-              ALLOW_SIGNUP: "false"
-              LOG_LEVEL: debug
+              # ENABLE_LOGIN_FORM: false
+              DEFAULT_USER_ROLE: user
+              USE_CUDA_DOCKER: true
+              OLLAMA_BASE_URL: http://ollama.cluster-utilities.svc.cluster.local:11434
+              ENABLE_AUTOCOMPLETE_GENERATION: false # annoying
+              WEBUI_URL: &host ai.${SECRET_DOMAIN}
+              CORS_ALLOW_ORIGIN: *host
+              SEARXNG_QUERY_URL: searxng.home.svc.cluster.local:8080/search?q=<query>
 
-              # OIDC
-              OIDC_AUTH_ENABLED: "true"
-              OIDC_SIGNUP_ENABLED: "true"
-              OIDC_PROVIDER_NAME: Authentik
-              OIDC_REMEMBER_ME: "true"
-              OIDC_USER_GROUP: "mealie_users"
-              OIDC_ADMIN_GROUP: "mealie_admins"
-              OIDC_USER_CLAIM: email
-              OIDC_AUTO_REDIRECT: 'false'
+              ENABLE_RAG_WEB_SEARCH: true
+              RAG_WEB_SEARCH_ENGINE: searxng
+              VECTOR_DB: pgvector
+              RAG_EMBEDDING_ENGINE: ollama
 
-              # ollama
-              # OPENAI_BASE_URL: http://ollama.utilities:11434/v1
-              # OPENAI_MODEL: llama3.2-vision-custom
-              # OPENAI_WORKERS: 1
-              # OPENAI_SEND_DATABASE_DATA: 'false'
-              # OPENAI_REQUEST_TIMEOUT: 120
-
-            envFrom:
-              - secretRef:
-                  name: mealie-secret
+              ENABLE_OAUTH_SIGNUP: true
+              OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
+              OAUTH_ALLOWED_DOMAINS: auth.${SECRET_DOMAIN}
+              OAUTH_PROVIDER_NAME: Authentik
+            envFrom: *envFrom
             securityContext:
               readOnlyRootFilesystem: true
             resources:
               requests:
-                cpu: 100m
+                cpu: 800m
                 memory: 100Mi
               limits:
-                memory: 2Gi
+                memory: 4Gi
+                nvidia.com/gpu: 1
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -117,28 +93,21 @@ spec:
         controller: main
         ports:
           http:
-            port: 9000
+            port: 8080
     ingress:
       *app :
         className: external
         annotations:
           nginx.ingress.kubernetes.io/proxy-body-size: "1g"
         hosts:
-          - host: "mealie.${SECRET_DOMAIN}"
+          - host: *host
             paths:
               - path: /
                 service:
                   identifier: *app
                   port: http
-
     persistence:
       config:
-        existingClaim: mealie-data
+        existingClaim: *app
         globalMounts:
-          - path: /app/data
-      # Needed for recipe parser
-      tmp:
-        enabled: true
-        type: emptyDir
-        globalMounts:
-          - path: /tmp
+          - path: /app/backend/data
