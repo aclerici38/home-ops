@@ -15,7 +15,7 @@ spec:
     - name: reflector
     - name: external-secrets-stores
   path: ./kubernetes/apps/home/immich/app
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
