@@ -177,7 +177,7 @@ spec:
           memory: 500Mi
         limits:
           nvidia.com/gpu: 1
-          memory: 4Gi
+          memory: 6Gi
 
     machine-learning:
       nodeSelector: *nodeSelector
