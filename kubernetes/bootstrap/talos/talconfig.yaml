@@ -59,7 +59,6 @@ nodes:
           officialExtensions:
             - siderolabs/nvidia-container-toolkit-production
             - siderolabs/nonfree-kmod-nvidia-production
-            - siderolabs/iscsi-tools
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -172,7 +171,6 @@ nodes:
           officialExtensions:
             - siderolabs/nvidia-container-toolkit-production
             - siderolabs/nonfree-kmod-nvidia-production
-            - siderolabs/iscsi-tools
     controlPlane: true
     networkInterfaces:
       - interface: bond0
@@ -231,11 +229,6 @@ nodes:
       mode: cloud
     nodeLabels:
       location: "cloud"
-    schematic:
-      customization:
-        systemExtensions:
-          officialExtensions:
-            - siderolabs/iscsi-tools
     controlPlane: true
     networkInterfaces:
       - interface: eth0

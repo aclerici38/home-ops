@@ -34,22 +34,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: truenas-iscsi
-  annotations:
-    io.cilium/lb-ipam-ips: 10.38.55.50
-    lbipam.cilium.io/sharing-key: truenas
-spec:
-  selector:
-    kubevirt.io/domain: truenas-scale
-  ports:
-    - protocol: TCP
-      port: 3260
-      targetPort: 3260
-  type: LoadBalancer
----
-apiVersion: v1
-kind: Service
-metadata:
   name: truenas-nfs
   annotations:
     io.cilium/lb-ipam-ips: 10.38.55.50
