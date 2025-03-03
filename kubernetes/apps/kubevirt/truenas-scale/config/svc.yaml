@@ -5,7 +5,7 @@ metadata:
   name: truenas-http
   annotations:
     io.cilium/lb-ipam-ips: 10.38.55.50
-    lbipam.cilium.io/sharing-key: please
+    lbipam.cilium.io/sharing-key: truenas
 spec:
   selector:
     kubevirt.io/domain: truenas-scale
