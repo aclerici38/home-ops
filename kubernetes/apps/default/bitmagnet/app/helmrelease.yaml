@@ -71,7 +71,6 @@ spec:
               tag: v3.40.0@sha256:2b42bfa046757145a5155acece417b65b4443c8033fb88661a8e9dcf7fda5a00
             env:
               DOT: "off"
-              DNS_ADDRESS: 172.17.0.11
               VPN_SERVICE_PROVIDER: custom
               VPN_TYPE: wireguard
               VPN_INTERFACE: wg0
@@ -95,7 +94,7 @@ spec:
           bitmagnet:
             image:
               repository: ghcr.io/bitmagnet-io/bitmagnet
-              tag: v0.10.0-beta.7@sha256:e62f79bdc4ea949c774727031caa31588e305e36eb3cf5993515dd40fa1867ba
+              tag: v0.10.0@sha256:cf2c16fac5b51f1c18e630b4710175d35d7e44b83012cfd05a2b43712feec05e
             env:
               TZ: ${TZ}
               CLASSIFIER_DELETE_XXX: true
@@ -152,11 +151,3 @@ spec:
                 service:
                   identifier: ui
                   port: http
-    persistence:
-      qbtun:
-        type: hostPath
-        hostPath: /dev/net
-        advancedMounts:
-          main:
-            gluetun:
-              - path: /dev/net
