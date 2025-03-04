@@ -1,0 +1,39 @@
+---
+use_default_settings: true
+
+server:
+  public_instance: false
+
+search:
+  languages:
+    - en
+    - en-US
+
+ui:
+  default_theme: simple
+  infinite_scroll: true
+  query_in_title: true
+  static_use_hash: true
+  theme_args:
+    simple_style: auto
+
+enabled_plugins:
+  - Basic Calculator
+  - Hash plugin
+  - Hostnames plugin
+  - Open Access DOI rewrite
+  - Self Informations
+  - Tracker URL remover
+  - Unit converter plugin
+
+hostnames:
+  high_priority:
+    - (.*)\/blog\/(.*)
+    - (.*\.)?wikipedia.org$
+    - (.*\.)?github.com$
+    - (.*\.)?reddit.com$
+    - (.*\.)?docker.com$
+    - (.*\.)?archlinux.org$
+    - (.*\.)?stackoverflow.com$
+    - (.*\.)?askubuntu.com$
+    - (.*\.)?superuser.com$
