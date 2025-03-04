@@ -105,6 +105,9 @@ spec:
           - path: /etc/searxng/settings.yml
             subPath: settings.yml
             readOnly: true
+          - path: /etc/searxng/limiter.toml
+            subPath: limiter.toml
+            readOnly: true
       tmp:
         enabled: true
         type: emptyDir
