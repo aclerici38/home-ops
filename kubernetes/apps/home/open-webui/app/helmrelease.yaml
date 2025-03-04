@@ -53,7 +53,7 @@ spec:
               repository: ghcr.io/open-webui/open-webui
               tag: v0.5.18@sha256:e774a5e695890b990ec2aa2f83ff52ff41d1f3fa33df11207d2418a2bc89ac63
             env:
-              # ENABLE_LOGIN_FORM: false
+              ENABLE_LOGIN_FORM: false
               DEFAULT_USER_ROLE: user
               OLLAMA_BASE_URL: http://ollama.cluster-utilities.svc.cluster.local:11434
               ENABLE_AUTOCOMPLETE_GENERATION: false # annoying
@@ -68,7 +68,6 @@ spec:
 
               ENABLE_OAUTH_SIGNUP: true
               OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
-              OAUTH_ALLOWED_DOMAINS: auth.${SECRET_DOMAIN}
               OAUTH_PROVIDER_NAME: Authentik
             envFrom:
               - secretRef:
