@@ -44,7 +44,7 @@ spec:
       secret:
         name: open-webui-secret
       postInitSQL:
-        - ALTER ROLE "open-webui_user WITH SUPERUSER;"
+        - ALTER ROLE "open-webui_user" WITH SUPERUSER;
   # externalClusters:
   #   - name: *previousCluster
   #     barmanObjectStore:
