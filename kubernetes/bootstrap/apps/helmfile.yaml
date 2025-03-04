@@ -58,7 +58,7 @@ releases:
   - name: dnscrypt-proxy
     namespace: network
     chart: oci://ghcr.io/bjw-s/helm/app-template
-    version: 3.7.1
+    version: 3.7.2
     values:
       - ../../apps/network/dnscrypt-proxy/app/helm-values.yaml
     needs:
@@ -94,7 +94,7 @@ releases:
   - name: onepassword-connect
     namespace: external-secrets
     chart: oci://ghcr.io/bjw-s/helm/app-template
-    version: 3.7.1
+    version: 3.7.2
     values:
       - ../../apps/external-secrets/onepassword-connect/app/helm-values.yaml
     needs:
