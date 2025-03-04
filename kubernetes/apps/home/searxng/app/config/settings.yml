@@ -3,6 +3,12 @@ use_default_settings: true
 
 server:
   public_instance: false
+  limiter: true
+  image_proxy: true
+  method: GET # https://github.com/searxng/searxng/pull/3619
+
+redis:
+  url: redis://searxng-dragonfly.home.svc.cluster.local:6379
 
 search:
   languages:
@@ -10,12 +16,12 @@ search:
     - en-US
 
 ui:
-  default_theme: simple
-  infinite_scroll: true
-  query_in_title: true
   static_use_hash: true
+  default_theme: simple
   theme_args:
-    simple_style: auto
+    simple_style: dark
+  infinite_scroll: true
+  results_on_new_tab: true
 
 enabled_plugins:
   - Basic Calculator
