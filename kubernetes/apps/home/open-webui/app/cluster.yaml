@@ -7,7 +7,7 @@ metadata:
   name: open-webui-db
 spec:
   instances: 1
-  imageName: ghcr.io/cloudnative-pg/postgresql:16.8@sha256:6ee982706d2d962ddc0ac123d7006094e51bed1fa994a2f05dd1268d4a446c70
+  imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:17.4
   primaryUpdateStrategy: unsupervised
   storage:
     size: 2Gi
@@ -15,6 +15,10 @@ spec:
   superuserSecret:
     name: cnpg-secret
   enableSuperuserAccess: true
+
+  postgresql:
+    shared_preload_libraries:
+      - "vectors.so"
 
   backup:
     retentionPolicy: 7d
@@ -45,6 +49,8 @@ spec:
         name: open-webui-secret
       postInitSQL:
         - ALTER ROLE "open-webui_user" WITH SUPERUSER;
+        - ALTER SYSTEM SET search_path TO "$user", public, vectors;
+        - CREATE EXTENSION IF NOT EXISTS "vectors";
   # externalClusters:
   #   - name: *previousCluster
   #     barmanObjectStore:
