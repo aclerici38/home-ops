@@ -88,7 +88,7 @@ spec:
 
     ingress:
       *app :
-        className: "internal"
+        className: "external"
         hosts:
           - host: search.${SECRET_DOMAIN}
             paths:
