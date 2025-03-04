@@ -57,7 +57,7 @@ spec:
               USE_CUDA_DOCKER: true
               OLLAMA_BASE_URL: http://ollama.cluster-utilities.svc.cluster.local:11434
               ENABLE_AUTOCOMPLETE_GENERATION: false # annoying
-              WEBUI_URL: &host ai.${SECRET_DOMAIN}
+              WEBUI_URL: &host https://ai.${SECRET_DOMAIN}
               CORS_ALLOW_ORIGIN: *host
               SEARXNG_QUERY_URL: http://searxng.home.svc.cluster.local:8080/search?q=<query>
 
@@ -102,7 +102,7 @@ spec:
         annotations:
           nginx.ingress.kubernetes.io/proxy-body-size: "1g"
         hosts:
-          - host: *host
+          - host: ai.${SECRET_DOMAIN}
             paths:
               - path: /
                 service:
@@ -115,7 +115,3 @@ spec:
           - path: /app/backend/data
       tmp:
         type: emptyDir
-      postgres:
-        type: emptyDir
-        globalMounts:
-          - path: /root/.postgresql
