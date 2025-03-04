@@ -74,6 +74,7 @@ spec:
     service:
       *app :
         controller: main
+        primary: true
         nameOverride: *app
         ports:
           http:

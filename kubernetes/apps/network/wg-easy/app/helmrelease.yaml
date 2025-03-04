@@ -67,6 +67,7 @@ spec:
     service:
       ui:
         controller: main
+        primary: true
         ports:
           http:
             port: *uiPort
