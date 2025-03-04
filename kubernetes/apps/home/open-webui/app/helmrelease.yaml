@@ -27,6 +27,7 @@ spec:
   values:
     controllers:
       main:
+        strategy: RollingUpdate
         # initContainers:
         #   init-db:
         #     image:
@@ -54,7 +55,6 @@ spec:
             env:
               # ENABLE_LOGIN_FORM: false
               DEFAULT_USER_ROLE: user
-              USE_CUDA_DOCKER: true
               OLLAMA_BASE_URL: http://ollama.cluster-utilities.svc.cluster.local:11434
               ENABLE_AUTOCOMPLETE_GENERATION: false # annoying
               WEBUI_URL: &host https://ai.${SECRET_DOMAIN}
@@ -81,7 +81,6 @@ spec:
                 memory: 100Mi
               limits:
                 memory: 4Gi
-                nvidia.com/gpu: 1
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
