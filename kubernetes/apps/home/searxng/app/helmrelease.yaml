@@ -39,7 +39,7 @@ spec:
           *app :
             image:
               repository: docker.io/searxng/searxng
-              tag: 2024.6.30-39aaac40d
+              tag: 2025.3.2-b0beb307c
             env:
               SEARXNG_BASE_URL: &url https://search.${SECRET_DOMAIN}
               SEARXNG_URL: *url
@@ -89,6 +89,10 @@ spec:
     ingress:
       *app :
         className: "internal"
+        annotations:
+          nginx.org/proxy_set_headers: |
+                X-Forwarded-For $proxy_add_x_forwarded_for;
+                X-Real-IP $remote_addr;
         hosts:
           - host: search.${SECRET_DOMAIN}
             paths:
