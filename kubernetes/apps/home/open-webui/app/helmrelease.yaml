@@ -28,25 +28,6 @@ spec:
     controllers:
       main:
         strategy: RollingUpdate
-        # initContainers:
-        #   init-db:
-        #     image:
-        #       repository: ghcr.io/onedr0p/postgres-init
-        #       tag: 16.8@sha256:217c47c886965474f5c234b5a35ed008f53b39ea90a3088b31c0da98e1f9284d
-        #     env:
-        #       - name: INIT_POSTGRES_SUPER_USER
-        #         valueFrom:
-        #           secretKeyRef:
-        #             name: cnpg-secret
-        #             key: username
-        #       - name: INIT_POSTGRES_SUPER_PASS
-        #         valueFrom:
-        #           secretKeyRef:
-        #             name: cnpg-secret
-        #             key: password
-            # envFrom: &envFrom
-            #   - secretRef:
-            #       name: open-webui-secret
         containers:
           *app :
             image:

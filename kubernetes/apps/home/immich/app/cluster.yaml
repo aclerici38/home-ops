@@ -9,7 +9,7 @@ spec:
     nodeSelector:
       kubernetes.io/hostname: bonds
   instances: 1
-  imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.3
+  imageName: tensorchord/vchord_bm25-postgres:pg16-v0.1.1
   primaryUpdateStrategy: unsupervised
   storage:
     size: 20Gi
