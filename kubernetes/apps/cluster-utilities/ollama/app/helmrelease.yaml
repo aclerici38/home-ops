@@ -66,11 +66,8 @@ spec:
           http:
             port: 11434
     persistence:
+      # ollama mounts models and certs into ~/.ollama. when using 65534 user is 'nonexistent'
       config:
         existingClaim: ollama
-        globalMounts:
-          - path: /.ollama
-      nonexistent:
-        type: emptyDir
         globalMounts:
           - path: /nonexistent
