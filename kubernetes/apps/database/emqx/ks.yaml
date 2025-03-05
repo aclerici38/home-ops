@@ -10,7 +10,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: onepassword
+    - name: onepassword-connect
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
@@ -39,7 +39,6 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: emqx
-      namespace: &namespace database
   healthCheckExprs:
     - apiVersion: apps.emqx.io/v2beta1
       kind: EMQX
@@ -53,6 +52,6 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: *namespace
+  targetNamespace: database
   timeout: 5m
   wait: true
