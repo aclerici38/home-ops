@@ -11,6 +11,8 @@ redis:
   url: redis://searxng-dragonfly.home.svc.cluster.local:6379
 
 search:
+  autocomplete: google
+  favicon_resolver: duckduckgo
   languages:
     - en
     - en-US
