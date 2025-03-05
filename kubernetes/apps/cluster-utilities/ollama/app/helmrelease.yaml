@@ -71,6 +71,7 @@ spec:
             port: 11434
     persistence:
       # ollama mounts models and certs into ~/.ollama. when using 65534 user is 'nonexistent'
+      #   even with OLLAMA_MODELS set it saves keys here
       config:
         existingClaim: ollama
         globalMounts:
