@@ -9,6 +9,7 @@ spec:
   targetNamespace: home
   dependsOn:
     - name: external-secrets-stores
+    - name: volsync
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
