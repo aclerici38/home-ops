@@ -13,7 +13,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: apt-emqx-dashboard
+                name: emqx-dashboard
                 port:
                   number: 18083
-                  
