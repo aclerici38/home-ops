@@ -30,7 +30,7 @@ spec:
       main:
         pod:
           nodeSelector:
-            location: apartment
+            location: cloud
           securityContext:
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
