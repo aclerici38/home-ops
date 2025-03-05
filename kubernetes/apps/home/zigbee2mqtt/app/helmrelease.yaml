@@ -57,11 +57,12 @@ spec:
               ZIGBEE2MQTT_CONFIG_MQTT_REJECT_UNAUTHORIZED: true
               ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://emqx-listeners.database.svc.cluster.local
               ZIGBEE2MQTT_CONFIG_MQTT_VERSION: 5
-              ZIGBEE2MQTT_CONFIG_PERMIT_JOIN: false
+              ZIGBEE2MQTT_CONFIG_PERMIT_JOIN: true
               ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE: 115200
               ZIGBEE2MQTT_CONFIG_SERIAL_DISABLE_LED: true
               ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_d4f0088f4c1fef119b9450d0639e525b-if00-port0
-              ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack
+              ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: ember
+              ZIGBEE2MQTT_CONFIG_SERIAL_RTSCTS: false
             envFrom:
               - secretRef:
                   name: zigbee2mqtt-secret
