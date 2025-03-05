@@ -87,6 +87,7 @@ spec:
                 cpu: 10m
               limits:
                 memory: 1Gi
+                squat.ai/zigbee: 1
     service:
       *app :
         controller: main
