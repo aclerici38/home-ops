@@ -3,7 +3,7 @@
 apiVersion: apps.emqx.io/v2beta1
 kind: EMQX
 metadata:
-  name: house-emqx
+  name: emqx
 spec:
   image: public.ecr.aws/emqx/emqx:5.8.5
   config:
@@ -29,9 +29,7 @@ spec:
       }
   coreTemplate:
     spec:
-      nodeSelector:
-        location: house
-      replicas: 2
+      replicas: 3
       envFrom:
         - secretRef:
             name: emqx-secret

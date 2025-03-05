@@ -2,11 +2,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: apt-emqx-dashboard
+  name: emqx-dashboard
 spec:
   ingressClassName: internal
   rules:
-    - host: apt-emqx.${SECRET_DOMAIN}
+    - host: emqx.${SECRET_DOMAIN}
       http:
         paths:
           - path: /
@@ -16,21 +16,4 @@ spec:
                 name: apt-emqx-dashboard
                 port:
                   number: 18083
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: house-emqx-dashboard
-spec:
-  ingressClassName: internal
-  rules:
-    - host: house-emqx.${SECRET_DOMAIN}
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: house-emqx-dashboard
-                port:
-                  number: 18083
+                  
