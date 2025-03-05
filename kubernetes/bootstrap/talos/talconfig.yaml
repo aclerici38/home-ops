@@ -108,6 +108,10 @@ nodes:
               - amd_iommu=on
               - amd_pstate=active
               - iommu.passthrough=0
+          udev:
+            rules:
+              # zigbee USB stick
+              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
           pods:
             - apiVersion: v1
               kind: Pod
@@ -131,7 +135,6 @@ nodes:
                         echo -n "0000:09:00.0" > /sys/bus/pci/drivers/ahci/unbind
                         # Bind the controllers to vfio-pci by registering the device/vendor IDs
                         echo "1022 7901" > /sys/bus/pci/drivers/vfio-pci/new_id
-                        sleep infinity
                     volumeMounts:
                       - name: sys
                         mountPath: /sys
