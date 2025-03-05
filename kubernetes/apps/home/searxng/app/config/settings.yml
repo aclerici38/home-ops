@@ -10,6 +10,9 @@ server:
 redis:
   url: redis://searxng-dragonfly.home.svc.cluster.local:6379
 
+outgoing:
+  request_timeout: 1.0
+
 search:
   autocomplete: google
   favicon_resolver: duckduckgo
