@@ -36,6 +36,7 @@ spec:
       runtimeClassName: nvidia
     controllers:
       main:
+        strategy: RollingUpdate
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
@@ -74,3 +75,7 @@ spec:
         existingClaim: ollama
         globalMounts:
           - path: /nonexistent/.ollama
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - /nonexistent
