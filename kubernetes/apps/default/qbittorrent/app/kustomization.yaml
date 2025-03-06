@@ -5,7 +5,6 @@ kind: Kustomization
 resources:
   - ../../../../templates/volsync/claim.yaml
   - ../../../../templates/volsync/minio.yaml
-  - ./qbitrr-pvc.yaml
   - ./helmrelease.yaml
 configMapGenerator:
   - name: qbitrr-config
