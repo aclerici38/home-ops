@@ -37,7 +37,7 @@ spec:
       mendRnvPrometheusMetricsEnabled: true
       existingSecret: 'renovate-secret'
       config: |
-        module.exports {
+        module.exports = {
           allowPlugins: true,
           allowScripts: true,
           assigneesFromCodeOwners: true,
