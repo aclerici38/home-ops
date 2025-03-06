@@ -29,14 +29,6 @@ spec:
         pod:
           nodeSelector:
             location: apartment
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 65534
-            runAsGroup: 65534
-            fsGroup: 65534
-            fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: RuntimeDefault }
-            supplementalGroups: [44, 10000]
         initContainers:
           init-db:
             image:
@@ -103,17 +95,6 @@ spec:
             envFrom:
               - secretRef:
                   name: renovate-secret
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
-              capabilities:
-                drop:
-                  - ALL
-                add:
-                  - CHOWN
-                  - SETGID
-                  - SETUID
-                  - DAC_OVERRIDE
             resources:
               requests:
                 cpu: 250m
