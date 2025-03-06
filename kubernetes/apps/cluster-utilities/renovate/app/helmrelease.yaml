@@ -66,7 +66,7 @@ spec:
       port: '5432'
       database: 'renovate-main'
       user: '${PGUSER}'
-      password: '${PGPASS}'
+      password: '${PGPASSWORD}'
     cacheInMemory:
       enabled: true
     service:
