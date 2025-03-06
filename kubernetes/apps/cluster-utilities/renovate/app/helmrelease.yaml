@@ -1,0 +1,152 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/app-template-3.7.2/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app renovate
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    cleanupOnFail: true
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      main:
+        pod:
+          nodeSelector:
+            location: apartment
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            runAsGroup: 65534
+            fsGroup: 65534
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 16.8@sha256:217c47c886965474f5c234b5a35ed008f53b39ea90a3088b31c0da98e1f9284d
+            env:
+              - name: INIT_POSTGRES_SUPER_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: cnpg-secret
+                    key: username
+              - name: INIT_POSTGRES_SUPER_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: cnpg-secret
+                    key: password
+              - name: INIT_POSTGRES_DBNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: renovate-secret
+                    key: PGDATABASE
+              - name: INIT_POSTGRES_HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: renovate-secret
+                    key: PGHOST
+              - name: INIT_POSTGRES_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: renovate-secret
+                    key: PGUSER
+              - name: INIT_POSTGRES_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: renovate-secret
+                    key: PGPASSWORD
+        containers:
+          *app :
+            image:
+              repository: ghcr.io/mend/renovate-ce
+              tag: 9.5.0-full@sha256:7b81d57b181616950507c9e232ae9e736933a463d3fdb1af50acef679241aeaf
+            env:
+              MEND_RNV_ACCEPT_TOS: "y"
+              LOG_LEVEL: debug
+              MEND_RNV_PLATFORM: github
+              MEND_RNV_CRON_JOB_SCHEDULER_ALL: "0 */2 * * *"
+              MEND_RNV_CRON_APP_SYNC: "0 */2 * * *"
+              MEND_RNV_AUTODISCOVER_FILTER: "ant385525/home-ops/*"
+              RENOVATE_PAGINATE_ALL: "true"
+              MEND_RNV_ADMIN_API_ENABLED: "false"
+              MEND_RNV_DATA_HANDLER_TYPE: "postgresql"
+              # public license key, 10 repos
+              MEND_RNV_LICENSE_KEY: "eyJsaW1pdCI6IjEwIn0=.30440220457941b71ea8eb345c729031718b692169f0ce2cf020095fd328812f4d7d5bc1022022648d1a29e71d486f89f27bdc8754dfd6df0ddda64a23155000a61a105da2a1"
+              MEND_RNV_PROMETHEUS_METRICS_ENABLED: "true"
+              MEND_RNV_SERVER_PORT: &port 8080
+              MEND_RNV_LOG_HISTORY_TTL_DAYS: "14"
+              MEND_RNV_WORKER_CLEANUP: "@daily"
+              # config
+              RENOVATE_REDIS_URL: "redis://renovate-dragonfly"
+              RENOVATE_requireConfig: "required"
+              RENOVATE_onboarding: true
+              RENOVATE_onboardingConfigFileName: ".github/renovate.json5"
+              RENOVATE_REPOSITORY_CACHE: 'enabled'
+            envFrom:
+              - secretRef:
+                  name: renovate
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 250m
+                memory: 500Mi
+              limits:
+                cpu: '2'
+                memory: 4Gi
+            probes:
+              liveness: &probe
+                enabled: true
+                type: HTTP
+                path: /health
+              readiness: *probe
+              startup:
+                <<: *probe
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+    service:
+      *app :
+        controller: main
+        ports:
+          http:
+            port: *port
+    ingress:
+      *app :
+        enabled: true
+        className: "external"
+        hosts:
+          - host: renovate.${SECRET_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  identifier: *app
+                  port: http
+    persistence:
+      logs:
+        existingClaim: renovate-logs
+        globalMounts:
+          - path: /home/renovate/logs
+      tmp:
+        type: emptyDir
