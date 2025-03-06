@@ -1,0 +1,28 @@
+---
+image:
+  repsotory: ghcr.io/xunholy/kustomize-mutating-webhook
+  pullPolicy: IfNotPresent
+replicaCount: 1
+certManager:
+  enabled: true
+configMaps: []
+secrets:
+  - create: false
+    name: cluster-secrets
+    optional: false
+env:
+  LOG_LEVEL: debug
+webhook:
+  failurePolicy: Fail
+  timeoutSeconds: 30
+  namespaceSelector:
+    matchExpressions:
+      - key: kubernetes.io/metadata.name
+        operator: NotIn
+        values:
+          - "thisisafakenamespace"
+podDisruptionBudget:
+  enabled: false
+securityContext:
+  seccompProfile:
+    type: RuntimeDefault

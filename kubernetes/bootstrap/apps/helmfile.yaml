@@ -23,6 +23,9 @@ repositories:
   - name: emberstack
     url: https://emberstack.github.io/helm-charts
 
+  - name: kustomize-mutating-webhook
+    url: https://xunholy.github.io/fluxcd-kustomize-mutating-webhook
+
 releases:
   - name: prometheus-operator-crds
     namespace: observability
@@ -113,6 +116,16 @@ releases:
         showlogs: true
         command: "kubectl"
         args: ["apply", "-f", "../../apps/external-secrets/external-secrets/stores/clustersecretstore.yaml"]
+
+  - name: kustomize-mutating-webhook
+    namespace: flux-system
+    chart: kustomize-mutating-webhook/kustomize-mutating-webhook
+    version: 0.4.2
+    values:
+      - ../../apps/flux-system/kustomize-mutating-webhook/app/helm-values.yaml
+    needs:
+      - cert-manager/cert-manager
+      - external-secrets/external-secrets
 
   - name: flux-operator
     namespace: flux-system
