@@ -12,6 +12,8 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-utilities/renovate/app
   prune: true
+  dependsOn:
+    - name: dragonfly
   sourceRef:
     kind: GitRepository
     name: flux-system
