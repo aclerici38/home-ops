@@ -36,6 +36,15 @@
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       }
-    }
+    },
+    {
+      "description": ["Immich Group"],
+      "groupName": "Talos",
+      "matchPackagePatterns": ["^immich-app/.*", "^immich-app\\..*"],
+      "matchDatasources": ["docker", "helm"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
   ]
 }
