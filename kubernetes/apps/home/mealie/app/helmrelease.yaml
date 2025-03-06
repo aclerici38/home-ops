@@ -71,7 +71,6 @@ spec:
             env:
               DB_ENGINE: postgres
               BASE_URL: https://mealie.${SECRET_DOMAIN}
-              TZ: ${TZ}
               DAILY_SCHEDULE_TIME: 05:00
               ALLOW_SIGNUP: "false"
               LOG_LEVEL: debug

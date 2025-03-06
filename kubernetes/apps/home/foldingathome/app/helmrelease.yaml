@@ -36,7 +36,6 @@ spec:
               repository: ghcr.io/linuxserver/foldingathome
               tag: 8.4.9@sha256:796284f7cec5bcb27edeec9b0861caccbd113ee48ca8fa81a6167a8c935767e7
             env:
-              TZ: ${TZ}
               MACHINE_NAME: oracle_cloud
             envFrom:
               - secretRef:

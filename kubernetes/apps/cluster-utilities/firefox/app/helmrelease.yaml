@@ -47,7 +47,6 @@ spec:
               repository: ghcr.io/linuxserver/firefox
               tag: 0.24.04@sha256:8865d68e1c4df1743a21476df343af152637d2728c8e8c287d04aafedc19d297
             env:
-              TZ: ${TZ}
               PUID: *id
               PGID: *id
             securityContext:

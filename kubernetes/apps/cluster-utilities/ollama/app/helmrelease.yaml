@@ -47,7 +47,6 @@ spec:
               tag: 0.5.13@sha256:a79fc15cecf33ed3b05c09a28415db7291c85c4c9d5945f4597317ca02456532
             env:
               # https://github.com/ollama/ollama/blob/main/envconfig/config.go
-              TZ: ${TZ}
               OLLAMA_MAX_LOADED_MODELS: 1
               OLLAMA_CONTEXT_LENGTH: 4096
             resources:

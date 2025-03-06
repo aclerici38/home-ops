@@ -89,8 +89,6 @@ spec:
             image:
               repository: ghcr.io/onedr0p/qbittorrent
               tag: 5.0.4@sha256:3b7e6671b4e6b8ab1366ca8a038776638c77cc8110dc74c257eb14568d43c614
-            env:
-              TZ: ${TZ}
             probes:
               liveness:
                 enabled: true
@@ -144,8 +142,6 @@ spec:
           #   image:
           #     repository: docker.io/feramance/qbitrr
           #     tag: v4.10.11@sha256:b5182d131cf0c1bc969c1400c51e9ab0a249cb7560f815422ba9d0ba836188c4
-          #   env:
-          #     TZ: ${TZ}
           #   resources:
           #     requests:
           #       cpu: 5m

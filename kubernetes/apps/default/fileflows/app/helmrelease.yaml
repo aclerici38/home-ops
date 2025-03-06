@@ -48,7 +48,6 @@ spec:
               repository: ghcr.io/ant385525/fileflows-server
               tag: 25.2.9.4516@sha256:4923f29393530e192d97c2e5623a33aeead4a0750c39a969b28efb18b543c4a6
             env:
-              TZ: "${TZ}"
               SQLITE_TMPDIR: &sqliteTmp /tmp/sqlite/
             resources: &resources
               requests:

@@ -37,7 +37,6 @@ spec:
               repository: onerahmet/openai-whisper-asr-webservice
               tag: v1.8.2-gpu@sha256:75f21f1fffdb69f40f9f1dccfeb9f581c14242b4b43c5437e0910c94f2bb51d4
             env:
-              TZ: ${TZ}
               ASR_MODEL: medium # tiny, base, small, medium, large, large-v1, large-v2 and large-v3
               ASR_ENGINEL: faster_whisper # openai_whisper, faster_whisper
             resources:

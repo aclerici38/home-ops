@@ -79,7 +79,6 @@ spec:
               SONARR__LOG__DBENABLED: "False"
               SONARR__LOG__LEVEL: info
               SONARR__SERVER__PORT: &port 8989
-              TZ: ${TZ}
             envFrom:
               - secretRef:
                   name: sonarr-secret

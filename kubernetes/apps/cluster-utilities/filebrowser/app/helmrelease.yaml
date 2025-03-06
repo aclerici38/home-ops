@@ -46,7 +46,6 @@ spec:
               FB_DATABASE: /config/filebrowser.db
               FB_LOG: stdout
               FB_ROOT: /allMedia
-              TZ: ${TZ}
             probes:
               liveness: &probes
                 enabled: true

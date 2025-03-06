@@ -29,8 +29,6 @@ spec:
       recyclarr:
         containers:
           app:
-            env:
-              TZ: ${TZ}
             envFrom:
               - secretRef:
                   name: recyclarr-secret

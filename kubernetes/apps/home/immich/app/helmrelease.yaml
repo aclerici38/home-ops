@@ -28,7 +28,6 @@ spec:
       namespace: kube-system
   values:
     env:
-      TZ: ${TZ}
       REDIS_HOSTNAME: immich-dragonfly.home.svc.cluster.local
       IMMICH_LOG_LEVEL: debug
       DB_HOSTNAME:

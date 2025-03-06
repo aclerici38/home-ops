@@ -47,7 +47,6 @@ spec:
               repository: docker.io/athomasson2/ebook2audiobook
               tag: 25.2.18@sha256:36231d751f841f32f7c024a2bf8a3c1aab24b6351eb743fb75e5cba6dc0b1738
             env:
-              TZ: ${TZ}
               MPLCONFIGDIR: /home/user/app/models/matplotlib
             securityContext:
               allowPrivilegeEscalation: false

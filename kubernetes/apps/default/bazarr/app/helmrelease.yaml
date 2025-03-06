@@ -78,7 +78,6 @@ spec:
               BAZARR__AUTH__REQUIRED: DisabledForLocalAddresses
               BAZARR__LOG__DBENABLED: "False"
               BAZARR__LOG__LEVEL: info
-              TZ: ${TZ}
               POSTGRES_ENABLED: "true"
             envFrom:
               - secretRef:

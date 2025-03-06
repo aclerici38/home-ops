@@ -79,7 +79,6 @@ spec:
               RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
               RADARR__LOG__LEVEL: info
               RADARR__SERVER__PORT: &port 7878
-              TZ: ${TZ}
             envFrom:
               - secretRef:
                   name: radarr-secret
