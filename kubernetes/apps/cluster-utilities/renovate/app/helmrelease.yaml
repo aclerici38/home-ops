@@ -101,7 +101,7 @@ spec:
               RENOVATE_REPOSITORY_CACHE: 'enabled'
             envFrom:
               - secretRef:
-                  name: renovate
+                  name: renovate-secret
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
