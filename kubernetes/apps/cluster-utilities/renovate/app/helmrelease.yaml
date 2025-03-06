@@ -88,10 +88,12 @@ spec:
               MEND_RNV_WORKER_CLEANUP: "@daily"
               # config
               RENOVATE_REDIS_URL: "redis://renovate-dragonfly"
-              RENOVATE_requireConfig: "required"
-              RENOVATE_onboarding: true
-              RENOVATE_onboardingConfigFileName: ".github/renovate.json5"
+              RENOVATE_REQUIRE_CONFIG: "required"
+              RENOVATE_ONBOARDING: true
+              RENOVATE_ONBOARDING_CONFIG_FILE_NAME: ".github/renovate.json5"
               RENOVATE_REPOSITORY_CACHE: 'enabled'
+              RENOVATE_ONBOARDING_NO_DEPS: 'enabled'
+              RENOVATE_ONBOARDING_REBASE_CHECKBOX: true
             envFrom:
               - secretRef:
                   name: renovate-secret
