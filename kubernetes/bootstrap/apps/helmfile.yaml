@@ -23,16 +23,6 @@ repositories:
   - name: emberstack
     url: https://emberstack.github.io/helm-charts
 
-hooks:
-  - events: ["prepare"]
-    showlogs: true
-    command: "kubectl"
-    args: ["apply", "-f", "../../apps/network/dnscrypt-proxy/app/config/config-configmap.yaml"]
-  - events: ["prepare"]
-    showlogs: true
-    command: "kubectl"
-    args: ["apply", "-f", "../../apps/network/dnscrypt-proxy/app/config/forwarding-rules-configmap.yaml"]
-
 releases:
   - name: prometheus-operator-crds
     namespace: observability
@@ -63,6 +53,15 @@ releases:
       - ../../apps/network/dnscrypt-proxy/app/helm-values.yaml
     needs:
       - kube-system/cilium
+    hooks:
+      - events: ['presync']
+        showlogs: true
+        command: "kubectl"
+        args: ["apply", "-f", "../../apps/network/dnscrypt-proxy/app/config/config-configmap.yaml"]
+      - events: ["presync"]
+        showlogs: true
+        command: "kubectl"
+        args: ["apply", "-f", "../../apps/network/dnscrypt-proxy/app/config/forwarding-rules-configmap.yaml"]
 
   - name: coredns
     namespace: kube-system
