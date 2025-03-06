@@ -76,7 +76,7 @@ spec:
               MEND_RNV_PLATFORM: github
               MEND_RNV_CRON_JOB_SCHEDULER_ALL: "0 */2 * * *"
               MEND_RNV_CRON_APP_SYNC: "0 */2 * * *"
-              MEND_RNV_AUTODISCOVER_FILTER: "ant385525/home-ops/*"
+              MEND_RNV_AUTODISCOVER_FILTER: "ant385525/home-ops"
               RENOVATE_PAGINATE_ALL: "true"
               MEND_RNV_ADMIN_API_ENABLED: "false"
               MEND_RNV_DATA_HANDLER_TYPE: "postgresql"
@@ -134,6 +134,6 @@ spec:
       logs:
         existingClaim: renovate-logs
         globalMounts:
-          - path: /home/renovate/logs
+          - path: /home/ubuntu/logs
       tmp:
         type: emptyDir
