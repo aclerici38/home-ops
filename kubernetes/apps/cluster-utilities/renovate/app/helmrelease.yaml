@@ -74,7 +74,7 @@ spec:
       port: 8080
     ingress:
       enabled: true
-      ingressClassName: 'internal'
+      ingressClassName: 'external'
       hosts:
         renovate.${SECRET_DOMAIN}:
           paths:
