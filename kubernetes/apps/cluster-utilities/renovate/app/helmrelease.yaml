@@ -90,3 +90,9 @@ spec:
       capabilities:
         drop:
           - ALL
+    extraVolumes:
+      - name: tmp
+        type: emptydir
+    extraVolumeMounts:
+      - name: tmp
+        mountPath: /tmp
