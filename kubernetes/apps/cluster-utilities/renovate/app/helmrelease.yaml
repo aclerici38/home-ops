@@ -110,6 +110,9 @@ spec:
                   - ALL
                 add:
                   - CHOWN
+                  - SETGID
+                  - SETUID
+                  - DAC_OVERRIDE
             resources:
               requests:
                 cpu: 250m
