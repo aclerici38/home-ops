@@ -14,9 +14,15 @@ spec:
   prune: true
   dependsOn:
     - name: dragonfly
+    - name: cloudnative-pg
   sourceRef:
     kind: GitRepository
     name: flux-system
   wait: true
   interval: 30m
   timeout: 5m
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: renovate-secret
+        optional: false
