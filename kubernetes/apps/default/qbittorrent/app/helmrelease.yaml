@@ -172,12 +172,3 @@ spec:
               - path: /tmp/webui
             qbit:
               - path: /webui
-      # Gluetun auth
-      gluetun-config-file:
-        name: gluetun-config
-        type: configMap
-        advancedMounts:
-          qbit:
-            gluetun:
-              - path: /gluetun/auth/config.toml
-                subPath: config.toml
