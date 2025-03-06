@@ -12,6 +12,8 @@ secrets:
     optional: false
 env:
   LOG_LEVEL: debug
+service:
+  headless: false
 webhook:
   failurePolicy: Fail
   timeoutSeconds: 30
