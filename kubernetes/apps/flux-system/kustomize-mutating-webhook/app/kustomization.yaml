@@ -10,7 +10,7 @@ configMapGenerator:
   - name: kustomization-mutating-webhook-values
     namespace: flux-system
     files:
-      - helm-values.yaml=./values.yaml
+      - values.yaml=./helm-values.yaml
 
 generatorOptions:
   annotations:
