@@ -28,6 +28,7 @@ spec:
   values:
     controllers:
       main:
+        strategy: RollingUpdate
         pod:
           nodeSelector:
             location: "apartment"
@@ -51,9 +52,9 @@ spec:
             resources:
               requests:
                 cpu: 10m
-                memory: 10Mi
+                memory: 20Mi
               limits:
-                memory: 100Mi
+                memory: 200Mi
             probes:
               liveness: &probes
                 enabled: true
@@ -90,4 +91,4 @@ spec:
                   port: http
     persistence:
       config:
-        type: emptyDir
+        existingClaim: vuetorrent-config
