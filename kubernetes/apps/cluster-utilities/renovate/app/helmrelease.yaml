@@ -25,6 +25,9 @@ spec:
   values:
     image:
       useFull: true
+    nodeSelector:
+      location: 'apartment'
+      kubernetes.io/arch: amd64
     fullNameOverride: 'renovate'
     renovate:
       logLevel: 'debug'
