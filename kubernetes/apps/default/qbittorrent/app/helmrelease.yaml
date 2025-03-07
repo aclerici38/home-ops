@@ -72,9 +72,9 @@ spec:
                     - /bin/sh
                     - -c
                     - |-
-                      if [ "$(cat /config/webui/vuetorrent/version.txt)" != ${VUETORRENT_VERSION} ] || [ ! -f "/config/webui/vuetorrent/version.txt" ]; then
+                      if [ ! -f "/config/webui/vuetorrent/version.txt" ] || [ "$(cat /config/webui/vuetorrent/version.txt)" != ${VUETORRENT_VERSION} ]; then
                         echo "Installing VueTorrent version ${VUETORRENT_VERSION}\n"
-                        curl -o /config/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/${VUETORRENT_VERSION}/vuetorrent.zip
+                        wget -qO /config/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/${VUETORRENT_VERSION}/vuetorrent.zip
                         mkdir -p /config/webui
                         unzip /config/vuetorrent.zip -d /config/webui
                         rm -f /config/vuetorrent.zip
