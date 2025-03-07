@@ -33,6 +33,26 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
         initContainers:
+          vuetorrent:
+            dependsOn: gluetun
+            image:
+              repository: docker.io/busybox
+              tag: 1.37.0@sha256:498a000f370d8c37927118ed80afe8adc38d1edcbfc071627d17b25c88efcab0
+            command:
+              - sh
+              - -c
+              - |
+                echo "Downloading Vuetorrent version ${VUETORRENT_VERSION}"
+                wget -qO /tmp/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/${VUETORRENT_VERSION}/vuetorrent.zip
+                mkdir -p /tmp/VueTorrent
+                unzip /tmp/vuetorrent.zip -d /tmp/webui
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              runAsUser: 1000
+              runAsGroup: 1000
           gluetun:
             image:
               repository: ghcr.io/qdm12/gluetun
