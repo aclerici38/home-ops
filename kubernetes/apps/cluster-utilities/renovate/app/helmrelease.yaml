@@ -41,7 +41,9 @@ spec:
       existingSecret: 'renovate-secret'
       config: |
         module.exports = {
-          redisUrl: 'redis://renovate-dragonfly'
+          redisUrl: 'redis://renovate-dragonfly',
+          onboarding: true,
+          requireConfig: "required"
         }
     postgresql:
       enabled: true
