@@ -38,26 +38,6 @@ spec:
       existingSecret: 'renovate-secret'
       config: |
         module.exports = {
-          allowPlugins: true,
-          allowScripts: true,
-          assigneesFromCodeOwners: true,
-          autodiscover: true,
-          onboarding: true,
-          onboardingConfigFileName: ".github/renovate.json5",
-          onboardingNoDeps: "enabled",
-          onboardingRebaseCheckbox: true,
-          persistRepoData: true,
-          automergeStrategy: "merge-commit",
-          automergeType: "pr",
-          dependencyDashboard: true,
-          enabled: true,
-          pinDigests: true,
-          prHourlyLimit: 0,
-          prConcurrentLimit: 0,
-          reviewersFromCodeOwners: true,
-          semanticCommits: "enabled",
-          timezone: "America/Los_Angeles",
-          rebaseWhen: 'behind-base-branch',
           redisUrl: 'redis://renovate-dragonfly'
         }
     postgresql:
