@@ -1,0 +1,79 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app vuetorrent
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.2
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  dependsOn:
+    - name: qbittorrent
+      namespace: default
+  install:
+    timeout: 2m
+  upgrade:
+    timeout: 2m
+    remediation:
+      strategy: rollback
+      retries: 1
+  values:
+    controllers:
+      main:
+        pod:
+          nodeSelector:
+            location: "apartment"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65543
+            runAsGroup: 65543
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          *app :
+            image:
+              repository: ghcr.io/vuetorrent/vuetorrent-backend
+              tag: 2.2.0
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 10m
+                memory: 10Mi
+              limits:
+                memory: 100Mi
+            env:
+              QBIT_BASE: qbitorrent:8080
+              RELEASE_TYPE: stable
+              UPDATE_VT_CRON: '0 0 * * *'
+    service:
+      *app :
+        controller: main
+        ports:
+          http:
+            port: 8080
+    ingress:
+      qbit:
+        className: "internal"
+        hosts:
+          - host: qbit.${SECRET_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  identifier: *app
+                  port: http
+    persistence:
+      config:
+        type: emptyDir

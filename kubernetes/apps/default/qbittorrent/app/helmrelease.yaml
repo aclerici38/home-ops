@@ -33,26 +33,6 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
         initContainers:
-          vuetorrent:
-            dependsOn: gluetun
-            image:
-              repository: docker.io/busybox
-              tag: 1.37.0@sha256:498a000f370d8c37927118ed80afe8adc38d1edcbfc071627d17b25c88efcab0
-            command:
-              - sh
-              - -c
-              - |
-                echo "Downloading Vuetorrent version ${VUETORRENT_VERSION}"
-                wget -qO /tmp/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/${VUETORRENT_VERSION}/vuetorrent.zip
-                mkdir -p /tmp/VueTorrent
-                unzip /tmp/vuetorrent.zip -d /tmp/webui
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              runAsUser: 1000
-              runAsGroup: 1000
           gluetun:
             image:
               repository: ghcr.io/qdm12/gluetun
@@ -84,23 +64,6 @@ spec:
               allowPrivilegeEscalation: false
         containers:
           qbit:
-            # vuetorrent
-            lifecycle:
-              preStart:
-                exec:
-                  command:
-                    - /bin/sh
-                    - -c
-                    - |-
-                      if [ ! -f "/config/webui/vuetorrent/version.txt" ] || [ "$(cat /config/webui/vuetorrent/version.txt)" != ${VUETORRENT_VERSION} ]; then
-                        echo "Installing VueTorrent version ${VUETORRENT_VERSION}\n"
-                        wget -qO /config/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/${VUETORRENT_VERSION}/vuetorrent.zip
-                        mkdir -p /config/webui
-                        unzip /config/vuetorrent.zip -d /config/webui
-                        rm -f /config/vuetorrent.zip
-                      else
-                        echo "VueTorrent version ${VUETORRENT_VERSION} is installed and up to date"
-                      fi
             image:
               repository: ghcr.io/onedr0p/qbittorrent
               tag: 5.0.4@sha256:3b7e6671b4e6b8ab1366ca8a038776638c77cc8110dc74c257eb14568d43c614
@@ -136,17 +99,6 @@ spec:
         ports:
           http:
             port: *port
-
-    ingress:
-      qbit:
-        className: "internal"
-        hosts:
-          - host: qbit.${SECRET_DOMAIN}
-            paths:
-              - path: /
-                service:
-                  identifier: qbit
-                  port: http
     persistence:
       config:
         existingClaim: qbittorrent
