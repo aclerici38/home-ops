@@ -10,8 +10,8 @@ spec:
   imageName: ghcr.io/cloudnative-pg/postgresql:16.8@sha256:bb0134f792c6891c8d9dae96d8547e62c10b4586356bdf51e7cdf6f483ce1948
   primaryUpdateStrategy: unsupervised
   storage:
-    size: 2Gi
-    storageClass: local-hostpath
+    size: 5Gi
+    storageClass: local-hostpath-madbum
   superuserSecret:
     name: cnpg-secret
   enableSuperuserAccess: true
@@ -33,7 +33,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
-      serverName: &currentCluster authentik-db-v8
+      serverName: &currentCluster authentik-db-v9
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -44,7 +44,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster authentik-db-v7
+      source: &previousCluster authentik-db-v8
   externalClusters:
     - name: *previousCluster
       barmanObjectStore:
