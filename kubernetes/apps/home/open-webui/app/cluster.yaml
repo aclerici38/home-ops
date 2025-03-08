@@ -38,6 +38,11 @@ spec:
   bootstrap:
     recovery:
       source: *db
+  externalClusters:
+    - name: *db
+      barmanObjectStore:
+        <<: *barmanObjectStore
+        serverName: *db
     # initdb:
     #   database: open-webui
     #   owner: "open-webui_user"
@@ -47,7 +52,6 @@ spec:
     #     - ALTER ROLE "open-webui_user" WITH SUPERUSER;
   monitoring:
     enablePodMonitor: true
-
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/postgresql.cnpg.io/scheduledbackup_v1.json
 apiVersion: postgresql.cnpg.io/v1

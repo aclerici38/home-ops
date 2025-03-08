@@ -19,7 +19,6 @@ spec:
   superuserSecret:
     name: cnpg-secret
   enableSuperuserAccess: true
-
   postgresql:
     shared_preload_libraries:
       - "vectors.so"
@@ -29,7 +28,6 @@ spec:
       max_wal_size: '2GB'
       shared_buffers: '512MB'
       wal_compression: 'on'
-
   backup:
     retentionPolicy: 7d
     barmanObjectStore: &barmanObjectStore
@@ -51,6 +49,11 @@ spec:
   bootstrap:
     recovery:
       source: *db
+  externalClusters:
+    - name: *db
+      barmanObjectStore:
+        <<: *barmanObjectStore
+        serverName: *db
     # initdb:
     #   database: immich
     #   owner: immich

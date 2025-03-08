@@ -41,6 +41,11 @@ spec:
   bootstrap:
     recovery:
       source: *db
+  externalClusters:
+    - name: *db
+      barmanObjectStore:
+        <<: *barmanObjectStore
+        serverName: *db
   monitoring:
     enablePodMonitor: true
 

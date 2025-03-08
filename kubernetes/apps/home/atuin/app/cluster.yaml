@@ -17,7 +17,6 @@ spec:
   superuserSecret:
     name: cnpg-secret
   enableSuperuserAccess: true
-
   backup:
     retentionPolicy: 7d
     barmanObjectStore: &barmanObjectStore
@@ -39,9 +38,13 @@ spec:
   bootstrap:
     recovery:
       source: *db
+  externalClusters:
+    - name: *db
+      barmanObjectStore:
+        <<: *barmanObjectStore
+        serverName: *db
   monitoring:
     enablePodMonitor: true
-
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/postgresql.cnpg.io/scheduledbackup_v1.json
 apiVersion: postgresql.cnpg.io/v1
