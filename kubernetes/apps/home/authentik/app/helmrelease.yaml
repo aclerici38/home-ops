@@ -101,7 +101,14 @@ spec:
           memory: 512Mi
         limits:
           memory: 2Gi
-
+      readinessProbe: &rProbe
+        httpGet:
+          path: "/health/ready/"
+          port: http
+      startupProbe: &sProbe
+        httpGet:
+          path: "/health/live/"
+          port: http
       volumeMounts:
         - name: custom
           mountPath: /custom
