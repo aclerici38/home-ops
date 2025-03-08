@@ -108,6 +108,9 @@ spec:
           facialRecognition:
             modelName: buffalo_l
             minFaces: 1
+          duplicateDetection:
+            enabled: true,
+            maxDistance: 0.00001
 
         oauth:
           enabled: true
