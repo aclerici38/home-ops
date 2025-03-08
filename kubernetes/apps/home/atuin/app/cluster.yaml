@@ -5,6 +5,8 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: atuin-db
+  annotations:
+    cnpg.io/skipEmptyWalArchiveCheck: 'enabled'
 spec:
   instances: 1
   imageName: ghcr.io/cloudnative-pg/postgresql:16.8@sha256:bb0134f792c6891c8d9dae96d8547e62c10b4586356bdf51e7cdf6f483ce1948
@@ -26,7 +28,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
-      serverName: &currentCluster atuin-db-v2
+      serverName: &currentCluster atuin-db
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -37,7 +39,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster atuin-db-v1
+      source: &previousCluster atuin-db-v2
   externalClusters:
     - name: *previousCluster
       barmanObjectStore:
