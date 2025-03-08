@@ -35,14 +35,14 @@ spec:
         secretAccessKey:
           name: cnpg-secret
           key: minio-secret-access-key
-  bootstrap:
-    recovery:
-      source: *db
-  externalClusters:
-    - name: *db
-      barmanObjectStore:
-        <<: *barmanObjectStore
-        serverName: *db
+  # bootstrap:
+  #   recovery:
+  #     source: *db
+  # externalClusters:
+  #   - name: *db
+  #     barmanObjectStore:
+  #       <<: *barmanObjectStore
+  #       serverName: *db
     # initdb:
     #   database: open-webui
     #   owner: "open-webui_user"
