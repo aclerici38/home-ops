@@ -34,19 +34,15 @@ spec:
           hostname: ff-server
           runtimeClassName: nvidia
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
+            runAsNonRoot: false
             fsGroupChangePolicy: Always
-            seccompProfile: { type: RuntimeDefault }
           nodeSelector:
             kubernetes.io/hostname: "bonds"
         containers:
           app:
             image:
-              repository: ghcr.io/ant385525/fileflows-server
-              tag: 25.2.9.4516@sha256:4923f29393530e192d97c2e5623a33aeead4a0750c39a969b28efb18b543c4a6
+              repository: docker.io/revenz/fileflows
+              tag: 25.02@sha256:54ae364c9ea13423a370444f2a24b77ff8f27e3e55975f71550d3f4d74c51a24
             env:
               SQLITE_TMPDIR: &sqliteTmp /tmp/sqlite/
             resources: &resources
@@ -57,11 +53,8 @@ spec:
                 memory: 6Gi
                 nvidia.com/gpu: 1
             securityContext: &secOps
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
-              capabilities:
-                drop:
-                  - ALL
     service:
       *app :
         controller: main
