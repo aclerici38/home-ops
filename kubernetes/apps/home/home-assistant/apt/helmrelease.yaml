@@ -40,9 +40,9 @@ spec:
             k8s.v1.cni.cncf.io/networks: |
               [
                 {
-                  "name":"multus-apt",
+                  "name":"multus-apt-home",
                   "namespace": "network",
-                  "ips": ["192.168.9.30/24"]
+                  "ips": ["192.168.1.25/24"]
                 }
               ]
         containers:
