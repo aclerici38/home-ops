@@ -35,7 +35,7 @@ spec:
         secretAccessKey:
           name: cnpg-secret
           key: minio-secret-access-key
-  # bootstrap:
+  bootstrap:
   #   recovery:
   #     source: *db
   # externalClusters:
@@ -43,13 +43,13 @@ spec:
   #     barmanObjectStore:
   #       <<: *barmanObjectStore
   #       serverName: *db
-    # initdb:
-    #   database: open-webui
-    #   owner: "open-webui_user"
-    #   secret:
-    #     name: open-webui-secret
-    #   postInitSQL:
-    #     - ALTER ROLE "open-webui_user" WITH SUPERUSER;
+    initdb:
+      database: open-webui
+      owner: "open-webui_user"
+      secret:
+        name: open-webui-secret
+      postInitSQL:
+        - ALTER ROLE "open-webui_user" WITH SUPERUSER;
   monitoring:
     enablePodMonitor: true
 ---
