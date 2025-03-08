@@ -27,11 +27,6 @@ repositories:
     url: https://xunholy.github.io/fluxcd-kustomize-mutating-webhook
 
 releases:
-  - name: prometheus-operator-crds
-    namespace: observability
-    chart: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
-    version: 18.0.1
-
   - name: cilium
     namespace: kube-system
     chart: cilium/cilium
