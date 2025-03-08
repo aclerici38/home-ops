@@ -17,7 +17,6 @@ spec:
   superuserSecret:
     name: cnpg-secret
   enableSuperuserAccess: true
-
   backup:
     retentionPolicy: 7d
     barmanObjectStore: &barmanObjectStore
@@ -36,16 +35,9 @@ spec:
         secretAccessKey:
           name: cnpg-secret
           key: minio-secret-access-key
-
   bootstrap:
     recovery:
-      source: &previousCluster vikunja-db-v1
-  externalClusters:
-    - name: *previousCluster
-      barmanObjectStore:
-        <<: *barmanObjectStore
-        serverName: *previousCluster
-
+      source: *db
   monitoring:
     enablePodMonitor: true
 

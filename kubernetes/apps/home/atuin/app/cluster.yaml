@@ -36,11 +36,9 @@ spec:
         secretAccessKey:
           name: cnpg-secret
           key: minio-secret-access-key
-
   bootstrap:
     recovery:
       source: *db
-
   monitoring:
     enablePodMonitor: true
 

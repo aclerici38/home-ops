@@ -42,12 +42,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster bazarr-db-v7
-  externalClusters:
-    - name: *previousCluster
-      barmanObjectStore:
-        <<: *barmanObjectStore
-        serverName: *previousCluster
+      source: *db
 
   monitoring:
     enablePodMonitor: true

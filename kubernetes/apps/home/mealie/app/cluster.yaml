@@ -36,16 +36,9 @@ spec:
         secretAccessKey:
           name: cnpg-secret
           key: minio-secret-access-key
-
   bootstrap:
     recovery:
-      source: &previousCluster mealie-db-v6
-  externalClusters:
-    - name: *previousCluster
-      barmanObjectStore:
-        <<: *barmanObjectStore
-        serverName: *previousCluster
-
+      source: *db
   monitoring:
     enablePodMonitor: true
 

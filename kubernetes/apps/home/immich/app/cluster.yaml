@@ -48,10 +48,9 @@ spec:
         secretAccessKey:
           name: cnpg-secret
           key: minio-secret-access-key
-
   bootstrap:
     recovery:
-      source: &previousCluster immich-db-v7
+      source: *db
     # initdb:
     #   database: immich
     #   owner: immich
@@ -59,12 +58,6 @@ spec:
     #     name: immich-secret
     #   postInitSQL:
     #     - ALTER ROLE immich WITH SUPERUSER;
-  externalClusters:
-    - name: *previousCluster
-      barmanObjectStore:
-        <<: *barmanObjectStore
-        serverName: *previousCluster
-
   monitoring:
     enablePodMonitor: true
 

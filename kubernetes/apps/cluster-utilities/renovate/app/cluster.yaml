@@ -38,16 +38,9 @@ spec:
         secretAccessKey:
           name: cnpg-secret
           key: minio-secret-access-key
-
   bootstrap:
     recovery:
-      source: &previousCluster renovate-db-v1
-  externalClusters:
-    - name: *previousCluster
-      barmanObjectStore:
-        <<: *barmanObjectStore
-        serverName: *previousCluster
-
+      source: *db
   monitoring:
     enablePodMonitor: true
 

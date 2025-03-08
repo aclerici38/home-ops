@@ -43,16 +43,9 @@ spec:
         secretAccessKey:
           name: cnpg-secret
           key: minio-secret-access-key
-
   bootstrap:
     recovery:
-      source: &previousCluster authentik-db-v9
-  externalClusters:
-    - name: *previousCluster
-      barmanObjectStore:
-        <<: *barmanObjectStore
-        serverName: *previousCluster
-
+      source: *db
   monitoring:
     enablePodMonitor: true
 
