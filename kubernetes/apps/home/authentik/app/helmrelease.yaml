@@ -25,9 +25,9 @@ spec:
       strategy: rollback
       retries: 1
   values:
-    nodeSelector:
-      "location": "cloud"
     global:
+      nodeSelector:
+        "location": "cloud"
       image:
         repository: ghcr.io/goauthentik/server
       env:
