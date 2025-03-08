@@ -77,7 +77,7 @@ spec:
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: ceph-block
+              storageClassName: local-hostpath-bonds
               resources:
                 requests:
                   storage: 50Gi
