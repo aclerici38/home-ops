@@ -4,7 +4,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: atuin-db
+  name: &db atuin-db
   annotations:
     cnpg.io/skipEmptyWalArchiveCheck: 'enabled'
 spec:
@@ -28,7 +28,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
-      serverName: &currentCluster atuin-db
+      serverName: *db
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -39,12 +39,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster atuin-db-v2
-  externalClusters:
-    - name: *previousCluster
-      barmanObjectStore:
-        <<: *barmanObjectStore
-        serverName: *previousCluster
+      source: *db
 
   monitoring:
     enablePodMonitor: true

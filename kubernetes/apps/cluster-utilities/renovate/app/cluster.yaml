@@ -3,7 +3,9 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: renovate-db
+  name: &db renovate-db
+  annotations:
+    cnpg.io/skipEmptyWalArchiveCheck: 'enabled'
 spec:
   instances: 1
   affinity:
@@ -28,7 +30,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
-      serverName: &currentCluster renovate-db-v1
+      serverName: *db
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -37,14 +39,14 @@ spec:
           name: cnpg-secret
           key: minio-secret-access-key
 
-  # bootstrap:
-  #   recovery:
-  #     source: &previousCluster renovate-db-v1
-  # externalClusters:
-  #   - name: *previousCluster
-  #     barmanObjectStore:
-  #       <<: *barmanObjectStore
-  #       serverName: *previousCluster
+  bootstrap:
+    recovery:
+      source: &previousCluster renovate-db-v1
+  externalClusters:
+    - name: *previousCluster
+      barmanObjectStore:
+        <<: *barmanObjectStore
+        serverName: *previousCluster
 
   monitoring:
     enablePodMonitor: true

@@ -4,7 +4,9 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: radarr-db
+  name: &db radarr-db
+  annotations:
+    cnpg.io/skipEmptyWalArchiveCheck: 'enabled'
 spec:
   instances: 1
   affinity:
@@ -29,7 +31,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
-      serverName: &currentCluster radarr-db-v8
+      serverName: *db
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -40,7 +42,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster radarr-db-v7
+      source: &previousCluster radarr-db-v8
   externalClusters:
     - name: *previousCluster
       barmanObjectStore:

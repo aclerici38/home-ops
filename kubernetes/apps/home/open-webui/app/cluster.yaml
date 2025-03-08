@@ -4,7 +4,9 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: open-webui-db
+  name: &db open-webui-db
+  annotations:
+    cnpg.io/skipEmptyWalArchiveCheck: 'enabled'
 spec:
   instances: 1
   imageName: ghcr.io/cloudnative-pg/postgresql:16.8@sha256:bb0134f792c6891c8d9dae96d8547e62c10b4586356bdf51e7cdf6f483ce1948
@@ -26,7 +28,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
-      serverName: &currentCluster open-webui-db-v1
+      serverName: *db
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -36,8 +38,8 @@ spec:
           key: minio-secret-access-key
 
   bootstrap:
-  #   recovery:
-  #     source: &previousCluster open-webui-db-v1
+    recovery:
+      source: *db
     initdb:
       database: open-webui
       owner: "open-webui_user"
@@ -45,11 +47,6 @@ spec:
         name: open-webui-secret
       postInitSQL:
         - ALTER ROLE "open-webui_user" WITH SUPERUSER;
-  # externalClusters:
-  #   - name: *previousCluster
-  #     barmanObjectStore:
-  #       <<: *barmanObjectStore
-  #       serverName: *previousCluster
 
   monitoring:
     enablePodMonitor: true

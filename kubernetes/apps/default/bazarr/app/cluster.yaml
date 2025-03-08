@@ -4,7 +4,9 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: bazarr-db
+  name: &db bazarr-db
+  annotations:
+    cnpg.io/skipEmptyWalArchiveCheck: 'enabled'
 spec:
   instances: 1
   affinity:
@@ -29,7 +31,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
-      serverName: &currentCluster bazarr-db-v7
+      serverName: *db
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -40,7 +42,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster bazarr-db-v6
+      source: &previousCluster bazarr-db-v7
   externalClusters:
     - name: *previousCluster
       barmanObjectStore:

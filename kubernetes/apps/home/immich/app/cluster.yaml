@@ -3,7 +3,9 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: immich-db
+  name: &db immich-db
+  annotations:
+    cnpg.io/skipEmptyWalArchiveCheck: 'enabled'
 spec:
   affinity:
     nodeSelector:
@@ -38,7 +40,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
-      serverName: &currentCluster immich-db-v7
+      serverName: *db
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -49,7 +51,7 @@ spec:
 
   bootstrap:
     recovery:
-      source: &previousCluster immich-db-v6
+      source: &previousCluster immich-db-v7
     # initdb:
     #   database: immich
     #   owner: immich
