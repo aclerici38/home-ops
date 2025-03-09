@@ -11,12 +11,12 @@ spec:
     name: kube-prometheus-stack
     namespace: flux-system
   install:
-    timeout: 2m
+    timeout: 5m
     remediation:
       retries: 1
   upgrade:
     cleanupOnFail: true
-    timeout: 2m
+    timeout: 5m
     remediation:
       strategy: rollback
       retries: 1
