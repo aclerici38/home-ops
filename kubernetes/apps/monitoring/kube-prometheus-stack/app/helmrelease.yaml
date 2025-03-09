@@ -29,11 +29,11 @@ spec:
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
       enabled: true
-      # ingress:
-      #   enabled: true
-      #   ingressClassName: internal
-      #   hosts: ["alertmanager.${SECRET_DOMAIN}"]
-      #   pathType: Prefix
+      ingress:
+        enabled: true
+        ingressClassName: internal
+        hosts: ["alertmanager.${SECRET_DOMAIN}"]
+        pathType: Prefix
       # alertmanagerSpec:
       #   alertmanagerConfiguration:
       #     name: alertmanager
