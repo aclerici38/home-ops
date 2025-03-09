@@ -39,14 +39,14 @@ spec:
           name: alertmanager
           global:
             resolveTimeout: 5m
-      #   externalUrl: https://alertmanager.${SECRET_DOMAIN}
-      #   storage:
-      #     volumeClaimTemplate:
-      #       spec:
-      #         storageClassName: local-hostpath
-      #         resources:
-      #           requests:
-      #             storage: 10Gi
+        externalUrl: https://alertmanager.${SECRET_DOMAIN}
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: local-hostpath
+              resources:
+                requests:
+                  storage: 10Gi
     kubeEtcd:
       service:
         selector:
