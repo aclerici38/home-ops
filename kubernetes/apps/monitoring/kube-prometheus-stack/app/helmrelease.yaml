@@ -29,24 +29,24 @@ spec:
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
       enabled: true
-      ingress:
-        enabled: true
-        ingressClassName: internal
-        hosts: ["alertmanager.${SECRET_DOMAIN}"]
-        pathType: Prefix
-      alertmanagerSpec:
-        alertmanagerConfiguration:
-          name: alertmanager
-          global:
-            resolveTimeout: 5m
-        externalUrl: https://alertmanager.${SECRET_DOMAIN}
-        storage:
-          volumeClaimTemplate:
-            spec:
-              storageClassName: local-hostpath
-              resources:
-                requests:
-                  storage: 10Gi
+      # ingress:
+      #   enabled: true
+      #   ingressClassName: internal
+      #   hosts: ["alertmanager.${SECRET_DOMAIN}"]
+      #   pathType: Prefix
+      # alertmanagerSpec:
+      #   alertmanagerConfiguration:
+      #     name: alertmanager
+      #     global:
+      #       resolveTimeout: 5m
+      #   externalUrl: https://alertmanager.${SECRET_DOMAIN}
+      #   storage:
+      #     volumeClaimTemplate:
+      #       spec:
+      #         storageClassName: local-hostpath
+      #         resources:
+      #           requests:
+      #             storage: 10Gi
     kubeEtcd:
       service:
         selector:
