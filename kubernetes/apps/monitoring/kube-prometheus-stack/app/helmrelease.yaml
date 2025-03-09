@@ -34,11 +34,11 @@ spec:
         ingressClassName: internal
         hosts: ["alertmanager.${SECRET_DOMAIN}"]
         pathType: Prefix
-      # alertmanagerSpec:
-      #   alertmanagerConfiguration:
-      #     name: alertmanager
-      #     global:
-      #       resolveTimeout: 5m
+      alertmanagerSpec:
+        alertmanagerConfiguration:
+          name: alertmanager
+          global:
+            resolveTimeout: 5m
       #   externalUrl: https://alertmanager.${SECRET_DOMAIN}
       #   storage:
       #     volumeClaimTemplate:
