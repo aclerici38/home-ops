@@ -31,8 +31,8 @@ spec:
           nodeSelector:
             location: house
           securityContext:
-            runAsUser: 0
-            runAsGroup: 0
+            runAsUser: 1000
+            runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: Always
           hostname: channels-dvr
@@ -94,3 +94,5 @@ spec:
         existingClaim: channels-dvr-cache
         globalMounts:
           - path: /channels-dvr
+      tmp:
+        type: emptyDir
