@@ -65,7 +65,7 @@ spec:
     service:
       *app :
         annotations:
-          lbipam.cilium.io/ips: *ip
+          lbipam.cilium.io/ips: 10.38.55.26
         controller: main
         type: LoadBalancer
         ports:
