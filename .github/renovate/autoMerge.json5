@@ -8,6 +8,14 @@
       "automerge": true,
       "automergeType": "branch",
       "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "description": ["Auto-merge specific apps' minor versions"],
+      "automerge": true,
+      "automergeType": "pr",
+      "rebaseWhen": "behind-base-branch",
+      "matchPackageNames": ["**/oauth2-proxy", "**/mend-renovate-ce"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
     }
   ]
 }
