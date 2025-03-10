@@ -82,9 +82,9 @@ spec:
         existingClaim: *app
         globalMounts:
           - path: /mnt/disk/dvr/config
-            subPath: /config
+            subPath: config
           - path: /channels-dvr/data
-            subPath: /data
+            subPath: data
       recordings:
         existingClaim: channels-dvr-recordings
         globalMounts:
