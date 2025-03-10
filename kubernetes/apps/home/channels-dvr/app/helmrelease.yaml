@@ -31,9 +31,9 @@ spec:
           nodeSelector:
             location: house
           securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
+            runAsUser: 65543
+            runAsGroup: 65543
+            fsGroup: 65543
             fsGroupChangePolicy: Always
           hostname: channels-dvr
           # annotations:
