@@ -60,10 +60,7 @@ spec:
                 memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: false
-              capabilities:
-                drop:
-                  - ALL
+              readOnlyRootFilesystem: true
     service:
       *app :
         controller: main
