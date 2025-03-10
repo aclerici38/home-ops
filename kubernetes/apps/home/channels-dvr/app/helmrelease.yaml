@@ -32,9 +32,6 @@ spec:
             location: house
           runtimeClassName: nvidia
           securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
           hostname: channels-dvr
           # annotations:
@@ -51,6 +48,9 @@ spec:
             image:
               repository: docker.io/fancybits/channels-dvr
               tag: nvidia@sha256:fd0f0fd21d70ec47f5a9237177ad9624b221b855f971d042f031daae20ccae88
+            env:
+              PUID: 65543
+              PGID: 65543
             resources:
               requests:
                 cpu: 100m
@@ -59,8 +59,6 @@ spec:
                 memory: 2Gi
                 nvidia.com/gpu: 1
             securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
