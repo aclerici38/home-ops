@@ -69,6 +69,7 @@ spec:
         annotations:
           lbipam.cilium.io/ips: *ip
         controller: main
+        type: LoadBalancer
         ports:
           http:
             port: 8089
