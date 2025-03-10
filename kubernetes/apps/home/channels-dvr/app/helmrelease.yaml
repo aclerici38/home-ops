@@ -72,7 +72,7 @@ spec:
       *app :
         className: external
         hosts:
-          - host: &fqdn "channels-dvr.${SECRET_DOMAIN}"
+          - host: &fqdn "channels.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
