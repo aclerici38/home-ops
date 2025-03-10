@@ -50,6 +50,9 @@ spec:
             image:
               repository: docker.io/fancybits/channels-dvr
               tag: tve@sha256:f3672e8cc5ff5e8093ce63e6179b5cf4dc2a8ccd3a51509d4e087a21d3490a50
+            env:
+              XDG_CONFIG_HOME: /tmp/.chromium
+              XDG_CACHE_HOME: /tmp/.chromium
             resources:
               requests:
                 cpu: 100m
