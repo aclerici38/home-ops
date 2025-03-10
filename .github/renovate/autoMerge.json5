@@ -14,7 +14,12 @@
       "automerge": true,
       "automergeType": "pr",
       "rebaseWhen": "behind-base-branch",
-      "matchPackageNames": ["**/oauth2-proxy", "**/mend-renovate-ce"],
+      "matchDatasources": ["docker", "helm"],
+      "matchPackageNames": [
+        "**/oauth2-proxy",
+        "**/mend-renovate-ce",
+        "**/searxng"
+      ],
       "matchUpdateTypes": ["minor", "patch", "digest"],
     }
   ]
