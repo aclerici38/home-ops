@@ -60,7 +60,7 @@ spec:
                 memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
