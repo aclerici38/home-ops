@@ -87,3 +87,7 @@ spec:
         existingClaim: channels-dvr-recordings
         globalMounts:
           - path: /mnt/disk/dvr/recordings
+      cache:
+        existingClaim: channels-dvr-cache
+        globalMounts:
+          - path: /mnt/disk/dvr/channels-dvr
