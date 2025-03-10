@@ -33,7 +33,8 @@ spec:
           securityContext:
             runAsUser: 65543
             runAsGroup: 65543
-            fsGroupChangePolicy: OnRootMismatch
+            fsGroup: 65543
+            fsGroupChangePolicy: Always
           hostname: channels-dvr
           # annotations:
           #   k8s.v1.cni.cncf.io/networks: |
