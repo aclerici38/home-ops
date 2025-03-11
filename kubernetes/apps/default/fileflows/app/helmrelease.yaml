@@ -41,12 +41,12 @@ spec:
         containers:
           app:
             lifecycle:
-              preStart:
+              postStart:
                 exec:
                   command:
                     - "/bin/sh"
                     - "-c"
-                    - git clone https://github.com/DrewThomasson/ebook2audiobook.git#${EBOOK2AUDIO_VERSION}
+                    - cd /app && git clone https://github.com/DrewThomasson/ebook2audiobook.git#${EBOOK2AUDIO_VERSION}
             image:
               repository: docker.io/revenz/fileflows
               tag: 25.02@sha256:54ae364c9ea13423a370444f2a24b77ff8f27e3e55975f71550d3f4d74c51a24
@@ -119,6 +119,10 @@ spec:
         existingClaim: calibre-library
         globalMounts:
           - path: /mnt/calibre-library
+      ebook2audio:
+        type: emptyDir
+        globalMounts:
+          - path: /app/ebook2audiobook
       media:
         enabled: true
         type: nfs
