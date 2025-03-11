@@ -1,0 +1,91 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app chrony
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 1
+  values:
+    controllers:
+      main:
+        type: daemonset
+        strategy: RollingUpdate
+        replicas: 2
+        containers:
+          &app dnscrypt-proxy :
+            image:
+              repository: docker.io/simonrupf/chronyd
+              tag: 0.6.1@sha256:c2242fb3153cf478c893c24694d61aad001f6f7df05aade88d5b6540a98f9fe5
+            env:
+              ENABLE_NTS: true
+            resources:
+              requests:
+                cpu: 10m
+                memory: 150Mi
+              limits:
+                memory: 2Gi
+            securityContext:
+              runAsUser: 65534
+              runAsGroup: 65534
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities:
+                drop:
+                  - ALL
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - chronyc
+                      - -n
+                      - tracking
+                  initialDelaySeconds: 1
+                  periodSeconds: 10
+                  failureThreshold: 3
+              liveness: *probes
+    service:
+      *app :
+        controller: main
+        internalTrafficPolicy: Local
+        externalTrafficPolicy: Local
+        ports:
+          ntp:
+            port: 123
+            protocol: UDP
+    persistence:
+      etc:
+        type: emptyDir
+        globalMounts:
+          - path: /etc/chrony
+      run:
+        type: emptyDir
+        globalMounts:
+          - path: /run/chrony
+      lib:
+        type: emptyDir
+        globalMounts:
+          - path: /var/lib/chrony
+
