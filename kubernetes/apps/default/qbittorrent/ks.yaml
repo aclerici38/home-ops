@@ -28,8 +28,6 @@ spec:
       APP: *app
       VOLSYNC_STORAGECLASS: &sc local-hostpath
       VOLSYNC_SNAPSHOTCLASS: *sc
-      # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
-      VUETORRENT_VERSION: v2.23.0
     substituteFrom:
       - kind: Secret
         name: sonarr-secret
