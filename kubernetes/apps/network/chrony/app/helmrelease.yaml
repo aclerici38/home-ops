@@ -71,6 +71,9 @@ spec:
         controller: main
         internalTrafficPolicy: Local
         externalTrafficPolicy: Local
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: 10.38.55.6
         ports:
           ntp:
             port: 123
