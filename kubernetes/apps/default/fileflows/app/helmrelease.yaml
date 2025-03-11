@@ -18,7 +18,7 @@ spec:
     - name: nvidia-device-plugin
       namespace: kube-system
   install:
-    timeout: 5m
+    timeout: 2m
     remediation:
       retries: 1
   upgrade:
