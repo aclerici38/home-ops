@@ -43,8 +43,8 @@ spec:
               limits:
                 memory: 2Gi
             securityContext:
-              runAsUser: 65534
-              runAsGroup: 65534
+              runAsUser: 0
+              runAsGroup: 0
               runAsNonRoot: true
               allowPrivilegeEscalation: false
               seccompProfile: { type: RuntimeDefault }
@@ -53,7 +53,7 @@ spec:
                   - ALL
                 add:
                   - CAP_CHOWN
-                  # - CAP_SETGID
+                  - CAP_SETGID
             probes:
               readiness: &probes
                 enabled: true
