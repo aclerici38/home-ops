@@ -48,8 +48,11 @@ spec:
                 drop:
                   - ALL
                 add:
-                  - CAP_CHOWN
-                  - CAP_SETGID
+                  - CHOWN
+                  - SETGID
+                  - FOWNER
+                  - SETUID
+                  - DAC_OVERRIDE
             probes:
               readiness: &probes
                 enabled: true
