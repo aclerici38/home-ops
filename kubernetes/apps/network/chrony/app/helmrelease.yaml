@@ -27,7 +27,6 @@ spec:
   values:
     controllers:
       main:
-        type: daemonset
         strategy: RollingUpdate
         replicas: 2
         containers:
@@ -44,16 +43,14 @@ spec:
               limits:
                 memory: 2Gi
             securityContext:
-              runAsUser: 65534
-              runAsGroup: 65534
+              runAsUser: 100
+              runAsGroup: 101
               runAsNonRoot: true
               allowPrivilegeEscalation: false
               seccompProfile: { type: RuntimeDefault }
               capabilities:
                 drop:
                   - ALL
-                add:
-                  - CHOWN
             probes:
               readiness: &probes
                 enabled: true
