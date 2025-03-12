@@ -33,7 +33,7 @@ spec:
           &app dnscrypt-proxy :
             image:
               repository: docker.io/ant385525/chrony
-              tag: 0.6.1@sha256:21ca9c4781fb617ac2440a36857d65974af2e0e6bb42fb5989d12582f431b78b
+              tag: latest@sha256:1e0feafd39c8b69343aa27bf5464ccf8f6c5c5f7952673b66537f492d0de542a
             env:
               ENABLE_NTS: true
             resources:
@@ -43,8 +43,8 @@ spec:
               limits:
                 memory: 2Gi
             securityContext:
-              runAsUser: 65534
-              runAsGroup: 65534
+              runAsUser: 1001
+              runAsGroup: 1001
               runAsNonRoot: true
               allowPrivilegeEscalation: false
               seccompProfile: { type: RuntimeDefault }
