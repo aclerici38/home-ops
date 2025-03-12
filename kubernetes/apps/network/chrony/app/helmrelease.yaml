@@ -45,6 +45,9 @@ spec:
               readOnlyRootFilesystem: true
               allowPrivilegeEscalation: false
               seccompProfile: { type: RuntimeDefault }
+              capabilities:
+                add:
+                  - NET_BIND_SERVICE
             probes:
               readiness: &probes
                 enabled: true
