@@ -43,9 +43,9 @@ spec:
               limits:
                 memory: 2Gi
             securityContext:
-              runAsUser: 100
-              runAsGroup: 101
-              runAsNonRoot: true
+              runAsUser: 0
+              runAsGroup: 0
+              runAsNonRoot: false
               allowPrivilegeEscalation: false
               seccompProfile: { type: RuntimeDefault }
               capabilities:
