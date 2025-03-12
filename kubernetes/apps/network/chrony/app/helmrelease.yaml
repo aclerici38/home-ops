@@ -53,6 +53,7 @@ spec:
                   - FOWNER
                   - SETUID
                   - DAC_OVERRIDE
+                  - CAP_SETPCAP
             probes:
               readiness: &probes
                 enabled: true
