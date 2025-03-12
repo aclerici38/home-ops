@@ -123,7 +123,7 @@ nodes:
                 hostPID: true
                 containers:
                   - name: vfio-bind
-                    image: busybox:latest
+                    image: debian:buster-slim
                     securityContext:
                       privileged: true
                     command:
