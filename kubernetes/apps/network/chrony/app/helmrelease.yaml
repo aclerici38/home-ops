@@ -33,7 +33,7 @@ spec:
           &app dnscrypt-proxy :
             image:
               repository: docker.io/ant385525/chrony
-              tag: latest@sha256:1d2d8d7c29b0a1db6e7b4a9267ef230dc8263d5c96bcac4a3fbf7b13672f1ce4
+              tag: latest@sha256:1256817eeccea012952583166b74e612feaa4dc4c0d83315e2215e3663d86729
             env:
               ENABLE_NTS: true
             resources:
@@ -51,6 +51,8 @@ spec:
               capabilities:
                 drop:
                   - ALL
+                add:
+                  - CAP_SETGID
             probes:
               readiness: &probes
                 enabled: true
