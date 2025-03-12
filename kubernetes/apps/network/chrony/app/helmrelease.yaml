@@ -42,6 +42,7 @@ spec:
                 memory: 2Gi
             securityContext:
               runAsNonRoot: false
+              readOnlyRootFilesystem: true
               allowPrivilegeEscalation: false
               seccompProfile: { type: RuntimeDefault }
             probes:
@@ -61,8 +62,6 @@ spec:
     service:
       *app :
         controller: main
-        internalTrafficPolicy: Local
-        externalTrafficPolicy: Local
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 10.38.55.6
