@@ -51,9 +51,9 @@ spec:
               capabilities:
                 drop:
                   - ALL
-                # add:
-                #   - CAP_CHOWN
-                #   - CAP_SETGID
+                add:
+                  - CAP_CHOWN
+                  # - CAP_SETGID
             probes:
               readiness: &probes
                 enabled: true
