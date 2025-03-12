@@ -34,8 +34,6 @@ spec:
             image:
               repository: docker.io/simonrupf/chronyd
               tag: 0.6.1@sha256:c2242fb3153cf478c893c24694d61aad001f6f7df05aade88d5b6540a98f9fe5
-            env:
-              ENABLE_NTS: true
             resources:
               requests:
                 cpu: 10m
@@ -46,6 +44,12 @@ spec:
               runAsNonRoot: false
               allowPrivilegeEscalation: false
               seccompProfile: { type: RuntimeDefault }
+              capabilities:
+                drop:
+                  - ALL
+                add:
+                  - CAP_CHOWN
+                  - CAP_SETGID
             probes:
               readiness: &probes
                 enabled: true
