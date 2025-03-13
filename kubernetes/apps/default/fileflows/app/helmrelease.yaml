@@ -112,10 +112,6 @@ spec:
         existingClaim: calibre-library
         globalMounts:
           - path: /mnt/calibre-library
-      ebook2audio:
-        type: emptyDir
-        globalMounts:
-          - path: /app/ebook2audiobook
       media:
         enabled: true
         type: nfs
