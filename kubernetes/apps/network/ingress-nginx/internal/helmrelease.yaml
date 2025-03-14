@@ -28,7 +28,9 @@ spec:
     controller:
       kind: DaemonSet
       service:
-        enabled: false
+        annotations:
+          lbipam.cilium.io/ips: "10.38.55.4"
+        externalTrafficPolicy: Local
       ingressClassResource:
         name: internal
         default: true
