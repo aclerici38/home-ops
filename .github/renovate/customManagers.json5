@@ -29,5 +29,18 @@
       "matchStrings": ["imageName: (?<depName>[^\\s:]+):(?<currentValue>\\S+)(@(?<currentDigest>sha256:\\S+)?)"],
       "datasourceTemplate": "docker"
     },
+    {
+      "customType": "regex",
+      "description": ["Process kubevirt-flux branch versioning for CDI releases"],
+      "fileMatch": ["kubevirt-flux-cdi.yaml"],
+      "matchStrings": [
+        "branch:\\s*cdi-(?<currentValue>v\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "kubevirt/containerized-data-importer",
+      "versioningTemplate": "regex",
+      "extractVersion": "v(\\d+\\.\\d+\\.\\d+)",
+      "replaceString": "cdi-$1"
+    }
   ]
 }
