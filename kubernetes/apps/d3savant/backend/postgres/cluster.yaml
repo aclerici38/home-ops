@@ -16,6 +16,7 @@ spec:
   postgresql:
     pg_hba:
       - host all all 10.38.55.0/24 md5
+      - host all all 192.168.1.0/24 md5
   storage:
     size: 500Gi
     storageClass: local-hostpath
