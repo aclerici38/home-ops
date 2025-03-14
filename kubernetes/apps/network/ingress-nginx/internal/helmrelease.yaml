@@ -31,6 +31,8 @@ spec:
         annotations:
           lbipam.cilium.io/ips: "10.38.55.4"
         externalTrafficPolicy: Local
+        ports:
+          postgres: 5432
       ingressClassResource:
         name: internal
         default: true
