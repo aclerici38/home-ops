@@ -116,7 +116,7 @@ spec:
             securityContext:
               runAsUser: 65534
               runAsGroup: 65534
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
