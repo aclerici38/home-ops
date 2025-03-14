@@ -36,7 +36,7 @@ spec:
         containers:
           *app :
             image:
-              repository: docker.io/tannermiddleton/recomendarr
+              repository: docker.io/tannermiddleton/recommendarr
               tag: v1.2.83@sha256:35be302075407ec8f09884f298a223fbd42b039e53deca7d1c3d67bd65d91e4a
             args:
               - "--public_url=https://recomendarr.${SECRET_DOMAIN}"
