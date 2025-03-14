@@ -13,6 +13,9 @@ spec:
       kubernetes.io/hostname: bonds
   imageName: ghcr.io/cloudnative-pg/postgresql:17.4@sha256:1c78556ba832fe7e8a4e539fcae83a276dcd9cc61cbe4df1e17cafbd282a33f2
   primaryUpdateStrategy: unsupervised
+  postgresql:
+    pg_hba:
+      - host all all 10.38.55.0/24 md5
   storage:
     size: 500Gi
     storageClass: local-hostpath
