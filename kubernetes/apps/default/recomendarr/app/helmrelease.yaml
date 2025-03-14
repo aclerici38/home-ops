@@ -31,8 +31,10 @@ spec:
           securityContext:
             runAsUser: 65534
             runAsGroup: 65534
+            fsGroup: 65534
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
+            fsGroupChangePolicy: Always
         containers:
           *app :
             image:
