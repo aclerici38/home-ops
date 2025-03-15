@@ -1,0 +1,39 @@
+---
+caching:
+  minTime: 2m
+  maxTime: 1h
+  maxItemsCount: 0
+  prefetchExpires: 1h
+  prefetchThreshold: 3
+  prefetchMaxItemsCount: 0
+  cacheTimeNegative: -1
+
+log:
+  level: info
+
+minTlsServeVersion: 1.3
+ports:
+  dns: 53
+  tls: 853
+  http: 4000
+
+prometheus:
+  enable: true
+  path: /metrics
+
+upstreams:
+  groups:
+    default:
+      - dnscrypt-proxy.network.svc.cluster.local:53
+
+redis:
+  address: blocky-dragonfly.network.svc.cluster.local
+
+queryLog:
+  # optional: Which fields should be logged. You can choose one or more from: clientIP, clientName, responseReason, responseAnswer, question, duration. If not defined, it logs all fields
+  fields:
+    - clientIP
+    - duration
+    - question
+    - responseReason
+    - responseAnswer
