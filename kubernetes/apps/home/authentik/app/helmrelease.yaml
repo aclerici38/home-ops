@@ -34,7 +34,7 @@ spec:
         - name: AUTHENTIK_REDIS__HOST
           value: dragonfly-db.database.svc.cluster.local
         - name: AUTHENTIK_REDIS__DB
-          value: 0
+          value: "0"
       envFrom:
         - secretRef:
             name: authentik-secret
