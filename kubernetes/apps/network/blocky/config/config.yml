@@ -21,6 +21,10 @@ ports:
 prometheus:
   enable: true
   path: /metrics
+  
+conditional:
+  mapping:
+    ${SECRET_DOMAIN}: k8s-gateway.network.svc.cluster.local:53
 
 upstreams:
   groups:
