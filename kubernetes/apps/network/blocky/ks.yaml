@@ -7,9 +7,11 @@ metadata:
 spec:
   path: "./kubernetes/apps/network/blocky/config/"
   prune: true
+  wait: true
   dependsOn:
     - name: cloudnative-pg
     - name: dragonfly-cluster
+    - name: external-secrets-stores
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -34,6 +36,7 @@ metadata:
 spec:
   path: "./kubernetes/apps/network/blocky/apartment/"
   prune: true
+  wait: true
   dependsOn:
     - name: blocky-config
   sourceRef:
@@ -56,6 +59,7 @@ metadata:
 spec:
   path: "./kubernetes/apps/network/blocky/house/"
   prune: true
+  wait: true
   dependsOn:
     - name: blocky-config
   sourceRef:
