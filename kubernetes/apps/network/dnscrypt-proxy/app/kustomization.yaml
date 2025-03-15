@@ -5,7 +5,6 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./config/config-configmap.yaml
-  - ./config/forwarding-rules-configmap.yaml
 configMapGenerator:
   - name: dnscrypt-proxy-helm-values
     files:

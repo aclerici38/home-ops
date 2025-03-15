@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: dnscrypt-proxy-forwarding-rules-configmap
-  namespace: network
-data:
-  forwarding-rules.txt: |
-    ${SECRET_DOMAIN} 172.17.0.12:53
