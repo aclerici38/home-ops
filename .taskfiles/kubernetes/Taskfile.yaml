@@ -82,3 +82,15 @@ tasks:
         cmd: kubectl delete pods --all-namespaces --field-selector status.phase={{.ITEM.PHASE}} --ignore-not-found=true
     preconditions:
       - which kubectl
+  flux-resume:
+    desc: Suspend, resume, and reconcile a flux app [NS=default] [APP=required]
+    interactive: true
+    cmd: flux suspend hr {{.APP}} -n {{.NS}} && flux resume hr {{.APP}} -n {{.NS}} && flux reconcile ks {{.APP}}
+    vars:
+      NS: '{{.NS | default "default"}}'
+    requires:
+      vars: [APP]
+    preconditions:
+      - flux --version
+      - which flux
+
