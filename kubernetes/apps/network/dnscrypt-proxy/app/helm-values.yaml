@@ -7,8 +7,8 @@ defaultPodOptions:
       effect: "NoSchedule"
 controllers:
   main:
-    type: daemonset
     strategy: RollingUpdate
+    replicas: 2
     containers:
       &app dnscrypt-proxy :
         image:
@@ -47,7 +47,6 @@ controllers:
 service:
   *app :
     controller: main
-    internalTrafficPolicy: Local
     ports:
       dns-tcp:
         targetPort: &targetPort 5053
