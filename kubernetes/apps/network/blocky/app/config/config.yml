@@ -40,7 +40,9 @@ blocking:
       - ads
     192.168.1.0/24:
       - ads
-
+    10.8.0.0/24:
+      - ads
+  
 redis:
   address: dragonfly-db.database.svc.cluster.local:6379
   database: 4
