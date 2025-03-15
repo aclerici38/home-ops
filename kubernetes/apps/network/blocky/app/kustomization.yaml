@@ -6,7 +6,7 @@ resources:
   - ./dragonfly.yaml
   - ./helmrelease.yaml
 configMapGenerator:
-  - name: blocky-apartment-configmap
+  - name: blocky-configmap
     files:
       - ./config/config.yml
 generatorOptions:

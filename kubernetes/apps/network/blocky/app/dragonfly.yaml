@@ -3,7 +3,7 @@
 apiVersion: dragonflydb.io/v1alpha1
 kind: Dragonfly
 metadata:
-  name: blocky-apartment-dragonfly
+  name: blocky-dragonfly
 spec:
   image: ghcr.io/dragonflydb/dragonfly:v1.27.2@sha256:df160a92b7097a1d7f673facebd20a74b03c287fb7503b55380b2931d9faf120
   replicas: 2
@@ -22,5 +22,3 @@ spec:
       cpu: 100m
     limits:
       memory: 512Mi
-  nodeSelector:
-    kubernetes.io/hostname: "bonds"

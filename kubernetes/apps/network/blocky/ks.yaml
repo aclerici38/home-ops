@@ -3,32 +3,10 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app blocky-apartment
+  name: &app blocky
   namespace: flux-system
 spec:
-  path: "./kubernetes/apps/network/blocky/apartment/"
-  prune: true
-  dependsOn:
-    - name: dragonfly
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  interval: 30m
-  retryInterval: 2m
-  timeout: 3m
-  targetNamespace: network
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app blocky-house
-  namespace: flux-system
-spec:
-  path: "./kubernetes/apps/network/blocky/house/"
+  path: "./kubernetes/apps/network/blocky/app/"
   prune: true
   dependsOn:
     - name: dragonfly
