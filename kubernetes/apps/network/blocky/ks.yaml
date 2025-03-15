@@ -1,4 +1,22 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app blocky-config
+  namespace: flux-system
+spec:
+  path: "./kubernetes/utility/apps/network/blocky/config/"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: home-ops
+  interval: 30m
+  retryInterval: 2m
+  timeout: 3m
+  targetNamespace: network
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -10,6 +28,7 @@ spec:
   prune: true
   dependsOn:
     - name: dragonfly
+    - name: blocky-config
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -32,6 +51,7 @@ spec:
   prune: true
   dependsOn:
     - name: dragonfly
+    - name: blocky-config
   sourceRef:
     kind: GitRepository
     name: flux-system
