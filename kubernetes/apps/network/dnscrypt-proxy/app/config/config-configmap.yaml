@@ -51,8 +51,6 @@ data:
 
     use_syslog = true
 
-    forwarding_rules = '/config/forwarding-rules.txt'
-
     [sources]
       [sources.public-resolvers]
         urls = ['https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md', 'https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md']
