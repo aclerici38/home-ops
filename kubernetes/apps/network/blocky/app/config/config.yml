@@ -25,6 +25,15 @@ prometheus:
 conditional:
   mapping:
     ${SECRET_DOMAIN}: k8s-gateway.network.svc.cluster.local:53
+    
+clientLookup:
+  clients:
+    k8s:
+      - 172.16.0.0/16
+    house:
+      - 10.0.0.0/8
+    apartment:
+      - 192.168.1.0/24
 
 upstreams:
   groups:
@@ -33,11 +42,13 @@ upstreams:
 
 blocking:
   denylists:
-    global:
+    ads:
       - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/multi.txt
   clientGroupsBlock:
-    default:
-      - global
+    house:
+      - ads
+    apartment:
+      - ads
 
 redis:
   address: dragonfly-db.database.svc.cluster.local:6379
