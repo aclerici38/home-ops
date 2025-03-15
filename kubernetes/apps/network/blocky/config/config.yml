@@ -21,7 +21,7 @@ ports:
 prometheus:
   enable: true
   path: /metrics
-  
+
 conditional:
   mapping:
     ${SECRET_DOMAIN}: k8s-gateway.network.svc.cluster.local:53
@@ -40,7 +40,8 @@ blocking:
       - global
 
 redis:
-  address: blocky-dragonfly.network.svc.cluster.local
+  address: dragonfly-db.database.svc.cluster.local
+  database: 4
 
 queryLog:
   # optional: Which fields should be logged. You can choose one or more from: clientIP, clientName, responseReason, responseAnswer, question, duration. If not defined, it logs all fields

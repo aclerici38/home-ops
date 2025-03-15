@@ -32,7 +32,9 @@ spec:
         repository: ghcr.io/goauthentik/server
       env:
         - name: AUTHENTIK_REDIS__HOST
-          value: authentik-dragonfly.home.svc.cluster.local
+          value: dragonfly-db.database.svc.cluster.local
+        - AUTHENTIK_REDIS__DB:
+          value: 0
       envFrom:
         - secretRef:
             name: authentik-secret

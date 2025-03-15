@@ -28,7 +28,8 @@ spec:
       namespace: kube-system
   values:
     env:
-      REDIS_HOSTNAME: immich-dragonfly.home.svc.cluster.local
+      REDIS_HOSTNAME: dragonfly-db.database.svc.cluster.local
+      REDIS_DBINDEX: 2
       IMMICH_LOG_LEVEL: debug
       DB_HOSTNAME:
         valueFrom:

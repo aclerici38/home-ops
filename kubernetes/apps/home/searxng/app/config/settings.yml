@@ -7,9 +7,6 @@ server:
   image_proxy: true
   method: GET # https://github.com/searxng/searxng/pull/3619
 
-redis:
-  url: redis://searxng-dragonfly.home.svc.cluster.local:6379
-
 outgoing:
   request_timeout: 1.0
 

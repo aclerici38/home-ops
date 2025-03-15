@@ -41,7 +41,7 @@ spec:
       existingSecret: 'renovate-secret'
       config: |
         module.exports = {
-          redisUrl: 'redis://renovate-dragonfly',
+          redisUrl: 'redis://dragonfly-db.database.svc.cluster.local:6379/1',
           onboarding: true,
           requireConfig: "required"
         }
