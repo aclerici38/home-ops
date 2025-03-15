@@ -50,7 +50,7 @@ spec:
       - name: prometheus
         parameters: 0.0.0.0:9153
       - name: forward
-        parameters: . 1.1.1.1
+        parameters: . 172.17.0.11
     probes:
       liveness:
         enabled: true
