@@ -2,10 +2,10 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app blocky-config
+  name: &app blocky
   namespace: flux-system
 spec:
-  path: "./kubernetes/apps/network/blocky/config/"
+  path: "./kubernetes/apps/network/blocky/app/"
   prune: true
   wait: true
   dependsOn:
@@ -28,70 +28,3 @@ spec:
       - kind: Secret
         name: blocky-secret
         optional: false
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app apt-blocky
-  namespace: flux-system
-spec:
-  path: "./kubernetes/apps/network/blocky/apartment/"
-  prune: true
-  wait: true
-  dependsOn:
-    - name: blocky-config
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  interval: 30m
-  retryInterval: 2m
-  timeout: 3m
-  targetNamespace: network
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app house-blocky
-  namespace: flux-system
-spec:
-  path: "./kubernetes/apps/network/blocky/house/"
-  prune: true
-  wait: true
-  dependsOn:
-    - name: blocky-config
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  interval: 30m
-  retryInterval: 2m
-  timeout: 3m
-  targetNamespace: network
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-# ---
-# apiVersion: kustomize.toolkit.fluxcd.io/v1
-# kind: Kustomization
-# metadata:
-#   name: &app blocky-frontend
-#   namespace: flux-system
-# spec:
-#   path: "./kubernetes/utility/apps/network/blocky/frontend/"
-#   prune: true
-#   sourceRef:
-#     kind: GitRepository
-#     name: home-ops
-#   interval: 30m
-#   retryInterval: 2m
-#   timeout: 3m
-#   targetNamespace: network
-#   commonMetadata:
-#     labels:
-#       app.kubernetes.io/name: *app
-#   postBuild:
-#     substitute:
-#       APP: *app
