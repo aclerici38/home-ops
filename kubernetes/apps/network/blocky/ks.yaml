@@ -9,6 +9,7 @@ spec:
   prune: true
   wait: true
   dependsOn:
+    - name: reflector
     - name: cloudnative-pg
     - name: dragonfly-cluster
     - name: external-secrets-stores
