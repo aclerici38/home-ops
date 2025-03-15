@@ -6,5 +6,6 @@ configMapGenerator:
   - name: blocky-configmap
     files:
       - ./config.yml
+      - ./cluster.yaml
 generatorOptions:
   disableNameSuffixHash: true

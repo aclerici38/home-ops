@@ -36,6 +36,27 @@ spec:
             runAsGroup: 65534
         strategy: RollingUpdate
         replicas: 2
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 16.6@sha256:a37bbb04a0ea3f15b505c6f97637e7ae89bc66541ae23b8d3848024087980e76
+            env:
+              - name: INIT_POSTGRES_SUPER_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: cnpg-secret
+                    key: username
+              - name: INIT_POSTGRES_SUPER_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: cnpg-secret
+                    key: password
+            envFrom:
+              - secretRef:
+                  name: cnpg-secret
+              - secretRef:
+                  name: blocky-secret
         containers:
           *app :
             image:

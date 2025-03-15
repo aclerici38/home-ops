@@ -7,6 +7,9 @@ metadata:
 spec:
   path: "./kubernetes/apps/network/blocky/config/"
   prune: true
+  dependsOn:
+    - name: cloudnative-pg
+    - name: dragonfly-cluster
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -27,7 +30,6 @@ spec:
   path: "./kubernetes/apps/network/blocky/apartment/"
   prune: true
   dependsOn:
-    - name: dragonfly
     - name: blocky-config
   sourceRef:
     kind: GitRepository
@@ -39,6 +41,11 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: blocky-secret
+        optional: false
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -50,7 +57,6 @@ spec:
   path: "./kubernetes/apps/network/blocky/house/"
   prune: true
   dependsOn:
-    - name: dragonfly
     - name: blocky-config
   sourceRef:
     kind: GitRepository
