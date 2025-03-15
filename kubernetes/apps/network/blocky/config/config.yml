@@ -7,7 +7,7 @@ caching:
   prefetchExpires: 1h
   prefetchThreshold: 10
   prefetchMaxItemsCount: 0
-  cacheTimeNegative: -1 min
+  cacheTimeNegative: -1
 
 log:
   level: info
@@ -44,7 +44,7 @@ redis:
   database: 4
   required: true
   connectionCooldown: 5s
-  
+
 
 queryLog:
   type: postgresql
