@@ -42,6 +42,9 @@ blocking:
 redis:
   address: dragonfly-db.database.svc.cluster.local
   database: 4
+  required: true
+  connectionCooldown: 5s
+  
 
 queryLog:
   type: postgresql
