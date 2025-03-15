@@ -13,7 +13,7 @@ spec:
   path: ./kubernetes/apps/cluster-utilities/renovate/app
   prune: true
   dependsOn:
-    - name: dragonfly
+    - name: dragonfly-cluster
     - name: cloudnative-pg
   sourceRef:
     kind: GitRepository

@@ -9,7 +9,7 @@ spec:
   targetNamespace: home
   dependsOn:
     - name: external-secrets-stores
-    - name: dragonfly
+    - name: dragonfly-cluster
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
