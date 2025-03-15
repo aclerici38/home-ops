@@ -5,7 +5,7 @@ metadata:
   name: &app blocky-config
   namespace: flux-system
 spec:
-  path: "./kubernetes/utility/apps/network/blocky/config/"
+  path: "./kubernetes/apps/network/blocky/config/"
   prune: true
   sourceRef:
     kind: GitRepository
