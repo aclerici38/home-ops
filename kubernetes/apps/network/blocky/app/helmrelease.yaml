@@ -27,7 +27,7 @@ spec:
   values:
     controllers:
       apt: &controller
-        pod:
+        pod: &pod
           nodeSelector:
             location: "apartment"
           securityContext:
@@ -92,9 +92,9 @@ spec:
       house:
         <<: *controller
         pod:
-          <<: *controller.pod
+          <<: *pod
           nodeSelector:
-            location: house
+            location: "house"
     service:
       global: &svc
         controller: main
