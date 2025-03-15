@@ -27,13 +27,13 @@ spec:
   values:
     controllers:
       main:
+        type: daemonset
         pod:
           securityContext:
             runAsNonRoot: true
             runAsUser: 65534
             runAsGroup: 65534
         strategy: RollingUpdate
-        replicas: 2
         containers:
           *app :
             image:
@@ -69,6 +69,7 @@ spec:
     service:
       *app :
         controller: main
+        externalTrafficPolicy: Local
         nameOverride: *app
         primary: true
         ports:
