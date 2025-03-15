@@ -97,7 +97,7 @@ spec:
             location: "house"
     service:
       global: &svc
-        controller: main
+        controller: apt
         extraSelectorLabels:
           app.kubernetes.io/name: *app
         ports:
@@ -112,6 +112,7 @@ spec:
             protocol: TCP
       house-dns:
         <<: *svc
+        controller: house
         type: LoadBalancer
         annotations:
           io.cilium/lb-ipam-ips: 10.38.55.25
