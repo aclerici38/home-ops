@@ -36,7 +36,7 @@ blocking:
     ads:
       - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/multi.txt
   clientGroupsBlock:
-    10.0.0.0/8:
+    10.0.0.0/16:
       - ads
     192.168.1.0/24:
       - ads
