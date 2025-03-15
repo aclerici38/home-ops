@@ -1,7 +1,7 @@
 ---
 mqtt:
   enabled: true
-  host: mosquitto.cluster-utilities.svc.cluster.local
+  host: emqx-listeners.database.svc.cluster.local
   port: 1883
   user: "{FRIGATE_MQTT_USER}"
   password: "{FRIGATE_MQTT_PASS}"
