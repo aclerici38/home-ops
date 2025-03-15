@@ -40,6 +40,7 @@ controllers:
                   - google.com
                   - 127.0.0.1:5053
               initialDelaySeconds: 15
+              timeoutSeconds: 5
               periodSeconds: 30
               failureThreshold: 3
           liveness: *probes
