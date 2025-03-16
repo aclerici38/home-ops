@@ -30,13 +30,6 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
-          securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            fsGroupChangePolicy: Always
-            runAsNonRoot: true
-            seccompProfile: { type: RuntimeDefault }
         containers:
           *app :
             image:
@@ -57,12 +50,9 @@ spec:
               limits:
                 memory: 600Mi
             securityContext:
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
-              capabilities:
-                drop:
-                  - ALL
-                add: ["CHOWN", "SETUID", "SETGID", "FOWNER", "DAC_OVERRIDE"]
-              allowPrivilegeEscalation: false
+              privileged: true
     service:
       *app :
         controller: main
@@ -97,5 +87,3 @@ spec:
         existingClaim: calibre-library
         globalMounts:
           - path: /calibre-library
-      run:
-        type: emptyDir
