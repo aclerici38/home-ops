@@ -37,6 +37,33 @@ spec:
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
       GF_SECURITY_ANGULAR_SUPPORT_ENABLED: true
       GF_SERVER_ROOT_URL: https://grafana.${SECRET_DOMAIN}
+    envFromSecret: grafana-secret
+    extraInitContainers:
+      - name: init-db
+        image: ghcr.io/onedr0p/postgres-init:16.8@sha256:217c47c886965474f5c234b5a35ed008f53b39ea90a3088b31c0da98e1f9284d
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: INIT_POSTGRES_SUPER_USER
+            valueFrom:
+              secretKeyRef:
+                name: cnpg-secret
+                key: username
+          - name: INIT_POSTGRES_SUPER_PASS
+            valueFrom:
+              secretKeyRef:
+                name: cnpg-secret
+                key: password
+          - name: INIT_POSTGRES_DBNAME
+            value: *app
+          - name: INIT_POSTGRES_HOST
+            value: &dbHost grafana-db-rw
+          - name: INIT_POSTGRES_USER
+            value: &dbUser grafana_user
+          - name: INIT_POSTGRES_PASS
+            valueFrom:
+              secretKeyRef:
+                name: grafana-secret
+                key: DB_PASS
     grafana.ini:
       analytics:
         check_for_updates: false
@@ -49,6 +76,12 @@ spec:
         org_role: Viewer
       news:
         news_feed_enabled: false
+      database:
+        type: postgres
+        host: *dbHost
+        name: *app
+        user: *dbUser
+        password: $__env{DB_PASS}
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
@@ -75,13 +108,13 @@ spec:
             access: proxy
             url: http://prometheus-operated.monitoring.svc.cluster.local:9090
             isDefault: true
-          - name: Loki
-            type: loki
-            uid: loki
-            access: proxy
-            url: http://loki-headless.monitoring.svc.cluster.local:3100
-            jsonData:
-              maxLines: 250
+          # - name: Loki
+          #   type: loki
+          #   uid: loki
+          #   access: proxy
+          #   url: http://loki-headless.monitoring.svc.cluster.local:3100
+          #   jsonData:
+          #     maxLines: 250
           - name: Alertmanager
             type: alertmanager
             uid: alertmanager

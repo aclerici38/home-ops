@@ -81,7 +81,6 @@ spec:
                 secretKeyRef:
                   name: authentik-secret
                   key: AUTHENTIK_POSTGRESQL__PASSWORD
-
       replicas: 2
       pdb:
         enabled: true
