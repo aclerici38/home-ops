@@ -32,6 +32,9 @@ upstreams:
     default:
       - 172.17.0.11:53
 
+bootstrapDns:
+  - upstream: 127.17.0.11:53
+
 blocking:
   denylists:
     ads:
