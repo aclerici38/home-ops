@@ -25,12 +25,12 @@ prometheus:
 conditional:
   fallbackUpstream: true
   mapping:
-    ${SECRET_DOMAIN}: k8s-gateway.network.svc.cluster.local:53
+    ${SECRET_DOMAIN}: 172.17.0.12:53
 
 upstreams:
   groups:
     default:
-      - dnscrypt-proxy.network.svc.cluster.local:53
+      - 172.17.0.11:53
 
 blocking:
   denylists:
