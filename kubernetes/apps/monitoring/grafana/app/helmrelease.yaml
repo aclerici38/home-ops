@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app grafana
+  name: &appgrafana
 spec:
   interval: 30m
   chart:
@@ -56,7 +56,7 @@ spec:
           - name: INIT_POSTGRES_DBNAME
             value: *app
           - name: INIT_POSTGRES_HOST
-            value: &dbHost grafana-db-rw
+            value: &dbHost grafana-db-rw.monitoring.svc.cluster.local
           - name: INIT_POSTGRES_USER
             value: &dbUser grafana_user
           - name: INIT_POSTGRES_PASS
