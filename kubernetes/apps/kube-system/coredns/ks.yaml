@@ -6,11 +6,11 @@ metadata:
   name: &app coredns
   namespace: flux-system
 spec:
-  targetNamespace: network
+  targetNamespace: kube-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/network/coredns/app
+  path: ./kubernetes/apps/kube-system/coredns/app
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
