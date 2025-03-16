@@ -27,6 +27,9 @@ spec:
     controllers:
       main:
         pod:
+          securityContext:
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
           nodeSelector:
             kubernetes.io/hostname: "bonds"
         containers:
