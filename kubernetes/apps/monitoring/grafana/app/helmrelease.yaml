@@ -31,8 +31,6 @@ spec:
       type: Recreate
     admin:
       existingSecret: grafana-secret
-    image:
-      registry: ghcr.io
     env:
       GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
       GF_EXPLORE_ENABLED: true
