@@ -42,6 +42,7 @@ spec:
               BOOK_LANGUAGE: en
               UID: 1000
               GID: 1000
+            command: ["python", "-m", "app"]
             probes:
               liveness: &probes
                 enabled: true
