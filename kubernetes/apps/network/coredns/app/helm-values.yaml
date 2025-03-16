@@ -11,7 +11,6 @@ servers:
   - zones:
       - zone: .
         scheme: dns://
-        use_tcp: true
     port: 53
     plugins:
       - name: errors
@@ -25,18 +24,17 @@ servers:
       - name: prometheus
         parameters: 0.0.0.0:9153
       - name: kubernetes
-        parameters: cluster.local in-addr.arpa ip6.arpa
+        parameters: cluster.local
         configBlock: |-
           pods insecure
-          fallthrough in-addr.arpa ip6.arpa
-      - name: forward
-        parameters: . 172.17.0.13
+          fallthrough
       # Enable recursion https://github.com/coredns/coredns/issues/3690#issuecomment-1573865953
       - name: header
         configBlock: |-
           response set ra
       - name: reload
-      - name: loadbalance
+      - name: forward
+        parameters: . 172.17.0.13
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
