@@ -7,6 +7,8 @@ metadata:
   namespace: flux-system
 spec:
   targetNamespace: monitoring
+  dependsOn:
+    - name: external-secrets-stores
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
