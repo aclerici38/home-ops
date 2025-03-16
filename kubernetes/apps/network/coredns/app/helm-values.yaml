@@ -28,13 +28,13 @@ servers:
         configBlock: |-
           pods insecure
           fallthrough
+      - name: forward
+        parameters: . 172.17.0.13
       # Enable recursion https://github.com/coredns/coredns/issues/3690#issuecomment-1573865953
       - name: header
         configBlock: |-
           response set ra
       - name: reload
-      - name: forward
-        parameters: . 172.17.0.13
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
