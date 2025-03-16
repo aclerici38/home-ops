@@ -27,9 +27,6 @@ spec:
     controllers:
       main:
         pod:
-          securityContext:
-            fsGroup: 1000
-            fsGroupChangePolicy: Always
           nodeSelector:
             kubernetes.io/hostname: "bonds"
         containers:
@@ -88,9 +85,7 @@ spec:
       tmp:
         type: emptyDir
       ingest:
-        type: nfs
-        server: 10.38.55.50
-        path: /mnt/tank/media/books/calibre/ingest
+        existingClaim: calibre-ingest
         globalMounts:
           - path: /cwa-book-ingest
 

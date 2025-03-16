@@ -82,9 +82,7 @@ spec:
       cache:
         type: emptyDir
       ingest:
-        type: nfs
-        server: 10.38.55.50
-        path: /mnt/tank/media/books/calibre/ingest
+        existingClaim: calibre-ingest
         globalMounts:
           - path: /cwa-book-ingest
       # Temporarily use local-path library til v3.1
