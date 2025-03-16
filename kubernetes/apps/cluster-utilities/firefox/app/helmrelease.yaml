@@ -38,8 +38,11 @@ spec:
                     values:
                       - "apartment"
           securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
-            fsGroup: &id 1000
           runtimeClassName: nvidia
         containers:
           *app :
@@ -50,9 +53,17 @@ spec:
               PUID: *id
               PGID: *id
             securityContext:
-              allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: false
-              privileged: true
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+                add:
+                  - CHOWN
+                  - SETUID
+                  - SETGID
+                  - FOWNER
+                  - DAC_OVERRIDE
+              allowPrivilegeEscalation: false
             resources:
               requests:
                 cpu: 100m
