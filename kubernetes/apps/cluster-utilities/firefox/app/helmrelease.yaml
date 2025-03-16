@@ -38,30 +38,21 @@ spec:
                     values:
                       - "apartment"
           securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            runAsNonRoot: true
-            fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
+            fsGroup: &id 1000
           runtimeClassName: nvidia
         containers:
           *app :
             image:
               repository: ghcr.io/linuxserver/firefox
               tag: 136.0.1@sha256:90efc7211c735e048b070e7811a28dfb7f9297bbd4664eac1596176328bb5c44
+            env:
+              PUID: *id
+              PGID: *id
             securityContext:
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
-              capabilities:
-                drop:
-                  - ALL
-                add:
-                  - CHOWN
-                  - SETUID
-                  - SETGID
-                  - FOWNER
-                  - DAC_OVERRIDE
-              allowPrivilegeEscalation: false
+              privileged: true
             resources:
               requests:
                 cpu: 100m
