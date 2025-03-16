@@ -4,6 +4,8 @@ replicaCount: 3
 k8sAppLabelOverride: kube-dns
 serviceAccount:
   create: true
+rbac:
+  create: true
 service:
   name: kube-dns
   clusterIP: 172.17.0.10
