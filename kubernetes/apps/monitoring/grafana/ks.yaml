@@ -9,6 +9,7 @@ spec:
   targetNamespace: monitoring
   dependsOn:
     - name: external-secrets-stores
+    - name: cloudnative-pg
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
