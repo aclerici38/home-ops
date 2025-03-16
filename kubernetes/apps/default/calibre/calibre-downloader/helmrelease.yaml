@@ -46,8 +46,6 @@ spec:
               AA_BASE_URL: https://annas-archive.li
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
-              UID: 1000
-              GID: 1000
             command: ["python", "-m", "app"]
             probes:
               liveness: &probes
@@ -93,6 +91,10 @@ spec:
     persistence:
       tmp:
         type: emptyDir
+      log:
+        type: emptyDir
+        globalMounts:
+          - path: /var/log/cwa-book-downloader/
       ingest:
         existingClaim: calibre-ingest
         globalMounts:
