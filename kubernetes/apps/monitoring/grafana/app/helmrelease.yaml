@@ -4,7 +4,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: grafana
-  namespace: observability
 spec:
   interval: 30m
   chart:
@@ -26,7 +25,7 @@ spec:
       retries: 1
   dependsOn:
     - name: kube-prometheus-stack
-      namespace: observability
+      namespace: monitoring
   values:
     deploymentStrategy:
       type: Recreate
@@ -76,26 +75,26 @@ spec:
             type: prometheus
             uid: prometheus
             access: proxy
-            url: http://prometheus-operated.observability.svc.cluster.local:9090
+            url: http://prometheus-operated.monitoring.svc.cluster.local:9090
             isDefault: true
           - name: Loki
             type: loki
             uid: loki
             access: proxy
-            url: http://loki-headless.observability.svc.cluster.local:3100
+            url: http://loki-headless.monitoring.svc.cluster.local:3100
             jsonData:
               maxLines: 250
           - name: Alertmanager
             type: alertmanager
             uid: alertmanager
             access: proxy
-            url: http://alertmanager-operated.observability.svc.cluster.local:9093
+            url: http://alertmanager-operated.monitoring.svc.cluster.local:9093
             jsonData:
               implementation: prometheus
     dashboards:
       default:
         cert-manager:
-          url: https://raw.githubusercontent.com/kashalls/home-cluster/refs/heads/main/kubernetes/apps/observability/grafana/app/dashboards/cert-manager.json
+          url: https://raw.githubusercontent.com/kashalls/home-cluster/refs/heads/main/kubernetes/apps/monitoring/grafana/app/dashboards/cert-manager.json
           datasource: Prometheus
         external-dns:
           # renovate: depName="External-dns"
