@@ -49,8 +49,6 @@ spec:
       # Serves a /metrics endpoint on :9153, required for serviceMonitor
       - name: prometheus
         parameters: 0.0.0.0:9153
-      - name: forward
-        parameters: . 172.17.0.11
     probes:
       liveness:
         enabled: true
@@ -69,10 +67,3 @@ spec:
         periodSeconds: 10
         timeoutSeconds: 1
         failureThreshold: 3
-    topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/name: k8s-gateway

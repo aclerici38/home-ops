@@ -23,6 +23,7 @@ prometheus:
   path: /metrics
 
 conditional:
+  fallbackUpstream: true
   mapping:
     ${SECRET_DOMAIN}: k8s-gateway.network.svc.cluster.local:53
 
@@ -42,7 +43,7 @@ blocking:
       - ads
     10.8.0.0/24:
       - ads
-  
+
 redis:
   address: dragonfly-db.database.svc.cluster.local:6379
   database: 4
