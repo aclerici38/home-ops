@@ -30,8 +30,11 @@ spec:
         effect: "NoSchedule"
     replicaCount: 2
     fullnameOverride: k8s-gateway
-    domain: "${SECRET_DOMAIN}"
+    domain: &domain "${SECRET_DOMAIN}"
     ttl: 1
+    fallthrough:
+      enabled: true
+      zones: [*domain]
     service:
       type: ClusterIP
       port: 53
@@ -49,6 +52,7 @@ spec:
       # Serves a /metrics endpoint on :9153, required for serviceMonitor
       - name: prometheus
         parameters: 0.0.0.0:9153
+      - name: fallthrough
     probes:
       liveness:
         enabled: true
