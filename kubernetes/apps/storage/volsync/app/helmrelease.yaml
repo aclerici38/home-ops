@@ -37,7 +37,7 @@ spec:
       runAsGroup: 1000
       seccompProfile: { type: RuntimeDefault }
     image: &image
-      repository: ghcr.io/onedr0p/volsync
-      tag: 0.12.0@sha256:628947bbb45f290e3d310cec4200e1a0174bd98e0b99dcf219a32e66055eb870
+      repository: ghcr.io/home-operations/volsync
+      tag: 0.12.0
     restic: *image
     rclone: *image

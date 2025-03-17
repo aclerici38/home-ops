@@ -32,7 +32,7 @@ spec:
           init-db:
             dependsOn: gluetun
             image:
-              repository: ghcr.io/onedr0p/postgres-init
+              repository: ghcr.io/home-operations/postgres-init
               tag: 16
             env:
               - name: INIT_POSTGRES_SUPER_USER
