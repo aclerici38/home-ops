@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/cluster-utilities/it-tools/app
+  path: &path ./kubernetes/apps/cluster-utilities/it-tools/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -18,3 +18,9 @@ spec:
   wait: false
   interval: 30m
   timeout: 5m
+  components:
+    - ./kubernetes/components/helm
+  postBuild:
+    substitute:
+      APP: *app
+      PATH: *path

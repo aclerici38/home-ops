@@ -24,45 +24,6 @@ spec:
     remediation:
       strategy: rollback
       retries: 1
-  values:
-    controllers:
-      main:
-        containers:
-          *app :
-            image:
-              repository: ghcr.io/bjw-s-labs/it-tools
-              tag: 2024.10.22@sha256:75cbecf0092c306ba86d7342d8488fd8c86564bda27644921618debb6215c4e1
-            resources:
-              requests:
-                cpu: 100m
-              limits:
-                memory: 500Mi
-            securityContext:
-              runAsNonRoot: true
-              allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
-              capabilities:
-                drop:
-                  - ALL
-    service:
-      *app :
-        controller: main
-        ports:
-          http:
-            port: 80
-    ingress:
-      *app :
-        className: internal
-        hosts:
-          - host: "it-tools.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: http
-    persistence:
-      cache:
-        type: emptyDir
-        sizeLimit: 2Gi
-        globalMounts:
-          - path: /var/cache/nginx
+  valuesFrom:
+    - kind: ConfigMap
+      name: it-tools-helm-values
