@@ -1,5 +1,7 @@
 machine:
   kubelet:
+    extraArgs:
+      max-pods: 500
     nodeIP:
       validSubnets:
         - "10.10.0.0/24"
