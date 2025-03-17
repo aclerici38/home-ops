@@ -19,7 +19,7 @@ spec:
   interval: 30m
   timeout: 5m
   components:
-    - ./kubernetes/components/helm
+    - ../../../components/helm
   postBuild:
     substitute:
       APP: *app
