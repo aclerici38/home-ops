@@ -33,7 +33,7 @@ spec:
             dependsOn: gluetun
             image:
               repository: ghcr.io/home-operations/postgres-init
-              tag: 16
+              tag: 17.4
             env:
               - name: INIT_POSTGRES_SUPER_USER
                 valueFrom:
