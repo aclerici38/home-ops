@@ -10,7 +10,7 @@ spec:
   affinity:
     nodeSelector:
       kubernetes.io/hostname: bonds
-  imageName: ghcr.io/cloudnative-pg/postgresql:16.8@sha256:921da8306283f0c2cca34c6ca9dea78a9d65f2aca97c9169791e49790429bc06
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.8@sha256:464aa1fe1ada7820212b165b66f8cb4f8be5cbe18cb248f590158938e50388be
   primaryUpdateStrategy: unsupervised
   storage:
     size: 2Gi
