@@ -7,6 +7,6 @@ metadata:
 configMapGenerator:
   - name: ${APP}-helm-values
     files:
-      - values.yaml=../../../${PATH}/values.yaml
+      - values.yaml=../../.${PATH}/values.yaml
 configurations:
   - kustomizeconfig.yaml
