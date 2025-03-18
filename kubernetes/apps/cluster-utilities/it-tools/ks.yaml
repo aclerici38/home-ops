@@ -19,7 +19,7 @@ spec:
   interval: 30m
   timeout: 2m
   components:
-    - ../../../components/helm
+    - ../../../../components/helm
   postBuild:
     substitute:
       APP: *app

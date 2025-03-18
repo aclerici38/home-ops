@@ -3,10 +3,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 metadata:
-  name: "${APP}-configmap-generator"
+  name: "$test-configmap-generator"
 configMapGenerator:
-  - name: "${APP}-helm-values"
+  - name: "$test-helm-values"
     files:
-      - "../../../${PATH}/values.yaml"
+      - "../../.././kubernetes/apps/cluster-utilities/it-tools/app/values.yaml"
 configurations:
   - kustomizeconfig.yaml
