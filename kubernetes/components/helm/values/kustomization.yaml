@@ -3,7 +3,7 @@ kind: Kustomization
 configMapGenerator:
   - name: "${APP}-helm-values"
     files:
-      - "../../../${PATH}/values.yaml"
+      - "${VALUES_PATH}/values.yaml"
 configurations:
   - ./kustomizeconfig.yaml
 generatorOptions:
