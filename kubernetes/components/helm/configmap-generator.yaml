@@ -7,6 +7,6 @@ metadata:
 configMapGenerator:
   - name: "$test-helm-values"
     files:
-      - "../../.././kubernetes/apps/cluster-utilities/it-tools/app/values.yaml"
+      - ./values.yaml
 configurations:
   - kustomizeconfig.yaml
