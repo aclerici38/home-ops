@@ -8,5 +8,5 @@ configMapGenerator:
   - name: ${APP}-helm-values
     files:
       - values.yaml=../../../${PATH}/values.yaml
-# configurations:
-#   - kustomizeconfig.yaml
+configurations:
+  - kustomizeconfig.yaml
