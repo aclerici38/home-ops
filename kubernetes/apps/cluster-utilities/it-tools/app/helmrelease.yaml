@@ -26,4 +26,4 @@ spec:
       retries: 1
   valuesFrom:
     - kind: ConfigMap
-      name: it-tools-helm-values
+      name: ${APP}-helm-values

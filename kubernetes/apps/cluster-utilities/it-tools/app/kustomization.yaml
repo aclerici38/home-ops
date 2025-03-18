@@ -3,5 +3,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../../../templates/helm/filepath-configmap.yaml
   - ./helmrelease.yaml
+configMapGenerator:
+  - name: "${APP}-helm-values"
+    files:
+      - ./values.yaml
+configurations:
+  - ../../../../templates/helm/kustomizeconfig.yaml
+generatorOptions:
+  disableNameSuffixHash: true
