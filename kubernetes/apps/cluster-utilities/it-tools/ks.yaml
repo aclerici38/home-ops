@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: &path ./kubernetes/apps/cluster-utilities/it-tools/app
+  path: ./kubernetes/apps/cluster-utilities/it-tools/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -23,5 +23,3 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      PATH: *path
-      VALUES_PATH: ../../../../${PATH}
