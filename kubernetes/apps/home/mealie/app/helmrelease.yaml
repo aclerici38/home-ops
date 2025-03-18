@@ -137,7 +137,6 @@ spec:
           - path: /app/data
       # Needed for recipe parser
       tmp:
-        enabled: true
         type: emptyDir
-        globalMounts:
-          - path: /tmp
+      nonexistent:
+        type: emptyDir
