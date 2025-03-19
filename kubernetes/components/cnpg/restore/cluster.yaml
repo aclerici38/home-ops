@@ -9,7 +9,7 @@ metadata:
     cnpg.io/skipEmptyWalArchiveCheck: 'enabled'
 spec:
   instances: 1
-  imageName: ghcr.io/cloudnative-pg/postgresql:${CNPG_VERSION:=17.4}
+  imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql}:${CNPG_VERSION:=17.4}
   primaryUpdateStrategy: unsupervised
   storage:
     size: ${CNPG_SIZE:=2Gi}

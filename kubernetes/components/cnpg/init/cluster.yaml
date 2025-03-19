@@ -6,7 +6,7 @@ metadata:
   name: &db ${APP}-db
 spec:
   instances: 1
-  imageName: ghcr.io/cloudnative-pg/postgresql:${CNPG_VERSION:=17.4}
+  imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql}:${CNPG_VERSION:=17.4}
   primaryUpdateStrategy: unsupervised
   storage:
     size: ${CNPG_SIZE:=2Gi}
@@ -32,11 +32,5 @@ spec:
         secretAccessKey:
           name: cnpg-secret
           key: minio-secret-access-key
-  bootstrap:
-    initdb:
-      database: ${APP}
-      owner: ${APP}_user
-      secret:
-        name: ${APP}-secret
   monitoring:
     enablePodMonitor: true

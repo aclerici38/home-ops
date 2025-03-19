@@ -30,42 +30,6 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
-        initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/home-operations/postgres-init
-              tag: 17.4
-            env:
-              - name: INIT_POSTGRES_SUPER_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: username
-              - name: INIT_POSTGRES_SUPER_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: password
-              - name: INIT_POSTGRES_DBNAME
-                valueFrom:
-                  secretKeyRef:
-                    name: bazarr-secret
-                    key: POSTGRES_DATABASE
-              - name: INIT_POSTGRES_HOST
-                valueFrom:
-                  secretKeyRef:
-                    name: bazarr-secret
-                    key: POSTGRES_HOST
-              - name: INIT_POSTGRES_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: bazarr-secret
-                    key: POSTGRES_USERNAME
-              - name: INIT_POSTGRES_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: bazarr-secret
-                    key: POSTGRES_PASSWORD
         containers:
           app:
             image:
@@ -79,9 +43,26 @@ spec:
               BAZARR__LOG__DBENABLED: "False"
               BAZARR__LOG__LEVEL: info
               POSTGRES_ENABLED: "true"
-            envFrom:
-              - secretRef:
-                  name: bazarr-secret
+              POSTGRES_HOST:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: host
+              POSTGRES_USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: username
+              POSTGRES_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: password
+              POSTGRES_DATABASE:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: dbname
             probes:
               liveness: &probes
                 enabled: true

@@ -15,6 +15,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/default/bazarr/app
+  components:
+    - ../../../../components/cnpg/restore
   prune: true
   sourceRef:
     kind: GitRepository
@@ -25,6 +27,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      CNPG_VERSION: "16.8"
       VOLSYNC_CAPACITY: 10Gi
       VOLSYNC_STORAGECLASS: &sc local-hostpath
       VOLSYNC_SNAPSHOTCLASS: *sc
