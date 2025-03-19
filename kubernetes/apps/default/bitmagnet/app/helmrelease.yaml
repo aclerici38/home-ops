@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: bitmagnet
+  name: &app bitmagnet
 spec:
   interval: 30m
   chart:
@@ -29,42 +29,6 @@ spec:
       main:
         type: statefulset
         initContainers:
-          init-db:
-            dependsOn: gluetun
-            image:
-              repository: ghcr.io/home-operations/postgres-init
-              tag: 17.4
-            env:
-              - name: INIT_POSTGRES_SUPER_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: username
-              - name: INIT_POSTGRES_SUPER_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: password
-              - name: INIT_POSTGRES_DBNAME
-                valueFrom:
-                  secretKeyRef:
-                    name: bitmagnet-secret
-                    key: POSTGRES_NAME
-              - name: INIT_POSTGRES_HOST
-                valueFrom:
-                  secretKeyRef:
-                    name: bitmagnet-secret
-                    key: POSTGRES_HOST
-              - name: INIT_POSTGRES_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: bitmagnet-secret
-                    key: POSTGRES_USER
-              - name: INIT_POSTGRES_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: bitmagnet-secret
-                    key: POSTGRES_PASSWORD
           gluetun:
             image:
               repository: ghcr.io/qdm12/gluetun
@@ -78,6 +42,22 @@ spec:
               FIREWALL_INPUT_PORTS: "3333,3334"
               FIREWALL_OUTBOUND_SUBNETS: 172.16.0.0/16,172.17.0.0/16
               DNS_KEEP_NAMESERVER: on
+              POSTGRES_HOST:
+                secretKeyRef:
+                  name: ${APP}-db-app
+                  key: host
+              POSTGRES_USER:
+                secretKeyRef:
+                  name: ${APP}-db-app
+                  key: username
+              POSTGRES_PASSWORD:
+                secretKeyRef:
+                  name: ${APP}-db-app
+                  key: password
+              POSTGRES_NAME:
+                secretKeyRef:
+                  name: ${APP}-db-app
+                  key: dbname
             envFrom: &envFrom
               - secretRef:
                   name: bitmagnet-secret
