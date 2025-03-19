@@ -43,21 +43,25 @@ spec:
               FIREWALL_OUTBOUND_SUBNETS: 172.16.0.0/16,172.17.0.0/16
               DNS_KEEP_NAMESERVER: on
               POSTGRES_HOST:
-                secretKeyRef:
-                  name: ${APP}-db-app
-                  key: host
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: host
               POSTGRES_USER:
-                secretKeyRef:
-                  name: ${APP}-db-app
-                  key: username
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: username
               POSTGRES_PASSWORD:
-                secretKeyRef:
-                  name: ${APP}-db-app
-                  key: password
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: password
               POSTGRES_NAME:
-                secretKeyRef:
-                  name: ${APP}-db-app
-                  key: dbname
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: dbname
             envFrom: &envFrom
               - secretRef:
                   name: bitmagnet-secret
