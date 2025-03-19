@@ -42,26 +42,6 @@ spec:
               FIREWALL_INPUT_PORTS: "3333,3334"
               FIREWALL_OUTBOUND_SUBNETS: 172.16.0.0/16,172.17.0.0/16
               DNS_KEEP_NAMESERVER: on
-              POSTGRES_HOST:
-                valueFrom:
-                  secretKeyRef:
-                    name: bitmagnet-db-app
-                    key: host
-              POSTGRES_USER:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-db-app
-                    key: username
-              POSTGRES_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-db-app
-                    key: password
-              POSTGRES_NAME:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-db-app
-                    key: dbname
             envFrom: &envFrom
               - secretRef:
                   name: bitmagnet-secret
@@ -84,6 +64,26 @@ spec:
               LOG_LEVEL: 'info'
               METAINFO_REQUESTER_REQUEST_TIMEOUT: 10s
               DHT_SERVER_QUERY_TIMEOUT: 10s
+              POSTGRES_HOST:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: host
+              POSTGRES_USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: username
+              POSTGRES_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: password
+              POSTGRES_NAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: dbname
             envFrom: *envFrom
             command:
               - bitmagnet
