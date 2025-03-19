@@ -45,7 +45,7 @@ spec:
               POSTGRES_HOST:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: bitmagnet-db-app
                     key: host
               POSTGRES_USER:
                 valueFrom:
