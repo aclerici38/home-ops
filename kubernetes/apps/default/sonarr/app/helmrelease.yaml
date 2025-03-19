@@ -30,42 +30,6 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
-        initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/home-operations/postgres-init
-              tag: 17.4
-            env:
-              - name: INIT_POSTGRES_SUPER_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: username
-              - name: INIT_POSTGRES_SUPER_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: password
-              - name: INIT_POSTGRES_DBNAME
-                valueFrom:
-                  secretKeyRef:
-                    name: sonarr-secret
-                    key: SONARR__POSTGRES__MAINDB
-              - name: INIT_POSTGRES_HOST
-                valueFrom:
-                  secretKeyRef:
-                    name: sonarr-secret
-                    key: SONARR__POSTGRES__HOST
-              - name: INIT_POSTGRES_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: sonarr-secret
-                    key: SONARR__POSTGRES__USER
-              - name: INIT_POSTGRES_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: sonarr-secret
-                    key: SONARR__POSTGRES__PASSWORD
         containers:
           sonarr:
             image:
@@ -79,9 +43,26 @@ spec:
               SONARR__LOG__DBENABLED: "False"
               SONARR__LOG__LEVEL: info
               SONARR__SERVER__PORT: &port 8989
-            envFrom:
-              - secretRef:
-                  name: sonarr-secret
+              SONARR__POSTGRES__HOST:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: host
+              SONARR__POSTGRES__USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: username
+              SONARR__POSTGRES__PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: password
+              SONARR__POSTGRES__MAINDB:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: dbname
             probes:
               liveness: &probes
                 enabled: true
