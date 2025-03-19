@@ -8,6 +8,9 @@ metadata:
   annotations:
     cnpg.io/skipEmptyWalArchiveCheck: 'enabled'
 spec:
+  affinity:
+    nodeSelector:
+      ${CNPG_NODESELECTOR:={}}
   instances: 1
   imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql}:${CNPG_VERSION:=17.4}
   primaryUpdateStrategy: unsupervised

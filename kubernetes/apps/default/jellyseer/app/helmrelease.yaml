@@ -27,42 +27,6 @@ spec:
   values:
     controllers:
       jellyseerr:
-        initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/home-operations/postgres-init
-              tag: 17.4
-            env:
-              - name: INIT_POSTGRES_SUPER_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: username
-              - name: INIT_POSTGRES_SUPER_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: password
-              - name: INIT_POSTGRES_DBNAME
-                valueFrom:
-                  secretKeyRef:
-                    name: jellyseer-secret
-                    key: DB_NAME
-              - name: INIT_POSTGRES_HOST
-                valueFrom:
-                  secretKeyRef:
-                    name: jellyseer-secret
-                    key: DB_HOST
-              - name: INIT_POSTGRES_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: jellyseer-secret
-                    key: DB_USER
-              - name: INIT_POSTGRES_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: jellyseer-secret
-                    key: DB_PASS
         containers:
           app:
             image:
@@ -70,9 +34,26 @@ spec:
               tag: 2.5.1@sha256:52ca0b18c58ec4e769b8acae9beaae37a520a365c7ead52b7fc3ba1c3352d1f0
             env:
               DB_TYPE: postgres
-            envFrom:
-              - secretRef:
-                  name: jellyseer-secret
+              DB_HOST:
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP}-db-app
+                      key: host
+              DB_USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: username
+              DB_PASS:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: password
+              DB_NAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: dbname
             resources:
               requests:
                 cpu: 15m
