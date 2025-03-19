@@ -5,9 +5,6 @@ kind: Cluster
 metadata:
   name: &db ${APP}-db
 spec:
-  affinity:
-    nodeSelector:
-      ${CNPG_NODESELECTOR:={}}
   instances: 1
   imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql}:${CNPG_VERSION:=17.4}
   primaryUpdateStrategy: unsupervised

@@ -27,6 +27,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      CNPG_VERSION: "16.8"
+      CNPG_NODESELECTOR: "location: apartment"
       VOLSYNC_STORAGECLASS: &sc local-hostpath-bonds
       VOLSYNC_SNAPSHOTCLASS: *sc
+      CNPG_STORAGECLASS: *sc
