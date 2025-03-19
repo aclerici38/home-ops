@@ -27,6 +27,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      CNPG_VERSION: "16.8"
       VOLSYNC_STORAGECLASS: &sc local-hostpath
       VOLSYNC_SNAPSHOTCLASS: *sc
       VOLSYNC_CAPACITY: 10Gi
