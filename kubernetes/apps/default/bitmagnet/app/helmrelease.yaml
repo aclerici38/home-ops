@@ -27,6 +27,9 @@ spec:
   values:
     controllers:
       main:
+        pod:
+          nodeSelector:
+            location: cloud
         type: statefulset
         initContainers:
           gluetun:
