@@ -13,7 +13,9 @@ spec:
   wait: true
   dependsOn:
     - name: cloudnative-pg
+      namespace: flux-system
     - name: dragonfly-cluster
+      namespace: flux-system
   sourceRef:
     kind: GitRepository
     name: flux-system
