@@ -48,6 +48,7 @@ spec:
         metadata:
           name: immich-settings
         spec:
+          $patch: replace
           postgresql:
             shared_preload_libraries:
               - "vectors.so"
