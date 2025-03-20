@@ -116,3 +116,4 @@ spec:
         name: ${APP}-db-app
         globalMounts:
           - path: /etc/pgpass.conf
+            subPath: pgpass
