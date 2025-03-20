@@ -10,7 +10,7 @@ spec:
   primaryUpdateStrategy: unsupervised
   storage:
     size: ${CNPG_SIZE:=2Gi}
-    storageClass: ${CNPG_STORAGECLAS:=local-hostpath}
+    storageClass: ${CNPG_STORAGECLASS:=local-hostpath}
   superuserSecret:
     name: cnpg-secret
   enableSuperuserAccess: true
