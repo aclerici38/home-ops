@@ -56,8 +56,6 @@ spec:
                   - immich
                 source:
                   externalCluster: immich-db
-              postInitApplicationSQL:
-                - "CREATE EXTENSION IF NOT EXISTS vector"
       target:
         kind: Cluster
     - patch: |-
