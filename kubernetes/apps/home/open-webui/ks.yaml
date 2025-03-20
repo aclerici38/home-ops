@@ -29,3 +29,10 @@ spec:
   postBuild:
     substitute:
       APP: *app
+  patches:
+    - patch: |
+        - op: add
+          path: /spec/bootstrap/initdb/postInitApplicationSQL
+          value: "CREATE EXTENSION IF NOT EXISTS vector"
+      target:
+        kind: Cluster

@@ -5,10 +5,3 @@ kind: Kustomization
 resources:
   - ./pvc.yaml
   - ./helmrelease.yaml
-patchesJson6902:
-  - target:
-      group: postgresql.cnpg.io
-      version: v1
-      kind: Cluster
-      name: ${APP}-db
-    path: load-vector.yaml
