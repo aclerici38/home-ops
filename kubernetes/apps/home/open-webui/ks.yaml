@@ -30,9 +30,15 @@ spec:
     substitute:
       APP: *app
   patches:
-    - patch: |
-        - op: add
-          path: /spec/bootstrap/initdb/postInitApplicationSQL
-          value: "CREATE EXTENSION IF NOT EXISTS vector"
+    - patch: |-
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Cluster
+        metadata:
+          name: extension-init
+        spec:
+          bootstrap:
+            initdb:
+              postInitApplicationSQL:
+                - "CREATE EXTENSION IF NOT EXISTS vector"
       target:
         kind: Cluster
