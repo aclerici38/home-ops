@@ -43,11 +43,6 @@ spec:
       valuesKey: username
       targetPath: postgresql.user
       optional: false
-    - kind: Secret
-      name: ${APP}-db-app
-      valuesKey: password
-      targetPath: postgresql.password
-      optional: false
   values:
     image:
       useFull: true
