@@ -31,14 +31,13 @@ spec:
       APP: *app
   patches:
     - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
-          name: extension-init
-        spec:
-          initdb:
-            postInitApplicationSQL:
-              - "CREATE EXTENSION IF NOT EXISTS vector"
+        [
+          {
+            "op": "add",
+            "path": "/spec/bootstrap/initdb/postInitApplicationSQL",
+            "value": ["CREATE EXTENSION IF NOT EXISTS vector"]
+          }
+        ]
       target:
         kind: Cluster
         name: open-webui-db
