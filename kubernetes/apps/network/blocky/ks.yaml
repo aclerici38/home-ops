@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -11,10 +12,8 @@ spec:
   prune: true
   wait: true
   dependsOn:
-    - name: reflector
     - name: cloudnative-pg
     - name: dragonfly-cluster
-    - name: external-secrets-stores
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -28,3 +27,8 @@ spec:
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: block-db-app
+        optional: false
+
