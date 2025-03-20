@@ -26,4 +26,5 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   postBuild:
-    APP: *app
+    substitute:
+      APP: *app
