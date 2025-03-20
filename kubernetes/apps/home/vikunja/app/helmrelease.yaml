@@ -27,49 +27,12 @@ spec:
   values:
     controllers:
       main:
-        initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/home-operations/postgres-init
-              tag: 17.4
-            env:
-              - name: INIT_POSTGRES_SUPER_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: username
-              - name: INIT_POSTGRES_SUPER_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: password
-              - name: INIT_POSTGRES_DBNAME
-                valueFrom:
-                  secretKeyRef:
-                    name: vikunja-secret
-                    key: VIKUNJA_DATABASE_DATABASE
-              - name: INIT_POSTGRES_HOST
-                valueFrom:
-                  secretKeyRef:
-                    name: vikunja-secret
-                    key: VIKUNJA_DATABASE_HOST
-              - name: INIT_POSTGRES_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: vikunja-secret
-                    key: VIKUNJA_DATABASE_USER
-              - name: INIT_POSTGRES_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: vikunja-secret
-                    key: VIKUNJA_DATABASE_PASSWORD
         containers:
           *app :
             image:
               repository: docker.io/vikunja/vikunja
               tag: 0.24.6@sha256:ed1f3ed467fecec0b57e9de7bc6607f8bbcbb23ffced6a81f5dfefc794cdbe3b
             env:
-              VIKUNJA_DATABASE_TYPE: postgres
               VIKUNJA_SERVICE_PUBLICURL: &fqdn vikunja.${SECRET_DOMAIN}
               VIKUNJA_SERVICE_TIMEZONE: America/Los_Angeles
               POSTGRES_ENABLED: "true"
@@ -81,6 +44,28 @@ spec:
               overdue_tasks_reminders_time: '11:00'
               VIKUNJA_DEFAULTSETTINGS_WEEK_START: 1
 
+              # postgres
+              VIKUNJA_DATABASE_TYPE: postgres
+              VIKUNJA_DATABASE_HOST:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: host
+              VIKUNJA_DATABASE_USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: user
+              VIKUNJA_DATABASE_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: password
+              VIKUNJA_DATABASE_DATABASE:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: dbname
             envFrom:
               - secretRef:
                   name: vikunja-secret

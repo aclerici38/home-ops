@@ -37,33 +37,23 @@ spec:
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
       GF_SECURITY_ANGULAR_SUPPORT_ENABLED: true
       GF_SERVER_ROOT_URL: https://grafana.${SECRET_DOMAIN}
-    envFromSecret: grafana-secret
-    extraInitContainers:
-      - name: init-db
-        image: ghcr.io/home-operations/postgres-init:17.4
-        imagePullPolicy: IfNotPresent
-        env:
-          - name: INIT_POSTGRES_SUPER_USER
-            valueFrom:
-              secretKeyRef:
-                name: cnpg-secret
-                key: username
-          - name: INIT_POSTGRES_SUPER_PASS
-            valueFrom:
-              secretKeyRef:
-                name: cnpg-secret
-                key: password
-          - name: INIT_POSTGRES_DBNAME
-            value: *app
-          - name: INIT_POSTGRES_HOST
-            value: &dbHost grafana-db-rw.monitoring.svc.cluster.local
-          - name: INIT_POSTGRES_USER
-            value: &dbUser grafana_user
-          - name: INIT_POSTGRES_PASS
-            valueFrom:
-              secretKeyRef:
-                name: grafana-secret
-                key: DB_PASS
+    envValueFrom:
+      PG_HOST:
+        secretKeyRef:
+          name: ${APP}-db-app
+          key: host
+      PG_USER:
+        secretKeyRef:
+          name: ${APP}-db-app
+          key: user
+      PG_PASS:
+        secretKeyRef:
+          name: ${APP}-db-app
+          key: password
+      PG_DB:
+        secretKeyRef:
+          name: ${APP}-db-app
+          key: dbname
     grafana.ini:
       analytics:
         check_for_updates: false
@@ -78,10 +68,10 @@ spec:
         news_feed_enabled: false
       database:
         type: postgres
-        host: *dbHost
-        name: *app
-        user: *dbUser
-        password: $__env{DB_PASS}
+        host: $__env{PG_HOST}
+        name: $__env{PG_DB}
+        user: $__env{PG_USER}
+        password: $__env{PG_PASS}
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1

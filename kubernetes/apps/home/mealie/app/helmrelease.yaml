@@ -27,49 +27,15 @@ spec:
   values:
     controllers:
       main:
-        initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/home-operations/postgres-init
-              tag: 17.4
-            env:
-              - name: INIT_POSTGRES_SUPER_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: username
-              - name: INIT_POSTGRES_SUPER_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: password
-              - name: INIT_POSTGRES_DBNAME
-                valueFrom:
-                  secretKeyRef:
-                    name: mealie-secret
-                    key: POSTGRES_DB
-              - name: INIT_POSTGRES_HOST
-                valueFrom:
-                  secretKeyRef:
-                    name: mealie-secret
-                    key: POSTGRES_SERVER
-              - name: INIT_POSTGRES_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: mealie-secret
-                    key: POSTGRES_USER
-              - name: INIT_POSTGRES_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: mealie-secret
-                    key: POSTGRES_PASSWORD
+        pod:
+          nodeSelector:
+            location: apartment
         containers:
           *app :
             image:
               repository: ghcr.io/mealie-recipes/mealie
               tag: v2.8.0@sha256:63aef46d90975d9cf9c0fdb9399fc2fe36acd222e1db6be99c504b9ccdbee967
             env:
-              DB_ENGINE: postgres
               BASE_URL: https://mealie.${SECRET_DOMAIN}
               DAILY_SCHEDULE_TIME: 05:00
               ALLOW_SIGNUP: "false"
@@ -92,6 +58,28 @@ spec:
               # OPENAI_SEND_DATABASE_DATA: 'false'
               # OPENAI_REQUEST_TIMEOUT: 120
 
+              # postgres
+              DB_ENGINE: postgres
+              POSTGRES_SERVER:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: host
+              POSTGRES_USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: user
+              POSTGRES_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: password
+              POSTGRES_DB:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: dbname
             envFrom:
               - secretRef:
                   name: mealie-secret
@@ -132,7 +120,7 @@ spec:
 
     persistence:
       config:
-        existingClaim: mealie-data
+        existingClaim: *app
         globalMounts:
           - path: /app/data
       # Needed for recipe parser

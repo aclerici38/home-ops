@@ -50,6 +50,12 @@ spec:
               ENABLE_OAUTH_SIGNUP: true
               OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
               OAUTH_PROVIDER_NAME: Authentik
+
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: uri
             envFrom:
               - secretRef:
                   name: open-webui-secret
