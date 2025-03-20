@@ -46,22 +46,6 @@ spec:
         apiVersion: postgresql.cnpg.io/v1
         kind: Cluster
         metadata:
-          name: temp-import
-        spec:
-          bootstrap:
-            initdb:
-              import:
-                type: microservice
-                databases:
-                  - immich
-                source:
-                  externalCluster: immich-db
-      target:
-        kind: Cluster
-    - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
           name: immich-settings
         spec:
           postgresql:
@@ -71,6 +55,12 @@ spec:
               search_path: '"$user", public, vectors'
           bootstrap:
             initdb:
+              import:
+                type: microservice
+                databases:
+                  - immich
+                source:
+                  externalCluster: immich-db
               postInitApplicationSQL:
                 - "CREATE EXTENSION IF NOT EXISTS vectors"
                 - "CREATE EXTENSION IF NOT EXISTS earthdistance CASCADE"
