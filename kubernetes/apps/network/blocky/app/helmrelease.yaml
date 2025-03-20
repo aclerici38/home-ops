@@ -40,6 +40,7 @@ spec:
           debug:
             image:
               repository: busybox
+              tag: latest
             command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
           *app :
             image:
