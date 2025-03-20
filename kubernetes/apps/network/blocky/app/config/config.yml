@@ -10,7 +10,7 @@ caching:
   cacheTimeNegative: -1
 
 log:
-  level: info
+  level: trace
 
 minTlsServeVersion: 1.3
 ports:
@@ -52,7 +52,6 @@ redis:
 
 queryLog:
   type: postgresql
-  target: ${uri}
   logRetentionDays: 0
   creationAttempts: 3
   creationCooldown: 5s
