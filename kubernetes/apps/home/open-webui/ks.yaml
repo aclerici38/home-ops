@@ -34,13 +34,11 @@ spec:
         apiVersion: postgresql.cnpg.io/v1
         kind: Cluster
         metadata:
-          name: open-webui-db
+          name: extension-init
         spec:
-          managed:
-            roles:
-              - name: app
-                ensure: present
-                superuser: true
+          initdb:
+            postInitApplicationSQL:
+              - "CREATE EXTENSION IF NOT EXISTS vector"
       target:
         kind: Cluster
         name: open-webui-db
