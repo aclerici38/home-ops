@@ -42,10 +42,7 @@ spec:
               repository: ghcr.io/0xerr0r/blocky
               tag: v0.25@sha256:347f8c6addc1775ef74b83dfc609c28436a67f812ef0ee7e2602569dc0e56cd1
             env:
-              PGPASSFILE:
-                secretKeyRef:
-                  name: ${APP}-db-app
-                  key: pgpass
+              PGPASSFILE: /etc/pgpass.conf
             probes:
               readiness: &probes
                 enabled: true
@@ -114,3 +111,8 @@ spec:
           - path: /app/config.yml
             subPath: config.yml
             readOnly: true
+      pgpass:
+        type: secret
+        name: ${APP}-db-app
+        globalMounts:
+          - path: /etc/pgpass.conf
