@@ -54,14 +54,7 @@ spec:
             parameters:
               search_path: '"$user", public, vectors'
           bootstrap:
-            $patch: replace
             initdb:
-              import:
-                type: microservice
-                databases:
-                  - immich
-                source:
-                  externalCluster: immich-db
               postInitApplicationSQL:
                 - "CREATE EXTENSION IF NOT EXISTS vectors"
                 - "CREATE EXTENSION IF NOT EXISTS earthdistance CASCADE"
