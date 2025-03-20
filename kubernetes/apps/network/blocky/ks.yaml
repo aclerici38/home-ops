@@ -6,6 +6,8 @@ metadata:
   namespace: flux-system
 spec:
   path: "./kubernetes/apps/network/blocky/app/"
+  components:
+    - ../../../../components/cnpg/init
   prune: true
   wait: true
   dependsOn:
@@ -24,7 +26,4 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   postBuild:
-    substituteFrom:
-      - kind: Secret
-        name: blocky-secret
-        optional: false
+    APP: *app
