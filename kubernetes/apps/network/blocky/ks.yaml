@@ -29,6 +29,6 @@ spec:
       APP: *app
     substituteFrom:
       - kind: Secret
-        name: block-db-app
+        name: blocky-db-app
         optional: true
 
