@@ -33,6 +33,7 @@ spec:
       CNPG_IMAGE: ghcr.io/tensorchord/cloudnative-pgvecto.rs
       CNPG_VERSION: "16.3"
       CNPG_STORAGECLASS: local-hostpath-bonds
+      CNPG_CAPACITY: 20Gi
       VOLSYNC_CAPACITY: 2Ti
       VOLSYNC_STORAGECLASS: truenas-nfs
       VOLSYNC_SNAPSHOTCLASS: truenas-nfs
@@ -46,18 +47,26 @@ spec:
         apiVersion: postgresql.cnpg.io/v1
         kind: Cluster
         metadata:
-          name: immich-settings
+          name: temp-import
         spec:
+          bootstrap:
+            initdb:
+              database: app
+              owner: app
+              import:
+                type: microservice
+                databases:
+                  - immich
+                source:
+                  externalCluster: immich-db
+              postInitApplicationSQL:
+                - "CREATE EXTENSION IF NOT EXISTS vectors"
+                - "CREATE EXTENSION IF NOT EXISTS earthdistance CASCADE"
+                - "ALTER SCHEMA vectors OWNER to app"
           postgresql:
             shared_preload_libraries:
               - "vectors.so"
             parameters:
               search_path: '"$user", public, vectors'
-          bootstrap:
-            initdb:
-              postInitApplicationSQL:
-                - "CREATE EXTENSION IF NOT EXISTS vectors"
-                - "CREATE EXTENSION IF NOT EXISTS earthdistance CASCADE"
-                - "ALTER SCHEMA vectors OWNER to app"
       target:
         kind: Cluster
