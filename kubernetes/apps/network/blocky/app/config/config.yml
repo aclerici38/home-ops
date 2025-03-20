@@ -10,7 +10,7 @@ caching:
   cacheTimeNegative: -1
 
 log:
-  level: trace
+  level: info
 
 minTlsServeVersion: 1.3
 ports:
@@ -52,7 +52,6 @@ redis:
 
 queryLog:
   type: postgresql
-  target: postgresql://app:3y9FsRFUcgTF7mVG8Pz4mOWlcCvGIfpryGq601hJkrUJ1BJMyhb0IPvwfeCvRUxh@blocky-db-rw.network:5432/app
   logRetentionDays: 0
   creationAttempts: 3
   creationCooldown: 5s
