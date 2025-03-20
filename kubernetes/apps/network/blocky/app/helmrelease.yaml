@@ -37,12 +37,16 @@ spec:
         strategy: RollingUpdate
         replicas: 2
         containers:
+          debug:
+            image:
+              repository: busybox
+            command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
           *app :
             image:
               repository: ghcr.io/0xerr0r/blocky
               tag: v0.25@sha256:347f8c6addc1775ef74b83dfc609c28436a67f812ef0ee7e2602569dc0e56cd1
             env:
-              PGPASSFILE: /etc/pgpass.conf
+              PGPASSFILE: &pgPass /etc/pgpass.conf
             probes:
               readiness: &probes
                 enabled: true
@@ -115,5 +119,6 @@ spec:
         type: secret
         name: ${APP}-db-app
         globalMounts:
-          - path: /etc/pgpass.conf
+          - path: *pgPass
             subPath: pgpass
+            readOnly: true
