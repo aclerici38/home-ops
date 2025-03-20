@@ -29,16 +29,3 @@ spec:
   postBuild:
     substitute:
       APP: *app
-  patches:
-    - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
-          name: extension-init
-        spec:
-          shared_preload_libraries:
-            - "vectors"
-      target:
-        kind: Cluster
-        name: open-webui-db
-        namespace: *ns
