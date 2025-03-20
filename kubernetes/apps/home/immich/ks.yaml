@@ -42,3 +42,17 @@ spec:
     substituteFrom:
       - kind: Secret
         name: immich-secret
+  patches:
+    - patch: |-
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Cluster
+        metadata:
+          name: temp-import
+        spec:
+          postgresql:
+            shared_preload_libraries:
+              - "vectors.so"
+            parameters:
+              search_path: '"$user", public, vectors'
+      target:
+        kind: Cluster
