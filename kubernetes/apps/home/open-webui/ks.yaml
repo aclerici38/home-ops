@@ -29,3 +29,18 @@ spec:
   postBuild:
     substitute:
       APP: *app
+  patches:
+    - patch: |-
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Cluster
+        metadata:
+          name: not-used
+        spec:
+          managed:
+            roles:
+              - name: app
+                superuser: true
+      target:
+        kind: Cluster
+        name: open-webui-db
+        namespace: *ns
