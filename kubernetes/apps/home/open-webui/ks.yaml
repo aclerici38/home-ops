@@ -34,11 +34,12 @@ spec:
         apiVersion: postgresql.cnpg.io/v1
         kind: Cluster
         metadata:
-          name: not-used
+          name: open-webui-db
         spec:
           managed:
             roles:
               - name: app
+                ensure: present
                 superuser: true
       target:
         kind: Cluster
