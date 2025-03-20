@@ -5,5 +5,4 @@ kind: Kustomization
 resources:
   - ../../../../templates/volsync/claim.yaml
   - ../../../../templates/volsync/minio.yaml
-  - ./cluster.yaml
   - ./helmrelease.yaml

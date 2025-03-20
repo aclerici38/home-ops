@@ -27,42 +27,6 @@ spec:
   values:
     controllers:
       prowlarr:
-        initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/home-operations/postgres-init
-              tag: 17.4
-            env:
-              - name: INIT_POSTGRES_SUPER_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: username
-              - name: INIT_POSTGRES_SUPER_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: cnpg-secret
-                    key: password
-              - name: INIT_POSTGRES_DBNAME
-                valueFrom:
-                  secretKeyRef:
-                    name: prowlarr-secret
-                    key: PROWLARR__POSTGRES__MAINDB
-              - name: INIT_POSTGRES_HOST
-                valueFrom:
-                  secretKeyRef:
-                    name: prowlarr-secret
-                    key: PROWLARR__POSTGRES__HOST
-              - name: INIT_POSTGRES_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: prowlarr-secret
-                    key: PROWLARR__POSTGRES__USER
-              - name: INIT_POSTGRES_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: prowlarr-secret
-                    key: PROWLARR__POSTGRES__PASSWORD
         containers:
           prowlarr:
             image:
@@ -76,10 +40,26 @@ spec:
               PROWLARR__LOG__DBENABLED: "False"
               PROWLARR__LOG__LEVEL: info
               PROWLARR__SERVER__PORT: &port 9696
-              PROWLARR__UPDATE__BRANCH: develop
-            envFrom:
-              - secretRef:
-                  name: prowlarr-secret
+              PROWLARR__POSTGRES__HOST:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: host
+              PROWLARR__POSTGRES__USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: username
+              PROWLARR__POSTGRES__PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: password
+              PROWLARR__POSTGRES__MAINDB:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: dbname
             probes:
               liveness: &probes
                 enabled: true

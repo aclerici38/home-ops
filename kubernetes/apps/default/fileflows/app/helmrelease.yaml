@@ -35,7 +35,7 @@ spec:
           runtimeClassName: nvidia
           securityContext:
             runAsNonRoot: false
-            fsGroupChangePolicy: Always
+            fsGroupChangePolicy: OnRootMismatch
           nodeSelector:
             kubernetes.io/hostname: "bonds"
         containers:
