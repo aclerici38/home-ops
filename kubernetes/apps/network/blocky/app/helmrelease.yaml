@@ -119,6 +119,7 @@ spec:
       pgpass:
         type: secret
         name: ${APP}-db-app
+        defaultMode: 0600
         globalMounts:
           - path: *pgPass
             subPath: pgpass
