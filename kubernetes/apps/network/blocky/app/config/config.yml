@@ -52,7 +52,6 @@ redis:
 
 queryLog:
   type: postgresql
-  target: ${uri}
   logRetentionDays: 0
   creationAttempts: 3
   creationCooldown: 5s
