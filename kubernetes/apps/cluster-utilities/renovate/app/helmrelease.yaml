@@ -56,6 +56,12 @@ spec:
       kubernetes.io/arch: amd64
     fullNameOverride: 'renovate'
     renovate:
+      extraEnvVars:
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ${APP}-db-app
+              key: password
       logLevel: 'info'
       mendRnvAcceptTos: 'y'
       mendRnvPlatform: 'github'
