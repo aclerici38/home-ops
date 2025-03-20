@@ -52,6 +52,7 @@ redis:
 
 queryLog:
   type: postgresql
+  target: postgresql://app:3y9FsRFUcgTF7mVG8Pz4mOWlcCvGIfpryGq601hJkrUJ1BJMyhb0IPvwfeCvRUxh@blocky-db-rw.network:5432/app
   logRetentionDays: 0
   creationAttempts: 3
   creationCooldown: 5s
