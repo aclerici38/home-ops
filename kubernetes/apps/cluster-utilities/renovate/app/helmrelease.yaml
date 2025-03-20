@@ -22,6 +22,32 @@ spec:
     cleanupOnFail: true
     remediation:
       retries: 1
+  valuesFrom:
+    - kind: Secret
+      name: ${APP}-db-app
+      valuesKey: host
+      targetPath: postgresql.host
+      optional: false
+    - kind: Secret
+      name: ${APP}-db-app
+      valuesKey: port
+      targetPath: postgresql.port
+      optional: false
+    - kind: Secret
+      name: ${APP}-db-app
+      valuesKey: dbname
+      targetPath: postgresql.database
+      optional: false
+    - kind: Secret
+      name: ${APP}-db-app
+      valuesKey: username
+      targetPath: postgresql.user
+      optional: false
+    - kind: Secret
+      name: ${APP}-db-app
+      valuesKey: password
+      targetPath: postgresql.password
+      optional: false
   values:
     image:
       useFull: true
@@ -47,24 +73,13 @@ spec:
         }
     postgresql:
       enabled: true
-      host: 'renovate-db-rw'
-      port: '5432'
-      database: 'renovate-main'
-      user: '${PGUSER}'
-      password: '${PGPASSWORD}'
     cacheInMemory:
       enabled: true
     service:
       type: ClusterIP
       port: 8080
     ingress:
-      enabled: true
-      ingressClassName: 'external'
-      hosts:
-        renovate.${SECRET_DOMAIN}:
-          paths:
-            - path: "/"
-              pathType: ImplementationSpecific
+      enabled: false
     podSecurityContext:
       runAsNonRoot: true
       seccompProfile:

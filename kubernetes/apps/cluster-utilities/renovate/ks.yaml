@@ -4,13 +4,16 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app renovate
-  namespace: flux-system
+  namespace: &ns cluster-utilities
 spec:
-  targetNamespace: cluster-utilities
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-utilities/renovate/app
+  components:
+    - ../../../../components/cnpg/init
+    # - ../../../../components/cnpg/restore
   prune: true
   dependsOn:
     - name: dragonfly-cluster
@@ -22,7 +25,5 @@ spec:
   interval: 30m
   timeout: 5m
   postBuild:
-    substituteFrom:
-      - kind: Secret
-        name: renovate-secret
-        optional: false
+    substitute:
+      APP: *app
