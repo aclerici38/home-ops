@@ -2,7 +2,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: init-db-patch
+  name: &db ${APP}-db
 spec:
   backup:
     retentionPolicy: 7d
@@ -14,7 +14,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
-      serverName: ${APP}-db
+      serverName: *db
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
