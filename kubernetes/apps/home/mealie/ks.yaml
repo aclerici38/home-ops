@@ -30,5 +30,6 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_STORAGECLASS: &sc local-hostpath-bonds
+      VOLSYNC_SNAPSHOTCLASS: *sc
       VOLSYNC_CAPACITY: 10Gi
       CNPG_STORAGECLASS: *sc

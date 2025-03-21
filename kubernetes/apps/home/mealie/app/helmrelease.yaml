@@ -27,9 +27,6 @@ spec:
   values:
     controllers:
       main:
-        pod:
-          nodeSelector:
-            location: apartment
         containers:
           *app :
             image:
