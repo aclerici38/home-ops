@@ -34,23 +34,23 @@ spec:
       DB_HOSTNAME:
         valueFrom:
           secretKeyRef:
-            name: immich-secret
-            key: DB_HOSTNAME
+            name: ${APP}-db-app
+            key: host
       DB_USERNAME:
         valueFrom:
           secretKeyRef:
-            name: immich-secret
-            key: DB_USERNAME
+            name: ${APP}-db-app
+            key: user
       DB_DATABASE_NAME:
         valueFrom:
           secretKeyRef:
-            name: immich-secret
-            key: DB_DATABASE_NAME
+            name: ${APP}-db-app
+            key: dbname
       DB_PASSWORD:
         valueFrom:
           secretKeyRef:
-            name: immich-secret
-            key: DB_PASSWORD
+            name: ${APP}-db-app
+            key: password
     immich:
       metrics:
         enabled: true
