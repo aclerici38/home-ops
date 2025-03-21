@@ -90,6 +90,9 @@ spec:
           - path: /data
           - path: /app/backend/data
             subPath: backend
-      var:
+      cache:
         type: emptyDir
-        sizeLimit: 1Gi
+        sizeLimit: 200Mi
+        globalMounts:
+          - path: /.local
+      
