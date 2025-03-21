@@ -35,7 +35,7 @@ spec:
               tag: v0.43.1@sha256:293f0e22114f67793c5dccb853cf3d38050794e847370735701ec108938c2902
             command: ["/bin/sh", "/app/scripts/docker/entrypoint.sh"]
             env:
-              PUBLIC_APP_URL: https://${APP}.${SECRET_DOMAIN}
+              PUBLIC_APP_URL: https://id.${SECRET_DOMAIN}
               TRUST_PROXY: true
               DB_PROVIDER: postgres
               CADDY_PORT: 8080
@@ -71,18 +71,28 @@ spec:
       *app :
         controller: main
         ports:
-          http:
+          frontend:
+            port: 3000
+          backend:
             port: 8080
     ingress:
       *app :
         className: external
         hosts:
-          - host: ${APP}.${SECRET_DOMAIN}
+          - host: id.${SECRET_DOMAIN}
             paths:
               - path: /
                 service:
                   identifier: *app
-                  port: http
+                  port: frontend
+              - path: /api
+                service:
+                  identifier: *app
+                  port: backend
+              - path: /.well-known
+                service:
+                  identifier: *app
+                  port: backend
     persistence:
       data:
         existingClaim: *app
@@ -90,9 +100,3 @@ spec:
           - path: /data
           - path: /app/backend/data
             subPath: backend
-      cache:
-        type: emptyDir
-        sizeLimit: 200Mi
-        globalMounts:
-          - path: /.local
-      
