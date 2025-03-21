@@ -36,10 +36,10 @@ spec:
             command: ["/bin/sh", "/app/scripts/docker/entrypoint.sh"]
             env:
               PUBLIC_APP_URL: https://id.${SECRET_DOMAIN}
-              TRUST_PROXY: true
+              TRUST_PROXY: "true"
               DB_PROVIDER: postgres
-              CADDY_PORT: 8080
-              UPDATE_CHECK_DISABLED: true
+              CADDY_DISABLED: "true"
+              UPDATE_CHECK_DISABLED: "true"
 
               EMAIL_LOGIN_NOTIFICATION_ENABLED: true
 
