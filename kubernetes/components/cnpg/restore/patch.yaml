@@ -1,22 +1,10 @@
----
-# yaml-language-server: $schema=https://crd.movishell.pl/postgresql.cnpg.io/cluster_v1.json
-
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: &db ${APP}-db
+  name: restore-db-patch
   annotations:
     cnpg.io/skipEmptyWalArchiveCheck: 'enabled'
 spec:
-  instances: ${CNPG_REPLICAS:=1}
-  imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql}:${CNPG_VERSION:=17.4}
-  primaryUpdateStrategy: unsupervised
-  storage:
-    size: ${CNPG_SIZE:=2Gi}
-    storageClass: ${CNPG_STORAGECLASS:=local-hostpath}
-  superuserSecret:
-    name: cnpg-secret
-  enableSuperuserAccess: true
   backup:
     retentionPolicy: 7d
     barmanObjectStore: &barmanObjectStore
@@ -27,7 +15,7 @@ spec:
         maxParallel: 8
       destinationPath: s3://backups/cnpg
       endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
-      serverName: *db
+      serverName: &db ${APP}-db
       s3Credentials:
         accessKeyId:
           name: cnpg-secret
@@ -43,5 +31,3 @@ spec:
       barmanObjectStore:
         <<: *barmanObjectStore
         serverName: *db
-  monitoring:
-    enablePodMonitor: true
