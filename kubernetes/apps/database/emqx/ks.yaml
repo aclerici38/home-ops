@@ -57,12 +57,19 @@ spec:
     substitute:
       APP: *app
   patches:
-    - patch: |-
-        - op: replace
-          path: /spec/target/template/data/init-user.json
-          value: "[{\"user_id\": \"{{ .X_EMQX_MQTT_USERNAME }}\", \"password\": \"{{ .X_EMQX_MQTT_PASSWORD }}\", \"is_superuser\": true}]"
-        - op: replace
-          path: /spec/dataFrom
-          value: [{"extract": {"key": "emqx"}}]
+    - patch: |
+        apiVersion: external-secrets.io/v1beta1
+        kind: ExternalSecret
+        metadata:
+          name: emqx-cluster-secret
+        spec:
+          target:
+            template:
+              data:
+                init-user.json: >
+                  [{"user_id": "{{ .X_EMQX_MQTT_USERNAME }}", "password": "{{ .X_EMQX_MQTT_PASSWORD }}", "is_superuser": true}]
+          dataFrom:
+          - extract:
+              key: emqx
       target:
         kind: ExternalSecret
