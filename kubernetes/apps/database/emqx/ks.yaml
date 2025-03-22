@@ -63,8 +63,6 @@ spec:
           value: "[{\"user_id\": \"{{ .X_EMQX_MQTT_USERNAME }}\", \"password\": \"{{ .X_EMQX_MQTT_PASSWORD }}\", \"is_superuser\": true}]"
         - op: replace
           path: /spec/dataFrom
-          value:
-            - extract:
-                key: emqx
+          value: [{"extract": {"key": "emqx"}}]
       target:
         kind: ExternalSecret
