@@ -18,9 +18,9 @@ spec:
         - name: cluster
           pod: {}
       volumes:
-        # - name: cdrom
-        #   dataVolume:
-        #     name: truenas-scale-iso
+        - name: cdrom
+          dataVolume:
+            name: truenas-scale-iso
         - name: boot
           persistentVolumeClaim:
             claimName: truenas-scale
