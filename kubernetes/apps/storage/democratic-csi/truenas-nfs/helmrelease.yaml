@@ -27,6 +27,15 @@ spec:
   dependsOn:
     - name: snapshot-controller
       namespace: storage
+  valuesFrom:
+    - kind: Secret
+      name: truenas-nfs-secret
+      valuesKey: API_KEY
+      targetPath: driver.config.httpConnection.apiKey
+    - kind: Secret
+      name: truenas-nfs-secret
+      valuesKey: API_KEY
+      targetPath: driver.config.sshConnection.privateKey
   values:
     controller:
       fullnameOverride: *name
