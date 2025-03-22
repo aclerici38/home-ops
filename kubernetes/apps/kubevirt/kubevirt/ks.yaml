@@ -13,6 +13,7 @@ spec:
   interval: 5m
   dependsOn:
     - name: cdi
+      namespace: cdi
   prune: true
   wait: true
   path: "./deploy"
