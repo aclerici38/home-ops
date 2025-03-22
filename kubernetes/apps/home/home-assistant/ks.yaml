@@ -3,20 +3,23 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app fam-hass
-  namespace: flux-system
+  namespace: &ns home
 spec:
-  targetNamespace: home
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: volsync
+      namespace: storage
     - name: multus
+      namespace: network
   path: ./kubernetes/apps/home/home-assistant/fam
   prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m
@@ -32,20 +35,23 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app apt-hass
-  namespace: flux-system
+  namespace: &ns home
 spec:
-  targetNamespace: home
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: volsync
+      namespace: storage
     - name: multus
+      namespace: network
   path: ./kubernetes/apps/home/home-assistant/apt
   prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m

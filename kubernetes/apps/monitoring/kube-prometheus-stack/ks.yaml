@@ -11,10 +11,11 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/monitoring/kube-prometheus-stack/app
-  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
+  prune: true
   interval: 30m
   timeout: 5m

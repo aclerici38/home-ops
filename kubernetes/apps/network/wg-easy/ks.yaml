@@ -4,11 +4,12 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app wg-easy
-  namespace: flux-system
+  namespace: &ns network
 spec:
-  targetNamespace: network
+  targetNamespace: *ns
   dependsOn:
     - name: volsync
+      namespace: storage
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -17,6 +18,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m

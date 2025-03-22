@@ -41,9 +41,11 @@ spec:
               ATUIN_TLS__CERT_PATH: ""
               ATUIN_TLS__PKEY_PATH: ""
               RUST_LOG: info
-            envFrom:
-              - secretRef:
-                  name: atuin-secret
+              ATUIN_DB_URI:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: uri
             probes:
               liveness:
                 enabled: true

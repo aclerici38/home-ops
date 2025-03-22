@@ -13,6 +13,7 @@ spec:
   path: ./kubernetes/apps/cluster-utilities/renovate/app
   components:
     - ../../../../components/cnpg/init
+    - ../../../../components/external-secret
   prune: false
   dependsOn:
     - name: dragonfly-cluster

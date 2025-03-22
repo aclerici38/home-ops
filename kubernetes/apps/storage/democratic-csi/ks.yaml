@@ -4,9 +4,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app local-path
-  namespace: flux-system
+  namespace: &ns storage
 spec:
-  targetNamespace: storage
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -24,9 +24,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app local-path-bonds
-  namespace: flux-system
+  namespace: &ns storage
 spec:
-  targetNamespace: storage
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -44,9 +44,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app local-path-madbum
-  namespace: flux-system
+  namespace: &ns storage
 spec:
-  targetNamespace: storage
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -64,9 +64,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app local-path-posey
-  namespace: flux-system
+  namespace: &ns storage
 spec:
-  targetNamespace: storage
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -84,9 +84,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app truenas-nfs
-  namespace: flux-system
+  namespace: &ns storage
 spec:
-  targetNamespace: storage
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -106,9 +106,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app synology-nfs
-  namespace: flux-system
+  namespace: &ns storage
 spec:
-  targetNamespace: storage
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

@@ -3,20 +3,23 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app audiobookshelf
-  namespace: flux-system
+  namespace: &ns default
 spec:
-  targetNamespace: default
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: volsync
+      namespace: storage
     - name: truenas-scale
+      namespace: truenas-scale
   path: ./kubernetes/apps/default/audiobookshelf/app
   prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m
@@ -25,4 +28,3 @@ spec:
       APP: *app
       VOLSYNC_STORAGECLASS: &sc local-hostpath
       VOLSYNC_SNAPSHOTCLASS: *sc
-

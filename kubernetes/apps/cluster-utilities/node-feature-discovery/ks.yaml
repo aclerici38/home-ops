@@ -4,7 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app node-feature-discovery
-  namespace: flux-system
+  namespace: &ns cluster-utilities
 spec:
   commonMetadata:
     labels:
@@ -17,31 +17,6 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: cluster-utilities
+  targetNamespace: *ns
   timeout: 5m
   wait: true
-# ---
-# # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-# apiVersion: kustomize.toolkit.fluxcd.io/v1
-# kind: Kustomization
-# metadata:
-#   name: &app node-feature-discovery-rules
-#   namespace: flux-system
-# spec:
-#   commonMetadata:
-#     labels:
-#       app.kubernetes.io/name: *app
-#   dependsOn:
-#     - name: node-feature-discovery
-#       namespace: cluster-utilities
-#   interval: 1h
-#   path: ./kubernetes/apps/cluster-utilities/node-feature-discovery/rules
-#   prune: false
-#   retryInterval: 2m
-#   sourceRef:
-#     kind: GitRepository
-#     name: flux-system
-#     namespace: flux-system
-#   targetNamespace: cluster-utilities
-#   timeout: 5m
-#   wait: true

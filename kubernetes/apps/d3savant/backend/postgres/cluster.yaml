@@ -21,7 +21,7 @@ spec:
     size: 500Gi
     storageClass: local-hostpath
   superuserSecret:
-    name: cnpg-secret
+    name: cloudnative-pg-secret
   enableSuperuserAccess: true
 
   backup:
@@ -37,10 +37,10 @@ spec:
       serverName: *db
       s3Credentials:
         accessKeyId:
-          name: cnpg-secret
+          name: cloudnative-pg-secret
           key: minio-access-key-id
         secretAccessKey:
-          name: cnpg-secret
+          name: cloudnative-pg-secret
           key: minio-secret-access-key
   # bootstrap:
   #   recovery:

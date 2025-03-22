@@ -4,19 +4,21 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app recomendarr
-  namespace: flux-system
+  namespace: &ns default
 spec:
-  targetNamespace: default
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/default/recomendarr/app
   dependsOn:
     - name: volsync
+      namespace: storage
   prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m

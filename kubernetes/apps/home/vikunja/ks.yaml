@@ -18,6 +18,7 @@ spec:
   path: ./kubernetes/apps/home/vikunja/app
   components:
     - ../../../../components/cnpg/init
+    - ../../../../components/external-secrets
   prune: false
   sourceRef:
     kind: GitRepository

@@ -4,46 +4,44 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app qbittorrent
-  namespace: flux-system
+  namespace: &ns default
 spec:
-  targetNamespace: default
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/default/qbittorrent/app
+  components:
+    - ../../../../components/external-secret
   prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   dependsOn:
     - name: volsync
+      namespace: storage
     - name: external-secrets-stores
-    - name: reflector
+      namespace: external-secrets
     - name: truenas-scale
+      namespace: truenas-scale
   postBuild:
     substitute:
       APP: *app
       VOLSYNC_STORAGECLASS: &sc local-hostpath
       VOLSYNC_SNAPSHOTCLASS: *sc
-    substituteFrom:
-      - kind: Secret
-        name: sonarr-secret
-        optional: false
-      - kind: Secret
-        name: radarr-secret
-        optional: false
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app vuetorrent
-  namespace: flux-system
+  namespace: &ns default
 spec:
-  targetNamespace: default
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -54,4 +52,5 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true

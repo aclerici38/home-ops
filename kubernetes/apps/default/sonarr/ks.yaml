@@ -20,7 +20,7 @@ spec:
   path: ./kubernetes/apps/default/sonarr/app
   components:
     - ../../../../components/cnpg/init
-    # - ../../../../components/cnpg/restore
+    - ../../../../components/external-secret
   prune: false
   sourceRef:
     kind: GitRepository
