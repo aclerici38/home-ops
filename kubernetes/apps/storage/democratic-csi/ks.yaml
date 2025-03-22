@@ -15,6 +15,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   interval: 30m
   timeout: 5m
   wait: true
@@ -35,6 +36,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   interval: 30m
   timeout: 5m
   wait: true
@@ -55,6 +57,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   interval: 30m
   timeout: 5m
   wait: true
@@ -75,6 +78,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   interval: 30m
   timeout: 5m
   wait: true
@@ -95,6 +99,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   dependsOn:
     - name: snapshot-controller
     - name: truenas-scale
@@ -117,6 +122,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   interval: 30m
   timeout: 5m
   wait: true
