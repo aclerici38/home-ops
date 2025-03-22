@@ -16,6 +16,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/default/fileflows/app
+  components:
+    - ../../../../components/volsync/minio
   prune: true
   sourceRef:
     kind: GitRepository

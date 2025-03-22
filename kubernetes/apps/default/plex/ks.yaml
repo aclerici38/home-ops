@@ -16,6 +16,8 @@ spec:
     - name: truenas-scale
       namespace: truenas-scale
   path: ./kubernetes/apps/default/plex/app
+  components:
+    - ../../../../components/volsync/minio
   prune: true
   sourceRef:
     kind: GitRepository

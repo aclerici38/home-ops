@@ -12,6 +12,8 @@ spec:
       namespace: database
     - name: truenas-scale
       namespace: truenas-scale
+    - name: external-secrets-stores
+      namespace: external-secrets
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -19,6 +21,7 @@ spec:
   components:
     - ../../../../components/cnpg/init
     - ../../../../components/external-secret
+    - ../../../../components/volsync/minio
   prune: true
   sourceRef:
     kind: GitRepository
