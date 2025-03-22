@@ -66,8 +66,7 @@ spec:
           target:
             template:
               data:
-                init-user.json: |
-                  [{"user_id": "{{ .X_EMQX_MQTT_USERNAME }}", "password": "{{ .X_EMQX_MQTT_PASSWORD }}", "is_superuser": true}]
+                init-user.json: [{"user_id": "{{ .X_EMQX_MQTT_USERNAME }}", "password": "{{ .X_EMQX_MQTT_PASSWORD }}", "is_superuser": true}]
           dataFrom:
             $patch: replace
             - extract:
