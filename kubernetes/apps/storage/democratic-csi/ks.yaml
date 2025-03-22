@@ -113,7 +113,7 @@ spec:
       APP: *app
     substituteFrom:
       - kind: Secret
-        name: ${APP}-secret
+        name: truenas-nfs-secret
         optional: false
 ---
 # yaml-language-server: $schema=https://kube-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
