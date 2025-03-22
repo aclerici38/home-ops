@@ -14,6 +14,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/network/wg-easy/app
+  components:
+    - ../../../../components/volsync/minio
   prune: true
   sourceRef:
     kind: GitRepository

@@ -10,6 +10,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-utilities/redisinsight/app
+  components:
+    - ../../../../components/volsync/minio
   prune: true
   sourceRef:
     kind: GitRepository

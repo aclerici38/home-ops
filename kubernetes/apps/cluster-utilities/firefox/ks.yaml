@@ -11,6 +11,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-utilities/firefox/app
+  components:
+    - ../../../../components/volsync/minio
   prune: true
   dependsOn:
     - name: volsync

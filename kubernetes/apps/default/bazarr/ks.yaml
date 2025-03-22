@@ -18,6 +18,7 @@ spec:
   path: ./kubernetes/apps/default/bazarr/app
   components:
     - ../../../../components/cnpg/init
+    - ../../../../components/volsync/minio
   prune: true
   sourceRef:
     kind: GitRepository
