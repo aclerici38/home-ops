@@ -9,11 +9,11 @@ spec:
   targetNamespace: *ns
   dependsOn:
     - name: external-secrets-stores
-      namespace: flux-system
+      namespace: externbal-secrets
     - name: cloudnative-pg
-      namespace: flux-system
+      namespace: database
     - name: truenas-scale
-      namespace: flux-system
+      namespace: truenas-scale
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
