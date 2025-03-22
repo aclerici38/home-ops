@@ -19,7 +19,7 @@ spec:
   path: ./kubernetes/apps/home/immich/app
   components:
     - ../../../../components/cnpg/restore
-    - ../../../../components/external-secrets
+    - ../../../../components/external-secret
   prune: false
   sourceRef:
     kind: GitRepository
