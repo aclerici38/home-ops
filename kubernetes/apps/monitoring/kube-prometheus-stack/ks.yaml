@@ -4,9 +4,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app kube-prometheus-stack
-  namespace: flux-system
+  namespace: &ns monitoring
 spec:
-  targetNamespace: monitoring
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
