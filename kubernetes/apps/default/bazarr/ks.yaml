@@ -18,7 +18,7 @@ spec:
   path: ./kubernetes/apps/default/bazarr/app
   components:
     - ../../../../components/cnpg/init
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

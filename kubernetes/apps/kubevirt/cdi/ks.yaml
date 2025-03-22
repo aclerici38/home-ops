@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  prune: false
+  prune: true
   wait: true
   path: "./deploy"
   sourceRef:

@@ -16,7 +16,7 @@ spec:
   components:
     - ../../../../components/cnpg/no-backup
     - ../../../../components/external-secret
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

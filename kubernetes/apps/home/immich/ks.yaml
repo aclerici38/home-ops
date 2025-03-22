@@ -20,7 +20,7 @@ spec:
   components:
     - ../../../../components/cnpg/restore
     - ../../../../components/external-secret
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

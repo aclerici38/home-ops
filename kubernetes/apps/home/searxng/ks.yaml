@@ -18,7 +18,7 @@ spec:
   path: ./kubernetes/apps/home/searxng/app
   components:
     - ../../../../components/external-secret
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

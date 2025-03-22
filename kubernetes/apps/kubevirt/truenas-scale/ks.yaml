@@ -14,7 +14,7 @@ spec:
     - name: kubevirt
       namespace: kubevirt
   path: ./kubernetes/apps/kubevirt/truenas-scale/config
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -40,7 +40,7 @@ spec:
     - name: volsync
       namespace: storage
   path: ./kubernetes/apps/kubevirt/truenas-scale/vm
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -16,7 +16,7 @@ spec:
   path: ./kubernetes/apps/home/atuin/app
   components:
     - ../../../../components/cnpg/init
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

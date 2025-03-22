@@ -14,7 +14,7 @@ spec:
   dependsOn:
     - name: volsync
       namespace: storage
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

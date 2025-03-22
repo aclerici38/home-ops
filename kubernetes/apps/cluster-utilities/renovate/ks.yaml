@@ -14,7 +14,7 @@ spec:
   components:
     - ../../../../components/cnpg/init
     - ../../../../components/external-secret
-  prune: false
+  prune: true
   dependsOn:
     - name: dragonfly-cluster
       namespace: flux-system

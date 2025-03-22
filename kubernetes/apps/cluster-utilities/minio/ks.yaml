@@ -17,7 +17,7 @@ spec:
   path: ./kubernetes/apps/cluster-utilities/minio/app
   components:
     - ../../../../components/external-secret
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

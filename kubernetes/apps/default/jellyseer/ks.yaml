@@ -18,7 +18,7 @@ spec:
   path: ./kubernetes/apps/default/jellyseer/app
   components:
     - ../../../../components/cnpg/no-backup
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

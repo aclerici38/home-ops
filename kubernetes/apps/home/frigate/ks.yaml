@@ -18,7 +18,7 @@ spec:
       namespace: external-secrets
     - name: emqx-cluster
       namespace: database
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

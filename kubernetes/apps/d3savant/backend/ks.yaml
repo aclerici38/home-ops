@@ -20,7 +20,7 @@ spec:
   path: ./kubernetes/apps/d3savant/backend/postgres
   components:
     - ../../../../components/external-secret
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

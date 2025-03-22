@@ -9,7 +9,7 @@ spec:
   interval: 30m
   timeout: 5m
   path: ./kubernetes/flux/meta
-  prune: false
+  prune: true
   wait: true
   sourceRef:
     kind: GitRepository

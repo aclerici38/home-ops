@@ -15,7 +15,7 @@ spec:
   path: ./kubernetes/apps/default/qbittorrent/app
   components:
     - ../../../../components/external-secret
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -48,7 +48,7 @@ spec:
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/default/qbittorrent/vuetorrent
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

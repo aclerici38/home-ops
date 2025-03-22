@@ -16,7 +16,7 @@ spec:
   path: ./kubernetes/apps/database/emqx/app
   components:
     - ../../../../components/external-secret
-  prune: false
+  prune: true
   retryInterval: 2m
   sourceRef:
     kind: GitRepository
@@ -44,7 +44,7 @@ spec:
   path: ./kubernetes/apps/database/emqx/cluster
   components:
     - ../../../../components/external-secret
-  prune: false
+  prune: true
   retryInterval: 2m
   sourceRef:
     kind: GitRepository

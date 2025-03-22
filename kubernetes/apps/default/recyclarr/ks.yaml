@@ -16,7 +16,7 @@ spec:
       namespace: external-secrets
     - name: sonarr
     - name: radarr
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

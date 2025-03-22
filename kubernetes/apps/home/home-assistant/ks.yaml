@@ -15,7 +15,7 @@ spec:
     - name: multus
       namespace: network
   path: ./kubernetes/apps/home/home-assistant/fam
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -47,7 +47,7 @@ spec:
     - name: multus
       namespace: network
   path: ./kubernetes/apps/home/home-assistant/apt
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
