@@ -103,6 +103,7 @@ spec:
   dependsOn:
     - name: snapshot-controller
     - name: truenas-scale
+      namespace: truenas-scale
   interval: 30m
   timeout: 5m
 ---
