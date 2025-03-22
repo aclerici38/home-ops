@@ -54,8 +54,8 @@ spec:
         kind: ExternalSecret
         metadata:
           name: patch
+        dataFrom: null
         data:
-          $patch: replace
           - secretKey: CLOUDFLARE_CERT_API_KEY
             remoteRef:
               key: cloudflare
