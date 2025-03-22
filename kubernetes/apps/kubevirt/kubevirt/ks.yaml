@@ -19,6 +19,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: kubevirt-flux
+    namespace: flux-system
   patches:
     # namespace is managed separately by main ks, no need for this ks to also manage it, KubeVirt bundles namespace into kubevirt-operator.yaml
     - patch: |
