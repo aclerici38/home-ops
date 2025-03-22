@@ -69,7 +69,6 @@ spec:
                 init-user.json: |
                   [{"user_id": "{{ .X_EMQX_MQTT_USERNAME }}", "password": "{{ .X_EMQX_MQTT_PASSWORD }}", "is_superuser": true}]
           dataFrom:
-            - $patch: replace
               extract:
                 key: emqx
       target:
