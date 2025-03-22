@@ -96,26 +96,18 @@ spec:
             port: 8123
           code-server:
             port: 12321
-    ingress:
-      *app :
-        className: external
-        hosts:
-          - host: &fqdn "apt-hass.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: http
-      code-server:
-        className: internal
-        hosts:
-          - host: &code-fqdn code-apt-hass.${SECRET_DOMAIN}
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: code-server
-
+    # route:
+    #   *app :
+    #     hostnames:
+    #       - ${APP}.${SECRET_DOMAIN}
+    #     parentRefs:
+    #       - name: internal
+    #         namespace: kube-system
+    #         sectionName: https
+    #     rules:
+    #       - backendRefs:
+    #           - name: *app
+    #             port: *port
     persistence:
       config:
         existingClaim: apt-hass

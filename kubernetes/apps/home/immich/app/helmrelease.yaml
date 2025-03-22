@@ -159,7 +159,7 @@ spec:
         pullPolicy: IfNotPresent
       ingress:
         main:
-          enabled: true
+          enabled: false
           ingressClassName: external
           annotations:
             nginx.ingress.kubernetes.io/proxy-request-buffering: "off"

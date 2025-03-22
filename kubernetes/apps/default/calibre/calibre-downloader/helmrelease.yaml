@@ -41,7 +41,7 @@ spec:
               repository: ghcr.io/calibrain/calibre-web-automated-book-downloader
               tag: latest@sha256:e4c205932b0ece06d76de09ba8569d5aa30768cc46d04beb3a24ddc0106043d6
             env:
-              FLASK_PORT: 8084
+              FLASK_PORT: &port 8084
               FLASK_DEBUG: false
               AA_BASE_URL: https://annas-archive.li
               INGEST_DIR: &ingest /cwa-book-ingest
@@ -54,7 +54,7 @@ spec:
                 spec:
                   httpGet:
                     path: /request/api/status
-                    port: 8084
+                    port: *port
                   initialDelaySeconds: 5
                   periodSeconds: 30
                   timeoutSeconds: 30
@@ -77,17 +77,19 @@ spec:
         controller: main
         ports:
           http:
-            port: 8084
-    ingress:
+            port: *port
+    route:
       *app :
-        className: internal
-        hosts:
-          - host: &fqdn "download-books.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: http
+        hostnames:
+          - download-books.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     persistence:
       tmp:
         type: emptyDir

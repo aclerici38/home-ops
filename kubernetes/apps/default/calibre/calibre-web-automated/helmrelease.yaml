@@ -58,17 +58,19 @@ spec:
         controller: main
         ports:
           http:
-            port: 8083
-    ingress:
+            port: &port 8083
+    route:
       *app :
-        className: internal
-        hosts:
-          - host: &fqdn "calibre.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: http
+        hostnames:
+          - download-books.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     persistence:
       config:
         existingClaim: calibre

@@ -79,16 +79,18 @@ spec:
         ports:
           http:
             port: *port
-    ingress:
-      qbit:
-        className: "internal"
-        hosts:
-          - host: qbit.${SECRET_DOMAIN}
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: http
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     persistence:
       config:
         existingClaim: vuetorrent-config

@@ -100,20 +100,19 @@ spec:
         controller: main
         ports:
           http:
-            port: 9000
-    ingress:
+            port: &port 9000
+    route:
       *app :
-        className: external
-        annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "1g"
-        hosts:
-          - host: "mealie.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: http
-
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     persistence:
       config:
         existingClaim: *app

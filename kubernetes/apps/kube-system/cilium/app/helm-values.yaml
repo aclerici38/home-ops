@@ -44,15 +44,7 @@ hubble:
     prometheus:
       enabled: true
   ui:
-    enabled: true
-    replicas: 1
-    baseUrl: "/"
-    rollOutPods: true
-    ingress:
-      enabled: true
-      className: internal
-      hosts:
-        - &fqdn "hubble.${SECRET_DOMAIN}"
+    enabled: false
 ipam:
   mode: kubernetes
 # So I don't have to worry about this again

@@ -62,17 +62,19 @@ spec:
         controller: main
         ports:
           http:
-            port: 5000
-    ingress:
+            port: &port 5000
+    route:
       *app :
-        className: internal
-        hosts:
-          - host: "fileflows.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: http
+        hostnames:
+          - download-books.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     serviceAccount:
       create: false
       name: *app

@@ -100,26 +100,6 @@ spec:
             port: 8123
           code-server:
             port: 12321
-    ingress:
-      *app :
-        className: external
-        hosts:
-          - host: &fqdn "fam-hass.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: http
-      code-server:
-        className: internal
-        hosts:
-          - host: &code-fqdn code-fam-hass.${SECRET_DOMAIN}
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: code-server
-
     persistence:
       config:
         existingClaim: fam-hass

@@ -225,9 +225,7 @@ spec:
     serviceMonitor:
       enabled: true
     ingress:
-      enabled: true
-      ingressClassName: internal
-      hosts: ["grafana.${SECRET_DOMAIN}"]
+      enabled: false
     persistence:
       enabled: false
     testFramework:

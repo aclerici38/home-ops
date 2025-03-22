@@ -104,16 +104,18 @@ spec:
         ports:
           http:
             port: *port
-    ingress:
+    route:
       *app :
-        className: external
-        hosts:
-          - host: *fqdn
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: http
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     persistence:
       files:
         existingClaim: *app

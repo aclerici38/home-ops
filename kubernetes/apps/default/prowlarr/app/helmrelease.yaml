@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: prowlarr
+  name: &app prowlarr
 spec:
   interval: 30m
   chart:
@@ -26,9 +26,9 @@ spec:
       retries: 1
   values:
     controllers:
-      prowlarr:
+      *app :
         containers:
-          prowlarr:
+          *app :
             image:
               repository: ghcr.io/home-operations/prowlarr
               tag: 1.32.2.4987
@@ -92,21 +92,23 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     service:
-      prowlarr:
-        controller: prowlarr
+      *app :
+        controller: *app 
         ports:
           http:
             port: *port
-    ingress:
-      prowlarr:
-        className: internal
-        hosts:
-          - host: "prowlarr.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: prowlarr
-                  port: http
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     persistence:
       config:
         existingClaim: prowlarr-metadata

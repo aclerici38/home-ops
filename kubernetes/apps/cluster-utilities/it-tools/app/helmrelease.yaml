@@ -49,17 +49,19 @@ spec:
         controller: main
         ports:
           http:
-            port: 80
-    ingress:
+            port: &port 80
+    route:
       *app :
-        className: internal
-        hosts:
-          - host: "it-tools.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: http
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     persistence:
       cache:
         type: emptyDir
