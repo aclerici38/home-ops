@@ -100,7 +100,7 @@ spec:
         controller: main
         ports:
           http:
-            port: 9000
+            port: &port 9000
     route:
       *app :
         hostnames:
