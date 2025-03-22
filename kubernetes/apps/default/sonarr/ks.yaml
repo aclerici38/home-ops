@@ -9,7 +9,7 @@ spec:
   targetNamespace: *ns
   dependsOn:
     - name: external-secrets-stores
-      namespace: externbal-secrets
+      namespace: external-secrets
     - name: cloudnative-pg
       namespace: database
     - name: truenas-scale
