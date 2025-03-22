@@ -36,7 +36,6 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: ingress-nginx-certificates
-      namespace: cluster-utilities
   path: ./kubernetes/apps/network/ingress-nginx/internal
   prune: true
   sourceRef:
@@ -60,7 +59,6 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: ingress-nginx-certificates
-      namespace: cluster-utilities
   path: ./kubernetes/apps/network/ingress-nginx/external
   prune: true
   sourceRef:
