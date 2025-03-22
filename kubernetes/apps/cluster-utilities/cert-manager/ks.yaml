@@ -34,7 +34,7 @@ spec:
   dependsOn:
     - name: cert-manager
     - name: external-secrets-stores
-      namespace: flux-system
+      namespace: external-secrets
   path: ./kubernetes/apps/cluster-utilities/cert-manager/issuers
   components:
     - ../../../../components/external-secret
