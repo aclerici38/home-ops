@@ -26,6 +26,15 @@ repositories:
   - name: kustomize-mutating-webhook
     url: https://xunholy.github.io/fluxcd-kustomize-mutating-webhook
 
+hooks:
+  - showlogs: true
+    command: "kubectl"
+    args:
+      - "apply"
+      - "-f"
+        # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
+      - "https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/experimental-install.yaml"
+
 releases:
   - name: cilium
     namespace: kube-system
