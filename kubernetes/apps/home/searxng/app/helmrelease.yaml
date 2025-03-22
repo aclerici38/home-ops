@@ -39,7 +39,7 @@ spec:
           *app :
             image:
               repository: docker.io/searxng/searxng
-              tag: 2025.3.21-f687306a9
+              tag: 2025.3.22-5986629c6
             env:
               SEARXNG_BASE_URL: &url https://search.${SECRET_DOMAIN}
               SEARXNG_URL: *url
