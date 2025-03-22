@@ -13,7 +13,8 @@ spec:
   path: ./kubernetes/apps/cluster-utilities/renovate/app
   components:
     - ../../../../components/cnpg/init
-  prune: false
+    - ../../../../components/external-secret
+  prune: true
   dependsOn:
     - name: dragonfly-cluster
       namespace: flux-system

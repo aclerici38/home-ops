@@ -18,7 +18,8 @@ spec:
   path: ./kubernetes/apps/home/vikunja/app
   components:
     - ../../../../components/cnpg/init
-  prune: false
+    - ../../../../components/external-secret
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -4,20 +4,23 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app firefox
-  namespace: flux-system
+  namespace: &ns cluster-utilities
 spec:
-  targetNamespace: cluster-utilities
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-utilities/firefox/app
-  prune: false
+  prune: true
   dependsOn:
     - name: volsync
+      namespace: storage
     - name: truenas-scale
+      namespace: truenas-scale
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m

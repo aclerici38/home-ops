@@ -4,19 +4,20 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app volsync
-  namespace: flux-system
+  namespace: &ns storage
 spec:
-  targetNamespace: storage
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets-stores
+    - name: snapshot-controller
   path: ./kubernetes/apps/storage/volsync/app
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m

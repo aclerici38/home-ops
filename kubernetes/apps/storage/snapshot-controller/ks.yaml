@@ -4,17 +4,18 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app snapshot-controller
-  namespace: flux-system
+  namespace: &ns storage
 spec:
-  targetNamespace: storage
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/storage/snapshot-controller/app
-  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false # no flux ks dependents
+  prune: true
   interval: 30m
   timeout: 5m

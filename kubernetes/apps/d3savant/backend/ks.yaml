@@ -4,21 +4,27 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app d3savant-postgres
-  namespace: flux-system
+  namespace: &ns d3savant
 spec:
-  targetNamespace: d3savant
+  targetNamespace: *ns
   dependsOn:
     - name: external-secrets-stores
+      namespace: external-secrets
     - name: cloudnative-pg
+      namespace: database
     - name: minio
+      namespace: cluster-utilities
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/d3savant/backend/postgres
-  prune: false
+  components:
+    - ../../../../components/external-secret
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m

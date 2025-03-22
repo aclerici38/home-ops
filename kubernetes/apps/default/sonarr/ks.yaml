@@ -20,8 +20,8 @@ spec:
   path: ./kubernetes/apps/default/sonarr/app
   components:
     - ../../../../components/cnpg/init
-    # - ../../../../components/cnpg/restore
-  prune: false
+    - ../../../../components/external-secret
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

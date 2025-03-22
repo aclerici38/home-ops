@@ -11,15 +11,16 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: cloudnative-pg
-      namespace: flux-system
+      namespace: database
     - name: dragonfly-cluster
-      namespace: flux-system
+      namespace: database
     - name: external-secrets-stores
-      namespace: flux-system
+      namespace: external-secrets
   path: ./kubernetes/apps/home/immich/app
   components:
     - ../../../../components/cnpg/restore
-  prune: false
+    - ../../../../components/external-secret
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -47,7 +48,7 @@ spec:
         apiVersion: postgresql.cnpg.io/v1
         kind: Cluster
         metadata:
-          name: temp-import
+          name: patch
         spec:
           postgresql:
             shared_preload_libraries:

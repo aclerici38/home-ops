@@ -4,16 +4,16 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app system-upgrade-controller
-  namespace: flux-system
+  namespace: &ns cluster-utilities
 spec:
-  targetNamespace: cluster-utilities
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
   path: "./kubernetes/apps/cluster-utilities/system-upgrade-controller/app"
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -25,16 +25,16 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app system-upgrade-controller-plans
-  namespace: flux-system
+  namespace: &ns cluster-utilities
 spec:
-  targetNamespace: cluster-utilities
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
   path: "./kubernetes/apps/cluster-utilities/system-upgrade-controller/plans"
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

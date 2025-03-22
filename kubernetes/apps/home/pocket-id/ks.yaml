@@ -9,9 +9,9 @@ spec:
   targetNamespace: *ns
   dependsOn:
     - name: external-secrets-stores
-      namespace: flux-system
+      namespace: external-secrets
     - name: cloudnative-pg
-      namespace: flux-system
+      namespace: database
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -20,7 +20,7 @@ spec:
     - ../../../../components/cnpg/init
     - ../../../../components/volsync/minio
     - ../../../../components/external-secret
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -4,20 +4,23 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app calibre
-  namespace: flux-system
+  namespace: &ns default
 spec:
-  targetNamespace: default
+  targetNamespace: *ns
   dependsOn:
     - name: volsync
+      namespace: storage
     - name: truenas-scale
+      namespace: truenas-scale
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/default/calibre/calibre-web-automated
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m
@@ -32,19 +35,21 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app calibre-web-automated-downloader
-  namespace: flux-system
+  namespace: &ns default
 spec:
-  targetNamespace: default
+  targetNamespace: *ns
   dependsOn:
     - name: truenas-scale
+      namespace: truenas-scale
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/default/calibre/calibre-downloader
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m

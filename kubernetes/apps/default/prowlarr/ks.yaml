@@ -8,18 +8,15 @@ metadata:
 spec:
   targetNamespace: *ns
   dependsOn:
-    - name: external-secrets-stores
-      namespace: flux-system
     - name: cloudnative-pg
-      namespace: flux-system
+      namespace: database
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/default/prowlarr/app
   components:
     - ../../../../components/cnpg/init
-    # - ../../../../components/cnpg/restore
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
