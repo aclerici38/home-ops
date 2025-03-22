@@ -17,7 +17,11 @@ debug:
 endpointRoutes:
   enabled: true
 envoy:
-  enabled: false
+  rollOutPods: true
+gatewayAPI:
+  enabled: true
+  enableAlpn: true
+  xffNumTrustedHops: 1
 dashboards:
   enabled: true
 hubble:
