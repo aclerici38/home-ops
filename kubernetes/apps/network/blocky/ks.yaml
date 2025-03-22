@@ -9,7 +9,7 @@ spec:
   path: "./kubernetes/apps/network/blocky/app/"
   components:
     - ../../../../components/cnpg/init
-  prune: true
+  prune: false
   wait: true
   dependsOn:
     - name: cloudnative-pg

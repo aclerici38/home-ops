@@ -13,7 +13,7 @@ spec:
   interval: 30m
   timeout: 5m
   path: "./kubernetes/apps/cluster-utilities/system-upgrade-controller/app"
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -34,7 +34,7 @@ spec:
   interval: 30m
   timeout: 5m
   path: "./kubernetes/apps/cluster-utilities/system-upgrade-controller/plans"
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system

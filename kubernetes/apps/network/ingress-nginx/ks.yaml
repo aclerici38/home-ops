@@ -14,7 +14,7 @@ spec:
     - name: cert-manager-issuers
       namespace: cluster-utilities
   path: ./kubernetes/apps/network/ingress-nginx/certificates
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -36,7 +36,7 @@ spec:
   # dependsOn:
   #   - name: ingress-nginx-certificates
   path: ./kubernetes/apps/network/ingress-nginx/internal
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -58,7 +58,7 @@ spec:
   # dependsOn:
   #   - name: ingress-nginx-certificates
   path: ./kubernetes/apps/network/ingress-nginx/external
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -80,7 +80,7 @@ spec:
   dependsOn:
     - name: ingress-nginx-external
   path: ./kubernetes/apps/network/ingress-nginx/external-services
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system

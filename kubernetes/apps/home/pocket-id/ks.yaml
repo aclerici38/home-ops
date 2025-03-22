@@ -20,7 +20,7 @@ spec:
     - ../../../../components/cnpg/init
     - ../../../../components/volsync/minio
     - ../../../../components/external-secret
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-utilities/firefox/app
-  prune: true
+  prune: false
   dependsOn:
     - name: volsync
     - name: truenas-scale

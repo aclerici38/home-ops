@@ -14,7 +14,7 @@ spec:
     - name: kubevirt
     # - name: multus
   path: ./kubernetes/apps/kubevirt/truenas-scale/config
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -37,7 +37,7 @@ spec:
     - name: truenas-scale-config
     - name: volsync
   path: ./kubernetes/apps/kubevirt/truenas-scale/vm
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system

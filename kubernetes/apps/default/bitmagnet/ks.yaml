@@ -15,7 +15,7 @@ spec:
   path: ./kubernetes/apps/default/bitmagnet/app
   components:
     - ../../../../components/cnpg/no-backup
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system

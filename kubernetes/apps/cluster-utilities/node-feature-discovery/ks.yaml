@@ -11,7 +11,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 1h
   path: ./kubernetes/apps/cluster-utilities/node-feature-discovery/app
-  prune: true
+  prune: false
   retryInterval: 2m
   sourceRef:
     kind: GitRepository
@@ -36,7 +36,7 @@ spec:
 #       namespace: cluster-utilities
 #   interval: 1h
 #   path: ./kubernetes/apps/cluster-utilities/node-feature-discovery/rules
-#   prune: true
+#   prune: false
 #   retryInterval: 2m
 #   sourceRef:
 #     kind: GitRepository

@@ -16,7 +16,7 @@ spec:
   path: ./kubernetes/apps/home/atuin/app
   components:
     - ../../../../components/cnpg/restore
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system

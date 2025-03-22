@@ -13,7 +13,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
   path: ./kubernetes/apps/storage/volsync/app
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system

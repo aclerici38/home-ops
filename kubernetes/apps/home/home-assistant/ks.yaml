@@ -13,7 +13,7 @@ spec:
     - name: volsync
     - name: multus
   path: ./kubernetes/apps/home/home-assistant/fam
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -42,7 +42,7 @@ spec:
     - name: volsync
     - name: multus
   path: ./kubernetes/apps/home/home-assistant/apt
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system

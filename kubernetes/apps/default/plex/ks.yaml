@@ -14,7 +14,7 @@ spec:
     - name: volsync
     - name: truenas-scale
   path: ./kubernetes/apps/default/plex/app
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/storage/democratic-csi/local-path/global
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -31,7 +31,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/storage/democratic-csi/local-path/bonds
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -51,7 +51,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/storage/democratic-csi/local-path/madbum
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -71,7 +71,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/storage/democratic-csi/local-path/posey
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -91,7 +91,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/storage/democratic-csi/truenas-nfs
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -113,7 +113,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/storage/democratic-csi/synology-nfs
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system

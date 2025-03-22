@@ -15,7 +15,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/d3savant/backend/postgres
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
