@@ -78,17 +78,19 @@ spec:
         controller: jellyseerr
         ports:
           http:
-            port: 5055
-    ingress:
-      app:
-        className: external
-        hosts:
-          - host: &fqdn "jellyseer.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+            port: &port 5055
+    route:
+      *app :
+        hostnames:
+          - download-books.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     persistence:
       config:
         existingClaim: jellyseer

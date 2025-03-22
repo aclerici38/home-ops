@@ -86,16 +86,18 @@ spec:
           http:
             port: *port
 
-    ingress:
+    route:
       *app :
-        className: "external"
-        hosts:
-          - host: search.${SECRET_DOMAIN}
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: http
+        hostnames:
+          - search.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
 
     persistence:
       config:

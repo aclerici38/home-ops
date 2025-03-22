@@ -88,20 +88,19 @@ spec:
           lbipam.cilium.io/ips: 10.38.55.2
         ports:
           http:
-            port: 32400
-            nodePort: 32400
-    ingress:
-      app:
-        annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-        className: external
-        hosts:
-          - host: "plex.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+            port: &port 32400
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     persistence:
       config:
         existingClaim: plex

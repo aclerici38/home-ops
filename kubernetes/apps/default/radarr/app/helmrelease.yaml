@@ -100,16 +100,18 @@ spec:
         ports:
           http:
             port: *port
-    ingress:
-      radarr:
-        className: internal
-        hosts:
-          - host: radarr.${SECRET_DOMAIN}
-            paths:
-              - path: /
-                service:
-                  identifier: radarr
-                  port: http
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
     persistence:
       config:
         existingClaim: *app

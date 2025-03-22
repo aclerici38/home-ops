@@ -98,26 +98,29 @@ spec:
             path: /minio/v2/metrics/cluster
             interval: 2m
             scrapeTimeout: 10s
-    ingress:
-      app:
-        className: internal
-        annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: '0'
-          nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-          nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-        hosts:
-          - host: "minio.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-          - host: s3.${SECRET_DOMAIN}
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: s3
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: 9001
+      s3:
+        hostnames:
+          - s3.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: 9000
     persistence:
       data:
         existingClaim: minio

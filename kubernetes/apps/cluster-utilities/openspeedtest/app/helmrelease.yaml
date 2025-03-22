@@ -30,13 +30,3 @@ spec:
       tag: v2.0.6@sha256:a6a7e3b3e9e93cfe7b9b2eb49c60b2a93644149a0a600845d4df57148b193ff6
     service:
       type: ClusterIP
-    ingress:
-      enabled: true
-      className: internal
-      annotations:
-        nginx.ingress.kubernetes.io/proxy-body-size: "35m"
-      hosts:
-        - host: speedtest.${SECRET_DOMAIN}
-          paths:
-            - path: /
-              pathType: Prefix

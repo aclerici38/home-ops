@@ -75,24 +75,37 @@ spec:
             port: 3000
           backend:
             port: 8080
-    ingress:
+    route:
       *app :
-        className: external
-        hosts:
-          - host: id.${SECRET_DOMAIN}
-            paths:
-              - path: /
-                service:
-                  identifier: *app
-                  port: frontend
-              - path: /api
-                service:
-                  identifier: *app
-                  port: backend
-              - path: /.well-known
-                service:
-                  identifier: *app
-                  port: backend
+        hostnames:
+          - id.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /api
+            backendRefs:
+              - name: *app
+                port: 8080
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /.well-known
+            backendRefs:
+              - name: *app
+                port: 8080
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: *app
+                port: 3000
+
     persistence:
       data:
         existingClaim: *app

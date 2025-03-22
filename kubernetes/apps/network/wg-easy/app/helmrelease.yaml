@@ -80,16 +80,18 @@ spec:
             port: 31821
             nodePort: 31821
             protocol: UDP
-    ingress:
+    route:
       *app :
-        className: internal
-        hosts:
-          - host: "wg-easy.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: ui
-                  port: http
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *uiPort
     persistence:
       config:
         existingClaim: *app
