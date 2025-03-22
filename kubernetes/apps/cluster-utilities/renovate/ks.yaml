@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-utilities/renovate/app
   components:
-    - ../../../../components/cnpg/restore
+    - ../../../../components/cnpg/init
   prune: true
   dependsOn:
     - name: dragonfly-cluster
