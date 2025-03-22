@@ -4,17 +4,18 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app cert-manager
-  namespace: flux-system
+  namespace: &ns cluster-utilities
 spec:
-  targetNamespace: cert-manager
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/cert-manager/cert-manager/app
+  path: ./kubernetes/apps/cluster-utilities/cert-manager/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 30m
   timeout: 5m
@@ -24,16 +25,19 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app cert-manager-issuers
-  namespace: flux-system
+  namespace: &ns cluster-utilities
 spec:
-  targetNamespace: cert-manager
+  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: cert-manager
     - name: external-secrets-stores
-  path: ./kubernetes/apps/cert-manager/cert-manager/issuers
+      namespace: flux-system
+  path: ./kubernetes/apps/cluster-utilities/cert-manager/issuers
+  components:
+    - ../../../../components/external-secret
   prune: true
   sourceRef:
     kind: GitRepository
@@ -41,5 +45,21 @@ spec:
   wait: true
   interval: 30m
   timeout: 5m
-
-
+  postBuild:
+    substitute:
+      APP: cert-manager
+  patches:
+    - patch: |-
+        apiVersion: external-secrets.io/v1beta1
+        kind: ExternalSecret
+        metadata:
+          name: patch
+        spec:
+          dataFrom: null
+          data:
+            - secretKey: CLOUDFLARE_CERT_API_KEY
+              remoteRef:
+                key: cloudflare
+                property: CLOUDFLARE_CERT_API_KEY
+      target:
+        kind: ExternalSecret

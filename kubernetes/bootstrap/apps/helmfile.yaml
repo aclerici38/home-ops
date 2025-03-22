@@ -80,7 +80,7 @@ releases:
       - kube-system/coredns
 
   - name: cert-manager
-    namespace: cert-manager
+    namespace: cluster-utilities
     chart: jetstack/cert-manager
     version: v1.17.1
     values:
