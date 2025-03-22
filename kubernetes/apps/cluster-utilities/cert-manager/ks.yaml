@@ -54,11 +54,12 @@ spec:
         kind: ExternalSecret
         metadata:
           name: patch
-        dataFrom: null
-        data:
-          - secretKey: CLOUDFLARE_CERT_API_KEY
-            remoteRef:
-              key: cloudflare
-              property: CLOUDFLARE_CERT_API_KEY
+        spec:
+          dataFrom: null
+          data:
+            - secretKey: CLOUDFLARE_CERT_API_KEY
+              remoteRef:
+                key: cloudflare
+                property: CLOUDFLARE_CERT_API_KEY
       target:
         kind: ExternalSecret
