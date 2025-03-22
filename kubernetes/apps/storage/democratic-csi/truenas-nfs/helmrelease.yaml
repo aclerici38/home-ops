@@ -29,11 +29,11 @@ spec:
       namespace: storage
   valuesFrom:
     - kind: Secret
-      name: *app
+      name: &secret truenas-nfs-secret
       valuesKey: API_KEY
       targetPath: driver.config.driver.httpConnection.apiKey
     - kind: Secret
-      name: *app
+      name: *secret
       valuesKey: SSH_KEY
       targetPath: driver.config.driver.sshConnection.privateKey
   values:
