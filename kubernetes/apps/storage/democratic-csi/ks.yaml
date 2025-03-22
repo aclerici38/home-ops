@@ -95,6 +95,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/storage/democratic-csi/truenas-nfs
+  components:
+    - ../../../../components/external-secret
   prune: true
   sourceRef:
     kind: GitRepository
@@ -106,6 +108,9 @@ spec:
       namespace: truenas-scale
   interval: 30m
   timeout: 5m
+  postBuild:
+    substitute:
+      APP: *app
 ---
 # yaml-language-server: $schema=https://kube-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1

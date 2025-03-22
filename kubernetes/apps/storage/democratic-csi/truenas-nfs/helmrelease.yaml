@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name truenas-nfs
+  name: &app truenas-nfs
 spec:
   interval: 30m
   chart:
@@ -27,9 +27,18 @@ spec:
   dependsOn:
     - name: snapshot-controller
       namespace: storage
+  valuesFrom:
+    - kind: Secret
+      name: *app
+      valuesKey: API_KEY
+      targetPath: driver.config.driver.httpConnection.apiKey
+    - kind: Secret
+      name: *app
+      valuesKey: SSH_KEY
+      targetPath: driver.config.driver.sshConnection.privateKey
   values:
     controller:
-      fullnameOverride: *name
+      fullnameOverride: *app
       enabled: true
       strategy: node
       externalAttacher:
@@ -45,7 +54,7 @@ spec:
         enabled: true
         image: registry.k8s.io/sig-storage/csi-snapshotter:v8.2.1@sha256:5f4bb469fec51147ce157329dab598c758da1b018bad6dad26f0ff469326d769
     csiDriver:
-      name: truenas-nfs
+      name: *app
       attachRequired: true
       storageCapacity: true
     driver:
@@ -55,13 +64,11 @@ spec:
           protocol: http
           host: 10.38.55.50
           port: 80
-          apiKey: ${TRUENAS_API_KEY}
           allowInsecure: true
           apiVersion: 2
         sshConnection:
           host: 10.38.55.50
           port: 22
-          privateKey: ${TRUENAS_SSH_KEY}
         zfs:
           cli:
             sudoEnabled: true
