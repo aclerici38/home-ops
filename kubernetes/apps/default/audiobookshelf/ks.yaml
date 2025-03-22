@@ -12,6 +12,8 @@ spec:
   dependsOn:
     - name: volsync
       namespace: storage
+    - name: minio
+      namespace: cluster-utilities
     - name: truenas-scale
       namespace: truenas-scale
   path: ./kubernetes/apps/default/audiobookshelf/app

@@ -16,6 +16,10 @@ spec:
       namespace: truenas-scale
     - name: external-secrets-stores
       namespace: external-secrets
+    - name: minio
+      namespace: cluster-utilities
+    - name: volsync
+      namespace: storage
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

@@ -14,6 +14,8 @@ spec:
       namespace: storage
     - name: multus
       namespace: network
+    - name: minio
+      namespace: cluster-utilities
   path: ./kubernetes/apps/home/home-assistant/fam
   components:
     - ../../../../components/volsync/minio
@@ -48,6 +50,8 @@ spec:
       namespace: storage
     - name: multus
       namespace: network
+    - name: minio
+      namespace: cluster-utilities
   path: ./kubernetes/apps/home/home-assistant/apt
   components:
     - ../../../../components/volsync/minio

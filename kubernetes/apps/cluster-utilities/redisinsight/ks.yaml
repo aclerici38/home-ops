@@ -13,6 +13,9 @@ spec:
   components:
     - ../../../../components/volsync/minio
   prune: true
+  dependsOn:
+    - name: minio
+      namespace: cluster-utilities
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -12,6 +12,10 @@ spec:
       namespace: external-secrets
     - name: cloudnative-pg
       namespace: database
+    - name: minio
+      namespace: cluster-utilities
+    - name: volsync
+      namespace: storage
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

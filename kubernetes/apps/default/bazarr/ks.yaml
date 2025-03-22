@@ -12,6 +12,10 @@ spec:
       namespace: database
     - name: truenas-scale
       namespace: truenas-scale
+    - name: minio
+      namespace: cluster-utilities
+    - name: volsync
+      namespace: storage
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
