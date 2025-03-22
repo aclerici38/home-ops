@@ -17,9 +17,9 @@ spec:
   prune: true
   dependsOn:
     - name: dragonfly-cluster
-      namespace: flux-system
+      namespace: database
     - name: cloudnative-pg
-      namespace: flux-system
+      namespace: database
   sourceRef:
     kind: GitRepository
     name: flux-system
