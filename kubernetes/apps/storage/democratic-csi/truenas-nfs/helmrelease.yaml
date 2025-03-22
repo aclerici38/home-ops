@@ -30,12 +30,12 @@ spec:
   valuesFrom:
     - kind: Secret
       name: &secret truenas-nfs-secret
-      targetPath: API_KEY
-      valuesKey: driver.config.driver.httpConnection.apiKey
+      valuesKey: API_KEY
+      targetPath: driver.config.driver.httpConnection.apiKey
     - kind: Secret
       name: *secret
-      targetPath: SSH_KEY
-      valuesKey: driver.config.driver.sshConnection.privateKey
+      valuesKey: SSH_KEY
+      targetPath: driver.config.driver.sshConnection.privateKey
   values:
     controller:
       fullnameOverride: *app
