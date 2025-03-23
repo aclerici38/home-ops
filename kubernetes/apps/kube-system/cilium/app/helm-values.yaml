@@ -20,9 +20,8 @@ envoy:
   rollOutPods: true
 gatewayAPI:
   enabled: true
-  # enableAlpn: true
-  # xffNumTrustedHops: 1
-  externalTrafficPolicy: Local
+  enableAlpn: true
+  xffNumTrustedHops: 1
 dashboards:
   enabled: true
 hubble:
