@@ -74,7 +74,7 @@ loadBalancer:
   algorithm: maglev
   mode: "snat"
   dsrDispatch: geneve
-  # serviceTopology: true
+  serviceTopology: true
 cluster:
   id: 1
   name: dormammu
