@@ -8,9 +8,11 @@ metadata:
     lbipam.cilium.io/sharing-key: "gateway"
 spec:
   type: LoadBalancer
+  clusterIP: None
+  externalTrafficPolicy: Cluster
   ports:
     - name: http
-      port: 1738
-      targetPort: 1738
+      port: 1
+      targetPort: 1
       protocol: TCP
   selector: {}
