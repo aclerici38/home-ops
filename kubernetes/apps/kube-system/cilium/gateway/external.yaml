@@ -14,6 +14,7 @@ spec:
   infrastructure:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: *hostname
+      lbipam.cilium.io/sharing-key: "gateway"
   listeners:
     - name: http
       protocol: HTTP

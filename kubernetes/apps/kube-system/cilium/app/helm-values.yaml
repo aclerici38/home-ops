@@ -22,6 +22,7 @@ gatewayAPI:
   enabled: true
   enableAlpn: true
   xffNumTrustedHops: 1
+  externalTrafficPolicy: Local
 dashboards:
   enabled: true
 hubble:
