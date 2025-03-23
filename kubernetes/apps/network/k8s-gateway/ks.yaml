@@ -16,7 +16,7 @@ spec:
     name: flux-system
     namespace: flux-system
   prune: true
-  wait: false
+  wait: true
   interval: 30m
   timeout: 5m
   postBuild:
