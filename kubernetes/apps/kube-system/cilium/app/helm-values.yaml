@@ -15,7 +15,7 @@ cgroup:
 debug:
   enabled: false
 endpointRoutes:
-  enabled: true
+  enabled: false
 envoy:
   rollOutPods: true
 gatewayAPI:
@@ -70,7 +70,7 @@ cluster:
 nodePort:
   enabled: true
   dsrDispatch: geneve
-localRedirectPolicy: false
+localRedirectPolicy: true
 operator:
   replicas: 2
   rollOutPods: true
