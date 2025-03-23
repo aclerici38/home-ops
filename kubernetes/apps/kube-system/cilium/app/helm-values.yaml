@@ -20,6 +20,7 @@ pmtuDiscovery:
   enabled: true
 envoy:
   rollOutPods: true
+  connectTimeoutSeconds: 15
 gatewayAPI:
   enabled: true
   enableAlpn: true
