@@ -45,7 +45,8 @@ spec:
       - --ingress-class=external
       - --default-targets=cloud.${SECRET_DOMAIN}
     policy: sync
-    sources: ["crd", "ingress"]
+    triggerLoopOnEvent: true
+    sources: ["crd", "gateway-httproute", "service"]
     txtPrefix: k8s.
     txtOwnerId: default
     domainFilters: ["${SECRET_DOMAIN}"]
