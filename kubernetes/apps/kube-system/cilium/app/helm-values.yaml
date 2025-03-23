@@ -70,7 +70,7 @@ cluster:
 nodePort:
   enabled: true
   dsrDispatch: geneve
-localRedirectPolicy: true
+localRedirectPolicy: false
 operator:
   replicas: 2
   rollOutPods: true
