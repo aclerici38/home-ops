@@ -51,4 +51,5 @@ spec:
         addresses:
           - LoadBalancerIP
       selector:
-        matchExpressions: []
+        matchExpressions:
+        - {key: somekey, operator: NotIn, values: ['never-used-value']}
