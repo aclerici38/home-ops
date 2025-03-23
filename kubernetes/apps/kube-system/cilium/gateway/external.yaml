@@ -8,11 +8,13 @@ metadata:
     external-dns.alpha.kubernetes.io/target: &hostname external.${SECRET_DOMAIN}
 spec:
   gatewayClassName: cilium
+  addresses:
+    - type: IPAddress
+      value: 10.38.55.3
   infrastructure:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: *hostname
-      io.cilium/lb-ipam-ips: "10.38.55.3"
-      lbipam.cilium.io/sharing-key: "external-gateway"
+      lbipam.cilium.io/sharing-key: "gateway"
   listeners:
     - name: http
       protocol: HTTP

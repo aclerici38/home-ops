@@ -2,33 +2,28 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: dummy-external-gateway
+  name: dummy-lb-service
   annotations:
-    io.cilium/lb-ipam-ips: "10.38.55.3"
-    lbipam.cilium.io/sharing-key: "external-gateway"
+    io.cilium/lb-ipam-ips: "10.38.55.3,10.38.55.4"
+    lbipam.cilium.io/sharing-key: "gateway"
 spec:
   type: LoadBalancer
+  clusterIP: None
   externalTrafficPolicy: Cluster
   ports:
     - name: http
       port: 1
       targetPort: 1
-      protocol: TCP
-  selector: {}
+  selector:
+    app: dummy-gateway
 ---
 apiVersion: v1
-kind: Service
+kind: Pod
 metadata:
-  name: dummy-internal-gateway
-  annotations:
-    io.cilium/lb-ipam-ips: "10.38.55.4"
-    lbipam.cilium.io/sharing-key: "internal-gateway"
+  name: dummy-endpoint
+  labels:
+    app: dummy-gateway
 spec:
-  type: LoadBalancer
-  externalTrafficPolicy: Cluster
-  ports:
-    - name: http
-      port: 1
-      targetPort: 1
-      protocol: TCP
-  selector: {}
+  containers:
+    - name: pause
+      image: k8s.gcr.io/pause:3.9
