@@ -18,12 +18,13 @@ endpointRoutes:
   enabled: true
 pmtuDiscovery:
   enabled: true
+MTU: 1280
 # Doesn't work on talos
 sysctlfix:
   enabled: false
 envoy:
   rollOutPods: true
-  connectTimeoutSeconds: 15
+  connectTimeoutSeconds: 360
   debug:
     admin:
       enabled: true
@@ -72,9 +73,8 @@ l2announcements:
   enabled: true
 loadBalancer:
   algorithm: maglev
-  mode: "snat"
+  mode: "dsr"
   dsrDispatch: geneve
-  serviceTopology: true
 cluster:
   id: 1
   name: dormammu
