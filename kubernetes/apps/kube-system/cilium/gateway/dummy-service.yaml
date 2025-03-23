@@ -8,7 +8,6 @@ metadata:
     lbipam.cilium.io/sharing-key: "gateway"
 spec:
   type: LoadBalancer
-  clusterIP: None
   externalTrafficPolicy: Cluster
   ports:
     - name: http
