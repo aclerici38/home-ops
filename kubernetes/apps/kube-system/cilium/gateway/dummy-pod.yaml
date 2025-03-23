@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dummy-gateway-endpoint
+  namespace: kube-system
+  labels:
+    app: dummy-gateway
+spec:
+  containers:
+    - name: pause
+      image: k8s.gcr.io/pause:3.9
