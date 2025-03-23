@@ -2,11 +2,10 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json
 autoDirectNodeRoutes: false
 bpf:
-  datapathMode: veth
-  hostLegacyRouting: true
-  masquerade: false
-  # preallocateMaps: true
-  # tproxy: true
+  datapathMode: netkit
+  masquerade: true
+  preallocateMaps: true
+  tproxy: true
 bgpControlPlane:
   enabled: true
 cgroup:
@@ -24,7 +23,7 @@ sysctlfix:
   enabled: false
 envoy:
   rollOutPods: true
-  connectTimeoutSeconds: 360
+  connectTimeoutSeconds: 15
   debug:
     admin:
       enabled: true
@@ -73,8 +72,8 @@ l2announcements:
   enabled: true
 loadBalancer:
   algorithm: maglev
-  mode: "snat"
-  # dsrDispatch: geneve
+  mode: "dsr"
+  dsrDispatch: geneve
 cluster:
   id: 1
   name: dormammu
