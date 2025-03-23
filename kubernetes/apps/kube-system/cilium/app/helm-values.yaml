@@ -3,7 +3,7 @@
 autoDirectNodeRoutes: false
 bpf:
   datapathMode: netkit
-  masquerade: false
+  masquerade: true
   preallocateMaps: true
   tproxy: true
 bgpControlPlane:
@@ -72,8 +72,8 @@ l2announcements:
   enabled: true
 loadBalancer:
   algorithm: maglev
-  mode: "dsr"
-  dsrDispatch: geneve
+  mode: "snat"
+  # dsrDispatch: geneve
 cluster:
   id: 1
   name: dormammu
