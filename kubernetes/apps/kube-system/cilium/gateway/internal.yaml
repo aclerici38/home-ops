@@ -30,6 +30,7 @@ spec:
         namespaces:
           from: All
       tls:
+        mode: Passthrough
         certificateRefs:
           - kind: Secret
             name: ${SECRET_DOMAIN/./-}-tls
