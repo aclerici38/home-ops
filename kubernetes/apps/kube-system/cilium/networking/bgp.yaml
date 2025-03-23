@@ -3,13 +3,13 @@ kind: CiliumBGPClusterConfig
 metadata:
   name: cilium-bgp
 spec:
-  nodeSelector:
-    matchExpressions:
-      - key: location
-        operator: In
-        values:
-          - house
-          - apartment
+  # nodeSelector:
+  #   matchExpressions:
+  #     - key: location
+  #       operator: In
+  #       values:
+  #         - house
+  #         - apartment
   bgpInstances:
   - name: "apartment-instance"
     localASN: 64513
