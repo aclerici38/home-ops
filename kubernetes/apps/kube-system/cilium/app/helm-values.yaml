@@ -72,8 +72,9 @@ l2announcements:
   enabled: true
 loadBalancer:
   algorithm: maglev
-  mode: "dsr"
+  mode: "snat"
   dsrDispatch: geneve
+  # serviceTopology: true
 cluster:
   id: 1
   name: dormammu
