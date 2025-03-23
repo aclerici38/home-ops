@@ -1,77 +1,92 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: k8s-gateway
+  name: &app k8s-gateway
 spec:
   interval: 30m
   chart:
     spec:
-      chart: k8s-gateway
-      version: 2.4.0
+      chart: app-template
+      version: 3.7.3
       sourceRef:
         kind: HelmRepository
-        name: k8s-gateway
+        name: bjw-s
         namespace: flux-system
   install:
+    createNamespace: true
     timeout: 2m
     remediation:
       retries: 1
   upgrade:
     timeout: 2m
-    cleanupOnFail: true
     remediation:
       retries: 1
   values:
-    tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-    replicaCount: 2
-    fullnameOverride: k8s-gateway
-    domain: &domain "${SECRET_DOMAIN}"
-    ttl: 1
-    fallthrough:
-      enabled: true
-      zones: [*domain]
+    controller:
+      replicas: 2
+      strategy: RollingUpdate
+    image:
+      repository: ghcr.io/larivierec/k8s_gateway
+      tag: v0.4.3-dirty
+
+    args: ["-conf", "/etc/coredns/Corefile"]
+
     service:
-      type: ClusterIP
-      port: 53
-      clusterIP: 172.17.0.12
-    watchedResources: ["Ingress", "Service"]
-    extraZonePlugins:
-      - name: log
-      - name: errors
-      # Serves a /health endpoint on :8080, required for livenessProbe
-      - name: health
-        configBlock: |-
-          lameduck 5s
-      # Serves a /ready endpoint on :8181, required for readinessProbe
-      - name: ready
-      # Serves a /metrics endpoint on :9153, required for serviceMonitor
-      - name: prometheus
-        parameters: 0.0.0.0:9153
-      - name: header
-        configBlock: |-
-          response set ra
-      - name: forward
-        parameters: . 172.17.0.11
-    probes:
-      liveness:
+      main:
+        ports:
+          http:
+            enabled: false
+          metrics:
+            enabled: true
+            port: 9153
+          dns:
+            enabled: true
+            port: 53
+            targetPort: 1053
+            protocol: UDP
+    serviceMonitor:
+      main:
         enabled: true
-        httpGet:
-          path: /health
-          port: 8080
-        initialDelaySeconds: 3
-        periodSeconds: 10
-        timeoutSeconds: 1
-        failureThreshold: 3
+        endpoints:
+          - port: metrics
+            scheme: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 10s
+    probes:
       readiness:
-        httpGet:
-          path: /ready
-          port: 8181
-        initialDelaySeconds: 1
-        periodSeconds: 10
-        timeoutSeconds: 1
-        failureThreshold: 3
+        custom: true
+        spec:
+          httpGet:
+            path: /ready
+            port: 8181
+      liveness:
+        custom: true
+        spec:
+          httpGet:
+            path: /health
+            port: 8080
+      startup:
+        enabled: false
+
+    serviceAccount:
+      create: true
+      name: *app
+
+    persistence:
+      config-file:
+        enabled: true
+        type: configMap
+        name: k8s-gateway-configmap
+        subPath: Corefile
+        mountPath: /etc/coredns/Corefile
+        readOnly: true
+
+    topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: *app
