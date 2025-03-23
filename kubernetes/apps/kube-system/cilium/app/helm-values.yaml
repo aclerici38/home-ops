@@ -21,7 +21,7 @@ envoy:
 gatewayAPI:
   enabled: true
   enableAlpn: true
-  externalTrafficPolicy: Local
+  externalTrafficPolicy: Cluster
 dashboards:
   enabled: true
 hubble:
