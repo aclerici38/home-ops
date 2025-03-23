@@ -50,7 +50,7 @@ metadata:
   name: &app cilium-gateway
   namespace: &ns kube-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: network
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
