@@ -53,5 +53,3 @@ spec:
       selector:
         matchExpressions:
           - { key: somekey, operator: NotIn, values: ['never-used-value'] }
-        matchLabels:
-          gateway.networking.k8s.io/gateway-name: internal
