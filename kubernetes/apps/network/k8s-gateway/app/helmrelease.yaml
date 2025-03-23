@@ -26,18 +26,22 @@ spec:
   values:
     controllers:
       main:
+        pod:
+          nodeSelector:
+            kubernetes.io/arch: amd64
         replicas: 2
         strategy: RollingUpdate
         containers:
           *app :
             image:
               repository: ghcr.io/larivierec/k8s_gateway
-              tag: v0.4.3-dirty
+              tag: v0.4.3-dirty@sha256:29c2d947d050cba2c243e8d26a10885595aca244461110c1644abfeb63f0484e
             args: ["-conf", "/etc/coredns/Corefile"]
 
     service:
       *app :
         controller: main
+        clusterIP: 172.17.0.12
         ports:
           metrics:
             enabled: true
