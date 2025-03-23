@@ -6,5 +6,5 @@ metadata:
   name: "lb-pool"
 spec:
   blocks:
-    - start: "10.38.55.1"
-      stop: "10.38.55.254"
+    - cidr: 10.25.0.0/16
+    - cidr: 10.38.55.0/24
