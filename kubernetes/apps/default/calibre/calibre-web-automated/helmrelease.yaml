@@ -62,7 +62,7 @@ spec:
     route:
       *app :
         hostnames:
-          - download-books.${SECRET_DOMAIN}
+          - ${APP}.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: kube-system
