@@ -8,3 +8,5 @@ machine:
     net.ipv6.conf.all.forwarding: 1
     net.ipv4.conf.all.src_valid_mark: 1
     net.ipv4.conf.all.rp_filter: 0
+    # Cilium https://github.com/cilium/cilium/blob/375906fd1196c0c3416d2f0ad59593be5f1a4ea3/tools/sysctlfix/main.go
+    net.ipv4.conf.default.rp_filter: 0
