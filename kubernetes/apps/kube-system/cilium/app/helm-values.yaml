@@ -18,6 +18,7 @@ endpointRoutes:
   enabled: true
 pmtuDiscovery:
   enabled: true
+MTU: 1280
 envoy:
   rollOutPods: true
   connectTimeoutSeconds: 15
@@ -77,7 +78,6 @@ cluster:
 nodePort:
   enabled: true
   dsrDispatch: geneve
-localRedirectPolicy: true
 operator:
   replicas: 2
   rollOutPods: true
