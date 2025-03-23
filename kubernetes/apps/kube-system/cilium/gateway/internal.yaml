@@ -23,7 +23,7 @@ spec:
         namespaces:
           from: Same
     - name: https
-      protocol: HTTPS
+      protocol: HTTP
       port: 443
       hostname: "*.${SECRET_DOMAIN}"
       allowedRoutes:
