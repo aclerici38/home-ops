@@ -23,14 +23,13 @@ spec:
         namespaces:
           from: Same
     - name: https
-      protocol: HTTP
+      protocol: HTTPS
       port: 443
       hostname: "*.${SECRET_DOMAIN}"
       allowedRoutes:
         namespaces:
           from: All
       tls:
-        mode: Passthrough
         certificateRefs:
           - kind: Secret
             name: ${SECRET_DOMAIN/./-}-tls
