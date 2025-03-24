@@ -120,7 +120,7 @@ securityContext:
 cni:
   exclusive: false
 socketLB:
-  hostNamespaceOnly: true
+  tracing: true
 # Graceful Helmfile to HelmRelease takeover
 commonLabels:
   helm.toolkit.fluxcd.io/name: cilium
