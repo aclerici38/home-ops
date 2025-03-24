@@ -116,7 +116,7 @@ securityContext:
       - SYS_ADMIN
       - SYS_RESOURCE
 cni:
-  exclusive: false
+  exclusive: true
 socketLB:
   hostNamespaceOnly: true
 # Graceful Helmfile to HelmRelease takeover
