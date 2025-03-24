@@ -4,6 +4,7 @@ autoDirectNodeRoutes: false
 bpf:
   datapathMode: netkit
   masquerade: true
+  hostLegacyRouting: true
   preallocateMaps: true
   tproxy: true
 bgpControlPlane:
