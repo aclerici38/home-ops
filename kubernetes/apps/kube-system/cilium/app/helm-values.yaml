@@ -24,9 +24,6 @@ sysctlfix:
 envoy:
   rollOutPods: true
   connectTimeoutSeconds: 15
-  image:
-    tag: v1.33.1-1742784275-e76b29a8d9694b2a6a015b6b9bb82a450bf51451
-    digest: sha256:062e832f5cbbacf7690e8fe669db6abe12ba45e5b53fbffee37762713d5ab51e
   debug:
     admin:
       enabled: true
