@@ -5,7 +5,7 @@ bpf:
   datapathMode: netkit
   masquerade: true
   preallocateMaps: true
-  # tproxy: true
+  tproxy: true
 bgpControlPlane:
   enabled: true
 cgroup:
@@ -67,11 +67,12 @@ k8sServicePort: 7445
 kubeProxyReplacement: true
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 l2announcements:
-  enabled: false
+  enabled: true
 loadBalancer:
   algorithm: maglev
   mode: "dsr"
   dsrDispatch: geneve
+  experimental: true
 cluster:
   id: 1
   name: dormammu
