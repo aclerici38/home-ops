@@ -14,7 +14,7 @@ cgroup:
     enabled: false
   hostRoot: /sys/fs/cgroup
 debug:
-  enabled: true
+  enabled: false
 endpointRoutes:
   enabled: false
 pmtuDiscovery:
@@ -22,6 +22,7 @@ pmtuDiscovery:
 # Doesn't work on talos
 sysctlfix:
   enabled: false
+devices: 'wg+'
 envoy:
   rollOutPods: true
   connectTimeoutSeconds: 15
