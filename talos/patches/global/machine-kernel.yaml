@@ -1,0 +1,7 @@
+machine:
+  kernel:
+    modules:
+      - name: xt_socket
+      - name: xt_TPROXY
+      - name: xt_CT
+      - name: xt_MATCH_MARK
