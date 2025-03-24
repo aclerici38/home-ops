@@ -28,30 +28,30 @@ debug:
 #     admin:
 #       enabled: true
 # enableXTSocketFallback: false
-# gatewayAPI:
-#   enabled: true
+gatewayAPI:
+  enabled: true
 # dashboards:
 #   enabled: true
-# hubble:
-#   enabled: true
-#   listenAddress: ":4244"
-#   metrics:
-#     enabled:
-#       - dns:query;ignoreAAAA
-#       - drop
-#       - tcp
-#       - flow
-#       - icmp
-#       - http
-#     dashboards:
-#       enabled: true
-#   relay:
-#     enabled: true
-#     rollOutPods: true
-#     prometheus:
-#       enabled: true
-#   ui:
-#     enabled: true
+hubble:
+  enabled: true
+  listenAddress: ":4244"
+  metrics:
+    enabled:
+      - dns:query;ignoreAAAA
+      - drop
+      - tcp
+      - flow
+      - icmp
+      - http
+    dashboards:
+      enabled: true
+  relay:
+    enabled: true
+    rollOutPods: true
+    prometheus:
+      enabled: true
+  ui:
+    enabled: true
 ipam:
   mode: kubernetes
 # So I don't have to worry about this again
