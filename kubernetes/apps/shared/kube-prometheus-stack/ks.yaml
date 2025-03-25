@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/monitoring/kube-prometheus-stack/app
+  path: ./kubernetes/apps/shared/kube-prometheus-stack/app
   components:
     - ../../../../components/helmrelease
   sourceRef:
