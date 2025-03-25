@@ -13,9 +13,9 @@ spec:
   prune: true
   wait: true
   dependsOn:
-    - name: cloudnative-pg
+    - name: ${CLUSTER_NAME}-cloudnative-pg
       namespace: database
-    - name: dragonfly-cluster
+    - name: ${CLUSTER_NAME}-dragonfly-cluster
       namespace: database
   sourceRef:
     kind: GitRepository

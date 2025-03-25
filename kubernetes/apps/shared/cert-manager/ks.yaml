@@ -37,8 +37,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: cert-manager
-    - name: external-secrets-stores
+    - name: ${CLUSTER_NAME}-cert-manager
+    - name: ${CLUSTER_NAME}-external-secrets-stores
       namespace: external-secrets
   path: ./kubernetes/apps/shared/cert-manager/issuers
   components:

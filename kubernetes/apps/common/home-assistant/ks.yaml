@@ -10,11 +10,11 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: volsync
+    - name: ${CLUSTER_NAME}-volsync
       namespace: storage
-    - name: multus
+    - name: ${CLUSTER_NAME}-multus
       namespace: network
-    - name: minio
+    - name: ${CLUSTER_NAME}-minio
       namespace: cluster-utilities
   path: ./kubernetes/apps/common/home-assistant/app
   components:

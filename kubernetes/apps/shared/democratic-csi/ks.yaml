@@ -14,6 +14,8 @@ spec:
   components:
     - ../../../../components/helmrelease
   prune: true
+  dependsOn:
+    - name: ${CLUSTER_NAME}-snapshot-controller
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -43,8 +45,8 @@ spec:
     name: flux-system
     namespace: flux-system
   dependsOn:
-    - name: snapshot-controller
-    - name: truenas-scale
+    - name: ${CLUSTER_NAME}-snapshot-controller
+    - name: ${CLUSTER_NAME}-truenas-scale
       namespace: truenas-scale
   interval: 30m
   wait: true

@@ -11,8 +11,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets-stores
-      namespace: external-secrets
+    - name: ${CLUSTER_NAME}-external-secrets-stores
+      namespace: ${CLUSTER_NAME}-external-secrets
   path: ./kubernetes/apps/shared/external-dns/cloudflare
   components:
     - ../../../../components/external-secret

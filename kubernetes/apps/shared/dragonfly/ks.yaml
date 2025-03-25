@@ -39,7 +39,7 @@ spec:
   path: ./kubernetes/apps/shared/dragonfly/cluster
   prune: true
   dependsOn:
-    - name: dragonfly
+    - name: ${CLUSTER_NAME}-dragonfly
   sourceRef:
     kind: GitRepository
     name: flux-system

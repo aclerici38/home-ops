@@ -37,7 +37,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: cilium
+    - name: ${CLUSTER_NAME}-cilium
   path: ./kubernetes/apps/shared/cilium/networking
   prune: false # never should be deleted
   sourceRef:
@@ -60,7 +60,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: cilium
+    - name: ${CLUSTER_NAME}-cilium
   path: ./kubernetes/apps/shared/cilium/gateway
   prune: true
   sourceRef:

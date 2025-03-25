@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: snapshot-controller
+    - name: ${CLUSTER_NAME}-snapshot-controller
   path: ./kubernetes/apps/shared/volsync/app
   components:
     - ../../../../components/helmrelease
