@@ -15,7 +15,7 @@ spec:
     - ../../../../components/volsync/minio
     - ../../../../components/helmrelease
   dependsOn:
-    - name: volsync
+    - name: ${CLUSTER_NAME}-volsync
       namespace: storage
     - name: minio
       namespace: cluster-utilities

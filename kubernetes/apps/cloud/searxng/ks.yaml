@@ -8,9 +8,9 @@ metadata:
 spec:
   targetNamespace: *ns
   dependsOn:
-    - name: external-secrets-stores
+    - name: ${CLUSTER_NAME}-external-secrets-stores
       namespace: external-secrets
-    - name: dragonfly-cluster
+    - name: ${CLUSTER_NAME}-dragonfly-cluster
       namespace: database
   commonMetadata:
     labels:

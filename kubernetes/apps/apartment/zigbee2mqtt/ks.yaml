@@ -8,9 +8,9 @@ metadata:
 spec:
   targetNamespace: *ns
   dependsOn:
-    - name: external-secrets-stores
+    - name: ${CLUSTER_NAME}-external-secrets-stores
       namespace: external-secrets
-    - name: volsync
+    - name: ${CLUSTER_NAME}-volsync
       namespace: storage
     - name: minio
       namespace: cluster-utilities

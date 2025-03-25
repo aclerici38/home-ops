@@ -8,13 +8,13 @@ metadata:
 spec:
   targetNamespace: *ns
   dependsOn:
-    - name: cloudnative-pg
+    - name: ${CLUSTER_NAME}-cloudnative-pg
       namespace: database
     - name: truenas-scale
       namespace: truenas-scale
     - name: minio
       namespace: cluster-utilities
-    - name: volsync
+    - name: ${CLUSTER_NAME}-volsync
       namespace: storage
   commonMetadata:
     labels:

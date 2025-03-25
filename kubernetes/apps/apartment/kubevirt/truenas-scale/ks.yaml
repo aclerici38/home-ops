@@ -37,7 +37,7 @@ spec:
   dependsOn:
     - name: truenas-scale-config
       namespace: truenas-scale
-    - name: volsync
+    - name: ${CLUSTER_NAME}-volsync
       namespace: storage
   path: ./kubernetes/apps/apartment/kubevirt/truenas-scale/vm
   prune: true

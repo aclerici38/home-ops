@@ -14,7 +14,7 @@ spec:
   components:
     - ../../../../components/helmrelease
   dependsOn:
-    - name: external-secrets-stores
+    - name: ${CLUSTER_NAME}-external-secrets-stores
       namespace: external-secrets
     - name: sonarr
     - name: radarr

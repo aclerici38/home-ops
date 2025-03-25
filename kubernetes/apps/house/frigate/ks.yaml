@@ -15,9 +15,9 @@ spec:
     - ../../../../components/external-secret
     - ../../../../components/helmrelease
   dependsOn:
-    - name: external-secrets-stores
+    - name: ${CLUSTER_NAME}-external-secrets-stores
       namespace: external-secrets
-    - name: emqx-cluster
+    - name: ${CLUSTER_NAME}-emqx-cluster
       namespace: database
   prune: true
   sourceRef:

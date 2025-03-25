@@ -8,7 +8,7 @@ metadata:
 spec:
   targetNamespace: *ns
   dependsOn:
-    - name: volsync
+    - name: ${CLUSTER_NAME}-volsync
       namespace: storage
     - name: truenas-scale
       namespace: truenas-scale
