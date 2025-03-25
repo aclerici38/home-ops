@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname ${CLUSTER_NAME}-generic-device-plugin
+  name: &appname generic-device-plugin
   namespace: &ns kube-system
 spec:
   targetNamespace: *ns

@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ${CLUSTER_NAME}-coredns
+  name: &app coredns
   namespace: &ns kube-system
 spec:
   targetNamespace: *ns

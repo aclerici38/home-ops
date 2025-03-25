@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ${CLUSTER_NAME}-cert-manager
+  name: &app cert-manager
   namespace: &ns cluster-utilities
 spec:
   targetNamespace: *ns
@@ -21,12 +21,15 @@ spec:
   wait: true
   interval: 30m
   timeout: 5m
+  postBuild:
+    substitute:
+      APP: *app
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ${CLUSTER_NAME}-cert-manager-issuers
+  name: &app cert-manager-issuers
   namespace: &ns cluster-utilities
 spec:
   targetNamespace: *ns

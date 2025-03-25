@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ${CLUSTER_NAME}-echo-server
+  name: &app echo-server
   namespace: &ns network
 spec:
   targetNamespace: *ns

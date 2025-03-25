@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ${CLUSTER_NAME}-multus
+  name: &app multus
   namespace: &ns network
 spec:
   targetNamespace: *ns
@@ -29,7 +29,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ${CLUSTER_NAME}-multus-networks
+  name: &app multus-networks
   namespace: &ns network
 spec:
   targetNamespace: *ns

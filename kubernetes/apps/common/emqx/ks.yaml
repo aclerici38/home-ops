@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ${CLUSTER_NAME}-emqx
+  name: &app emqx
   namespace: &ns database
 spec:
   commonMetadata:
@@ -33,7 +33,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ${CLUSTER_NAME}-emqx-cluster
+  name: &app emqx-cluster
   namespace: &ns database
 spec:
   commonMetadata:
