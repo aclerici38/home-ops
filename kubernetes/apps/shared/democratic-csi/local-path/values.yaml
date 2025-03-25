@@ -2,7 +2,6 @@
 controller:
   nodeSelector: &ns
     kubernetes.io/hostname: bonds
-  fullnameOverride: *name
   enabled: true
   strategy: node
   externalAttacher:
