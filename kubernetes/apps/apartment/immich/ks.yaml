@@ -40,8 +40,6 @@ spec:
       VOLSYNC_CAPACITY: 2Ti
       VOLSYNC_STORAGECLASS: truenas-nfs
       VOLSYNC_SNAPSHOTCLASS: truenas-nfs
-      VOLSYNC_ANNOTATIONS: |-
-        kustomize.toolkit.fluxcd.io/prune: disabled
     substituteFrom:
       - kind: Secret
         name: immich-secret
