@@ -67,7 +67,7 @@ service:
     controller: main
     ports:
       http:
-        port: &port 8183
+        port: *port
 
 route:
   ${APP}:

@@ -57,7 +57,7 @@ service:
     controller: main
     ports:
       http:
-        port: &port 80
+        port: *port
 route:
   ${APP}:
     hostnames:
