@@ -13,4 +13,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  namePrefix: cloud-
+  postBuild:
+    substitute:
+      CLUSTER_NAME: apartment
