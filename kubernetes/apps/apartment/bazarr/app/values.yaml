@@ -76,7 +76,7 @@ service:
       http:
         port: *port
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -85,11 +85,11 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 persistence:
   config:
-    existingClaim: *app
+    existingClaim: ${APP}
     globalMounts:
       - path: /config
   media:

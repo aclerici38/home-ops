@@ -4,7 +4,7 @@ controllers:
   main:
     strategy: RollingUpdate
     containers:
-      *app :
+      ${APP}:
         image:
           repository: ghcr.io/pocket-id/pocket-id
           tag: v0.43.1@sha256:293f0e22114f67793c5dccb853cf3d38050794e847370735701ec108938c2902
@@ -43,7 +43,7 @@ defaultPodOptions:
     fsGroupChangePolicy: OnRootMismatch
     seccompProfile: { type: RuntimeDefault }
 service:
-  *app :
+  ${APP}:
     controller: main
     ports:
       frontend:
@@ -51,7 +51,7 @@ service:
       backend:
         port: 8080
 route:
-  *app :
+  ${APP}:
     hostnames:
       - id.${SECRET_DOMAIN}
     parentRefs:
@@ -64,26 +64,26 @@ route:
               type: PathPrefix
               value: /api
         backendRefs:
-          - name: *app
+          - name: ${APP}
             port: 8080
       - matches:
           - path:
               type: PathPrefix
               value: /.well-known
         backendRefs:
-          - name: *app
+          - name: ${APP}
             port: 8080
       - matches:
           - path:
               type: PathPrefix
               value: /
         backendRefs:
-          - name: *app
+          - name: ${APP}
             port: 3000
 
 persistence:
   data:
-    existingClaim: *app
+    existingClaim: ${APP}
     globalMounts:
       - path: /data
       - path: /app/backend/data

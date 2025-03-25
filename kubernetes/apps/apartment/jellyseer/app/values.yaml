@@ -55,7 +55,7 @@ service:
       http:
         port: &port 5055
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -64,7 +64,7 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 persistence:
   config:

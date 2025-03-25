@@ -13,7 +13,7 @@ controllers:
                 values:
                   - "apartment"
     containers:
-      *app :
+      ${APP}:
         image:
           repository: docker.io/filebrowser/filebrowser
           tag: v2.32.0@sha256:593478e3c24c5ea9f5d7478dc549965b7bc7030707291006ce8d0b6162d3454b
@@ -53,13 +53,13 @@ defaultPodOptions:
     fsGroupChangePolicy: OnRootMismatch
     seccompProfile: { type: RuntimeDefault }
 service:
-  *app :
+  ${APP}:
     controller: main
     ports:
       http:
         port: &port 80
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -68,7 +68,7 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 persistence:
   config:

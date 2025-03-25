@@ -6,7 +6,7 @@ controllers:
       nodeSelector:
         kubernetes.io/hostname: madbum
     containers:
-      *app :
+      ${APP}:
         image:
           repository: ghcr.io/wg-easy/wg-easy
           tag: 14@sha256:66352ccb4b5095992550aa567df5118a5152b6ed31be34b0a8e118a3c3a35bf5
@@ -56,7 +56,7 @@ service:
         nodePort: 31821
         protocol: UDP
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -65,10 +65,10 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *uiPort
 persistence:
   config:
-    existingClaim: *app
+    existingClaim: ${APP}
     globalMounts:
       - path: /etc/wireguard

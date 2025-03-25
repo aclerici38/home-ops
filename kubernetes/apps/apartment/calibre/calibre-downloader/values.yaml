@@ -11,7 +11,7 @@ controllers:
         runAsNonRoot: true
         seccompProfile: { type: RuntimeDefault }
     containers:
-      *app :
+      ${APP}:
         image:
           repository: ghcr.io/calibrain/calibre-web-automated-book-downloader
           tag: latest@sha256:e4c205932b0ece06d76de09ba8569d5aa30768cc46d04beb3a24ddc0106043d6
@@ -48,13 +48,13 @@ controllers:
               - ALL
           allowPrivilegeEscalation: false
 service:
-  *app :
+  ${APP}:
     controller: main
     ports:
       http:
         port: *port
 route:
-  *app :
+  ${APP}:
     hostnames:
       - download-books.${SECRET_DOMAIN}
     parentRefs:
@@ -63,7 +63,7 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 persistence:
   tmp:

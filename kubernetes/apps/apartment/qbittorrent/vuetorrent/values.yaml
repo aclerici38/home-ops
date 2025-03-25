@@ -13,7 +13,7 @@ controllers:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     containers:
-      *app :
+      ${APP}:
         image:
           repository: ghcr.io/vuetorrent/vuetorrent-backend
           tag: 2.2.0
@@ -48,13 +48,13 @@ controllers:
           RELEASE_TYPE: stable
           UPDATE_VT_CRON: '0 0 * * *'
 service:
-  *app :
+  ${APP}:
     controller: main
     ports:
       http:
         port: *port
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -63,7 +63,7 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 persistence:
   config:

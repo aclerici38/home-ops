@@ -16,7 +16,7 @@ controllers:
       nodeSelector:
         kubernetes.io/hostname: "bonds"
     containers:
-      *app :
+      ${APP}:
         image:
           repository: docker.io/ollama/ollama
           tag: 0.6.2@sha256:74a0929e1e082a09e4fdeef8594b8f4537f661366a04080e600c90ea9f712721
@@ -38,7 +38,7 @@ controllers:
           seccompProfile:
             type: RuntimeDefault
 service:
-  *app :
+  ${APP}:
     controller: main
     ports:
       http:

@@ -3,7 +3,7 @@
 controllers:
   main:
     containers:
-      &app it-tools:
+      ${APP}:
         image:
           repository: ghcr.io/bjw-s-labs/it-tools
           tag: 2024.10.22@sha256:75cbecf0092c306ba86d7342d8488fd8c86564bda27644921618debb6215c4e1
@@ -20,13 +20,13 @@ controllers:
             drop:
               - ALL
 service:
-  *app :
+  ${APP}:
     controller: main
     ports:
       http:
         port: &port 80
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -35,7 +35,7 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 persistence:
   cache:

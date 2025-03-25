@@ -21,7 +21,7 @@ controllers:
             }
           ]
     containers:
-      *app :
+      ${APP}:
         image:
           repository: ghcr.io/home-operations/home-assistant
           tag: 2025.3.4
@@ -64,7 +64,7 @@ controllers:
           limits:
             memory: 1Gi
 service:
-  *app :
+  ${APP}:
     controller: main
     ports:
       http:
@@ -72,7 +72,7 @@ service:
       code-server:
         port: 12321
 # route:
-#   *app :
+#   ${APP}:
 #     hostnames:
 #       - ${APP}.${SECRET_DOMAIN}
 #     parentRefs:
@@ -81,7 +81,7 @@ service:
 #         sectionName: https
 #     rules:
 #       - backendRefs:
-#           - name: *app
+#           - name: ${APP}
 #             port: *port
 persistence:
   config:
@@ -92,7 +92,7 @@ persistence:
     existingClaim: hass-cache
     advancedMounts:
       main:
-        *app :
+        ${APP}:
           - path: /venv
             subPath: hass-venv
   dockerenv:
@@ -119,6 +119,6 @@ persistence:
     hostPath: /run/dbus
     advancedMounts:
       main :
-        *app :
+        ${APP}:
           - path: /run/dbus
             readOnly: true

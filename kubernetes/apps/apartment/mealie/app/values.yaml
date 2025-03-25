@@ -3,7 +3,7 @@
 controllers:
   main:
     containers:
-      *app :
+      ${APP}:
         image:
           repository: ghcr.io/mealie-recipes/mealie
           tag: v2.8.0@sha256:63aef46d90975d9cf9c0fdb9399fc2fe36acd222e1db6be99c504b9ccdbee967
@@ -71,13 +71,13 @@ defaultPodOptions:
     fsGroupChangePolicy: OnRootMismatch
     seccompProfile: { type: RuntimeDefault }
 service:
-  *app :
+  ${APP}:
     controller: main
     ports:
       http:
         port: &port 9000
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -86,11 +86,11 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 persistence:
   config:
-    existingClaim: *app
+    existingClaim: ${APP}
     globalMounts:
       - path: /app/data
   # Needed for recipe parser

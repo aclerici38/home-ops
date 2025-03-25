@@ -11,7 +11,7 @@ controllers:
         fsGroup: *id
         fsGroupChangePolicy: Always
     containers:
-      *app :
+      ${APP}:
         image:
           repository: ghcr.io/advplyr/audiobookshelf
           tag: 2.20.0@sha256:106531342a5f150e0e3dcbb348f126a5c452ecc4274f162d31545194dbe4352a
@@ -43,13 +43,13 @@ controllers:
           limits:
             memory: 5Gi
 service:
-  *app :
+  ${APP}:
     controller: main
     ports:
       http:
         port: *port
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -58,7 +58,7 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 persistence:
   config:

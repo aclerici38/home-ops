@@ -1,9 +1,9 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
 controllers:
-  *app :
+  ${APP}:
     containers:
-      *app :
+      ${APP}:
         image:
           repository: ghcr.io/home-operations/prowlarr
           tag: 1.32.2.4987
@@ -67,13 +67,13 @@ defaultPodOptions:
     fsGroupChangePolicy: OnRootMismatch
     seccompProfile: { type: RuntimeDefault }
 service:
-  *app :
-    controller: *app
+  ${APP}:
+    controller: ${APP}
     ports:
       http:
         port: *port
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -82,7 +82,7 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 persistence:
   config:

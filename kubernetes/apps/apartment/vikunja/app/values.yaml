@@ -3,7 +3,7 @@
 controllers:
   main:
     containers:
-      *app :
+      ${APP}:
         image:
           repository: docker.io/vikunja/vikunja
           tag: 0.24.6@sha256:ed1f3ed467fecec0b57e9de7bc6607f8bbcbb23ffced6a81f5dfefc794cdbe3b
@@ -74,13 +74,13 @@ defaultPodOptions:
     fsGroupChangePolicy: OnRootMismatch
     seccompProfile: { type: RuntimeDefault }
 service:
-  *app :
+  ${APP}:
     controller: main
     ports:
       http:
         port: *port
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -89,11 +89,11 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 persistence:
   files:
-    existingClaim: *app
+    existingClaim: ${APP}
     globalMounts:
       - path: /app/vikunja/files
 

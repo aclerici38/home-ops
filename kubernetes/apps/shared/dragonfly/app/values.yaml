@@ -52,7 +52,7 @@ defaultPodOptions:
     seccompProfile: { type: RuntimeDefault }
 service:
   app:
-    controller: *app
+    controller: ${APP}
     ports:
       http:
         port: *port
@@ -60,7 +60,7 @@ service:
         port: 8080
 serviceMonitor:
   app:
-    serviceName: *app
+    serviceName: ${APP}
     endpoints:
       - port: metrics
         scheme: http
@@ -69,4 +69,4 @@ serviceMonitor:
         scrapeTimeout: 10s
 serviceAccount:
   create: true
-  name: *app
+  name: ${APP}

@@ -17,7 +17,7 @@ controllers:
         fsGroup: &id 1000
       runtimeClassName: nvidia
     containers:
-      *app :
+      ${APP}:
         image:
           repository: ghcr.io/linuxserver/firefox
           tag: 136.0.2@sha256:e0466eb005008d517d01fe5bf14590bcb0e68ea0556aa63f6b5c3a2d8b89a763
@@ -36,13 +36,13 @@ controllers:
             memory: 4Gi
             nvidia.com/gpu: 1
 service:
-  *app :
+  ${APP}:
     controller: main
     ports:
       http:
         port: &port 3000
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -51,7 +51,7 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 persistence:
   config:

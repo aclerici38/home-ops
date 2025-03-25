@@ -8,14 +8,14 @@ controllers:
     replicas: 2
     strategy: RollingUpdate
     containers:
-      *app :
+      ${APP}:
         image:
           repository: ghcr.io/larivierec/k8s_gateway
           tag: v0.4.3-dirty@sha256:29c2d947d050cba2c243e8d26a10885595aca244461110c1644abfeb63f0484e
         args: ["-conf", "/etc/coredns/Corefile"]
 
 service:
-  *app :
+  ${APP}:
     controller: main
     clusterIP: 172.17.0.12
     ports:
@@ -28,9 +28,9 @@ service:
         targetPort: 1053
         protocol: UDP
 serviceMonitor:
-  *app :
+  ${APP}:
     enabled: true
-    serviceName: *app
+    serviceName: ${APP}
     endpoints:
       - port: metrics
         scheme: http
@@ -55,7 +55,7 @@ probes:
 
 serviceAccount:
   create: true
-  name: *app
+  name: ${APP}
 
 persistence:
   config-file:
@@ -72,4 +72,4 @@ topologySpreadConstraints:
     whenUnsatisfiable: DoNotSchedule
     labelSelector:
       matchLabels:
-        app.kubernetes.io/name: *app
+        app.kubernetes.io/name: ${APP}

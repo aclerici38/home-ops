@@ -10,7 +10,7 @@ controllers:
         seccompProfile: { type: RuntimeDefault }
     strategy: RollingUpdate
     containers:
-      *app :
+      ${APP}:
         image:
           repository: docker.io/searxng/searxng
           tag: 2025.3.22-5986629c6
@@ -54,14 +54,14 @@ controllers:
               - DAC_OVERRIDE
 
 service:
-  *app :
+  ${APP}:
     controller: main
     ports:
       http:
         port: *port
 
 route:
-  *app :
+  ${APP}:
     hostnames:
       - search.${SECRET_DOMAIN}
     parentRefs:
@@ -70,7 +70,7 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 
 persistence:

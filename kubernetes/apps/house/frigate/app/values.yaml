@@ -35,7 +35,7 @@ defaultPodOptions:
     seccompProfile: { type: RuntimeDefault }
 service:
   main:
-    controller: *app
+    controller: ${APP}
     type: ClusterIP
     ports:
       http-auth:

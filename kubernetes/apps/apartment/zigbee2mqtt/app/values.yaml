@@ -3,7 +3,7 @@
 controllers:
   main:
     containers:
-      *app :
+      ${APP}:
         image:
           repository: ghcr.io/koenkk/zigbee2mqtt
           tag: 2.1.3
@@ -63,14 +63,14 @@ defaultPodOptions:
       - 20
 
 service:
-  *app :
+  ${APP}:
     controller: main
     ports:
       http:
         port: &port 8183
 
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -79,11 +79,11 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 
 persistence:
   config:
-    existingClaim: *app
+    existingClaim: ${APP}
     globalMounts:
       - path: /data

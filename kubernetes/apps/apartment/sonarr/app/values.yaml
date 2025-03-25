@@ -1,6 +1,7 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
-sonarr:
+controllers:
+  main:
     pod:
       nodeSelector:
         kubernetes.io/hostname: "bonds"
@@ -70,12 +71,12 @@ defaultPodOptions:
     seccompProfile: { type: RuntimeDefault }
 service:
   sonarr:
-    controller: sonarr
+    controller: main
     ports:
       http:
         port: *port
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -84,11 +85,11 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 persistence:
   config:
-    existingClaim: *app
+    existingClaim: ${APP}
     globalMounts:
       - path: /config
   temp:

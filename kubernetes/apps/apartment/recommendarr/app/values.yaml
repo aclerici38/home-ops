@@ -11,7 +11,7 @@ controllers:
         seccompProfile: { type: RuntimeDefault }
         fsGroupChangePolicy: Always
     containers:
-      *app :
+      ${APP}:
         image:
           repository: docker.io/tannermiddleton/recommendarr
           tag: v1.3.0@sha256:dd655316e5973eaa9809025a7780acb29304b589c37f45fd01c7294a7d816f12
@@ -38,13 +38,13 @@ controllers:
             cpu: 10m
             memory: 50Mi
 service:
-  *app :
+  ${APP}:
     controller: main
     ports:
       http:
         port: *port
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -53,10 +53,10 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: *port
 persistence:
   data:
-    existingClaim: *app
+    existingClaim: ${APP}
     globalMounts:
       - path: /app/server/data

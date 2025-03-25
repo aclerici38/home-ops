@@ -1,7 +1,7 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
 controllers:
-  *app :
+  ${APP}:
     pod:
       nodeSelector:
         kubernetes.io/hostname: bonds
@@ -55,7 +55,7 @@ controllers:
             memory: 2Gi
 service:
   app:
-    controller: *app
+    controller: ${APP}
     ports:
       http:
         port: 9001
@@ -71,7 +71,7 @@ serviceMonitor:
         interval: 2m
         scrapeTimeout: 10s
 route:
-  *app :
+  ${APP}:
     hostnames:
       - ${APP}.${SECRET_DOMAIN}
     parentRefs:
@@ -80,7 +80,7 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: 9001
   s3:
     hostnames:
@@ -91,7 +91,7 @@ route:
         sectionName: https
     rules:
       - backendRefs:
-          - name: *app
+          - name: ${APP}
             port: 9000
 persistence:
   data:
