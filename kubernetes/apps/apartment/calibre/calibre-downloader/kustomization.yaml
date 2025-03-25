@@ -2,8 +2,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources:
-  - ./values.yaml
 configMapGenerator:
   - name: ${APP}-helm-values
     files:
