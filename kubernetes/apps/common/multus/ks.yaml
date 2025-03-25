@@ -38,7 +38,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/apps/network/multus/networks"
+  path: "./kubernetes/apps/common/multus/networks"
   prune: true
   sourceRef:
     kind: GitRepository
