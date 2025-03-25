@@ -13,7 +13,7 @@ spec:
   dependsOn:
     - name: kubevirt
       namespace: kubevirt
-  path: ./kubernetes/apps/kubevirt/truenas-scale/config
+  path: ./kubernetes/apps/apartment/kubevirt/truenas-scale/config
   prune: true
   sourceRef:
     kind: GitRepository
@@ -39,7 +39,7 @@ spec:
       namespace: truenas-scale
     - name: volsync
       namespace: storage
-  path: ./kubernetes/apps/kubevirt/truenas-scale/vm
+  path: ./kubernetes/apps/apartment/kubevirt/truenas-scale/vm
   prune: true
   sourceRef:
     kind: GitRepository
@@ -48,9 +48,3 @@ spec:
   wait: true
   interval: 30m
   timeout: 5m
-  postBuild:
-    substitute:
-      APP: *vm
-      VOLSYNC_STORAGECLASS: &sc local-hostpath
-      VOLSYNC_SNAPSHOTCLASS: *sc
-      VOLSYNC_CAPACITY: 32Gi
