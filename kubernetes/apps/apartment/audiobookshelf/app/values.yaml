@@ -16,7 +16,7 @@ controllers:
           repository: ghcr.io/advplyr/audiobookshelf
           tag: 2.20.0@sha256:106531342a5f150e0e3dcbb348f126a5c452ecc4274f162d31545194dbe4352a
         env:
-          AUDIOBOOKSHELF_UID: &id 1000
+          AUDIOBOOKSHELF_UID: *id
           AUDIOBOOKSHELF_GID: *id
           CONFIG_PATH: /config
           METADATA_PATH: /config/metadata

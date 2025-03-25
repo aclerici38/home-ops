@@ -14,7 +14,7 @@ spec:
       namespace: storage
     - name: ${CLUSTER_NAME}-multus
       namespace: network
-    - name: ${CLUSTER_NAME}-minio
+    - name: minio
       namespace: cluster-utilities
   path: ./kubernetes/apps/common/home-assistant/app
   components:

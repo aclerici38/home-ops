@@ -9,13 +9,13 @@ spec:
   targetNamespace: *ns
   dependsOn:
     - name: ${CLUSTER_NAME}-external-secrets-stores
-      namespace: external-secrets
+      namespace: cluster-utilities
     - name: ${CLUSTER_NAME}-cloudnative-pg
       namespace: database
     - name: truenas-scale
       namespace: truenas-scale
     - name: ${CLUSTER_NAME}-external-secrets-stores
-      namespace: external-secrets
+      namespace: cluster-utilities
     - name: minio
       namespace: cluster-utilities
     - name: ${CLUSTER_NAME}-volsync

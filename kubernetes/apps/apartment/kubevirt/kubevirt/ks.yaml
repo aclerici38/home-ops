@@ -22,21 +22,11 @@ spec:
     name: kubevirt-flux
     namespace: flux-system
   patches:
-    # namespace is managed separately by main ks, no need for this ks to also manage it, KubeVirt bundles namespace into kubevirt-operator.yaml
-    - patch: |
-        $patch: delete
-        apiVersion: v1
-        kind: Namespace
-        metadata:
-          name: kubevirt
-      target:
-        kind: Namespace
-        name: kubevirt
     - patch: |
         apiVersion: kubevirt.io/v1
         kind: KubeVirt
         metadata:
-          name: not-used
+          name: patch
         spec:
           infra:
             nodePlacement:

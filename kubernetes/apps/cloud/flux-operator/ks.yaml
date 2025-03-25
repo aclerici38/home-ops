@@ -38,7 +38,7 @@ spec:
   dependsOn:
     - name: flux-operator
     - name: ${CLUSTER_NAME}-external-secrets-stores
-      namespace: external-secrets
+      namespace: cluster-utilities
   path: ./kubernetes/apps/cloud/flux-operator/instance
   components:
     - ../../../../components/helmrelease

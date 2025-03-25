@@ -16,7 +16,7 @@ spec:
     - ../../../../components/helmrelease
   dependsOn:
     - name: ${CLUSTER_NAME}-external-secrets-stores
-      namespace: external-secrets
+      namespace: cluster-utilities
     - name: ${CLUSTER_NAME}-emqx-cluster
       namespace: database
   prune: true
