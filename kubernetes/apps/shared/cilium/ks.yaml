@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ${CLUSTER_NAME}-cilium
+  name: &app cilium
   namespace: &ns cilium
 spec:
   targetNamespace: *ns
@@ -29,7 +29,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ${CLUSTER_NAME}-cilium-config
+  name: &app cilium-config
   namespace: &ns cilium
 spec:
   targetNamespace: *ns
@@ -52,7 +52,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ${CLUSTER_NAME}-cilium-gateway
+  name: &app cilium-gateway
   namespace: &ns cilium
 spec:
   targetNamespace: *ns

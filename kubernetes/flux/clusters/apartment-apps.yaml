@@ -18,6 +18,4 @@ spec:
   kubeConfig:
     secretRef:
       name: apartment-cluster-kubeconfig
-  postBuild:
-    substitute:
-      CLUSTER_NAME: apartment
+  namePrefix: apartment-
