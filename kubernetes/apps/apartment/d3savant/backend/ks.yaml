@@ -17,9 +17,9 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/d3savant/backend/postgres
+  path: ./kubernetes/apps/apartment/d3savant/backend/postgres
   components:
-    - ../../../../components/external-secret
+    - ../../../../../components/external-secret
   prune: true
   sourceRef:
     kind: GitRepository
