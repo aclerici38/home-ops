@@ -46,7 +46,7 @@ spec:
     namespace: flux-system
   dependsOn:
     - name: ${CLUSTER_NAME}-snapshot-controller
-    - name: ${CLUSTER_NAME}-truenas-scale
+    - name: truenas-scale
       namespace: truenas-scale
   interval: 30m
   wait: true
