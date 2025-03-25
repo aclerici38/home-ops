@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/flaresolverr/app
+  path: ./kubernetes/apps/apartment/flaresolverr/app
   components:
     - ../../../../components/helmrelease
   sourceRef:
