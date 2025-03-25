@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./truenas-snapshotclass.yaml
+  - ./truenas-storageclass.yaml
+configMapGenerator:
+  - name: ${APP}-helm-values
+    files:
+      - ./values.yaml
+configurations:
+  - ../../../../templates/kustomizeconfig.yaml

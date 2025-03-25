@@ -1,0 +1,54 @@
+---
+image:
+  useFull: true
+nodeSelector:
+  location: 'apartment'
+  kubernetes.io/arch: amd64
+fullNameOverride: 'renovate'
+renovate:
+  extraEnvVars:
+    - name: PGPASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: ${APP}-db-app
+          key: password
+  logLevel: 'info'
+  mendRnvAcceptTos: 'y'
+  mendRnvPlatform: 'github'
+  mendRnvAutoDiscoverFilter: 'ant385525/home-ops'
+  mendRnvEnqueueJobsOnStartup: 'enabled'
+  mendRnvLogHistoryDir: '/tmp/logs'
+  mendRnvWorkerCleanup: '@daily'
+  mendRnvPrometheusMetricsEnabled: true
+  existingSecret: 'renovate-secret'
+  config: |
+    module.exports = {
+      redisUrl: 'redis://dragonfly-db.database.svc.cluster.local:6379/1',
+      onboarding: true,
+      requireConfig: "required"
+    }
+postgresql:
+  enabled: true
+cacheInMemory:
+  enabled: true
+service:
+  type: ClusterIP
+  port: 8080
+ingress:
+  enabled: false
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+extraVolumes:
+  - name: tmp
+    type: emptydir
+extraVolumeMounts:
+  - name: tmp
+    mountPath: /tmp

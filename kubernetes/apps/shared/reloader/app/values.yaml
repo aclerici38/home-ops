@@ -1,0 +1,9 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+fullnameOverride: ${APP}
+reloader:
+  autoReloadAll: true
+  readOnlyRootFileSystem: true
+  podMonitor:
+    enabled: true
+    namespace: "{{ .Release.Namespace }}"

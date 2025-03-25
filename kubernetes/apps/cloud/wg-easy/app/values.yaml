@@ -1,0 +1,74 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
+controllers:
+  main:
+    pod:
+      nodeSelector:
+        kubernetes.io/hostname: madbum
+    containers:
+      *app :
+        image:
+          repository: ghcr.io/wg-easy/wg-easy
+          tag: 14@sha256:66352ccb4b5095992550aa567df5118a5152b6ed31be34b0a8e118a3c3a35bf5
+        env:
+          LANG: EN
+          WG_HOST: cloud.${SECRET_DOMAIN}
+          PORT: &uiPort 51822
+          WG_PORT: &wgPort 51821
+          WG_DEFAULT_DNS: 172.17.0.13 # blocky
+          WG_MTU: 1280
+          WG_PERSISTENT_KEEPALIVE: 25
+          WG_ALLOWED_IPS: 0.0.0.0/0
+          UI_TRAFFIC_STATS: "true"
+          UI_CHART_TYPE: 1
+        resources:
+          requests:
+            cpu: 50m
+          limits:
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: true
+          readOnlyRootFilesystem: false
+          capabilities:
+            add:
+              - NET_ADMIN
+              # - SYS_MODULE
+              - NET_RAW
+            drop:
+              - ALL
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: false
+service:
+  ui:
+    controller: main
+    primary: true
+    ports:
+      http:
+        port: *uiPort
+  wg:
+    controller: main
+    type: NodePort
+    ports:
+      vpn:
+        targetPort: *wgPort
+        port: 31821
+        nodePort: 31821
+        protocol: UDP
+route:
+  *app :
+    hostnames:
+      - ${APP}.${SECRET_DOMAIN}
+    parentRefs:
+      - name: internal
+        namespace: kube-system
+        sectionName: https
+    rules:
+      - backendRefs:
+          - name: *app
+            port: *uiPort
+persistence:
+  config:
+    existingClaim: *app
+    globalMounts:
+      - path: /etc/wireguard

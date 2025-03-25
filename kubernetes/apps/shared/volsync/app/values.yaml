@@ -1,0 +1,14 @@
+---
+manageCRDs: true
+metrics:
+  disableAuth: true
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  seccompProfile: { type: RuntimeDefault }
+image: &image
+  repository: ghcr.io/home-operations/volsync
+  tag: v0.12.0
+restic: *image
+rclone: *image

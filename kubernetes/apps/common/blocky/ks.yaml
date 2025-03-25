@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app ${CLUSTER_NAME}-blocky
+  namespace: &ns network
+spec:
+  path: "./kubernetes/apps/common/blocky/app/"
+  components:
+    - ../../../../components/cnpg/init
+    - ../../../../components/helmrelease
+  prune: true
+  wait: true
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: database
+    - name: dragonfly-cluster
+      namespace: database
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  interval: 30m
+  retryInterval: 2m
+  timeout: 3m
+  targetNamespace: *ns
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  postBuild:
+    substitute:
+      APP: *app

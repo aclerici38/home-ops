@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
+controllers:
+  flaresolverr:
+    containers:
+      app:
+        image:
+          repository: ghcr.io/flaresolverr/flaresolverr
+          tag: v3.3.21@sha256:f104ee51e5124d83cf3be9b37480649355d223f7d8f9e453d0d5ef06c6e3b31b
+        resources:
+          requests:
+            cpu: 10m
+            memory: 150Mi
+          limits:
+            memory: 2Gi
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          seccompProfile: { type: RuntimeDefault }
+          capabilities:
+            drop:
+              - ALL
+service:
+  app:
+    controller: flaresolverr
+    ports:
+      http:
+        port: 8191

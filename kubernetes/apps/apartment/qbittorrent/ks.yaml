@@ -1,0 +1,65 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app qbittorrent
+  namespace: &ns media
+spec:
+  targetNamespace: *ns
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
+  path: ./kubernetes/apps/apartment/qbittorrent/app
+  components:
+    - ../../../../components/external-secret
+    - ../../../../components/volsync/minio
+    - ../../../../components/helmrelease
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  wait: true
+  dependsOn:
+    - name: volsync
+      namespace: storage
+    - name: external-secrets-stores
+      namespace: external-secrets
+    - name: truenas-scale
+      namespace: truenas-scale
+    - name: minio
+      namespace: cluster-utilities
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_STORAGECLASS: &sc local-hostpath
+      VOLSYNC_SNAPSHOTCLASS: *sc
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app vuetorrent
+  namespace: &ns media
+spec:
+  targetNamespace: *ns
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  interval: 30m
+  timeout: 5m
+  path: ./kubernetes/apps/apartment/qbittorrent/vuetorrent
+  components:
+    - ../../../../components/helmrelease
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  wait: true
+  postBuild:
+    substitute:
+      APP: *app

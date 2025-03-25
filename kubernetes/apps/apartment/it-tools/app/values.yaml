@@ -1,0 +1,46 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
+controllers:
+  main:
+    containers:
+      &app it-tools:
+        image:
+          repository: ghcr.io/bjw-s-labs/it-tools
+          tag: 2024.10.22@sha256:75cbecf0092c306ba86d7342d8488fd8c86564bda27644921618debb6215c4e1
+        resources:
+          requests:
+            cpu: 100m
+          limits:
+            memory: 500Mi
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          seccompProfile: { type: RuntimeDefault }
+          capabilities:
+            drop:
+              - ALL
+service:
+  *app :
+    controller: main
+    ports:
+      http:
+        port: &port 80
+route:
+  *app :
+    hostnames:
+      - ${APP}.${SECRET_DOMAIN}
+    parentRefs:
+      - name: internal
+        namespace: kube-system
+        sectionName: https
+    rules:
+      - backendRefs:
+          - name: *app
+            port: *port
+persistence:
+  cache:
+    type: emptyDir
+    sizeLimit: 2Gi
+    globalMounts:
+      - path: /var/cache/nginx
+

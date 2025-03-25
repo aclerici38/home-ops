@@ -1,0 +1,9 @@
+---
+master:
+  replicaCount: 1
+worker:
+  config:
+    core:
+      labelSources: ["pci", "system", "usb"]
+prometheus:
+  enable: true

@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
+controllers:
+  main:
+    pod:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: location
+                operator: In
+                values:
+                  - "apartment"
+      securityContext:
+        seccompProfile: { type: RuntimeDefault }
+        fsGroup: &id 1000
+      runtimeClassName: nvidia
+    containers:
+      *app :
+        image:
+          repository: ghcr.io/linuxserver/firefox
+          tag: 136.0.2@sha256:e0466eb005008d517d01fe5bf14590bcb0e68ea0556aa63f6b5c3a2d8b89a763
+        env:
+          PUID: *id
+          PGID: *id
+        securityContext:
+          allowPrivilegeEscalation: true
+          readOnlyRootFilesystem: false
+          privileged: true
+        resources:
+          requests:
+            cpu: 100m
+            memory: 500Mi
+          limits:
+            memory: 4Gi
+            nvidia.com/gpu: 1
+service:
+  *app :
+    controller: main
+    ports:
+      http:
+        port: &port 3000
+route:
+  *app :
+    hostnames:
+      - ${APP}.${SECRET_DOMAIN}
+    parentRefs:
+      - name: internal
+        namespace: kube-system
+        sectionName: https
+    rules:
+      - backendRefs:
+          - name: *app
+            port: *port
+persistence:
+  config:
+    existingClaim: firefox
+  data:
+    type: nfs
+    server: 10.38.55.50
+    path: /mnt/tank/media
+    globalMounts:
+      - path: /allMedia

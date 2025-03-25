@@ -1,0 +1,96 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
+# renovate: datasource=docker depName=ghcr.io/siderolabs/installer
+talosVersion: v1.9.5
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+kubernetesVersion: v1.32.3
+
+clusterName: cloud
+endpoint: https://155.248.199.104:6443
+
+clusterPodNets:
+  - &podNet "10.200.0.0/16"
+clusterSvcNets:
+  - &svcNet "10.210.0.0/16"
+
+additionalApiServerCertSans: &sans
+  - "10.38.55.200"
+  - "10.40.40.41"
+  - "127.0.0.1"
+  - "155.248.199.104"
+  - "10.10.0.3"
+  - "madbum"
+additionalMachineCertSans: *sans
+
+# Disable built-in Flannel to use Cilium
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: "madbum"
+    ipAddress: "10.40.40.41"
+    installDiskSelector:
+      size: ">= 10GB"
+    machineSpec:
+      secureboot: false
+      mode: cloud
+    nodeLabels:
+      location: "cloud"
+    controlPlane: true
+    patches:
+      - |-
+        machine:
+          install:
+            extraKernelArgs:
+              - talos.platform=oracle
+    networkInterfaces:
+      - interface: eth0
+        dhcp: false
+        addresses:
+          - 10.40.40.41/24
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "10.40.40.1"
+        mtu: 1500
+      - interface: wg0
+        addresses:
+          - 10.10.0.3/24
+        mtu: 1420
+        routes:
+          - network: 192.168.9.25/32
+            gateway: 10.10.0.1
+          - network: 10.0.30.28/32
+            gateway: 10.10.0.2
+        wireguard:
+          privateKey: ${MADBUM_WG_PRIVATE_KEY}
+          listenPort: 51820
+          peers:
+            - publicKey: ${BONDS_WG_PUBLIC_KEY}
+              endpoint: ${APARTMENT_WG_ENDPOINT}
+              allowedIPs:
+                - 192.168.9.25/32
+                - 10.10.0.1/32
+              persistentKeepaliveInterval: 10s
+            - publicKey: ${POSEY_WG_PUBLIC_KEY}
+              endpoint: ${OFFICE_WG_ENDPOINT}
+              allowedIPs:
+                - 10.0.30.28/32
+                - 10.10.0.2/32
+              persistentKeepaliveInterval: 10s
+
+# Global patches
+patches:
+  - "@../patches/global/machine-files.yaml"
+  - "@../patches/global/machine-kubelet.yaml"
+  - "@../patches/global/machine-network.yaml"
+  - "@../patches/global/machine-sysctls.yaml"
+  - "@../patches/global/machine-time.yaml"
+  - "@../patches/global/machine-install.yaml"
+  - "@../patches/global/machine-kernel.yaml"
+  - "@../patches/global/machine-features.yaml"
+
+# Controller patches
+controlPlane:
+  patches:
+    - "@../patches/controller/admission-controller-patch.yaml"
+    - "@../patches/controller/cluster.yaml"

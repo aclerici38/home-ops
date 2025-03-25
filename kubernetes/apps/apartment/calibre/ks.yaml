@@ -1,0 +1,62 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app calibre
+  namespace: &ns media
+spec:
+  targetNamespace: *ns
+  dependsOn:
+    - name: volsync
+      namespace: storage
+    - name: truenas-scale
+      namespace: truenas-scale
+    - name: minio
+      namespace: cluster-utilities
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/apps/apartment/calibre/calibre-web-automated
+  components:
+    - ../../../../components/volsync/minio
+    - ../../../../components/helmrelease
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  wait: true
+  interval: 30m
+  timeout: 5m
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_STORAGECLASS: &sc local-hostpath
+      VOLSYNC_SNAPSHOTCLASS: *sc
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app calibre-web-automated-downloader
+  namespace: &ns media
+spec:
+  targetNamespace: *ns
+  dependsOn:
+    - name: truenas-scale
+      namespace: truenas-scale
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/apps/apartment/calibre/calibre-downloader
+  components:
+    - ../../../../components/helmrelease
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  wait: true
+  interval: 30m
+  timeout: 5m

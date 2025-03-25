@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../shared
+
+  - ../common/blocky/ks.yaml
+  - ../common/emqx/ks.yaml
+  - ../common/home-assistant/ks.yaml
+  - ../common/multus/ks.yaml
+  - ../common/nvidia/ks.yaml
+
+  - ./atuin/ks.yaml
+  - ./audiobookshelf/ks.yaml
+  - ./bazarr/ks.yaml
+  - ./bitmagnet/ks.yaml
+  - ./calibre/ks.yaml
+  - ./d3savant/ks.yaml
+  - ./filebrowser/ks.yaml
+  - ./fileflows/ks.yaml
+  - ./firefox/ks.yaml
+  - ./flaresolverr/ks.yaml
+  - ./immich/ks.yaml
+  - ./it-tools/ks.yaml
+  - ./jellyseer/ks.yaml
+  - ./kubevirt/ks.yaml
+  - ./mealie/ks.yaml
+  - ./minio/ks.yaml
+  - ./ollama/ks.yaml
+  - ./open-webui/ks.yaml
+  - ./plex/ks.yaml
+  - ./prowlarr/ks.yaml
+  - ./qbittorrent/ks.yaml
+  - ./radarr/ks.yaml
+  - ./recommendarr/ks.yaml
+  - ./recyclarr/ks.yaml
+  - ./redisinsight/ks.yaml
+  - ./renovate/ks.yaml
+  - ./sonarr/ks.yaml
+  - ./vikunja/ks.yaml
+  - ./zigbee2mqtt/ks.yaml

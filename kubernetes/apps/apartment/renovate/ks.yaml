@@ -1,0 +1,63 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app renovate
+  namespace: &ns cluster-utilities
+spec:
+  targetNamespace: *ns
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/apps/apartment/renovate/app
+  components:
+    - ../../../../components/cnpg/no-backup
+    - ../../../../components/external-secret
+    - ../../../../components/helmrelease
+  prune: true
+  dependsOn:
+    - name: dragonfly-cluster
+      namespace: database
+    - name: cloudnative-pg
+      namespace: database
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  wait: true
+  interval: 30m
+  timeout: 5m
+  postBuild:
+    substitute:
+      APP: *app
+  patches:
+    - patch: |-
+        apiVersion: helm.toolkit.fluxcd.io/v2
+        kind: HelmRelease
+        metadata:
+          name: patch
+        spec:
+          valuesFrom:
+            - kind: Secret
+              name: renovate-db-app
+              valuesKey: host
+              targetPath: postgresql.host
+              optional: false
+            - kind: Secret
+              name: renovate-db-app
+              valuesKey: port
+              targetPath: postgresql.port
+              optional: false
+            - kind: Secret
+              name: renovate-db-app
+              valuesKey: dbname
+              targetPath: postgresql.database
+              optional: false
+            - kind: Secret
+              name: renovate-db-app
+              valuesKey: username
+              targetPath: postgresql.user
+              optional: false
+      target:
+        kind: HelmRelease

@@ -1,0 +1,100 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
+controllers:
+  *app :
+    pod:
+      nodeSelector:
+        kubernetes.io/hostname: bonds
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    containers:
+      app:
+        image:
+          repository: quay.io/minio/minio
+          tag: RELEASE.2025-03-12T18-04-18Z@sha256:46b3009bf7041eefbd90bd0d2b38c6ddc24d20a35d609551a1802c558c1c958f
+        env:
+          MINIO_API_CORS_ALLOW_ORIGIN: https://minio.${SECRET_DOMAIN},https://s3.${SECRET_DOMAIN}
+          MINIO_BROWSER_REDIRECT_URL: https://minio.${SECRET_DOMAIN}
+          # MINIO_PROMETHEUS_JOB_ID: minio
+          # MINIO_PROMETHEUS_URL: https://prometheus.${SECRET_DOMAIN}
+          # MINIO_PROMETHEUS_AUTH_TYPE: public
+          MINIO_SERVER_URL: https://s3.${SECRET_DOMAIN}
+          MINIO_STORAGE_CLASS_RRS: EC:0
+          MINIO_STORAGE_CLASS_STANDARD: EC:0
+          MINIO_UPDATE: "off"
+        envFrom:
+          - secretRef:
+              name: minio-secret
+        args: ["server", "/data", "--console-address", ":9001"]
+        probes:
+          liveness: &probes
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /minio/health/live
+                port: 9000
+              initialDelaySeconds: 30
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 6
+          readiness: *probes
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"] }
+        resources:
+          requests:
+            cpu: 100m
+          limits:
+            memory: 2Gi
+service:
+  app:
+    controller: *app
+    ports:
+      http:
+        port: 9001
+      s3:
+        port: 9000
+serviceMonitor:
+  app:
+    serviceName: minio
+    endpoints:
+      - port: s3
+        scheme: http
+        path: /minio/v2/metrics/cluster
+        interval: 2m
+        scrapeTimeout: 10s
+route:
+  *app :
+    hostnames:
+      - ${APP}.${SECRET_DOMAIN}
+    parentRefs:
+      - name: internal
+        namespace: kube-system
+        sectionName: https
+    rules:
+      - backendRefs:
+          - name: *app
+            port: 9001
+  s3:
+    hostnames:
+      - s3.${SECRET_DOMAIN}
+    parentRefs:
+      - name: internal
+        namespace: kube-system
+        sectionName: https
+    rules:
+      - backendRefs:
+          - name: *app
+            port: 9000
+persistence:
+  data:
+    existingClaim: minio
+    globalMounts:
+      - path: /data

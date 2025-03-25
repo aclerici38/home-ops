@@ -1,0 +1,105 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
+sonarr:
+    pod:
+      nodeSelector:
+        kubernetes.io/hostname: "bonds"
+    containers:
+      sonarr:
+        image:
+          repository: ghcr.io/home-operations/sonarr
+          tag: 4.0.14.2938
+        env:
+          SONARR__APP__INSTANCENAME: Sonarr
+          SONARR__APP__THEME: dark
+          SONARR__AUTH__METHOD: External
+          SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
+          SONARR__LOG__DBENABLED: "False"
+          SONARR__LOG__LEVEL: info
+          SONARR__SERVER__PORT: &port 8989
+          SONARR__POSTGRES__HOST:
+            valueFrom:
+              secretKeyRef:
+                name: ${APP}-db-app
+                key: host
+          SONARR__POSTGRES__USER:
+            valueFrom:
+              secretKeyRef:
+                name: ${APP}-db-app
+                key: username
+          SONARR__POSTGRES__PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: ${APP}-db-app
+                key: password
+          SONARR__POSTGRES__MAINDB:
+            valueFrom:
+              secretKeyRef:
+                name: ${APP}-db-app
+                key: dbname
+        probes:
+          liveness: &probes
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /ping
+                port: *port
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness: *probes
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"] }
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            memory: 16Gi
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: Always
+    seccompProfile: { type: RuntimeDefault }
+service:
+  sonarr:
+    controller: sonarr
+    ports:
+      http:
+        port: *port
+route:
+  *app :
+    hostnames:
+      - ${APP}.${SECRET_DOMAIN}
+    parentRefs:
+      - name: internal
+        namespace: kube-system
+        sectionName: https
+    rules:
+      - backendRefs:
+          - name: *app
+            port: *port
+persistence:
+  config:
+    existingClaim: *app
+    globalMounts:
+      - path: /config
+  temp:
+    enabled: true
+    type: emptyDir
+    globalMounts:
+      - path: /tmp
+  media:
+    enabled: true
+    type: nfs
+    server: 10.38.55.50
+    path: /mnt/tank/media
+    globalMounts:
+      - path: /allMedia

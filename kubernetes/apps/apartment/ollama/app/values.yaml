@@ -1,0 +1,56 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    runAsGroup: 65534
+    fsGroup: 65534
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile: { type: RuntimeDefault }
+  runtimeClassName: nvidia
+controllers:
+  main:
+    strategy: RollingUpdate
+    pod:
+      nodeSelector:
+        kubernetes.io/hostname: "bonds"
+    containers:
+      *app :
+        image:
+          repository: docker.io/ollama/ollama
+          tag: 0.6.2@sha256:74a0929e1e082a09e4fdeef8594b8f4537f661366a04080e600c90ea9f712721
+        env:
+          # https://github.com/ollama/ollama/blob/main/envconfig/config.go
+          OLLAMA_MAX_LOADED_MODELS: 1
+          OLLAMA_CONTEXT_LENGTH: 4096
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1Gi
+          limits:
+            nvidia.com/gpu: 1
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: { drop: ["ALL"] }
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+service:
+  *app :
+    controller: main
+    ports:
+      http:
+        port: 11434
+persistence:
+  # ollama mounts models and certs into ~/.ollama. when using 65534 user is 'nonexistent'
+  #   even with OLLAMA_MODELS set it saves keys here
+  config:
+    existingClaim: ollama
+    globalMounts:
+      - path: /nonexistent/.ollama
+  tmp:
+    type: emptyDir
+    globalMounts:
+      - path: /nonexistent

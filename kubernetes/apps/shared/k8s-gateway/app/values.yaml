@@ -1,0 +1,75 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
+controllers:
+  main:
+    pod:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+    replicas: 2
+    strategy: RollingUpdate
+    containers:
+      *app :
+        image:
+          repository: ghcr.io/larivierec/k8s_gateway
+          tag: v0.4.3-dirty@sha256:29c2d947d050cba2c243e8d26a10885595aca244461110c1644abfeb63f0484e
+        args: ["-conf", "/etc/coredns/Corefile"]
+
+service:
+  *app :
+    controller: main
+    clusterIP: 172.17.0.12
+    ports:
+      metrics:
+        enabled: true
+        port: 9153
+      dns:
+        enabled: true
+        port: 53
+        targetPort: 1053
+        protocol: UDP
+serviceMonitor:
+  *app :
+    enabled: true
+    serviceName: *app
+    endpoints:
+      - port: metrics
+        scheme: http
+        path: /metrics
+        interval: 1m
+        scrapeTimeout: 10s
+probes:
+  readiness:
+    custom: true
+    spec:
+      httpGet:
+        path: /ready
+        port: 8181
+  liveness:
+    custom: true
+    spec:
+      httpGet:
+        path: /health
+        port: 8080
+  startup:
+    enabled: false
+
+serviceAccount:
+  create: true
+  name: *app
+
+persistence:
+  config-file:
+    type: configMap
+    name: k8s-gateway-configmap
+    globalMounts:
+      - path: /etc/coredns/Corefile
+        subPath: Corefile
+        readOnly: true
+
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: DoNotSchedule
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/name: *app

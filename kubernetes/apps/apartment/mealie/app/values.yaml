@@ -1,0 +1,100 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
+controllers:
+  main:
+    containers:
+      *app :
+        image:
+          repository: ghcr.io/mealie-recipes/mealie
+          tag: v2.8.0@sha256:63aef46d90975d9cf9c0fdb9399fc2fe36acd222e1db6be99c504b9ccdbee967
+        env:
+          BASE_URL: https://mealie.${SECRET_DOMAIN}
+          DAILY_SCHEDULE_TIME: 05:00
+          ALLOW_SIGNUP: "false"
+          LOG_LEVEL: debug
+
+          # OIDC
+          OIDC_AUTH_ENABLED: "true"
+          OIDC_SIGNUP_ENABLED: "true"
+          OIDC_PROVIDER_NAME: Pocket-ID
+          OIDC_REMEMBER_ME: "true"
+          OIDC_USER_GROUP: "mealie_users"
+          OIDC_USER_CLAIM: email
+          OIDC_AUTO_REDIRECT: 'true'
+
+          # ollama
+          # OPENAI_BASE_URL: http://ollama.utilities:11434/v1
+          # OPENAI_MODEL: llama3.2-vision-custom
+          # OPENAI_WORKERS: 1
+          # OPENAI_SEND_DATABASE_DATA: 'false'
+          # OPENAI_REQUEST_TIMEOUT: 120
+
+          # postgres
+          DB_ENGINE: postgres
+          POSTGRES_SERVER:
+            valueFrom:
+              secretKeyRef:
+                name: ${APP}-db-app
+                key: host
+          POSTGRES_USER:
+            valueFrom:
+              secretKeyRef:
+                name: ${APP}-db-app
+                key: user
+          POSTGRES_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: ${APP}-db-app
+                key: password
+          POSTGRES_DB:
+            valueFrom:
+              secretKeyRef:
+                name: ${APP}-db-app
+                key: dbname
+        envFrom:
+          - secretRef:
+              name: mealie-secret
+        securityContext:
+          readOnlyRootFilesystem: true
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            memory: 2Gi
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    runAsGroup: 65534
+    fsGroup: 65534
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile: { type: RuntimeDefault }
+service:
+  *app :
+    controller: main
+    ports:
+      http:
+        port: &port 9000
+route:
+  *app :
+    hostnames:
+      - ${APP}.${SECRET_DOMAIN}
+    parentRefs:
+      - name: internal
+        namespace: kube-system
+        sectionName: https
+    rules:
+      - backendRefs:
+          - name: *app
+            port: *port
+persistence:
+  config:
+    existingClaim: *app
+    globalMounts:
+      - path: /app/data
+  # Needed for recipe parser
+  tmp:
+    type: emptyDir
+  nonexistent:
+    type: emptyDir
