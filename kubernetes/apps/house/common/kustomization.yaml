@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namePrefix: ${CLUSTER_NAME}
+resources:
+  - ../common/blocky/ks.yaml
+  - ../common/emqx/ks.yaml
+  - ../common/home-assistant/ks.yaml
+  - ../common/multus/ks.yaml
+  - ../common/nvidia/ks.yaml

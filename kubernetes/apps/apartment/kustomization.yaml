@@ -5,11 +5,7 @@ kind: Kustomization
 resources:
   - ../shared
 
-  - ../common/blocky/ks.yaml
-  - ../common/emqx/ks.yaml
-  - ../common/home-assistant/ks.yaml
-  - ../common/multus/ks.yaml
-  - ../common/nvidia/ks.yaml
+  - ./common
 
   - ./atuin/ks.yaml
   - ./audiobookshelf/ks.yaml
