@@ -63,11 +63,11 @@ spec:
         spec:
           valuesFrom:
             - kind: Secret
-              name: truenas-nfs-secret
+              name: ${CLUSTER_NAME}-truenas-nfs-secret
               valuesKey: API_KEY
               targetPath: driver.config.httpConnection.apiKey
             - kind: Secret
-              name: truenas-nfs-secret
+              name: ${CLUSTER_NAME}-truenas-nfs-secret
               valuesKey: API_KEY
               targetPath: driver.config.sshConnection.privateKey
       target:
