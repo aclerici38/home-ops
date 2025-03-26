@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/shared/cilium/app
+  path: ./kubernetes/apps/common/cilium/app
   components:
     - ../../../../components/helmrelease
   prune: false # never should be deleted
@@ -38,7 +38,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: ${CLUSTER_NAME}-cilium
-  path: ./kubernetes/apps/shared/cilium/networking
+  path: ./kubernetes/apps/common/cilium/networking
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
@@ -61,7 +61,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: ${CLUSTER_NAME}-cilium
-  path: ./kubernetes/apps/shared/cilium/gateway
+  path: ./kubernetes/apps/common/cilium/gateway
   prune: true
   sourceRef:
     kind: GitRepository
