@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/cloud/flux-operator/app
+  path: ./kubernetes/apps/cloud/flux-operator/operator
   components:
     - ../../../../components/helmrelease
   prune: false # never should be deleted
