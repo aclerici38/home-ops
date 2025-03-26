@@ -5,6 +5,7 @@ kind: Kustomization
 namePrefix: ${CLUSTER_NAME}-
 resources:
   - ../../common/blocky/ks.yaml
+  - ../../cilium/ks.yaml
   - ../../common/emqx/ks.yaml
   - ../../common/home-assistant/ks.yaml
   - ../../common/multus/ks.yaml
