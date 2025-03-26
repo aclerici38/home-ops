@@ -18,7 +18,6 @@ spec:
   path: ./kubernetes/apps/cloud/searxng/app
   components:
     - ../../../../components/external-secret
-    - ../../../../components/helmrelease
   prune: true
   sourceRef:
     kind: GitRepository

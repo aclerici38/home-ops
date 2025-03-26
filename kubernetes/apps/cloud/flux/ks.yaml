@@ -11,8 +11,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cloud/flux/operator
-  components:
-    - ../../../../components/helmrelease
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
@@ -40,8 +38,6 @@ spec:
     - name: ${CLUSTER_NAME}-external-secrets-stores
       namespace: cluster-utilities
   path: ./kubernetes/apps/cloud/flux/instance
-  components:
-    - ../../../../components/helmrelease
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository

@@ -16,7 +16,6 @@ spec:
   components:
     - ../../../../components/external-secret
     - ../../../../components/volsync/minio
-    - ../../../../components/helmrelease
   prune: true
   sourceRef:
     kind: GitRepository
@@ -52,8 +51,6 @@ spec:
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/apartment/qbittorrent/vuetorrent
-  components:
-    - ../../../../components/helmrelease
   prune: true
   sourceRef:
     kind: GitRepository

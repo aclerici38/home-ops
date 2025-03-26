@@ -13,8 +13,6 @@ spec:
   dependsOn:
     - name: ${CLUSTER_NAME}-snapshot-controller
   path: ./kubernetes/apps/shared/volsync/app
-  components:
-    - ../../../../components/helmrelease
   prune: true
   sourceRef:
     kind: GitRepository

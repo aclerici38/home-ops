@@ -13,7 +13,6 @@ spec:
   path: ./kubernetes/apps/apartment/recommendarr/app
   components:
     - ../../../../components/volsync/minio
-    - ../../../../components/helmrelease
   dependsOn:
     - name: ${CLUSTER_NAME}-volsync
       namespace: storage

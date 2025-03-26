@@ -13,7 +13,6 @@ spec:
   path: ./kubernetes/apps/apartment/filebrowser/app
   components:
     - ../../../../components/volsync/minio
-    - ../../../../components/helmrelease
   prune: true
   dependsOn:
     - name: ${CLUSTER_NAME}-volsync

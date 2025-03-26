@@ -16,7 +16,6 @@ spec:
   path: ./kubernetes/apps/common/emqx/app
   components:
     - ../../../../components/external-secret
-    - ../../../../components/helmrelease
   prune: true
   retryInterval: 2m
   sourceRef:

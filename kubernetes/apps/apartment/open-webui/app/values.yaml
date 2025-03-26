@@ -1,77 +1,101 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
-controllers:
-  main:
-    strategy: RollingUpdate
-    containers:
-      ${APP}:
-        image:
-          repository: ghcr.io/open-webui/open-webui
-          tag: 0.5.20@sha256:92b238e6c27dc6dacda7769062444044ed71b78628e0a9810ba5cea25e0e1ba0
-        env:
-          ENABLE_LOGIN_FORM: false
-          DEFAULT_USER_ROLE: user
-          OLLAMA_BASE_URL: http://ollama.cluster-utilities.svc.cluster.local:11434
-          ENABLE_AUTOCOMPLETE_GENERATION: false # annoying
-          WEBUI_URL: &host https://ai.${SECRET_DOMAIN}
-          CORS_ALLOW_ORIGIN: *host
-          SEARXNG_QUERY_URL: http://searxng.home.svc.cluster.local:8080/search?q=<query>
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app open-webui
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    createNamespace: true
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    timeout: 2m
+    remediation:
+      retries: 1
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      main:
+        strategy: RollingUpdate
+        containers:
+          *app :
+            image:
+              repository: ghcr.io/open-webui/open-webui
+              tag: 0.5.20@sha256:92b238e6c27dc6dacda7769062444044ed71b78628e0a9810ba5cea25e0e1ba0
+            env:
+              ENABLE_LOGIN_FORM: false
+              DEFAULT_USER_ROLE: user
+              OLLAMA_BASE_URL: http://ollama.cluster-utilities.svc.cluster.local:11434
+              ENABLE_AUTOCOMPLETE_GENERATION: false # annoying
+              WEBUI_URL: &host https://ai.${SECRET_DOMAIN}
+              CORS_ALLOW_ORIGIN: *host
+              SEARXNG_QUERY_URL: http://searxng.home.svc.cluster.local:8080/search?q=<query>
 
-          ENABLE_RAG_WEB_SEARCH: true
-          RAG_WEB_SEARCH_ENGINE: searxng
-          VECTOR_DB: pgvector
-          RAG_EMBEDDING_ENGINE: ollama
+              ENABLE_RAG_WEB_SEARCH: true
+              RAG_WEB_SEARCH_ENGINE: searxng
+              VECTOR_DB: pgvector
+              RAG_EMBEDDING_ENGINE: ollama
 
-          ENABLE_OAUTH_SIGNUP: true
-          OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
-          OAUTH_PROVIDER_NAME: Authentik
+              ENABLE_OAUTH_SIGNUP: true
+              OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
+              OAUTH_PROVIDER_NAME: Authentik
 
-          DATABASE_URL:
-            valueFrom:
-              secretKeyRef:
-                name: ${APP}-db-app
-                key: uri
-        envFrom:
-          - secretRef:
-              name: open-webui-secret
-        securityContext:
-          readOnlyRootFilesystem: true
-        resources:
-          requests:
-            cpu: 800m
-            memory: 100Mi
-          limits:
-            memory: 4Gi
-defaultPodOptions:
-  securityContext:
-    runAsNonRoot: true
-    runAsUser: 65534
-    runAsGroup: 65534
-    fsGroup: 65534
-    fsGroupChangePolicy: OnRootMismatch
-    seccompProfile: { type: RuntimeDefault }
-service:
-  ${APP}:
-    controller: main
-    ports:
-      http:
-        port: &port 8080
-route:
-  ${APP}:
-    hostnames:
-      - ai.${SECRET_DOMAIN}
-    parentRefs:
-      - name: internal
-        namespace: kube-system
-        sectionName: https
-    rules:
-      - backendRefs:
-          - name: ${APP}
-            port: *port
-persistence:
-  config:
-    existingClaim: ${APP}
-    globalMounts:
-      - path: /app/backend/data
-  tmp:
-    type: emptyDir
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: uri
+            envFrom:
+              - secretRef:
+                  name: open-webui-secret
+            securityContext:
+              readOnlyRootFilesystem: true
+            resources:
+              requests:
+                cpu: 800m
+                memory: 100Mi
+              limits:
+                memory: 4Gi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      *app :
+        controller: main
+        ports:
+          http:
+            port: &port 8080
+    route:
+      *app :
+        hostnames:
+          - ai.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: ${APP}
+                port: *port
+    persistence:
+      config:
+        existingClaim: ${APP}
+        globalMounts:
+          - path: /app/backend/data
+      tmp:
+        type: emptyDir

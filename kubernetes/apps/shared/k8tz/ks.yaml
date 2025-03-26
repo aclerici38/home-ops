@@ -12,8 +12,6 @@ spec:
   dependsOn:
     - name: ${CLUSTER_NAME}-cert-manager
   path: ./kubernetes/apps/shared/k8tz/app
-  components:
-    - ../../../../components/helmrelease
   sourceRef:
     kind: GitRepository
     name: flux-system

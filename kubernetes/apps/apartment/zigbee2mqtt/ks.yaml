@@ -20,7 +20,6 @@ spec:
   path: ./kubernetes/apps/apartment/zigbee2mqtt/app
   components:
     - ../../../../components/volsync/minio
-    - ../../../../components/helmrelease
   prune: true
   sourceRef:
     kind: GitRepository

@@ -19,7 +19,6 @@ spec:
   path: ./kubernetes/apps/common/home-assistant/app
   components:
     - ../../../../components/volsync/minio
-    - ../../../../components/helmrelease
   prune: true
   sourceRef:
     kind: GitRepository

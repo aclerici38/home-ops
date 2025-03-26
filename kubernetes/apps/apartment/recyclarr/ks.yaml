@@ -11,8 +11,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/apartment/recyclarr/app
-  components:
-    - ../../../../components/helmrelease
   dependsOn:
     - name: ${CLUSTER_NAME}-external-secrets-stores
       namespace: cluster-utilities

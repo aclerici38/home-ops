@@ -14,7 +14,6 @@ spec:
   components:
     - ../../../../components/cnpg/no-backup
     - ../../../../components/external-secret
-    - ../../../../components/helmrelease
   prune: true
   dependsOn:
     - name: ${CLUSTER_NAME}-dragonfly-cluster

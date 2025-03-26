@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app cilium
+  name: &app cloud-cilium
   namespace: &ns cilium
 spec:
   targetNamespace: *ns
@@ -11,8 +11,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cloud/cilium/app
-  components:
-    - ../../../../components/helmrelease
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
@@ -30,7 +28,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app cilium-gateway
+  name: &app cloud-cilium-gateway
   namespace: &ns cilium
 spec:
   targetNamespace: *ns

@@ -20,7 +20,6 @@ spec:
   path: ./kubernetes/apps/apartment/calibre/calibre-web-automated
   components:
     - ../../../../components/volsync/minio
-    - ../../../../components/helmrelease
   prune: true
   sourceRef:
     kind: GitRepository
@@ -50,8 +49,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/apartment/calibre/calibre-downloader
-  components:
-    - ../../../../components/helmrelease
   prune: true
   sourceRef:
     kind: GitRepository

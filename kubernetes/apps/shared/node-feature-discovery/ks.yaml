@@ -11,8 +11,6 @@ spec:
       app.kubernetes.io/name: *app
   interval: 1h
   path: ./kubernetes/apps/shared/node-feature-discovery/app
-  components:
-    - ../../../../components/helmrelease
   prune: true
   retryInterval: 2m
   sourceRef:

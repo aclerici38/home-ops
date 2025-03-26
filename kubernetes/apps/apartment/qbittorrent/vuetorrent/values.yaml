@@ -1,70 +1,94 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
-controllers:
-  main:
-    strategy: RollingUpdate
-    pod:
-      nodeSelector:
-        location: "apartment"
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 65543
-        runAsGroup: 65543
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
-    containers:
-      ${APP}:
-        image:
-          repository: ghcr.io/vuetorrent/vuetorrent-backend
-          tag: 2.2.0
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: false
-          capabilities:
-            drop:
-              - ALL
-        resources:
-          requests:
-            cpu: 10m
-            memory: 20Mi
-          limits:
-            memory: 200Mi
-        probes:
-          liveness: &probes
-            enabled: true
-            custom: true
-            spec:
-              httpGet:
-                path: /backend/ping
-                port: &port 8080
-              initialDelaySeconds: 0
-              periodSeconds: 10
-              timeoutSeconds: 1
-              failureThreshold: 3
-          readiness: *probes
-        env:
-          PORT: *port
-          QBIT_BASE: http://qbittorrent:8080
-          RELEASE_TYPE: stable
-          UPDATE_VT_CRON: '0 0 * * *'
-service:
-  ${APP}:
-    controller: main
-    ports:
-      http:
-        port: *port
-route:
-  ${APP}:
-    hostnames:
-      - ${APP}.${SECRET_DOMAIN}
-    parentRefs:
-      - name: internal
-        namespace: kube-system
-        sectionName: https
-    rules:
-      - backendRefs:
-          - name: ${APP}
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app vuetorrent
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    createNamespace: true
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    timeout: 2m
+    remediation:
+      retries: 1
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      main:
+        strategy: RollingUpdate
+        pod:
+          nodeSelector:
+            location: "apartment"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65543
+            runAsGroup: 65543
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          *app :
+            image:
+              repository: ghcr.io/vuetorrent/vuetorrent-backend
+              tag: 2.2.0
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 10m
+                memory: 20Mi
+              limits:
+                memory: 200Mi
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /backend/ping
+                    port: &port 8080
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            env:
+              PORT: *port
+              QBIT_BASE: http://qbittorrent:8080
+              RELEASE_TYPE: stable
+              UPDATE_VT_CRON: '0 0 * * *'
+    service:
+      *app :
+        controller: main
+        ports:
+          http:
             port: *port
-persistence:
-  config:
-    existingClaim: vuetorrent-config
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: ${APP}
+                port: *port
+    persistence:
+      config:
+        existingClaim: vuetorrent-config

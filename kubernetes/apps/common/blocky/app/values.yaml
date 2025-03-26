@@ -1,113 +1,137 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
-controllers:
-  apt: &controller
-    pod: &pod
-      nodeSelector:
-        location: "apartment"
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
-    strategy: RollingUpdate
-    replicas: 2
-    containers:
-      ${APP}:
-        image:
-          repository: ghcr.io/0xerr0r/blocky
-          tag: v0.25@sha256:347f8c6addc1775ef74b83dfc609c28436a67f812ef0ee7e2602569dc0e56cd1
-        env:
-          PGCONNECT_TIMEOUT: 10
-          PGHOST:
-            valueFrom:
-              secretKeyRef:
-                name: ${APP}-db-app
-                key: host
-          PGPORT:
-            valueFrom:
-              secretKeyRef:
-                name: ${APP}-db-app
-                key: port
-          PGUSER:
-            valueFrom:
-              secretKeyRef:
-                name: ${APP}-db-app
-                key: username
-          PGPASSWORD:
-            valueFrom:
-              secretKeyRef:
-                name: ${APP}-db-app
-                key: password
-          PGDATABASE:
-            valueFrom:
-              secretKeyRef:
-                name: ${APP}-db-app
-                key: dbname
-        probes:
-          readiness: &probes
-            enabled: true
-            custom: true
-            spec:
-              exec:
-                command:
-                  - /app/blocky
-                  - healthcheck
-              initialDelaySeconds: 0
-              periodSeconds: 10
-              timeoutSeconds: 1
-              failureThreshold: 3
-          liveness: *probes
-        resources:
-          requests:
-            cpu: 10m
-          limits:
-            memory: 512Mi
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          capabilities:
-            add:
-              - NET_BIND_SERVICE
-            drop:
-              - ALL
-  house:
-    <<: *controller
-    pod:
-      <<: *pod
-      nodeSelector:
-        location: "house"
-service:
-  global: &svc
-    controller: apt
-    extraSelectorLabels:
-      app.kubernetes.io/name: ${APP}
-    clusterIP: 172.17.0.13
-    ports:
-      dns-tcp:
-        port: 53
-        protocol: TCP
-      dns-udp:
-        port: 53
-        protocol: UDP
-      dns-tls:
-        port: 853
-        protocol: TCP
-  house-dns:
-    <<: *svc
-    controller: house
-    type: LoadBalancer
-    annotations:
-      io.cilium/lb-ipam-ips: 10.38.55.25
-  apt-dns:
-    <<: *svc
-    type: LoadBalancer
-    annotations:
-      io.cilium/lb-ipam-ips: 10.38.55.26
-persistence:
-  config:
-    type: configMap
-    name: blocky-configmap
-    globalMounts:
-      - path: /app/config.yml
-        subPath: config.yml
-        readOnly: true
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app blocky
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    createNamespace: true
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    timeout: 2m
+    remediation:
+      retries: 1
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      apt: &controller
+        pod: &pod
+          nodeSelector:
+            location: "apartment"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            runAsGroup: 65534
+        strategy: RollingUpdate
+        replicas: 2
+        containers:
+          *app :
+            image:
+              repository: ghcr.io/0xerr0r/blocky
+              tag: v0.25@sha256:347f8c6addc1775ef74b83dfc609c28436a67f812ef0ee7e2602569dc0e56cd1
+            env:
+              PGCONNECT_TIMEOUT: 10
+              PGHOST:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: host
+              PGPORT:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: port
+              PGUSER:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: username
+              PGPASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: password
+              PGDATABASE:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: dbname
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - /app/blocky
+                      - healthcheck
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              liveness: *probes
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                add:
+                  - NET_BIND_SERVICE
+                drop:
+                  - ALL
+      house:
+        <<: *controller
+        pod:
+          <<: *pod
+          nodeSelector:
+            location: "house"
+    service:
+      global: &svc
+        controller: apt
+        extraSelectorLabels:
+          app.kubernetes.io/name: ${APP}
+        clusterIP: ${CLUSTER_BLOCKY_ADDR}
+        ports:
+          dns-tcp:
+            port: 53
+            protocol: TCP
+          dns-udp:
+            port: 53
+            protocol: UDP
+          dns-tls:
+            port: 853
+            protocol: TCP
+      house-dns:
+        <<: *svc
+        controller: house
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: 10.38.55.25
+      apt-dns:
+        <<: *svc
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: 10.38.55.26
+    persistence:
+      config:
+        type: configMap
+        name: blocky-configmap
+        globalMounts:
+          - path: /app/config.yml
+            subPath: config.yml
+            readOnly: true

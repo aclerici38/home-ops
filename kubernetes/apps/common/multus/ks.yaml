@@ -13,8 +13,6 @@ spec:
   interval: 30m
   timeout: 5m
   path: "./kubernetes/apps/common/multus/app"
-  components:
-    - ../../../../components/helmrelease
   prune: true
   sourceRef:
     kind: GitRepository

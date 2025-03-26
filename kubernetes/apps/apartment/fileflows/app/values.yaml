@@ -1,92 +1,116 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/aee0d999ba805fc55c3989dd454b0b5116333079/charts/library/common/values.schema.json
-controllers:
-  main:
-    pod:
-      hostname: ff-server
-      runtimeClassName: nvidia
-      securityContext:
-        runAsNonRoot: false
-        fsGroupChangePolicy: OnRootMismatch
-      nodeSelector:
-        kubernetes.io/hostname: "bonds"
-    containers:
-      app:
-        image:
-          repository: docker.io/revenz/fileflows
-          tag: 25.02@sha256:54ae364c9ea13423a370444f2a24b77ff8f27e3e55975f71550d3f4d74c51a24
-        env:
-          SQLITE_TMPDIR: &sqliteTmp /tmp/sqlite/
-          PUID: 1000
-          PGID: 1000
-        resources: &resources
-          requests:
-            cpu: 100m
-            memory: 350M
-          limits:
-            memory: 6Gi
-            nvidia.com/gpu: 1
-        securityContext: &secOps
-          allowPrivilegeEscalation: true
-          readOnlyRootFilesystem: false
-service:
-  ${APP}:
-    controller: main
-    ports:
-      http:
-        port: &port 5000
-route:
-  ${APP}:
-    hostnames:
-      - ${APP}.${SECRET_DOMAIN}
-    parentRefs:
-      - name: internal
-        namespace: kube-system
-        sectionName: https
-    rules:
-      - backendRefs:
-          - name: ${APP}
-            port: *port
-persistence:
-  config:
-    existingClaim: ${APP}
-    globalMounts:
-      - path: /app/Data
-  logs:
-    enabled: true
-    existingClaim: fileflows-logs
-    globalMounts:
-      - path: /app/Logs
-  temp:
-    enabled: true
-    type: emptyDir
-    globalMounts:
-      - path: /temp
-  common:
-    existingClaim: fileflows-common
-    globalMounts:
-      - path: /app/common
-  dockermods:
-    type: emptyDir
-    globalMounts:
-      - path: /app/DockerMods
-  manually-added:
-    type: emptyDir
-    globalMounts:
-      - path: /app/ManuallyAdded
-  sqlite-tmp:
-    type: emptyDir
-    medium: Memory
-    globalMounts:
-      - path: *sqliteTmp
-  calibre-library:
-    existingClaim: calibre-library
-    globalMounts:
-      - path: /mnt/calibre-library
-  media:
-    enabled: true
-    type: nfs
-    server: 10.38.55.50
-    path: /mnt/tank/media
-    globalMounts:
-      - path: /allMedia
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app fileflows
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    createNamespace: true
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    timeout: 2m
+    remediation:
+      retries: 1
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      main:
+        pod:
+          hostname: ff-server
+          runtimeClassName: nvidia
+          securityContext:
+            runAsNonRoot: false
+            fsGroupChangePolicy: OnRootMismatch
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
+        containers:
+          app:
+            image:
+              repository: docker.io/revenz/fileflows
+              tag: 25.02@sha256:54ae364c9ea13423a370444f2a24b77ff8f27e3e55975f71550d3f4d74c51a24
+            env:
+              SQLITE_TMPDIR: &sqliteTmp /tmp/sqlite/
+              PUID: 1000
+              PGID: 1000
+            resources: &resources
+              requests:
+                cpu: 100m
+                memory: 350M
+              limits:
+                memory: 6Gi
+                nvidia.com/gpu: 1
+            securityContext: &secOps
+              allowPrivilegeEscalation: true
+              readOnlyRootFilesystem: false
+    service:
+      *app :
+        controller: main
+        ports:
+          http:
+            port: &port 5000
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: ${APP}
+                port: *port
+    persistence:
+      config:
+        existingClaim: ${APP}
+        globalMounts:
+          - path: /app/Data
+      logs:
+        enabled: true
+        existingClaim: fileflows-logs
+        globalMounts:
+          - path: /app/Logs
+      temp:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /temp
+      common:
+        existingClaim: fileflows-common
+        globalMounts:
+          - path: /app/common
+      dockermods:
+        type: emptyDir
+        globalMounts:
+          - path: /app/DockerMods
+      manually-added:
+        type: emptyDir
+        globalMounts:
+          - path: /app/ManuallyAdded
+      sqlite-tmp:
+        type: emptyDir
+        medium: Memory
+        globalMounts:
+          - path: *sqliteTmp
+      calibre-library:
+        existingClaim: calibre-library
+        globalMounts:
+          - path: /mnt/calibre-library
+      media:
+        enabled: true
+        type: nfs
+        server: 10.38.55.50
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /allMedia

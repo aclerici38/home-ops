@@ -18,7 +18,6 @@ spec:
   path: ./kubernetes/apps/cloud/wg-easy/app
   components:
     - ../../../../components/volsync/minio
-    - ../../../../components/helmrelease
   prune: true
   sourceRef:
     kind: GitRepository

@@ -12,7 +12,6 @@ spec:
   path: ./kubernetes/apps/apartment/redisinsight/app
   components:
     - ../../../../components/volsync/minio
-    - ../../../../components/helmrelease
   prune: true
   dependsOn:
     - name: minio

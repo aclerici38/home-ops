@@ -1,29 +1,27 @@
----
 # yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app ${APP}
+  name: &app flux-instance
 spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: ${HR_REPO:-app-template}
+    name: flux-instance
     namespace: flux-system
   install:
     crds: CreateReplace
-    createNamespace: ${HR_CREATE_NS:-true}
-    timeout: ${HR_TIMEOUT:-2m}
+    createNamespace: true
     remediation:
-      retries: ${HR_RETRIES:-0}
+      retries: 1
   upgrade:
     crds: CreateReplace
     cleanupOnFail: true
-    timeout: ${HR_TIMEOUT:-2m}
+    timeout: 2m
     remediation:
-      retries: ${HR_RETRIES:-0}
+      retries: 1
   uninstall:
     keepHistory: false
   valuesFrom:
     - kind: ConfigMap
-      name: ${APP}-helm-values
+      name: flux-instance-helm-values

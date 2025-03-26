@@ -9,7 +9,6 @@ spec:
   path: "./kubernetes/apps/common/blocky/app/"
   components:
     - ../../../../components/cnpg/init
-    - ../../../../components/helmrelease
   prune: true
   wait: true
   dependsOn:

@@ -16,7 +16,6 @@ spec:
   path: ./kubernetes/apps/shared/external-dns/cloudflare
   components:
     - ../../../../components/external-secret
-    - ../../../../components/helmrelease
   prune: true
   sourceRef:
     kind: GitRepository

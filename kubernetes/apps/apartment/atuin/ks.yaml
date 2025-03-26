@@ -16,7 +16,6 @@ spec:
   path: ./kubernetes/apps/apartment/atuin/app
   components:
     - ../../../../components/cnpg/init
-    - ../../../../components/helmrelease
   prune: true
   sourceRef:
     kind: GitRepository

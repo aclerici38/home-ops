@@ -11,8 +11,6 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   path: "./kubernetes/apps/common/generic-device-plugin/app"
-  components:
-    - ../../../../components/helmrelease
   sourceRef:
     kind: GitRepository
     name: flux-system
