@@ -84,7 +84,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: dnscrypt-proxy-config-configmap
+        name: dnscrypt-proxy-config
         globalMounts:
           - path: /config/dnscrypt-proxy.toml
             subPath: config.toml
