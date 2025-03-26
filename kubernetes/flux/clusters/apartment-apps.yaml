@@ -11,7 +11,8 @@ spec:
   path: ./kubernetes/apps/apartment
   prune: false
   dependsOn:
-    - name: flux-meta
+    - name: flux-settings
+    - name: flux-repos
   sourceRef:
     kind: GitRepository
     name: flux-system

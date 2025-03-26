@@ -9,6 +9,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: ${HR_REPO:-app-template}
+    namespace: flux-system
   install:
     crds: CreateReplace
     createNamespace: ${HR_CREATE_NS:-true}
@@ -17,7 +18,6 @@ spec:
       retries: ${HR_RETRIES:-0}
   upgrade:
     crds: CreateReplace
-    
     cleanupOnFail: true
     timeout: ${HR_TIMEOUT:-2m}
     remediation:

@@ -8,10 +8,11 @@ metadata:
 spec:
   interval: 30m
   timeout: 10m
-  dependsOn:
-    - name: flux-meta
   path: ./kubernetes/apps/house
   prune: false
+  dependsOn:
+    - name: flux-settings
+    - name: flux-repos
   sourceRef:
     kind: GitRepository
     name: flux-system

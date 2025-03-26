@@ -28,6 +28,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      HR_REPO: *app
   patches:
     - patch: |-
         apiVersion: external-secrets.io/v1beta1

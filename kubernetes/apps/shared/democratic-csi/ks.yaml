@@ -23,6 +23,10 @@ spec:
   interval: 30m
   timeout: 5m
   wait: true
+  postBuild:
+    substitute:
+      APP: *app
+      HR_REPO: *app
 ---
 # yaml-language-server: $schema=https://kube-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -54,6 +58,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      HR_REPO: *app
   patches:
     - patch: |-
         apiVersion: helm.toolkit.fluxcd.io/v2
@@ -95,3 +100,7 @@ spec:
   interval: 30m
   timeout: 5m
   wait: true
+  postBuild:
+    substitute:
+      APP: *app
+      HR_REPO: *app
