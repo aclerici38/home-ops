@@ -5,9 +5,9 @@ kind: Kustomization
 resources:
   - ../shared
 
-  - ./flux-operator/ks.yaml
+  - ./flux/ks.yaml
   - ./kustomize-mutating-webhook/ks.yaml
-  
+
   - ./morphos/ks.yaml
   - ./pocket-id/ks.yaml
   - ./searxng/ks.yaml
