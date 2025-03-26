@@ -4,114 +4,80 @@
 helmDefaults:
   timeout: 600
   force: true
+  cleanupOnFail: true
   wait: true
   waitForJobs: true
 
-repositories:
-  - name: cilium
-    url: https://helm.cilium.io
-
-  - name: coredns
-    url: https://coredns.github.io/helm
-
-  - name: jetstack
-    url: https://charts.jetstack.io
-
-  - name: postfinance
-    url: https://postfinance.github.io/kubelet-csr-approver
-
-  - name: emberstack
-    url: https://emberstack.github.io/helm-charts
-
-  - name: kustomize-mutating-webhook
-    url: https://xunholy.github.io/fluxcd-kustomize-mutating-webhook
-
 hooks:
-  - showlogs: true
+  - events: ['prepare']
+    showlogs: true
     command: "kubectl"
     args:
-      - "apply"
-      - "-f"
+      - server-side
+      - apply
+      - -f
         # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
-      - "https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/experimental-install.yaml"
+      - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/experimental-install.yaml
+        # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
+      - https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.81.0/stripped-down-crds.yaml
 
 releases:
   - name: cilium
-    namespace: kube-system
-    chart: cilium/cilium
+    namespace: cilium
+    chart: oci://ghcr.io/home-operations/charts-mirror/cilium
+    atomic: true
     version: 1.17.2
     values:
-      - ../../apps/kube-system/cilium/app/helm-values.yaml
-    needs:
-      - monitoring/prometheus-operator-crds
-
-  - name: reflector
-    namespace: kube-system
-    chart: emberstack/reflector
-    version: 9.0.322
-    needs:
-      - kube-system/cilium
-
-  - name: dnscrypt-proxy
-    namespace: network
-    chart: oci://ghcr.io/bjw-s/helm/app-template
-    version: 3.7.3
-    values:
-      - ../../apps/network/dnscrypt-proxy/app/helm-values.yaml
-    needs:
-      - kube-system/cilium
-    hooks:
-      - events: ['presync']
-        showlogs: true
-        command: "kubectl"
-        args: ["apply", "-f", "../../apps/network/dnscrypt-proxy/app/config/config-configmap.yaml"]
-      - events: ["presync"]
-        showlogs: true
-        command: "kubectl"
-        args: ["apply", "-f", "../../apps/network/dnscrypt-proxy/app/config/forwarding-rules-configmap.yaml"]
+      - ../../apps/shared/cilium/app/values.yaml
 
   - name: coredns
     namespace: kube-system
-    chart: coredns/coredns
+    chart: oci://ghcr.io/coredns/charts/coredns
+    atomic: true
     version: 1.39.1
     values:
-      - ../../apps/kube-system/coredns/app/helm-values.yaml
+      - fullnameOverride: coredns
+        image:
+          repository: mirror.gcr.io/coredns/coredns
+        replicaCount: 2
+        k8sAppLabelOverride: kube-dns
+        serviceAccount:
+          create: true
+        rbac:
+          create: true
+        service:
+          name: kube-dns
+          clusterIP: ${CLUSTER_DNS_ADDR}
     needs:
-      - network/dnscrypt-proxy
-
-  - name: kubelet-csr-approver
-    namespace: kube-system
-    chart: postfinance/kubelet-csr-approver
-    version: 1.2.6
-    values:
-      - ../../apps/kube-system/kubelet-csr-approver/app/helm-values.yaml
-    needs:
-      - kube-system/coredns
+      - cilium/cilium
 
   - name: cert-manager
     namespace: cluster-utilities
-    chart: jetstack/cert-manager
+    atomic: true
+    chart: oci://ghcr.io/home-operations/charts-mirror/cert-manager
     version: v1.17.1
     values:
-      - ../../apps/cert-manager/cert-manager/app/helm-values.yaml
+      - ../../apps/shared/cert-manager/app/values.yaml
     needs:
       - kube-system/coredns
 
   - name: onepassword-connect
-    namespace: external-secrets
+    namespace: cluster-utilities
+    atomic: true
     chart: oci://ghcr.io/bjw-s/helm/app-template
     version: 3.7.3
     values:
-      - ../../apps/external-secrets/onepassword-connect/app/helm-values.yaml
+      - ../../apps/cloud/onepassword-connect/app/values.yaml
     needs:
-      - kube-system/cilium
+      - cilium/cilium
 
   - name: external-secrets
-    namespace: external-secrets
+    namespace: cluster-utilities
+    atomic: true
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
     version: 0.15.0
     values:
-      - ../../apps/external-secrets/external-secrets/app/helm-values.yaml
+      - ../../apps/shared/external-secrets/app/values.yaml
     needs:
       - kube-system/coredns
       - onepassword-connect
@@ -119,32 +85,35 @@ releases:
       - events: ["postsync"]
         showlogs: true
         command: "kubectl"
-        args: ["apply", "-f", "../../apps/external-secrets/external-secrets/stores/clustersecretstore.yaml"]
+        args: ["apply", "-f", "../../apps/shared/external-secrets/stores/clustersecretstore.yaml"]
 
   - name: kustomize-mutating-webhook
     namespace: flux-system
-    chart: kustomize-mutating-webhook/kustomize-mutating-webhook
+    atomic: true
+    chart: oci://ghcr.io/xunholy/fluxcd-kustomize-mutating-webhook
     version: 0.4.2
     values:
-      - ../../apps/flux-system/kustomize-mutating-webhook/app/helm-values.yaml
+      - ../../apps/cloud/kustomize-mutating-webhook/app/values.yaml
     needs:
-      - cert-manager/cert-manager
-      - external-secrets/external-secrets
+      - cluster-utilities/cert-manager
+      - cluster-utilities/external-secrets
 
   - name: flux-operator
     namespace: flux-system
+    atomic: true
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
     version: 0.18.0
     values:
-      - ../../apps/flux-system/flux/app/helm-values.yaml
+      - ../../apps/cloud/flux/app/values.yaml
     needs:
       - kube-system/coredns
 
   - name: flux-instance
     namespace: flux-system
+    atomic: true
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
     version: 0.18.0
     values:
-      - ../../apps/flux-system/flux/instance/helm-values.yaml
+      - ../../apps/cloud/flux/instance/values.yaml
     needs:
       - flux-system/flux-operator

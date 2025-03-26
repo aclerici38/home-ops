@@ -11,7 +11,7 @@ endpoint: https://10.0.30.28:6443
 clusterPodNets:
   - &podNet "10.220.0.0/16"
 clusterSvcNets:
-  - &svcNet "10.230.0.0/16"
+  - &svcNet "10.225.0.0/16"
 
 additionalApiServerCertSans: &sans
   - "10.38.55.200"

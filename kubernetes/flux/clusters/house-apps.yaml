@@ -9,7 +9,7 @@ spec:
   interval: 30m
   timeout: 10m
   dependsOn:
-    - name: cloud-apps
+    - name: flux-meta
   path: ./kubernetes/apps/house
   prune: false
   sourceRef:
@@ -20,4 +20,7 @@ spec:
       name: house-kubeconfig
   postBuild:
     substitute:
-      CLUSTER_NAME: apartment
+      CLUSTER_NAME: house
+      POD_NET: 10.220.0.0/16
+      CLUSTER_DNS_ADDR: 10.225.0.10
+      CLUSTER_DNS_UPSTREAM: 10.225.0.11

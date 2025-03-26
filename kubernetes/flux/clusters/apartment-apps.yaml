@@ -11,7 +11,7 @@ spec:
   path: ./kubernetes/apps/apartment
   prune: false
   dependsOn:
-    - name: cloud-apps
+    - name: flux-meta
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -21,3 +21,6 @@ spec:
   postBuild:
     substitute:
       CLUSTER_NAME: apartment
+      POD_NET: 10.210.0.0/16
+      CLUSTER_DNS_ADDR: 10.215.0.10
+      CLUSTER_DNS_UPSTREAM: 10.215.0.11

@@ -3,21 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cloud-apps
+  name: flux-meta
   namespace: flux-system
 spec:
   interval: 30m
   timeout: 10m
-  path: ./kubernetes/apps/cloud
+  path: ./kubernetes/flux/meta/settings
   prune: false
-  dependsOn:
-    - name: flux-meta
   sourceRef:
     kind: GitRepository
     name: flux-system
-  postBuild:
-    substitute:
-      CLUSTER_NAME: cloud
-      POD_NET: 10.200.0.0/16
-      CLUSTER_DNS_ADDR: 10.205.0.10
-      CLUSTER_DNS_UPSTREAM: 10.205.0.11
