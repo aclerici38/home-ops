@@ -3,7 +3,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
-  name: cloudflare-dns
+  name: external-dns
 spec:
   interval: 5m
   layerSelector:
