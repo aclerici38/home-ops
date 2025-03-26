@@ -8,3 +8,5 @@ configMapGenerator:
   - name: vikunja-config
     files:
       - ./config/config.yml
+generatorOptions:
+  disableNameSuffixHash: true
