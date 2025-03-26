@@ -5,9 +5,3 @@ kind: Kustomization
 resources:
   - ./hr.yaml
   - ./config/config-configmap.yaml
-configMapGenerator:
-  - name: dnscrypt-proxy-config
-    files:
-      - ./config/config-configmap.yaml
-generatorOptions:
-  disableNameSuffixHash: true
