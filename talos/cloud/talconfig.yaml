@@ -6,7 +6,7 @@ talosVersion: v1.9.5
 kubernetesVersion: v1.32.3
 
 clusterName: cloud
-endpoint: https://155.248.199.104:6443
+endpoint: https://10.40.40.41:6443
 
 clusterPodNets:
   - &podNet "10.200.0.0/16"
@@ -43,6 +43,10 @@ nodes:
           install:
             extraKernelArgs:
               - talos.platform=oracle
+          kubelet:
+            nodeIP:
+              validSubnets:
+                - "10.40.40.0/24"
     networkInterfaces:
       - interface: eth0
         dhcp: false

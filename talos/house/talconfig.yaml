@@ -6,7 +6,7 @@ talosVersion: v1.9.5
 kubernetesVersion: v1.32.3
 
 clusterName: house
-endpoint: https://155.248.199.104:6443
+endpoint: https://10.0.30.28:6443
 
 clusterPodNets:
   - &podNet "10.220.0.0/16"
@@ -96,6 +96,10 @@ nodes:
           install:
             extraKernelArgs:
               - amd_pstate=active
+          kubelet:
+            nodeIP:
+              validSubnets:
+                - "10.0.30.0/24"
 
 # Global patches
 patches:

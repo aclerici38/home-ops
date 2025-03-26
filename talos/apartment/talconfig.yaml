@@ -138,6 +138,9 @@ nodes:
               partitions:
                 - mountpoint: /var/lib/csi-local-hostpath
           kubelet:
+            nodeIP:
+              validSubnets:
+                - "192.168.9.0/24"
             extraMounts:
               - destination: /var/lib/csi-local-hostpath
                 type: bind

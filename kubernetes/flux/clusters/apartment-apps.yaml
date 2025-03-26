@@ -17,7 +17,7 @@ spec:
     name: flux-system
   kubeConfig:
     secretRef:
-      name: apartment-cluster-kubeconfig
+      name: apartment-kubeconfig
   postBuild:
     substitute:
       CLUSTER_NAME: apartment

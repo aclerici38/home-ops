@@ -20,7 +20,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: kubevirt-flux
-    namespace: flux-system
   patches:
     - patch: |
         apiVersion: kubevirt.io/v1

@@ -2,7 +2,6 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: kubevirt-flux
-  namespace: flux-system
 spec:
   interval: 10m0s
   url: https://github.com/JJGadgets/kubevirt-flux.git
