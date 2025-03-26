@@ -4,10 +4,11 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: flux-settings
-  namespace: flux-system
+  namespace: &ns flux-system
 spec:
   interval: 30m
   timeout: 10m
+  targetNamespace: *ns
   path: ./kubernetes/flux/meta/settings
   prune: false
   sourceRef:
@@ -19,10 +20,11 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: flux-repos
-  namespace: flux-system
+  namespace: &ns flux-system
 spec:
   interval: 30m
   timeout: 10m
+  targetNamespace: *ns
   path: ./kubernetes/flux/meta/repositories
   prune: false
   sourceRef:
