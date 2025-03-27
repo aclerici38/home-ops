@@ -2,12 +2,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app cloud-cilium
+  name: &app ${CLUSTER_NAME}-cilium
 spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: *app
+    name: cilium
     namespace: flux-system
   install:
     crds: CreateReplace
@@ -24,7 +24,8 @@ spec:
     keepHistory: false
   valuesFrom:
     - kind: ConfigMap
-      name: cilium-helm-values
+      name: ${CLUSTER_NAME}-cilium-helm-values
+      optional: false
   values:
     cluster:
       id: ${CLUSTER_ID}
