@@ -8,7 +8,7 @@ spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: system-upgrade-controller
+    name: app-template
     namespace: flux-system
   install:
     crds: CreateReplace
