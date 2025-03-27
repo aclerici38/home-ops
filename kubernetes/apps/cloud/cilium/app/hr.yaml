@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app ${CLUSTER_NAME}-cilium
+  name: &app cilium
 spec:
   interval: 1h
   chartRef:
