@@ -23,44 +23,26 @@ spec:
       retries: 1
   uninstall:
     keepHistory: false
+  valuesFrom:
+    - kind: ConfigMap
+      name: cilium-helm-values
   values:
-    autoDirectNodeRoutes: true
-    bpf:
-      datapathMode: netkit
-      masquerade: true
-      preallocateMaps: true
-      tproxy: true
-    cgroup:
-      automount:
-        enabled: false
-      hostRoot: /sys/fs/cgroup
-    debug:
-      enabled: false
-    endpointRoutes:
-      enabled: true
-    # Doesn't work on talos
-    sysctlfix:
-      enabled: false
+    cluster:
+      id: ${CLUSTER_ID}
+      name: ${CLUSTER_NAME}
+    ipv4NativeRoutingCIDR: ${POD_NET}
     bgpControlPlane:
-      enabled: true
-    envoy:
-      rollOutPods: true
-    enableXTSocketFallback: false
-    gatewayAPI:
-      enabled: true
-      enableAlpn: true
-      xffNumTrustedHops: 1
-    dashboards:
       enabled: true
     hubble:
       enabled: true
       listenAddress: ":4244"
       metrics:
         enabled:
-          - dns:query;ignoreAAAA
+          - dns:query
           - drop
           - tcp
           - flow
+          - port-distribution
           - icmp
           - http
         dashboards:
@@ -70,57 +52,5 @@ spec:
         rollOutPods: true
         prometheus:
           enabled: true
-    ipam:
-      mode: kubernetes
-    ipv4NativeRoutingCIDR: ${CLUSTER_POD_NET}
-    k8sServiceHost: 127.0.0.1
-    k8sServicePort: 7445
-    kubeProxyReplacement: true
-    kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
-    l2announcements:
-      enabled: false
-    loadBalancer:
-      algorithm: maglev
-      mode: "dsr"
-    cluster:
-      id: ${CLUSTER_ID}
-      name: ${CLUSTER_NAME}
-    nodePort:
-      enabled: true
-    operator:
-      replicas: 2
-      rollOutPods: true
-      prometheus:
-        enabled: true
-        serviceMonitor:
-          enabled: true
-      dashboards:
-        enabled: true
-    prometheus:
-      enabled: true
-      serviceMonitor:
-        enabled: true
-        trustCRDsExist: true
-    rollOutCiliumPods: true
-    routingMode: native
-    localRedirectPolicy: true
-    securityContext:
-      capabilities:
-        ciliumAgent:
-          - CHOWN
-          - KILL
-          - NET_ADMIN
-          - NET_RAW
-          - IPC_LOCK
-          - SYS_ADMIN
-          - SYS_RESOURCE
-          - DAC_OVERRIDE
-          - FOWNER
-          - SETGID
-          - SETUID
-        cleanCiliumState:
-          - NET_ADMIN
-          - SYS_ADMIN
-          - SYS_RESOURCE
-    cni:
-      exclusive: false
+          serviceMonitor:
+            enabled: true

@@ -5,7 +5,7 @@ bpf:
   datapathMode: netkit
   masquerade: true
   preallocateMaps: true
-  tproxy: true
+  # tproxy: true
 cgroup:
   automount:
     enabled: false
@@ -27,25 +27,7 @@ gatewayAPI:
 dashboards:
   enabled: true
 hubble:
-  enabled: true
-  listenAddress: ":4244"
-  metrics:
-    enabled:
-      - dns:query;ignoreAAAA
-      - drop
-      - tcp
-      - flow
-      - icmp
-      - http
-    dashboards:
-      enabled: true
-  relay:
-    enabled: true
-    rollOutPods: true
-    prometheus:
-      enabled: true
-  ui:
-    enabled: true
+  enabled: false
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: 10.200.0.0/16
@@ -58,9 +40,6 @@ l2announcements:
 loadBalancer:
   algorithm: maglev
   mode: "dsr"
-cluster:
-  id: 1
-  name: cloud
 nodePort:
   enabled: true
 operator:
@@ -98,3 +77,5 @@ securityContext:
       - NET_ADMIN
       - SYS_ADMIN
       - SYS_RESOURCE
+cni:
+  exclusive: false

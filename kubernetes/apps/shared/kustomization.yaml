@@ -5,6 +5,7 @@ kind: Kustomization
 namePrefix: ${CLUSTER_NAME}-
 resources:
   - ./cert-manager/ks.yaml
+  - ./cilium
   - ./cloudnative-pg/ks.yaml
   - ./coredns/ks.yaml
   - ./democratic-csi/ks.yaml
