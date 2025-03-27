@@ -39,7 +39,6 @@ spec:
     service:
       *app :
         controller: main
-        clusterIP: 172.17.0.12
         ports:
           metrics:
             enabled: true
