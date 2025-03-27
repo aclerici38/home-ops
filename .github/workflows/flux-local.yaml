@@ -69,6 +69,7 @@ jobs:
         uses: docker://ghcr.io/allenporter/flux-local:v7.3.0
         with:
           args: >-
+            --log-level DEBUG
             diff ${{ matrix.resource }}
             --unified 6
             --path /github/workspace/pull/kubernetes/flux
@@ -78,7 +79,6 @@ jobs:
             --all-namespaces
             --sources "flux-system"
             --output-file diff.patch
-            --log-level DEBUG
 
       - name: Generate Diff
         id: diff
