@@ -89,10 +89,10 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: ${APP}
+              - name: *app
                 port: *uiPort
     persistence:
       config:
-        existingClaim: ${APP}
+        existingClaim: *app
         globalMounts:
           - path: /etc/wireguard

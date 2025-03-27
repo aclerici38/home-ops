@@ -25,7 +25,7 @@ spec:
     keepHistory: false
   values:
 
-    fullnameOverride: ${APP}
+    fullnameOverride: *app
     provider: cloudflare
     env:
       - name: CF_API_TOKEN

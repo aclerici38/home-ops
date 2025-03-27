@@ -24,7 +24,7 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    fullnameOverride: ${APP}
+    fullnameOverride: *app
     reloader:
       autoReloadAll: true
       readOnlyRootFileSystem: true

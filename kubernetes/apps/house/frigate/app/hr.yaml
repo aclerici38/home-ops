@@ -59,7 +59,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       main:
-        controller: ${APP}
+        controller: *app
         type: ClusterIP
         ports:
           http-auth:

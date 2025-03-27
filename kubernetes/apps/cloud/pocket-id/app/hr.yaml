@@ -88,26 +88,26 @@ spec:
                   type: PathPrefix
                   value: /api
             backendRefs:
-              - name: ${APP}
+              - name: *app
                 port: 8080
           - matches:
               - path:
                   type: PathPrefix
                   value: /.well-known
             backendRefs:
-              - name: ${APP}
+              - name: *app
                 port: 8080
           - matches:
               - path:
                   type: PathPrefix
                   value: /
             backendRefs:
-              - name: ${APP}
+              - name: *app
                 port: 3000
 
     persistence:
       data:
-        existingClaim: ${APP}
+        existingClaim: *app
         globalMounts:
           - path: /data
           - path: /app/backend/data

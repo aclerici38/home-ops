@@ -28,7 +28,7 @@ spec:
       dragonfly-operator:
         strategy: RollingUpdate
         containers:
-          app:
+          *app :
             image:
               repository: ghcr.io/dragonflydb/operator
               tag: v1.1.10@sha256:3668b8ab7017b81b8b9747424f34ee3c583008c597855e068534cadad366326f
@@ -75,16 +75,16 @@ spec:
         runAsGroup: 65534
         seccompProfile: { type: RuntimeDefault }
     service:
-      app:
-        controller: ${APP}
+      *app :
+        controller: *app
         ports:
           http:
             port: *port
           metrics:
             port: 8080
     serviceMonitor:
-      app:
-        serviceName: ${APP}
+      *app :
+        serviceName: *app
         endpoints:
           - port: metrics
             scheme: http
@@ -93,4 +93,4 @@ spec:
             scrapeTimeout: 10s
     serviceAccount:
       create: true
-      name: ${APP}
+      name: *app

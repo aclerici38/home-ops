@@ -59,7 +59,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: ${APP}
+              - name: *app
                 port: *port
     persistence:
       cache:

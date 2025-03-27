@@ -113,11 +113,11 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: ${APP}
+              - name: *app
                 port: *port
     persistence:
       files:
-        existingClaim: ${APP}
+        existingClaim: *app
         globalMounts:
           - path: /app/vikunja/files
 

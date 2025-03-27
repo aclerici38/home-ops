@@ -77,10 +77,10 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: ${APP}
+              - name: *app
                 port: *port
     persistence:
       data:
-        existingClaim: ${APP}
+        existingClaim: *app
         globalMounts:
           - path: /app/server/data

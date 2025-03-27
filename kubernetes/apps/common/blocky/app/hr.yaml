@@ -104,7 +104,7 @@ spec:
       global: &svc
         controller: apt
         extraSelectorLabels:
-          app.kubernetes.io/name: ${APP}
+          app.kubernetes.io/name: *app
         clusterIP: ${CLUSTER_BLOCKY_ADDR}
         ports:
           dns-tcp:

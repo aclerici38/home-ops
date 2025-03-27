@@ -79,7 +79,7 @@ spec:
                 memory: 2Gi
     service:
       app:
-        controller: ${APP}
+        controller: *app
         ports:
           http:
             port: 9001
@@ -104,7 +104,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: ${APP}
+              - name: *app
                 port: 9001
       s3:
         hostnames:
@@ -115,7 +115,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: ${APP}
+              - name: *app
                 port: 9000
     persistence:
       data:

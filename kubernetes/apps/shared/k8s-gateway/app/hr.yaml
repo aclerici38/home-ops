@@ -54,7 +54,7 @@ spec:
     serviceMonitor:
       *app :
         enabled: true
-        serviceName: ${APP}
+        serviceName: *app
         endpoints:
           - port: metrics
             scheme: http
@@ -79,7 +79,7 @@ spec:
 
     serviceAccount:
       create: true
-      name: ${APP}
+      name: *app
 
     persistence:
       config-file:
@@ -96,4 +96,4 @@ spec:
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app.kubernetes.io/name: ${APP}
+            app.kubernetes.io/name: *app

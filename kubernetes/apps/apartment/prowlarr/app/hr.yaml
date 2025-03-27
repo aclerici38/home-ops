@@ -92,7 +92,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       *app :
-        controller: ${APP}
+        controller: *app
         ports:
           http:
             port: *port
@@ -106,7 +106,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: ${APP}
+              - name: *app
                 port: *port
     persistence:
       config:
