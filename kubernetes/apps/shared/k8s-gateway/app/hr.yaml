@@ -78,7 +78,7 @@ spec:
     persistence:
       config-file:
         type: configMap
-        name: k8s-gateway-corefile
+        name: ${CLUSTER_NAME}-k8s-gateway-corefile
         globalMounts:
           - path: /etc/coredns/Corefile
             subPath: Corefile
