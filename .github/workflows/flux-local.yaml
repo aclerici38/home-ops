@@ -76,6 +76,7 @@ jobs:
             --path-orig /github/workspace/default/kubernetes/flux
             --strip-attrs "helm.sh/chart,checksum/config,app.kubernetes.io/version,chart"
             --limit-bytes 10000
+            --no-skip-crds
             --all-namespaces
             --sources "flux-system"
             --output-file diff.patch
