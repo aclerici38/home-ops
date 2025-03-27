@@ -57,7 +57,7 @@ spec:
       fsGroupPolicy: File
     storageClasses:
       - name: &sc local-hostpath-bonds
-        defaultClass: false
+        defaultClass: true
         reclaimPolicy: Delete
         volumeBindingMode: WaitForFirstConsumer
         allowVolumeExpansion: true

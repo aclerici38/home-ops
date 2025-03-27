@@ -29,6 +29,3 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_STORAGECLASS: &sc local-hostpath-madbum
-      VOLSYNC_SNAPSHOTCLASS: *sc
-      VOLSYNC_CACHE_STORAGECLASS: *sc

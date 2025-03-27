@@ -31,5 +31,3 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 25Gi
-      VOLSYNC_STORAGECLASS: &sc local-hostpath-posey
-      VOLSYNC_SNAPSHOTCLASS: *sc

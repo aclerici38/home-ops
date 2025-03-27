@@ -34,7 +34,6 @@ spec:
       APP: *app
       CNPG_IMAGE: ghcr.io/tensorchord/cloudnative-pgvecto.rs
       CNPG_VERSION: "16.3"
-      CNPG_STORAGECLASS: local-hostpath-bonds
       CNPG_CAPACITY: 20Gi
       VOLSYNC_CAPACITY: 2Ti
       VOLSYNC_STORAGECLASS: truenas-nfs

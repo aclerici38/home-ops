@@ -35,9 +35,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_STORAGECLASS: &sc local-hostpath-madbum
-      VOLSYNC_SNAPSHOTCLASS: *sc
-      VOLSYNC_CACHE_STORAGECLASS: *sc
       VOLSYNC_ACCESSMODES: ReadWriteMany
       CNPG_STORAGECLASS: *sc
       CNPG_REPLICAS: "3"

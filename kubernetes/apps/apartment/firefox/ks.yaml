@@ -31,5 +31,4 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_STORAGECLASS: &sc local-hostpath
-      VOLSYNC_SNAPSHOTCLASS: *sc
+

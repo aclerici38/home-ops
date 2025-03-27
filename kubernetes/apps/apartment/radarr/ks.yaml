@@ -37,7 +37,4 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      CNPG_STORAGECLASS: &sc local-hostpath-bonds
-      VOLSYNC_STORAGECLASS: *sc
-      VOLSYNC_SNAPSHOTCLASS: *sc
       VOLSYNC_CAPACITY: 10Gi

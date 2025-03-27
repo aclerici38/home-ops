@@ -32,6 +32,5 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_STORAGECLASS: &sc local-hostpath-bonds
-      VOLSYNC_SNAPSHOTCLASS: *sc
+
       CNPG_STORAGECLASS: *sc

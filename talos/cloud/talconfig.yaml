@@ -17,7 +17,8 @@ additionalApiServerCertSans: &sans
   - "10.38.55.200"
   - "10.40.40.41"
   - "127.0.0.1"
-  - "155.248.199.104"
+  - "${CLOUD_IP}"
+  - "cloud.${SECRET_DOMAIN}"
   - "10.10.0.3"
   - "madbum"
 additionalMachineCertSans: *sans
