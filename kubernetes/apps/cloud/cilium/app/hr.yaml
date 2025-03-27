@@ -31,6 +31,8 @@ spec:
       name: ${CLUSTER_NAME}
     hubble:
       enabled: true
+      tls:
+        enabled: true
       metrics:
         enabled:
           - dns:query

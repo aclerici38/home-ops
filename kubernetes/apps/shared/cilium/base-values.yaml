@@ -27,15 +27,9 @@ gatewayAPI:
 dashboards:
   enabled: true
 hubble:
-  enabled: true
+  enabled: false
   tls:
-    auto:
-      enabled: true
-      method: cert-manager
-      certManagerIssuerRef:
-        group: cert-manager.io
-        kind: ClusterIssuer
-        name: letsencrypt-production
+    enabled: false
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: 10.200.0.0/16
