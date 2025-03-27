@@ -34,24 +34,3 @@ spec:
     ipv4NativeRoutingCIDR: ${POD_NET}
     bgpControlPlane:
       enabled: true
-    hubble:
-      enabled: true
-      listenAddress: ":4244"
-      metrics:
-        enabled:
-          - dns:query
-          - drop
-          - tcp
-          - flow
-          - port-distribution
-          - icmp
-          - http
-        dashboards:
-          enabled: true
-      relay:
-        enabled: true
-        rollOutPods: true
-        prometheus:
-          enabled: true
-          serviceMonitor:
-            enabled: true

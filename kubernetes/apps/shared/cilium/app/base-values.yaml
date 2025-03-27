@@ -22,7 +22,28 @@ endpointRoutes:
 sysctlfix:
   enabled: false
 hubble:
-  enabled: false
+  enabled: true
+  metrics:
+    enabled:
+      - dns:query
+      - drop
+      - tcp
+      - flow
+      - port-distribution
+      - icmp
+      - http
+    serviceMonitor:
+      enabled: true
+      trustCRDsExist: true
+    dashboards:
+      enabled: true
+  relay:
+    enabled: true
+    rollOutPods: true
+    prometheus:
+      serviceMonitor:
+        enabled: true
+        trustCRDsExist: true
 envoy:
   rollOutPods: true
 enableXTSocketFallback: false
