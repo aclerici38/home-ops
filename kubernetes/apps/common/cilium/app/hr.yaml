@@ -29,7 +29,7 @@ spec:
       optional: false
   values:
     cluster:
-      name: "${CLUSTER_NAME:=placeholder}"
+      name: "${CLUSTER_NAME}"
       id: ${CLUSTER_ID}
     ipv4NativeRoutingCIDR: ${POD_NET}
     bgpControlPlane:

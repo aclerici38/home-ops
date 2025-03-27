@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kube-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1beta2.json
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1beta2.json
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
@@ -11,9 +11,9 @@ spec:
     operation: copy
   ref:
     tag: 2.2.28
-  url: oci://ghcr.io/piraeusdatastore/helm-charts/emqx-operator
+  url: oci://ghcr.io/home-operations/charts-mirror/emqx-operator
   verify:
     provider: cosign
     matchOIDCIdentity:
-      - issuer: ^https://token.actions.githubusercontent.com$
-        subject: ^https://github.com/piraeusdatastore/helm-charts.*$
+      - issuer: "^https://token.actions.githubusercontent.com$"
+        subject: "^https://github.com/home-operations/charts-mirror.*$"
