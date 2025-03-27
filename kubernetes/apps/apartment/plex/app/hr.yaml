@@ -1,0 +1,119 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app plex
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    createNamespace: true
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    timeout: 2m
+    remediation:
+      retries: 1
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      plex:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/plex
+              tag: 1.41.5.9522
+            env:
+              PLEX_ADVERTISE_URL: https://plex.${SECRET_DOMAIN}:443,http:/10.38.55.2:32400
+              PLEX_NO_AUTH_NETWORKS: 192.168.9.0/24,10.38.55.0/24
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /identity
+                    port: 32400
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 500Mi
+              limits:
+                nvidia.com/gpu: 1
+                memory: 16Gi
+    defaultPodOptions:
+      runtimeClassName: nvidia
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: Always
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      app:
+        controller: plex
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: 10.38.55.2
+        ports:
+          http:
+            port: &port 32400
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+    persistence:
+      config:
+        existingClaim: plex
+      cache:
+        existingClaim: plex-cache
+        globalMounts:
+          - path: /config/Library/Application Support/Plex Media Server/Cache
+      logs:
+        type: emptyDir
+        globalMounts:
+          - path: /config/Library/Application Support/Plex Media Server/Logs
+      tmp:
+        type: emptyDir
+      transcode:
+        type: emptyDir
+      media:
+        type: nfs
+        server: 10.38.55.50
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /allMedia

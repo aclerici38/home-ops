@@ -1,0 +1,15 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: kubevirt-flux
+spec:
+  interval: 10m0s
+  url: https://github.com/JJGadgets/kubevirt-flux.git
+  ref:
+    # renovate: datasource=github-releases depName=kubevirt/kubevirt
+    branch: v1.5.0
+  ignore: |
+    # exclude all to whitelist
+    /*
+    # include operator (with CRDs) and CR to deploy KubeVirt
+    !/deploy

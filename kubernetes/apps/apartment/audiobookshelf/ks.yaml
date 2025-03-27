@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app audiobookshelf
+  namespace: &ns media
+spec:
+  targetNamespace: *ns
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: ${CLUSTER_NAME}-volsync
+      namespace: storage
+    - name: minio
+      namespace: cluster-utilities
+    - name: truenas-scale
+      namespace: truenas-scale
+  path: ./kubernetes/apps/apartment/audiobookshelf/app
+  components:
+    - ../../../../components/volsync/minio
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  wait: true
+  interval: 30m
+  timeout: 5m
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_STORAGECLASS: &sc local-hostpath
+      VOLSYNC_SNAPSHOTCLASS: *sc

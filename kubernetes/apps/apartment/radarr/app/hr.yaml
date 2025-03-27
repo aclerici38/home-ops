@@ -1,0 +1,130 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app radarr
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    createNamespace: true
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    timeout: 2m
+    remediation:
+      retries: 1
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      radarr:
+        pod:
+          nodeSelector:
+            location: apartment
+        containers:
+          radarr:
+            image:
+              repository: ghcr.io/home-operations/radarr
+              tag:  5.20.2.9777
+            env:
+              RADARR__APP__INSTANCENAME: Radarr
+              RADARR__APP__THEME: dark
+              RADARR__AUTH__METHOD: External
+              RADARR__LOG__DBENABLED: "False"
+              RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              RADARR__LOG__LEVEL: info
+              RADARR__SERVER__PORT: &port 7878
+              RADARR__POSTGRES__HOST:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: host
+              RADARR__POSTGRES__USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: username
+              RADARR__POSTGRES__PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: password
+              RADARR__POSTGRES__MAINDB:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: dbname
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+              limits:
+                memory: 4Gi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      radarr:
+        controller: radarr
+        ports:
+          http:
+            port: *port
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+    persistence:
+      config:
+        existingClaim: *app
+        globalMounts:
+          - path: /config
+      temp:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+      media:
+        enabled: true
+        type: nfs
+        server: 10.38.55.50
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /allMedia

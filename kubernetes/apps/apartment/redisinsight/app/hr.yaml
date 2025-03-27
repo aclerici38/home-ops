@@ -1,0 +1,75 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app redisinsight
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    createNamespace: true
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    timeout: 2m
+    remediation:
+      retries: 1
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      main:
+        containers:
+          *app :
+            image:
+              repository: redis/redisinsight
+              tag: 2.66.0@sha256:e3af8fca1272243632adba175af4db0c439618f83649d8a12bbf617d3c9ff284
+            env:
+              RI_FILES_LOGGER: false
+              RI_STDOUT_LOGGER: true
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65543
+        runAsGroup: 65543
+        fsGroup: 65543
+        fsGroupChangePolicy: Always
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      *app :
+        controller: main
+        ports:
+          http:
+            port: &port 5540
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+    persistence:
+      data:
+        existingClaim: *app

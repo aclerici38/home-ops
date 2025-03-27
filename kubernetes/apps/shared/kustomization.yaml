@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namePrefix: ${CLUSTER_NAME}-
+resources:
+  - ./blocky/ks.yaml
+  - ./cert-manager/ks.yaml
+  - ./cilium/ks.yaml
+  - ./cloudnative-pg/ks.yaml
+  - ./coredns/ks.yaml
+  - ./democratic-csi/ks.yaml
+  - ./descheduler/ks.yaml
+  - ./dnscrypt-proxy/ks.yaml
+  - ./dragonfly/ks.yaml
+  - ./echo-server/ks.yaml
+  - ./external-dns/ks.yaml
+  - ./external-secrets/ks.yaml
+  - ./k8s-gateway/ks.yaml
+  - ./k8tz/ks.yaml
+  - ./kube-prometheus-stack/ks.yaml
+  - ./metrics-server/ks.yaml
+  - ./node-feature-discovery/ks.yaml
+  - ./openspeedtest/ks.yaml
+  - ./reflector/ks.yaml
+  - ./reloader/ks.yaml
+  - ./snapshot-controller/ks.yaml
+  - ./system-upgrade-controller/ks.yaml
+  - ./volsync/ks.yaml

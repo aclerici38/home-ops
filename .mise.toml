@@ -1,7 +1,7 @@
 [env]
 _.python.venv = { path = "{{config_root}}/.venv", create = true }
 SOPS_AGE_KEY_FILE = "{{config_root}}/age.key"
-TALOSCONFIG = "{{config_root}}/talos/clusterconfig/talosconfig"
+TALOSCONFIG_DIR = "{{config_root}}/talos"
 TASK_X_ENV_PRECEDENCE = 1
 TASK_X_MAP_VARIABLES = 0
 

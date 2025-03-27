@@ -1,0 +1,52 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app kubevirt
+  namespace: &ns kubevirt
+spec:
+  targetNamespace: *ns
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  interval: 5m
+  dependsOn:
+    - name: cdi
+      namespace: cdi
+  prune: true
+  wait: true
+  path: "./deploy"
+  sourceRef:
+    kind: GitRepository
+    name: kubevirt-flux
+  patches:
+    - patch: |
+        apiVersion: kubevirt.io/v1
+        kind: KubeVirt
+        metadata:
+          name: patch
+        spec:
+          infra:
+            nodePlacement:
+              nodeSelector:
+                kubernetes.io/hostname: "bonds"
+          workloads:
+            nodePlacement:
+              nodeSelector:
+                kubernetes.io/hostname: "bonds"
+
+          configuration:
+            permittedHostDevices:
+              pciHostDevices:
+                - pciVendorSelector: "1022:7901"
+                  resourceName: "amd.com/sata-controller"
+            developerConfiguration:
+              featureGates:
+                - HostDevices
+                - VMPersistentState
+                - DataVolumes
+                - AutoResourceLimitsGate
+      target:
+        group: kubevirt.io
+        kind: KubeVirt

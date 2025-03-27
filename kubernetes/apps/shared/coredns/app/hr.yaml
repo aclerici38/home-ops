@@ -1,0 +1,81 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app coredns
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: coredns
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    createNamespace: true
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    timeout: 2m
+    remediation:
+      retries: 1
+  uninstall:
+    keepHistory: false
+  values:
+    fullnameOverride: *app
+    image:
+      repository: mirror.gcr.io/coredns/coredns
+    replicaCount: 2
+    k8sAppLabelOverride: kube-dns
+    serviceAccount:
+      create: true
+    rbac:
+      create: true
+    service:
+      name: kube-dns
+      clusterIP: ${CLUSTER_DNS_ADDR}
+    servers:
+      - zones:
+          - zone: .
+            scheme: dns://
+            use_tcp: true
+        port: 53
+        plugins:
+          - name: errors
+          - name: health
+            configBlock: |-
+              lameduck 5s
+          - name: ready
+          - name: log
+            configBlock: |-
+              class error
+          - name: prometheus
+            parameters: 0.0.0.0:9153
+          - name: kubernetes
+            parameters: cluster.local in-addr.arpa ip6.arpa
+            configBlock: |-
+              pods insecure
+              fallthrough in-addr.arpa ip6.arpa
+          # Enable recursion https://github.com/coredns/coredns/issues/3690#issuecomment-1573865953
+          - name: header
+            configBlock: |-
+              response set ra
+          - name: reload
+          - name: loadbalance
+          - name: forward
+            parameters: . ${CLUSTER_DNS_UPSTREAM}
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: node-role.kubernetes.io/control-plane
+                  operator: Exists
+    tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule

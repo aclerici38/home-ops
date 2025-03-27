@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: apartment-apps
+  namespace: flux-system
+spec:
+  interval: 30m
+  timeout: 10m
+  path: ./kubernetes/apps/apartment
+  prune: false
+  dependsOn:
+    - name: flux-settings
+    - name: flux-repos
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  kubeConfig:
+    secretRef:
+      name: apartment-kubeconfig
+  postBuild:
+    substitute:
+      CLUSTER_NAME: "apartment"
+      POD_NET: "10.210.0.0/16"
+      CLUSTER_DNS_ADDR: "10.215.0.10"
+      CLUSTER_DNS_UPSTREAM: "10.215.0.11"
+      CLUSTER_DNSCRYPT_ADDR: "10.215.0.12"
+      CLUSTER_ID: "2"

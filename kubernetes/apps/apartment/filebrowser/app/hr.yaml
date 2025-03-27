@@ -1,0 +1,95 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app filebrowser
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    createNamespace: true
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    timeout: 2m
+    remediation:
+      retries: 1
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      main:
+        containers:
+          *app :
+            image:
+              repository: docker.io/filebrowser/filebrowser
+              tag: v2.32.0@sha256:593478e3c24c5ea9f5d7478dc549965b7bc7030707291006ce8d0b6162d3454b
+            env:
+              FB_DATABASE: /config/filebrowser.db
+              FB_LOG: stdout
+              FB_ROOT: /allMedia
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: &port 80
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+              limits:
+                memory: 800Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      *app :
+        controller: main
+        ports:
+          http:
+            port: *port
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+    persistence:
+      config:
+        existingClaim: filebrowser
+      data:
+        type: nfs
+        server: 10.38.55.50
+        path: /mnt/tank/media
+        globalMounts:
+          - path: /allMedia

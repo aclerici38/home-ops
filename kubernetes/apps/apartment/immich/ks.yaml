@@ -1,0 +1,58 @@
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app immich
+  namespace: &ns home
+spec:
+  targetNamespace: *ns
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: ${CLUSTER_NAME}-cloudnative-pg
+      namespace: database
+    - name: ${CLUSTER_NAME}-dragonfly-cluster
+      namespace: database
+    - name: ${CLUSTER_NAME}-external-secrets-stores
+      namespace: cluster-utilities
+  path: ./kubernetes/apps/apartment/immich/app
+  components:
+    - ../../../../components/cnpg/restore
+    - ../../../../components/external-secret
+    - ../../../../components/volsync/r2
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  wait: true
+  interval: 30m
+  timeout: 5m
+  postBuild:
+    substitute:
+      APP: *app
+      CNPG_IMAGE: ghcr.io/tensorchord/cloudnative-pgvecto.rs
+      CNPG_VERSION: "16.3"
+      CNPG_STORAGECLASS: local-hostpath-bonds
+      CNPG_CAPACITY: 20Gi
+      VOLSYNC_CAPACITY: 2Ti
+      VOLSYNC_STORAGECLASS: truenas-nfs
+      VOLSYNC_SNAPSHOTCLASS: truenas-nfs
+    substituteFrom:
+      - kind: Secret
+        name: immich-secret
+  patches:
+    - patch: |-
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Cluster
+        metadata:
+          name: patch
+        spec:
+          postgresql:
+            shared_preload_libraries:
+              - "vectors.so"
+            parameters:
+              search_path: '"$user", public, vectors'
+      target:
+        kind: Cluster
