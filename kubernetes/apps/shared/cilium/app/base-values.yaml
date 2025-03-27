@@ -55,11 +55,11 @@ dashboards:
   enabled: true
 ipam:
   mode: kubernetes
-ipv4NativeRoutingCIDR: 10.200.0.0/16
+ipv4NativeRoutingCIDR: "10.200.0.0/16"
 k8sServiceHost: 127.0.0.1
 k8sServicePort: 7445
 kubeProxyReplacement: true
-kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
+kubeProxyReplacementHealthzBindAddr: "0.0.0.0:10256"
 l2announcements:
   enabled: false
 loadBalancer:
