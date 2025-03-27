@@ -25,4 +25,4 @@ spec:
     keepHistory: false
   valuesFrom:
     - kind: ConfigMap
-      name: external-secrets-helm-values
+      name: ${CLUSTER_NAME}-external-secrets-helm-values
