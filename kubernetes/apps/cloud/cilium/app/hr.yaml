@@ -26,6 +26,9 @@ spec:
     - kind: ConfigMap
       name: cilium-helm-values
   values:
+    cluster:
+      id: ${CLUSTER_ID}
+      name: ${CLUSTER_NAME}
     hubble:
       enabled: true
       metrics:
