@@ -25,4 +25,4 @@ spec:
     keepHistory: false
   valuesFrom:
     - kind: ConfigMap
-      name: cert-manager-helm-values
+      name: ${CLUSTER_NAME}-cert-manager-helm-values
