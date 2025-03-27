@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -25,18 +24,10 @@ spec:
     keepHistory: false
   valuesFrom:
     - kind: ConfigMap
-      name: "${CLUSTER_NAME}-cilium-helm-values"
+      name: "cilium-helm-values"
       optional: false
   values:
-    cluster:
-      name: "${CLUSTER_NAME}"
-      id: "${CLUSTER_ID}"
-    ipv4NativeRoutingCIDR: "${POD_NET}"
-    bgpControlPlane:
-      enabled: true
-    cni:
-      exclusive: false
-    clustermesh:
-      apiserver:
-        service:
-          nodePort: ${CLUSTERMESH_PORT}
+    hubble:
+      ui:
+        enabled: true
+        rollOutPods: true
