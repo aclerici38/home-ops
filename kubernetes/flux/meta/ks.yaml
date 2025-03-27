@@ -40,7 +40,6 @@ metadata:
 spec:
   interval: 30m
   timeout: 10m
-  targetNamespace: *ns
   path: ./kubernetes/flux/meta/namespaces
   prune: false
   sourceRef:
