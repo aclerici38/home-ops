@@ -25,13 +25,13 @@ hubble:
   enabled: true
   metrics:
     enabled:
-      - dns:query
-      - drop
-      - tcp
-      - flow
-      - port-distribution
-      - icmp
-      - http
+      - "dns:query"
+      - "drop"
+      - "tcp"
+      - "flow"
+      - "port-distribution"
+      - "icmp"
+      - "http"
     serviceMonitor:
       enabled: true
       trustCRDsExist: true
@@ -103,5 +103,3 @@ securityContext:
       - NET_ADMIN
       - SYS_ADMIN
       - SYS_RESOURCE
-cni:
-  exclusive: false

@@ -34,3 +34,5 @@ spec:
     ipv4NativeRoutingCIDR: ${POD_NET}
     bgpControlPlane:
       enabled: true
+    cni:
+      exclusive: false
