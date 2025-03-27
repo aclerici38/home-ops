@@ -30,7 +30,7 @@ spec:
   values:
     cluster:
       id: ${CLUSTER_ID}
-      name: ${CLUSTER_NAME}
+      name: "${CLUSTER_NAME}"
     ipv4NativeRoutingCIDR: ${POD_NET}
     bgpControlPlane:
       enabled: true
