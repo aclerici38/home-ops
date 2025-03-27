@@ -13,6 +13,7 @@ spec:
   install:
     crds: CreateReplace
     createNamespace: true
+    timeout: 2m
     remediation:
       retries: 1
   upgrade:
