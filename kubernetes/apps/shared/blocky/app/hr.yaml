@@ -25,10 +25,8 @@ spec:
     keepHistory: false
   values:
     controllers:
-      apt: &controller
-        pod: &pod
-          nodeSelector:
-            location: "apartment"
+      main:
+        pod:
           securityContext:
             runAsNonRoot: true
             runAsUser: 65534
@@ -41,7 +39,7 @@ spec:
               repository: ghcr.io/0xerr0r/blocky
               tag: v0.25@sha256:347f8c6addc1775ef74b83dfc609c28436a67f812ef0ee7e2602569dc0e56cd1
             env:
-              PGCONNECT_TIMEOUT: 10
+              PGCONNECT_TIMEOUT: 30
               PGHOST:
                 valueFrom:
                   secretKeyRef:
@@ -94,18 +92,10 @@ spec:
                   - NET_BIND_SERVICE
                 drop:
                   - ALL
-      house:
-        <<: *controller
-        pod:
-          <<: *pod
-          nodeSelector:
-            location: "house"
     service:
       global: &svc
-        controller: apt
-        extraSelectorLabels:
-          app.kubernetes.io/name: *app
-        clusterIP: ${CLUSTER_BLOCKY_ADDR}
+        controller: main
+        clusterIP: ${CLUSTER_DNS_UPSTREAM}
         ports:
           dns-tcp:
             port: 53
@@ -118,15 +108,9 @@ spec:
             protocol: TCP
       house-dns:
         <<: *svc
-        controller: house
         type: LoadBalancer
         annotations:
           io.cilium/lb-ipam-ips: 10.38.55.25
-      apt-dns:
-        <<: *svc
-        type: LoadBalancer
-        annotations:
-          io.cilium/lb-ipam-ips: 10.38.55.26
     persistence:
       config:
         type: configMap

@@ -23,3 +23,5 @@ spec:
     substitute:
       APP: *app
       HR_REPO: *app
+      CLUSTER_DNS_ADDR: ${CLUSTER_DNS_ADDR}
+      CLUSTER_DNS_UPSTREAM: ${CLUSTER_DNS_UPSTREAM}

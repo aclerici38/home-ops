@@ -6,9 +6,9 @@ metadata:
   name: &app blocky
   namespace: &ns network
 spec:
-  path: "./kubernetes/apps/common/blocky/app/"
+  path: "./kubernetes/apps/shared/blocky/app/"
   components:
-    - ../../../../components/cnpg/init
+    - ../../../../components/cnpg/no-backup
   prune: true
   wait: true
   dependsOn:
@@ -30,3 +30,4 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      CLUSTER_DNS_UPSTREAM: ${CLUSTER_DNS_UPSTREAM}

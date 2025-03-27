@@ -22,6 +22,7 @@ spec:
   postBuild:
     substitute:
       CLUSTER_NAME: house
+      CLUSTER_ID: "3"
       POD_NET: 10.220.0.0/16
       CLUSTER_DNS_ADDR: 10.225.0.10
       CLUSTER_DNS_UPSTREAM: 10.225.0.11

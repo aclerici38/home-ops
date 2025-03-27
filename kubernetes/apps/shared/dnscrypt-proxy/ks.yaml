@@ -22,3 +22,4 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      CLUSTER_DNSCRYPT_ADDR: ${CLUSTER_DNSCRYPT_ADDR}
