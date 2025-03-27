@@ -12,8 +12,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/common/cilium/app
-  dependsOn:
-    - name: ${CLUSTER_NAME}-cilium-base
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
