@@ -5,6 +5,6 @@ kind: Kustomization
 configMapGenerator:
   - name: cilium-helm-values
     files:
-      - ./base-values.yaml
+      - values.yaml=./base-values.yaml
 configurations:
   - ../../../../resources/helm/kustomizeconfig.yaml
