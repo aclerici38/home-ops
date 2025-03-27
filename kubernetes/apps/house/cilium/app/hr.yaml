@@ -27,7 +27,15 @@ spec:
       name: "cilium-helm-values"
       optional: false
   values:
-    hubble:
-      ui:
-        enabled: true
-        rollOutPods: true
+    cluster:
+      name: "${CLUSTER_NAME}"
+      id: "${CLUSTER_ID}"
+    ipv4NativeRoutingCIDR: "${POD_NET}"
+    bgpControlPlane:
+      enabled: true
+    cni:
+      exclusive: false
+    clustermesh:
+      apiserver:
+        service:
+          nodePort: ${CLUSTERMESH_PORT}
