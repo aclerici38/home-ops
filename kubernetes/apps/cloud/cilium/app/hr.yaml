@@ -2,12 +2,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app cloud-cilium
+  name: &app cilium
 spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: cilium
+    name: *app
     namespace: flux-system
   install:
     crds: CreateReplace

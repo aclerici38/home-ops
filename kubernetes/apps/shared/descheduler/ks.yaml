@@ -6,6 +6,7 @@ metadata:
   namespace: &ns cluster-utilities
 spec:
   targetNamespace: *ns
+  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
