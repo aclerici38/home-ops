@@ -25,8 +25,6 @@ spec:
     keepHistory: false
   values:
     controller:
-      nodeSelector: &ns
-        kubernetes.io/hostname: bonds
       enabled: true
       strategy: node
       externalAttacher:
@@ -51,12 +49,12 @@ spec:
           - --leader-election=false
           - --node-deployment=true
     csiDriver:
-      name: local-hostpath-bonds.cluster.local
+      name: local-hostpath.cluster.local
       attachRequired: false
       storageCapacity: true
       fsGroupPolicy: File
     storageClasses:
-      - name: &sc local-hostpath-bonds
+      - name: &sc local-hostpath
         defaultClass: true
         reclaimPolicy: Delete
         volumeBindingMode: WaitForFirstConsumer
@@ -69,7 +67,7 @@ spec:
       config:
         driver: local-hostpath
         local-hostpath:
-          shareBasePath: &storagePath /var/lib/csi-local-hostpath/bonds
+          shareBasePath: &storagePath /var/lib/csi-local-hostpath
           controllerBasePath: *storagePath
           dirPermissionsMode: "0770"
           dirPermissionsUser: 0
@@ -79,11 +77,11 @@ spec:
       driver:
         image: ghcr.io/democratic-csi/democratic-csi:v1.9.3@sha256:8ce65ce5bd9b9cdd79ace0e94b6652a233cfbfb26af177fb7912c1217a3f2c19
         extraVolumeMounts:
-          - name: local-hostpath-bonds
+          - name: local-hostpath
             mountPath: *storagePath
             mountPropagation: Bidirectional
       extraVolumes:
-        - name: local-hostpath-bonds
+        - name: local-hostpath
           hostPath:
             path: *storagePath
             type: DirectoryOrCreate
