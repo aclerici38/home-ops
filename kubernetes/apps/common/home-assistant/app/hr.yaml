@@ -27,21 +27,19 @@ spec:
     controllers:
       main:
         pod:
-          nodeSelector:
-            kubernetes.io/hostname: bonds
           securityContext:
             runAsUser: 65534
             runAsGroup: 65533
             fsGroup: 65533
             fsGroupChangePolicy: OnRootMismatch
-          hostname: apt-hass
+          hostname: home-assistant
           annotations:
             k8s.v1.cni.cncf.io/networks: |
               [
                 {
-                  "name":"multus-apt-home",
+                  "name":"${CLUSTER_NAME}-multus-net",
                   "namespace": "network",
-                  "ips": ["192.168.1.25/24"]
+                  "ips": ["${MULTUS_ADDRESS}"]
                 }
               ]
         containers:
@@ -109,7 +107,7 @@ spec:
     #             port: *port
     persistence:
       config:
-        existingClaim: apt-hass
+        existingClaim: *app
         globalMounts:
           - path: /config
       hass-cache:
