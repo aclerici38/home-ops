@@ -21,9 +21,9 @@ spec:
       name: apartment-kubeconfig
   postBuild:
     substitute:
-      CLUSTER_NAME: apartment
-      POD_NET: 10.210.0.0/16
-      CLUSTER_DNS_ADDR: 10.215.0.10
-      CLUSTER_DNS_UPSTREAM: 10.215.0.11
-      CLUSTER_DNSCRYPT_ADDR: 10.215.0.12
+      CLUSTER_NAME: "apartment"
+      POD_NET: "10.210.0.0/16"
+      CLUSTER_DNS_ADDR: "10.215.0.10"
+      CLUSTER_DNS_UPSTREAM: "10.215.0.11"
+      CLUSTER_DNSCRYPT_ADDR: "10.215.0.12"
       CLUSTER_ID: "2"
