@@ -27,3 +27,11 @@ spec:
       APT_COREDNS_ADDR: "10.0.10.1:30053"
       HOUSE_COREDNS_ADDR: "10.10.0.2:30053"
       CLUSTERMESH_PORT: "32479"
+  patches:
+    - patch: |
+        apiVersion: v1
+        kind: namespace
+        metadata:
+          name: patch
+      target:
+        kind: Kustomization
