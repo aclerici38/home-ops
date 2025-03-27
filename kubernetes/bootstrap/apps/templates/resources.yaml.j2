@@ -5,6 +5,13 @@ metadata:
   name: external-secrets
 ---
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: cilium
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+---
+apiVersion: v1
 kind: Secret
 metadata:
   name: onepassword-connect-secret
