@@ -28,7 +28,7 @@ releases:
     atomic: true
     version: 1.17.2
     values:
-      - ../../apps/cloud/cilium/app/values.yaml
+      - ../../apps/shared/cilium/app/base-values.yaml
 
   - name: coredns
     namespace: kube-system
