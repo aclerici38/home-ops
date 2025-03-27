@@ -27,6 +27,8 @@ spec:
       name: "cilium-helm-values"
       optional: false
   values:
+    bgpControlPlane:
+      enabled: true
     hubble:
       ui:
         enabled: true
