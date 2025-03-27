@@ -24,7 +24,6 @@ spec:
   uninstall:
     keepHistory: false
   values:
-
     crds:
       enabled: true
       upgradeJob:
@@ -77,7 +76,7 @@ spec:
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: local-hostpath-bonds
+              storageClassName: local-hostpath
               resources:
                 requests:
                   storage: 50Gi
