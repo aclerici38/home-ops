@@ -8,7 +8,7 @@ spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: coredns
+    name: *app
     namespace: flux-system
   install:
     crds: CreateReplace

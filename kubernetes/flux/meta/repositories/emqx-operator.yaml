@@ -3,17 +3,17 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
-  name: cloudnative-pg
+  name: emqx-operator
 spec:
   interval: 5m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.23.2
-  url: oci://ghcr.io/cloudnative-pg/charts/cloudnative-pg
+    tag: 2.2.28
+  url: oci://ghcr.io/piraeusdatastore/helm-charts/emqx-operator
   verify:
     provider: cosign
     matchOIDCIdentity:
       - issuer: ^https://token.actions.githubusercontent.com$
-        subject: ^https://github.com/cloudnative-pg/charts.*$
+        subject: ^https://github.com/piraeusdatastore/helm-charts.*$

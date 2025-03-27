@@ -8,7 +8,7 @@ spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: nvidia-device-plugin
+    name: *app
     namespace: flux-system
   install:
     crds: CreateReplace

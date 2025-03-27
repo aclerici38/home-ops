@@ -7,7 +7,7 @@ spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: flux-instance
+    name: *app
     namespace: flux-system
   install:
     crds: CreateReplace

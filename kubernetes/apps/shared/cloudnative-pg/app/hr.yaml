@@ -8,7 +8,7 @@ spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: cloudnative-pg
+    name: *app
     namespace: flux-system
   install:
     crds: CreateReplace

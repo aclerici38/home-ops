@@ -8,7 +8,7 @@ spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: k8tz
+    name: *app
     namespace: flux-system
   install:
     crds: CreateReplace
