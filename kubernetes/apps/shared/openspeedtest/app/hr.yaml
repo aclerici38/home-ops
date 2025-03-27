@@ -54,7 +54,7 @@ spec:
                 memory: 2G
     service:
       *app :
-        controller: openspeedtest
+        controller: main
         ports:
           http:
             port: 3000
