@@ -1,6 +1,5 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/helmfile
-
 helmDefaults:
   timeout: 600
   force: true
@@ -24,6 +23,14 @@ releases:
     version: 1.17.2
     values:
       - /Users/anthony/home-ops/kubernetes/apps/shared/cilium/app/base-values.yaml
+      - cluster:
+          name: apartment
+          id: 2
+        ipv4NativeRoutingCIDR: 10.210.0.0/16
+        clustermesh:
+          apiserver:
+            service:
+              nodePort: 32379
 
   - name: coredns
     namespace: kube-system
@@ -42,6 +49,6 @@ releases:
           create: true
         service:
           name: kube-dns
-          clusterIP: 10.225.0.10
+          clusterIP: 10.215.0.10
     needs:
       - cilium/cilium

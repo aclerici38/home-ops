@@ -26,7 +26,7 @@ spec:
     keepHistory: false
   valuesFrom:
     - kind: ConfigMap
-      name: "${CLUSTER_NAME}-cilium-helm-values"
+      name: "cilium-helm-values"
       optional: false
   values:
     cluster:

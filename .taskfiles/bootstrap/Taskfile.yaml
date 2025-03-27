@@ -13,33 +13,25 @@ env:
   TALOSCONFIG: '{{.TALHELPER_CLUSTER_DIR}}/talosconfig'
 
 tasks:
-  save-kubeconfigs:
-    desc: Save admin kubeconfigs for all clusters into 1Password
-    cmds:
-      - for:
-          matrix:
-            CLUSTER: [apartment, house, cloud]
-        cmd: |
-          echo "Saving kubeconfig for cluster: {{.ITEM.CLUSTER}}"
-          kubeconfig=$(kubectl config view --minify --context admin@{{.ITEM.CLUSTER}} --raw)
-          op item create --category=login --vault="Kubernetes" --title="{{.ITEM.CLUSTER}}-kubeconfig" kubeconfig[password]="$kubeconfig"
-
   apps:
     desc: Bootstrap Apps
-    prompt: Bootstrap apps into the Talos cluster?
+    prompt: Bootstrap apps into the {{.CLUSTER}} Talos cluster?
     cmds:
-      - op run --env-file {{.KUBE_BOOTSTRAP_DIR}}/.secrets.env --no-masking -- bash -c 'export ONEPASSWORD_CREDENTIALS_B64=$(echo "$ONEPASSWORD_CREDENTIALS" | base64) && minijinja-cli --env {{.KUBE_BOOTSTRAP_DIR}}/apps/resources.yaml.j2' | kubectl apply --server-side --filename -
-      - helmfile --file {{.KUBE_BOOTSTRAP_DIR}}/apps/helmfile.yaml apply --skip-diff-on-install --suppress-diff
+      - op run --env-file {{.KUBE_BOOTSTRAP_DIR}}/.secrets.env --no-masking -- bash -c 'export ONEPASSWORD_CREDENTIALS_B64=$(echo "$ONEPASSWORD_CREDENTIALS" | base64) && minijinja-cli --env {{.KUBE_BOOTSTRAP_DIR}}/apps/{{.CLUSTER}}/resources.yaml.j2' | kubectl apply --server-side --filename -
+      - helmfile --file {{.KUBE_BOOTSTRAP_DIR}}/apps/{{.CLUSTER}}/helmfile.yaml apply --skip-diff-on-install --suppress-diff
+    vars:
+      CLUSTER: '{{.CLUSTER | default "cloud"}}'
     env:
       FLUX_GITHUB_PUBLIC_KEYS:
         sh: curl -fsSL https://api.github.com/meta | jq --raw-output '"github.com "+.ssh_keys[]'
-      NODE_COUNT:
-        sh: talosctl config info --output json | jq --raw-output '.nodes | length'
       VAULT: Kubernetes
     preconditions:
       - op user get --me
       - talosctl config info
+      - talosctl config context {{.CLUSTER}} >/dev/null 2>&1
+      - kubectl config use-context admin@{{.CLUSTER}} >/dev/null 2>&1
       - test -f {{.KUBE_BOOTSTRAP_DIR}}/.secrets.env
-      - test -f {{.KUBE_BOOTSTRAP_DIR}}/apps/helmfile.yaml
-      - test -f {{.KUBE_BOOTSTRAP_DIR}}/apps/resources.yaml.j2
+      - test -f {{.KUBE_BOOTSTRAP_DIR}}/apps/{{.CLUSTER}}/resources.yaml.j2
+      - test -f {{.KUBE_BOOTSTRAP_DIR}}/apps/{{.CLUSTER}}/helmfile.yaml
       - which curl jq helmfile kubectl op talosctl minijinja-cli
+
