@@ -24,7 +24,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      HR_REPO: *app
       CLUSTER_NAME: ${CLUSTER_NAME}
       CLUSTER_ID: ${CLUSTER_ID}
       POD_NET: ${POD_NET}
