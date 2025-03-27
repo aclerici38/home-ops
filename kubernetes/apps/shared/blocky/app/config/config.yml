@@ -30,7 +30,7 @@ conditional:
 upstreams:
   groups:
     default:
-      - dnscrypt-proxy.network.svc.cluster.local:53
+      - ${CLUSTER_DNSCRYPT_ADDR}:53
 
 blocking:
   denylists:
