@@ -29,13 +29,13 @@ spec:
       optional: false
   values:
     cluster:
-      name: "${CLUSTER_NAME}"
+      name: ${CLUSTER_NAME}
       id: ${CLUSTER_ID}
     ipv4NativeRoutingCIDR: ${POD_NET}
     bgpControlPlane:
       enabled: true
     hubble:
-      enabled: false
+      enabled: true
       listenAddress: ":4244"
       metrics:
         enabled:
@@ -47,11 +47,11 @@ spec:
           - icmp
           - http
         dashboards:
-          enabled: false
+          enabled: true
       relay:
-        enabled: false
+        enabled: true
         rollOutPods: true
         prometheus:
-          enabled: false
+          enabled: true
           serviceMonitor:
             enabled: true

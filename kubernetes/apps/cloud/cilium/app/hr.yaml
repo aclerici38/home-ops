@@ -24,14 +24,11 @@ spec:
     keepHistory: false
   valuesFrom:
     - kind: ConfigMap
-      name: cloud-cilium-helm-values
+      name: ${CLUSTER_NAME}-cilium-helm-values
       optional: false
   values:
-    cluster:
-      name: cloud
-      id: 1
     hubble:
-      enabled: false
+      enabled: true
       metrics:
         enabled:
           - dns:query
@@ -42,15 +39,15 @@ spec:
           - icmp
           - http
         serviceMonitor:
-          enabled: false
+          enabled: true
         dashboards:
-          enabled: false
+          enabled: true
       relay:
-        enabled: false
+        enabled: true
         rollOutPods: true
         prometheus:
           serviceMonitor:
-            enabled: false
+            enabled: true
       ui:
-        enabled: false
+        enabled: true
         rollOutPods: true
