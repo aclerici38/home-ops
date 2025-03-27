@@ -16,7 +16,7 @@ hooks:
       - "kustomize build /Users/anthony/home-ops/kubernetes/resources/crds | kubectl apply --server-side -f -"
 
 releases:
-  - name: cilium
+  - name: apartment-cilium
     namespace: cilium
     chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     atomic: true
@@ -32,7 +32,7 @@ releases:
             service:
               nodePort: 32379
 
-  - name: coredns
+  - name: apartment-coredns
     namespace: kube-system
     chart: oci://ghcr.io/coredns/charts/coredns
     atomic: true
@@ -53,11 +53,14 @@ releases:
     needs:
       - cilium/cilium
 
-  - name: cert-manager
+  - name: apartment-cert-manager
     namespace: cluster-utilities
     atomic: true
     chart: oci://ghcr.io/home-operations/charts-mirror/cert-manager
     version: v1.17.1
+    values:
+      - crds:
+          enabled: true
     needs:
       - kube-system/coredns
 
@@ -71,7 +74,7 @@ releases:
     needs:
       - cilium/cilium
 
-  - name: external-secrets
+  - name: apartment-external-secrets
     namespace: external-secrets
     atomic: true
     chart: oci://ghcr.io/external-secrets/charts/external-secrets

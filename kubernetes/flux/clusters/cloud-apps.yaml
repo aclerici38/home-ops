@@ -17,6 +17,9 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  kubeConfig:
+    secretRef:
+      name: house-kubeconfig
   postBuild:
     substitute:
       CLUSTER_NAME: cloud
