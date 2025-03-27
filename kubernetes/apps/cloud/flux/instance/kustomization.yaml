@@ -6,7 +6,7 @@ resources:
   - ./github
   - ./hr.yaml
 configMapGenerator:
-  - name: ${APP}-helm-values
+  - name: flux-instance-helm-values
     files:
       - ./values.yaml
 configurations:

@@ -5,8 +5,8 @@ kind: Kustomization
 resources:
   - ./hr.yaml
 configMapGenerator:
-  - name: ${APP}-helm-values
+  - name: cert-manager-helm-values
     files:
-      - ./values.yaml
+      - ../values.yaml
 configurations:
   - ../../../../resources/helm/kustomizeconfig.yaml

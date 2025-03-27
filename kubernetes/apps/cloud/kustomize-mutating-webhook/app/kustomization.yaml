@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - ./hr.yaml
 configMapGenerator:
-  - name: ${APP}-helm-values
+  - name: kustomize-mutating-webhook-helm-values
     files:
       - ./values.yaml
 configurations:
