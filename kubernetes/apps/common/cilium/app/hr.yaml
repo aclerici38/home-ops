@@ -25,13 +25,13 @@ spec:
     keepHistory: false
   valuesFrom:
     - kind: ConfigMap
-      name: ${CLUSTER_NAME}-cilium-helm-values
+      name: "${CLUSTER_NAME}-cilium-helm-values"
       optional: false
   values:
     cluster:
-      name: ${CLUSTER_NAME}
-      id: ${CLUSTER_ID}
-    ipv4NativeRoutingCIDR: ${POD_NET}
+      name: "${CLUSTER_NAME}"
+      id: "${CLUSTER_ID}"
+    ipv4NativeRoutingCIDR: "${POD_NET}"
     bgpControlPlane:
       enabled: true
     cni:
