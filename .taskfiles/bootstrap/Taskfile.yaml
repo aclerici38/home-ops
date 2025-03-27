@@ -28,7 +28,7 @@ tasks:
     desc: Bootstrap Apps
     prompt: Bootstrap apps into the Talos cluster?
     cmds:
-      - op run --env-file {{.KUBE_BOOTSTRAP_DIR}}/.secrets.env --no-masking -- bash -c 'export ONEPASSWORD_CREDENTIALS_B64=$(echo "$ONEPASSWORD_CREDENTIALS" | base64) && minijinja-cli --env {{.KUBE_BOOTSTRAP_DIR}}/apps/templates/resources.yaml.j2' | kubectl apply --server-side --filename -
+      - op run --env-file {{.KUBE_BOOTSTRAP_DIR}}/.secrets.env --no-masking -- bash -c 'export ONEPASSWORD_CREDENTIALS_B64=$(echo "$ONEPASSWORD_CREDENTIALS" | base64) && minijinja-cli --env {{.KUBE_BOOTSTRAP_DIR}}/apps/resources.yaml.j2' | kubectl apply --server-side --filename -
       - helmfile --file {{.KUBE_BOOTSTRAP_DIR}}/apps/helmfile.yaml apply --skip-diff-on-install --suppress-diff
     env:
       FLUX_GITHUB_PUBLIC_KEYS:
@@ -41,5 +41,5 @@ tasks:
       - talosctl config info
       - test -f {{.KUBE_BOOTSTRAP_DIR}}/.secrets.env
       - test -f {{.KUBE_BOOTSTRAP_DIR}}/apps/helmfile.yaml
-      - test -f {{.KUBE_BOOTSTRAP_DIR}}/apps/templates/resources.yaml.j2
+      - test -f {{.KUBE_BOOTSTRAP_DIR}}/apps/resources.yaml.j2
       - which curl jq helmfile kubectl op talosctl minijinja-cli
