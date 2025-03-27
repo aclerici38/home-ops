@@ -29,7 +29,7 @@ spec:
       }
   coreTemplate:
     spec:
-      replicas: 3
+      replicas: 1
       envFrom:
         - secretRef:
             name: emqx-secret

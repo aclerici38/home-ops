@@ -29,7 +29,6 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/arch: amd64
-        replicas: 2
         strategy: RollingUpdate
         containers:
           *app :

@@ -9,14 +9,13 @@ helmDefaults:
   waitForJobs: true
 
 hooks:
-  - events: ['prepare']
+  - events: ["prepare"]
+    command: "sh"
     showlogs: true
-    command: "kubectl"
     args:
-      - server-side
-      - apply
-      - -f
-      - ../../../resources/crds
+      - "-c"
+      - "kustomize build /Users/anthony/home-ops/kubernetes/resources/crds | kubectl apply --server-side -f -"
+
 releases:
   - name: cilium
     namespace: cilium
@@ -24,7 +23,7 @@ releases:
     atomic: true
     version: 1.17.2
     values:
-      - ../../apps/shared/cilium/app/base-values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/shared/cilium/app/base-values.yaml
 
   - name: coredns
     namespace: kube-system
@@ -35,7 +34,7 @@ releases:
       - fullnameOverride: coredns
         image:
           repository: mirror.gcr.io/coredns/coredns
-        replicaCount: 2
+        replicaCount: 1
         k8sAppLabelOverride: kube-dns
         serviceAccount:
           create: true
@@ -43,7 +42,7 @@ releases:
           create: true
         service:
           name: kube-dns
-          clusterIP: ${CLUSTER_DNS_ADDR}
+          clusterIP: 10.205.0.10
     needs:
       - cilium/cilium
 
@@ -53,27 +52,27 @@ releases:
     chart: oci://ghcr.io/home-operations/charts-mirror/cert-manager
     version: v1.17.1
     values:
-      - ../../apps/shared/cert-manager/app/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/shared/cert-manager/app/values.yaml
     needs:
       - kube-system/coredns
 
   - name: onepassword-connect
-    namespace: cluster-utilities
+    namespace: external-secrets
     atomic: true
     chart: oci://ghcr.io/bjw-s/helm/app-template
     version: 3.7.3
     values:
-      - ../../apps/cloud/onepassword-connect/app/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/cloud/onepassword-connect/app/values.yaml
     needs:
       - cilium/cilium
 
   - name: external-secrets
-    namespace: cluster-utilities
+    namespace: external-secrets
     atomic: true
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
     version: 0.15.0
     values:
-      - ../../apps/shared/external-secrets/app/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/shared/external-secrets/app/values.yaml
     needs:
       - kube-system/coredns
       - onepassword-connect
@@ -81,18 +80,7 @@ releases:
       - events: ["postsync"]
         showlogs: true
         command: "kubectl"
-        args: ["apply", "-f", "../../apps/shared/external-secrets/stores/clustersecretstore.yaml"]
-
-  - name: kustomize-mutating-webhook
-    namespace: flux-system
-    atomic: true
-    chart: oci://ghcr.io/xunholy/charts/kustomize-mutating-webhook
-    version: 0.4.3
-    values:
-      - ../../apps/cloud/kustomize-mutating-webhook/app/values.yaml
-    needs:
-      - cluster-utilities/cert-manager
-      - cluster-utilities/external-secrets
+        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/shared/external-secrets/stores/clustersecretstore.yaml"]
 
   - name: flux-operator
     namespace: flux-system
@@ -100,7 +88,7 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
     version: 0.18.0
     values:
-      - ../../apps/cloud/flux/app/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/cloud/flux/operator/values.yaml
     needs:
       - kube-system/coredns
 
@@ -110,6 +98,24 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
     version: 0.18.0
     values:
-      - ../../apps/cloud/flux/instance/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/cloud/flux/instance/values.yaml
     needs:
       - flux-system/flux-operator
+      - external-secrets/external-secrets
+
+  - name: kustomize-mutating-webhook
+    namespace: flux-system
+    atomic: true
+    chart: oci://ghcr.io/xunholy/charts/kustomize-mutating-webhook
+    version: 0.4.3
+    values:
+      - /Users/anthony/home-ops/kubernetes/apps/cloud/kustomize-mutating-webhook/app/values.yaml
+    needs:
+      - flux-system/flux-instance
+      - cluster-utilities/cert-manager
+      - external-secrets/external-secrets
+    hooks:
+      - events: ["presync"]
+        showlogs: true
+        command: "kubectl"
+        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/flux/meta/settings/cluster-secrets.yaml"]

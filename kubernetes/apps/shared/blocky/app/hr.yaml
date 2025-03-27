@@ -32,7 +32,6 @@ spec:
             runAsUser: 65534
             runAsGroup: 65534
         strategy: RollingUpdate
-        replicas: 2
         containers:
           *app :
             image:

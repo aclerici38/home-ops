@@ -7,7 +7,7 @@ vars:
   TALHELPER_SECRET_FILE: '{{.KUBERNETES_DIR}}/bootstrap/talos/talsecret.sops.yaml'
   TALHELPER_CONFIG_FILE: '{{.KUBERNETES_DIR}}/bootstrap/talos/talconfig.yaml'
   CLUSTER_DIR: '{{.ROOT_DIR}}/kubernetes'
-  KUBE_BOOTSTRAP_DIR: '{{.CLUSTER_DIR}}/bootstrap'
+  KUBE_BOOTSTRAP_DIR: '/Users/anthony/home-ops/kubernetes/bootstrap'
 
 env:
   TALOSCONFIG: '{{.TALHELPER_CLUSTER_DIR}}/talosconfig'
@@ -23,12 +23,11 @@ tasks:
           echo "Saving kubeconfig for cluster: {{.ITEM.CLUSTER}}"
           kubeconfig=$(kubectl config view --minify --context admin@{{.ITEM.CLUSTER}} --raw)
           op item create --category=login --vault="Kubernetes" --title="{{.ITEM.CLUSTER}}-kubeconfig" kubeconfig[password]="$kubeconfig"
-          
+
   apps:
     desc: Bootstrap Apps
     prompt: Bootstrap apps into the Talos cluster?
     cmds:
-      - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
       - op run --env-file {{.KUBE_BOOTSTRAP_DIR}}/.secrets.env --no-masking -- bash -c 'export ONEPASSWORD_CREDENTIALS_B64=$(echo "$ONEPASSWORD_CREDENTIALS" | base64) && minijinja-cli --env {{.KUBE_BOOTSTRAP_DIR}}/apps/templates/resources.yaml.j2' | kubectl apply --server-side --filename -
       - helmfile --file {{.KUBE_BOOTSTRAP_DIR}}/apps/helmfile.yaml apply --skip-diff-on-install --suppress-diff
     env:
@@ -40,7 +39,6 @@ tasks:
     preconditions:
       - op user get --me
       - talosctl config info
-      - test -f {{.TALHELPER_CLUSTER_DIR}}/talosconfig
       - test -f {{.KUBE_BOOTSTRAP_DIR}}/.secrets.env
       - test -f {{.KUBE_BOOTSTRAP_DIR}}/apps/helmfile.yaml
       - test -f {{.KUBE_BOOTSTRAP_DIR}}/apps/templates/resources.yaml.j2
