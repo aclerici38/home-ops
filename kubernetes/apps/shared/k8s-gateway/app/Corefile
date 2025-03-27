@@ -11,7 +11,7 @@
     ttl 300
   }
   prometheus 0.0.0.0:9153
-  forward . 172.17.0.11
+  forward . 1.1.1.1
   loop
   reload
   loadbalance
