@@ -78,7 +78,7 @@ jobs:
             --all-namespaces
             --sources "flux-system"
             --output-file diff.patch
-            --debug
+            --log-level DEBUG
 
       - name: Generate Diff
         id: diff
