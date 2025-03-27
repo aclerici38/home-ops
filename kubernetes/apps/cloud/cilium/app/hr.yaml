@@ -41,15 +41,15 @@ spec:
           - icmp
           - http
         serviceMonitor:
-          enabled: true
+          enabled: false
         dashboards:
-          enabled: true
+          enabled: false
       relay:
-        enabled: true
+        enabled: false
         rollOutPods: true
         prometheus:
           serviceMonitor:
-            enabled: true
+            enabled: false
       ui:
-        enabled: true
+        enabled: false
         rollOutPods: true
