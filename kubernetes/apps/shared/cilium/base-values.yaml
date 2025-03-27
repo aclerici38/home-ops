@@ -29,7 +29,9 @@ dashboards:
 hubble:
   enabled: false
   tls:
-    enabled: false
+    server:
+      # having this empty breaks flux-local. overridden in common/cloud values
+      existingSecret: "thisisafakesecret"
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: 10.200.0.0/16
