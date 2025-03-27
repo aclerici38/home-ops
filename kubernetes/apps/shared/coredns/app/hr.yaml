@@ -33,15 +33,70 @@ spec:
       create: true
     rbac:
       create: true
+    serviceType: "nodePort"
     service:
       name: kube-dns
       clusterIP: ${CLUSTER_DNS_ADDR}
+      nodePort: &np 30053
     servers:
+      - zones:
+          - zone: cluster.house
+            scheme: dns://
+            use_tcp: true
+        port: 53
+        nodePort: *np
+        plugins:
+          - name: rewrite
+            configBlock: |-
+              name substring cluster.house svc.cluster.local
+          - name: forward
+            configBlock: |-
+              forward . ${HOUSE_COREDNS_ADDR} {
+                expire 10s
+              }
+          - name: cache
+            parameters: 10
+
+      - zones:
+          - zone: cluster.apartment
+            scheme: dns://
+            use_tcp: true
+        port: 53
+        nodePort: *np
+        hostPort: 53
+        plugins:
+          - name: rewrite
+            configBlock: |-
+              name substring cluster.apartment svc.cluster.local
+          - name: forward
+            configBlock: |-
+              forward . ${APT_COREDNS_ADDR} {
+                expire 10s
+              }
+
+      - zones:
+          - zone: cluster.cloud
+            scheme: dns://
+            use_tcp: true
+        port: 53
+        nodePort: *np
+        hostPort: 53
+        plugins:
+          - name: rewrite
+            configBlock: |-
+              name substring cluster.cloud svc.cluster.local
+          - name: forward
+            configBlock: |-
+              forward . ${CLOUD_COREDNS_ADDR} {
+                expire 10s
+              }
+
       - zones:
           - zone: .
             scheme: dns://
             use_tcp: true
         port: 53
+        hostPort: 53
         plugins:
           - name: errors
           - name: health
