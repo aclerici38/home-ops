@@ -16,12 +16,9 @@ spec:
       retries: 1
   upgrade:
     crds: CreateReplace
-    cleanupOnFail: true
     timeout: 2m
     remediation:
       retries: 1
-  uninstall:
-    keepHistory: false
   valuesFrom:
     - kind: ConfigMap
       name: flux-instance-helm-values
