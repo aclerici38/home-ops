@@ -18,9 +18,9 @@ spec:
     namespace: flux-system
   wait: false
   dependsOn:
-    - name: dnscrypt-proxy
+    - name: ${CLUSTER_NAME}-dnscrypt-proxy
       namespace: network
-    - name: blocky
+    - name: ${CLUSTER_NAME}-blocky
       namespace: network
   interval: 30m
   timeout: 5m
