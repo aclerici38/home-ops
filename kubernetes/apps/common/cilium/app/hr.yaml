@@ -36,3 +36,7 @@ spec:
       enabled: true
     cni:
       exclusive: false
+    clustermesh:
+      apiserver:
+        service:
+          nodePort: ${CLUSTERMESH_PORT}

@@ -67,6 +67,51 @@ loadBalancer:
   mode: "dsr"
 nodePort:
   enabled: true
+clustermesh:
+  useAPIServer: true
+  config:
+    enabled: true
+    clusters:
+      - name: apartment
+        port: 32379
+        ips:
+          - 10.10.0.1
+      - name: house
+        port: 32579
+        ips:
+          - 10.10.0.2
+      - name: cloud
+        port: 32479
+        ips:
+          - 10.10.0.3
+  apiserver:
+    etcd:
+      storageMedium: Memory
+    service:
+      type: NodePort
+      nodePort: 32479
+    requests:
+      cpu: 100m
+      memory: 500Mi
+    limits:
+      cpu: 1000m
+      memory: 2048M
+    tls:
+      authMode: cluster
+      auto:
+        enabled: true
+    metrics:
+      enabled: true
+      port: 9962
+      kvstoremesh:
+        enabled: true
+        port: 9964
+      etcd:
+        enabled: true
+        mode: basic
+        port: 9963
+      serviceMonitor:
+        enabled: true
 operator:
   replicas: 2
   rollOutPods: true
