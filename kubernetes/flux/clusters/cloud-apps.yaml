@@ -19,6 +19,7 @@ spec:
   postBuild:
     substitute:
       CLUSTER_NAME: cloud
+      CLUSTER_ID: 1
       POD_NET: 10.200.0.0/16
       CLUSTER_DNS_ADDR: 10.205.0.10
       CLUSTER_DNS_UPSTREAM: 10.205.0.11
