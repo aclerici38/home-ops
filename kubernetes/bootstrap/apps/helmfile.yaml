@@ -90,8 +90,8 @@ releases:
   - name: kustomize-mutating-webhook
     namespace: flux-system
     atomic: true
-    chart: oci://ghcr.io/xunholy/kustomize-mutating-webhook
-    version: 2025.01.17-b26c80a9
+    chart: oci://ghcr.io/xunholy/charts/kustomize-mutating-webhook
+    version: 0.4.3
     values:
       - ../../apps/cloud/kustomize-mutating-webhook/app/values.yaml
     needs:

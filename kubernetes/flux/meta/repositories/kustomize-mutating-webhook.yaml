@@ -10,8 +10,8 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 2025.01.17-b26c80a9
-  url: oci://ghcr.io/xunholy/kustomize-mutating-webhook
+    tag: 0.4.3
+  url: oci://ghcr.io/xunholy/charts/kustomize-mutating-webhook
   verify:
     provider: cosign
     matchOIDCIdentity:
