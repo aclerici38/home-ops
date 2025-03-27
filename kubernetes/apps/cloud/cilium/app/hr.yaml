@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app cilium
+  name: &app cloud-cilium
 spec:
   interval: 1h
   chartRef:
@@ -24,12 +24,12 @@ spec:
     keepHistory: false
   valuesFrom:
     - kind: ConfigMap
-      name: ${CLUSTER_NAME}-cilium-helm-values
+      name: cloud-cilium-helm-values
       optional: false
   values:
     cluster:
-      name: "test"
-      id: ${CLUSTER_ID}
+      name: cloud
+      id: 1
     hubble:
       enabled: false
       metrics:
