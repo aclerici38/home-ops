@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app apartment-cilium
+  name: &app house-cilium
   namespace: &ns cilium
 spec:
   targetNamespace: *ns
@@ -11,7 +11,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/apartment/cilium/app
+  path: ./kubernetes/apps/house/cilium/app
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
@@ -29,7 +29,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app apartment-cilium-gateway
+  name: &app house-cilium-gateway
   namespace: &ns cilium
 spec:
   targetNamespace: *ns
@@ -39,7 +39,31 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: ${CLUSTER_NAME}-cilium
-  path: ./kubernetes/apps/apartment/cilium/gateway
+  path: ./kubernetes/apps/house/cilium/gateway
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  wait: true
+  interval: 30m
+  timeout: 5m
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app house-cilium-networking
+  namespace: &ns cilium
+spec:
+  targetNamespace: *ns
+  namePrefix: ${CLUSTER_NAME}-
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: ${CLUSTER_NAME}-cilium
+  path: ./kubernetes/apps/house/cilium/networking
   prune: true
   sourceRef:
     kind: GitRepository

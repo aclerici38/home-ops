@@ -51,7 +51,7 @@ releases:
           name: kube-dns
           clusterIP: 10.215.0.10
     needs:
-      - cilium/cilium
+      - cilium/apartment-cilium
 
   - name: apartment-cert-manager
     namespace: cluster-utilities
@@ -62,7 +62,7 @@ releases:
       - crds:
           enabled: true
     needs:
-      - kube-system/coredns
+      - kube-system/apartment-coredns
 
   - name: onepassword-connect
     namespace: external-secrets
@@ -72,7 +72,7 @@ releases:
     values:
       - /Users/anthony/home-ops/kubernetes/apps/apartment/onepassword-connect/app/values.yaml
     needs:
-      - cilium/cilium
+      - cilium/apartment-cilium
 
   - name: apartment-external-secrets
     namespace: external-secrets
@@ -80,7 +80,7 @@ releases:
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
     version: 0.15.0
     needs:
-      - kube-system/coredns
+      - kube-system/apartment-coredns
       - onepassword-connect
     hooks:
       - events: ["postsync"]
@@ -96,7 +96,7 @@ releases:
     values:
       - /Users/anthony/home-ops/kubernetes/apps/apartment/flux/operator/values.yaml
     needs:
-      - kube-system/coredns
+      - kube-system/apartment-coredns
 
   - name: flux-instance
     namespace: flux-system
@@ -107,7 +107,7 @@ releases:
       - /Users/anthony/home-ops/kubernetes/apps/apartment/flux/instance/values.yaml
     needs:
       - flux-system/flux-operator
-      - external-secrets/external-secrets
+      - external-secrets/apartment-external-secrets
 
   - name: kustomize-mutating-webhook
     namespace: flux-system
@@ -118,8 +118,8 @@ releases:
       - /Users/anthony/home-ops/kubernetes/apps/apartment/kustomize-mutating-webhook/app/values.yaml
     needs:
       - flux-system/flux-instance
-      - cluster-utilities/cert-manager
-      - external-secrets/external-secrets
+      - cluster-utilities/apartment-cert-manager
+      - external-secrets/apartment-external-secrets
     hooks:
       - events: ["presync"]
         showlogs: true

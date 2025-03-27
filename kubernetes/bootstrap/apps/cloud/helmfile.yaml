@@ -17,7 +17,7 @@ hooks:
       - "kustomize build /Users/anthony/home-ops/kubernetes/resources/crds | kubectl apply --server-side -f -"
 
 releases:
-  - name: cilium
+  - name: cloud-cilium
     namespace: cilium
     chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     atomic: true
@@ -25,7 +25,7 @@ releases:
     values:
       - /Users/anthony/home-ops/kubernetes/apps/shared/cilium/base-values.yaml
 
-  - name: coredns
+  - name: cloud-coredns
     namespace: kube-system
     chart: oci://ghcr.io/coredns/charts/coredns
     atomic: true
@@ -44,4 +44,4 @@ releases:
           name: kube-dns
           clusterIP: 10.205.0.10
     needs:
-      - cilium/cilium
+      - cilium/cloud-cilium
