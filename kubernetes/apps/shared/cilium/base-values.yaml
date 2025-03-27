@@ -10,6 +10,9 @@ cgroup:
   automount:
     enabled: false
   hostRoot: /sys/fs/cgroup
+cluster:
+  name: cloud
+  id: 1
 debug:
   enabled: false
 endpointRoutes:
@@ -26,12 +29,6 @@ gatewayAPI:
   xffNumTrustedHops: 1
 dashboards:
   enabled: true
-hubble:
-  enabled: false
-  tls:
-    server:
-      # having this empty breaks flux-local. overridden in common/cloud values
-      existingSecret: "thisisafakesecret"
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: 10.200.0.0/16
