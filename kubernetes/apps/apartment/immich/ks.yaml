@@ -15,7 +15,7 @@ spec:
     - name: ${CLUSTER_NAME}-dragonfly-cluster
       namespace: database
     - name: ${CLUSTER_NAME}-external-secrets-stores
-      namespace: cluster-utilities
+      namespace: external-secrets
   path: ./kubernetes/apps/apartment/immich/app
   components:
     - ../../../../components/cnpg/restore

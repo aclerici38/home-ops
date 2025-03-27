@@ -9,7 +9,7 @@ spec:
   targetNamespace: *ns
   dependsOn:
     - name: ${CLUSTER_NAME}-external-secrets-stores
-      namespace: cluster-utilities
+      namespace: external-secrets
     - name: ${CLUSTER_NAME}-cloudnative-pg
       namespace: database
   commonMetadata:

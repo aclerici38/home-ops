@@ -26,7 +26,7 @@ spec:
     - name: ${CLUSTER_NAME}-volsync
       namespace: storage
     - name: ${CLUSTER_NAME}-external-secrets-stores
-      namespace: cluster-utilities
+      namespace: external-secrets
     - name: truenas-scale
       namespace: truenas-scale
     - name: minio
