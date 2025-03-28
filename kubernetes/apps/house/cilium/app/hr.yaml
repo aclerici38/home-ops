@@ -24,18 +24,8 @@ spec:
     keepHistory: false
   valuesFrom:
     - kind: ConfigMap
-      name: "cilium-helm-values"
+      name: house-cilium-shared-helm-values
       optional: false
-  values:
-    cluster:
-      name: "${CLUSTER_NAME}"
-      id: "${CLUSTER_ID}"
-    ipv4NativeRoutingCIDR: "${POD_NET}"
-    bgpControlPlane:
-      enabled: true
-    cni:
-      exclusive: false
-    clustermesh:
-      apiserver:
-        service:
-          nodePort: ${CLUSTERMESH_PORT}
+    - kind: ConfigMap
+      name: house-cilium-common-helm-values
+      optional: false

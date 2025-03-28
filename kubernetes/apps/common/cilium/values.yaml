@@ -1,0 +1,8 @@
+bgpControlPlane:
+  enabled: true
+  secretsNamespace:
+    *app
+hubble:
+  ui:
+    enabled: true
+    rollOutPods: true

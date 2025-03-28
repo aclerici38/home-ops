@@ -33,13 +33,12 @@ metadata:
   namespace: &ns cilium
 spec:
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: ${CLUSTER_NAME}-cilium
-  path: ./kubernetes/apps/house/cilium/gateway
+  path: ./kubernetes/apps/common/cilium/gateway
   prune: true
   sourceRef:
     kind: GitRepository
@@ -57,13 +56,12 @@ metadata:
   namespace: &ns cilium
 spec:
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: ${CLUSTER_NAME}-cilium
-  path: ./kubernetes/apps/house/cilium/networking
+  path: ./kubernetes/apps/common/cilium/networking
   prune: true
   sourceRef:
     kind: GitRepository

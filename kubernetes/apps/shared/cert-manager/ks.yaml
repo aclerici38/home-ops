@@ -55,6 +55,7 @@ spec:
   postBuild:
     substitute:
       APP: cert-manager
+      CLUSTER_NAME: ${CLUSTER_NAME}
   patches:
     - patch: |-
         apiVersion: external-secrets.io/v1beta1

@@ -24,12 +24,8 @@ spec:
     keepHistory: false
   valuesFrom:
     - kind: ConfigMap
-      name: "cilium-helm-values"
+      name: apartment-cilium-shared-helm-values
       optional: false
-  values:
-    bgpControlPlane:
-      enabled: true
-    hubble:
-      ui:
-        enabled: true
-        rollOutPods: true
+    - kind: ConfigMap
+      name: apartment-cilium-common-helm-values
+      optional: false
