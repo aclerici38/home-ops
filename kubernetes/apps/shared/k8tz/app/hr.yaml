@@ -28,6 +28,9 @@ spec:
     timezone: America/Los_Angeles
     cronJobTimeZone: true
     webhook:
+      ignoredNamespaces:
+        - kube-system
+        - cilium
       certManager:
         enabled: true
         issuerRef:
