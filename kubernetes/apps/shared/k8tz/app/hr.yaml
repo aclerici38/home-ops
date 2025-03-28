@@ -21,10 +21,9 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
-  uninstall:
-    keepHistory: false
   values:
     namespace: cluster-utilities
+    createNamespace: false
     replicaCount: 1
     timezone: America/Los_Angeles
     cronJobTimeZone: true
