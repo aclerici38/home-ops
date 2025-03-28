@@ -33,14 +33,5 @@ spec:
       certManager:
         enabled: true
         issuerRef:
-          name: k8tz-webhook-selfsign
+          name: ${CLUSTER_NAME}-k8tz-webhook-selfsign
           kind: Issuer
-    affinity:
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: k8tz
-              topologyKey: kubernetes.io/hostname
