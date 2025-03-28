@@ -53,12 +53,12 @@ spec:
                 - name: rcpbind
                   port: 111
           disks:
-            - name: cdrom
-              cdrom: {}
-              bootOrder: 1
+            # - name: cdrom
+            #   cdrom: {}
+            #   bootOrder: 1
             - name: boot
               disk: {}
-              bootOrder: 2
+              # bootOrder: 2
           hostDevices:
             - name: sata-controller-1
               deviceName: "amd.com/sata-controller"
