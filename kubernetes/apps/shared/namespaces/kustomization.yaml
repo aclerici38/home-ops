@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./cilium.yaml
+  - ./cluster-utilities.yaml
+  - ./d3savant.yaml
+  - ./database.yaml
+  - ./default.yaml
+  - ./external-secrets.yaml
+  - ./home.yaml
+  - ./media.yaml
+  - ./network.yaml
+  - ./storage.yaml
