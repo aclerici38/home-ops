@@ -24,6 +24,9 @@ spec:
     substitute:
       APP: *app
       CLUSTER_NAME: ${CLUSTER_NAME}
+      CLUSTER_ID: ${CLUSTER_ID}
+      CLUSTERMESH_PORT: ${CLUSTERMESH_PORT}
+      POD_NET: ${POD_NET}
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -47,6 +50,9 @@ spec:
   wait: true
   interval: 30m
   timeout: 5m
+  postBuild:
+    substitute:
+      CLUSTER_NAME: ${CLUSTER_NAME}
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -70,3 +76,6 @@ spec:
   wait: true
   interval: 30m
   timeout: 5m
+  postBuild:
+    substitute:
+      CLUSTER_NAME: ${CLUSTER_NAME}
