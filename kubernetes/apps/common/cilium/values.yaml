@@ -2,7 +2,13 @@ bgpControlPlane:
   enabled: true
   secretsNamespace:
     *app
-hubble:
-  ui:
-    enabled: true
-    rollOutPods: true
+cluster:
+  name: "${CLUSTER_NAME}"
+  id: "${CLUSTER_ID}"
+ipv4NativeRoutingCIDR: "${POD_NET}"
+cni:
+  exclusive: false
+clustermesh:
+  apiserver:
+    service:
+      nodePort: ${CLUSTERMESH_PORT}

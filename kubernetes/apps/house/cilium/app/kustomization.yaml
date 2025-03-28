@@ -7,9 +7,9 @@ resources:
 configMapGenerator:
   - name: house-cilium-shared-helm-values
     files:
-      - values.yaml=../../../shared/cilium/base-values.yaml
+      - values.yaml=../../../shared/cilium/values.yaml
   - name: house-cilium-common-helm-values
     files:
-      - values.yaml=../../../common/cilium/base-values.yaml
+      - values.yaml=../../../common/cilium/values.yaml
 configurations:
   - ../../../../resources/helm/kustomizeconfig.yaml
