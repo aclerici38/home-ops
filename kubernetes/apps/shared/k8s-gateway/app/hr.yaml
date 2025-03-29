@@ -14,7 +14,7 @@ spec:
         kind: HelmRepository
         name: *app
         namespace: flux-system
-      version: v1.0.1
+      version: v1.0.0
   install:
     crds: CreateReplace
     timeout: 2m
