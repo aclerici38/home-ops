@@ -14,8 +14,6 @@ spec:
   dependsOn:
     - name: ${CLUSTER_NAME}-external-secrets-stores
       namespace: external-secrets
-    - name: minio
-      namespace: cluster-utilities
   path: ./kubernetes/apps/shared/cloudnative-pg/app
   components:
     - ../../../../components/external-secret

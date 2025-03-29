@@ -10,6 +10,10 @@ spec:
   dependsOn:
     - name: ${CLUSTER_NAME}-cloudnative-pg
       namespace: database
+    - name: minio
+      namespace: cluster-utilities
+    - name: minio
+      namespace: cluster-utilities
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
