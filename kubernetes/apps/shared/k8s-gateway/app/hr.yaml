@@ -43,6 +43,7 @@ spec:
         parameters: . ${CLUSTER_DNSCRYPT_ADDR}
     service:
       type: ClusterIP
+      clusterIP: ${CLUSTER_GATEWAY_ADDR}
     debug:
       enabled: true
     serviceAccount:
