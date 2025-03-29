@@ -56,8 +56,6 @@ spec:
               forward . ${HOUSE_COREDNS_ADDR} {
                 expire 10s
               }
-          - name: cache
-            parameters: 10
 
       - zones:
           - zone: cluster.apartment
