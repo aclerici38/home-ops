@@ -78,7 +78,7 @@ releases:
     namespace: external-secrets
     atomic: true
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
-    version: 0.15.0
+    version: 0.15.1
     needs:
       - kube-system/apartment-coredns
       - onepassword-connect
