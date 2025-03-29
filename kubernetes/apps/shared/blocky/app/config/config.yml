@@ -25,7 +25,7 @@ prometheus:
 conditional:
   fallbackUpstream: true
   mapping:
-    ${SECRET_DOMAIN}: k8s-gateway.network.svc.cluster.local:53
+    ${SECRET_DOMAIN}: ${CLUSTER_NAME}-k8s-gateway.network.svc.cluster.local:53
 
 upstreams:
   groups:

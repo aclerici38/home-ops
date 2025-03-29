@@ -1,15 +1,17 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: &app k8s-gateway
 spec:
   interval: 1h
-  chartRef:
-    kind: OCIRepository
-    name: app-template
-    namespace: flux-system
+  chart:
+    spec:
+      chart: *app
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        name: *app
+      version: v1.0.1
   install:
     crds: CreateReplace
     timeout: 2m
@@ -21,70 +23,22 @@ spec:
     remediation:
       retries: 1
   values:
-    controllers:
-      main:
-        strategy: RollingUpdate
-        containers:
-          *app :
-            image:
-              repository: ghcr.io/samip5/k8s_gateway
-              tag: v0.9.2
-            args: ["-conf", "/etc/coredns/Corefile"]
+    domain: ${SECRET_DOMAIN}
+    watchedResources:
+      - Ingress
+      - HTTPRoute
+    extraZonePlugins:
+      - name: log
+      - name: errors
+      - name: health
+        configBlock: |-
+          lameduck 5s
+      - name: ready
+      - name: prometheus
+        parameters: 0.0.0.0:9153
+      - name: forward
+        parameters: . ${CLUSTER_DNSCRYPT_ADDR}
     service:
-      *app :
-        controller: main
-        ports:
-          metrics:
-            enabled: true
-            port: 9153
-          dns:
-            enabled: true
-            port: 53
-            targetPort: 1053
-            protocol: UDP
-    serviceMonitor:
-      *app :
-        enabled: true
-        serviceName: *app
-        endpoints:
-          - port: metrics
-            scheme: http
-            path: /metrics
-            interval: 1m
-            scrapeTimeout: 10s
-    probes:
-      readiness:
-        custom: true
-        spec:
-          httpGet:
-            path: /ready
-            port: 8181
-      liveness:
-        custom: true
-        spec:
-          httpGet:
-            path: /health
-            port: 8080
-      startup:
-        enabled: false
-
-    serviceAccount:
-      create: true
-      name: *app
-
-    persistence:
-      config-file:
-        type: configMap
-        name: ${CLUSTER_NAME}-k8s-gateway-corefile
-        globalMounts:
-          - path: /etc/coredns/Corefile
-            subPath: Corefile
-            readOnly: true
-
-    topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/name: *app
+      type: ClusterIP
+    debug:
+      enabled: true
