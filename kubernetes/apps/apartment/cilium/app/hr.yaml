@@ -7,7 +7,7 @@ spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: *app
+    name: cilium
     namespace: flux-system
   install:
     crds: CreateReplace
