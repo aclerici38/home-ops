@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -10,6 +11,7 @@ spec:
       chart: *app
       reconcileStrategy: ChartVersion
       sourceRef:
+        kind: HelmRepository
         name: *app
       version: v1.0.1
   install:
