@@ -28,8 +28,10 @@ spec:
   values:
     domain: ${SECRET_DOMAIN}
     watchedResources:
-      - Ingress
-      - HTTPRoute
+      - ingress
+      - gatewayAPI
+      - service
+      - dnsEndpoint
     extraZonePlugins:
       - name: log
       - name: errors
