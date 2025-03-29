@@ -91,7 +91,7 @@ spec:
     service:
       global: &svc
         controller: main
-        clusterIP: ${CLUSTER_DNS_UPSTREAM}
+        clusterIP: ${CLUSTER_BLOCKY_ADDR}
         ports:
           dns-tcp:
             port: 53

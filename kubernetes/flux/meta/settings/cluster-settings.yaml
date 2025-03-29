@@ -2,13 +2,4 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cluster-settings
-data:
-  # Apartment
-  APT_POD_NET: 10.200.0.0/16
-  APT_CLUSTER_DNS_ADDR: 10.205.0.10
-  APT_CLUSTER_DNS_UPSTREAM: 10.205.0.11
-
-  # House
-  HOUSE_POD_NET: 10.200.0.0/16
-  HOUSE_CLUSTER_DNS_ADDR: 10.205.0.10
-  HOUSE_CLUSTER_DNS_UPSTREAM: 10.205.0.11
+data: {}
