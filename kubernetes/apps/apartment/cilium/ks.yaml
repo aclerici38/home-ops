@@ -40,7 +40,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: ${CLUSTER_NAME}-cilium
-  path: ./kubernetes/apps/common/cilium/gateway
+  path: ./kubernetes/apps/shared/cilium/gateway
   prune: true
   sourceRef:
     kind: GitRepository
