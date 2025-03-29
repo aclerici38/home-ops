@@ -8,8 +8,5 @@ configMapGenerator:
   - name: apartment-cilium-shared-helm-values
     files:
       - values.yaml=../../../shared/cilium/values.yaml
-  - name: apartment-cilium-common-helm-values
-    files:
-      - values.yaml=../../../common/cilium/values.yaml
 configurations:
   - ../../../../resources/helm/kustomizeconfig.yaml

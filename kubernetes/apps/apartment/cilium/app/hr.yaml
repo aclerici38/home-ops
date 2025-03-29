@@ -26,11 +26,23 @@ spec:
     - kind: ConfigMap
       name: apartment-cilium-shared-helm-values
       optional: false
-    - kind: ConfigMap
-      name: apartment-cilium-common-helm-values
-      optional: false
   values:
     hubble:
       ui:
         enabled: true
         rollOutPods: true
+    bgpControlPlane:
+      enabled: true
+      secretsNamespace:
+        name: cilium
+    cluster:
+      name: "${CLUSTER_NAME}"
+      id: ${CLUSTER_ID}
+    ipv4NativeRoutingCIDR: "${POD_NET}"
+    cni:
+      exclusive: false
+    clustermesh:
+      apiserver:
+        service:
+          nodePort: ${CLUSTERMESH_PORT}
+
