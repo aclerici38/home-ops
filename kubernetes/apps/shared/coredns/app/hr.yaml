@@ -53,10 +53,7 @@ spec:
             configBlock: |-
               name substring cluster.house svc.cluster.local
           - name: forward
-            configBlock: |-
-              forward . ${HOUSE_COREDNS_ADDR} {
-                expire 10s
-              }
+            parameters: . ${HOUSE_COREDNS_ADDR}
 
       - zones:
           - zone: cluster.apartment
@@ -70,10 +67,7 @@ spec:
             configBlock: |-
               name substring cluster.apartment svc.cluster.local
           - name: forward
-            configBlock: |-
-              forward . ${APT_COREDNS_ADDR} {
-                expire 10s
-              }
+            parameters: . ${APT_COREDNS_ADDR}
 
       - zones:
           - zone: cluster.cloud
@@ -87,11 +81,7 @@ spec:
             configBlock: |-
               name substring cluster.cloud svc.cluster.local
           - name: forward
-            configBlock: |-
-              forward . ${CLOUD_COREDNS_ADDR} {
-                expire 10s
-              }
-
+            parameters: . ${CLOUD_COREDNS_ADDR}
       - zones:
           - zone: .
             scheme: dns://
