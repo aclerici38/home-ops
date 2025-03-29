@@ -18,7 +18,6 @@ kind: CiliumBGPPeerConfig
 metadata:
   name: cilium-peer
 spec:
-  ebgpMultihop: 255
   families:
     - afi: ipv4
       safi: unicast
