@@ -22,6 +22,7 @@ spec:
       retries: 1
   upgrade:
     crds: CreateReplace
+    force: true
     timeout: 2m
     remediation:
       retries: 1
@@ -35,7 +36,7 @@ spec:
       create: true
     rbac:
       create: true
-    serviceType: "nodePort"
+    serviceType: "NodePort"
     service:
       name: kube-dns
       clusterIP: ${CLUSTER_DNS_ADDR}
