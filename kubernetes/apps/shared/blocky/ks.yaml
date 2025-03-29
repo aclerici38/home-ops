@@ -11,6 +11,11 @@ spec:
     - ../../../../components/cnpg/no-backup
   prune: true
   wait: true
+  dependsOn:
+    - name: ${CLUSTER_NAME}-cloudnative-pg
+      namespace: database
+    - name: ${CLUSTER_NAME}-dragonfly-cluster
+      namespace: database
   sourceRef:
     kind: GitRepository
     name: flux-system
