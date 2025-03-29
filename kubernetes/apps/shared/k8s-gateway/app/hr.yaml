@@ -45,3 +45,6 @@ spec:
       type: ClusterIP
     debug:
       enabled: true
+    serviceAccount:
+      create: true
+      name: ${CLUSTER_NAME}-k8s-gateway
