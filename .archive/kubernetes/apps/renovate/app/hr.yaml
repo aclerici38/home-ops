@@ -33,7 +33,7 @@ spec:
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
-              name: ${APP}-db-app
+              name: ${CLUSTER_NAME}-${CLUSTER_NAME}-${APP}-db-app
               key: password
       logLevel: 'info'
       mendRnvAcceptTos: 'y'

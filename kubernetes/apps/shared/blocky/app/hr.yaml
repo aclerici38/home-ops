@@ -39,27 +39,27 @@ spec:
               PGHOST:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: host
               PGPORT:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: port
               PGUSER:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: username
               PGPASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: password
               PGDATABASE:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: dbname
             probes:
               readiness: &probes

@@ -40,7 +40,7 @@ spec:
               ATUIN_DB_URI:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: uri
             probes:
               liveness:

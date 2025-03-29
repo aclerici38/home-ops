@@ -55,22 +55,22 @@ spec:
               POSTGRES_SERVER:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: host
               POSTGRES_USER:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: user
               POSTGRES_PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: password
               POSTGRES_DB:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: dbname
             envFrom:
               - secretRef:

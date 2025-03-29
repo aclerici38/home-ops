@@ -42,7 +42,7 @@ spec:
               POSTGRES_CONNECTION_STRING:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: uri
             envFrom:
               - secretRef:

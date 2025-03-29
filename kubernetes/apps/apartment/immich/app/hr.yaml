@@ -29,22 +29,22 @@ spec:
       DB_HOSTNAME:
         valueFrom:
           secretKeyRef:
-            name: ${APP}-db-app
+            name: ${CLUSTER_NAME}-${APP}-db-app
             key: host
       DB_USERNAME:
         valueFrom:
           secretKeyRef:
-            name: ${APP}-db-app
+            name: ${CLUSTER_NAME}-${APP}-db-app
             key: user
       DB_DATABASE_NAME:
         valueFrom:
           secretKeyRef:
-            name: ${APP}-db-app
+            name: ${CLUSTER_NAME}-${APP}-db-app
             key: dbname
       DB_PASSWORD:
         valueFrom:
           secretKeyRef:
-            name: ${APP}-db-app
+            name: ${CLUSTER_NAME}-${APP}-db-app
             key: password
     immich:
       metrics:

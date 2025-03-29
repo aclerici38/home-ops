@@ -34,19 +34,19 @@ spec:
     envValueFrom:
       PG_HOST:
         secretKeyRef:
-          name: ${APP}-db-app
+          name: ${CLUSTER_NAME}-${APP}-db-app
           key: host
       PG_USER:
         secretKeyRef:
-          name: ${APP}-db-app
+          name: ${CLUSTER_NAME}-${APP}-db-app
           key: user
       PG_PASS:
         secretKeyRef:
-          name: ${APP}-db-app
+          name: ${CLUSTER_NAME}-${APP}-db-app
           key: password
       PG_DB:
         secretKeyRef:
-          name: ${APP}-db-app
+          name: ${CLUSTER_NAME}-${APP}-db-app
           key: dbname
     grafana.ini:
       analytics:

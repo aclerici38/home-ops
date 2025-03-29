@@ -42,22 +42,22 @@ spec:
               SONARR__POSTGRES__HOST:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: host
               SONARR__POSTGRES__USER:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: username
               SONARR__POSTGRES__PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: password
               SONARR__POSTGRES__MAINDB:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: ${CLUSTER_NAME}-${APP}-db-app
                     key: dbname
             probes:
               liveness: &probes
