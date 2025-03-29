@@ -13,6 +13,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: *app
+        namespace: flux-system
       version: v1.0.1
   install:
     crds: CreateReplace
