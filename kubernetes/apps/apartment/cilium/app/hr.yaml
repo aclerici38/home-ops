@@ -24,7 +24,7 @@ spec:
     keepHistory: false
   valuesFrom:
     - kind: ConfigMap
-      name: apartment-cilium-shared-helm-values
+      name: apartment-cilium-helm-values
       optional: false
   values:
     hubble:
