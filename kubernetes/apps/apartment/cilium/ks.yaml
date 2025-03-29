@@ -21,6 +21,7 @@ spec:
   timeout: 5m
   postBuild:
     substitute:
+      quote: '"'
       APP: *app
       CLUSTER_NAME: ${CLUSTER_NAME}
       CLUSTER_ID: "${CLUSTER_ID}"
