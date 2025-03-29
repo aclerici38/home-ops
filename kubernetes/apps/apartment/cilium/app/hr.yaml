@@ -34,11 +34,11 @@ spec:
         name: cilium
     cluster:
       name: "${CLUSTER_NAME}"
-      id: "${CLUSTER_ID}"
+      id: ${CLUSTER_ID}
     ipv4NativeRoutingCIDR: "${POD_NET}"
     cni:
       exclusive: false
     clustermesh:
       apiserver:
         service:
-          nodePort: "${CLUSTERMESH_PORT}"
+          nodePort: ${CLUSTERMESH_PORT}
