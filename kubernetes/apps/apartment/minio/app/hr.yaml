@@ -116,6 +116,8 @@ spec:
                 port: 9000
     persistence:
       data:
-        existingClaim: minio
+        type: nfs
+        server: 10.38.55.25
+        path: /mnt/tank/minio
         globalMounts:
           - path: /data
