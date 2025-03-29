@@ -21,12 +21,11 @@ spec:
   timeout: 5m
   postBuild:
     substitute:
-      quote: '"'
       APP: *app
       CLUSTER_NAME: ${CLUSTER_NAME}
-      CLUSTER_ID: "${CLUSTER_ID}"
+      CLUSTER_ID: "'${CLUSTER_ID}'"
       POD_NET: ${POD_NET}
-      CLUSTERMESH_PORT: "${CLUSTERMESH_PORT}"
+      CLUSTERMESH_PORT: "'${CLUSTERMESH_PORT}'"
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
