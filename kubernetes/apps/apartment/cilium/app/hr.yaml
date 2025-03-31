@@ -30,8 +30,6 @@ spec:
         rollOutPods: true
     bgpControlPlane:
       enabled: true
-      secretsNamespace:
-        name: cilium
     cluster:
       name: "${CLUSTER_NAME}"
       id: ${CLUSTER_ID}
