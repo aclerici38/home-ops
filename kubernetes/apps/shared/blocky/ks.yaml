@@ -21,7 +21,6 @@ spec:
     name: flux-system
     namespace: flux-system
   interval: 30m
-  retryInterval: 2m
   timeout: 3m
   targetNamespace: *ns
   namePrefix: ${CLUSTER_NAME}-
