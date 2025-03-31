@@ -23,13 +23,13 @@ spec:
     - kind: ConfigMap
       name: apartment-cilium-helm-values
       optional: false
-  # values:
+  values:
   #   hubble:
   #     ui:
   #       enabled: true
   #       rollOutPods: true
-  #   bgpControlPlane:
-  #     enabled: true
+    bgpControlPlane:
+      enabled: true
   #   cluster:
   #     name: "${CLUSTER_NAME}"
   #     id: ${CLUSTER_ID}
