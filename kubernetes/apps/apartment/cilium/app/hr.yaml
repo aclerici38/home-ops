@@ -5,15 +5,10 @@ metadata:
   name: &app apartment-cilium
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: cilium
-      reconcileStrategy: ChartVersion
-      sourceRef:
-        kind: HelmRepository
-        name: cilium
-        namespace: flux-system
-      version: 1.18.0-pre.1
+  chartRef:
+    kind: OCIRepository
+    name: cilium
+    namespace: flux-system
   install:
     crds: CreateReplace
     timeout: 2m
