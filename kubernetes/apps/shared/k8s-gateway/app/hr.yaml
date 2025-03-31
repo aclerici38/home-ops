@@ -34,13 +34,13 @@ spec:
       - name: ready
       - name: prometheus
         parameters: 0.0.0.0:9153
-      # - name: forward
-      #   parameters: . ${CLUSTER_DNSCRYPT_ADDR}
+      - name: forward
+        parameters: . ${CLUSTER_DNSCRYPT_ADDR}
     service:
       type: ClusterIP
       clusterIP: ${CLUSTER_GATEWAY_ADDR}
     debug:
-      enabled: true
+      enabled: false
     serviceAccount:
       create: true
       name: ${CLUSTER_NAME}-k8s-gateway
