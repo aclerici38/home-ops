@@ -111,7 +111,7 @@ spec:
           - name: reload
           - name: loadbalance
           - name: forward
-            parameters: . ${CLUSTER_DNSCRYPT_ADDR}
+            parameters: . ${CLUSTER_BLOCKY_ADDR}
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
