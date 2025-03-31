@@ -80,7 +80,7 @@ spec:
           - download-books.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
-            namespace: kube-system
+            namespace: cilium
             sectionName: https
         rules:
           - backendRefs:

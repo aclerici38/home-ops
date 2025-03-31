@@ -22,10 +22,6 @@ spec:
       retries: 1
   values:
     domain: ${SECRET_DOMAIN}
-    filters:
-      gatewayClasses:
-        - internal
-        - external
     watchedResources:
       - HTTPRoute
     extraZonePlugins:
