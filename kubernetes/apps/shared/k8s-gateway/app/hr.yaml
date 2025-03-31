@@ -40,7 +40,7 @@ spec:
       type: ClusterIP
       clusterIP: ${CLUSTER_GATEWAY_ADDR}
     debug:
-      enabled: false
+      enabled: true
     serviceAccount:
       create: true
       name: ${CLUSTER_NAME}-k8s-gateway
