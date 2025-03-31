@@ -1,7 +1,19 @@
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1beta2.json
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
 metadata:
   name: k8s-gateway
 spec:
-  url: https://k8s-gateway.github.io/k8s_gateway/
-  interval: 30m
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 3.0.2
+  url: oci://ghcr.io/k8s-gateway/charts/k8s-gateway
+  verify:
+    provider: cosign
+    matchOIDCIdentity:
+      - issuer: "^https://token.actions.githubusercontent.com$"
+        subject: "^https://github.com/home-operations/charts-mirror.*$"

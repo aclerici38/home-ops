@@ -6,15 +6,10 @@ metadata:
   name: &app k8s-gateway
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: *app
-      reconcileStrategy: ChartVersion
-      sourceRef:
-        kind: HelmRepository
-        name: *app
-        namespace: flux-system
-      version: 3.0.0
+  chartRef:
+    kind: OCIRepository
+    name: *app
+    namespace: flux-system
   install:
     crds: CreateReplace
     timeout: 2m
