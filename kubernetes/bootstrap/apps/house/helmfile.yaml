@@ -18,7 +18,7 @@ hooks:
 
 releases:
   - name: house-cilium
-    namespace: cilium
+    namespace: kube-system
     chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     atomic: true
     version: 1.17.2

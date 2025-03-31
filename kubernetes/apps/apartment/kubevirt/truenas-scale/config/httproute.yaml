@@ -6,7 +6,7 @@ spec:
   parentRefs:
     - name: internal
       kind: Gateway
-      namespace: cilium
+      namespace: kube-system
       sectionName: https
   hostnames:
     - truenas.${SECRET_DOMAIN}

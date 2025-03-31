@@ -52,7 +52,7 @@ spec:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
-            namespace: cilium
+            namespace: kube-system
             sectionName: https
         rules:
           - backendRefs:
