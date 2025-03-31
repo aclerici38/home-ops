@@ -7,6 +7,7 @@ spec:
     - name: internal
       kind: Gateway
       namespace: cilium
+      sectionName: https
   hostnames:
     - truenas.${SECRET_DOMAIN}
   rules:
