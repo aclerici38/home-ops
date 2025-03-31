@@ -22,9 +22,6 @@ spec:
       retries: 1
   values:
     domain: ${SECRET_DOMAIN}
-    watchedResources:
-      - HTTPRoute
-      - Ingress
     extraZonePlugins:
       - name: log
       - name: errors
