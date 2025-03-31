@@ -2,9 +2,10 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json
 autoDirectNodeRoutes: true
 bpf:
-  datapathMode: netkit
-  masquerade: false
-  preallocateMaps: true
+  hostLegacyRouting: true
+  # datapathMode: netkit
+  # masquerade: false
+  # preallocateMaps: true
   # tproxy: true
 devices: 'enp4s0f0'
 cgroup:
@@ -50,8 +51,6 @@ envoy:
   rollOutPods: true
 gatewayAPI:
   enabled: true
-  enableAlpn: true
-  xffNumTrustedHops: 1
 dashboards:
   enabled: true
 ipam:
