@@ -1,9 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json
 autoDirectNodeRoutes: false
-bandwidthManager:
-  enabled: true
-  bbr: true
 bpf:
   hostLegacyRouting: true
   masquerade: false
