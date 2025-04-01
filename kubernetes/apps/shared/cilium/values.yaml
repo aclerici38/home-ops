@@ -2,10 +2,8 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json
 autoDirectNodeRoutes: true
 bpf:
-  datapathMode: netkit
-  masquerade: true
-  preallocateMaps: true
-  tproxy: false
+  hostLegacyRouting: true
+  masquerade: false
 devices: 'enp4s0f0'
 cgroup:
   automount:
