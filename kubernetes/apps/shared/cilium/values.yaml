@@ -52,6 +52,9 @@ envoy:
   rollOutPods: true
   log:
     defaultLevel: debug
+  securityContext:
+    capabilities:
+      keepCapNetBindService: true
 gatewayAPI:
   enabled: true
 dashboards:
