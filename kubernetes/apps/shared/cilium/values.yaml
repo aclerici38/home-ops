@@ -54,6 +54,14 @@ envoy:
   rollOutPods: true
   log:
     defaultLevel: debug
+  securityContext:
+    capabilities:
+      envoy:
+        - NET_ADMIN
+        - SYS_ADMIN
+        - PERFMON
+        - BPF
+      keepCapNetBindService: true
 gatewayAPI:
   enabled: true
 dashboards:
@@ -93,4 +101,26 @@ prometheus:
 rollOutCiliumPods: true
 routingMode: native
 securityContext:
-  privileged: true
+  capabilities:
+    ciliumAgent:
+      - CHOWN
+      - KILL
+      - NET_ADMIN
+      - NET_RAW
+      - IPC_LOCK
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - SYS_MODULE
+      - PERFMON
+      - BPF
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+    cleanCiliumState:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - SYS_MODULE
+      - PERFMON
+      - BPF
