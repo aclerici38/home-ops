@@ -3,7 +3,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: external
+  name: cilium-external
 spec:
   gatewayClassName: cilium
   addresses:

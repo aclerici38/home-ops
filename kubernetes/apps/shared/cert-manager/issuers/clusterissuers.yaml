@@ -8,7 +8,7 @@ spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: ${CLUSTER_NAME}-letsencrypt-production
+      name: letsencrypt-production
     solvers:
       - dns01:
           cloudflare:
