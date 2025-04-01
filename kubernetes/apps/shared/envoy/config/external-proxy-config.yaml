@@ -1,0 +1,23 @@
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: external-proxy-config
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyDeployment:
+        replicas: 2
+      envoyService:
+        name: envoy-network-external
+        patch:
+          type: StrategicMerge
+          value:
+            spec:
+              externalIPs: []
+              ports:
+                - name: metrics
+                  port: 19001
+                  targetPort: 19001
+                  protocol: TCP
