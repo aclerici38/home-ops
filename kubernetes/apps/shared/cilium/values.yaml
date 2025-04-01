@@ -67,6 +67,10 @@ l2announcements:
 loadBalancer:
   algorithm: maglev
   mode: "dsr"
+  acceleration: native
+  experimental: true
+  l7:
+    backend: enabled
 nodePort:
   enabled: true
 operator:
