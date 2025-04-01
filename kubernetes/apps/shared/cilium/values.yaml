@@ -45,14 +45,9 @@ hubble:
         enabled: true
         trustCRDsExist: true
 envoy:
-  rollOutPods: true
-  log:
-    defaultLevel: debug
-enableXTSocketFallback: false
+  enabled: false
 gatewayAPI:
-  enabled: true
-  enableAlpn: true
-  xffNumTrustedHops: 1
+  enabled: false
 dashboards:
   enabled: true
 ipam:
@@ -141,6 +136,8 @@ securityContext:
       - IPC_LOCK
       - SYS_ADMIN
       - SYS_RESOURCE
+      - PERFMON
+      - BPF
       - DAC_OVERRIDE
       - FOWNER
       - SETGID
