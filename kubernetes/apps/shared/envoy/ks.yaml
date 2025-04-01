@@ -14,7 +14,7 @@ spec:
   dependsOn:
     - name: ${CLUSTER_NAME}-cilium
       namespace: kube-system
-  path: ./kubernetes/apps/shared/envoy-gateway/app
+  path: ./kubernetes/apps/shared/envoy/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -41,7 +41,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: ${CLUSTER_NAME}-envoy
-  path: ./kubernetes/apps/shared/envoy-gateway/gateway
+  path: ./kubernetes/apps/shared/envoy/gateway
   prune: true
   sourceRef:
     kind: GitRepository
