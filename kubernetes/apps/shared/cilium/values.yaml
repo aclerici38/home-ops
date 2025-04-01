@@ -110,7 +110,6 @@ securityContext:
       - IPC_LOCK
       - SYS_ADMIN
       - SYS_RESOURCE
-      - SYS_MODULE
       - PERFMON
       - BPF
       - DAC_OVERRIDE
@@ -121,6 +120,5 @@ securityContext:
       - NET_ADMIN
       - SYS_ADMIN
       - SYS_RESOURCE
-      - SYS_MODULE
       - PERFMON
       - BPF
