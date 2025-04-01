@@ -24,19 +24,19 @@ spec:
       name: apartment-cilium-helm-values
       optional: false
   values:
-  #   hubble:
-  #     ui:
-  #       enabled: true
-  #       rollOutPods: true
+    hubble:
+      ui:
+        enabled: true
+        rollOutPods: true
     bgpControlPlane:
       enabled: true
-  #   cluster:
-  #     name: "${CLUSTER_NAME}"
-  #     id: ${CLUSTER_ID}
-  #   ipv4NativeRoutingCIDR: "${POD_NET}"
-  #   cni:
-  #     exclusive: false
-  #   clustermesh:
-  #     apiserver:
-  #       service:
-  #         nodePort: ${CLUSTERMESH_PORT}
+    cluster:
+      name: "${CLUSTER_NAME}"
+      id: ${CLUSTER_ID}
+    ipv4NativeRoutingCIDR: "${POD_NET}"
+    cni:
+      exclusive: false
+    clustermesh:
+      apiserver:
+        service:
+          nodePort: ${CLUSTERMESH_PORT}

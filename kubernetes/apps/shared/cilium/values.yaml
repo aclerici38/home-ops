@@ -1,13 +1,12 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json
-autoDirectNodeRoutes: false
+autoDirectNodeRoutes: true
 bpf:
-  datapathMode: veth
+  datapathMode: netkit
   masquerade: true
   preallocateMaps: true
   # tproxy: true
 bpfClockProbe: true
-devices: 'enp4s0f0'
 cgroup:
   automount:
     enabled: false
@@ -16,14 +15,12 @@ cluster:
   name: "apartment"
   id: 2
 debug:
-  enabled: true
+  enabled: false
 endpointRoutes:
   enabled: true
 # Doesn't work on talos
 sysctlfix:
   enabled: false
-bgpControlPlane:
-  enabled: true
 hubble:
   enabled: true
   metrics:
@@ -48,15 +45,14 @@ hubble:
         enabled: true
         trustCRDsExist: true
 envoy:
-  enabled: true
   rollOutPods: true
   log:
     defaultLevel: debug
-  securityContext:
-    capabilities:
-      keepCapNetBindService: true
+enableXTSocketFallback: false
 gatewayAPI:
   enabled: true
+  enableAlpn: true
+  xffNumTrustedHops: 1
 dashboards:
   enabled: true
 ipam:
@@ -71,11 +67,53 @@ l2announcements:
 loadBalancer:
   algorithm: maglev
   mode: "dsr"
-  acceleration: best-effort
-  l7:
-    backend: enabled
 nodePort:
   enabled: true
+clustermesh:
+  useAPIServer: true
+  config:
+    enabled: true
+    clusters:
+      - name: apartment
+        port: 32379
+        ips:
+          - 10.10.0.1
+      - name: house
+        port: 32579
+        ips:
+          - 10.10.0.2
+      - name: cloud
+        port: 32479
+        ips:
+          - 10.10.0.3
+  apiserver:
+    etcd:
+      storageMedium: Memory
+    service:
+      type: NodePort
+      nodePort: 32379
+    requests:
+      cpu: 100m
+      memory: 500Mi
+    limits:
+      cpu: 1000m
+      memory: 2048M
+    tls:
+      authMode: cluster
+      auto:
+        enabled: true
+    metrics:
+      enabled: true
+      port: 9962
+      kvstoremesh:
+        enabled: true
+        port: 9964
+      etcd:
+        enabled: true
+        mode: basic
+        port: 9963
+      serviceMonitor:
+        enabled: true
 operator:
   replicas: 1
   rollOutPods: true
@@ -103,8 +141,6 @@ securityContext:
       - IPC_LOCK
       - SYS_ADMIN
       - SYS_RESOURCE
-      - PERFMON
-      - BPF
       - DAC_OVERRIDE
       - FOWNER
       - SETGID
