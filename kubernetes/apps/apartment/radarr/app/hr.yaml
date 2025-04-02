@@ -108,6 +108,8 @@ spec:
           - backendRefs:
               - name: *app
                 port: *port
+            timeouts:
+              request: 3m
     persistence:
       config:
         existingClaim: *app
