@@ -47,7 +47,7 @@ metadata:
   name: "${APP}"
   namespace: "${NAMESPACE}"
 spec:
-  sourcePVC: "${CLUSTER_NAME:+-}${APP}"
+  sourcePVC: "${NAME_PREFIX}${APP}"
   trigger:
     schedule: "${VOLSYNC_SCHEDULE:-0 3 * * *}"
   restic:
