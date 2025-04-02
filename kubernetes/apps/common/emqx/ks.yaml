@@ -52,7 +52,6 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   timeout: 5m
   wait: true
   postBuild:
