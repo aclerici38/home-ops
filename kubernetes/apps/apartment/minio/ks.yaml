@@ -17,7 +17,6 @@ spec:
   path: ./kubernetes/apps/apartment/minio/app
   components:
     - ../../../../components/external-secret
-    - ../../../../components/envoy/timeout
   prune: true
   sourceRef:
     kind: GitRepository

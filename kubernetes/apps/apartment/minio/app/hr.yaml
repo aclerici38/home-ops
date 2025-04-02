@@ -100,6 +100,8 @@ spec:
           - backendRefs:
               - name: *app
                 port: 9001
+            timeouts:
+              request: 1m
       s3:
         hostnames:
           - s3.${SECRET_DOMAIN}
