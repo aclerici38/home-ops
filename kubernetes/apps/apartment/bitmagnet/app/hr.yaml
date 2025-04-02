@@ -36,7 +36,7 @@ spec:
               VPN_INTERFACE: wg0
               WIREGUARD_ENDPOINT_PORT: 51820
               FIREWALL_INPUT_PORTS: "3333,3334"
-              FIREWALL_OUTBOUND_SUBNETS: 172.16.0.0/16,172.17.0.0/16
+              FIREWALL_OUTBOUND_SUBNETS: 10.210.0.0/16,10.215.0.0/16
               DNS_KEEP_NAMESERVER: on
             envFrom: &envFrom
               - secretRef:
