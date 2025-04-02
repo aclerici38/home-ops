@@ -28,6 +28,21 @@ spec:
   postBuild:
     substitute:
       APP: *app
+  patches:
+    - patch: |-
+        apiVersion: external-secrets.io/v1beta1
+        kind: ExternalSecret
+        metadata:
+          name: patch
+        spec:
+          target:
+            template:
+              metadata:
+                annotations:
+                  reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+                  reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      target:
+        kind: ExternalSecret
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
