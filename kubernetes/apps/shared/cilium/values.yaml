@@ -45,9 +45,11 @@ hubble:
         enabled: true
         trustCRDsExist: true
 envoy:
-  enabled: false
+  enabled: true
+  log:
+    defaultLevel: debug
 gatewayAPI:
-  enabled: false
+  enabled: true
 dashboards:
   enabled: true
 ipam:
