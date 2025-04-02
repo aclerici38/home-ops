@@ -36,7 +36,7 @@ spec:
                 {
                   "name":"${CLUSTER_NAME}-multus-home-net",
                   "namespace": "network",
-                  "ips": ["${MULTUS_ADDRESS}"]
+                  "ips": ["${MULTUS_HASS_ADDRESS}"]
                 }
               ]
         containers:
