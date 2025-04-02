@@ -126,6 +126,9 @@ prometheus:
     trustCRDsExist: true
 rollOutCiliumPods: true
 routingMode: native
+socketLB:
+  enabled: true
+  hostNamespaceOnly: true
 securityContext:
   capabilities:
     ciliumAgent:
