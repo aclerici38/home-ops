@@ -34,7 +34,7 @@ spec:
             k8s.v1.cni.cncf.io/networks: |
               [
                 {
-                  "name":"${CLUSTER_NAME}-multus-net",
+                  "name":"${CLUSTER_NAME}-multus-home-net",
                   "namespace": "network",
                   "ips": ["${MULTUS_ADDRESS}"]
                 }
