@@ -4,12 +4,10 @@ sonarr:
   sonarr:
     media_naming:
       series: plex-tvdb
-      season: default
       episodes:
         rename: true
-        standard: default
-        daily: default
-        anime: default
+        standard: original
+        daily: original
     base_url: http://sonarr:8989
     api_key: ${SONARR_API_KEY}
 
@@ -26,7 +24,7 @@ sonarr:
 
     quality_profiles:
       - name: WEB-2160p
-        min_format_score: -60000
+        min_format_score: -1000
         reset_unmatched_scores:
           enabled: true
           except:
@@ -52,7 +50,7 @@ sonarr:
           - name: SDTV
 
       - name: Remux-1080p - Anime
-        min_format_score: -60000
+        min_format_score: -1000
         reset_unmatched_scores:
           enabled: true
           except:
@@ -137,7 +135,7 @@ radarr:
       folder:  plex-tmdb
       movie:
         rename: true
-        standard: standard
+        standard: original
 
     base_url: http://radarr:7878
     api_key: ${RADARR_API_KEY}
@@ -151,7 +149,7 @@ radarr:
 
     quality_profiles:
       - name: SQP-1 (2160p)
-        min_format_score: -60000
+        min_format_score: -1000
         reset_unmatched_scores:
           enabled: true
           except:
