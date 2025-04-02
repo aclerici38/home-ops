@@ -57,7 +57,7 @@ sonarr:
             - "Language: Prefer English"
 
       - name: Remux-1080p - Anime (english only)
-        min_format_score: -1000
+        min_format_score: 0
         reset_unmatched_scores:
           enabled: true
           except:
