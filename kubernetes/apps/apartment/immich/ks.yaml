@@ -67,8 +67,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: immich
   path: ./kubernetes/apps/apartment/immich/config
   prune: true
   sourceRef:
