@@ -6,14 +6,9 @@ metadata:
   name: external
 spec:
   gatewayClassName: envoy
-  addresses:
-    - type: IPAddress
-      value: 10.38.55.81
   infrastructure:
-    parametersRef:
-      group: gateway.envoyproxy.io
-      kind: EnvoyProxy
-      name: internal-proxy-config
+    annotations:
+      lbipam.cilium.io/ips: 10.38.55.81
   listeners:
     - name: http
       protocol: HTTP

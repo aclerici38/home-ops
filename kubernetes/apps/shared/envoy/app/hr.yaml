@@ -20,11 +20,3 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
-  values:
-    config:
-      envoy-gateway:
-        backendTlsConfig:
-          clientCertificateRef: ${SECRET_DOMAIN/./-}-tls
-      logging:
-        level:
-          default: debug
