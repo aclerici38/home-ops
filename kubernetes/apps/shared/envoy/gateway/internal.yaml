@@ -9,6 +9,11 @@ spec:
   addresses:
     - type: IPAddress
       value: 10.38.55.80
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: external-proxy-config
   listeners:
     - name: http
       protocol: HTTP
