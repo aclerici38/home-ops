@@ -32,7 +32,6 @@ metadata:
   namespace: &ns database
 spec:
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

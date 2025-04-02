@@ -39,6 +39,8 @@ spec:
       VOLSYNC_CAPACITY: 2Ti
       VOLSYNC_STORAGECLASS: truenas-nfs
       VOLSYNC_SNAPSHOTCLASS: truenas-nfs
+      # renovate: datasource=github-releases depName=immich-app/immich-server
+      IMMICH_VERSION: v1.129.0
     substituteFrom:
       - kind: Secret
         name: immich-secret
