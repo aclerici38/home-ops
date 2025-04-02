@@ -45,22 +45,22 @@ spec:
               VIKUNJA_DATABASE_HOST:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: host
               VIKUNJA_DATABASE_USER:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: user
               VIKUNJA_DATABASE_PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: password
               VIKUNJA_DATABASE_DATABASE:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: dbname
             envFrom:
               - secretRef:

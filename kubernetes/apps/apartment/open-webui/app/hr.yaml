@@ -50,7 +50,7 @@ spec:
               DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: uri
             envFrom:
               - secretRef:

@@ -42,22 +42,22 @@ spec:
               POSTGRES_HOST:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: host
               POSTGRES_USERNAME:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: username
               POSTGRES_PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: password
               POSTGRES_DATABASE:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: dbname
             probes:
               liveness: &probes

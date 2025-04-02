@@ -33,22 +33,22 @@ spec:
               DB_HOST:
                   valueFrom:
                     secretKeyRef:
-                      name: ${CLUSTER_NAME}-${APP}-db-app
+                      name: ${APP}-db-app
                       key: host
               DB_USER:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: username
               DB_PASS:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: password
               DB_NAME:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: dbname
             resources:
               requests:
