@@ -1,0 +1,8 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyHTTPRoute
+metadata:
+  name: 1-min-timeout
+  namespace: network
+spec:
+  route:
+    requestTimeout: 1m

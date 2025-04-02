@@ -94,18 +94,24 @@ spec:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
-            namespace: network
+            namespace: &gns network
             sectionName: https
         rules:
           - backendRefs:
               - name: *app
                 port: 9001
+            filters:
+              - extensionRef:
+                group: gateway.envoyproxy.io
+                kind: EnvoyHTTPRoute
+                name: 1-min-timeout
+                namespace: *gns
       s3:
         hostnames:
           - s3.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
-            namespace: network
+            namespace: *gns
             sectionName: https
         rules:
           - backendRefs:
