@@ -41,9 +41,6 @@ spec:
       VOLSYNC_SNAPSHOTCLASS: truenas-nfs
       # renovate: datasource=github-releases depName=immich-app/immich-server
       IMMICH_VERSION: v1.129.0
-    substituteFrom:
-      - kind: Secret
-        name: immich-secret
   patches:
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1
@@ -58,3 +55,30 @@ spec:
               search_path: '"$user", public, vectors'
       target:
         kind: Cluster
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app immich-config
+  namespace: &ns home
+spec:
+  targetNamespace: *ns
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: immich
+  path: ./kubernetes/apps/apartment/immich/config
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  wait: true
+  interval: 30m
+  timeout: 5m
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: immich-secret
