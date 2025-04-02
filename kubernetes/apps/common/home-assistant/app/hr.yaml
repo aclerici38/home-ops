@@ -104,11 +104,11 @@ spec:
     #             port: *port
     persistence:
       config:
-        existingClaim: *app
+        existingClaim: ${CLUSTER_NAME}-${APP}
         globalMounts:
           - path: /config
       hass-cache:
-        existingClaim: hass-cache
+        existingClaim: ${CLUSTER_NAME}-hass-cache
         advancedMounts:
           main:
             *app :
