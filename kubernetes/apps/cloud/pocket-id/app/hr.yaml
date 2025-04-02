@@ -39,7 +39,7 @@ spec:
 
               EMAIL_LOGIN_NOTIFICATION_ENABLED: true
 
-              POSTGRES_CONNECTION_STRING:
+              DB_CONNECTION_STRING:
                 valueFrom:
                   secretKeyRef:
                     name: ${CLUSTER_NAME}-${APP}-db-app
