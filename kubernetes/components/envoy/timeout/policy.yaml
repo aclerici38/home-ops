@@ -8,4 +8,5 @@ spec:
     kind: HTTPRoute
     name: ${APP}
   timeout:
-    request: ${ENVOY_TIMEOUT:-1m}
+    http:
+      requestReceivedTimeout: ${ENVOY_TIMEOUT:-1m}
