@@ -20,158 +20,158 @@ spec:
     timeout: 5m
     remediation:
       retries: 1
-  # values:
-  #   controllers:
-  #     server:
-  #       containers:
-  #         immich-server:
-  #           image:
-  #             repository: ghcr.io/immich-app/immich-server
-  #             tag:  ${IMMICH_VERSION}
-  #           env:
-  #             IMMICH_LOG_LEVEL: info
-  #             REDIS_HOSTNAME: dragonfly-db.database.svc.cluster.local
-  #             REDIS_DBINDEX: 2
-  #             IMMICH_TELEMETRY_INCLUDE: all
-  #             IMMICH_CONFIG_FILE: &config /config/immich-config.yaml
-  #             DB_URL:
-  #               valueFrom:
-  #                 secretKeyRef:
-  #                   name: ${APP}-db-app
-  #                   key: uri
-  #           probes:
-  #             liveness: &probes
-  #               enabled: true
-  #               custom: true
-  #               spec:
-  #                 httpGet:
-  #                   path: /api/server/ping
-  #                   port: http
-  #                 initialDelaySeconds: 0
-  #                 periodSeconds: 10
-  #                 timeoutSeconds: 1
-  #                 failureThreshold: 3
-  #             readiness: *probes
-  #             startup:
-  #               enabled: true
-  #               custom: true
-  #               spec:
-  #                 httpGet:
-  #                   path: /api/server/ping
-  #                   port: http
-  #                 initialDelaySeconds: 0
-  #                 periodSeconds: 10
-  #                 timeoutSeconds: 1
-  #                 failureThreshold: 30
-  #           securityContext: &contSec
-  #             allowPrivilegeEscalation: false
-  #             readOnlyRootFilesystem: true
-  #             capabilities: { drop: ["ALL"] }
-  #           resources: &resources
-  #             requests:
-  #               cpu: 500m
-  #               memory: 500Mi
-  #             limits:
-  #               memory: 5Gi
-  #               nvidia.com/gpu: 1
-  #     machine-learning:
-  #       containers:
-  #         immich-ml:
-  #           image:
-  #             repository: ghcr.io/immich-app/immich-machine-learning
-  #             tag:  ${IMMICH_VERSION}-cuda
-  #           env:
-  #             MACHINE_LEARNING_MODEL_TTL: 0
-  #             MACHINE_LEARNING_CACHE_FOLDER: /cache
-  #             MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: ViT-SO400M-16-SigLIP2-384__webli
-  #           resources: *resources
-  #           probes:
-  #             liveness: &probes
-  #               enabled: true
-  #               custom: true
-  #               spec:
-  #                 httpGet:
-  #                   path: /ping
-  #                   port: http
-  #                 initialDelaySeconds: 0
-  #                 periodSeconds: 10
-  #                 timeoutSeconds: 1
-  #                 failureThreshold: 3
-  #             readiness: *probes
-  #             startup:
-  #               enabled: true
-  #               custom: true
-  #               spec:
-  #                 httpGet:
-  #                   path: /ping
-  #                   port: http
-  #                 initialDelaySeconds: 0
-  #                 periodSeconds: 10
-  #                 timeoutSeconds: 2
-  #                 failureThreshold: 60
-  #           securityContext: *contSec
-  #   defaultPodOptions:
-  #     securityContext:
-  #       runAsNonRoot: true
-  #       runAsUser: 1000
-  #       runAsGroup: 1000
-  #       fsGroup: 1000
-  #       fsGroupChangePolicy: OnRootMismatch
-  #       seccompProfile: { type: RuntimeDefault }
-  #   service:
-  #     *app :
-  #       controller: server
-  #       ports:
-  #         http:
-  #           port: &port 2283
-  #         metrics-api:
-  #           port: 8081
-  #         metrics-ms:
-  #           port: 8082
-  #     ml:
-  #       controller: machine-learning
-  #       ports:
-  #         http:
-  #           port: 3003
-  #   serviceMonitor:
-  #     *app :
-  #       serviceName: *app
-  #       endpoints:
-  #         - port: metrics-api
-  #           scheme: http
-  #         - port: metrics-ms
-  #           scheme: http
-  #   route:
-  #     *app :
-  #       hostnames:
-  #         - ${APP}.${SECRET_DOMAIN}
-  #       parentRefs:
-  #         - name: internal
-  #           namespace: network
-  #           sectionName: https
-  #       rules:
-  #         - backendRefs:
-  #             - name: *app
-  #               port: *port
-  #           timeouts:
-  #             request: 3m
-  #   persistence:
-  #     media:
-  #       enabled: true
-  #       type: nfs
-  #       server: 10.38.55.50
-  #       path: /mnt/tank/immich
-  #       globalMounts:
-  #         - path: /usr/src/app/upload
-  #     thumbnails:
-  #       existingClaim: immich-thumbnails
-  #       globalMounts:
-  #         - path: /usr/src/app/upload/thumbnails
-  #     config:
-  #       type: configMap
-  #       name: immich-config
-  #       globalMounts:
-  #         - path: *config
-  #           subPath: config.yaml
-  #     cache:
-  #       existingClaim: immich-ml-cache
+  values:
+    controllers:
+      server:
+        containers:
+          immich-server:
+            image:
+              repository: ghcr.io/immich-app/immich-server
+              tag:  ${IMMICH_VERSION}
+            env:
+              IMMICH_LOG_LEVEL: info
+              REDIS_HOSTNAME: dragonfly-db.database.svc.cluster.local
+              REDIS_DBINDEX: 2
+              IMMICH_TELEMETRY_INCLUDE: all
+              IMMICH_CONFIG_FILE: &config /config/immich-config.yaml
+              DB_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: uri
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/server/ping
+                    port: http
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/server/ping
+                    port: http
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 30
+            securityContext: &contSec
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources: &resources
+              requests:
+                cpu: 500m
+                memory: 500Mi
+              limits:
+                memory: 5Gi
+                nvidia.com/gpu: 1
+      machine-learning:
+        containers:
+          immich-ml:
+            image:
+              repository: ghcr.io/immich-app/immich-machine-learning
+              tag:  ${IMMICH_VERSION}-cuda
+            env:
+              MACHINE_LEARNING_MODEL_TTL: 0
+              MACHINE_LEARNING_CACHE_FOLDER: /cache
+              MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: ViT-SO400M-16-SigLIP2-384__webli
+            resources: *resources
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: http
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: http
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 2
+                  failureThreshold: 60
+            securityContext: *contSec
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      *app :
+        controller: server
+        ports:
+          http:
+            port: &port 2283
+          metrics-api:
+            port: 8081
+          metrics-ms:
+            port: 8082
+      ml:
+        controller: machine-learning
+        ports:
+          http:
+            port: 3003
+    serviceMonitor:
+      *app :
+        serviceName: *app
+        endpoints:
+          - port: metrics-api
+            scheme: http
+          - port: metrics-ms
+            scheme: http
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+            timeouts:
+              request: 3m
+    persistence:
+      media:
+        enabled: true
+        type: nfs
+        server: 10.38.55.50
+        path: /mnt/tank/immich
+        globalMounts:
+          - path: /usr/src/app/upload
+      thumbnails:
+        existingClaim: immich-thumbnails
+        globalMounts:
+          - path: /usr/src/app/upload/thumbnails
+      config:
+        type: configMap
+        name: immich-config
+        globalMounts:
+          - path: *config
+            subPath: config.yaml
+      cache:
+        existingClaim: immich-ml-cache
