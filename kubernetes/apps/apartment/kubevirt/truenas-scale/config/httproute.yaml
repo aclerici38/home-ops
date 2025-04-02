@@ -4,9 +4,9 @@ metadata:
   name: truenas-webui
 spec:
   parentRefs:
-    - name: cilium-internal
+    - name: internal
       kind: Gateway
-      namespace: kube-system
+      namespace: network
       sectionName: https
   hostnames:
     - truenas.${SECRET_DOMAIN}
