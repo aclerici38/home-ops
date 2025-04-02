@@ -17,7 +17,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/apartment/atuin/app
   components:
-    - ../../../../components/cnpg/restore
+    - ../../../../components/cnpg/init
   prune: true
   sourceRef:
     kind: GitRepository
