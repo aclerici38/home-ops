@@ -29,8 +29,6 @@ spec:
           securityContext:
             runAsNonRoot: false
             fsGroupChangePolicy: OnRootMismatch
-          nodeSelector:
-            kubernetes.io/hostname: "bonds"
         containers:
           app:
             image:
