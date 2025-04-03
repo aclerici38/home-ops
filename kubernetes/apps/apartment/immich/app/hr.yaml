@@ -25,6 +25,16 @@ spec:
       server:
         containers:
           immich-server:
+            lifecycle:
+              postStart:
+                exec:
+                  command:
+                    - |
+                      touch /usr/src/app/upload/upload/.immich
+                      touch /usr/src/app/upload/profile/.immich
+                      touch /usr/src/app/upload/library/.immich
+                      touch /usr/src/app/upload/thumbs/.immich
+                      touch /usr/src/app/upload/encoded-video/.immich
             image:
               repository: ghcr.io/immich-app/immich-server
               tag:  ${IMMICH_VERSION}
@@ -34,7 +44,6 @@ spec:
               REDIS_DBINDEX: 2
               IMMICH_TELEMETRY_INCLUDE: all
               IMMICH_CONFIG_FILE: &config /config/immich-config.yaml
-              IMMICH_IGNORE_MOUNT_CHECK_ERRORS: true
               DB_URL:
                 valueFrom:
                   secretKeyRef:
@@ -47,7 +56,7 @@ spec:
                 spec:
                   httpGet:
                     path: /api/server/ping
-                    port: http
+                    port: &port 2283
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -59,7 +68,7 @@ spec:
                 spec:
                   httpGet:
                     path: /api/server/ping
-                    port: http
+                    port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -93,7 +102,7 @@ spec:
                 spec:
                   httpGet:
                     path: /ping
-                    port: http
+                    port: &mlPort 3003
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -105,7 +114,7 @@ spec:
                 spec:
                   httpGet:
                     path: /ping
-                    port: http
+                    port: *mlPort
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 2
@@ -124,7 +133,7 @@ spec:
         controller: server
         ports:
           http:
-            port: &port 2283
+            port: *port
           metrics-api:
             port: 8081
           metrics-ms:
@@ -133,7 +142,7 @@ spec:
         controller: machine-learning
         ports:
           http:
-            port: 3003
+            port: *mlPort
     serviceMonitor:
       *app :
         serviceName: *app
