@@ -13,7 +13,7 @@ hooks:
     showlogs: true
     args:
       - "-c"
-      - "kustomize build /Users/anthony/home-ops/kubernetes/resources/crds | kubectl apply --server-side -f -"
+      - "kustomize build /Users/anthony/home-ops/kubernetes/resources/crds | kubectl apply --server-side --force-conflicts -f -"
 
 releases:
   - name: cilium
@@ -70,7 +70,7 @@ releases:
     chart: oci://ghcr.io/bjw-s/helm/app-template
     version: 3.7.3
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/cloud/onepassword-connect/app/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/shared/onepassword-connect/app/values.yaml
     needs:
       - kube-system/cilium
 
