@@ -43,7 +43,7 @@ job:
 
 machineLearning:
   clip:
-    modelName: ViT-SO400M-16-SigLIP2-384__webli
+    # modelName: ViT-SO400M-16-SigLIP2-384__webli
   facialRecognition:
     modelName: buffalo_l
     minFaces: 1
@@ -51,14 +51,14 @@ machineLearning:
     enabled: true
     maxDistance: 0.001
 
-oauth:
-  enabled: true
-  issuerUrl: https://id.${SECRET_DOMAIN}/application/o/immich/
-  autoLaunch: false
-  autoRegister: true
-  buttonText: Login with Authentik
-  clientId: ${CLIENT_ID}
-  clientSecret: ${CLIENT_SECRET}
+# oauth:
+#   enabled: true
+#   issuerUrl: https://id.${SECRET_DOMAIN}/application/o/immich/
+#   autoLaunch: false
+#   autoRegister: true
+#   buttonText: Login with Pocket ID
+#   clientId: ${CLIENT_ID}
+#   clientSecret: ${CLIENT_SECRET}
 
 storageTemplate:
   enabled: true
