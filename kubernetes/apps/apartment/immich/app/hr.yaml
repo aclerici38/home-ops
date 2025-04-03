@@ -165,11 +165,11 @@ spec:
         advancedMounts:
           server:
             immich-server:
-              - path: /usr/src/app/upload
+              - path: /usr/src/app/upload/upload
                 subPath: upload
-              - path: /usr/src/app/profile
+              - path: /usr/src/app/upload/profile
                 subPath: profile
-              - path: /usr/src/app/library
+              - path: /usr/src/app/upload/library
                 subPath: library
       thumbnails:
         existingClaim: immich-thumbnails
