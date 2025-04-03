@@ -104,13 +104,23 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
     version: 0.18.0
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/shared/flux/instance/values.yaml
       - instance:
+          cluster:
+            networkPolicy: false
+          components:
+            - source-controller
+            - kustomize-controller
+            - helm-controller
+            - notification-controller
           sync:
             kind: GitRepository
             url: "https://github.com/ant385525/home-ops.git"
             ref: refs/heads/main
             path: kubernetes/flux/clusters/apartment
+          distribution:
+            registry: "ghcr.io/fluxcd"
+            # renovate: datasource=github-releases depName=controlplaneio-fluxcd/distribution
+            version: 2.5.1
     needs:
       - flux-system/flux-operator
       - external-secrets/external-secrets
