@@ -78,6 +78,16 @@ releases:
         command: "kubectl"
         args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/shared/external-secrets/stores/clustersecretstore.yaml"]
 
+  - name: flux-operator
+    namespace: flux-system
+    atomic: true
+    chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
+    version: 0.18.0
+    values:
+      - /Users/anthony/home-ops/kubernetes/apps/cloud/flux/operator/values.yaml
+    needs:
+      - kube-system/coredns
+
   - name: flux-instance
     namespace: flux-system
     atomic: true
@@ -89,19 +99,19 @@ releases:
       - flux-system/flux-operator
       - external-secrets/apartment-external-secrets
 
-  - name: kustomize-mutating-webhook
-    namespace: flux-system
-    atomic: true
-    chart: oci://ghcr.io/xunholy/charts/kustomize-mutating-webhook
-    version: 0.4.3
-    values:
-      - /Users/anthony/home-ops/kubernetes/apps/apartment/kustomize-mutating-webhook/app/values.yaml
-    needs:
-      - flux-system/flux-instance
-      - cluster-utilities/apartment-cert-manager
-      - external-secrets/apartment-external-secrets
-    hooks:
-      - events: ["presync"]
-        showlogs: true
-        command: "kubectl"
-        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/flux/meta/settings/cluster-secrets.yaml"]
+  # - name: kustomize-mutating-webhook
+  #   namespace: flux-system
+  #   atomic: true
+  #   chart: oci://ghcr.io/xunholy/charts/kustomize-mutating-webhook
+  #   version: 0.4.3
+  #   values:
+  #     - /Users/anthony/home-ops/kubernetes/apps/apartment/kustomize-mutating-webhook/app/values.yaml
+  #   needs:
+  #     - flux-system/flux-instance
+  #     - cluster-utilities/apartment-cert-manager
+  #     - external-secrets/apartment-external-secrets
+  #   hooks:
+  #     - events: ["presync"]
+  #       showlogs: true
+  #       command: "kubectl"
+  #       args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/flux/meta/settings/cluster-secrets.yaml"]
