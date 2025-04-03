@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich-encoded-video
+spec:
+  storageClassName: local-hostpath
+  resources:
+    requests:
+      storage: 500Gi
+  accessModes:
+    - ReadWriteMany

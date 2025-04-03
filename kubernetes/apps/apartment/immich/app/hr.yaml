@@ -84,7 +84,6 @@ spec:
               MACHINE_LEARNING_MODEL_TTL: 0
               MACHINE_LEARNING_CACHE_FOLDER: /cache
               MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: ViT-SO400M-16-SigLIP2-384__webli
-              IMMICH_IGNORE_MOUNT_CHECK_ERRORS: true
             resources: *resources
             probes:
               liveness: &probes
@@ -167,8 +166,6 @@ spec:
             immich-server:
               - path: /usr/src/app/upload
                 subPath: upload
-              - path: /usr/src/app/encoded
-                subPath: encoded-video
               - path: /usr/src/app/profile
                 subPath: profile
               - path: /usr/src/app/library
@@ -179,6 +176,12 @@ spec:
           server:
             immich-server:
               - path: /usr/src/app/upload/thumbs
+      encoded-video:
+        existingClaim: immich-encoded-video
+        advancedMounts:
+          server:
+            immich-server:
+              - path: /usr/src/app/upload/encoded-video
       config:
         type: configMap
         name: immich-config
