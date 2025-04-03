@@ -5,15 +5,15 @@ bpf:
   datapathMode: netkit
   masquerade: true
   preallocateMaps: true
-  # tproxy: true
+  tproxy: true
 bpfClockProbe: true
 cgroup:
   automount:
     enabled: false
   hostRoot: /sys/fs/cgroup
-cluster:
-  name: "apartment"
-  id: 2
+# cluster:
+#   name: "apartment"
+#   id: 2
 debug:
   enabled: false
 endpointRoutes:
@@ -72,21 +72,21 @@ clustermesh:
       - name: apartment
         port: 32379
         ips:
-          - 10.10.0.1
+          - 192.168.9.25
       - name: house
         port: 32579
         ips:
-          - 10.10.0.2
+          - 10.0.30.28
       - name: cloud
         port: 32479
         ips:
-          - 10.10.0.3
+          - 10.40.40.41
   apiserver:
     etcd:
       storageMedium: Memory
-    service:
-      type: NodePort
-      nodePort: 32379
+    # service:
+    #   type: NodePort
+    #   nodePort: 32379
     requests:
       cpu: 100m
       memory: 500Mi
