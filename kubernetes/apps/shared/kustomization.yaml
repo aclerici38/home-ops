@@ -4,8 +4,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namePrefix: ${CLUSTER_NAME}-
 resources:
-  - ./namespaces
-
   - ./blocky/ks.yaml
   - ./cert-manager/ks.yaml
   - ./cloudnative-pg/ks.yaml
