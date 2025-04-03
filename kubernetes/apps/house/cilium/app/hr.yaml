@@ -29,7 +29,6 @@ spec:
     cluster:
       name: "${CLUSTER_NAME}"
       id: ${CLUSTER_ID}
-    ipv4NativeRoutingCIDR: "${POD_NET}"
     cni:
       exclusive: false
     clustermesh:
