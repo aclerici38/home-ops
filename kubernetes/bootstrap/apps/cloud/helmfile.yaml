@@ -24,13 +24,13 @@ releases:
     values:
       - /Users/anthony/home-ops/kubernetes/apps/shared/cilium/values.yaml
       - cluster:
-          name: apartment
-          id: 2
-        ipv4NativeRoutingCIDR: 10.210.0.0/16
+          name: cloud
+          id: 1
+        ipv4NativeRoutingCIDR: 10.200.0.0/16
         clustermesh:
           apiserver:
             service:
-              nodePort: 32379
+              nodePort: 32479
 
   - name: coredns
     namespace: kube-system
@@ -49,9 +49,9 @@ releases:
           create: true
         service:
           name: kube-dns
-          clusterIP: 10.215.0.10
+          clusterIP: 10.205.0.10
     needs:
-      - cilium/cilium
+      - kube-system/cilium
 
   - name: cert-manager
     namespace: cluster-utilities
@@ -72,7 +72,7 @@ releases:
     values:
       - /Users/anthony/home-ops/kubernetes/apps/cloud/onepassword-connect/app/values.yaml
     needs:
-      - cilium/cilium
+      - kube-system/cilium
 
   - name: external-secrets
     namespace: external-secrets

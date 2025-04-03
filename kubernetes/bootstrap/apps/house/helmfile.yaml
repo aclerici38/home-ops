@@ -26,7 +26,7 @@ releases:
       - cluster:
           name: apartment
           id: 2
-        ipv4NativeRoutingCIDR: 10.210.0.0/16
+        ipv4NativeRoutingCIDR: 10.220.0.0/16
         clustermesh:
           apiserver:
             service:
@@ -49,7 +49,7 @@ releases:
           create: true
         service:
           name: kube-dns
-          clusterIP: 10.215.0.10
+          clusterIP: 10.225.0.10
     needs:
       - cilium/apartment-cilium
 
