@@ -10,11 +10,11 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-cloudnative-pg
+    - name: cloudnative-pg
       namespace: database
-    - name: ${CLUSTER_NAME}-dragonfly-cluster
+    - name: dragonfly-cluster
       namespace: database
-    - name: ${CLUSTER_NAME}-external-secrets-stores
+    - name: external-secrets-stores
       namespace: external-secrets
     - name: minio
       namespace: cluster-utilities

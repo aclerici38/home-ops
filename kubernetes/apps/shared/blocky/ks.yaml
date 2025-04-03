@@ -12,9 +12,9 @@ spec:
   prune: true
   wait: true
   dependsOn:
-    - name: ${CLUSTER_NAME}-cloudnative-pg
+    - name: cloudnative-pg
       namespace: database
-    - name: ${CLUSTER_NAME}-dragonfly-cluster
+    - name: dragonfly-cluster
       namespace: database
   sourceRef:
     kind: GitRepository
@@ -23,7 +23,6 @@ spec:
   interval: 30m
   timeout: 3m
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

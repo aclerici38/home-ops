@@ -50,7 +50,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: ${CLUSTER_NAME}-generic-device-plugin-config
+        name: generic-device-plugin-config
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml

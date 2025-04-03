@@ -33,5 +33,5 @@ spec:
       certManager:
         enabled: true
         issuerRef:
-          name: ${CLUSTER_NAME}-k8tz-webhook-selfsign
+          name: k8tz-webhook-selfsign
           kind: Issuer

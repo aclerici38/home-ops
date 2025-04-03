@@ -7,12 +7,11 @@ metadata:
   namespace: &ns network
 spec:
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-external-secrets-stores
+    - name: external-secrets-stores
       namespace: external-secrets
   path: ./kubernetes/apps/shared/external-dns/cloudflare
   components:

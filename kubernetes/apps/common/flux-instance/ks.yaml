@@ -3,27 +3,23 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app atuin
-  namespace: &ns home
+  name: &app flux-instance
+  namespace: &ns flux-system
 spec:
   targetNamespace: *ns
-  dependsOn:
-    - name: cloudnative-pg
-      namespace: database
-    - name: minio
-      namespace: cluster-utilities
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/apartment/atuin/app
-  components:
-    - ../../../../components/cnpg/init
-  prune: true
+  dependsOn:
+    - name: flux-operator
+    - name: external-secrets-stores
+      namespace: external-secrets
+  path: ./kubernetes/apps/common/flux-instance/app
+  prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
-  wait: true
+  wait: false
   interval: 30m
   timeout: 5m
   postBuild:

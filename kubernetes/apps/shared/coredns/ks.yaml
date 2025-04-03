@@ -7,7 +7,6 @@ metadata:
   namespace: &ns kube-system
 spec:
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -19,9 +18,9 @@ spec:
     namespace: flux-system
   wait: false
   dependsOn:
-    - name: ${CLUSTER_NAME}-dnscrypt-proxy
+    - name: dnscrypt-proxy
       namespace: network
-    - name: ${CLUSTER_NAME}-blocky
+    - name: blocky
       namespace: network
   interval: 30m
   timeout: 5m

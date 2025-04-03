@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/apartment/kustomize-mutating-webhook/app
+  path: ./kubernetes/apps/shared/kustomize-mutating-webhook/app
   sourceRef:
     kind: GitRepository
     name: flux-system

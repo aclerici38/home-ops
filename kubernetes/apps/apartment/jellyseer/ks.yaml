@@ -8,9 +8,9 @@ metadata:
 spec:
   targetNamespace: *ns
   dependsOn:
-    - name: ${CLUSTER_NAME}-cloudnative-pg
+    - name: cloudnative-pg
       namespace: database
-    - name: ${CLUSTER_NAME}-volsync
+    - name: volsync
       namespace: storage
     - name: minio
       namespace: cluster-utilities

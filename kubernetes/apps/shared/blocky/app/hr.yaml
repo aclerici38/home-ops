@@ -39,27 +39,27 @@ spec:
               PGHOST:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: host
               PGPORT:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: port
               PGUSER:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: username
               PGPASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: password
               PGDATABASE:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: dbname
             probes:
               readiness: &probes
@@ -110,7 +110,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: ${CLUSTER_NAME}-blocky-config
+        name: blocky-config
         globalMounts:
           - path: /app/config.yml
             subPath: config.yml

@@ -2,9 +2,9 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namePrefix: ${CLUSTER_NAME}-
 resources:
   - ./emqx/ks.yaml
+  - ./flux-instance/ks.yaml
   - ./generic-device-plugin/ks.yaml
   - ./home-assistant/ks.yaml
   - ./multus/ks.yaml

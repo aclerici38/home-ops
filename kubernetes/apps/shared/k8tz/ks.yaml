@@ -6,12 +6,11 @@ metadata:
   namespace: &ns cluster-utilities
 spec:
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-cert-manager
+    - name: cert-manager
   path: ./kubernetes/apps/shared/k8tz/app
   sourceRef:
     kind: GitRepository

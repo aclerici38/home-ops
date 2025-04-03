@@ -10,7 +10,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-external-secrets-stores
+    - name: external-secrets-stores
       namespace: external-secrets
   interval: 1h
   path: ./kubernetes/apps/common/emqx/app
@@ -23,7 +23,6 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   timeout: 5m
   postBuild:
     substitute:
@@ -55,7 +54,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-emqx
+    - name: emqx
   interval: 1h
   path: ./kubernetes/apps/common/emqx/cluster
   components:

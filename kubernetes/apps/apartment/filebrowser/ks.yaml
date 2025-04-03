@@ -15,7 +15,7 @@ spec:
     - ../../../../components/volsync/minio
   prune: true
   dependsOn:
-    - name: ${CLUSTER_NAME}-volsync
+    - name: volsync
       namespace: storage
     - name: minio
       namespace: cluster-utilities

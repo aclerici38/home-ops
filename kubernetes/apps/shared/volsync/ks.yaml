@@ -7,12 +7,11 @@ metadata:
   namespace: &ns storage
 spec:
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-snapshot-controller
+    - name: snapshot-controller
   path: ./kubernetes/apps/shared/volsync/app
   prune: true
   sourceRef:

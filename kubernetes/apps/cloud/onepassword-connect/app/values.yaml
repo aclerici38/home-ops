@@ -93,6 +93,7 @@ defaultPodOptions:
 service:
   app:
     controller: onepassword-connect
+    clusterIP: 
     ports:
       http:
         port: *apiPort

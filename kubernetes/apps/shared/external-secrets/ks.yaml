@@ -7,7 +7,6 @@ metadata:
   namespace: &ns external-secrets
 spec:
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -33,12 +32,11 @@ metadata:
   namespace: &ns external-secrets
 spec:
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-external-secrets
+    - name: external-secrets
   path: ./kubernetes/apps/shared/external-secrets/stores
   prune: true
   sourceRef:

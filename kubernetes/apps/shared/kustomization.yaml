@@ -2,7 +2,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namePrefix: ${CLUSTER_NAME}-
 resources:
   - ./blocky/ks.yaml
   - ./cert-manager/ks.yaml
@@ -19,6 +18,7 @@ resources:
   - ./k8s-gateway/ks.yaml
   - ./k8tz/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
+  - ./kustomize-mutating-webhook/ks.yaml
   - ./metrics-server/ks.yaml
   - ./node-feature-discovery/ks.yaml
   - ./openspeedtest/ks.yaml

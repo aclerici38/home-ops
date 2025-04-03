@@ -39,7 +39,7 @@ spec:
 #     labels:
 #       app.kubernetes.io/name: *app
 #   dependsOn:
-#     - name: ${CLUSTER_NAME}-cilium
+#     - name: cilium
 #   path: ./kubernetes/apps/shared/cilium/gateway
 #   prune: true
 #   sourceRef:
@@ -65,7 +65,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-cilium
+    - name: cilium
   path: ./kubernetes/apps/common/cilium/networking
   prune: true
   sourceRef:

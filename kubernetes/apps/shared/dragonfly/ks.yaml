@@ -7,7 +7,6 @@ metadata:
   namespace: &ns database
 spec:
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -38,7 +37,7 @@ spec:
   path: ./kubernetes/apps/shared/dragonfly/cluster
   prune: true
   dependsOn:
-    - name: ${CLUSTER_NAME}-dragonfly
+    - name: dragonfly
   sourceRef:
     kind: GitRepository
     name: flux-system

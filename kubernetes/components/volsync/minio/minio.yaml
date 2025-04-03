@@ -13,7 +13,7 @@ spec:
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: "{{ .RESTIC_REPOSITORY }}/{{ .BUCKET }}/${NAME_PREFIX}${APP}"
+        RESTIC_REPOSITORY: "{{ .RESTIC_REPOSITORY }}/{{ .BUCKET }}/${APP}"
         RESTIC_PASSWORD: "{{ .RESTIC_PASSWORD }}"
         AWS_ACCESS_KEY_ID: "{{ .AWS_ACCESS_KEY_ID }}"
         AWS_SECRET_ACCESS_KEY: "{{ .AWS_SECRET_ACCESS_KEY }}"
@@ -47,13 +47,13 @@ metadata:
   name: "${APP}"
   namespace: "${NAMESPACE}"
 spec:
-  sourcePVC: "${NAME_PREFIX}${APP}"
+  sourcePVC: "${APP}"
   trigger:
     schedule: "${VOLSYNC_SCHEDULE:-0 3 * * *}"
   restic:
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     pruneIntervalDays: 14
-    repository: "${NAME_PREFIX}${APP}-volsync-minio-secret"
+    repository: "${APP}-volsync-minio-secret"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]
     storageClassName: "${VOLSYNC_STORAGECLASS:-local-hostpath}"
     accessModes: ["${VOLSYNC_SNAP_ACCESSMODES:-ReadWriteOnce}"]
@@ -76,7 +76,7 @@ spec:
   trigger:
     manual: restore-once
   restic:
-    repository: "${NAME_PREFIX}${APP}-volsync-minio-secret"
+    repository: "${APP}-volsync-minio-secret"
     copyMethod: Snapshot
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-local-hostpath}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-local-hostpath}"

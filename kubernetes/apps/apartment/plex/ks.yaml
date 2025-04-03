@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-volsync
+    - name: volsync
       namespace: storage
     - name: truenas-scale
       namespace: truenas-scale

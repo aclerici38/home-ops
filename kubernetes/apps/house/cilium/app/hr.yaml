@@ -21,7 +21,7 @@ spec:
       retries: 1
   valuesFrom:
     - kind: ConfigMap
-      name: house-cilium-shared-helm-values
+      name: cilium-shared-helm-values
       optional: false
   values:
     bgpControlPlane:

@@ -10,9 +10,9 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-external-secrets-stores
+    - name: external-secrets-stores
       namespace: external-secrets
-    - name: ${CLUSTER_NAME}-volsync
+    - name: volsync
       namespace: storage
   path: ./kubernetes/apps/apartment/minio/app
   components:

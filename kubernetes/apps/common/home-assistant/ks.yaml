@@ -6,14 +6,13 @@ metadata:
   namespace: &ns home
 spec:
   targetNamespace: *ns
-  namePrefix: &prefix ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-volsync
+    - name: volsync
       namespace: storage
-    - name: ${CLUSTER_NAME}-multus
+    - name: multus
       namespace: network
     - name: minio
       namespace: cluster-utilities

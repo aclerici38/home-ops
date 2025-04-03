@@ -21,7 +21,7 @@ spec:
       retries: 1
   valuesFrom:
     - kind: ConfigMap
-      name: apartment-cilium-helm-values
+      name: cilium-shared-helm-values
       optional: false
   values:
     hubble:

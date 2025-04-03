@@ -16,9 +16,9 @@ spec:
     - ../../../../components/external-secret
   prune: true
   dependsOn:
-    - name: ${CLUSTER_NAME}-dragonfly-cluster
+    - name: dragonfly-cluster
       namespace: database
-    - name: ${CLUSTER_NAME}-cloudnative-pg
+    - name: cloudnative-pg
       namespace: database
   sourceRef:
     kind: GitRepository

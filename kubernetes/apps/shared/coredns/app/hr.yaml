@@ -7,9 +7,9 @@ metadata:
 spec:
   interval: 1h
   dependsOn:
-    - name: ${CLUSTER_NAME}-dnscrypt-proxy
+    - name: dnscrypt-proxy
       namespace: network
-    - name: ${CLUSTER_NAME}-blocky
+    - name: blocky
       namespace: network
   chartRef:
     kind: OCIRepository

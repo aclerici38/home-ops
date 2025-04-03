@@ -7,7 +7,6 @@ metadata:
   namespace: &ns kube-system
 spec:
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -40,7 +39,7 @@ spec:
 #     labels:
 #       app.kubernetes.io/name: *app
 #   dependsOn:
-#     - name: ${CLUSTER_NAME}-cilium
+#     - name: cilium
 #   path: ./kubernetes/apps/common/cilium/gateway
 #   prune: true
 #   sourceRef:
@@ -66,7 +65,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-cilium
+    - name: cilium
   path: ./kubernetes/apps/common/cilium/networking
   prune: true
   sourceRef:

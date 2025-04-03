@@ -17,7 +17,7 @@ spec:
   secretName: k8tz-webhook-ca
   duration: 43800h # 5y
   issuerRef:
-    name: ${CLUSTER_NAME}-k8tz-webhook-selfsign
+    name: k8tz-webhook-selfsign
     kind: Issuer
   commonName: "ca.k8tz.cert-manager"
   isCA: true
@@ -29,4 +29,4 @@ metadata:
   name: k8tz-webhook-ca
 spec:
   ca:
-    secretName: ${CLUSTER_NAME}-k8tz-webhook-ca
+    secretName: k8tz-webhook-ca

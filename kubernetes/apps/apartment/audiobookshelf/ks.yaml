@@ -10,7 +10,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-volsync
+    - name: volsync
       namespace: storage
     - name: minio
       namespace: cluster-utilities

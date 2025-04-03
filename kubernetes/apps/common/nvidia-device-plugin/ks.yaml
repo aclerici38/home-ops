@@ -7,7 +7,6 @@ metadata:
   namespace: &ns kube-system
 spec:
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -37,7 +36,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/common/nvidia-device-plugin/runtimeclass
   dependsOn:
-    - name: ${CLUSTER_NAME}-nvidia-device-plugin
+    - name: nvidia-device-plugin
   sourceRef:
     kind: GitRepository
     name: flux-system

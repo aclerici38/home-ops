@@ -8,7 +8,7 @@ spec:
   dataSourceRef:
     kind: ReplicationDestination
     apiGroup: volsync.backube
-    name: "${NAME_PREFIX}${APP}-dst"
+    name: "${APP}-dst"
   resources:
     requests:
       storage: "${VOLSYNC_CAPACITY:-5Gi}"

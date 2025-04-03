@@ -42,7 +42,7 @@ spec:
               DB_CONNECTION_STRING:
                 valueFrom:
                   secretKeyRef:
-                    name: ${CLUSTER_NAME}-${APP}-db-app
+                    name: ${APP}-db-app
                     key: uri
             envFrom:
               - secretRef:

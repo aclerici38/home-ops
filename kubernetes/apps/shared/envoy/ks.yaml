@@ -7,12 +7,11 @@ metadata:
   namespace: &ns network
 spec:
   targetNamespace: *ns
-  namePrefix: ${CLUSTER_NAME}-
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-cilium
+    - name: cilium
       namespace: kube-system
   path: ./kubernetes/apps/shared/envoy/app
   prune: true
@@ -40,7 +39,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: ${CLUSTER_NAME}-envoy
+    - name: envoy
   path: ./kubernetes/apps/shared/envoy/gateway
   prune: true
   sourceRef:
@@ -67,7 +66,7 @@ spec:
 #     labels:
 #       app.kubernetes.io/name: *app
 #   dependsOn:
-#     - name: ${CLUSTER_NAME}-envoy-gateway
+#     - name: envoy-gateway
 #   path: ./kubernetes/apps/shared/envoy/config
 #   prune: true
 #   sourceRef:

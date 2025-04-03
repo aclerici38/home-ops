@@ -8,13 +8,13 @@ metadata:
 spec:
   targetNamespace: *ns
   dependsOn:
-    - name: ${CLUSTER_NAME}-external-secrets-stores
+    - name: external-secrets-stores
       namespace: external-secrets
-    - name: ${CLUSTER_NAME}-cloudnative-pg
+    - name: cloudnative-pg
       namespace: database
     - name: minio
       namespace: cluster-utilities
-    - name: ${CLUSTER_NAME}-volsync
+    - name: volsync
       namespace: storage
     - name: minio
       namespace: cluster-utilities

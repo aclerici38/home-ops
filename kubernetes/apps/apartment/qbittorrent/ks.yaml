@@ -23,9 +23,9 @@ spec:
     namespace: flux-system
   wait: true
   dependsOn:
-    - name: ${CLUSTER_NAME}-volsync
+    - name: volsync
       namespace: storage
-    - name: ${CLUSTER_NAME}-external-secrets-stores
+    - name: external-secrets-stores
       namespace: external-secrets
     - name: truenas-scale
       namespace: truenas-scale

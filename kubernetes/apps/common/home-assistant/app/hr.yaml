@@ -34,7 +34,7 @@ spec:
             k8s.v1.cni.cncf.io/networks: |
               [
                 {
-                  "name":"${CLUSTER_NAME}-multus-home-net",
+                  "name":"multus-home-net",
                   "namespace": "network",
                   "ips": ["${MULTUS_HASS_ADDRESS}"]
                 }
@@ -104,11 +104,11 @@ spec:
     #             port: *port
     persistence:
       config:
-        existingClaim: ${CLUSTER_NAME}-${APP}
+        existingClaim: ${APP}
         globalMounts:
           - path: /config
       hass-cache:
-        existingClaim: ${CLUSTER_NAME}-hass-cache
+        existingClaim: hass-cache
         advancedMounts:
           main:
             *app :
