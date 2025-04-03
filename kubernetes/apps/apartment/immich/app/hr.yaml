@@ -188,3 +188,5 @@ spec:
                 subPath: config.yaml
       cache:
         existingClaim: immich-ml-cache
+      tmp:
+        type: emptyDir
