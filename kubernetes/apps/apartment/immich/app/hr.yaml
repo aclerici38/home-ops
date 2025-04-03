@@ -112,6 +112,7 @@ spec:
                   failureThreshold: 60
             securityContext: *contSec
     defaultPodOptions:
+      runtimeClassName: nvidia
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
