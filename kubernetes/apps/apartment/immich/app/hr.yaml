@@ -25,16 +25,6 @@ spec:
       server:
         containers:
           immich-server:
-            lifecycle:
-              postStart:
-                exec:
-                  command:
-                    - |
-                      touch /usr/src/app/upload/upload/.immich
-                      touch /usr/src/app/upload/profile/.immich
-                      touch /usr/src/app/upload/library/.immich
-                      touch /usr/src/app/upload/thumbs/.immich
-                      touch /usr/src/app/upload/encoded-video/.immich
             image:
               repository: ghcr.io/immich-app/immich-server
               tag:  ${IMMICH_VERSION}
@@ -44,6 +34,7 @@ spec:
               REDIS_DBINDEX: 2
               IMMICH_TELEMETRY_INCLUDE: all
               IMMICH_CONFIG_FILE: &config /config/immich-config.yaml
+              IMMICH_IGNORE_MOUNT_CHECK_ERRORS: true
               DB_URL:
                 valueFrom:
                   secretKeyRef:
@@ -126,7 +117,7 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
+        fsGroupChangePolicy: Always
         seccompProfile: { type: RuntimeDefault }
     service:
       *app :
