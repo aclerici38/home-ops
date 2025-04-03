@@ -26,32 +26,32 @@ spec:
       CLUSTER_ID: ${CLUSTER_ID}
       POD_NET: ${POD_NET}
       CLUSTERMESH_PORT: ${CLUSTERMESH_PORT}
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app apartment-cilium-gateway
-  namespace: &ns kube-system
-spec:
-  targetNamespace: *ns
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-  dependsOn:
-    - name: ${CLUSTER_NAME}-cilium
-  path: ./kubernetes/apps/shared/cilium/gateway
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  wait: true
-  interval: 30m
-  timeout: 5m
-  postBuild:
-    substitute:
-      CLUSTER_NAME: ${CLUSTER_NAME}
+# ---
+# # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: &app apartment-cilium-gateway
+#   namespace: &ns kube-system
+# spec:
+#   targetNamespace: *ns
+#   commonMetadata:
+#     labels:
+#       app.kubernetes.io/name: *app
+#   dependsOn:
+#     - name: ${CLUSTER_NAME}-cilium
+#   path: ./kubernetes/apps/shared/cilium/gateway
+#   prune: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#     namespace: flux-system
+#   wait: true
+#   interval: 30m
+#   timeout: 5m
+#   postBuild:
+#     substitute:
+#       CLUSTER_NAME: ${CLUSTER_NAME}
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
