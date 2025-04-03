@@ -12,7 +12,7 @@ instance:
     kind: GitRepository
     url: "https://github.com/ant385525/home-ops.git"
     ref: refs/heads/main
-    path: kubernetes/flux/clusters/${CLUSTER_NAME}
+    path: kubernetes/flux/clusters/apartment
   distribution:
     registry: "ghcr.io/fluxcd"
     # renovate: datasource=github-releases depName=controlplaneio-fluxcd/distribution

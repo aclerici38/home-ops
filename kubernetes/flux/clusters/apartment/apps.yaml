@@ -16,9 +16,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  kubeConfig:
-    secretRef:
-      name: apartment-kubeconfig
   postBuild:
     substitute:
       CLUSTER_NAME: "apartment"

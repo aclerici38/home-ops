@@ -3,6 +3,8 @@
 serviceMonitor:
   create: true
 
+installCRDs: true
+
 securityContext:
   runAsNonRoot: true
   readOnlyRootFilesystem: true
