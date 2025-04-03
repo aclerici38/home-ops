@@ -23,25 +23,27 @@ jobs:
         with:
           patterns: kubernetes/**/*
 
-  # Doesn't work with gitrepos for now
-  # test:
-  #   if: ${{ needs.filter.outputs.changed-files != '[]' }}
-  #   needs: filter
-  #   name: Flux Local - Test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+  test:
+    if: ${{ needs.filter.outputs.changed-files != '[]' }}
+    needs: filter
+    name: Flux Local - Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cluster: ["main", "test", "utility"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-  #     - name: Run flux-local test
-  #       uses: docker://ghcr.io/allenporter/flux-local:v7.3.0
-  #       with:
-  #         args: >-
-  #           test
-  #           --all-namespaces
-  #           --enable-helm
-  #           --path /github/workspace/kubernetes/flux
-  #           --verbose
+      - name: Run flux-local test
+        uses: docker://ghcr.io/allenporter/flux-local:v7.3.0
+        with:
+          args: >-
+            test
+            --all-namespaces
+            --enable-helm
+            --path /github/workspace/kubernetes/clusters/${{ matrix.cluster }}
+            --verbose
 
   diff:
     if: ${{ needs.filter.outputs.changed-files != '[]' }}
@@ -52,6 +54,7 @@ jobs:
       pull-requests: write
     strategy:
       matrix:
+        cluster: ["cloud", "apartment", "house"]
         resource: ["helmrelease", "kustomization"]
       fail-fast: false
     steps:
@@ -70,14 +73,12 @@ jobs:
         uses: docker://ghcr.io/allenporter/flux-local:v7.3.0
         with:
           args: >-
-            --log-level DEBUG
             diff ${{ matrix.resource }}
             --unified 6
-            --path /github/workspace/pull/kubernetes/flux
-            --path-orig /github/workspace/default/kubernetes/flux
+            --path /github/workspace/pull/kubernetes/flux/clusters/${{ matrix.cluster }}
+            --path-orig /github/workspace/default/kubernetes/flux/clusters/${{ matrix.cluster }}
             --strip-attrs "helm.sh/chart,checksum/config,app.kubernetes.io/version,chart"
             --limit-bytes 10000
-            --no-skip-crds
             --all-namespaces
             --sources "flux-system"
             --output-file diff.patch
@@ -111,7 +112,7 @@ jobs:
 
   success:
     if: ${{ !cancelled() }}
-    needs: ["diff"]
+    needs: ["test", "diff"]
     name: Flux Local - Success
     runs-on: ubuntu-latest
     steps:

@@ -1,6 +1,5 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/helmfile
-
 helmDefaults:
   timeout: 600
   force: true
@@ -17,15 +16,23 @@ hooks:
       - "kustomize build /Users/anthony/home-ops/kubernetes/resources/crds | kubectl apply --server-side -f -"
 
 releases:
-  - name: house-cilium
+  - name: apartment-cilium
     namespace: kube-system
     chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     atomic: true
     version: 1.17.2
     values:
       - /Users/anthony/home-ops/kubernetes/apps/shared/cilium/values.yaml
+      - cluster:
+          name: apartment
+          id: 2
+        ipv4NativeRoutingCIDR: 10.210.0.0/16
+        clustermesh:
+          apiserver:
+            service:
+              nodePort: 32379
 
-  - name: house-coredns
+  - name: apartment-coredns
     namespace: kube-system
     chart: oci://ghcr.io/coredns/charts/coredns
     atomic: true
@@ -42,6 +49,59 @@ releases:
           create: true
         service:
           name: kube-dns
-          clusterIP: 10.225.0.10
+          clusterIP: 10.215.0.10
     needs:
-      - cilium/cilium
+      - cilium/apartment-cilium
+
+  - name: apartment-cert-manager
+    namespace: cluster-utilities
+    atomic: true
+    chart: oci://ghcr.io/home-operations/charts-mirror/cert-manager
+    version: v1.17.1
+    values:
+      - crds:
+          enabled: true
+    needs:
+      - kube-system/apartment-coredns
+
+  - name: apartment-external-secrets
+    namespace: external-secrets
+    atomic: true
+    chart: oci://ghcr.io/external-secrets/charts/external-secrets
+    version: 0.15.1
+    needs:
+      - kube-system/apartment-coredns
+      - onepassword-connect
+    hooks:
+      - events: ["postsync"]
+        showlogs: true
+        command: "kubectl"
+        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/shared/external-secrets/stores/clustersecretstore.yaml"]
+
+  - name: flux-instance
+    namespace: flux-system
+    atomic: true
+    chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
+    version: 0.18.0
+    values:
+      - /Users/anthony/home-ops/kubernetes/apps/apartment/flux/instance/values.yaml
+    needs:
+      - flux-system/flux-operator
+      - external-secrets/apartment-external-secrets
+
+  - name: kustomize-mutating-webhook
+    namespace: flux-system
+    atomic: true
+    chart: oci://ghcr.io/xunholy/charts/kustomize-mutating-webhook
+    version: 0.4.3
+    values:
+      - /Users/anthony/home-ops/kubernetes/apps/apartment/kustomize-mutating-webhook/app/values.yaml
+    needs:
+      - flux-system/flux-instance
+      - cluster-utilities/apartment-cert-manager
+      - external-secrets/apartment-external-secrets
+    hooks:
+      - events: ["presync"]
+        showlogs: true
+        command: "kubectl"
+        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/flux/meta/settings/cluster-secrets.yaml"]
