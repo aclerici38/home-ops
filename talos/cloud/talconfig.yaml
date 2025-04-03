@@ -64,7 +64,15 @@ nodes:
         routes:
           - network: 192.168.9.25/32
             gateway: 10.10.0.1
+          - network: 10.210.0.0/16
+            gateway: 10.10.0.1
+          - network: 10.215.0.0/16
+            gateway: 10.10.0.1
           - network: 10.0.30.28/32
+            gateway: 10.10.0.2
+          - network: 10.220.0.0/16
+            gateway: 10.10.0.2
+          - network: 10.225.0.0/16
             gateway: 10.10.0.2
         wireguard:
           privateKey: ${MADBUM_WG_PRIVATE_KEY}
@@ -75,12 +83,16 @@ nodes:
               allowedIPs:
                 - 192.168.9.25/32
                 - 10.10.0.1/32
+                - 10.210.0.0/16
+                - 10.215.0.0/16
               persistentKeepaliveInterval: 10s
             - publicKey: ${POSEY_WG_PUBLIC_KEY}
               endpoint: ${OFFICE_WG_ENDPOINT}
               allowedIPs:
                 - 10.0.30.28/32
                 - 10.10.0.2/32
+                - 10.220.0.0/16
+                - 10.225.0.0/16
               persistentKeepaliveInterval: 10s
 
 # Global patches
