@@ -29,7 +29,7 @@ spec:
               repository: ghcr.io/immich-app/immich-server
               tag:  ${IMMICH_VERSION}
             env:
-              IMMICH_LOG_LEVEL: info
+              IMMICH_LOG_LEVEL: log
               REDIS_HOSTNAME: dragonfly-db.database.svc.cluster.local
               REDIS_DBINDEX: 2
               IMMICH_TELEMETRY_INCLUDE: all
