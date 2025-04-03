@@ -84,6 +84,7 @@ spec:
               MACHINE_LEARNING_MODEL_TTL: 0
               MACHINE_LEARNING_CACHE_FOLDER: /cache
               MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: ViT-SO400M-16-SigLIP2-384__webli
+              IMMICH_IGNORE_MOUNT_CHECK_ERRORS: true
             resources: *resources
             probes:
               liveness: &probes
