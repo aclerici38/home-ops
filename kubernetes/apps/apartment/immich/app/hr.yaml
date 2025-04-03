@@ -164,7 +164,14 @@ spec:
         advancedMounts:
           server:
             immich-server:
-                - path: /usr/src/app/upload
+              - path: /usr/src/app/upload
+                subPath: upload
+              - path: /usr/src/app/encoded
+                subPath: encoded-video
+              - path: /usr/src/app/profile
+                subPath: profile
+              - path: /usr/src/app/library
+                subPath: library
       thumbnails:
         existingClaim: immich-thumbnails
         advancedMounts:
