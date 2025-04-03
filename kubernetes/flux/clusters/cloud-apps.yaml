@@ -18,7 +18,7 @@ spec:
     name: flux-system
   kubeConfig:
     secretRef:
-      name: house-kubeconfig
+      name: cloud-kubeconfig
   postBuild:
     substitute:
       CLUSTER_NAME: cloud

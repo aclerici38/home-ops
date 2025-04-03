@@ -34,6 +34,7 @@ spec:
               REDIS_DBINDEX: 2
               IMMICH_TELEMETRY_INCLUDE: all
               IMMICH_CONFIG_FILE: &config /config/immich-config.yaml
+              IMMICH_IGNORE_MOUNT_CHECK_ERRORS: true
               DB_URL:
                 valueFrom:
                   secretKeyRef:
