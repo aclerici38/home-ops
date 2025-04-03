@@ -161,17 +161,23 @@ spec:
         type: nfs
         server: 10.38.55.50
         path: /mnt/tank/immich
-        globalMounts:
-          - path: /usr/src/app/upload
+        advancedMounts:
+          server:
+            immich-server:
+                - path: /usr/src/app/upload
       thumbnails:
         existingClaim: immich-thumbnails
-        globalMounts:
-          - path: /usr/src/app/upload/thumbs
+        advancedMounts:
+          server:
+            immich-server:
+              - path: /usr/src/app/upload/thumbs
       config:
         type: configMap
         name: immich-config
-        globalMounts:
-          - path: *config
-            subPath: config.yaml
+        advancedMounts:
+          server:
+            immich-server:
+              - path: *config
+                subPath: config.yaml
       cache:
         existingClaim: immich-ml-cache
