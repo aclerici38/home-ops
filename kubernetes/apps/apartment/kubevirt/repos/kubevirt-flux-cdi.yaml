@@ -8,7 +8,7 @@ spec:
   url: https://github.com/JJGadgets/kubevirt-flux.git
   ref:
     # renovate: datasource=github-releases depName=kubevirt/containerized-data-importer
-    # renovate:extractVersion=^cdi-(?<version>v\d+\.\d+\.\d+)$
+    # renovate: extractVersion=^cdi-(?<version>v\d+\.\d+\.\d+)$
     branch: cdi-v1.61.2
   ignore: |
     # exclude all to whitelist
