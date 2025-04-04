@@ -43,19 +43,19 @@ spec:
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
             command: ["python", "-m", "app"]
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /request/api/status
-                    port: *port
-                  initialDelaySeconds: 5
-                  periodSeconds: 30
-                  timeoutSeconds: 30
-                  failureThreshold: 3
-              readiness: *probes
+            # probes:
+            #   liveness: &probes
+            #     enabled: true
+            #     custom: true
+            #     spec:
+            #       httpGet:
+            #         path: /request/api/status
+            #         port: *port
+            #       initialDelaySeconds: 5
+            #       periodSeconds: 30
+            #       timeoutSeconds: 30
+            #       failureThreshold: 3
+            #   readiness: *probes
             resources:
               requests:
                 cpu: 10m
