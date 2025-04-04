@@ -34,14 +34,16 @@ spec:
         containers:
           *app :
             image:
-              repository: docker.io/ant385525/calibre-downloader
-              tag: test
+              repository: ghcr.io/calibrain/calibre-web-automated-book-downloader
+              tag: 20250404@sha256:f870ae46ac7fc2b45f2d2ac2dcdc67351dd0ecf18ddcce51e5fa38771409f622
             env:
               FLASK_PORT: &port 8084
               FLASK_DEBUG: true
               LOG_LEVEL: debug
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
+              HOME: /tmp
+              TMPDIR: /tmp
             command: ["python", "-m", "app"]
             probes:
               liveness: &probes
