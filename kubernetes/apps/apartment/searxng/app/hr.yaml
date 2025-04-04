@@ -24,8 +24,6 @@ spec:
     controllers:
       main:
         pod:
-          nodeSelector:
-            location: cloud
           securityContext:
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
