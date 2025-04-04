@@ -20,6 +20,9 @@ sysctlfix:
   enabled: false
 hubble:
   enabled: true
+  ui:
+    enabled: true
+    rollOutPods: true
   metrics:
     enabled:
       - "dns:query"
@@ -61,54 +64,6 @@ loadBalancer:
   mode: "dsr"
 nodePort:
   enabled: true
-clustermesh:
-  useAPIServer: true
-  config:
-    enabled: true
-    clusters:
-      - name: apartment
-        port: 32379
-        ips:
-          - 192.168.9.25
-      - name: house
-        port: 32579
-        ips:
-          - 10.0.30.28
-      - name: cloud
-        port: 32479
-        ips:
-          - 10.40.40.41
-  apiserver:
-    kvstoremesh:
-      enabled: false
-    etcd:
-      storageMedium: Memory
-    requests:
-      cpu: 100m
-      memory: 500Mi
-    limits:
-      cpu: 1000m
-      memory: 2048M
-    tls:
-      authMode: cluster
-      auto:
-        enabled: true
-        method: certmanager
-        certManagerIssuerRef:
-          group: cert-manager.io
-          kind: ClusterIssuer
-          name: cilium-shared-issuer
-    metrics:
-      enabled: true
-      port: 9962
-      kvstoremesh:
-        enabled: false
-      etcd:
-        enabled: true
-        mode: basic
-        port: 9963
-      serviceMonitor:
-        enabled: true
 operator:
   replicas: 1
   rollOutPods: true
@@ -126,8 +81,6 @@ prometheus:
     trustCRDsExist: true
 rollOutCiliumPods: true
 routingMode: native
-# For clustermesh over wg interfaces
-directRoutingSkipUnreachable: true
 socketLB:
   enabled: true
   hostNamespaceOnly: true

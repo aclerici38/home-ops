@@ -29,7 +29,3 @@ spec:
       id: ${CLUSTER_ID}
     cni:
       exclusive: false
-    clustermesh:
-      apiserver:
-        service:
-          nodePort: ${CLUSTERMESH_PORT}

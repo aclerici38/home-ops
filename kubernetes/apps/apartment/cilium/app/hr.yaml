@@ -24,10 +24,6 @@ spec:
       name: cilium-shared-helm-values
       optional: false
   values:
-    hubble:
-      ui:
-        enabled: true
-        rollOutPods: true
     bgpControlPlane:
       enabled: true
     cluster:
@@ -35,7 +31,3 @@ spec:
       id: ${CLUSTER_ID}
     cni:
       exclusive: false
-    clustermesh:
-      apiserver:
-        service:
-          nodePort: ${CLUSTERMESH_PORT}
