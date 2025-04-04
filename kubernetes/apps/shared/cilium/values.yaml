@@ -79,6 +79,8 @@ clustermesh:
         ips:
           - 10.40.40.41
   apiserver:
+    kvstoremesh:
+      enabled: false
     etcd:
       storageMedium: Memory
     requests:
