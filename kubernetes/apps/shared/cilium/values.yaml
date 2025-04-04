@@ -81,9 +81,6 @@ clustermesh:
   apiserver:
     etcd:
       storageMedium: Memory
-    # service:
-    #   type: NodePort
-    #   nodePort: 32379
     requests:
       cpu: 100m
       memory: 500Mi
@@ -98,8 +95,7 @@ clustermesh:
       enabled: true
       port: 9962
       kvstoremesh:
-        enabled: true
-        port: 9964
+        enabled: false
       etcd:
         enabled: true
         mode: basic
