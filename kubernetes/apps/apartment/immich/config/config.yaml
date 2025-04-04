@@ -42,6 +42,7 @@ job:
     concurrency: 10
 
 machineLearning:
+  urls: ["http://immich-ml:3003"]
   clip:
     modelName: ViT-SO400M-16-SigLIP2-384__webli
   facialRecognition:
