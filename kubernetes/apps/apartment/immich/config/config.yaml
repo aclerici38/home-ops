@@ -54,7 +54,7 @@ machineLearning:
 
 oauth:
   enabled: true
-  issuerUrl: https://id.${SECRET_DOMAIN}/.well-known/openid-configuration
+  issuerUrl: https://id.${SECRET_DOMAIN}/
   autoLaunch: false
   autoRegister: true
   buttonText: Login with Pocket ID
