@@ -43,7 +43,6 @@ spec:
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
               HOME: /tmp
-              TMPDIR: /tmp
             command: ["python", "-m", "app"]
             probes:
               liveness: &probes
