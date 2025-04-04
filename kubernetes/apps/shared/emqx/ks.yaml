@@ -13,7 +13,7 @@ spec:
     - name: external-secrets-stores
       namespace: external-secrets
   interval: 1h
-  path: ./kubernetes/apps/common/emqx/app
+  path: ./kubernetes/apps/shared/emqx/app
   components:
     - ../../../../components/external-secret
   prune: true
@@ -56,7 +56,7 @@ spec:
   dependsOn:
     - name: emqx
   interval: 1h
-  path: ./kubernetes/apps/common/emqx/cluster
+  path: ./kubernetes/apps/shared/emqx/cluster
   components:
     - ../../../../components/external-secret
   prune: true

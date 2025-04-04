@@ -16,7 +16,7 @@ spec:
       namespace: network
     - name: minio
       namespace: cluster-utilities
-  path: ./kubernetes/apps/common/home-assistant/app
+  path: ./kubernetes/apps/shared/home-assistant/app
   components:
     - ../../../../components/volsync/minio
   prune: true

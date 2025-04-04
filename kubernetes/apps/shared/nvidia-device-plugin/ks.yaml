@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/common/nvidia-device-plugin/app
+  path: ./kubernetes/apps/shared/nvidia-device-plugin/app
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -34,7 +34,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/common/nvidia-device-plugin/runtimeclass
+  path: ./kubernetes/apps/shared/nvidia-device-plugin/runtimeclass
   dependsOn:
     - name: nvidia-device-plugin
   sourceRef:

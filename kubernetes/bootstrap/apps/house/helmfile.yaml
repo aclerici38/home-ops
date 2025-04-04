@@ -93,7 +93,7 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
     version: 0.18.0
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/cloud/flux/operator/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/shared/flux/operator/values.yaml
     needs:
       - kube-system/coredns
 
