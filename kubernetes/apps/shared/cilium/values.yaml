@@ -126,6 +126,8 @@ prometheus:
     trustCRDsExist: true
 rollOutCiliumPods: true
 routingMode: native
+# For clustermesh over wg interfaces
+directRoutingSkipUnreachable: true
 socketLB:
   enabled: true
   hostNamespaceOnly: true
