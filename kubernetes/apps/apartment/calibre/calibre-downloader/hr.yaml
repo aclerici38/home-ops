@@ -34,8 +34,8 @@ spec:
         containers:
           *app :
             image:
-              repository: ghcr.io/calibrain/calibre-web-automated-book-downloader
-              tag: 20250404@sha256:f870ae46ac7fc2b45f2d2ac2dcdc67351dd0ecf18ddcce51e5fa38771409f622
+              repository: docker.io/ant385525/calibre-downloader
+              tag: test
             env:
               FLASK_PORT: &port 8084
               FLASK_DEBUG: true
@@ -43,19 +43,19 @@ spec:
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
             command: ["python", "-m", "app"]
-            # probes:
-            #   liveness: &probes
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       httpGet:
-            #         path: /request/api/status
-            #         port: *port
-            #       initialDelaySeconds: 5
-            #       periodSeconds: 30
-            #       timeoutSeconds: 30
-            #       failureThreshold: 3
-            #   readiness: *probes
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /request/api/status
+                    port: *port
+                  initialDelaySeconds: 5
+                  periodSeconds: 30
+                  timeoutSeconds: 30
+                  failureThreshold: 5
+              readiness: *probes
             resources:
               requests:
                 cpu: 10m
