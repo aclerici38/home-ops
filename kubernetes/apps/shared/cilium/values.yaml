@@ -90,9 +90,14 @@ clustermesh:
       cpu: 1000m
       memory: 2048M
     tls:
-      authMode: legacy
+      authMode: cluster
       auto:
         enabled: true
+        method: certmanager
+        certManagerIssuerRef:
+          group: cert-manager.io
+          kind: ClusterIssuer
+          name: cilium-shared-issuer
     metrics:
       enabled: true
       port: 9962
