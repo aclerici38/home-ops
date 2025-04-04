@@ -4,9 +4,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../resources/namespaces
+  - ../../resources/crds
 
   - ../shared
-  - ../common
 
   - ./atuin/ks.yaml
   - ./audiobookshelf/ks.yaml
@@ -31,12 +31,14 @@ resources:
   - ./ollama/ks.yaml
   - ./open-webui/ks.yaml
   - ./plex/ks.yaml
+  - ./pocket-id/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
   - ./radarr/ks.yaml
   - ./recommendarr/ks.yaml
   - ./recyclarr/ks.yaml
   - ./redisinsight/ks.yaml
+  - ./searxng/ks.yaml
   - ./sonarr/ks.yaml
   - ./vikunja/ks.yaml
   - ./zigbee2mqtt/ks.yaml
