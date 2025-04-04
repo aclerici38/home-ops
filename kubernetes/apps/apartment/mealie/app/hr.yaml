@@ -41,7 +41,8 @@ spec:
               OIDC_REMEMBER_ME: "true"
               OIDC_USER_GROUP: "mealie_users"
               OIDC_USER_CLAIM: email
-              OIDC_AUTO_REDIRECT: 'false'
+              OIDC_AUTO_REDIRECT: 'true'
+              OIDC_CONFIGURATION_URL: https://id.${SECRET_DOMAIN}/.well-known/openid-configuration
 
               # ollama
               # OPENAI_BASE_URL: http://ollama.utilities:11434/v1
