@@ -52,14 +52,14 @@ machineLearning:
     enabled: true
     maxDistance: 0.001
 
-# oauth:
-#   enabled: true
-#   issuerUrl: https://id.${SECRET_DOMAIN}/application/o/immich/
-#   autoLaunch: false
-#   autoRegister: true
-#   buttonText: Login with Pocket ID
-#   clientId: ${CLIENT_ID}
-#   clientSecret: ${CLIENT_SECRET}
+oauth:
+  enabled: true
+  issuerUrl: https://id.${SECRET_DOMAIN}/application/o/immich/
+  autoLaunch: false
+  autoRegister: true
+  buttonText: Login with Pocket ID
+  clientId: ${CLIENT_ID}
+  clientSecret: ${CLIENT_SECRET}
 
 storageTemplate:
   enabled: true
