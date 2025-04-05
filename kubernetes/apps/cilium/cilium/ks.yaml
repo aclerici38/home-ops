@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/kube-system/cilium/app
+  path: ./kubernetes/apps/cilium/cilium/app
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
@@ -59,7 +59,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: cilium
-  path: ./kubernetes/apps/kube-system/cilium/networking
+  path: ./kubernetes/apps/cilium/cilium/networking
   prune: true
   sourceRef:
     kind: GitRepository
