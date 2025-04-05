@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: cilium
-      namespace: kube-system
+      namespace: cilium
   path: ./kubernetes/apps/network/envoy/app
   prune: true
   sourceRef:
