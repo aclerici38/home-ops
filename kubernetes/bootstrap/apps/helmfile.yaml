@@ -17,20 +17,12 @@ hooks:
 
 releases:
   - name: cilium
-    namespace: kube-system
+    namespace: cilim
     chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     atomic: true
     version: 1.17.2
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/shared/cilium/values.yaml
-      - cluster:
-          name: apartment
-          id: 2
-        ipv4NativeRoutingCIDR: 10.210.0.0/16
-        clustermesh:
-          apiserver:
-            service:
-              nodePort: 32379
+      - /Users/anthony/home-ops/kubernetes/apps/cilium/cilium/values.yaml
 
   - name: coredns
     namespace: kube-system
@@ -41,7 +33,7 @@ releases:
       - fullnameOverride: coredns
         image:
           repository: mirror.gcr.io/coredns/coredns
-        replicaCount: 1
+        replicaCount: 2
         k8sAppLabelOverride: kube-dns
         serviceAccount:
           create: true
@@ -49,9 +41,9 @@ releases:
           create: true
         service:
           name: kube-dns
-          clusterIP: 10.215.0.10
+          clusterIP: 10.55.0.10
     needs:
-      - kube-system/cilium
+      - cilium/cilium
 
   - name: cert-manager
     namespace: cluster-utilities
@@ -65,20 +57,22 @@ releases:
       - kube-system/coredns
 
   - name: onepassword-connect
-    namespace: external-secrets
+    namespace: cluster-utilities
     atomic: true
     chart: oci://ghcr.io/bjw-s/helm/app-template
     version: 3.7.3
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/shared/onepassword-connect/app/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/cluster-utilities/onepassword-connect/app/values.yaml
     needs:
-      - kube-system/cilium
+      - cilium/cilium
 
   - name: external-secrets
-    namespace: external-secrets
+    namespace: cluster-utilities
     atomic: true
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
     version: 0.15.1
+    values:
+      - /Users/anthony/home-ops/kubernetes/apps/cluster-utilities/external-secrets/app/values.yaml
     needs:
       - kube-system/coredns
       - onepassword-connect
@@ -86,7 +80,7 @@ releases:
       - events: ["postsync"]
         showlogs: true
         command: "kubectl"
-        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/shared/external-secrets/stores/clustersecretstore.yaml"]
+        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cluster-utilities/external-secrets/stores/clustersecretstore.yaml"]
 
   - name: flux-operator
     namespace: flux-system
@@ -94,7 +88,7 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
     version: 0.18.0
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/shared/flux/operator/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux/operator/values.yaml
     needs:
       - kube-system/coredns
 
@@ -104,23 +98,7 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
     version: 0.18.0
     values:
-      - instance:
-          cluster:
-            networkPolicy: false
-          components:
-            - source-controller
-            - kustomize-controller
-            - helm-controller
-            - notification-controller
-          sync:
-            kind: GitRepository
-            url: "https://github.com/ant385525/home-ops.git"
-            ref: refs/heads/main
-            path: kubernetes/flux/clusters/apartment
-          distribution:
-            registry: "ghcr.io/fluxcd"
-            # renovate: datasource=github-releases depName=controlplaneio-fluxcd/distribution
-            version: 2.5.1
+      - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux/instance/values.yaml
     needs:
       - flux-system/flux-operator
       - external-secrets/external-secrets
@@ -131,7 +109,7 @@ releases:
     chart: oci://ghcr.io/xunholy/charts/kustomize-mutating-webhook
     version: 0.4.3
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/shared/kustomize-mutating-webhook/app/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux/kustomize-mutating-webhook/values.yaml
     needs:
       - flux-system/flux-instance
       - cluster-utilities/cert-manager

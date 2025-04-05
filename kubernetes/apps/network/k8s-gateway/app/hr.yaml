@@ -34,10 +34,10 @@ spec:
       - name: prometheus
         parameters: 0.0.0.0:9153
       - name: forward
-        parameters: . 10.38.0.12
+        parameters: . 10.55.0.12
     service:
       type: ClusterIP
-      clusterIP: 10.38.0.13
+      clusterIP: 10.55.0.13
     debug:
       enabled: true
     serviceAccount:

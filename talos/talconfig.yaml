@@ -9,9 +9,9 @@ clusterName: dormammu
 endpoint: https://192.168.9.25:6443
 
 clusterPodNets:
-  - &podNet "10.210.0.0/16"
+  - &podNet "10.38.0.0/16"
 clusterSvcNets:
-  - &svcNet "10.210.0.0/16"
+  - &svcNet "10.55.0.0/16"
 
 additionalApiServerCertSans: &sans
   - "10.38.55.200"

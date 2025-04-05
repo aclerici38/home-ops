@@ -8,7 +8,7 @@ serviceAccount:
   create: true
 service:
   name: kube-dns
-  clusterIP: 10.38.0.10
+  clusterIP: 10.55.0.10
 servers:
   - zones:
       - zone: .
@@ -32,7 +32,7 @@ servers:
           pods insecure
           fallthrough in-addr.arpa ip6.arpa
       - name: forward
-        parameters: . 10.38.0.11
+        parameters: . 10.55.0.11
       - name: reload
       - name: loadbalance
 affinity:

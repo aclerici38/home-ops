@@ -23,7 +23,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/home/pocket-id/app
   components:
-    - ../../../../components/cnpg/init
+    - ../../../../components/cnpg/restore
     - ../../../../components/volsync/minio
     - ../../../../components/external-secret
   prune: true
@@ -38,4 +38,21 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_ACCESSMODES: ReadWriteMany
-      CNPG_REPLICAS: "3"
+      VOLSYNC_STORAGECLASS: &sc local-hostpath-madbum
+      VOLSYNC_SNAPSHOTCLASS: *sc
+      CNPG_STORAGECLASS: *sc
+  patches:
+    - patch: |-
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Cluster
+        metadata:
+          name: patch
+        spec:
+          nodeSelector:
+            location: cloud
+          tolerations:
+            - key: "node-role.kubernetes.io/control-plane"
+              operator: "Exists"
+              effect: "NoSchedule"
+      target:
+        kind: Cluster

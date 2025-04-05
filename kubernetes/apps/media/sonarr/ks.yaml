@@ -27,7 +27,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media/sonarr/app
   components:
-    - ../../../../components/cnpg/init
+    - ../../../../components/cnpg/restore
     - ../../../../components/external-secret
     - ../../../../components/volsync/minio
   prune: true

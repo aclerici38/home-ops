@@ -4,7 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app cilium
-  namespace: &ns kube-system
+  namespace: &ns cilium
 spec:
   targetNamespace: *ns
   commonMetadata:
@@ -28,7 +28,7 @@ spec:
 # kind: Kustomization
 # metadata:
 #   name: &app kube-system-cilium-gateway
-#   namespace: &ns kube-system
+#   namespace: &ns cilium
 # spec:
 #   targetNamespace: *ns
 #   commonMetadata:
@@ -51,7 +51,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app cilium-networking
-  namespace: &ns kube-system
+  namespace: &ns cilium
 spec:
   targetNamespace: *ns
   commonMetadata:
