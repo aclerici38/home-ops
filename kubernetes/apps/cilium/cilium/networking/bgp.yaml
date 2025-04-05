@@ -26,10 +26,10 @@ spec:
     matchLabels:
       location: house
   bgpInstances:
-  - name: "apartment-instance"
+  - name: "house-instance"
     localASN: 64514
     peers:
-    - name: "opnsense-apartment"
+    - name: "opnsense-house"
       peerASN: 64524
       peerAddress: 10.0.30.1
       peerConfigRef:
