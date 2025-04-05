@@ -15,7 +15,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/cloud/wg-easy/app
+  path: ./kubernetes/apps/network/wg-easy/app
   components:
     - ../../../../components/volsync/minio
   prune: true
