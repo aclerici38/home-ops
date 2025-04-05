@@ -6,10 +6,7 @@ metadata:
 spec:
   nodeSelector:
     matchLabels:
-      - key: location
-        operator: In
-        values:
-          - apartment
+      location: apartment
   bgpInstances:
   - name: "apartment-instance"
     localASN: 64513
@@ -27,10 +24,7 @@ metadata:
 spec:
   nodeSelector:
     matchLabels:
-      - key: location
-        operator: In
-        values:
-          - house
+      location: house
   bgpInstances:
   - name: "apartment-instance"
     localASN: 64514
