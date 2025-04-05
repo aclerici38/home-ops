@@ -27,6 +27,10 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: "posey"
+          tolerations:
+            - key: "node-role.kubernetes.io/control-plane"
+              operator: "Exists"
+              effect: "NoSchedule"
         containers:
           app:
             image:

@@ -21,13 +21,13 @@ spec:
     remediation:
       retries: 1
   values:
-    defaultPodOptions:
-      tolerations:
-        - key: "node-role.kubernetes.io/control-plane"
-          operator: "Exists"
-          effect: "NoSchedule"
     controllers:
       main:
+        pod:
+          tolerations:
+            - key: "node-role.kubernetes.io/control-plane"
+              operator: "Exists"
+              effect: "NoSchedule"
         strategy: RollingUpdate
         containers:
           *app :
@@ -59,10 +59,10 @@ spec:
                       - /usr/local/bin/dnsprobe
                       - google.com
                       - 127.0.0.1:5053
-                  initialDelaySeconds: 15
+                  initialDelaySeconds: 10
                   timeoutSeconds: 5
-                  periodSeconds: 30
-                  failureThreshold: 3
+                  periodSeconds: 10
+                  failureThreshold: 10
               liveness: *probes
     service:
       *app :
@@ -76,7 +76,7 @@ spec:
             targetPort: *targetPort
             port: *port
             protocol: UDP
-        clusterIP: "10.38.0.12"
+        clusterIP: 10.38.0.12
     persistence:
       config:
         type: configMap

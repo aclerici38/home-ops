@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: frigate-config
 spec:
-  storageClassName: local-hostpath
+  storageClassName: local-hostpath-posey
   resources:
     requests:
       storage: 10Gi
