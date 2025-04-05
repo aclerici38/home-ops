@@ -45,8 +45,3 @@ spec:
   wait: true
   dependsOn:
     - name: multus
-  postBuild:
-    substitute:
-      MULTUS_NIC: ${MULTUS_NIC}
-      MULTUS_CIDR: ${MULTUS_CIDR}
-      MULTUS_GATEWAY: ${MULTUS_GATEWAY}
