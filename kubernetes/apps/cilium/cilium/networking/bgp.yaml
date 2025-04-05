@@ -5,7 +5,11 @@ metadata:
   name: cilium-apartment-bgp
 spec:
   nodeSelector:
-    location: apartment
+    matchLabels:
+      - key: location
+        operator: In
+        values:
+          - apartment
   bgpInstances:
   - name: "apartment-instance"
     localASN: 64513
@@ -22,7 +26,11 @@ metadata:
   name: cilium-house-bgp
 spec:
   nodeSelector:
-    location: house
+    matchLabels:
+      - key: location
+        operator: In
+        values:
+          - house
   bgpInstances:
   - name: "apartment-instance"
     localASN: 64514
