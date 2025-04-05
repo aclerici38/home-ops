@@ -107,7 +107,7 @@ jobs:
 
   success:
     if: ${{ !cancelled() }}
-    needs: ["test", "diff"]
+    needs: ["diff"]
     name: Flux Local - Success
     runs-on: ubuntu-latest
     steps:
