@@ -29,6 +29,7 @@ spec:
               operator: "Exists"
               effect: "NoSchedule"
         strategy: RollingUpdate
+        replicas: 2
         containers:
           *app :
             image:
