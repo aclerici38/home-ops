@@ -29,6 +29,3 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      CLUSTER_BLOCKY_ADDR: ${CLUSTER_BLOCKY_ADDR}
-      CLUSTER_DNSCRYPT_ADDR: ${CLUSTER_DNSCRYPT_ADDR}
-      CLUSTER_NAME: ${CLUSTER_NAME}

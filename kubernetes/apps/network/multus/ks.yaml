@@ -47,7 +47,6 @@ spec:
     - name: multus
   postBuild:
     substitute:
-      CLUSTER_NAME: ${CLUSTER_NAME}
       MULTUS_NIC: ${MULTUS_NIC}
       MULTUS_CIDR: ${MULTUS_CIDR}
       MULTUS_GATEWAY: ${MULTUS_GATEWAY}

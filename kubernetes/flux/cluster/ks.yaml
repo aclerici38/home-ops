@@ -16,19 +16,3 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  postBuild:
-    substitute:
-      CLUSTER_NAME: "apartment"
-      POD_NET: "10.210.0.0/16"
-      CLUSTER_DNS_ADDR: "10.215.0.10"
-      CLUSTER_BLOCKY_ADDR: "10.215.0.11"
-      CLUSTER_DNSCRYPT_ADDR: "10.215.0.12"
-      CLUSTER_ID: "'2'"
-      HOUSE_COREDNS_ADDR: "10.10.0.2:30053"
-      CLOUD_COREDNS_ADDR: "10.10.0.3:30053"
-      CLUSTERMESH_PORT: "'32379'"
-      MULTUS_NIC: enp6s0
-      MULTUS_CIDR: "192.168.1.0/24"
-      MULTUS_GATEWAY: "192.168.1.1"
-      MULTUS_HASS_ADDRESS: "192.168.1.25/24"
-      CLUSTER_GATEWAY_ADDR: "10.215.0.13"

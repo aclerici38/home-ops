@@ -19,6 +19,3 @@ spec:
   timeout: 5m
   prune: true
   wait: true
-  postBuild:
-    substitute:
-      CLUSTER_NAME: ${CLUSTER_NAME}

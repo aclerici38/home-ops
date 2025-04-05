@@ -5,37 +5,40 @@ kind: HelmRelease
 metadata:
   name: &app blocky
 spec:
-  interval: 1h
-  chartRef:
-    kind: OCIRepository
-    name: app-template
-    namespace: flux-system
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
   install:
-    crds: CreateReplace
     timeout: 2m
     remediation:
       retries: 1
   upgrade:
-    crds: CreateReplace
     timeout: 2m
+    cleanupOnFail: true
     remediation:
+      strategy: rollback
       retries: 1
   values:
     controllers:
-      main:
+      apt: &controller
         pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 65534
-            runAsGroup: 65534
+          nodeSelector:
+            location: "apartment"
         strategy: RollingUpdate
+        replicas: 2
         containers:
           *app :
             image:
               repository: ghcr.io/0xerr0r/blocky
               tag: v0.25@sha256:347f8c6addc1775ef74b83dfc609c28436a67f812ef0ee7e2602569dc0e56cd1
             env:
-              PGCONNECT_TIMEOUT: 30
+              PGCONNECT_TIMEOUT: 10
               PGHOST:
                 valueFrom:
                   secretKeyRef:
@@ -88,10 +91,22 @@ spec:
                   - NET_BIND_SERVICE
                 drop:
                   - ALL
+      house:
+        <<: *controller
+        pod:
+          nodeSelector:
+            location: "house"
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
     service:
       global: &svc
-        controller: main
-        clusterIP: ${CLUSTER_BLOCKY_ADDR}
+        controller: apt
+        extraSelectorLabels:
+          app.kubernetes.io/name: *app
+        clusterIP: 172.17.0.13
         ports:
           dns-tcp:
             port: 53
@@ -104,13 +119,19 @@ spec:
             protocol: TCP
       house-dns:
         <<: *svc
+        controller: house
         type: LoadBalancer
         annotations:
           io.cilium/lb-ipam-ips: 10.38.55.25
+      apt-dns:
+        <<: *svc
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: 10.38.55.26
     persistence:
       config:
         type: configMap
-        name: blocky-config
+        name: blocky-configmap
         globalMounts:
           - path: /app/config.yml
             subPath: config.yml

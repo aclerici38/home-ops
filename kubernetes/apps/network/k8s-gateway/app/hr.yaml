@@ -21,7 +21,7 @@ spec:
     remediation:
       retries: 1
   values:
-    domain: ${SECRET_DOMAIN}
+    domain: ${SECRET_DOMAIN:-samthony.com}
     watchedResources:
       - HTTPRoute
     extraZonePlugins:
@@ -34,10 +34,10 @@ spec:
       - name: prometheus
         parameters: 0.0.0.0:9153
       - name: forward
-        parameters: . ${CLUSTER_DNSCRYPT_ADDR}
+        parameters: . 10.38.0.12
     service:
       type: ClusterIP
-      clusterIP: ${CLUSTER_GATEWAY_ADDR}
+      clusterIP: 10.38.0.13
     debug:
       enabled: true
     serviceAccount:
