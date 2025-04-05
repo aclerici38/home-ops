@@ -13,7 +13,7 @@ spec:
   dependsOn:
     - name: kubevirt
       namespace: kubevirt
-  path: ./kubernetes/apps/apartment/kubevirt/truenas-scale/config
+  path: ./kubernetes/apps/kubevirt/kubevirt/truenas-scale/config
   prune: true
   sourceRef:
     kind: GitRepository
@@ -39,7 +39,7 @@ spec:
       namespace: truenas-scale
     - name: volsync
       namespace: storage
-  path: ./kubernetes/apps/apartment/kubevirt/truenas-scale/vm
+  path: ./kubernetes/apps/kubevirt/kubevirt/truenas-scale/vm
   prune: true
   sourceRef:
     kind: GitRepository
