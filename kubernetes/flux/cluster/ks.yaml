@@ -3,12 +3,12 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apartment-apps
+  name: cluster-apps
   namespace: flux-system
 spec:
   interval: 30m
   timeout: 10m
-  path: ./kubernetes/apps/apartment
+  path: ./kubernetes/apps/
   prune: false
   dependsOn:
     - name: flux-settings
