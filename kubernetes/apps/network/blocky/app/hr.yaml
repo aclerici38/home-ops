@@ -106,7 +106,7 @@ spec:
         controller: apt
         extraSelectorLabels:
           app.kubernetes.io/name: *app
-        clusterIP: 10.55.0.11
+        clusterIP: 172.17.0.11
         ports:
           dns-tcp:
             port: 53

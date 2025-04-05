@@ -77,7 +77,7 @@ spec:
             targetPort: *targetPort
             port: *port
             protocol: UDP
-        clusterIP: 10.55.0.12
+        clusterIP: 172.17.0.12
     persistence:
       config:
         type: configMap

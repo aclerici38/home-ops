@@ -41,7 +41,7 @@ releases:
           create: true
         service:
           name: kube-dns
-          clusterIP: 10.55.0.10
+          clusterIP: 172.17.0.10
     needs:
       - cilium/cilium
 

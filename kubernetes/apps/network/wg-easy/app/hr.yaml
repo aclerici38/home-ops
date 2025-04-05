@@ -40,7 +40,7 @@ spec:
               WG_HOST: cloud.${SECRET_DOMAIN}
               PORT: &uiPort 51822
               WG_PORT: &wgPort 51821
-              WG_DEFAULT_DNS: 10.55.0.11 # blocky
+              WG_DEFAULT_DNS: 172.17.0.11 # blocky
               WG_MTU: 1280
               WG_PERSISTENT_KEEPALIVE: 25
               WG_ALLOWED_IPS: 0.0.0.0/0
