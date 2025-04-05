@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./ns.yaml
+
+  - ./cert-manager/ks.yaml
+  - ./external-secrets/ks.yaml
+  - ./generic-device-plugin/ks.yaml
+  - ./k8tz/ks.yaml
+  - ./metrics-server/ks.yaml
+  - ./minio/ks.yaml
+  - ./nvidia-device-plugin/ks.yaml
+  - ./onepassword-connect/ks.yaml
+  - ./redisinsight/ks.yaml
+  - ./reflector/ks.yaml
+  - ./reloader/ks.yaml
+  - ./system-upgrade-controller/ks.yaml

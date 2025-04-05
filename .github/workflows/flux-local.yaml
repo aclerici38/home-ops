@@ -1,5 +1,4 @@
 ---
-# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Flux Local
 
 on:
@@ -28,9 +27,6 @@ jobs:
     needs: filter
     name: Flux Local - Test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        cluster: ["cloud", "apartment", "house"]
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -42,7 +38,7 @@ jobs:
             test
             --all-namespaces
             --enable-helm
-            --path /github/workspace/kubernetes/flux/clusters/${{ matrix.cluster }}
+            --path /github/workspace/kubernetes/flux/cluster
             --verbose
 
   diff:
@@ -51,10 +47,10 @@ jobs:
     name: Flux Local - Diff
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pull-requests: write
     strategy:
       matrix:
-        cluster: ["cloud", "apartment", "house"]
         resource: ["helmrelease", "kustomization"]
       fail-fast: false
     steps:
@@ -66,7 +62,7 @@ jobs:
       - name: Checkout Default Branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ github.event.repository.default_branch }}
+          ref: "${{ github.event.repository.default_branch }}"
           path: default
 
       - name: Run flux-local diff
@@ -75,8 +71,8 @@ jobs:
           args: >-
             diff ${{ matrix.resource }}
             --unified 6
-            --path /github/workspace/pull/kubernetes/flux/clusters/${{ matrix.cluster }}
-            --path-orig /github/workspace/default/kubernetes/flux/clusters/${{ matrix.cluster }}
+            --path /github/workspace/pull/kubernetes/flux/cluster
+            --path-orig /github/workspace/default/kubernetes/flux/cluster
             --strip-attrs "helm.sh/chart,checksum/config,app.kubernetes.io/version,chart"
             --limit-bytes 10000
             --all-namespaces
@@ -100,7 +96,6 @@ jobs:
 
       - if: ${{ steps.diff.outputs.diff != '' }}
         name: Add Comment
-        continue-on-error: true
         uses: marocchino/sticky-pull-request-comment@52423e01640425a022ef5fd42c6fb5f633a02728 # v2.9.1
         with:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
