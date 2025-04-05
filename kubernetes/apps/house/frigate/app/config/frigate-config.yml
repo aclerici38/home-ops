@@ -7,6 +7,10 @@ mqtt:
   user: "{FRIGATE_MQTT_USER}"
   password: "{FRIGATE_MQTT_PASS}"
 
+# For when I get this cluster a connection to minio
+# database:
+#   path: /database/frigate.db
+
 proxy:
   header_map:
     user: x-forwarded-user

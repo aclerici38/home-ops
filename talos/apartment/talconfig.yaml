@@ -66,8 +66,8 @@ nodes:
           - 10.10.0.1/24
         mtu: 1420
         routes:
-          - network: 10.0.30.28/32
-            gateway: 10.10.0.2
+          - network: 10.0.0.0/16
+            gateway: 10.0.30.28
           - network: 10.220.0.0/16
             gateway: 10.10.0.2
           - network: 10.225.0.0/16
