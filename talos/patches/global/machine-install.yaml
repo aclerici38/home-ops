@@ -1,6 +1,6 @@
 machine:
   install:
-    wipe: true
+    # wipe: true
     extraKernelArgs:
       - cpufreq.default_governor=performance
       - apparmor=0

@@ -1,0 +1,93 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app local-path-madbum
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: democratic-csi
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controller:
+      nodeSelector: &ns
+        kubernetes.io/hostname: madbum
+      tolerations: &tol
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+      enabled: true
+      strategy: node
+      externalAttacher:
+        enabled: false
+      externalProvisioner:
+        enabled: true
+        image: registry.k8s.io/sig-storage/csi-provisioner:v5.2.0@sha256:d5e46da8aff7d73d6f00c761dae94472bcda6e78f4f17b3802dc89d44de0111b
+        extraArgs:
+          - --leader-election=false
+          - --node-deployment=true
+          - --node-deployment-immediate-binding=false
+          - --feature-gates=Topology=true
+          - --strict-topology=true
+          - --enable-capacity=true
+          - --capacity-ownerref-level=1
+      externalResizer:
+        enabled: false
+      externalSnapshotter:
+        enabled: true
+        image: registry.k8s.io/sig-storage/csi-snapshotter:v8.2.1@sha256:5f4bb469fec51147ce157329dab598c758da1b018bad6dad26f0ff469326d769
+        extraArgs:
+          - --leader-election=false
+          - --node-deployment=true
+    csiDriver:
+      name: local-hostpath-madbum.cluster.local
+      attachRequired: false
+      storageCapacity: true
+      fsGroupPolicy: File
+    storageClasses:
+      - name: &sc local-hostpath-madbum
+        defaultClass: false
+        reclaimPolicy: Delete
+        volumeBindingMode: WaitForFirstConsumer
+        allowVolumeExpansion: true
+    volumeSnapshotClasses:
+      - name: *sc
+        deletionPolicy: Delete
+        parameters: {}
+    driver:
+      config:
+        driver: local-hostpath
+        local-hostpath:
+          shareBasePath: &storagePath /var/lib/csi-local-hostpath/madbum
+          controllerBasePath: *storagePath
+          dirPermissionsMode: "0770"
+          dirPermissionsUser: 0
+          dirPermissionsGroup: 0
+    node:
+      nodeSelector: *ns
+      tolerations: *tol
+      driver:
+        image: ghcr.io/democratic-csi/democratic-csi:v1.9.3@sha256:8ce65ce5bd9b9cdd79ace0e94b6652a233cfbfb26af177fb7912c1217a3f2c19
+        extraVolumeMounts:
+          - name: local-hostpath-madbum
+            mountPath: *storagePath
+            mountPropagation: Bidirectional
+      extraVolumes:
+        - name: local-hostpath-madbum
+          hostPath:
+            path: *storagePath
+            type: DirectoryOrCreate
+    csiProxy:
+      image: ghcr.io/democratic-csi/csi-grpc-proxy:v0.5.6@sha256:fc5fc1fe9c682463fe8b219db070930e77067d76449749ef5ba99cedd30fa437

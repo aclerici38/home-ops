@@ -3,5 +3,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./meta/ks.yaml
-  - ./cluster/ks.yaml
+  - ./ns.yaml
+
+  - ./cloudnative-pg/ks.yaml
+  - ./dragonfly/ks.yaml
+  - ./emqx/ks.yaml

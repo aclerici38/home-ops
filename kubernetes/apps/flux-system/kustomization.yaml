@@ -3,5 +3,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./meta/ks.yaml
-  - ./cluster/ks.yaml
+  - ./ns.yaml
+
+  - ./flux/ks.yaml
+  - ./kustomize-mutating-webhook/ks.yaml

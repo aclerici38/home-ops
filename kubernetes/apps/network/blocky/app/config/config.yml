@@ -1,0 +1,64 @@
+---
+caching:
+  minTime: 2m
+  maxTime: 1h
+  maxItemsCount: 0
+  prefetching: true
+  prefetchExpires: 1h
+  prefetchThreshold: 30
+  prefetchMaxItemsCount: 0
+  cacheTimeNegative: -1
+
+log:
+  level: info
+
+minTlsServeVersion: 1.3
+ports:
+  dns: 53
+  tls: 853
+  http: 4000
+
+prometheus:
+  enable: true
+  path: /metrics
+
+conditional:
+  fallbackUpstream: true
+  mapping:
+    ${SECRET_DOMAIN}: k8s-gateway.network.svc.cluster.local:53
+
+upstreams:
+  groups:
+    default:
+      - 10.55.0.12:53
+
+blocking:
+  denylists:
+    ads:
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/multi.txt
+  clientGroupsBlock:
+    10.0.0.0/16:
+      - ads
+    192.168.1.0/24:
+      - ads
+    10.8.0.0/24:
+      - ads
+
+redis:
+  address: dragonfly-db.database.svc.cluster.local:6379
+  database: 4
+  connectionCooldown: 5s
+
+
+queryLog:
+  type: postgresql
+  logRetentionDays: 0
+  creationAttempts: 3
+  creationCooldown: 5s
+  # optional: Which fields should be logged. You can choose one or more from: clientIP, clientName, responseReason, responseAnswer, question, duration. If not defined, it logs all fields
+  fields:
+    - clientIP
+    - duration
+    - question
+    - responseReason
+    - responseAnswer
