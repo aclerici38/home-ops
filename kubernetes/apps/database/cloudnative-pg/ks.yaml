@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets-stores
-      namespace: external-secrets
+      namespace: cluster-utilities
   path: ./kubernetes/apps/database/cloudnative-pg/app
   components:
     - ../../../../components/external-secret

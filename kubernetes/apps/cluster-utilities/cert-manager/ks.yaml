@@ -37,7 +37,7 @@ spec:
   dependsOn:
     - name: cert-manager
     - name: external-secrets-stores
-      namespace: external-secrets
+      namespace: cluster-utilities
   path: ./kubernetes/apps/cluster-utilities/cert-manager/issuers
   components:
     - ../../../../components/external-secret

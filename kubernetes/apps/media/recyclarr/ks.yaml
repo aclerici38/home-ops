@@ -13,7 +13,7 @@ spec:
   path: ./kubernetes/apps/media/recyclarr/app
   dependsOn:
     - name: external-secrets-stores
-      namespace: external-secrets
+      namespace: cluster-utilities
     - name: sonarr
     - name: radarr
   prune: true

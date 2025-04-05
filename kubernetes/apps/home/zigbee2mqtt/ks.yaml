@@ -9,7 +9,7 @@ spec:
   targetNamespace: *ns
   dependsOn:
     - name: external-secrets-stores
-      namespace: external-secrets
+      namespace: cluster-utilities
     - name: volsync
       namespace: storage
     - name: minio

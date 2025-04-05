@@ -15,7 +15,7 @@ spec:
     - ../../../../components/external-secret
   dependsOn:
     - name: external-secrets-stores
-      namespace: external-secrets
+      namespace: cluster-utilities
     - name: emqx-cluster
       namespace: database
   prune: true

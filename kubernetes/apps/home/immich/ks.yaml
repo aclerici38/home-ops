@@ -15,7 +15,7 @@ spec:
     - name: dragonfly-cluster
       namespace: database
     - name: external-secrets-stores
-      namespace: external-secrets
+      namespace: cluster-utilities
     - name: minio
       namespace: cluster-utilities
   path: ./kubernetes/apps/home/immich/app
