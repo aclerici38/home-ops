@@ -5,8 +5,8 @@ kind: Kustomization
 resources:
   - ./hr.yaml
 configMapGenerator:
-  - name: cilium-shared-helm-values
+  - name: cilium-helm-values
     files:
-      - values.yaml=./values.yaml
+      - ./values.yaml
 configurations:
   - ../../../../resources/helm/kustomizeconfig.yaml

@@ -21,13 +21,5 @@ spec:
       retries: 1
   valuesFrom:
     - kind: ConfigMap
-      name: cilium-shared-helm-values
+      name: cilium-helm-values
       optional: false
-  values:
-    bgpControlPlane:
-      enabled: true
-    cluster:
-      name: "${CLUSTER_NAME}"
-      id: ${CLUSTER_ID}
-    cni:
-      exclusive: false

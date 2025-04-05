@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/cilium/cilium/refs/heads/main/install/kubernetes/cilium/values.schema.json
-autoDirectNodeRoutes: true
+autoDirectNodeRoutes: false
 bpf:
   datapathMode: netkit
   masquerade: true
@@ -52,7 +52,7 @@ dashboards:
   enabled: true
 ipam:
   mode: kubernetes
-ipv4NativeRoutingCIDR: "10.210.0.0/16"
+ipv4NativeRoutingCIDR: "10.38.0.0/16"
 k8sServiceHost: 127.0.0.1
 k8sServicePort: 7445
 kubeProxyReplacement: true
@@ -62,10 +62,11 @@ l2announcements:
 loadBalancer:
   algorithm: maglev
   mode: "dsr"
+  dsrDispatch: geneve
 nodePort:
   enabled: true
 operator:
-  replicas: 1
+  replicas: 2
   rollOutPods: true
   prometheus:
     enabled: true
@@ -80,7 +81,15 @@ prometheus:
     enabled: true
     trustCRDsExist: true
 rollOutCiliumPods: true
-routingMode: native
+routingMode: tunnel
+tunnelProtocol: geneve
+bgpControlPlane:
+  enabled: true
+cluster:
+  name: main
+  id: 1
+cni:
+  exclusive: false
 socketLB:
   enabled: true
   hostNamespaceOnly: true
