@@ -17,12 +17,12 @@ hooks:
 
 releases:
   - name: cilium
-    namespace: cilim
+    namespace: cilium
     chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     atomic: true
     version: 1.17.2
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/cilium/cilium/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/cilium/cilium/app/values.yaml
 
   - name: coredns
     namespace: kube-system
@@ -101,7 +101,7 @@ releases:
       - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux/instance/values.yaml
     needs:
       - flux-system/flux-operator
-      - external-secrets/external-secrets
+      - cluster-utilities/external-secrets
 
   - name: kustomize-mutating-webhook
     namespace: flux-system
@@ -109,11 +109,11 @@ releases:
     chart: oci://ghcr.io/xunholy/charts/kustomize-mutating-webhook
     version: 0.4.3
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux/kustomize-mutating-webhook/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/flux-system/kustomize-mutating-webhook/app/values.yaml
     needs:
       - flux-system/flux-instance
       - cluster-utilities/cert-manager
-      - external-secrets/external-secrets
+      - cluster-utilities/external-secrets
     hooks:
       - events: ["presync"]
         showlogs: true
