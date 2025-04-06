@@ -48,11 +48,12 @@ spec:
         metadata:
           name: patch
         spec:
-          nodeSelector:
-            location: cloud
-          tolerations:
-            - key: "node-role.kubernetes.io/control-plane"
-              operator: "Exists"
-              effect: "NoSchedule"
+          affinity:
+            nodeSelector:
+              location: cloud
+            tolerations:
+              - key: "node-role.kubernetes.io/control-plane"
+                operator: "Exists"
+                effect: "NoSchedule"
       target:
         kind: Cluster
