@@ -87,15 +87,15 @@ spec:
                   - NET_BIND_SERVICE
                 drop:
                   - ALL
-      house:
-        <<: *controller
-        pod:
-          nodeSelector:
-            location: "house"
-          tolerations:
-            - key: "node-role.kubernetes.io/control-plane"
-              operator: "Exists"
-              effect: "NoSchedule"
+      # house:
+      #   <<: *controller
+      #   pod:
+      #     nodeSelector:
+      #       location: "house"
+      #     tolerations:
+      #       - key: "node-role.kubernetes.io/control-plane"
+      #         operator: "Exists"
+      #         effect: "NoSchedule"
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -117,12 +117,12 @@ spec:
           dns-tls:
             port: 853
             protocol: TCP
-      house-dns:
-        <<: *svc
-        controller: house
-        type: LoadBalancer
-        annotations:
-          io.cilium/lb-ipam-ips: 10.38.55.25
+      # house-dns:
+      #   <<: *svc
+      #   controller: house
+      #   type: LoadBalancer
+      #   annotations:
+      #     io.cilium/lb-ipam-ips: 10.38.55.25
       apt-dns:
         <<: *svc
         type: LoadBalancer
