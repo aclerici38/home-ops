@@ -24,6 +24,10 @@ spec:
     manageCRDs: true
     metrics:
       disableAuth: true
+    tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
     podSecurityContext:
       runAsNonRoot: true
       runAsUser: 1000
