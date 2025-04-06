@@ -27,67 +27,22 @@ spec:
     remediation:
       retries: 1
   values:
-    fullnameOverride: *app
+    fullnameOverride: coredns
     image:
       repository: mirror.gcr.io/coredns/coredns
-    replicaCount: 1
+    replicaCount: 2
     k8sAppLabelOverride: kube-dns
     serviceAccount:
       create: true
-    rbac:
-      create: true
-    serviceType: "NodePort"
     service:
       name: kube-dns
-      clusterIP: ${CLUSTER_DNS_ADDR}
-      nodePort: &np 30053
+      clusterIP: 172.17.0.10
     servers:
-      - zones:
-          - zone: cluster.house
-            scheme: dns://
-            use_tcp: true
-        port: 53
-        nodePort: *np
-        plugins:
-          - name: rewrite
-            configBlock: |-
-              name substring cluster.house svc.cluster.local
-          - name: forward
-            parameters: . ${HOUSE_COREDNS_ADDR}
-
-      - zones:
-          - zone: cluster.apartment
-            scheme: dns://
-            use_tcp: true
-        port: 53
-        nodePort: *np
-        hostPort: 53
-        plugins:
-          - name: rewrite
-            configBlock: |-
-              name substring cluster.apartment svc.cluster.local
-          - name: forward
-            parameters: . ${APT_COREDNS_ADDR}
-
-      - zones:
-          - zone: cluster.cloud
-            scheme: dns://
-            use_tcp: true
-        port: 53
-        nodePort: *np
-        hostPort: 53
-        plugins:
-          - name: rewrite
-            configBlock: |-
-              name substring cluster.cloud svc.cluster.local
-          - name: forward
-            parameters: . ${CLOUD_COREDNS_ADDR}
       - zones:
           - zone: .
             scheme: dns://
             use_tcp: true
         port: 53
-        hostPort: 53
         plugins:
           - name: errors
           - name: health
@@ -104,14 +59,10 @@ spec:
             configBlock: |-
               pods insecure
               fallthrough in-addr.arpa ip6.arpa
-          # Enable recursion https://github.com/coredns/coredns/issues/3690#issuecomment-1573865953
-          - name: header
-            configBlock: |-
-              response set ra
+          - name: forward
+            parameters: . 172.17.0.11
           - name: reload
           - name: loadbalance
-          - name: forward
-            parameters: . ${CLUSTER_BLOCKY_ADDR}
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
