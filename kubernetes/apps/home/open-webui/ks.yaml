@@ -32,16 +32,16 @@ spec:
   postBuild:
     substitute:
       APP: *app
-  patches:
-    - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
-          name: extension-init
-        spec:
-          bootstrap:
-            initdb:
-              postInitApplicationSQL:
-                - "CREATE EXTENSION IF NOT EXISTS vector"
-      target:
-        kind: Cluster
+  # patches:
+  #   - patch: |-
+  #       apiVersion: postgresql.cnpg.io/v1
+  #       kind: Cluster
+  #       metadata:
+  #         name: extension-init
+  #       spec:
+  #         bootstrap:
+  #           initdb:
+  #             postInitApplicationSQL:
+  #               - "CREATE EXTENSION IF NOT EXISTS vector"
+      # target:
+      #   kind: Cluster
