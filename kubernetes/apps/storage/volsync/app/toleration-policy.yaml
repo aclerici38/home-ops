@@ -1,0 +1,47 @@
+---
+apiVersion: admissionregistration.k8s.io/v1alpha1
+kind: MutatingAdmissionPolicy
+metadata:
+  name: "volsync-mover-toleration"
+spec:
+  matchConstraints:
+    resourceRules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE"]
+        resources: ["pods"]
+        scope: "Namespaced"
+  matchConditions:
+    - name: is-volsync-mover
+      expression: >
+        object.metadata.labels.exists(l, l.key == "app.kubernetes.io/created-by" && l.value == "volsync")
+  failurePolicy: Ignore
+  reinvocationPolicy: IfNeeded
+  mutations:
+    - patchType: "JSONPatch"
+      jsonPatch:
+        expression: >
+          [
+            JSONPatch{
+              op: "add",
+              path: "/spec/tolerations/-",
+              value: {
+                key: "node-role.kubernetes.io/control-plane",
+                operator: "Exists",
+                effect: "NoSchedule"
+              }
+            }
+          ]
+---
+apiVersion: admissionregistration.k8s.io/v1alpha1
+kind: MutatingAdmissionPolicyBinding
+metadata:
+  name: "volsync-mover-toleration-binding"
+spec:
+  policyName: "volsync-mover-toleration"
+  matchResources:
+    resourceRules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE"]
+        resources: ["pods"]
