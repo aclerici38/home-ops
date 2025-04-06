@@ -23,7 +23,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/home/pocket-id/app
   components:
-    - ../../../../components/cnpg/restore
+    - ../../../../components/cnpg/init
     - ../../../../components/volsync/minio
     - ../../../../components/external-secret
   prune: true
