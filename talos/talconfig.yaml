@@ -18,14 +18,9 @@ additionalApiServerCertSans: &sans
   - "192.168.9.25"
   - "10.0.30.28"
   - "10.40.40.41"
-  - "192.168.9.55"
   - "127.0.0.1"
   - "${CLOUD_IP}"
-  - "10.10.0.1"
-  - "10.10.0.2"
-  - "10.10.0.3"
   - "posey"
-  - "timmy"
   - "bonds"
   - "madbum"
 additionalMachineCertSans: *sans
@@ -70,31 +65,6 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
         mtu: 1500
-      - interface: wg0
-        addresses:
-          - 10.10.0.1/24
-        mtu: 1420
-        routes:
-          - network: 10.0.0.0/16
-            gateway: 10.10.0.2
-          - network: 10.40.41.0/24
-            gateway: 10.10.0.3
-        wireguard:
-          privateKey: ${BONDS_WG_PRIVATE_KEY}
-          listenPort: 51820
-          peers:
-            - publicKey: ${POSEY_WG_PUBLIC_KEY}
-              endpoint: ${OFFICE_WG_ENDPOINT}
-              allowedIPs:
-                - 10.0.0.0/16
-                - 10.10.0.2/32
-              persistentKeepaliveInterval: 10s
-            - publicKey: ${MADBUM_WG_PUBLIC_KEY}
-              endpoint: ${MADBUM_WG_ENDPOINT}
-              allowedIPs:
-                - 10.40.41.0/24
-                - 10.10.0.3/32
-              persistentKeepaliveInterval: 10s
       - deviceSelector:
           hardwareAddr: a0:36:9f:09:4c:8e
         ignore: true
@@ -147,6 +117,9 @@ nodes:
               partitions:
                 - mountpoint: /var/lib/csi-local-hostpath
           kubelet:
+            nodeIP:
+              validSubnets:
+                - "192.168.9.0/24"
             extraMounts:
               - destination: /var/lib/csi-local-hostpath
                 type: bind
@@ -194,39 +167,18 @@ nodes:
       - deviceSelector:
           hardwareAddr: a8:5e:45:9c:d0:99
         ignore: true
-      - interface: wg0
-        addresses:
-          - 10.10.0.2/24
-        mtu: 1420
-        routes:
-          - network: 192.168.9.0/24
-            gateway: 10.10.0.1
-          - network: 10.40.41.0/24
-            gateway: 10.10.0.3
-        wireguard:
-          privateKey: ${POSEY_WG_PRIVATE_KEY}
-          listenPort: 51820
-          peers:
-            - publicKey: ${BONDS_WG_PUBLIC_KEY}
-              endpoint: ${APARTMENT_WG_ENDPOINT}
-              allowedIPs:
-                - 192.168.9.0/24
-                - 10.10.0.1/32
-              persistentKeepaliveInterval: 10s
-            - publicKey: ${MADBUM_WG_PUBLIC_KEY}
-              endpoint: ${MADBUM_WG_ENDPOINT}
-              allowedIPs:
-                - 10.40.41.0/24
-                - 10.10.0.3/32
-              persistentKeepaliveInterval: 10s
     patches:
       - |-
         machine:
           install:
             extraKernelArgs:
               - amd_pstate=active
+          kubelet:
+            nodeIP:
+              validSubnets:
+                - "10.0.30.0/24"
   - hostname: "madbum"
-    ipAddress: "10.40.40.41"
+    ipAddress: "10.10.10.3"
     installDiskSelector:
       size: ">= 10GB"
     machineSpec:
@@ -248,29 +200,36 @@ nodes:
         mtu: 1500
       - interface: wg0
         addresses:
-          - 10.10.0.3/24
+          - 10.10.10.3/24
         mtu: 1420
         routes:
           - network: 192.168.9.0/24
-            gateway: 10.10.0.1
+            gateway: 10.10.10.1
           - network: 10.0.0.0/16
-            gateway: 10.10.0.2
+            gateway: 10.10.10.2
         wireguard:
           privateKey: ${MADBUM_WG_PRIVATE_KEY}
           listenPort: 51820
           peers:
-            - publicKey: ${BONDS_WG_PUBLIC_KEY}
+            - publicKey: ${APARTMENT_WG_PUBKEY}
               endpoint: ${APARTMENT_WG_ENDPOINT}
               allowedIPs:
                 - 192.168.9.0/24
-                - 10.10.0.1/32
+                - 10.10.10.1/32
               persistentKeepaliveInterval: 10s
-            - publicKey: ${POSEY_WG_PUBLIC_KEY}
+            - publicKey: ${OFFICE_WG_PUBKEY}
               endpoint: ${OFFICE_WG_ENDPOINT}
               allowedIPs:
                 - 10.0.0.0/16
-                - 10.10.0.2/32
+                - 10.10.10.2/32
               persistentKeepaliveInterval: 10s
+    patches:
+      - |-
+        machine:
+          kubelet:
+            nodeIP:
+              validSubnets:
+                - "10.10.10.0/24"
 
 # Global patches
 patches:
