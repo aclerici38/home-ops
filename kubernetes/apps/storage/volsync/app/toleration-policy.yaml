@@ -23,10 +23,14 @@ spec:
       jsonPatch:
         expression: >
           [
-            {
-              "op": "add",
-              "path": "/spec/tolerations/-",
-              "value": "{\"key\": \"node-role.kubernetes.io/control-plane\", \"operator\": \"Exists\", \"effect\": \"NoSchedule\"}"
+            JSONPatch{
+              op: "add",
+              path: "/spec/tolerations/-",
+              value: json.encode({
+                "key": "node-role.kubernetes.io/control-plane",
+                "operator": "Exists",
+                "effect": "NoSchedule"
+              })
             }
           ]
 ---
