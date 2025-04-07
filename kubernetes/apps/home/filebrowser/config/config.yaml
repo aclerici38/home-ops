@@ -1,0 +1,11 @@
+server:
+  port: 8080
+  externalUrl: https://filebrowser.${SECRET_DOMAIN}
+  cacheDir: /tmp
+  database: /home/filebrowser/database
+  sources:
+    - name: media
+      path: /mnt/media
+auth:
+  adminUsername: ${ADMIN_USER}
+  adminPassword: ${ADMIN_PASS}

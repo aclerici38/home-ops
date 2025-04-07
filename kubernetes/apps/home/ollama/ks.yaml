@@ -4,7 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app ollama
-  namespace: &ns cluster-utilities
+  namespace: &ns home
 spec:
   targetNamespace: *ns
   commonMetadata:

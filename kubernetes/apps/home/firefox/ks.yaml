@@ -4,7 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app firefox
-  namespace: &ns cluster-utilities
+  namespace: &ns home
 spec:
   targetNamespace: *ns
   commonMetadata:
@@ -18,7 +18,7 @@ spec:
     - name: volsync
       namespace: storage
     - name: minio
-      namespace: cluster-utilities
+      namespace: home
     - name: truenas-scale
       namespace: truenas-scale
   sourceRef:
