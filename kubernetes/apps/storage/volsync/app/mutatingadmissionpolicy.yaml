@@ -23,6 +23,7 @@ spec:
   matchConditions:
     - name: has-volsync-created-by-labels
       expression: >
+        ("app.kubernetes.io/created-by" in object.metadata.labels) &&
         object.metadata.labels["app.kubernetes.io/created-by"] == "volsync"
   failurePolicy: Fail
   reinvocationPolicy: IfNeeded
