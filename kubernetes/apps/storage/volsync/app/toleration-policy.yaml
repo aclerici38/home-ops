@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.0/mutatingadmissionpolicy-admissionregistration-v1alpha1.json
 apiVersion: admissionregistration.k8s.io/v1alpha1
 kind: MutatingAdmissionPolicy
 metadata:
@@ -18,21 +19,23 @@ spec:
   failurePolicy: Ignore
   reinvocationPolicy: IfNeeded
   mutations:
-    - patchType: "JSONPatch"
+    - patchType: JSONPatch
       jsonPatch:
         expression: >
           [
-            JSONPatch{
-              op: "add",
-              path: "/spec/tolerations/-",
-              value: {
-                key: "node-role.kubernetes.io/control-plane",
-                operator: "Exists",
-                effect: "NoSchedule"
+            {
+              "op": "add",
+              "path": "/spec/tolerations/-",
+              "value": {
+                "key": "node-role.kubernetes.io/control-plane",
+                "operator": "Exists",
+                "effect": "NoSchedule"
               }
             }
           ]
+
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.0/mutatingadmissionpolicybinding-admissionregistration-v1alpha1.json
 apiVersion: admissionregistration.k8s.io/v1alpha1
 kind: MutatingAdmissionPolicyBinding
 metadata:
