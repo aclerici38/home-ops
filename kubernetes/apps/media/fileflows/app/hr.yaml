@@ -92,11 +92,6 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /app/ManuallyAdded
-      sqlite-tmp:
-        type: emptyDir
-        medium: Memory
-        globalMounts:
-          - path: *sqliteTmp
       calibre-library:
         existingClaim: calibre-library
         globalMounts:
