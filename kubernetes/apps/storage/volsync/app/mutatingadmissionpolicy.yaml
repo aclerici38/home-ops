@@ -16,10 +16,10 @@ metadata:
 spec:
   matchConstraints:
     resourceRules:
-      - apiGroups: ["batch"]
+      - apiGroups: [""]
         apiVersions: ["v1"]
         operations: ["CREATE", "UPDATE"]
-        resources: ["jobs"]
+        resources: ["pods"]
   matchConditions:
     - name: has-volsync-created-by-labels
       expression: >
@@ -30,17 +30,11 @@ spec:
     - patchType: JSONPatch
       jsonPatch:
         expression: >
-          [
-            JSONPatch{
-              op: "add", path: "/spec/template/spec/tolerations",
-              value: []
-            },
-            JSONPatch{
-              op: "add", path: "/spec/template/spec/tolerations/-",
-              value: Object.spec.template.spec.tolerations{
-                key: "node-role.kubernetes.io/control-plane",
-                operator: "Exists",
-                effect: "NoSchedule"
-              }
+          JSONPatch{
+            op: "add", path: "/spec/tolerations/-",
+            value: Object.spec.tolerations{
+              key: "node-role.kubernetes.io/control-plane",
+              operator: "Exists",
+              effect: "NoSchedule"
             }
-          ]
+          }
