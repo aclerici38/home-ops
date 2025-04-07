@@ -26,14 +26,9 @@ spec:
             {
               "op": "add",
               "path": "/spec/tolerations/-",
-              "value": {
-                "key": "node-role.kubernetes.io/control-plane",
-                "operator": "Exists",
-                "effect": "NoSchedule"
-              }
+              "value": "{\"key\": \"node-role.kubernetes.io/control-plane\", \"operator\": \"Exists\", \"effect\": \"NoSchedule\"}"
             }
           ]
-
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.0/mutatingadmissionpolicybinding-admissionregistration-v1alpha1.json
 apiVersion: admissionregistration.k8s.io/v1alpha1
