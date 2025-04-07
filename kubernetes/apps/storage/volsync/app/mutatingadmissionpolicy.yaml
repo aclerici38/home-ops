@@ -3,15 +3,16 @@
 apiVersion: admissionregistration.k8s.io/v1alpha1
 kind: MutatingAdmissionPolicyBinding
 metadata:
-  name: volsync-add-toleration
+  name: volsync-add-tolerations
 spec:
-  policyName: volsync-add-toleration
+  policyName: volsync-add-tolerations
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.0/mutatingadmissionpolicy-admissionregistration-v1alpha1.json
 apiVersion: admissionregistration.k8s.io/v1alpha1
 kind: MutatingAdmissionPolicy
 metadata:
-  name: volsync-add-toleration
+  name: volsync-add-tolerations
+  namespace: volsync-system
 spec:
   matchConstraints:
     resourceRules:
@@ -30,6 +31,10 @@ spec:
       jsonPatch:
         expression: >
           [
+            JSONPatch{
+              op: "add", path: "/spec/template/spec/tolerations",
+              value: []
+            },
             JSONPatch{
               op: "add", path: "/spec/template/spec/tolerations/-",
               value: Object.spec.template.spec.tolerations{
