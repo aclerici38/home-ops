@@ -43,7 +43,7 @@ spec:
                 spec:
                   httpGet:
                     path: /health
-                    port: &port 80
+                    port: &port 8080
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -88,7 +88,8 @@ spec:
         type: configMap
         name: filebrowser-config
         globalMounts:
-          - path: /home/filebrowser
+          - path: /home/filebrowser/config.yaml
+            subPath: config.yaml
       media:
         type: nfs
         server: 10.38.55.50
