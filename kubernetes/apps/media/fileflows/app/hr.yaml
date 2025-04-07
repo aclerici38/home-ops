@@ -35,7 +35,6 @@ spec:
               repository: docker.io/revenz/fileflows
               tag: 25.04@sha256:79f713cbfa181b7940dad6dfc7e50e80177335ae44cd6de7a60988cb3ef75057
             env:
-              SQLITE_TMPDIR: &sqliteTmp /tmp/sqlite/
               PUID: 1000
               PGID: 1000
             resources: &resources
