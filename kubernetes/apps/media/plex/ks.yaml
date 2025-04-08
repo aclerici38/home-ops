@@ -13,8 +13,8 @@ spec:
   dependsOn:
     - name: volsync
       namespace: storage
-    - name: truenas-scale
-      namespace: truenas-scale
+    - name: nfs-server
+      namespace: storage
     - name: minio
       namespace: cluster-utilities
   path: ./kubernetes/apps/media/plex/app

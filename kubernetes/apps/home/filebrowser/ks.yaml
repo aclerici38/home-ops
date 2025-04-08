@@ -20,8 +20,8 @@ spec:
       namespace: storage
     - name: minio
       namespace: cluster-utilities
-    - name: truenas-scale
-      namespace: truenas-scale
+    - name: nfs-server
+      namespace: storage
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -14,8 +14,8 @@ spec:
       namespace: storage
     - name: minio
       namespace: cluster-utilities
-    - name: truenas-scale
-      namespace: truenas-scale
+    - name: nfs-server
+      namespace: storage
   path: ./kubernetes/apps/media/audiobookshelf/app
   components:
     - ../../../../components/volsync/minio

@@ -10,8 +10,8 @@ spec:
   dependsOn:
     - name: volsync
       namespace: storage
-    - name: truenas-scale
-      namespace: truenas-scale
+    - name: nfs-server
+      namespace: storage
     - name: minio
       namespace: cluster-utilities
   commonMetadata:
@@ -42,8 +42,8 @@ metadata:
 spec:
   targetNamespace: *ns
   dependsOn:
-    - name: truenas-scale
-      namespace: truenas-scale
+    - name: nfs-server
+      namespace: storage
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

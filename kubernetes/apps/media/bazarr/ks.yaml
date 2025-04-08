@@ -10,8 +10,8 @@ spec:
   dependsOn:
     - name: cloudnative-pg
       namespace: database
-    - name: truenas-scale
-      namespace: truenas-scale
+    - name: nfs-server
+      namespace: storage
     - name: minio
       namespace: cluster-utilities
     - name: volsync
