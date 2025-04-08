@@ -11,24 +11,26 @@ spec:
       labels:
         app: nfs-server
     spec:
-      hostPID: true
       nodeSelector:
         kubernetes.io/hostname: bonds
       containers:
         - name: nfs-server
-          image: docker.io/library/busybox@sha256:37f7b378a29ceb4c551b1b5582e27747b855bbfaa73fa11914fe0df028dc581f
+          image: quay.io/aminvakil/alpine-nfs-server:latest@sha256:b4b6fda64e589b78043af5a771cc0651e65fb913641b9b7929448d367975e5b3
           command:
             - sh
             - -c
             - |
               set -e
-              mkdir -p /export
               echo "Validating exports..."
               exportfs -r && exportfs -v
-              echo 8 > /proc/fs/nfsd/threads
+              rpc.nfsd --debug 8 --no-udp --no-nfs-version 3
               exec rpc.mountd -F
+              echo "starting nfs server"
           securityContext:
-            privileged: true
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - SETPCAP
           resources:
             requests:
               cpu: "10m"
@@ -41,8 +43,8 @@ spec:
               command:
                 - sh
                 - -c
-                - 'test -f /proc/fs/nfsd/threads && [ "$(cat /proc/fs/nfsd/threads)" -gt 0 ]'
-            initialDelaySeconds: 1
+                - 'rpcinfo -u localhost nfs 4'
+            initialDelaySeconds: 3
             periodSeconds: 15
             failureThreshold: 3
           readinessProbe:
@@ -50,7 +52,7 @@ spec:
               command:
                 - sh
                 - -c
-                - 'test -d /proc/fs/nfsd && exportfs -v | grep -q /'
+                - 'exportfs -v | grep -q /mnt/tank'
             periodSeconds: 10
             failureThreshold: 3
           volumeMounts:
@@ -58,8 +60,6 @@ spec:
               mountPath: /etc/exports
               subPath: exports
               readOnly: true
-            - name: nfsd
-              mountPath: /proc/fs/nfsd
             - name: media
               mountPath: /mnt/tank/media
             - name: immich
@@ -70,9 +70,6 @@ spec:
         - name: exports
           configMap:
             name: nfs-config
-        - name: nfsd
-          hostPath:
-            path: /proc/fs/nfsd
         - name: media
           hostPath:
             path: /mnt/tank/media

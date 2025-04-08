@@ -46,9 +46,7 @@ nodes:
       - name: nvidia_uvm
       - name: nvidia_drm
       - name: nvidia_modeset
-      # kubevirt
-      - name: vfio_pci
-      - name: vfio_iommu_type1
+      - name: nfsd
     schematic:
       customization:
         systemExtensions:
@@ -57,6 +55,8 @@ nodes:
             - siderolabs/nonfree-kmod-nvidia-production
             - siderolabs/zfs
             - siderolabs/amd-ucode
+            # 1.10 maybe?
+            # - siderolabs/nfsd
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -78,9 +78,7 @@ nodes:
         machine:
           install:
             extraKernelArgs:
-              - amd_iommu=on
               - amd_pstate=active
-              - iommu.passthrough=0
           udev:
             rules:
               - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
