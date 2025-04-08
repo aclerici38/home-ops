@@ -6,9 +6,5 @@ machine:
       forwardKubeDNSToHost: false
     rbac: true
     stableHostname: true
-    kubernetesTalosAPIAccess:
-      enabled: true
-      allowedRoles: ["os:admin"]
-      allowedKubernetesNamespaces: ["cluster-utilities"]
     apidCheckExtKeyUsage: true
     diskQuotaSupport: true

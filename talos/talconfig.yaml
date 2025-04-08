@@ -55,6 +55,8 @@ nodes:
           officialExtensions:
             - siderolabs/nvidia-container-toolkit-production
             - siderolabs/nonfree-kmod-nvidia-production
+            - siderolabs/zfs
+            - siderolabs/amd-ucode
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -82,36 +84,6 @@ nodes:
           udev:
             rules:
               - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
-          pods:
-            - apiVersion: v1
-              kind: Pod
-              metadata:
-                name: vfio-bind
-                namespace: kube-system
-              spec:
-                restartPolicy: Never
-                hostPID: true
-                containers:
-                  - name: vfio-bind
-                    image: busybox:latest
-                    securityContext:
-                      privileged: true
-                    command:
-                      - /bin/sh
-                      - -c
-                      - |
-                        # Unbind each SATA controller from the AHCI driver
-                        echo -n "0000:08:00.0" > /sys/bus/pci/drivers/ahci/unbind
-                        echo -n "0000:09:00.0" > /sys/bus/pci/drivers/ahci/unbind
-                        # Bind the controllers to vfio-pci by registering the device/vendor IDs
-                        echo "1022 7901" > /sys/bus/pci/drivers/vfio-pci/new_id
-                    volumeMounts:
-                      - name: sys
-                        mountPath: /sys
-                volumes:
-                  - name: sys
-                    hostPath:
-                      path: /sys
           disks:
             - device: /dev/disk/by-id/nvme-eui.00253841414031f0
               partitions:
@@ -147,7 +119,8 @@ nodes:
           officialExtensions:
             - siderolabs/nvidia-container-toolkit-production
             - siderolabs/nonfree-kmod-nvidia-production
-    controlPlane: true
+            - siderolabs/amd-ucode
+    controlPlane: false
     nodeTaints:
       node-role.kubernetes.io/control-plane: NoSchedule
     networkInterfaces:
@@ -186,7 +159,7 @@ nodes:
       mode: cloud
     nodeLabels:
       location: "cloud"
-    controlPlane: true
+    controlPlane: false
     nodeTaints:
       node-role.kubernetes.io/control-plane: NoSchedule
     networkInterfaces:

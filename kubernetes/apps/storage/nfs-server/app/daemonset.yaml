@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nfs-server
+spec:
+  selector:
+    matchLabels:
+      app: nfs-server
+  template:
+    metadata:
+      labels:
+        app: nfs-server
+    spec:
+      hostPID: true
+      nodeSelector:
+        kubernetes.io/hostname: bonds
+      containers:
+        - name: nfs-server
+          image: docker.io/library/busybox@sha256:37f7b378a29ceb4c551b1b5582e27747b855bbfaa73fa11914fe0df028dc581f
+          command:
+            - sh
+            - -c
+            - |
+              set -e
+              mkdir -p /export
+              echo "Validating exports..."
+              exportfs -r && exportfs -v
+              echo 8 > /proc/fs/nfsd/threads
+              exec rpc.mountd -F
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "32Mi"
+            limits:
+              cpu: "50m"
+              memory: "128Mi"
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - 'test -f /proc/fs/nfsd/threads && [ "$(cat /proc/fs/nfsd/threads)" -gt 0 ]'
+            initialDelaySeconds: 1
+            periodSeconds: 15
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - 'test -d /proc/fs/nfsd && exportfs -v | grep -q /'
+            periodSeconds: 10
+            failureThreshold: 3
+          volumeMounts:
+            - name: exports
+              mountPath: /etc/exports
+              subPath: exports
+              readOnly: true
+            - name: nfsd
+              mountPath: /proc/fs/nfsd
+            - name: media
+              mountPath: /mnt/tank/media
+            - name: immich
+              mountPath: /mnt/tank/immich
+            - name: minio
+              mountPath: /mnt/tank/minio
+      volumes:
+        - name: exports
+          configMap:
+            name: nfs-config
+        - name: nfsd
+          hostPath:
+            path: /proc/fs/nfsd
+        - name: media
+          hostPath:
+            path: /mnt/tank/media
+        - name: immich
+          hostPath:
+            path: /mnt/tank/immich
+        - name: minio
+          hostPath:
+            path: /mnt/tank/minio

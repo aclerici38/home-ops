@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nfs-config
+data:
+  exports: |
+    /mnt/tank/media *(rw,sync,no_subtree_check,fsid=0,no_root_squash)
+    /mnt/tank/immich *(rw,sync,no_subtree_check,no_root_squash)
+    /mnt/tank/minio *(rw,sync,no_subtree_check,no_root_squash)
