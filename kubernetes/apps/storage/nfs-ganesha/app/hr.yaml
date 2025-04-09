@@ -39,7 +39,7 @@ spec:
                 cpu: "500m"
                 memory: "512Mi"
             securityContext:
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               allowPrivilegeEscalation: true
               seccompProfile: { type: RuntimeDefault }
               capabilities:
