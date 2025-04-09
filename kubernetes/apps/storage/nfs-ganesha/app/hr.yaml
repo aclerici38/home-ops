@@ -70,7 +70,6 @@ spec:
         globalMounts:
           - path: /etc/ganesha/ganesha.conf
             subPath: ganesha.conf
-            readOnly: true
       minio:
         existingClaim: minio
         globalMounts:
