@@ -31,7 +31,7 @@ spec:
             image:
               repository: docker.io/library/busybox
               tag: latest
-            command: [ "sh", "-c", "ln -sf /proc/self/mounts /mtab/mtab" ]
+            command: [ "sh", "-c", "ln -sf /proc/self/mounts /mtab/mtab && ls -l /mtab" ]
         containers:
           *app :
             image:
