@@ -26,6 +26,12 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: bonds
+        initContainers:
+          mtab:
+            image:
+              repository: docker.io/library/busybox
+              tag: latest
+            command: [ "sh", "-c", "ln -sf /proc/self/mounts /mtab/mtab" ]
         containers:
           *app :
             image:
@@ -88,3 +94,12 @@ spec:
         type: emptyDir
       tmp:
         type: emptyDir
+      mtab:
+        type: emptyDir
+        advancedMounts:
+          main:
+            mtab:
+              - path: /mtab
+            *app :
+              - path: /etc/mtab
+                subPath: mtab
