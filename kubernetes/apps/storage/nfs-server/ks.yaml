@@ -13,8 +13,11 @@ spec:
   path: ./kubernetes/apps/storage/nfs-server/app
   dependsOn:
     - name: media-zfs-volume
+      namespace: openebs-system
     # - name: immich-zfs-volume
+    #   namespace: openebs-system
     # - name: minio-zfs-volume
+    #   namespace: openebs-system
   sourceRef:
     kind: GitRepository
     name: flux-system
