@@ -13,8 +13,8 @@ spec:
   path: ./kubernetes/apps/storage/nfs-server/app
   dependsOn:
     - name: media-zfs-volume
-    - name: immich-zfs-volume
-    - name: minio-zfs-volume
+    # - name: immich-zfs-volume
+    # - name: minio-zfs-volume
   sourceRef:
     kind: GitRepository
     name: flux-system
