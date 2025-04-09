@@ -90,7 +90,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: nfs-server-exports
+        name: nfs-server-config
         globalMounts:
           - path: /etc/exports
             subPath: exports
