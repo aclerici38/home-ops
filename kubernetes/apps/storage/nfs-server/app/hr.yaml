@@ -73,7 +73,7 @@ spec:
                   periodSeconds: 10
                   failureThreshold: 3
             securityContext:
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities:
                 add:
                   - SYS_ADMIN
