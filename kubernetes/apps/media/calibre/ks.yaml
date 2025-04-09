@@ -39,7 +39,6 @@ metadata:
   namespace: &ns media
 spec:
   targetNamespace: *ns
-  dependsOn:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
