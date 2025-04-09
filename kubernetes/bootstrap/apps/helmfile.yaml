@@ -14,10 +14,6 @@ hooks:
     args:
       - "-c"
       - "kustomize build /Users/anthony/home-ops/kubernetes/resources/crds | kubectl apply --server-side --force-conflicts -f -"
-  - events: ["prepare"]
-    showlogs: true
-    command: "kubectl"
-    args: ["apply", "-f", "/Users/anthony/home-ops/storage/nfs-server/app"]
 
 releases:
   - name: cilium
@@ -69,6 +65,7 @@ releases:
       - /Users/anthony/home-ops/kubernetes/apps/cluster-utilities/onepassword-connect/app/values.yaml
     needs:
       - cilium/cilium
+      - kube-system/coredns
 
   - name: external-secrets
     namespace: cluster-utilities

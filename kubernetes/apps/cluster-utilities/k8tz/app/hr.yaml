@@ -35,6 +35,3 @@ spec:
         issuerRef:
           name: k8tz-webhook-selfsign
           kind: Issuer
-    initContainerResources:
-      limits:
-        ephemeral-storage: 1Mi
