@@ -25,7 +25,7 @@ spec:
       main:
         pod:
           nodeSelector:
-            location: bonds
+            kubernetes.io/hostname: bonds
         containers:
           *app :
             image:
