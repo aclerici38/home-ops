@@ -18,6 +18,8 @@ spec:
       namespace: cluster-utilities
     - name: minio
       namespace: cluster-utilities
+    - name: nfs-server
+      namespace: storage
   path: ./kubernetes/apps/home/immich/app
   components:
     - ../../../../components/cnpg/restore

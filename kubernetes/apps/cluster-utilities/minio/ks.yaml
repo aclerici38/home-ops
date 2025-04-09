@@ -14,6 +14,8 @@ spec:
       namespace: cluster-utilities
     - name: volsync
       namespace: storage
+    - name: nfs-server
+      namespace: storage
   path: ./kubernetes/apps/cluster-utilities/minio/app
   components:
     - ../../../../components/external-secret

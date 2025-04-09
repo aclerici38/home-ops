@@ -46,6 +46,7 @@ nodes:
       - name: nvidia_uvm
       - name: nvidia_drm
       - name: nvidia_modeset
+      - name: zfs
     schematic:
       customization:
         systemExtensions:
@@ -54,8 +55,6 @@ nodes:
             - siderolabs/nonfree-kmod-nvidia-production
             - siderolabs/zfs
             - siderolabs/amd-ucode
-            # 1.10 maybe?
-            # - siderolabs/nfsd
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -80,6 +79,7 @@ nodes:
               - amd_pstate=active
           udev:
             rules:
+              - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
               - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
           disks:
             - device: /dev/disk/by-id/nvme-eui.00253841414031f0

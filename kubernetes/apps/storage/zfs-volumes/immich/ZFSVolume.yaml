@@ -1,0 +1,14 @@
+apiVersion: zfs.openebs.io/v1
+kind: ZFSVolume
+metadata:
+  finalizers:
+    - cluster.local/data-protection
+  name: media
+spec:
+  capacity: "47983374630912"
+  fsType: zfs
+  ownerNodeID: bonds
+  poolName: tank
+  volumeType: DATASET
+  shared: "yes"
+  thinProvision: "yes"

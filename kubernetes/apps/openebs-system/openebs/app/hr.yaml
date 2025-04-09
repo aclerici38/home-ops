@@ -1,0 +1,69 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openebs
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: openebs
+    namespace: flux-system
+  driftDetection:
+    mode: enabled
+  install:
+    disableHooks: true
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    disableHooks: true
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    openebs-crds:
+      csi:
+        volumeSnapshots:
+          enabled: false # snapshot-controller manages those CRDs
+
+    # https://github.com/openebs/dynamic-localpv-provisioner/blob/HEAD/deploy/helm/charts/values.yaml
+    localpv-provisioner:
+      enabled: false
+
+    # https://github.com/openebs/zfs-localpv/blob/HEAD/deploy/helm/charts/values.yaml
+    zfs-localpv:
+      enabled: true
+      analytics:
+        enabled: false
+      zfs:
+        bin: /usr/local/sbin/zfs
+      zfsNode:
+        encrKeysDir: /var/openebs/keys
+        nodeSelector:
+          kubernetes.io/hostname: bonds
+      crds:
+        csi:
+          volumeSnapshots:
+            enabled: false
+
+    # https://github.com/openebs/lvm-localpv/blob/HEAD/deploy/helm/charts/values.yaml
+    lvm-localpv:
+      enabled: false
+
+    # https://github.com/openebs/mayastor-extensions/blob/v2.7.0/chart/values.yaml
+    mayastor:
+      enabled: false
+
+    engines:
+      local:
+        lvm:
+          enabled: false
+        zfs:
+          enabled: true
+      replicated:
+        mayastor:
+          enabled: false

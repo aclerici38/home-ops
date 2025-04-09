@@ -1,0 +1,36 @@
+# ---
+# kind: PersistentVolumeClaim
+# apiVersion: v1
+# metadata:
+#   name: immich
+# spec:
+#   storageClassName: zfs-tank
+#   accessModes:
+#     - ReadWriteMany
+#   resources:
+#     requests:
+#       storage: 43.6Ti
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: media
+spec:
+  storageClassName: zfs-tank
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 43.6Ti
+# ---
+# kind: PersistentVolumeClaim
+# apiVersion: v1
+# metadata:
+#   name: minio
+# spec:
+#   storageClassName: zfs-tank
+#   accessModes:
+#     - ReadWriteMany
+#   resources:
+#     requests:
+#       storage: 43.6Ti
