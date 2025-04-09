@@ -74,15 +74,15 @@ spec:
       minio:
         existingClaim: minio
         globalMounts:
-          - path: /var/mnt/minio
+          - path: /export/minio
       immich:
         existingClaim: immich
         globalMounts:
-          - path: /var/mnt/immich
+          - path: /export/immich
       media:
         existingClaim: media
         globalMounts:
-          - path: /var/mnt/media
+          - path: /export/media
       recovery:
         type: emptyDir
       run:
