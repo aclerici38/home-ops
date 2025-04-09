@@ -9,6 +9,5 @@ configMapGenerator:
   - name: ganesha-config
     files:
       - ./config/ganesha.conf
-      - ./config/entrypoint.sh
 generatorOptions:
   disableNameSuffixHash: true
