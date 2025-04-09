@@ -50,6 +50,8 @@ spec:
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/media/qbittorrent/vuetorrent
+  dependsOn:
+    - name: qbittorrent
   prune: true
   sourceRef:
     kind: GitRepository
