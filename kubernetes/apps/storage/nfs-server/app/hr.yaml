@@ -75,10 +75,12 @@ spec:
                   failureThreshold: 3
             securityContext:
               readOnlyRootFilesystem: false
-              capabilities:
-                add:
-                  - SYS_ADMIN
-                  - SETPCAP
+              fsgroup: 0
+              privileged: true
+              # capabilities:
+              #   add:
+              #     - SYS_ADMIN
+              #     - SETPCAP
     service:
       *app :
         controller: main
