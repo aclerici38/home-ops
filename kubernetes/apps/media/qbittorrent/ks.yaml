@@ -27,8 +27,6 @@ spec:
       namespace: storage
     - name: external-secrets-stores
       namespace: cluster-utilities
-    - name: nfs-server
-      namespace: storage
     - name: minio
       namespace: cluster-utilities
   postBuild:

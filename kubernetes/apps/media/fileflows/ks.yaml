@@ -10,8 +10,6 @@ spec:
   dependsOn:
     - name: volsync
       namespace: storage
-    - name: nfs-server
-      namespace: storage
     - name: minio
       namespace: cluster-utilities
   commonMetadata:

@@ -19,7 +19,7 @@ spec:
       namespace: storage
     - name: minio
       namespace: cluster-utilities
-    - name: nfs-server
+    - name: nfs-ganesha
       namespace: storage
   sourceRef:
     kind: GitRepository

@@ -45,9 +45,9 @@ spec:
   wait: false
   dependsOn:
     - name: system-upgrade-controller
-  postBuild:
-    substitute:
-      # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-      TALOS_VERSION: v1.9.5
-      # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
-      KUBERNETES_VERSION: v1.32.3
+  # postBuild:
+  #   substitute:
+  #     # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
+  #     TALOS_VERSION: v1.9.5
+  #     # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
+  #     KUBERNETES_VERSION: v1.32.3

@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: nfs-server-config
-data:
-  exports: |-
-    /var/mnt/media *(rw,sync,no_subtree_check,no_root_squash)
