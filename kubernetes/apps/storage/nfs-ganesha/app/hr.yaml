@@ -26,27 +26,12 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: bonds
-        initContainers:
-          mtab:
-            image:
-              repository: docker.io/library/busybox
-              tag: latest
-            command: [ "sh", "-c", "ln -sf /proc/self/mounts /mtab/mtab && ls -l /mtab" ]
         containers:
           *app :
-            lifecycle:
-              postStart:
-                exec:
-                  command:
-                    - sh
-                    - -c
-                    - |
-                      echo "Contents of /etc/mtab:"
-                      ls -l /etc
-                      cat /etc/mtab
             image:
               repository: docker.io/hectorm/nfs-ganesha
               tag: v9@sha256:930d4eed3df4cd246bacf5d920cfe4d5bfc831c13617c53bdaa16d1e197782c8
+            command: ["/entrypoint.sh"]
             resources:
               requests:
                 cpu: "100m"
@@ -86,6 +71,8 @@ spec:
         globalMounts:
           - path: /etc/ganesha/ganesha.conf
             subPath: ganesha.conf
+          - path: /entrypoint.sh
+            subPath: entrypoint.sh
       minio:
         existingClaim: minio
         globalMounts:
@@ -104,12 +91,3 @@ spec:
         type: emptyDir
       tmp:
         type: emptyDir
-      mtab:
-        type: emptyDir
-        advancedMounts:
-          main:
-            mtab:
-              - path: /mtab
-            *app :
-              - path: /etc/mtab
-                subPath: mtab
