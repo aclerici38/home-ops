@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app nfs-server
+  name: &app nfs-ganesha
 spec:
   interval: 1h
   chartRef:
@@ -84,4 +84,6 @@ spec:
         globalMounts:
           - path: /var/mnt/media
       recovery:
+        type: emptyDir
+      run:
         type: emptyDir
