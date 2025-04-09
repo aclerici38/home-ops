@@ -4,7 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app media-zfs-volume
-  namespace: &ns storage
+  namespace: &ns openebs-system
 spec:
   targetNamespace: *ns
   commonMetadata:
@@ -13,7 +13,7 @@ spec:
   dependsOn:
     - name: openebs
       namespace: openebs-system
-  path: ./kubernetes/apps/storage/zfs-volumes/media
+  path: ./kubernetes/apps/openebs-system/zfs-volumes/media
   prune: false
   sourceRef:
     kind: GitRepository
@@ -31,7 +31,7 @@ spec:
 # kind: Kustomization
 # metadata:
 #   name: &app immich-zfs-volume
-#   namespace: &ns storage
+#   namespace: &ns openebs-system
 # spec:
 #   targetNamespace: *ns
 #   commonMetadata:
@@ -40,7 +40,7 @@ spec:
 #   dependsOn:
 #     - name: openebs
 #       namespace: openebs-system
-#   path: ./kubernetes/apps/storage/zfs-volumes/immich
+#   path: ./kubernetes/apps/openebs-system/zfs-volumes/immich
 #   prune: false
 #   sourceRef:
 #     kind: GitRepository
@@ -58,7 +58,7 @@ spec:
 # kind: Kustomization
 # metadata:
 #   name: &app minio-zfs-volume
-#   namespace: &ns storage
+#   namespace: &ns openebs-system
 # spec:
 #   targetNamespace: *ns
 #   commonMetadata:
@@ -67,7 +67,7 @@ spec:
 #   dependsOn:
 #     - name: openebs
 #       namespace: openebs-system
-#   path: ./kubernetes/apps/storage/zfs-volumes/minio
+#   path: ./kubernetes/apps/openebs-system/zfs-volumes/minio
 #   prune: false
 #   sourceRef:
 #     kind: GitRepository

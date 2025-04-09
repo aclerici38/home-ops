@@ -48,6 +48,30 @@ spec:
               limits:
                 cpu: "500m"
                 memory: "512Mi"
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - 'rpcinfo -u localhost nfs 4'
+                  initialDelaySeconds: 3
+                  periodSeconds: 15
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - 'exportfs -v | grep -q /var/mnt/'
+                  periodSeconds: 10
+                  failureThreshold: 3
             securityContext:
               readOnlyRootFilesystem: true
               capabilities:
