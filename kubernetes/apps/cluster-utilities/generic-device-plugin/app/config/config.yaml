@@ -10,3 +10,8 @@ devices:
       - count: 10
         paths:
           - path: /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_d4f0088f4c1fef119b9450d0639e525b-if00-port0
+  - name: nfsd
+    groups:
+      - count: 1
+        paths:
+          - path: /proc/fs/nfsd

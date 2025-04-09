@@ -48,6 +48,7 @@ spec:
               limits:
                 cpu: "500m"
                 memory: "512Mi"
+                squat.ai/nfsd: 1
             probes:
               liveness:
                 enabled: true
@@ -74,7 +75,10 @@ spec:
                   failureThreshold: 3
             securityContext:
               readOnlyRootFilesystem: false
-              privileged: true
+              capabilities:
+                add:
+                  - SYS_ADMIN
+                  - SETPCAP
     service:
       *app :
         controller: main
