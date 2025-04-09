@@ -71,14 +71,14 @@ spec:
           - path: /etc/ganesha/ganesha.conf
             subPath: ganesha.conf
             readOnly: true
-      # minio:
-      #   existingClaim: minio
-      #   globalMounts:
-      #     - path: /var/mnt/minio
-      # immich:
-      #   existingClaim: immich
-      #   globalMounts:
-          # - path: /var/mnt/immich
+      minio:
+        existingClaim: minio
+        globalMounts:
+          - path: /var/mnt/minio
+      immich:
+        existingClaim: immich
+        globalMounts:
+          - path: /var/mnt/immich
       media:
         existingClaim: media
         globalMounts:
