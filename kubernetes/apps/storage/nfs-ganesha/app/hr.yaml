@@ -31,12 +31,6 @@ spec:
             image:
               repository: docker.io/hectorm/nfs-ganesha
               tag: v9@sha256:930d4eed3df4cd246bacf5d920cfe4d5bfc831c13617c53bdaa16d1e197782c8
-            command:
-              - sh
-              - -c
-              - |
-                ln -sf /proc/self/mounts /etc/mtab && \
-                exec /usr/bin/catatonit -- /usr/local/bin/ganesha.nfsd
             resources:
               requests:
                 cpu: "100m"
