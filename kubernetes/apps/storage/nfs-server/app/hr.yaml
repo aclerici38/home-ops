@@ -73,12 +73,12 @@ spec:
       # minio:
       #   existingClaim: minio
       #   globalMounts:
-      #     - /var/mnt/minio
+      #     - path: /var/mnt/minio
       # immich:
       #   existingClaim: immich
       #   globalMounts:
-          # - /var/mnt/immich
+          # - path: /var/mnt/immich
       media:
         existingClaim: media
         globalMounts:
-          - /var/mnt/media
+          - path: /var/mnt/media
