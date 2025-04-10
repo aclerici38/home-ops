@@ -27,8 +27,9 @@ spec:
         pod:
           hostNetwork: true
           tolerations:
-            - key: "node-role.kubernetes.io/control-plane"
-              operator: "Exists"
+            - key: "location"
+              operator: "Equal"
+              value: "house"
               effect: "NoSchedule"
         initContainers:
           cni-plugins:

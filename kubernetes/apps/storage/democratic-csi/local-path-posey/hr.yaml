@@ -24,9 +24,10 @@ spec:
     controller:
       nodeSelector: &ns
         kubernetes.io/hostname: posey
-      tolerations: &tol
-        - key: "node-role.kubernetes.io/control-plane"
-          operator: "Exists"
+      tolerations:
+        - key: "location"
+          operator: "Equal"
+          value: "house"
           effect: "NoSchedule"
       enabled: true
       strategy: node

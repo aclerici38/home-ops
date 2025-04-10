@@ -120,7 +120,7 @@ nodes:
             - siderolabs/amd-ucode
     controlPlane: false
     nodeTaints:
-      node-role.kubernetes.io/control-plane: NoSchedule
+      location=cloud: NoSchedule
     networkInterfaces:
       - interface: bond0
         dhcp: false
@@ -159,7 +159,7 @@ nodes:
       location: "cloud"
     controlPlane: false
     nodeTaints:
-      node-role.kubernetes.io/control-plane: NoSchedule
+      location=cloud: NoSchedule
     networkInterfaces:
       - interface: eth0
         dhcp: false

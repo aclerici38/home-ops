@@ -25,8 +25,9 @@ spec:
       main:
         pod:
           tolerations:
-            - key: "node-role.kubernetes.io/control-plane"
-              operator: "Exists"
+            - key: "location"
+              operator: "Equal"
+              value: "cloud"
               effect: "NoSchedule"
         strategy: RollingUpdate
         replicas: 2

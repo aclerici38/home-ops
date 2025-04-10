@@ -35,9 +35,10 @@ spec:
             JSONPatch{
               op: "add", path: "/spec/tolerations/-",
               value: Object.spec.tolerations{
-                key: "node-role.kubernetes.io/control-plane",
-                operator: "Exists",
-                effect: "NoSchedule"
+                "key": "location",
+                "operator": "Equal",
+                "value": "cloud",
+                "effect": "NoSchedule"
               }
             }
           ]

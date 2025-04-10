@@ -25,8 +25,9 @@ spec:
       nodeSelector: &ns
         kubernetes.io/hostname: madbum
       tolerations: &tol
-        - key: "node-role.kubernetes.io/control-plane"
-          operator: "Exists"
+        - key: "location"
+          operator: "Equal"
+          value: "cloud"
           effect: "NoSchedule"
       enabled: true
       strategy: node
