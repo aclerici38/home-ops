@@ -48,7 +48,7 @@ spec:
       *app :
         controller: main
         annotations:
-          io.cilium/lb-ipam-ips: 10.38.55.50
+          lbipam.cilium.io/ips: 10.38.55.50
         ports:
           nfs-tcp:
             port: 2049
