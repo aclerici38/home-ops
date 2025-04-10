@@ -35,10 +35,10 @@ spec:
             JSONPatch{
               op: "add", path: "/spec/tolerations/-",
               value: Object.spec.tolerations{
-                "key": "location",
-                "operator": "Equal",
-                "value": "cloud",
-                "effect": "NoSchedule"
+                key: "location",
+                operator: "Equal",
+                value: "cloud",
+                effect: "NoSchedule"
               }
             }
           ]
