@@ -26,8 +26,8 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: bonds
-          # securityContext:
-          #   seccompProfile: { type: RuntimeDefault }
+          securityContext:
+            seccompProfile: { type: RuntimeDefault }
         containers:
           *app :
             image:
