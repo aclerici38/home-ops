@@ -21,6 +21,8 @@ spec:
       retries: 1
   values:
     controller:
+      nodeSelector: &ns
+        location: house
       fullnameOverride: *name
       enabled: true
       strategy: node
