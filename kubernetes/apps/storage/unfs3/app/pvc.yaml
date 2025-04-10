@@ -4,6 +4,7 @@ apiVersion: v1
 metadata:
   name: immich
 spec:
+  storageClassName: zfs-tank
   accessModes:
     - ReadWriteMany
   resources:
@@ -15,6 +16,7 @@ apiVersion: v1
 metadata:
   name: media
 spec:
+  storageClassName: zfs-tank
   accessModes:
     - ReadWriteMany
   resources:
@@ -26,6 +28,7 @@ apiVersion: v1
 metadata:
   name: minio
 spec:
+  storageClassName: zfs-tank
   accessModes:
     - ReadWriteMany
   resources:
