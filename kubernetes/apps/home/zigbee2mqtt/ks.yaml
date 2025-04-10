@@ -34,19 +34,19 @@ spec:
       APP: *app
   patches:
     - patch: |-
-        apiVersion: external-secrets.io/v1beta1
-        kind: ExternalSecret
-        metadata:
-          name: patch
-        spec:
-          data:
-            - secretKey: ZIGBEE2MQTT_CONFIG_MQTT_USER
-              remoteRef:
-                key: "emqx"
-                property: "X_EMQX_MQTT_USERNAME"
-            - secretKey: ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD
-              remoteRef:
-                key: "emqx"
-                property: "X_EMQX_MQTT_PASSWORD"
+        - op: add
+          path: /spec/data/-
+          value:
+            secretKey: ZIGBEE2MQTT_CONFIG_MQTT_USER
+            remoteRef:
+              key: "emqx"
+              property: "X_EMQX_MQTT_USERNAME"
+        - op: add
+          path: /spec/data/-
+          value:
+            secretKey: ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD
+            remoteRef:
+              key: "emqx"
+              property: "X_EMQX_MQTT_PASSWORD"
       target:
         kind: ExternalSecret
