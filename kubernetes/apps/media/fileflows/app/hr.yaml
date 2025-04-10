@@ -97,9 +97,6 @@ spec:
         globalMounts:
           - path: /mnt/calibre-library
       media:
-        enabled: true
-        type: nfs
-        server: 10.38.55.50
-        path: /mnt/tank/media
+        existingClaim: media
         globalMounts:
           - path: /allMedia

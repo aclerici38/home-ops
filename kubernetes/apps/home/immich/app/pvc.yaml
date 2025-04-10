@@ -11,26 +11,26 @@ spec:
     requests:
       storage: 43.6Ti
 ---
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: media
+  name: immich-ml-cache
 spec:
-  storageClassName: zfs-tank
-  accessModes:
-    - ReadWriteMany
+  storageClassName: local-hostpath
   resources:
     requests:
-      storage: 43.6Ti
+      storage: 50Gi
+  accessModes:
+    - ReadWriteMany
 ---
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: minio
+  name: immich-thumbnails
 spec:
-  storageClassName: zfs-tank
-  accessModes:
-    - ReadWriteMany
+  storageClassName: local-hostpath
   resources:
     requests:
-      storage: 43.6Ti
+      storage: 100Gi
+  accessModes:
+    - ReadWriteMany

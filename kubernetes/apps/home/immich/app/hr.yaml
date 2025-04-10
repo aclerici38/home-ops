@@ -160,9 +160,7 @@ spec:
     persistence:
       media:
         enabled: true
-        type: nfs
-        server: 10.38.55.50
-        path: /mnt/tank/immich
+        existingClaim: *app
         advancedMounts:
           server:
             immich-server:

@@ -91,8 +91,6 @@ spec:
           - path: /home/filebrowser/config.yaml
             subPath: config.yaml
       media:
-        type: nfs
-        server: 10.38.55.50
-        path: /mnt/tank/media
+        existingClaim: media
         globalMounts:
-          - path: /mnt/media
+          - path: /allMedia

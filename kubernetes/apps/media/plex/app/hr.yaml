@@ -109,8 +109,6 @@ spec:
       transcode:
         type: emptyDir
       media:
-        type: nfs
-        server: 10.38.55.50
-        path: /mnt/tank/media
+        existingClaim: media
         globalMounts:
           - path: /allMedia
