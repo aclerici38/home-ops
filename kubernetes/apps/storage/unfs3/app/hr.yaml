@@ -73,14 +73,14 @@ spec:
         globalMounts:
           - path: /etc/exports
             subPath: exports
-      minio:
-        existingClaim: minio
-        globalMounts:
-          - path: /export/minio
-      immich:
-        existingClaim: immich
-        globalMounts:
-          - path: /export/immich
+      # minio:
+      #   existingClaim: minio
+      #   globalMounts:
+      #     - path: /export/minio
+      # immich:
+      #   existingClaim: immich
+      #   globalMounts:
+      #     - path: /export/immich
       media:
         existingClaim: media
         globalMounts:
