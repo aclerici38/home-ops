@@ -25,7 +25,7 @@ spec:
       expression: >
         ("app.kubernetes.io/created-by" in object.metadata.labels) &&
         object.metadata.labels["app.kubernetes.io/created-by"] == "volsync"
-  failurePolicy: Fail
+  failurePolicy: Ignore
   reinvocationPolicy: IfNeeded
   mutations:
     - patchType: JSONPatch
