@@ -29,8 +29,8 @@ spec:
         containers:
           *app :
             image:
-              repository: docker.io/hectorm/nfs-ganesha
-              tag: v9@sha256:930d4eed3df4cd246bacf5d920cfe4d5bfc831c13617c53bdaa16d1e197782c8
+              repository: docker.io/nimbix/unfs3
+              tag: latest
             resources:
               requests:
                 cpu: "100m"
@@ -39,53 +39,49 @@ spec:
                 cpu: "500m"
                 memory: "512Mi"
             securityContext:
-              readOnlyRootFilesystem: false
-              allowPrivilegeEscalation: true
-              privileged: true
-              # seccompProfile: { type: RuntimeDefault }
-              # capabilities:
-              #   drop:
-              #    - ALL
-              #   add:
-              #     - CHOWN
-              #     - DAC_OVERRIDE
-              #     - DAC_READ_SEARCH
-              #     - FOWNER
-              #     - FSETID
-              #     - SETGID
-              #     - SETUID
-              #     - SYS_RESOURCE
+              readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities:
+                drop:
+                 - ALL
+                add:
+                  - NET_BIND_SERVICE
     service:
       *app :
         controller: main
         annotations:
           io.cilium/lb-ipam-ips: 10.38.55.50
         ports:
-          nfs:
+          nfs-tcp:
             port: 2049
             protocol: TCP
+          nfs-udp:
+            port: 2049
+            protocol: UDP
+          rpcbind-tcp:
+            port: 111
+            protocol: TCP
+          rpcbind-udp:
+            port: 111
+            protocol: UDP
+
     persistence:
-      # config:
-      #   type: configMap
-      #   name: ganesha-config
-      #   globalMounts:
-      #     - path: /etc/ganesha/ganesha.conf
-      #       subPath: ganesha.conf
-      # minio:
-      #   existingClaim: minio
-      #   globalMounts:
-      #     - path: /export/minio
-      # immich:
-      #   existingClaim: immich
-      #   globalMounts:
-      #     - path: /export/immich
+      config:
+        type: configMap
+        name: nfs-config
+        globalMounts:
+          - path: /etc/exports
+            subPath: exports
+      minio:
+        existingClaim: minio
+        globalMounts:
+          - path: /export/minio
+      immich:
+        existingClaim: immich
+        globalMounts:
+          - path: /export/immich
       media:
         existingClaim: media
         globalMounts:
           - path: /export
-      recovery:
-        type: emptyDir
-      run:
-        type: emptyDir
-      tmp:
-        type: emptyDir

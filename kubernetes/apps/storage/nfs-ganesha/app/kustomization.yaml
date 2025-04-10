@@ -6,8 +6,8 @@ resources:
   - ./hr.yaml
   - ./pvc.yaml
 configMapGenerator:
-  - name: ganesha-config
+  - name: nfs-config
     files:
-      - ./config/ganesha.conf
+      - ./config/exports
 generatorOptions:
   disableNameSuffixHash: true
