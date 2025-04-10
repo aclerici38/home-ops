@@ -41,19 +41,20 @@ spec:
             securityContext:
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: true
-              seccompProfile: { type: RuntimeDefault }
-              capabilities:
-                drop:
-                 - ALL
-                add:
-                  - CHOWN
-                  - DAC_OVERRIDE
-                  - DAC_READ_SEARCH
-                  - FOWNER
-                  - FSETID
-                  - SETGID
-                  - SETUID
-                  - SYS_RESOURCE
+              privileged: true
+              # seccompProfile: { type: RuntimeDefault }
+              # capabilities:
+              #   drop:
+              #    - ALL
+              #   add:
+              #     - CHOWN
+              #     - DAC_OVERRIDE
+              #     - DAC_READ_SEARCH
+              #     - FOWNER
+              #     - FSETID
+              #     - SETGID
+              #     - SETUID
+              #     - SYS_RESOURCE
     service:
       *app :
         controller: main
@@ -64,12 +65,12 @@ spec:
             port: 2049
             protocol: TCP
     persistence:
-      config:
-        type: configMap
-        name: ganesha-config
-        globalMounts:
-          - path: /etc/ganesha/ganesha.conf
-            subPath: ganesha.conf
+      # config:
+      #   type: configMap
+      #   name: ganesha-config
+      #   globalMounts:
+      #     - path: /etc/ganesha/ganesha.conf
+      #       subPath: ganesha.conf
       minio:
         existingClaim: minio
         globalMounts:
