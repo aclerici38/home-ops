@@ -3,21 +3,21 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app nfs-ganesha
+  name: &app unfs3
   namespace: &ns storage
 spec:
   targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/storage/nfs-ganesha/app
+  path: ./kubernetes/apps/storage/unfs3/app
   dependsOn:
     - name: media-zfs-volume
       namespace: openebs-system
-    # - name: immich-zfs-volume
-    #   namespace: openebs-system
-    # - name: minio-zfs-volume
-    #   namespace: openebs-system
+    - name: immich-zfs-volume
+      namespace: openebs-system
+    - name: minio-zfs-volume
+      namespace: openebs-system
   sourceRef:
     kind: GitRepository
     name: flux-system
