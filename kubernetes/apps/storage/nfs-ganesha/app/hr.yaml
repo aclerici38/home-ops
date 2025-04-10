@@ -71,18 +71,18 @@ spec:
       #   globalMounts:
       #     - path: /etc/ganesha/ganesha.conf
       #       subPath: ganesha.conf
-      minio:
-        existingClaim: minio
-        globalMounts:
-          - path: /export/minio
-      immich:
-        existingClaim: immich
-        globalMounts:
-          - path: /export/immich
+      # minio:
+      #   existingClaim: minio
+      #   globalMounts:
+      #     - path: /export/minio
+      # immich:
+      #   existingClaim: immich
+      #   globalMounts:
+      #     - path: /export/immich
       media:
         existingClaim: media
         globalMounts:
-          - path: /export/media
+          - path: /export
       recovery:
         type: emptyDir
       run:
