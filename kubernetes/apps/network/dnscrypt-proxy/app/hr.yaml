@@ -29,6 +29,10 @@ spec:
               operator: "Equal"
               value: "cloud"
               effect: "NoSchedule"
+            - key: "location"
+              operator: "Equal"
+              value: "house"
+              effect: "NoSchedule"
         strategy: RollingUpdate
         replicas: 2
         containers:

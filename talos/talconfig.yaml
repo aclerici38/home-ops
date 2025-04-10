@@ -120,21 +120,19 @@ nodes:
             - siderolabs/amd-ucode
     controlPlane: false
     nodeTaints:
-      location=cloud: NoSchedule
+      location: house:NoSchedule
     networkInterfaces:
-      - interface: bond0
-        dhcp: false
-        mtu: 1500
+      - deviceSelector:
+          hardwareAddr: "c4:62:37:01:8c:cf"
         addresses:
-          - 10.0.30.28/24
+          - "10.0.30.28/24"
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.0.30.1"
-        bond:
-          mode: 802.3ad
-          deviceSelectors:
-            - hardwareAddr: "c4:62:37:01:8c:cf"
-            - hardwareAddr: "c4:62:37:01:8c:ce"
+        mtu: 1500
+      - deviceSelector:
+          hardwareAddr: "c4:62:37:01:8c:ce"
+        ignore: true
       - deviceSelector:
           hardwareAddr: a8:5e:45:9c:d0:99
         ignore: true
@@ -159,7 +157,7 @@ nodes:
       location: "cloud"
     controlPlane: false
     nodeTaints:
-      location=cloud: NoSchedule
+      location: cloud:NoSchedule
     networkInterfaces:
       - interface: eth0
         dhcp: false
