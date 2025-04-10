@@ -24,7 +24,7 @@ spec:
     controller:
       nodeSelector: &ns
         kubernetes.io/hostname: posey
-      tolerations:
+      tolerations: &tol
         - key: "location"
           operator: "Equal"
           value: "house"
