@@ -17,6 +17,7 @@ additionalApiServerCertSans: &sans
   - "10.38.55.200"
   - "192.168.9.25"
   - "10.0.30.28"
+  - "10.10.10.3"
   - "10.40.40.41"
   - "127.0.0.1"
   - "${CLOUD_IP}"
@@ -175,6 +176,8 @@ nodes:
         routes:
           - network: 192.168.9.0/24
             gateway: 10.10.10.1
+          - network: 192.168.1.0/24
+            gateway: 10.10.10.1
           - network: 10.0.0.0/16
             gateway: 10.10.10.2
         wireguard:
@@ -185,6 +188,7 @@ nodes:
               endpoint: ${APARTMENT_WG_ENDPOINT}
               allowedIPs:
                 - 192.168.9.0/24
+                - 192.168.1.0/24
                 - 10.10.10.1/32
               persistentKeepaliveInterval: 10s
             - publicKey: ${OFFICE_WG_PUBKEY}
