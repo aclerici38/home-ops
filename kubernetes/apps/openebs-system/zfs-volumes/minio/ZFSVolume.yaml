@@ -2,6 +2,8 @@ apiVersion: zfs.openebs.io/v1
 kind: ZFSVolume
 metadata:
   name: minio
+  finalizers:
+    - cluster.local/data-protection
 spec:
   capacity: "47983374630912"
   fsType: zfs
