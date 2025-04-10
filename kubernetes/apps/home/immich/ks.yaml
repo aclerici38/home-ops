@@ -18,8 +18,8 @@ spec:
       namespace: cluster-utilities
     - name: minio
       namespace: cluster-utilities
-    - name: nfs-ganesha
-      namespace: storage
+    - name: immich-zfs-volume
+      namespace: openebs-system
   path: ./kubernetes/apps/home/immich/app
   components:
     - ../../../../components/cnpg/restore

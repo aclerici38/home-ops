@@ -14,6 +14,8 @@ spec:
       namespace: storage
     - name: minio
       namespace: cluster-utilities
+    - name: media-zfs-volume
+      namespace: openebs-system
   path: ./kubernetes/apps/media/audiobookshelf/app
   components:
     - ../../../../components/volsync/minio

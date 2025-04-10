@@ -4,13 +4,13 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app filebrowser
-  namespace: &ns home
+  namespace: &ns media
 spec:
   targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/home/filebrowser/app
+  path: ./kubernetes/apps/media/filebrowser/app
   components:
     - ../../../../components/volsync/minio
     - ../../../../components/external-secret
@@ -20,8 +20,8 @@ spec:
       namespace: storage
     - name: minio
       namespace: cluster-utilities
-    - name: nfs-ganesha
-      namespace: storage
+    - name: media-zfs-volume
+      namespace: openebs-system
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -38,13 +38,13 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app filebrowser-config
-  namespace: &ns home
+  namespace: &ns media
 spec:
   targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/home/filebrowser/config
+  path: ./kubernetes/apps/media/filebrowser/config
   prune: true
   sourceRef:
     kind: GitRepository

@@ -29,6 +29,8 @@ spec:
       namespace: cluster-utilities
     - name: minio
       namespace: cluster-utilities
+    - name: media-zfs-volume
+      namespace: openebs-system
   postBuild:
     substitute:
       APP: *app

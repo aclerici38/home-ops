@@ -16,6 +16,8 @@ spec:
       namespace: storage
     - name: minio
       namespace: cluster-utilities
+    - name: media-zfs-volume
+      namespace: openebs-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

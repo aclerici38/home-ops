@@ -14,8 +14,8 @@ spec:
       namespace: cluster-utilities
     - name: volsync
       namespace: storage
-    - name: nfs-ganesha
-      namespace: storage
+    - name: minio-zfs-volume
+      namespace: openebs-system
   path: ./kubernetes/apps/cluster-utilities/minio/app
   components:
     - ../../../../components/external-secret

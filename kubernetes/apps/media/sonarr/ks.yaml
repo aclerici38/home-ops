@@ -14,12 +14,12 @@ spec:
       namespace: database
     - name: external-secrets-stores
       namespace: cluster-utilities
-    - name: minio
-      namespace: cluster-utilities
     - name: volsync
       namespace: storage
     - name: minio
       namespace: cluster-utilities
+    - name: media-zfs-volume
+      namespace: openebs-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
