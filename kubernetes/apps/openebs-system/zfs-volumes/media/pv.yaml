@@ -11,7 +11,7 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     name: media
-    namespace: storage
+    namespace: media
   csi:
     driver: zfs.csi.openebs.io
     fsType: zfs
