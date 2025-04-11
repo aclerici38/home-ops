@@ -13,6 +13,7 @@ spec:
   path: ./kubernetes/apps/home/frigate/app
   components:
     - ../../../../components/external-secret
+    - ../../../../components/volsync/minio
   dependsOn:
     - name: external-secrets-stores
       namespace: cluster-utilities
@@ -29,6 +30,9 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_STORAGECLASS: &sc local-hostpath-posey
+      VOLSYNC_SNAPSHOTCLASS: *sc
+      VOLSYNC_CACHE_STORAGECLASS: *sc
   patches:
     - patch: |-
         apiVersion: external-secrets.io/v1beta1

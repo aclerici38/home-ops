@@ -43,8 +43,13 @@ spec:
                   name: frigate-secret
             securityContext:
               allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: false
-              privileged: true
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+                add:
+                  - CAP_NET_ADMIN
+                  - CAP_NET_RAW
             resources:
               requests:
                 cpu: 1000m
@@ -77,6 +82,8 @@ spec:
             port: &webrtc 8555
             targetPort: *webrtc
     persistence:
+      database:
+        existingClaim: *app
       config:
         existingClaim: frigate-config
         globalMounts:
