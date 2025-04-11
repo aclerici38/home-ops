@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      frigate:
+      main:
         pod:
           nodeSelector:
             kubernetes.io/hostname: "posey"
@@ -31,8 +31,14 @@ spec:
               operator: "Equal"
               value: "house"
               effect: "NoSchedule"
+          securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 0
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          *app :
             image:
               repository: ghcr.io/blakeblackshear/frigate
               tag: 0.15.0@sha256:dc77295ccc5a7258510ab6b1d9d5b7a339027305e2d29224338534febc4d1e89
@@ -56,16 +62,9 @@ spec:
                 memory: 2Gi
               limits:
                 memory: 6Gi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: false
-        runAsUser: 0
-        runAsGroup: 0
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
     service:
-      main:
-        controller: *app
+      *app :
+        controller: main
         type: ClusterIP
         ports:
           http-auth:
