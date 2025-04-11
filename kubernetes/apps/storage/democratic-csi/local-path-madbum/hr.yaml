@@ -37,7 +37,7 @@ spec:
         enabled: true
         image: registry.k8s.io/sig-storage/csi-provisioner:v5.2.0@sha256:d5e46da8aff7d73d6f00c761dae94472bcda6e78f4f17b3802dc89d44de0111b
         extraArgs:
-          - --leader-election=true
+          - --leader-election=false
           - --node-deployment=true
           - --node-deployment-immediate-binding=false
           - --feature-gates=Topology=true
@@ -50,7 +50,7 @@ spec:
         enabled: true
         image: registry.k8s.io/sig-storage/csi-snapshotter:v8.2.1@sha256:5f4bb469fec51147ce157329dab598c758da1b018bad6dad26f0ff469326d769
         extraArgs:
-          - --leader-election=true
+          - --leader-election=false
           - --node-deployment=true
     csiDriver:
       name: local-hostpath-madbum.cluster.local
