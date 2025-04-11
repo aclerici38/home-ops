@@ -80,6 +80,18 @@ spec:
           webrtc:
             port: &webrtc 8555
             targetPort: *webrtc
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: http-auth
+                port: *http-auth
     persistence:
       database:
         existingClaim: *app
