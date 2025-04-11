@@ -28,26 +28,27 @@ spec:
   failurePolicy: Ignore
   reinvocationPolicy: IfNeeded
   mutations:
-  - patchType: JSONPatch
-    jsonPatch:
-      expression: >
-        [
-          JSONPatch{
-            op: "add", path: "/spec/tolerations/-",
-            value: {
-              key: "location",
-              operator: "Equal",
-              value: "cloud",
-              effect: "NoSchedule"
+    - patchType: JSONPatch
+      jsonPatch:
+        expression: >
+          [
+            JSONPatch{
+              op: "add", path: "/spec/tolerations/-",
+              value: Object.spec.tolerations{
+                key: "location",
+                operator: "Equal",
+                value: "cloud",
+                effect: "NoSchedule"
+              }
+            },
+            JSONPatch{
+              op: "add", path: "/spec/tolerations/-",
+              value: Object.spec.tolerations{
+                key: "location",
+                operator: "Equal",
+                value: "house",
+                effect: "NoSchedule"
+              }
             }
-          },
-          JSONPatch{
-            op: "add", path: "/spec/tolerations/-",
-            value: {
-              key: "location",
-              operator: "Equal",
-              value: "house",
-              effect: "NoSchedule"
-            }
-          }
-        ]
+          ]
+
