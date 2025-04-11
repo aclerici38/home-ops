@@ -31,3 +31,4 @@ spec:
       APP: *app
       VOLSYNC_STORAGECLASS: &sc local-hostpath-madbum
       VOLSYNC_SNAPSHOTCLASS: *sc
+      VOLSYNC_CAPACITY: 500Mi

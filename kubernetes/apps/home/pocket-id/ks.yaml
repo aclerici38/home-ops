@@ -12,8 +12,6 @@ spec:
       namespace: cluster-utilities
     - name: cloudnative-pg
       namespace: database
-    - name: minio
-      namespace: cluster-utilities
     - name: volsync
       namespace: storage
     - name: minio
@@ -37,10 +35,10 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_ACCESSMODES: ReadWriteMany
       VOLSYNC_STORAGECLASS: &sc local-hostpath-madbum
       VOLSYNC_SNAPSHOTCLASS: *sc
       CNPG_STORAGECLASS: *sc
+      VOLSYNC_CAPACITY: 500Mi
   patches:
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1
