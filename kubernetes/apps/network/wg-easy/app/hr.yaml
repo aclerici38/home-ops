@@ -31,6 +31,12 @@ spec:
               operator: "Equal"
               value: "cloud"
               effect: "NoSchedule"
+          securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 0
+            fsGroup: 0
+            fsGroupChangePolicy: Always
         containers:
           *app :
             image:
@@ -62,9 +68,6 @@ spec:
                   - NET_RAW
                 drop:
                   - ALL
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: false
     service:
       ui:
         controller: main
