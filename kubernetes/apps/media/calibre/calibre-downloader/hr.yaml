@@ -95,7 +95,8 @@ spec:
         globalMounts:
           - path: /var/log/cwa-book-downloader/
       ingest:
-        existingClaim: calibre-ingest
+        existingClaim: media
         globalMounts:
           - path: /cwa-book-ingest
+            subPath: books/calibre/ingest
 

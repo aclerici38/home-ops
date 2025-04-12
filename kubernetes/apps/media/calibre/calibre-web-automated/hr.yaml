@@ -76,12 +76,9 @@ spec:
               - path: /config
       cache:
         type: emptyDir
-      ingest:
-        existingClaim: calibre-ingest
+      media:
+        existingClaim: media
         globalMounts:
           - path: /cwa-book-ingest
-      # Temporarily use local-path library til v3.1
-      library:
-        existingClaim: calibre-library
-        globalMounts:
-          - path: /calibre-library
+            subPath: books/calibre/ingest
+          - path: /allMedia

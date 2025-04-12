@@ -83,10 +83,6 @@ spec:
     persistence:
       config:
         existingClaim: audiobookshelf
-      calibre:
-        existingClaim: calibre-library
-        globalMounts:
-          - path: /mnt/calibre
       media:
         existingClaim: media
         globalMounts:
