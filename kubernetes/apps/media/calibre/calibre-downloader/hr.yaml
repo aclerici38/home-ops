@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app calibre-automated-downloader
+  name: &app calibre-downloader
 spec:
   interval: 1h
   chartRef:
@@ -23,8 +23,6 @@ spec:
     controllers:
       main:
         pod:
-          nodeSelector:
-            kubernetes.io/hostname: "bonds"
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
@@ -76,9 +74,9 @@ spec:
           http:
             port: *port
     route:
-      download-books:
+      *app :
         hostnames:
-          - download-books.${SECRET_DOMAIN}
+          - calibre-downloader.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: network
@@ -97,6 +95,6 @@ spec:
       ingest:
         existingClaim: media
         globalMounts:
-          - path: /cwa-book-ingest
+          - path: *ingest
             subPath: books/calibre/ingest
 
