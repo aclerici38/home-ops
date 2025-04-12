@@ -14,6 +14,7 @@ spec:
   components:
     - ../../../../components/external-secret
     - ../../../../components/volsync/minio
+    - ../../../../components/envoy/oauth
   dependsOn:
     - name: external-secrets-stores
       namespace: cluster-utilities
@@ -33,10 +34,7 @@ spec:
       VOLSYNC_STORAGECLASS: &sc local-hostpath-posey
       VOLSYNC_SNAPSHOTCLASS: *sc
       VOLSYNC_CACHE_STORAGECLASS: *sc
-    substituteFrom:
-      - kind: Secret
-        name: frigate-secret
-        optional: false
+      CLIENT_ID: "217756b8-feda-4f0d-abb4-3ebd151f662d"
   patches:
     - patch: |-
         apiVersion: external-secrets.io/v1beta1
