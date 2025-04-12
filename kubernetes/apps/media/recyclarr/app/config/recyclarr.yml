@@ -6,8 +6,8 @@ sonarr:
       series: plex-tvdb
       episodes:
         rename: true
-        standard: original
-        daily: original
+        standard: default
+        daily: default
     base_url: http://sonarr:8989
     api_key: ${SONARR_API_KEY}
 
@@ -163,7 +163,7 @@ radarr:
       folder:  plex-tmdb
       movie:
         rename: true
-        standard: original
+        standard: plex-tmdb
 
     base_url: http://radarr:7878
     api_key: ${RADARR_API_KEY}
