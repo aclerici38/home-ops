@@ -9,6 +9,10 @@ spec:
   infrastructure:
     annotations:
       lbipam.cilium.io/ips: 10.38.55.81
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: daemonset-config
   listeners:
     - name: http
       protocol: HTTP

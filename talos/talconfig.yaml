@@ -143,7 +143,7 @@ nodes:
             - siderolabs/nvidia-container-toolkit-production
             - siderolabs/nonfree-kmod-nvidia-production
             - siderolabs/amd-ucode
-    controlPlane: false
+    controlPlane: true
     nodeTaints:
       location: house:NoSchedule
     networkInterfaces:
@@ -201,7 +201,7 @@ nodes:
       mode: cloud
     nodeLabels:
       location: "cloud"
-    controlPlane: false
+    controlPlane: true
     nodeTaints:
       location: cloud:NoSchedule
     networkInterfaces:

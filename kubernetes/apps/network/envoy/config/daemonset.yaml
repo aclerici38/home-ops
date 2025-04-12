@@ -1,0 +1,23 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: daemonset-config
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyDaemonSet:
+        patch:
+          value:
+            spec:
+              template:
+                spec:
+                  tolerations:
+                    - key: "location"
+                      operator: "Equal"
+                      value: "house"
+                      effect: "NoSchedule"
+                    - key: "location"
+                      operator: "Equal"
+                      value: "cloud"
+                      effect: "NoSchedule"
