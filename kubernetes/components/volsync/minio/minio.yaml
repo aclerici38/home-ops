@@ -84,10 +84,10 @@ spec:
     storageClassName: "${VOLSYNC_STORAGECLASS:-local-hostpath}"
     accessModes: ["${VOLSYNC_ACCESSMODES:-ReadWriteMany}"]
     capacity: "${VOLSYNC_CAPACITY:-5Gi}"
-    # moverSecurityContext:
-    #   runAsUser: ${VOLSYNC_PUID:-1000}
-    #   runAsGroup: ${VOLSYNC_PGID:-1000}
-    #   fsGroup: ${VOLSYNC_PGID:-1000}
-    # enableFileDeletion: true
-    # cleanupCachePVC: true
-    # cleanupTempPVC: true
+    moverSecurityContext:
+      runAsUser: ${VOLSYNC_PUID:-1000}
+      runAsGroup: ${VOLSYNC_PGID:-1000}
+      fsGroup: ${VOLSYNC_PGID:-1000}
+    enableFileDeletion: true
+    cleanupCachePVC: true
+    cleanupTempPVC: true
