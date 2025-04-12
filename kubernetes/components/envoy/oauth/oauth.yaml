@@ -15,3 +15,4 @@ spec:
       name: "${APP}-secret"
     redirectURL: "https://${APP}.${SECRET_DOMAIN}/oauth2/callback"
     logoutPath: "${LOGOUT_PATH:-/logout}"
+    scopes: ["openid", "profile", "email"]
