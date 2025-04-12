@@ -94,7 +94,7 @@ semantic_search:
 genai:
   enabled: True
   provider: ollama
-  base_url: http://ollama.cluster-utilities.svc.cluste.local:11434
+  base_url: http://ollama:11434
   model: minicpm-v:8b
   prompt: Analyze the {label} in this image from a security camera. Return a MINIMAL, multi-word description of the {label}. For example, "man in a white shirt", "white dog", "delivery vehicle"
 
