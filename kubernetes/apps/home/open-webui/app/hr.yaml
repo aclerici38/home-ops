@@ -32,7 +32,7 @@ spec:
             env:
               ENABLE_LOGIN_FORM: false
               DEFAULT_USER_ROLE: user
-              OLLAMA_BASE_URL: http://ollama.cluster-utilities.svc.cluster.local:11434
+              OLLAMA_BASE_URL: http://ollama.home.svc.cluster.local:11434
               ENABLE_AUTOCOMPLETE_GENERATION: false # annoying
               WEBUI_URL: &host https://ai.${SECRET_DOMAIN}
               CORS_ALLOW_ORIGIN: *host
@@ -45,7 +45,7 @@ spec:
 
               ENABLE_OAUTH_SIGNUP: true
               OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
-              OAUTH_PROVIDER_NAME: Authentik
+              OAUTH_PROVIDER_NAME: Pocket ID
 
               DATABASE_URL:
                 valueFrom:
