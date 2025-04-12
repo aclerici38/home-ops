@@ -37,19 +37,19 @@ spec:
       CLIENT_ID: "217756b8-feda-4f0d-abb4-3ebd151f662d"
   patches:
     - patch: |-
-        apiVersion: external-secrets.io/v1beta1
-        kind: ExternalSecret
-        metadata:
-          name: patch
-        spec:
-          data:
-            - secretKey: FRIGATE_MQTT_USER
-              remoteRef:
-                key: "emqx"
-                property: "X_EMQX_MQTT_USERNAME"
-            - secretKey: FRIGATE_MQTT_PASS
-              remoteRef:
-                key: "emqx"
-                property: "X_EMQX_MQTT_PASSWORD"
+        - op: add
+          path: /spec/data/-
+          value:
+            secretKey: FRIGATE_MQTT_USER
+            remoteRef:
+              key: "emqx"
+              property: "X_EMQX_MQTT_USERNAME"
+        - op: add
+          path: /spec/data/-
+          value:
+            secretKey: FRIGATE_MQTT_PASS
+            remoteRef:
+              key: "emqx"
+              property: "X_EMQX_MQTT_PASSWORD"
       target:
         kind: ExternalSecret
