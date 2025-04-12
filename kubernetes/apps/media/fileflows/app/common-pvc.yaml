@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: fileflows-common
 spec:
-  storageClassName: local-hostpath
+  storageClassName: zfs-nvme
   resources:
     requests:
       storage: 50Gi

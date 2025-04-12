@@ -19,7 +19,7 @@ spec:
       - host all all 192.168.1.0/24 md5
   storage:
     size: 500Gi
-    storageClass: local-hostpath
+    storageClass: zfs-nvme
   superuserSecret:
     name: cloudnative-pg-secret
   enableSuperuserAccess: true

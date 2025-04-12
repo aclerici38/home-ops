@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: open-webui
 spec:
-  storageClassName: local-hostpath
+  storageClassName: zfs-nvme
   resources:
     requests:
       storage: 10Gi

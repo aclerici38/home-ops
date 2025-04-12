@@ -10,7 +10,7 @@ spec:
   primaryUpdateStrategy: unsupervised
   storage:
     size: ${CNPG_SIZE:=2Gi}
-    storageClass: ${CNPG_STORAGECLASS:=local-hostpath}
+    storageClass: ${CNPG_STORAGECLASS:=zfs-nvme}
   superuserSecret:
     name: cloudnative-pg-secret
   enableSuperuserAccess: true
