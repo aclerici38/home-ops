@@ -4,7 +4,7 @@ autoDirectNodeRoutes: false
 namespaceOverride: cilium
 bpf:
   datapathMode: netkit
-  masquerade: true
+  masquerade: false
   preallocateMaps: true
   tproxy: true
 bpfClockProbe: true
