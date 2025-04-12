@@ -14,7 +14,6 @@ spec:
   components:
     - ../../../../components/external-secret
     - ../../../../components/volsync/minio
-    - ../../../../components/envoy/oauth
   dependsOn:
     - name: external-secrets-stores
       namespace: cluster-utilities

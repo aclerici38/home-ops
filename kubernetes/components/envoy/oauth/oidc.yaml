@@ -10,7 +10,7 @@ spec:
   oidc:
     provider:
       issuer: ""
-    clientID: "${CLIENT_ID}"
+    clientID: "$(CLIENT_ID)" # subbed via var from kubernetes ks
     clientSecret:
       name: "${app}-secret"
     redirectURL: "https://www.${APP}.${SECRET_DOMAIN}/oauth2/callback"
