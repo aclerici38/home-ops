@@ -76,7 +76,7 @@ spec:
           http:
             port: *port
     route:
-      *app :
+      download-books:
         hostnames:
           - download-books.${SECRET_DOMAIN}
         parentRefs:
