@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app calibre
+  name: &app calibre-web-automated
   namespace: &ns media
 spec:
   targetNamespace: *ns
