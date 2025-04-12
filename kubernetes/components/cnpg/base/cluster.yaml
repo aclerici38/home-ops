@@ -9,7 +9,7 @@ spec:
   imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql}:${CNPG_VERSION:=17.4}
   primaryUpdateStrategy: unsupervised
   storage:
-    size: ${CNPG_SIZE:=2Gi}
+    size: ${CNPG_CAPACITY:=2Gi}
     storageClass: ${CNPG_STORAGECLASS:=zfs-nvme}
   superuserSecret:
     name: cloudnative-pg-secret
