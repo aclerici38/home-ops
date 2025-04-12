@@ -6,7 +6,6 @@ metadata:
   name: &app media-zfs-volume
   namespace: &ns openebs-system
 spec:
-  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -33,7 +32,6 @@ metadata:
   name: &app immich-zfs-volume
   namespace: &ns openebs-system
 spec:
-  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -60,7 +58,6 @@ metadata:
   name: &app minio-zfs-volume
   namespace: &ns openebs-system
 spec:
-  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

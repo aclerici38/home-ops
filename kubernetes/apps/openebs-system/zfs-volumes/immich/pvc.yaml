@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: immich
+  namespace: home
 spec:
   storageClassName: zfs-tank
   accessModes:

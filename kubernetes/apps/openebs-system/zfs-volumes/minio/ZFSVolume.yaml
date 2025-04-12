@@ -2,6 +2,7 @@ apiVersion: zfs.openebs.io/v1
 kind: ZFSVolume
 metadata:
   name: minio
+  namespace: openebs-system
   finalizers: []
 spec:
   capacity: "47983374630912"
