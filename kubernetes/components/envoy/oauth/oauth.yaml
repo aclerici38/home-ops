@@ -12,6 +12,6 @@ spec:
       issuer: "https://id.${SECRET_DOMAIN}/.well-known/openid-configuration"
     clientID: "${CLIENT_ID}"
     clientSecret:
-      name: "${app}-secret"
+      name: "${APP}-secret"
     redirectURL: "https://www.${APP}.${SECRET_DOMAIN}/oauth2/callback"
     logoutPath: "${LOGOUT_PATH:-/logout}"
