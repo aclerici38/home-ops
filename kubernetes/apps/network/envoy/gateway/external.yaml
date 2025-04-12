@@ -12,7 +12,7 @@ spec:
     parametersRef:
       group: gateway.envoyproxy.io
       kind: EnvoyProxy
-      name: envoy-config
+      name: envoy-external-config
   listeners:
     - name: http
       protocol: HTTP

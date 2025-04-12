@@ -1,0 +1,32 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: envoy-external-config
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyDaemonSet:
+        patch:
+          value:
+            spec:
+              template:
+                spec:
+                  tolerations:
+                    - key: "location"
+                      operator: "Equal"
+                      value: "house"
+                      effect: "NoSchedule"
+                    - key: "location"
+                      operator: "Equal"
+                      value: "cloud"
+                      effect: "NoSchedule"
+      envoyService:
+        patch:
+          value:
+            spec:
+              ports:
+                - name: https-443
+                  port: 443
+                  targetPort: 10443
+                  nodePort: 31443
