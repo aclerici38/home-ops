@@ -92,10 +92,6 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /app/ManuallyAdded
-      calibre-library:
-        existingClaim: calibre-library
-        globalMounts:
-          - path: /mnt/calibre-library
       media:
         existingClaim: media
         globalMounts:
