@@ -26,7 +26,6 @@ kind: ReplicationSource
 metadata:
   name: "${APP}-r2"
 spec:
-
   sourcePVC: "${APP}"
   trigger:
     schedule: "${VOLSYNC_SCHEDULE:-30 0 * * 1}"
@@ -34,7 +33,7 @@ spec:
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     pruneIntervalDays: 14
     repository: "${APP}-volsync-r2-secret"
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-zfs-nvme}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-openebs-zfs}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-zfs-nvme}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]
     storageClassName: "${VOLSYNC_STORAGECLASS:-zfs-nvme}"
@@ -59,7 +58,7 @@ spec:
   restic:
     repository: "${APP}-volsync-r2-secret"
     copyMethod: Snapshot
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-zfs-nvme}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-openebs-zfs}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-zfs-nvme}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]
     cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:-2Gi}"

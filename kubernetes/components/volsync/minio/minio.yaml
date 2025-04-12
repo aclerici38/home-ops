@@ -53,6 +53,8 @@ spec:
   restic:
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     pruneIntervalDays: 14
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-openebs-zfs}"
+    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-zfs-nvme}"
     repository: "${APP}-volsync-minio-secret"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteMany}"]
     storageClassName: "${VOLSYNC_STORAGECLASS:-zfs-nvme}"
@@ -78,7 +80,7 @@ spec:
   restic:
     repository: "${APP}-volsync-minio-secret"
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-zfs-nvme}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-openebs-zfs}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-zfs-nvme}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteMany}"]
     storageClassName: "${VOLSYNC_STORAGECLASS:-zfs-nvme}"

@@ -1,0 +1,36 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: zfs-nvme
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+allowVolumeExpansion: true
+parameters:
+  poolname: "nvme/pvc"
+  fstype: "zfs"
+  shared: "yes"
+provisioner: zfs.csi.openebs.io
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: zfs-ssd
+allowVolumeExpansion: true
+parameters:
+  poolname: "ssd"
+  fstype: "zfs"
+  shared: "yes"
+provisioner: zfs.csi.openebs.io
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: zfs-tank
+allowVolumeExpansion: true
+parameters:
+  poolname: "tank"
+  fstype: "zfs"
+  shared: "yes"
+provisioner: zfs.csi.openebs.io
+
