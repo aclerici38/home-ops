@@ -1,0 +1,76 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/external-secrets.io/externalsecret_v1beta1.json
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: "immich-volsync-storj-secret"
+  namespace: "openebs-system"
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    template:
+      engineVersion: v2
+      data:
+        RESTIC_REPOSITORY: "{{ .RESTIC_REPOSITORY }}/immich/upload"
+        RESTIC_PASSWORD: "{{ .RESTIC_PASSWORD }}"
+        AWS_ACCESS_KEY_ID: "{{ .AWS_ACCESS_KEY_ID }}"
+        AWS_SECRET_ACCESS_KEY: "{{ .AWS_SECRET_ACCESS_KEY }}"
+  dataFrom:
+    - extract:
+        key: storj
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/volsync.backube/replicationsource_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: "immich"
+  namespace: "openebs-system"
+spec:
+  sourcePVC: "immich"
+  trigger:
+    schedule: "30 0 * * 1"
+  restic:
+    copyMethod: Snapshot
+    pruneIntervalDays: 14
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-openebs-zfs}"
+    cacheStorageClassName: "zfs-tank"
+    repository: "immich-volsync-storj-secret"
+    cacheAccessModes: ["ReadWriteMany"]
+    storageClassName: "zfs-tank"
+    accessModes: ["ReadWriteMany"]
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    retain:
+      hourly: 24
+      daily: 7
+# ---
+# # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/volsync.backube/replicationdestination_v1alpha1.json
+# apiVersion: volsync.backube/v1alpha1
+# kind: ReplicationDestination
+# metadata:
+#   name: "${APP}-dst"
+#   labels:
+#     kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+# spec:
+#   trigger:
+#     manual: restore-once
+#   restic:
+#     repository: "${APP}-volsync-minio-secret"
+#     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
+#     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-openebs-zfs}"
+#     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-zfs-nvme}"
+#     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteMany}"]
+#     storageClassName: "${VOLSYNC_STORAGECLASS:-zfs-nvme}"
+#     accessModes: ["${VOLSYNC_ACCESSMODES:-ReadWriteMany}"]
+#     capacity: "${VOLSYNC_CAPACITY:-5Gi}"
+#     # moverSecurityContext:
+#     #   runAsUser: ${VOLSYNC_PUID:-1000}
+#     #   runAsGroup: ${VOLSYNC_PGID:-1000}
+#     #   fsGroup: ${VOLSYNC_PGID:-1000}
+#     enableFileDeletion: true
+#     cleanupCachePVC: true
+#     cleanupTempPVC: true
