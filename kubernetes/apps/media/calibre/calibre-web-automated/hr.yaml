@@ -69,11 +69,9 @@ spec:
                 port: *port
     persistence:
       config:
-        existingClaim: calibre
-        advancedMounts:
-          main:
-            *app :
-              - path: /config
+        existingClaim: *app
+        globalMounts:
+          - path: /config
       cache:
         type: emptyDir
       media:
