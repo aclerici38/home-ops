@@ -34,8 +34,8 @@ spec:
         containers:
           *app :
             image:
-              repository: docker.io/gtstef/filebrowser
-              tag: 0.6.7-beta@sha256:e3f76062f4ec9e738e7b641855718aea87d71956d4f72af2b2333ada97cee7be
+              repository: ghcr.io/gtstef/filebrowser
+              tag: 0.6.8-beta@sha256:7e8b81078f5be25342839fe8cdd87bd49b4b20ea2090316c280a16492110e865
             probes:
               liveness: &probes
                 enabled: true
