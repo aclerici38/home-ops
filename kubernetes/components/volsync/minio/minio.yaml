@@ -77,7 +77,7 @@ spec:
     manual: restore-once
   restic:
     repository: "${APP}-volsync-minio-secret"
-    copyMethod: Snapshot
+    copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-local-hostpath}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-local-hostpath}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]

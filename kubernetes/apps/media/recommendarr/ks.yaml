@@ -30,4 +30,5 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_COPYMETHOD: Direct
 
