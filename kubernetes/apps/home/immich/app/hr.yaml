@@ -192,5 +192,9 @@ spec:
                 subPath: config.yaml
       cache:
         existingClaim: immich-ml-cache
+        advancedMounts:
+          machine-learning:
+            immich-ml:
+              - path: /cache
       tmp:
         type: emptyDir
