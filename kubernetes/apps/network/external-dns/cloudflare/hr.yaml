@@ -31,7 +31,6 @@ spec:
             key: CLOUDFLARE_CERT_API_KEY
     extraArgs:
       - --cloudflare-dns-records-per-page=1000
-      - --cloudflare-proxied
       - --gateway-name=external
       - --default-targets=cloud.${SECRET_DOMAIN}
     policy: sync
