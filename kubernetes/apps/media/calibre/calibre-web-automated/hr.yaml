@@ -58,7 +58,7 @@ spec:
     route:
       *app :
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - calibre.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: network
