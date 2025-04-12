@@ -9,15 +9,18 @@ spec:
       effect: "NoSchedule"
     - operator: "Exists"
       effect: "NoExecute"
-  nodeSelector:
-    kubernetes.io/hostname: bonds
+  nodeName: bonds
+  hostNetwork: true
+  hostPID: true
+  hostIPC: true
+  restartPolicy: Never
   containers:
     - name: zfs-tools
       image: ubuntu:22.04
       command: [
         "/bin/sh",
         "-c",
-        "apt update && apt install -y zfsutils-linux smartmontools nvme-cli && sleep infinity",
+        "apt update && apt install -y zfsutils-linux gdisk && sleep infinity",
       ]
       securityContext:
         privileged: true
@@ -28,6 +31,3 @@ spec:
     - name: host-dev
       hostPath:
         path: /dev
-  hostNetwork: true
-  hostPID: true
-  restartPolicy: Never
