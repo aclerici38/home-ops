@@ -32,29 +32,3 @@ spec:
   postBuild:
     substitute:
       APP: *app
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app filebrowser-config
-  namespace: &ns media
-spec:
-  targetNamespace: *ns
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/media/filebrowser/config
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  wait: true
-  interval: 30m
-  timeout: 5m
-  postBuild:
-    substituteFrom:
-      - kind: Secret
-        name: filebrowser-secret
-        optional: false
