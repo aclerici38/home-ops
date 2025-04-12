@@ -21,7 +21,7 @@ spec:
     remediation:
       retries: 1
   values:
-    domain: ${SECRET_DOMAIN:-samthony.com}
+    domain: ${SECRET_DOMAIN}
     watchedResources:
       - HTTPRoute
     extraZonePlugins:
@@ -42,4 +42,4 @@ spec:
       enabled: true
     serviceAccount:
       create: true
-      name: k8s-gateway
+      name: *app

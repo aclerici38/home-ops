@@ -31,6 +31,7 @@ spec:
             runAsGroup: *id
             fsGroup: *id
             fsGroupChangePolicy: Always
+            seccompProfile: { type: RuntimeDefault }
         containers:
           *app :
             image:
@@ -43,11 +44,9 @@ spec:
               METADATA_PATH: /config/metadata
               PORT: &port 8080
             securityContext:
-              allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: false
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-              privileged: true
-              seccompProfile: { type: RuntimeDefault }
             probes:
               liveness: &probes
                 enabled: true
