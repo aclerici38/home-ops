@@ -13,5 +13,5 @@ spec:
     clientID: "${CLIENT_ID}"
     clientSecret:
       name: "${APP}-secret"
-    redirectURL: "https://${APP}.${SECRET_DOMAIN}/oauth2/callback"
+    redirectURL: "https://${APP}.${SECRET_DOMAIN}/"
     logoutPath: "${LOGOUT_PATH:-/logout}"
