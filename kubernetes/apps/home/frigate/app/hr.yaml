@@ -94,7 +94,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: http-auth
+              - name: *app
                 port: *http-auth
     persistence:
       database:
