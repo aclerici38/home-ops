@@ -80,7 +80,7 @@ spec:
         hostnames:
           - download-books.${SECRET_DOMAIN}
         parentRefs:
-          - name: internal
+          - name: external
             namespace: network
             sectionName: https
         rules:
