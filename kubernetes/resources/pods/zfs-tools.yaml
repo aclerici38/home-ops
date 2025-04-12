@@ -9,6 +9,8 @@ spec:
       effect: "NoSchedule"
     - operator: "Exists"
       effect: "NoExecute"
+  nodeSelector:
+    kubernetes.io/hostname: bonds
   containers:
     - name: zfs-tools
       image: ubuntu:22.04
