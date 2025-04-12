@@ -34,7 +34,7 @@ spec:
         containers:
           *app :
             image:
-              repository: ghcr.io/gtstef/filebrowser
+              repository: ghcr.io/gtsteffaniak/filebrowser
               tag: 0.6.8-beta@sha256:7e8b81078f5be25342839fe8cdd87bd49b4b20ea2090316c280a16492110e865
             probes:
               liveness: &probes
