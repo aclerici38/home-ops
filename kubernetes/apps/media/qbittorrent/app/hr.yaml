@@ -29,7 +29,7 @@ spec:
             kubernetes.io/hostname: "bonds"
           securityContext:
             fsGroup: 1000
-            fsGroupChangePolicy: "OnRootMismatch"
+            fsGroupChangePolicy: "Always"
         initContainers:
           gluetun:
             image:

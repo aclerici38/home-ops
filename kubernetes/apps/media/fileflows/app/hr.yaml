@@ -28,7 +28,7 @@ spec:
           runtimeClassName: nvidia
           securityContext:
             runAsNonRoot: false
-            fsGroupChangePolicy: OnRootMismatch
+            fsGroupChangePolicy: Always
         containers:
           app:
             image:

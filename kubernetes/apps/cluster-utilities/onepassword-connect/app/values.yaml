@@ -88,7 +88,7 @@ defaultPodOptions:
     runAsUser: 999
     runAsGroup: 999
     fsGroup: 999
-    fsGroupChangePolicy: OnRootMismatch
+    fsGroupChangePolicy: Always
     seccompProfile: { type: RuntimeDefault }
 service:
   app:

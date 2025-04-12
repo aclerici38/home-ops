@@ -31,7 +31,7 @@ spec:
             runAsNonRoot: true
             runAsUser: 65543
             runAsGroup: 65543
-            fsGroupChangePolicy: OnRootMismatch
+            fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
           *app :

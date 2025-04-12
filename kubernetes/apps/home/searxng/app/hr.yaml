@@ -25,7 +25,7 @@ spec:
       main:
         pod:
           securityContext:
-            fsGroupChangePolicy: OnRootMismatch
+            fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         strategy: RollingUpdate
         containers:

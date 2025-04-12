@@ -28,7 +28,7 @@ spec:
             runAsUser: 65534
             runAsGroup: 65533
             fsGroup: 65533
-            fsGroupChangePolicy: OnRootMismatch
+            fsGroupChangePolicy: Always
           hostname: home-assistant
           annotations:
             k8s.v1.cni.cncf.io/networks: |
