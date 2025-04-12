@@ -35,7 +35,6 @@ spec:
     copyMethod: Snapshot
     pruneIntervalDays: 14
     volumeSnapshotClassName: openebs-zfs
-    cacheStorageClassName: "zfs-tank"
     repository: "immich-volsync-storj-secret"
     cacheAccessModes: ["ReadWriteMany"]
     storageClassName: "zfs-tank"
