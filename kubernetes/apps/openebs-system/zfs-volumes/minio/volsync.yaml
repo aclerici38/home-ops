@@ -4,7 +4,7 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: "minio-volsync-storj-secret"
-  namespace: "openebs-system"
+  namespace: "cluster-utilities"
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
@@ -26,11 +26,11 @@ apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
   name: "minio"
-  namespace: "openebs-system"
+  namespace: "cluster-utilities"
 spec:
   sourcePVC: "minio"
   trigger:
-    schedule: "30 0 * * 1"
+    schedule: "0 3 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 14
