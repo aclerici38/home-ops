@@ -13,7 +13,7 @@ spec:
   path: ./kubernetes/apps/media/recommendarr/app
   components:
     - ../../../../components/volsync/minio
-    - ../../../../components/external-secrets
+    - ../../../../components/external-secret
   dependsOn:
     - name: volsync
       namespace: storage
