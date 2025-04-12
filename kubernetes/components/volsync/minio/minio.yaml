@@ -78,10 +78,10 @@ spec:
   restic:
     repository: "${APP}-volsync-minio-secret"
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-zfs-ssd}"
-    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-zfs-ssd}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-local-hostpath}"
+    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-local-hostpath}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteMany}"]
-    storageClassName: "${VOLSYNC_STORAGECLASS:-zfs-ssd}"
+    storageClassName: "${VOLSYNC_STORAGECLASS:-local-hostpath}"
     accessModes: ["${VOLSYNC_ACCESSMODES:-ReadWriteMany}"]
     capacity: "${VOLSYNC_CAPACITY:-5Gi}"
     # moverSecurityContext:
