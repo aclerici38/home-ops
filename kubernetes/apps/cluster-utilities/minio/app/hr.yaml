@@ -87,7 +87,7 @@ spec:
             scheme: http
             path: /minio/v2/metrics/cluster
             interval: 2m
-            scrapeTimeout: 10s
+            scrapeTimeout: 0s
     route:
       *app :
         hostnames:
