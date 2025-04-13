@@ -41,8 +41,7 @@ spec:
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
               HOME: /tmp
-              UID: 1000
-              GID: 1000
+            command: ["python", "-m", "app"]
             probes:
               liveness: &probes
                 enabled: true
