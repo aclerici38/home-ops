@@ -30,7 +30,7 @@ spec:
             image:
               repository: docker.io/revenz/fileflows
               tag: 25.04@sha256:a7e98f8f2b34c722652bf2209f835cde1883d4c6b05decec2e73eb864727295f
-            env:
+            env: &env
               PUID: 1000
               PGID: 1000
             resources:
@@ -50,6 +50,7 @@ spec:
           *name :
             <<: *container
             env:
+              <<: *env
               FFNODE: 1
               ServerUrl: http://fileflows-server:5000
     service:
