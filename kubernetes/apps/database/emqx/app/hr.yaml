@@ -25,3 +25,12 @@ spec:
     replicaCount: 2
     image:
       repository: ghcr.io/emqx/emqx-operator
+    tolerations:
+      - key: "location"
+        operator: "Equal"
+        value: "cloud"
+        effect: "NoSchedule"
+      - key: "location"
+        operator: "Equal"
+        value: "house"
+        effect: "NoSchedule"

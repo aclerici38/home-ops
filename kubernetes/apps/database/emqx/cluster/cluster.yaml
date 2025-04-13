@@ -29,7 +29,16 @@ spec:
       }
   coreTemplate:
     spec:
-      replicas: 1
+      replicas: 2
+      tolerations:
+        - key: "location"
+          operator: "Equal"
+          value: "cloud"
+          effect: "NoSchedule"
+        - key: "location"
+          operator: "Equal"
+          value: "house"
+          effect: "NoSchedule"
       envFrom:
         - secretRef:
             name: emqx-secret
