@@ -73,7 +73,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: ff-server
+              - name: server
                 port: *port
     defaultPodOptions:
       runtimeClassName: nvidia
