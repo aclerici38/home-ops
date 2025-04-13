@@ -22,15 +22,11 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      server: &controller
         pod:
-          hostname: ff-server
-          runtimeClassName: nvidia
-          securityContext:
-            runAsNonRoot: false
-            fsGroupChangePolicy: Always
+          hostname: &name ff-server
         containers:
-          app:
+          *name :
             image:
               repository: docker.io/revenz/fileflows
               tag: 25.04@sha256:a7e98f8f2b34c722652bf2209f835cde1883d4c6b05decec2e73eb864727295f
@@ -47,12 +43,26 @@ spec:
             securityContext: &secOps
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
+      node:
+        <<: *controller
+        pod:
+          hostname: &name ff-kube-bonds
+        containers:
+          *name :
+            env:
+              FFNODE: 1
+              ServerUrl: http://ff-server:5000
     service:
-      *app :
-        controller: main
+      ff-server:
+        controller: server
         ports:
           http:
             port: &port 5000
+      ff-kube-bonds:
+        controller: node
+        ports:
+          http:
+            port: *port
     route:
       *app :
         hostnames:
@@ -63,23 +73,46 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: *app
+              - name: ff-server
                 port: *port
+    defaultPodOptions:
+      runtimeClassName: nvidia
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        runAsNonRoot: false
     persistence:
       config:
         existingClaim: *app
-        globalMounts:
-          - path: /app/Data
+        advancedMounts:
+          server:
+            ff-server:
+              - path: /app/Data
       logs:
         enabled: true
         existingClaim: fileflows-logs
-        globalMounts:
-          - path: /app/Logs
+        advancedMounts:
+          server:
+            ff-server:
+              - path: /app/Logs
+                subPath: ff-server
+          node:
+            ff-kube-bonds:
+              - path: /app/Logs
+                subPath: ff-kube-bonds
       temp:
         enabled: true
         type: emptyDir
-        globalMounts:
-          - path: /temp
+        # Multiple nodes try to clean the same temp dir
+        advancedMounts:
+          server:
+            ff-server:
+              - path: /temp
+                subPath: ff-server
+          node:
+            ff-kube-bonds:
+              - path: /temp
+                subPath: ff-kube-bonds
       common:
         existingClaim: fileflows-common
         globalMounts:
