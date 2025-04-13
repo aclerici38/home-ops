@@ -33,7 +33,7 @@ spec:
             env:
               PUID: 1000
               PGID: 1000
-            resources: &resources
+            resources:
               requests:
                 cpu: 100m
                 memory: 350M
@@ -51,14 +51,14 @@ spec:
             <<: *container
             env:
               FFNODE: 1
-              ServerUrl: http://ff-server:5000
+              ServerUrl: http://fileflows-server:5000
     service:
-      ff-server:
+      server:
         controller: server
         ports:
           http:
             port: &port 5000
-      ff-kube-bonds:
+      kube-bonds:
         controller: node
         ports:
           http:
