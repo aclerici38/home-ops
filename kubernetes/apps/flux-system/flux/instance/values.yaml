@@ -18,8 +18,24 @@ instance:
     # renovate: datasource=github-releases depName=controlplaneio-fluxcd/distribution
     version: 2.5.1
 
+
   kustomize:
     patches:
+      - patch: |
+          - op: add
+            path: /spec/template/spec/tolerations
+            value:
+              - key: "location"
+                operator: "Equal"
+                value: "cloud"
+                effect: "NoSchedule"
+              - key: "location"
+                operator: "Equal"
+                value: "house"
+                effect: "NoSchedule"
+        target:
+          kind: Deployment
+          name: "(kustomize-controller|helm-controller|source-controller|notification-controller)"
       - patch: |
           - op: add
             path: /spec/template/spec/containers/0/args/-
