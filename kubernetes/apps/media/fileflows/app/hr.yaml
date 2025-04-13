@@ -22,11 +22,11 @@ spec:
       retries: 1
   values:
     controllers:
-      server: &controller
+      server:
         pod:
           hostname: &name ff-server
         containers:
-          *name :
+          *name : &container
             image:
               repository: docker.io/revenz/fileflows
               tag: 25.04@sha256:a7e98f8f2b34c722652bf2209f835cde1883d4c6b05decec2e73eb864727295f
@@ -44,11 +44,11 @@ spec:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
       node:
-        <<: *controller
         pod:
           hostname: &name ff-kube-bonds
         containers:
           *name :
+            <<: *container
             env:
               FFNODE: 1
               ServerUrl: http://ff-server:5000
