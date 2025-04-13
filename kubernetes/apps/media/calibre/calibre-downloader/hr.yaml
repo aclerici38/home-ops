@@ -33,7 +33,7 @@ spec:
           *app :
             image:
               repository: ghcr.io/calibrain/calibre-web-automated-book-downloader
-              tag: 20250404@sha256:c9141176d41a20f8c348a2577315bc8f9ab73daeb5b485cdc6b414285948a543
+              tag: 20250413@sha256:286dc7359e49dbf7afedb5ab1fc5d60da9d1995804430bf1cae72ece3337b96e
             env:
               FLASK_PORT: &port 8084
               FLASK_DEBUG: true
@@ -41,7 +41,8 @@ spec:
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
               HOME: /tmp
-            command: ["python", "-m", "app"]
+              UID: 1000
+              GID: 1000
             probes:
               liveness: &probes
                 enabled: true
