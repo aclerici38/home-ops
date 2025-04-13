@@ -24,6 +24,21 @@ spec:
     controllers:
       main:
         strategy: RollingUpdate
+        pod:
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "cloud"
+              effect: "NoSchedule"
+            - key: "location"
+              operator: "Equal"
+              value: "house"
+              effect: "NoSchedule"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            runAsGroup: 65534
+            seccompProfile: { type: RuntimeDefault }
         containers:
           *app :
             image:
@@ -65,12 +80,6 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
-        seccompProfile: { type: RuntimeDefault }
     service:
       *app :
         controller: main
