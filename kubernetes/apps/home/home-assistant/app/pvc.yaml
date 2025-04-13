@@ -7,5 +7,5 @@ spec:
   accessModes: ["ReadWriteOnce"]
   resources:
     requests:
-      storage: 5Gi
-  storageClassName: local-hostpath
+      storage: 10Gi
+  storageClassName: zfs-nvme

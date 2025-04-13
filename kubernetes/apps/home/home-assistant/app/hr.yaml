@@ -34,9 +34,9 @@ spec:
             k8s.v1.cni.cncf.io/networks: |
               [
                 {
-                  "name":"multus-home-net",
+                  "name":"multus-apt-net",
                   "namespace": "network",
-                  "ips": ["10.0.40.28"]
+                  "ips": ["192.168.1.25"]
                 }
               ]
         containers:
@@ -49,7 +49,6 @@ spec:
             resources:
               requests:
                 cpu: 47m
-                memory: 2Gi
               limits:
                 memory: 2Gi
             securityContext:
@@ -90,21 +89,34 @@ spec:
             port: 8123
           code-server:
             port: 12321
-    # route:
-    #   *app :
-    #     hostnames:
-    #       - ${APP}.${SECRET_DOMAIN}
-    #     parentRefs:
-    #       - name: internal
-    #         namespace: kube-system
-    #         sectionName: https
-    #     rules:
-    #       - backendRefs:
-    #           - name: *app
-    #             port: *port
+    route:
+      app:
+        hostnames:
+          - hass.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: network
+            sectionName: https
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /code/
+            filters:
+              - type: URLRewrite
+                urlRewrite:
+                  path:
+                    type: ReplacePrefixMatch
+                    replacePrefixMatch: /
+            backendRefs:
+              - name: *app
+                port: 12321
+          - backendRefs:
+              - name: *app
+                port: 8123
     persistence:
       config:
-        existingClaim: ${APP}
+        existingClaim: *app
         globalMounts:
           - path: /config
       hass-cache:
