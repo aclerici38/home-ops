@@ -38,7 +38,7 @@ spec:
                 cpu: 100m
                 memory: 350M
               limits:
-                memory: 6Gi
+                memory: 12Gi
                 nvidia.com/gpu: 1
             securityContext: &secOps
               allowPrivilegeEscalation: true
