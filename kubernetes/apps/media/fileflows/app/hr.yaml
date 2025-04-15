@@ -76,6 +76,8 @@ spec:
           - backendRefs:
               - name: server
                 port: *port
+            timeouts:
+              request: 0s
     defaultPodOptions:
       runtimeClassName: nvidia
       securityContext:
