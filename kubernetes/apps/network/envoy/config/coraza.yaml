@@ -1,0 +1,25 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyExtensionPolicy
+metadata:
+  name: coraza
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: external
+  wasm:
+    - name: coraza
+      rootID: coraza-root
+      code:
+        type: Image
+        image:
+          url: ghcr.io/corazawaf/coraza-proxy-wasm:0.5.0
+      config:
+        directives_map:
+          default:
+            - "Include @demo-conf"
+            - "SecDebugLogLevel 3"
+            - "SecRuleEngine On"
+            - "Include @crs-setup-conf"
+            - "Include @owasp_crs/*.conf"
+        default_directives: "default"
