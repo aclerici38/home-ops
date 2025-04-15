@@ -13,7 +13,6 @@ spec:
     clientID: "${CLIENT_ID}"
     clientSecret:
       name: "${APP}-secret"
-    cookieDomain: ${SECRET_DOMAIN}
     refreshToken: True
     redirectURL: "https://${APP}.${SECRET_DOMAIN}/oauth2/callback"
     logoutPath: "${LOGOUT_PATH:-/logout}"
