@@ -15,11 +15,10 @@ spec:
         image:
           url: ghcr.io/corazawaf/coraza-proxy-wasm:0.5.0
       config:
+        default_directives: "default"
         directives_map:
           default:
-            - "Include @demo-conf"
-            - "SecDebugLogLevel 3"
+            - "SecDebugLogLevel 9"
             - "SecRuleEngine On"
             - "Include @crs-setup-conf"
             - "Include @owasp_crs/*.conf"
-        default_directives: "default"
