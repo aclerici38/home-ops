@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app morphos
+  name: &app convertx
 spec:
   interval: 1h
   chartRef:
@@ -23,35 +23,58 @@ spec:
   values:
     controllers:
       main:
+        pod:
+          runtimeClassName: nvidia
+          securityContext:
+            runAsUser: 65534
+            runAsGroup: 65533
+            fsGroup: 65533
+            fsGroupChangePolicy: Always
         containers:
           *app :
             image:
-              repository: ghcr.io/danvergara/morphos-server
-              tag: 0.6.0@sha256:3d6f64ef386cbb6a7c5d55526e1a69da2d3661a1996d757897e92bf4369088f5
+              repository: ghcr.io/c4illin/convertx
+              tag: v0.12.1
+            env:
+              ACCOUNT_REGISTRATION: false
+              HTTP_ALLOWED: false
+              ALLOW_UNAUTHENTICATED: true
+              AUTO_DELETE_EVERY_N_HOURS: 1
             resources:
               requests:
                 cpu: 100m
               limits:
-                memory: 500Mi
+                memory: 2Gi
+                nvidia.com/gpu: 1
             securityContext:
-              runAsUser: 65534
-              runAsGroup: 65534
-              runAsNonRoot: true
               allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
+    probes:
+      liveness: &probes
+        enabled: true
+        custom: true
+        spec:
+          httpGet:
+            path: /
+            port: &port 3000
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+      readiness: *probes
     service:
       *app :
         controller: main
         ports:
           http:
-            port: &port 8080
+            port: *port
     route:
-      *app :
+      app:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - convert.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: network
@@ -61,7 +84,7 @@ spec:
               - name: *app
                 port: *port
     persistence:
-      cache:
-        type: emptyDir
+      data:
+        existingClaim: *app
         globalMounts:
-          - path: /tmp
+          - path: /app/data
