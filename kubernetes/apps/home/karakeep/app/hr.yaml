@@ -47,7 +47,7 @@ spec:
               - secretRef:
                   name: karakeep-secret
             securityContext:
-              runAsNonRoot: true
+              runAsNonRoot: false
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
               seccompProfile: { type: RuntimeDefault }
