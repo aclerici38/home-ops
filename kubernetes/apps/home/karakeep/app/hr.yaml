@@ -71,6 +71,13 @@ spec:
               limits:
                 memory: 1Gi
       chrome:
+        pod:
+          securityContext: &sec
+            runAsGroup: 65543
+            runAsUser: 65543
+            runAsNonRoot: true
+            fsGroup: 65543
+            fsGroupChangePolicy: Always
         containers:
           chrome:
             image:
@@ -96,6 +103,8 @@ spec:
                   - ALL
             resources: *res
       meilisearch:
+        pod:
+          securityContext: *sec
         containers:
           meilisearch:
             image:
@@ -125,13 +134,6 @@ spec:
                 drop:
                   - ALL
 
-    defaultPodOptions:
-      securityContext:
-        runAsGroup: 1000
-        runAsUser: 1000
-        runAsNonRoot: true
-        fsGroup: 1000
-        fsGroupChangePolicy: Always
     service:
       *app :
         controller: main
