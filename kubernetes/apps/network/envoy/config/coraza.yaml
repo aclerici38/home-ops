@@ -22,3 +22,7 @@ spec:
             - "SecRuleEngine On"
             - "Include @crs-setup-conf"
             - "Include @owasp_crs/*.conf"
+            # Pocket id
+            - >
+              SecRule REQUEST_URI "@beginsWith /api/oidc/clients"
+              "id:1000001,phase:1,pass,nolog,ctl:ruleRemoveById=949111"
