@@ -46,6 +46,20 @@ spec:
             envFrom:
               - secretRef:
                   name: karakeep-secret
+            securityContext:
+              runAsNonRoot: true
+              readOnlyRootFilesystem: false
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities:
+                drop:
+                  - ALL
+                add:
+                  - CHOWN
+                  - SETUID
+                  - SETGID
+                  - FOWNER
+                  - DAC_OVERRIDE
             probes:
               liveness:
                 enabled: true
@@ -56,13 +70,6 @@ spec:
                 cpu: 10m
               limits:
                 memory: 1Gi
-            securityContext: &sec
-              runAsNonRoot: true
-              allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
-              capabilities:
-                drop:
-                  - ALL
       chrome:
         containers:
           chrome:
@@ -79,7 +86,14 @@ spec:
               - --remote-debugging-address=0.0.0.0
               - --remote-debugging-port=9222
               - --hide-scrollbars
-            securityContext: *sec
+            securityContext:
+              runAsNonRoot: true
+              readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities:
+                drop:
+                  - ALL
             resources: *res
       meilisearch:
         containers:
@@ -102,7 +116,14 @@ spec:
                 cpu: 10m
               limits:
                 memory: 4Gi
-            securityContext: *sec
+            securityContext:
+              runAsNonRoot: true
+              readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities:
+                drop:
+                  - ALL
 
     defaultPodOptions:
       securityContext:
