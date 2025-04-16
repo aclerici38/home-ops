@@ -16,11 +16,10 @@
       "rebaseWhen": "behind-base-branch",
       "matchDatasources": ["docker", "helm"],
       "matchPackageNames": [
-        "**/oauth2-proxy",
-        "**/mend-renovate-ce",
         "**/searxng",
         "**/code-server",
-        "**/firefox"
+        "**/firefox",
+        "**/calibre-web-automated-book-downloader",
       ],
       "matchUpdateTypes": ["minor", "patch", "digest"],
     }

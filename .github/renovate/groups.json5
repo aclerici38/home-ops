@@ -2,15 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "packageRules": [
     {
-      "description": ["1Password Connect Group"],
-      "groupName": "1Password Connnect",
-      "matchPackagePatterns": ["1password/connect"],
-      "matchDatasources": ["docker"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      }
-    },
-    {
       "description": ["Actions Runner Controller Group"],
       "groupName": "Actions Runner Controller",
       "matchPackagePatterns": ["gha-runner-scale-set"],
@@ -40,8 +31,8 @@
     {
       "description": ["Immich Group"],
       "groupName": "Immich",
-      "matchPackagePatterns": ["^immich-app/.*", "^immich-app\\..*"],
-      "matchDatasources": ["docker", "helm"],
+      "matchPackagePatterns": ["immich-app/"],
+      "matchDatasources": ["docker"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       }
