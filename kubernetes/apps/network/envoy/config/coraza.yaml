@@ -23,9 +23,9 @@ spec:
             # Custom
             # Pocket id
             - >
-              SecRule REQUEST_URI "@beginsWith /api/oidc/clients"
-              "id:1000001,phase:1,pass,nolog,ctl:ruleRemoveById=949111"
-
+              SecRule REQUEST_URI "@rx ^pocked\-id\.${SECRET_DOMAIN}/api/oidc/clients/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" "id:1000005,phase:1,pass,nolog,ctl:ruleRemoveById=949111,ctl:ruleRemoveById=911100"
+            - >
+              SecRule REQUEST_URI "@rx ^pocked\-id\.${SECRET_DOMAIN}/api/oidc/clients/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" "id:1000006,phase:2,pass,nolog,ctl:ruleRemoveById=949110"
             # Default
             - "Include @crs-setup-conf"
             - "Include @owasp_crs/*.conf"
