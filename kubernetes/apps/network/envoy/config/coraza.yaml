@@ -23,9 +23,11 @@ spec:
             # Custom
             # Pocket id
             - >
-              SecRule REQUEST_URI "@rx ^pocket\-id\.${SECRET_DOMAIN}/api/oidc/clients/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" "id:1000005,phase:1,pass,nolog,ctl:ruleRemoveById=949111,ctl:ruleRemoveById=911100"
+              SecRule REQUEST_HEADERS:Host "@streq pocket-id.${SECRET_DOMAIN}" "id:1000005,phase:1,pass,nolog,ctl:ruleRemoveById=949111,ctl:ruleRemoveById=911100,chain"
+            - SecRule REQUEST_URI "@rx ^/api/oidc/clients/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
             - >
-              SecRule REQUEST_URI "@rx ^pocket\-id\.${SECRET_DOMAIN}/api/oidc/clients/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" "id:1000006,phase:2,pass,nolog,ctl:ruleRemoveById=949110"
+              SecRule REQUEST_HEADERS:Host "@streq pocket-id.${SECRET_DOMAIN}" "id:1000006,phase:2,pass,nolog,ctl:ruleRemoveById=949110,chain"
+            - SecRule REQUEST_URI "@rx ^/api/oidc/clients/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
             # Default
             - "Include @crs-setup-conf"
             - "Include @owasp_crs/*.conf"
