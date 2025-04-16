@@ -20,10 +20,10 @@ spec:
           default:
             - "SecDebugLogLevel 9"
             - "SecRuleEngine On"
+            # Default
+            - "Include @crs-setup-conf"
+            - "Include @owasp_crs/*.conf"
             # Custom
             # Pocket id
             - 'SecRule REQUEST_URI "@contains /api/oidc/clients/" "id:1000005,phase:1,pass,nolog,ctl:ruleRemoveById=949111,ctl:ruleRemoveById=911100"'
             - 'SecRule REQUEST_URI "@contains /api/oidc/clients/" "id:1000006,phase:2,pass,nolog,ctl:ruleRemoveById=949110"'
-            # Default
-            - "Include @crs-setup-conf"
-            - "Include @owasp_crs/*.conf"
