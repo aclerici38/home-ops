@@ -1,0 +1,153 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app karakeep
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      main:
+        containers:
+          *app :
+            image:
+              repository: ghcr.io/karakeep-app/karakeep
+              tag: 0.23.2
+            env:
+              BROWSER_WEB_URL: http://karakeep-chrome:9222
+              CRAWLER_DOWNLOAD_BANNER_IMAGE: true
+              CRAWLER_ENABLE_ADBLOCKER: true
+              CRAWLER_STORE_SCREENSHOT: true
+              DATA_DIR: /data
+              MEILI_ADDR: http://karakeep-meilisearch:7700
+              NEXTAUTH_URL: https://karakeep.${SECRET_DOMAIN}
+              DISABLE_NEW_RELEASE_CHECK: true
+              COREPACK_INTEGRITY_KEYS: 0
+              DISABLE_PASSWORD_AUTH: true
+              OAUTH_PROVIDER_NAME: Pocket ID
+              OLLAMA_BASE_URL: http://ollama.home.svc.cluster.local:11434
+              INFERENCE_TEXT_MODEL: gemma3:12b
+              INFERENCE_IMAGE_MODEL: llava:13b
+            envFrom:
+              - secretRef:
+                  name: karakeep-secret
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources: &res
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
+            securityContext: &sec
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities:
+                drop:
+                  - ALL
+      chrome:
+        containers:
+          chrome:
+            image:
+              repository: ghcr.io/zenika/alpine-chrome
+              tag: 124
+            command:
+              - chromium-browser
+            args:
+              - --headless
+              - --no-sandbox
+              - --disable-gpu
+              - --disable-dev-shm-usage
+              - --remote-debugging-address=0.0.0.0
+              - --remote-debugging-port=9222
+              - --hide-scrollbars
+            securityContext: *sec
+            resources: *res
+      meilisearch:
+        containers:
+          meilisearch:
+            image:
+              repository: docker.io/getmeili/meilisearch
+              tag: v1.14.0
+            args:
+              - /bin/meilisearch
+              - --experimental-dumpless-upgrade
+            env:
+              MEILI_NO_ANALYTICS: true
+              MEILI_MASTER_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: karakeep-secret
+                    key: MEILI_MASTER_KEY
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 4Gi
+            securityContext: *sec
+
+    defaultPodOptions:
+      securityContext:
+        runAsGroup: 1000
+        runAsUser: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
+        fsGroupChangePolicy: Always
+    service:
+      *app :
+        controller: main
+        ports:
+          http:
+            port: &port 3000
+      chrome:
+        controller: chrome
+        ports:
+          http:
+            port: 9222
+      meilisearch:
+        controller: meilisearch
+        ports:
+          http:
+            port: 7700
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+    persistence:
+      data:
+        existingClaim: *app
+        advancedMounts:
+          main:
+            *app :
+              - path: /data
+                subPath: *app
+          meilisearch:
+            meilisearch:
+              - path: /meili_data
+                subPath: meilisearch
