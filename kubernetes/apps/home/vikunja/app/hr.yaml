@@ -29,7 +29,9 @@ spec:
               repository: docker.io/vikunja/vikunja
               tag: 0.24.6@sha256:ed1f3ed467fecec0b57e9de7bc6607f8bbcbb23ffced6a81f5dfefc794cdbe3b
             env:
-              VIKUNJA_SERVICE_PUBLICURL: &fqdn vikunja.${SECRET_DOMAIN}
+              # Proper shell path for cli
+              PATH: /app/vikunja:$${PATH}
+              VIKUNJA_SERVICE_PUBLICURL: https://vikunja.${SECRET_DOMAIN}
               VIKUNJA_SERVICE_TIMEZONE: America/Los_Angeles
               POSTGRES_ENABLED: "true"
               VIKUNJA_MAILER_ENABLED: true
