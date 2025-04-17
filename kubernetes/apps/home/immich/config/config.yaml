@@ -61,6 +61,14 @@ oauth:
   clientId: ${CLIENT_ID}
   clientSecret: ${CLIENT_SECRET}
 
+notifications:
+  smtp:
+    enabled: true
+    from: bot@${SECRET_DOMAIN}
+    transport:
+      host: smtp-relay.cluster-utilities.svc.cluster.local
+      port: 25
+
 storageTemplate:
   enabled: true
   hashVerificationEnabled: true
