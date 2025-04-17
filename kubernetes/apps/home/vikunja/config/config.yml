@@ -10,4 +10,4 @@ auth:
         authurl: "https://id.${SECRET_DOMAIN}/.well-known/openid-configuration"
         clientid: "${CLIENT_ID}"
         clientsecret: "${CLIENT_SECRET}"
-        scope: openid profile email
+        scope: email
