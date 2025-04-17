@@ -6,9 +6,8 @@ auth:
     redirecturl: "https://vikunja.${SECRET_DOMAIN}/auth/openid/"
 
     providers:
-      - name: Authentik
-        authurl: "https://auth.${SECRET_DOMAIN}/application/o/vikunja/"
-        logouturl: "https://auth.${SECRET_DOMAIN}/application/o/vikunja/end-session/"
+      - name: Pocket ID
+        authurl: "https://id.clerici.tech/authorize"
         clientid: "${CLIENT_ID}"
         clientsecret: "${CLIENT_SECRET}"
         scope: openid profile email

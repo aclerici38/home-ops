@@ -40,6 +40,11 @@ spec:
               overdue_tasks_reminders_time: '11:00'
               VIKUNJA_DEFAULTSETTINGS_WEEK_START: 1
 
+              # SMTP
+              VIKUNJA_MAILER_HOST: smtp-relay.cluster-utilities.svc.cluster.local
+              VIKUNJA_MAILER_PORT: 25
+              VIKUNJA_MAILER_FROMEMAIL: Vikunja <bot@${SECRET_DOMAIN}>
+
               # postgres
               VIKUNJA_DATABASE_TYPE: postgres
               VIKUNJA_DATABASE_HOST:
