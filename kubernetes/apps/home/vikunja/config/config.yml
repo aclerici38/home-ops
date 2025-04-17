@@ -7,7 +7,7 @@ auth:
 
     providers:
       - name: Pocket ID
-        authurl: "https://id.${SECRET_DOMAIN}/.well-known/openid-configuration"
+        authurl: "https://id.${SECRET_DOMAIN}/.well-known/openid-configuration/"
         clientid: "${CLIENT_ID}"
         clientsecret: "${CLIENT_SECRET}"
-        scope: email
+        scope: openid profile email
