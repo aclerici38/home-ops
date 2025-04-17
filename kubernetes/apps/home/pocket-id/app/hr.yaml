@@ -44,8 +44,13 @@ spec:
               DB_PROVIDER: postgres
               CADDY_DISABLED: "true"
               UPDATE_CHECK_DISABLED: "true"
+              SESSION_DURATION: 1440
 
               EMAIL_LOGIN_NOTIFICATION_ENABLED: true
+              SMTP_HOST: smtp-relay.cluster-utilities.svc.cluster.local
+              SMTP_PORT: 25
+              SMTP_FROM: bot@${SECRET_DOMAIN}
+              SMTP_TLS: none
 
               DB_CONNECTION_STRING:
                 valueFrom:
