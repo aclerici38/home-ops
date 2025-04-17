@@ -64,7 +64,7 @@ oauth:
 notifications:
   smtp:
     enabled: true
-    from: bot@${SECRET_DOMAIN}
+    from: Immich <bot@${SECRET_DOMAIN}>
     transport:
       host: smtp-relay.cluster-utilities.svc.cluster.local
       port: 25
