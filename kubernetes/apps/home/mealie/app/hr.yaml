@@ -53,26 +53,17 @@ spec:
 
               # postgres
               DB_ENGINE: postgres
-              POSTGRES_SERVER:
+              POSTGRES_URL_OVERRIDE:
                 valueFrom:
                   secretKeyRef:
                     name: ${APP}-db-app
-                    key: host
-              POSTGRES_USER:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-db-app
-                    key: user
-              POSTGRES_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-db-app
-                    key: password
-              POSTGRES_DB:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-db-app
-                    key: dbname
+                    key: uri
+
+              # SMTP
+              SMTP_HOST: smtp-relay.cluster-utilities.svc.cluster.local
+              SMTP_PORT: 25
+              SMTP_AUTH_STRATEGY: None
+              SMTP_FROM_EMAIL: bot@${SECRET_DOMAIN}
             envFrom:
               - secretRef:
                   name: mealie-secret
