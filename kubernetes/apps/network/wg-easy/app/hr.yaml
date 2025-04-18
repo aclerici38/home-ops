@@ -79,8 +79,8 @@ spec:
         type: NodePort
         ports:
           vpn:
-            targetPort: 51820
-            port: 51820
+            targetPort: *wgPort
+            port: *wgPort
             nodePort: *wgPort
             protocol: UDP
     route:
