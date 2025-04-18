@@ -6,4 +6,4 @@ spec:
   endpoints:
     - dnsName: cloud.${SECRET_DOMAIN}
       recordType: A
-      targets: ["${CLOUD_IP}"]
+      targets: ["${CLOUD_IP:-1.1.1.1}"]
