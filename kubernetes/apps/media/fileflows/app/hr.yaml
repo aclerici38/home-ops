@@ -43,27 +43,27 @@ spec:
             securityContext: &secOps
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
-      # node:
-      #   pod:
-      #     hostname: &name ff-kube-bonds
-      #   containers:
-      #     *name :
-      #       <<: *container
-      #       env:
-      #         <<: *env
-      #         FFNODE: 1
-      #         ServerUrl: http://fileflows-server:5000
+      node:
+        pod:
+          hostname: &name ff-kube-bonds
+        containers:
+          *name :
+            <<: *container
+            env:
+              <<: *env
+              FFNODE: 1
+              ServerUrl: http://fileflows-server:5000
     service:
       server:
         controller: server
         ports:
           http:
             port: &port 5000
-      # kube-bonds:
-      #   controller: node
-      #   ports:
-      #     http:
-      #       port: *port
+      kube-bonds:
+        controller: node
+        ports:
+          http:
+            port: *port
     route:
       *app :
         hostnames:
@@ -99,10 +99,10 @@ spec:
             ff-server:
               - path: /app/Logs
                 subPath: ff-server
-          # node:
-          #   ff-kube-bonds:
-          #     - path: /app/Logs
-          #       subPath: ff-kube-bonds
+          node:
+            ff-kube-bonds:
+              - path: /app/Logs
+                subPath: ff-kube-bonds
       temp:
         enabled: true
         type: emptyDir
@@ -112,10 +112,10 @@ spec:
             ff-server:
               - path: /temp
                 subPath: ff-server
-          # node:
-          #   ff-kube-bonds:
-          #     - path: /temp
-          #       subPath: ff-kube-bonds
+          node:
+            ff-kube-bonds:
+              - path: /temp
+                subPath: ff-kube-bonds
       common:
         existingClaim: fileflows-common
         globalMounts:
