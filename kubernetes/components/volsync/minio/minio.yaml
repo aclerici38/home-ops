@@ -79,7 +79,7 @@ spec:
     manual: restore-once
   restic:
     repository: "${APP}-volsync-minio-secret"
-    copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
+    copyMethod: Snapshot
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-openebs-zfs}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-zfs-nvme}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteMany}"]
