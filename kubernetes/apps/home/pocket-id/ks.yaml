@@ -40,6 +40,7 @@ spec:
       VOLSYNC_CACHE_STORAGECLASS: *sc
       CNPG_STORAGECLASS: *sc
       VOLSYNC_CAPACITY: 500Mi
+      VOLSYNC_COPYMETHOD: Direct
   patches:
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1

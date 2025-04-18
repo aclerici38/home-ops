@@ -34,6 +34,7 @@ spec:
       VOLSYNC_STORAGECLASS: &sc local-hostpath-posey
       VOLSYNC_SNAPSHOTCLASS: *sc
       VOLSYNC_CACHE_STORAGECLASS: *sc
+      VOLSYNC_COPYMETHOD: Direct
       CLIENT_ID: "217756b8-feda-4f0d-abb4-3ebd151f662d"
   patches:
     - patch: |-
