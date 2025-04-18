@@ -44,11 +44,9 @@ spec:
               tag: 14@sha256:66352ccb4b5095992550aa567df5118a5152b6ed31be34b0a8e118a3c3a35bf5
             env:
               LANG: EN
-              WG_HOST: cloud.${SECRET_DOMAIN}
-              PORT: &uiPort 51822
-              WG_PORT: &wgPort 51821
-              WG_DEFAULT_DNS: 172.17.0.11 # blocky
-              WG_MTU: 1280
+              WG_HOST: &host cloud.${SECRET_DOMAIN}
+              WG_DEFAULT_DNS: &dns 172.17.0.11 # blocky
+              WG_MTU: 1280 # Geneve + wireguard
               WG_PERSISTENT_KEEPALIVE: 25
               WG_ALLOWED_IPS: 0.0.0.0/0
               UI_TRAFFIC_STATS: "true"
@@ -74,15 +72,15 @@ spec:
         primary: true
         ports:
           http:
-            port: *uiPort
+            port: 51821
       wg:
         controller: main
         type: NodePort
         ports:
           vpn:
-            targetPort: *wgPort
-            port: 31821
-            nodePort: 31821
+            targetPort: 51820
+            port: 51820
+            nodePort: 123
             protocol: UDP
     route:
       *app :
