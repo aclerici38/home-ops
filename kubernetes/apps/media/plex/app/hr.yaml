@@ -32,8 +32,8 @@ spec:
               repository: ghcr.io/home-operations/plex
               tag: 1.41.6.9685
             env:
-              PLEX_ADVERTISE_URL: https://plex.${SECRET_DOMAIN}:443,http:/10.38.55.2:32400
-              PLEX_NO_AUTH_NETWORKS: 192.168.9.0/24,10.38.55.0/24
+              PLEX_ADVERTISE_URL: https://plex.${SECRET_DOMAIN}:443,http:/10.38.55.2:32400,http://10.38.55.81:32400
+              PLEX_NO_AUTH_NETWORKS: 192.168.9.0/24
             probes:
               liveness: &probes
                 enabled: true
@@ -82,13 +82,23 @@ spec:
           http:
             port: &port 32400
     route:
-      *app :
+      http:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: network
             sectionName: https
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
+      tcp:
+        kind: TCPRoute
+        parentRefs:
+          - name: external
+            namespace: network
+            sectionName: plex-tcp
         rules:
           - backendRefs:
               - name: *app
