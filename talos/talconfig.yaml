@@ -228,12 +228,6 @@ nodes:
                 - 10.0.30.28/32
                 - 10.10.0.2/32
               persistentKeepaliveInterval: 10s
-    patches:
-      - |-
-        cluster:
-          apiServer:
-            extraArgs:
-              service-node-port-range: "443-32767"
 
 # Global patches
 patches:

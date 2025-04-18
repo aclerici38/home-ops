@@ -40,3 +40,4 @@ cluster:
     extraArgs:
       runtime-config: admissionregistration.k8s.io/v1alpha1=true
       feature-gates: MutatingAdmissionPolicy=true
+      service-node-port-range: "443-32767"
