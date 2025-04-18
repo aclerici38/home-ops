@@ -1,0 +1,78 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app synology-external-service
+  namespace: &ns network
+spec:
+  targetNamespace: *ns
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/apps/network/external-services/template
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  prune: true
+  wait: true
+  interval: 30m
+  timeout: 5m
+  postBuild:
+    substitute:
+      APP: synology
+      IP: 10.0.30.101
+      PORT: '5000'
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app house-opnsense-external-service
+  namespace: &ns network
+spec:
+  targetNamespace: *ns
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/apps/network/external-services/template
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  prune: true
+  wait: true
+  interval: 30m
+  timeout: 5m
+  postBuild:
+    substitute:
+      APP: house-opnsense
+      IP: 10.0.10.1
+      PORT: '80'
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app apartment-opnsense-external-service
+  namespace: &ns network
+spec:
+  targetNamespace: *ns
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/apps/network/external-services/template
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  prune: true
+  wait: true
+  interval: 30m
+  timeout: 5m
+  postBuild:
+    substitute:
+      APP: apartment-opnsense
+      IP: 192.168.9.1
+      PORT: '80'
