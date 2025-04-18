@@ -72,7 +72,7 @@ spec:
         primary: true
         ports:
           http:
-            port: 51821
+            port: &uiPort 51821
       wg:
         controller: main
         type: NodePort
