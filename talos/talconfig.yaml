@@ -80,7 +80,7 @@ nodes:
           - 10.10.0.1/24
         mtu: 1420
         routes:
-          - network: 10.0.30.28/32
+          - network: 10.0.30.0/24
             gateway: 10.10.0.2
           - network: 10.40.40.41/32
             gateway: 10.10.0.3
@@ -91,7 +91,7 @@ nodes:
             - publicKey: ${POSEY_WG_PUBKEY}
               endpoint: ${HOUSE_WG_ENDPOINT}
               allowedIPs:
-                - 10.0.30.28/32
+                - 10.0.30.0/24
                 - 10.10.0.2/32
               persistentKeepaliveInterval: 10s
             - publicKey: ${MADBUM_WG_PUBKEY}
@@ -156,7 +156,7 @@ nodes:
           - 10.10.0.2/24
         mtu: 1420
         routes:
-          - network: 192.168.9.25/32
+          - network: 192.168.9.0/24
             gateway: 10.10.0.1
           - network: 10.40.40.41/32
             gateway: 10.10.0.3
@@ -167,7 +167,7 @@ nodes:
             - publicKey: ${BONDS_WG_PUBKEY}
               endpoint: ${APARTMENT_WG_ENDPOINT}
               allowedIPs:
-                - 192.168.9.25/32
+                - 192.168.9.0/24
                 - 10.10.0.1/32
               persistentKeepaliveInterval: 10s
             - publicKey: ${MADBUM_WG_PUBKEY}
@@ -208,9 +208,9 @@ nodes:
           - 10.10.0.3/24
         mtu: 1420
         routes:
-          - network: 192.168.9.25/32
+          - network: 192.168.9.0/24
             gateway: 10.10.0.1
-          - network: 10.0.30.28/32
+          - network: 10.0.30.0/24
             gateway: 10.10.0.2
         wireguard:
           privateKey: ${MADBUM_WG_PRIVATE_KEY}
@@ -219,13 +219,13 @@ nodes:
             - publicKey: ${BONDS_WG_PUBKEY}
               endpoint: ${APARTMENT_WG_ENDPOINT}
               allowedIPs:
-                - 192.168.9.25/32
+                - 192.168.9.0/24
                 - 10.10.0.1/32
               persistentKeepaliveInterval: 10s
             - publicKey: ${POSEY_WG_PUBKEY}
               endpoint: ${HOUSE_WG_ENDPOINT}
               allowedIPs:
-                - 10.0.30.28/32
+                - 10.0.30.0/24
                 - 10.10.0.2/32
               persistentKeepaliveInterval: 10s
 
