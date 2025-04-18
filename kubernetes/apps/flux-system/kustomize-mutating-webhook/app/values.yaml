@@ -3,12 +3,14 @@ image:
   repsotory: ghcr.io/xunholy/kustomize-mutating-webhook
   pullPolicy: IfNotPresent
 replicaCount: 1
+annotations:
+  secret.reloader.stakater.com/reload: &sname cluster-secrets
 certManager:
   enabled: true
 configMaps: []
 secrets:
   - create: false
-    name: cluster-secrets
+    name: *sname
     optional: false
 env:
   LOG_LEVEL: debug
