@@ -1,0 +1,9 @@
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: cloud-ip
+spec:
+  endpoints:
+    - dnsName: cloud.${SECRET_DOMAIN}
+      recordType: A
+      targets: ["${CLOUD_IP}"]
