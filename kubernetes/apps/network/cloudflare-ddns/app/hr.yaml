@@ -25,7 +25,7 @@ spec:
       apartment:
         pod:
           nodeSelector:
-            location: *location
+            location: &location apartment
         containers:
           *location : &container
             image:
