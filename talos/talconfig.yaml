@@ -89,7 +89,7 @@ nodes:
           listenPort: 51820
           peers:
             - publicKey: ${POSEY_WG_PUBKEY}
-              endpoint: ${OFFICE_WG_ENDPOINT}
+              endpoint: ${HOUSE_WG_ENDPOINT}
               allowedIPs:
                 - 10.0.30.28/32
                 - 10.10.0.2/32
@@ -223,7 +223,7 @@ nodes:
                 - 10.10.0.1/32
               persistentKeepaliveInterval: 10s
             - publicKey: ${POSEY_WG_PUBKEY}
-              endpoint: ${OFFICE_WG_ENDPOINT}
+              endpoint: ${HOUSE_WG_ENDPOINT}
               allowedIPs:
                 - 10.0.30.28/32
                 - 10.10.0.2/32
