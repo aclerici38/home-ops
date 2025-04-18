@@ -73,6 +73,6 @@ spec:
   timeout: 5m
   postBuild:
     substitute:
-      APP: apartment-opnsense
+      APP: apt-opnsense
       IP: 192.168.9.1
       PORT: '80'
