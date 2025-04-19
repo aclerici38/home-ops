@@ -61,9 +61,9 @@ spec:
         spec:
           dataFrom: null
           data:
-            - secretKey: CLOUDFLARE_CERT_API_KEY
+            - secretKey: CLOUDFLARE_API_TOKEN
               remoteRef:
                 key: cloudflare
-                property: CLOUDFLARE_CERT_API_KEY
+                property: CLOUDFLARE_API_TOKEN
       target:
         kind: ExternalSecret
