@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./ns.yaml
 
+  - ./actual/ks.yaml
   - ./atuin/ks.yaml
   - ./convertx/ks.yaml
   - ./frigate/ks.yaml
