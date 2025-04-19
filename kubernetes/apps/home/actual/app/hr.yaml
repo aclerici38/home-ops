@@ -39,7 +39,7 @@ spec:
             env:
               ACTUAL_LOGIN_METHOD: openid
               ACTUAL_ALLOWED_LOGIN_METHODS: '[openid]'
-              ACTUAL_OPENID_DISCOVERY_URL: https://id.${SECRET_DOMAIN}/.well-known/openid-configuration
+              ACTUAL_OPENID_DISCOVERY_URL: https://id.${SECRET_DOMAIN}
               ACTUAL_OPENID_SERVER_HOSTNAME: https://actual.${SECRET_DOMAIN}
               ACTUAL_OPENID_AUTH_METHOD: openid
               ACTUAL_OPENID_ENFORCE: true
