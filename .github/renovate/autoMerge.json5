@@ -19,7 +19,6 @@
         "**/searxng",
         "**/code-server",
         "**/firefox",
-        "**/calibre-web-automated-book-downloader",
         "**/grafana",
         "**/radarr",
         "**/sonarr",
@@ -27,6 +26,17 @@
         "**/kube-prometheus-stack"
       ],
       "matchUpdateTypes": ["minor", "patch", "digest"],
+    },
+    {
+      "description": ["Auto-merge specific apps' major versions"],
+      "automerge": true,
+      "automergeType": "pr",
+      "rebaseWhen": "behind-base-branch",
+      "matchDatasources": ["docker", "helm"],
+      "matchPackageNames": [
+        "**/calibre-web-automated-book-downloader",
+      ],
+      "matchUpdateTypes": ["major", "minor", "patch", "digest"],
     }
   ]
 }
