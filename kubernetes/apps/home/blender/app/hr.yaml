@@ -35,6 +35,9 @@ spec:
             image:
               repository: ghcr.io/linuxserver/blender
               tag: 4.4.1@sha256:5af7ebb00d90a461ec7c998bf896e4102bb05dfa0305d1a2fc6cd3330fe3c9c0
+            env:
+              PUID: 1000
+              PGID: 1000
             securityContext:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
