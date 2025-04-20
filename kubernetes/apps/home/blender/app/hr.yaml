@@ -41,16 +41,17 @@ spec:
             securityContext:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
-              capabilities:
-                drop:
-                  - ALL
-                add:
-                  # S6
-                  - CHOWN
-                  - SETUID
-                  - SETGID
-                  - FOWNER
-                  - DAC_OVERRIDE
+              privileged: true
+              # capabilities:
+              #   drop:
+              #     - ALL
+              #   add:
+              #     # S6
+              #     - CHOWN
+              #     - SETUID
+              #     - SETGID
+              #     - FOWNER
+              #     - DAC_OVERRIDE
             resources:
               requests:
                 cpu: 200m
