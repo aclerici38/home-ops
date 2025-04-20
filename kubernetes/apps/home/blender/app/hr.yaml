@@ -38,21 +38,20 @@ spec:
             securityContext:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
-              privileged: true
-              # capabilities:
-              #   drop:
-              #     - ALL
-              #   add:
-              #     # S6
-              #     - CHOWN
-              #     - SETUID
-              #     - SETGID
-              #     - FOWNER
-              #     - DAC_OVERRIDE
+              capabilities:
+                drop:
+                  - ALL
+                add:
+                  # S6
+                  - CHOWN
+                  - SETUID
+                  - SETGID
+                  - FOWNER
+                  - DAC_OVERRIDE
             resources:
               requests:
                 cpu: 200m
-                memory: 500Mi
+                memory: 600Mi
               limits:
                 memory: 6Gi
                 nvidia.com/gpu: 1
