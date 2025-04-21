@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: omada-controller-logs
 spec:
-  storageClassName: zfs-nvme
+  storageClassName: local-hostpath-posey
   resources:
     requests:
       storage: 2Gi
