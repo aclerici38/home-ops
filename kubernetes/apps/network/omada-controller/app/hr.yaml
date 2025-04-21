@@ -49,8 +49,8 @@ spec:
               SHOW_SERVER_LOGS: "true"
               SHOW_MONGODB_LOGS: "true"
 
-              MANAGE_HTTP_PORT: "8088"
-              MANAGE_HTTPS_PORT: &port "8043"
+              MANAGE_HTTP_PORT: &port "8088"
+              MANAGE_HTTPS_PORT: "8043"
               PORTAL_HTTP_PORT: "8888"
               PORTAL_HTTPS_PORT: "8843"
               PORT_APP_DISCOVERY: "27001"
@@ -96,9 +96,9 @@ spec:
           lbipam.cilium.io/ips: 10.38.55.10
         ports:
           manage-http:
-            port: 8088
-          manage-https:
             port: *port
+          manage-https:
+            port: 8043
           portal-http:
             port: 8888
           portal-https:
@@ -134,20 +134,24 @@ spec:
             namespace: network
             sectionName: https
         rules:
+          - matches:
+            - path:
+                type: RegularExpression
+                value: "^/(.+)/login$"
+            filters:
+              - type: ResponseHeaderModifier
+                responseHeaderModifier:
+                  remove:
+                  - name: Location
+              - type: URLRewrite
+                urlRewrite:
+                  hostname: "omada.${CLUSTER_DOMAIN}"
+                  path:
+                    type: ReplaceFullPath
+                    replaceFullPath: "/$1/login"
           - backendRefs:
               - name: *app
                 port: *port
-            # filters:
-            #   - type: RequestHeaderModifier
-            #     requestHeaderModifier:
-            #       set:
-            #         - name: Host
-            #           value: omada.${SECRET_DOMAIN}:8043
-            #   - type: ResponseHeaderModifier
-            #     responseHeaderModifier:
-            #       set:
-            #         - name: location
-            #           value: https://omada.${SECRET_DOMAIN}/login
     persistence:
       data:
         existingClaim: *app
