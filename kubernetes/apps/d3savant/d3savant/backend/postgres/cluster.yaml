@@ -15,7 +15,7 @@ spec:
   primaryUpdateStrategy: unsupervised
   postgresql:
     pg_hba:
-      - host all all 10.38.55.0/24 md5
+      - host all all 172.16.0.0/16 md5
       - host all all 192.168.1.0/24 md5
   storage:
     size: 500Gi

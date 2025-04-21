@@ -32,3 +32,12 @@ spec:
         certificateRefs:
           - kind: Secret
             name: ${SECRET_DOMAIN/./-}-tls
+    - name: d3savant
+      protocol: TCP
+      port: 5432
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: d3savant

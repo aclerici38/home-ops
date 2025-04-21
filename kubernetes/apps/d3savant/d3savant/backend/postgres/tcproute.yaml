@@ -1,0 +1,13 @@
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: d3savant-pg-tcproute
+spec:
+  parentRefs:
+    - name: internal
+      namespace: network
+      sectionName: d3savant
+  rules:
+    - backendRefs:
+        - name: d3savant-db-rw
+          port: 5432

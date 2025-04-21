@@ -14,6 +14,8 @@ spec:
       namespace: database
     - name: minio
       namespace: cluster-utilities
+    - name: envoy-gateway
+      namespace: network
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
