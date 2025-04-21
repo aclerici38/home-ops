@@ -141,10 +141,10 @@ spec:
               - type: ResponseHeaderModifier
                 responseHeaderModifier:
                   remove:
-                  - name: Location
+                  - Location
               - type: URLRewrite
                 urlRewrite:
-                  hostname: "omada.${CLUSTER_DOMAIN}"
+                  hostname: "omada.${SECRET_DOMAIN}"
                   path:
                     type: ReplaceFullPath
                     replaceFullPath: "/$1/login"
