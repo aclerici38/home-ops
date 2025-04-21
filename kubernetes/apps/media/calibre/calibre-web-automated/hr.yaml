@@ -26,6 +26,10 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            seccompProfile: { type: RuntimeDefault }
         containers:
           *app :
             image:
@@ -48,7 +52,16 @@ spec:
             securityContext:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
-              privileged: true
+              capabilities:
+                drop:
+                  - ALL
+                add:
+                  # S6
+                  - CHOWN
+                  - SETUID
+                  - SETGID
+                  - FOWNER
+                  - DAC_OVERRIDE
     service:
       *app :
         controller: main
