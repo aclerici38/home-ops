@@ -16,6 +16,8 @@ spec:
     - name: minio
       namespace: cluster-utilities
   path: ./kubernetes/apps/network/omada-controller/app
+  components:
+    - ../../../../components/volsync/minio
   sourceRef:
     kind: GitRepository
     name: flux-system
