@@ -87,7 +87,7 @@ spec:
             port: 8043
       controller:
         controller: main
-        type: Loadbalancer
+        type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 10.38.55.10
         ports:
