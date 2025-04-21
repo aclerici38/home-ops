@@ -126,7 +126,6 @@ spec:
             port: 29816
     route:
       *app :
-        kind: TLSRoute
         hostnames:
           - omada.${SECRET_DOMAIN}
         parentRefs:
