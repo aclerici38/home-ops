@@ -88,15 +88,13 @@ spec:
         controller: main
         ports:
           http:
-            port: 8043
+            port: *port
       controller:
         controller: main
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 10.38.55.10
         ports:
-          manage-http:
-            port: *port
           manage-https:
             port: 8043
           portal-http:
