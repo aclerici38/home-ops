@@ -30,7 +30,7 @@ metadata:
 spec:
   sourcePVC: "immich"
   trigger:
-    schedule: "30 0 * * 1"
+    schedule: "0 23 * * *"
   restic:
     copyMethod: Snapshot
     pruneIntervalDays: 14
