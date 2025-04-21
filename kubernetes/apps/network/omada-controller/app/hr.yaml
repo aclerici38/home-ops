@@ -156,3 +156,7 @@ spec:
         existingClaim: omada-controller-logs
         globalMounts:
           - path: /opt/tplink/EAPController/logs
+      properties:
+        type: emptyDir
+        globalMounts:
+          - path: /opt/tplink/EAPController/properties
