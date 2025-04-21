@@ -31,6 +31,13 @@ spec:
               operator: "Equal"
               value: "house"
               effect: "NoSchedule"
+          securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+              fsGroup: 1000
+              runAsNonRoot: true
+              fsGroupChangePolicy: Always
+              seccompProfile: { type: RuntimeDefault }
         containers:
           *app :
             image:
@@ -61,11 +68,8 @@ spec:
               limits:
                 memory: 2000Mi
             securityContext:
-              runAsUser: 65534
-              runAsGroup: 65534
-              runAsNonRoot: true
               allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
