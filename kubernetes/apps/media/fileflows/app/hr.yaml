@@ -40,9 +40,13 @@ spec:
               limits:
                 memory: 12Gi
                 nvidia.com/gpu: 1
-            securityContext: &secOps
+            securityContext:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities:
+                drop:
+                  - ALL
       node:
         pod:
           hostname: &name ff-kube-bonds
