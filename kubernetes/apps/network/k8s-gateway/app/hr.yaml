@@ -22,6 +22,10 @@ spec:
       retries: 1
   values:
     domain: ${SECRET_DOMAIN}
+    fallthrough:
+      enabled: true
+      zones:
+        - ${SECRET_DOMAIN}
     replicaCount: 2
     watchedResources:
       - HTTPRoute
