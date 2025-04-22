@@ -38,6 +38,8 @@ spec:
       - name: ready
       - name: prometheus
         parameters: 0.0.0.0:9153
+      - name: forward
+        parameters: . 172.17.0.12
     service:
       type: ClusterIP
       clusterIP: 172.17.0.13
