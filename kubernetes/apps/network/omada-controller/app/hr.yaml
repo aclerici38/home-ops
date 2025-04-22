@@ -49,8 +49,8 @@ spec:
               SHOW_SERVER_LOGS: "true"
               SHOW_MONGODB_LOGS: "true"
 
-              MANAGE_HTTP_PORT: &port "8088"
-              MANAGE_HTTPS_PORT: "443"
+              MANAGE_HTTP_PORT: "8088"
+              MANAGE_HTTPS_PORT: &port "443"
               PORTAL_HTTP_PORT: "8888"
               PORTAL_HTTPS_PORT: "8843"
               PORT_APP_DISCOVERY: "27001"
@@ -98,9 +98,9 @@ spec:
           lbipam.cilium.io/ips: 10.38.55.10
         ports:
           manage-http:
-            port: *port
+            port: 8088
           manage-https:
-            port: 443
+            port: *port
           portal-http:
             port: 8888
           portal-https:
