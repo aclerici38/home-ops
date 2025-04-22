@@ -8,5 +8,8 @@ spec:
       kind: Service
       name: omada-controller
   validation:
-    wellKnownCACertificates: System
     hostname: "omada.${SECRET_DOMAIN}"
+    caCertificateRefs:
+      - group: ""
+        kind: Secret
+        name: omada-selfsigned-tls

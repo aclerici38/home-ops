@@ -153,3 +153,9 @@ spec:
           - path: /opt/tplink/EAPController/properties
       tmp:
         type: emptyDir
+      cert:
+        type: secret
+        name: omada-selfsigned-tls
+        globalMounts:
+          - path: /cert
+            readOnly: true

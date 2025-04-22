@@ -1,0 +1,23 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: selfsigned
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: omada-selfsigned
+spec:
+  secretName: omada-selfsigned-tls
+  issuerRef:
+    name: selfsigned
+    kind: Issuer
+  commonName: omada.${SECRET_DOMAIN}
+  dnsNames:
+    - omada.${SECRET_DOMAIN}
+  privateKey:
+    algorithm: RSA
+    size: 2048
