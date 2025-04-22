@@ -4,7 +4,8 @@ metadata:
   name: omada-tls-policy
 spec:
   targetRefs:
-    - kind: Service
+    - group: ""
+      kind: Service
       name: omada-controller
   validation:
     wellKnownCACertificates: System
