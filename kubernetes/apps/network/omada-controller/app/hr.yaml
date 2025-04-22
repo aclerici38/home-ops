@@ -133,22 +133,12 @@ spec:
             namespace: network
             sectionName: https
         rules:
-          - matches:
-            - path:
-                type: RegularExpression
-                value: "^/(.+)/login$"
-            filters:
+          - filters:
               - type: ResponseHeaderModifier
                 responseHeaderModifier:
                   remove:
-                  - Location
-              - type: URLRewrite
-                urlRewrite:
-                  hostname: "omada.${SECRET_DOMAIN}"
-                  path:
-                    type: ReplaceFullPath
-                    replaceFullPath: "/$1/login"
-          - backendRefs:
+                    - Location
+            backendRefs:
               - name: *app
                 port: *port
     persistence:
