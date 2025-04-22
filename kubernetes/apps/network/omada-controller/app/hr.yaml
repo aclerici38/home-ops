@@ -50,7 +50,7 @@ spec:
               SHOW_MONGODB_LOGS: "true"
 
               MANAGE_HTTP_PORT: &port "8088"
-              MANAGE_HTTPS_PORT: "8043"
+              MANAGE_HTTPS_PORT: "443"
               PORTAL_HTTP_PORT: "8888"
               PORTAL_HTTPS_PORT: "8843"
               PORT_APP_DISCOVERY: "27001"
@@ -73,6 +73,8 @@ spec:
               capabilities:
                 drop:
                   - ALL
+                add:
+                  - NET_BIND_SERVICE
             probes:
               liveness:
                 enabled: true
@@ -98,7 +100,7 @@ spec:
           manage-http:
             port: *port
           manage-https:
-            port: 8043
+            port: 443
           portal-http:
             port: 8888
           portal-https:
@@ -133,12 +135,7 @@ spec:
             namespace: network
             sectionName: https
         rules:
-          - filters:
-              - type: ResponseHeaderModifier
-                responseHeaderModifier:
-                  remove:
-                    - Location
-            backendRefs:
+          - backendRefs:
               - name: *app
                 port: *port
     persistence:
