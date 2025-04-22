@@ -6,6 +6,6 @@ spec:
   targetRefs:
     - kind: Service
       name: omada-controller
-  hostname: "omada.${CLUSTER_DOMAIN}"
   validation:
     wellKnownCACertificates: System
+    hostname: "omada.${CLUSTER_DOMAIN}"
