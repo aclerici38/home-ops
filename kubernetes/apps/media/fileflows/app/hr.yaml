@@ -44,15 +44,6 @@ spec:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
               seccompProfile: { type: RuntimeDefault }
-              capabilities:
-                drop:
-                  - ALL
-                add:
-                  - CHOWN
-                  - SETUID
-                  - SETGID
-                  - FOWNER
-                  - DAC_OVERRIDE
       node:
         pod:
           hostname: &name ff-kube-bonds
