@@ -133,7 +133,7 @@ spec:
         globalMounts:
           - path: /app/common
       ffmpeg:
-        existingClaim: fileflows-ffmpeg
+        type: emptyDir
         globalMounts:
           - path: /opt/ffmpeg
       dockermods:

@@ -34,15 +34,3 @@ spec:
       storage: 10Gi
   accessModes:
     - ReadWriteMany
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: fileflows-ffmpeg
-spec:
-  storageClassName: zfs-nvme
-  resources:
-    requests:
-      storage: 1Gi
-  accessModes:
-    - ReadWriteMany
