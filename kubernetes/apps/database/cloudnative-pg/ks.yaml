@@ -14,8 +14,6 @@ spec:
     - name: external-secrets-stores
       namespace: cluster-utilities
   path: ./kubernetes/apps/database/cloudnative-pg/app
-  components:
-    - ../../../../components/external-secret
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -27,27 +25,3 @@ spec:
   postBuild:
     substitute:
       APP: *app
-  patches:
-    - patch: |-
-        apiVersion: external-secrets.io/v1
-        kind: ExternalSecret
-        metadata:
-          name: patch
-        spec:
-          target:
-            template:
-              metadata:
-                annotations:
-                  reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
-                  reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
-          data:
-            - secretKey: minio-access-key-id
-              remoteRef:
-                key: "minio"
-                property: "access-key-id"
-            - secretKey: minio-secret-access-key
-              remoteRef:
-                key: "minio"
-                property: "secret-access-key"
-      target:
-        kind: ExternalSecret
