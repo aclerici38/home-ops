@@ -37,7 +37,14 @@ spec:
                 # Install if ffmpeg version doesn't exist
                 if [ ! -d "/opt/ffmpeg/${FFMPEG_VERSION}" ]; then
                   echo "Installing ffmpeg ${FFMPEG_VERSION}"
-                  rm -rf /opt/ffmpeg
+                  rm -rf /opt/ffmpeg/*
+
+                  apt-get update && apt-get install -y --no-install-suggests --no-install-recommends \
+                      curl \
+                      gnupg \
+                      ca-certificates \
+                      apt-transport-https
+
                   curl -m15 -fsSL https://repo.jellyfin.org/debian/jellyfin_team.gpg.key | gpg --dearmor -o /etc/apt/trusted.gpg.d/jellyfin.gpg
                   . /etc/os-release && \
                     echo "deb [arch=$(dpkg --print-architecture)] https://repo.jellyfin.org/$ID $VERSION_CODENAME main" \
