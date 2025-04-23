@@ -56,6 +56,7 @@ spec:
                   ls -la /opt/ffmpeg/${FFMPEG_VERSION}/
                 else
                   echo ffmpeg ${FFMPEG_VERSION} already installed
+                  ls -la /opt/ffmpeg/${FFMPEG_VERSION}/
                 fi
         containers:
           *name : &container
@@ -74,6 +75,7 @@ spec:
             env: &env
               PUID: 1000
               PGID: 1000
+              LD_LIBRARY_PATH: /opt/ffmpeg/${FFMPEG_VERSION}/lib
             resources:
               requests:
                 cpu: 100m
