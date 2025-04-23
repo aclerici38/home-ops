@@ -28,17 +28,14 @@ spec:
         initContainers:
           ffmpeg-download:
             image:
-              repository: ubuntu
-              tag: latest
+              repository: ghcr.io/jrottenberg/ffmpeg
+              tag: 7.1-scratch@sha256:037260616dc6ffb17870a2ff06aa053e85c92a54acc3ebadae9f564ea52d4915
             command:
               - sh
               - -c
               - |
-                apt-get update && apt-get install -y wget gnupg2 && \
-                echo "deb [trusted=yes] https://repo.jellyfin.org/debian bookworm main" > /etc/apt/sources.list.d/jellyfin.list && \
-                apt-get update && \
-                apt-get install -y jellyfin-ffmpeg7 && \
-                cp -r /usr/lib/jellyfin-ffmpeg/* /opt/ffmpeg/
+                cp /usr/local/bin/ffmpeg /opt/ffmpeg/ && \
+                cp /usr/local/bin/ffprobe /opt/ffmpeg/
         containers:
           *name : &container
             image:
