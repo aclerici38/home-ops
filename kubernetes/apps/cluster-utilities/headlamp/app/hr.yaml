@@ -33,12 +33,6 @@ spec:
             name: headlamp-plugins
     config:
       inCluster: true
-      oidc:
-        secret:
-          create: false
-        externalSecret:
-          enabled: true
-          name: headlamp-secret
       pluginsDir: /build/plugins
     volumeMounts:
       - mountPath: /build/plugins
