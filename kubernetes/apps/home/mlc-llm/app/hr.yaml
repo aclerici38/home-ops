@@ -62,19 +62,19 @@ spec:
                 cpu: 1000m
                 memory: 7.5Gi
                 nvidia.com/gpu: 1
-            probes:
-              liveness:
-                enabled: true
-              readiness:
-                enabled: true
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  periodSeconds: 2
-                  failureThreshold: 300
-                  tcpSocket:
-                    port: &port 8080
+            # probes:
+            #   liveness:
+            #     enabled: true
+            #   readiness:
+            #     enabled: true
+            #   startup:
+            #     enabled: true
+            #     custom: true
+            #     spec:
+            #       periodSeconds: 2
+            #       failureThreshold: 300
+            #       tcpSocket:
+            #         port: &port 8080
       phi:
         strategy: RollingUpdate
         containers:
