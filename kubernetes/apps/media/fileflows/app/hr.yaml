@@ -28,8 +28,8 @@ spec:
         initContainers: &init
           ffmpeg-download:
             image:
-              repository: docker.io/library/ubuntu
-              tag: 25.04
+              repository: docker.io/library/debian
+              tag: bookworm-slim
             command:
               - sh
               - -c
