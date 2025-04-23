@@ -32,6 +32,7 @@ spec:
           - mountPath: /build/plugins
             name: headlamp-plugins
     config:
+      inCluster: true
       oidc:
         secret:
           create: false
