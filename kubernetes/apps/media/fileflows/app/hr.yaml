@@ -34,8 +34,8 @@ spec:
               - sh
               - -c
               - |
-                cp /usr/local/bin/ffmpeg /opt/ffmpeg/ && \
-                cp /usr/local/bin/ffprobe /opt/ffmpeg/
+                cp /bin/ffmpeg /opt/ffmpeg/ && \
+                cp /bin/ffprobe /opt/ffmpeg/
         containers:
           *name : &container
             image:
