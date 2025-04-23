@@ -70,7 +70,7 @@ spec:
                     - -c
                     - |
                       ln -sf /opt/ffmpeg/${FFMPEG_VERSION}/ffmpeg /usr/local/bin/ffmpeg && \
-                      ln -sf /opt/ffmpeg/${FFMPEG_VERSION}/ffprobe /usr/local/bin/ffprobe && \
+                      ln -sf /opt/ffmpeg/${FFMPEG_VERSION}/ffprobe /usr/local/bin/ffprobe
             env: &env
               PUID: 1000
               PGID: 1000
