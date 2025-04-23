@@ -51,7 +51,9 @@ spec:
                     > /etc/apt/sources.list.d/jellyfin.list
                   apt-get update && \
                   apt-get install -y --no-install-suggests --no-install-recommends jellyfin-ffmpeg7
-                  cp -r /usr/lib/jellyfin-ffmpeg /opt/ffmpeg/${FFMPEG_VERSION}/
+                  cp -r /usr/lib/jellyfin-ffmpeg/ /opt/ffmpeg/${FFMPEG_VERSION}/
+                  echo "ffmpeg ${FFMPEG_VERSION} successfully installed"
+                  ls -la /opt/ffmpeg/${FFMPEG_VERSION}/
                 else
                   echo ffmpeg ${FFMPEG_VERSION} already installed
                 fi
