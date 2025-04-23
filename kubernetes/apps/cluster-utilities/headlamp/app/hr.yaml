@@ -43,9 +43,9 @@ spec:
       create: false
     persistentVolumeClaim:
       enabled: true
-      accessModes: ["${STORAGECLASS_ACCESSMODE}"]
+      accessModes: ["ReadWriteOnce"]
       size: 1Gi
-      storageClassName: ${STORAGECLASS}
+      storageClassName: zfs-nvme
     volumeMounts:
       - mountPath: /build/plugins
         name: headlamp-plugins

@@ -9,12 +9,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: external-secrets-stores
-      namespace: cluster-utilities
   path: ./kubernetes/apps/cluster-utilities/headlamp/app
-  components:
-    - ../../../../components/external-secret
   prune: true
   sourceRef:
     kind: GitRepository
