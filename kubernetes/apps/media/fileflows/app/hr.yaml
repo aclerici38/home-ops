@@ -34,8 +34,8 @@ spec:
               - sh
               - -c
               - |
-                cp /bin/ffmpeg /opt/ffmpeg/ && \
-                cp /bin/ffprobe /opt/ffmpeg/
+                cp /opt/ffmpeg /mnt/ffmpeg/ && \
+                cp /opt/ffprobe /mnt/ffmpeg/
         containers:
           *name : &container
             image:
@@ -48,9 +48,9 @@ spec:
                     - sh
                     - -c
                     - |
-                      ln -sf /opt/ffmpeg/ffmpeg /usr/local/bin/ffmpeg && \
-                      ln -sf /opt/ffmpeg/ffmpeg /usr/local/bin/ffmpeg7 && \
-                      ln -sf /opt/ffmpeg/ffprobe /usr/local/bin/ffprobe
+                      ln -sf /mnt/ffmpeg/ffmpeg /usr/local/bin/ffmpeg && \
+                      ln -sf /mnt/ffmpeg/ffmpeg /usr/local/bin/ffmpeg7 && \
+                      ln -sf /mnt/ffmpeg/ffprobe /usr/local/bin/ffprobe
             env: &env
               PUID: 1000
               PGID: 1000
@@ -136,7 +136,7 @@ spec:
       ffmpeg:
         type: emptyDir
         globalMounts:
-          - path: /opt/ffmpeg
+          - path: /mnt/ffmpeg
       dockermods:
         type: emptyDir
         globalMounts:
