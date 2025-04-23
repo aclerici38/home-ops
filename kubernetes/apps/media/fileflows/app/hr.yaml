@@ -25,7 +25,7 @@ spec:
       server:
         pod:
           hostname: &name ff-server
-        initContainers:
+        initContainers: &init
           ffmpeg-download:
             image:
               repository: ghcr.io/jrottenberg/ffmpeg
@@ -67,6 +67,7 @@ spec:
       node:
         pod:
           hostname: &name ff-kube-bonds
+        initContainers: *init
         containers:
           *name :
             <<: *container
