@@ -96,3 +96,5 @@ spec:
     persistence:
       data:
         existingClaim: mlc-llm-data
+      tmp:
+        type: emptyDir
