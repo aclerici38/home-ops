@@ -36,6 +36,7 @@ spec:
             name: headlamp-plugins
     config:
       pluginsDir: /build/plugins
+      inCluster: true
     serviceAccount:
       create: false
       name: headlamp-admin
