@@ -147,7 +147,7 @@ spec:
       ffmpeg:
         existingClaim: fileflows-ffmpeg
         globalMounts:
-          - /opt/ffmpeg
+          - path: /opt/ffmpeg
       dockermods:
         type: emptyDir
         globalMounts:
