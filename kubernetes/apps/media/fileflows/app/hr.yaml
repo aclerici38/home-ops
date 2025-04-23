@@ -47,6 +47,7 @@ spec:
                   cp -r /usr/lib/jellyfin-ffmpeg /opt/ffmpeg/${FFMPEG_VERSION}/
                 else
                   echo ffmpeg ${FFMPEG_VERSION} already installed
+                fi
         containers:
           *name : &container
             image:
