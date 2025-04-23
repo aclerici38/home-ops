@@ -37,7 +37,6 @@ spec:
     config:
       pluginsDir: /build/plugins
       inCluster: true
-      baseURL: "headlamp.${SECRET_DOMAIN}"
     serviceAccount:
       create: false
       name: headlamp-admin
