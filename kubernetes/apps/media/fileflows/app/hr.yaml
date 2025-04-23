@@ -25,11 +25,34 @@ spec:
       server:
         pod:
           hostname: &name ff-server
+        initContainers:
+          ffmpeg-download:
+            image:
+              repository: ubuntu
+              tag: latest
+            command:
+              - sh
+              - -c
+              - |
+                apt-get update && apt-get install -y wget gnupg2 && \
+                echo "deb [trusted=yes] https://repo.jellyfin.org/debian bookworm main" > /etc/apt/sources.list.d/jellyfin.list && \
+                apt-get update && \
+                apt-get install -y jellyfin-ffmpeg7 && \
+                cp -r /usr/lib/jellyfin-ffmpeg/* /opt/ffmpeg/
         containers:
           *name : &container
             image:
               repository: docker.io/revenz/fileflows
               tag: 25.04@sha256:86c48b6119439dd07c771485520f9066973c7e8e30943a754643038a8137154e
+            lifecycle:
+              postStart:
+                exec:
+                  command:
+                    - sh
+                    - -c
+                    - |
+                      ln -sf /opt/ffmpeg/ffmpeg /usr/local/bin/ffmpeg && \
+                      ln -sf /opt/ffmpeg/ffprobe /usr/local/bin/ffprobe
             env: &env
               PUID: 1000
               PGID: 1000
@@ -121,6 +144,10 @@ spec:
         existingClaim: fileflows-common
         globalMounts:
           - path: /app/common
+      ffmpeg:
+        existingClaim: fileflows-ffmpeg
+        globalMounts:
+          - /opt/ffmpeg
       dockermods:
         type: emptyDir
         globalMounts:
