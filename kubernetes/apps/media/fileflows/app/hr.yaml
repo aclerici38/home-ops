@@ -29,37 +29,24 @@ spec:
           ffmpeg-download:
             image:
               repository: docker.io/library/ubuntu
-              tag: 22.04
+              tag: 25.04
             command:
               - sh
               - -c
               - |
-                set -eux
-                # skip install if correct version exists
-                if [ -x /opt/ffmpeg/bin/ffmpeg ] && \
-                  dpkg-query -W -f='${Version}' jellyfin-ffmpeg7 2>/dev/null \
-                    | grep -xq "$FFMPEG_VERSION"
-                then
-                  echo "→ jellyfin-ffmpeg7 $FFMPEG_VERSION already in /opt/ffmpeg, skipping install."
-                  exit 0
-                fi
-
-                apt-get update
-                apt-get install -y gnupg wget apt-transport-https
-                wget -O - https://repo.jellyfin.org/ubuntu/jellyfin_team.gpg.key \
-                  | apt-key add -
-                echo "deb [arch=amd64] https://repo.jellyfin.org/ubuntu $(lsb_release -cs) main" \
-                  > /etc/apt/sources.list.d/jellyfin.list
-                apt-get update
-                apt-get install -y jellyfin-ffmpeg7="$FFMPEG_VERSION"
-
-                mkdir -p /opt/ffmpeg/{bin,lib}
-                cp /usr/lib/jellyfin-ffmpeg/ffmpeg    /opt/ffmpeg/bin/
-                cp /usr/lib/jellyfin-ffmpeg/ffprobe   /opt/ffmpeg/bin/
-                cp /usr/lib/jellyfin-ffmpeg/lib/*.so* /opt/ffmpeg/lib/
-            env:
-              # renovate: datasource=github-releases depName=jellyfin/jellyfin-ffmpeg
-              FFMPEG_VERSION: 7.0.2-9
+                # Install if ffmpeg version doesn't exist
+                if [ ! -d "/opt/ffmpeg/${FFMPEG_VERSION}" ]; then
+                  echo "Installing ffmpeg ${FFMPEG_VERSION}"
+                  rm -rf /opt/ffmpeg
+                  curl -m15 -fsSL https://repo.jellyfin.org/debian/jellyfin_team.gpg.key | gpg --dearmor -o /etc/apt/trusted.gpg.d/jellyfin.gpg
+                  . /etc/os-release && \
+                    echo "deb [arch=$(dpkg --print-architecture)] https://repo.jellyfin.org/$ID $VERSION_CODENAME main" \
+                    > /etc/apt/sources.list.d/jellyfin.list
+                  apt-get update && \
+                  apt-get install -y --no-install-suggests --no-install-recommends jellyfin-ffmpeg7
+                  cp -r /usr/lib/jellyfin-ffmpeg /opt/ffmpeg/${FFMPEG_VERSION}/
+                else
+                  echo ffmpeg ${FFMPEG_VERSION} already installed
         containers:
           *name : &container
             image:
@@ -72,13 +59,11 @@ spec:
                     - sh
                     - -c
                     - |
-                      ln -sf /opt/ffmpeg/bin/ffmpeg /usr/local/bin/ffmpeg && \
-                      ln -sf /opt/ffmpeg/bin/ffmpeg /usr/local/bin/ffmpeg7 && \
-                      ln -sf /opt/ffmpeg/bin/ffprobe /usr/local/bin/ffprobe && \
+                      ln -sf /opt/ffmpeg/${FFMPEG_VERSION}/ffmpeg /usr/local/bin/ffmpeg && \
+                      ln -sf /opt/ffmpeg/${FFMPEG_VERSION}/ffprobe /usr/local/bin/ffprobe && \
             env: &env
               PUID: 1000
               PGID: 1000
-              LD_LIBRARY_PATH: /opt/ffmpeg/lib:$LD_LIBRARY_PATH
             resources:
               requests:
                 cpu: 100m
