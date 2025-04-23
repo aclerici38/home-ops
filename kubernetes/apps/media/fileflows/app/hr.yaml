@@ -127,16 +127,6 @@ spec:
       temp:
         enabled: true
         type: emptyDir
-        # Multiple nodes try to clean the same temp dir
-        advancedMounts:
-          server:
-            ff-server:
-              - path: /temp
-                subPath: ff-server
-          node:
-            ff-kube-bonds:
-              - path: /temp
-                subPath: ff-kube-bonds
       common:
         existingClaim: fileflows-common
         globalMounts:
@@ -150,7 +140,7 @@ spec:
         globalMounts:
           - path: /app/DockerMods
       manually-added:
-        type: emptyDir
+        existingClaim: fileflows-manually-added
         globalMounts:
           - path: /app/ManuallyAdded
       media:
