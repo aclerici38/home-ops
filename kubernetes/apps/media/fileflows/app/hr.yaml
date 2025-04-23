@@ -29,7 +29,7 @@ spec:
           ffmpeg-download:
             image:
               repository: ghcr.io/jrottenberg/ffmpeg
-              tag: 7.1-scratch@sha256:037260616dc6ffb17870a2ff06aa053e85c92a54acc3ebadae9f564ea52d4915
+              tag: 7.1-ubuntu@sha256:615e9621bc1b69d40c662fe034e76feaf71e2b6165ece6c13c23e9b2bdfa7f45
             command:
               - sh
               - -c
@@ -49,6 +49,7 @@ spec:
                     - -c
                     - |
                       ln -sf /opt/ffmpeg/ffmpeg /usr/local/bin/ffmpeg && \
+                      ln -sf /opt/ffmpeg/ffmpeg /usr/local/bin/ffmpeg7 && \
                       ln -sf /opt/ffmpeg/ffprobe /usr/local/bin/ffprobe
             env: &env
               PUID: 1000
