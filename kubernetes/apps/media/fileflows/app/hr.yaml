@@ -28,16 +28,38 @@ spec:
         initContainers: &init
           ffmpeg-download:
             image:
-              repository: ghcr.io/jrottenberg/ffmpeg
-              tag: 7.1-ubuntu@sha256:615e9621bc1b69d40c662fe034e76feaf71e2b6165ece6c13c23e9b2bdfa7f45
+              repository: docker.io/library/ubuntu
+              tag: 22.04
             command:
               - sh
               - -c
               - |
-                mkdir -p /opt/ffmpeg/bin /opt/ffmpeg/lib && \
-                cp /usr/local/bin/ffmpeg /opt/ffmpeg/bin/ && \
-                cp /usr/local/bin/ffprobe /opt/ffmpeg/bin/ && \
-                cp -r /usr/local/lib/* /opt/ffmpeg/lib/
+                set -eux
+                # skip install if correct version exists
+                if [ -x /opt/ffmpeg/bin/ffmpeg ] && \
+                  dpkg-query -W -f='${Version}' jellyfin-ffmpeg7 2>/dev/null \
+                    | grep -xq "$FFMPEG_VERSION"
+                then
+                  echo "→ jellyfin-ffmpeg7 $FFMPEG_VERSION already in /opt/ffmpeg, skipping install."
+                  exit 0
+                fi
+
+                apt-get update
+                apt-get install -y gnupg wget apt-transport-https
+                wget -O - https://repo.jellyfin.org/ubuntu/jellyfin_team.gpg.key \
+                  | apt-key add -
+                echo "deb [arch=amd64] https://repo.jellyfin.org/ubuntu $(lsb_release -cs) main" \
+                  > /etc/apt/sources.list.d/jellyfin.list
+                apt-get update
+                apt-get install -y jellyfin-ffmpeg7="$FFMPEG_VERSION"
+
+                mkdir -p /opt/ffmpeg/{bin,lib}
+                cp /usr/lib/jellyfin-ffmpeg/ffmpeg    /opt/ffmpeg/bin/
+                cp /usr/lib/jellyfin-ffmpeg/ffprobe   /opt/ffmpeg/bin/
+                cp /usr/lib/jellyfin-ffmpeg/lib/*.so* /opt/ffmpeg/lib/
+            env:
+              # renovate: datasource=github-releases depName=jellyfin/jellyfin-ffmpeg
+              FFMPEG_VERSION: 7.0.2-9
         containers:
           *name : &container
             image:
@@ -53,7 +75,6 @@ spec:
                       ln -sf /opt/ffmpeg/bin/ffmpeg /usr/local/bin/ffmpeg && \
                       ln -sf /opt/ffmpeg/bin/ffmpeg /usr/local/bin/ffmpeg7 && \
                       ln -sf /opt/ffmpeg/bin/ffprobe /usr/local/bin/ffprobe && \
-                      cp -r /usr/local/lib/* /opt/ffmpeg/lib/
             env: &env
               PUID: 1000
               PGID: 1000
@@ -138,7 +159,7 @@ spec:
         globalMounts:
           - path: /app/common
       ffmpeg:
-        type: emptyDir
+        existingClaim: fileflows-ffmpeg
         globalMounts:
           - path: /opt/ffmpeg
       dockermods:
