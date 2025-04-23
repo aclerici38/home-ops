@@ -33,7 +33,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
       runtimeClassName: nvidia
     controllers:
-      llama3: &controller
+      qwen:
         strategy: RollingUpdate
         containers:
           *app : &container
@@ -48,7 +48,7 @@ spec:
             env: &env
               MLC_JIT_POLICY: ON
               MLC_DOWNLOAD_CACHE_POLICY: ON
-              MODEL: Llama-3.2-3B-Instruct-q4f16_1-MLC
+              MODEL: Qwen2.5-Coder-14B-Instruct-q4f16_1-MLC
               CONTEXT_SIZE: 32768
             securityContext: &sc
               readOnlyRootFilesystem: true
@@ -75,24 +75,45 @@ spec:
                   failureThreshold: 300
                   tcpSocket:
                     port: &port 8080
+      phi:
+        strategy: RollingUpdate
+        containers:
+          *app :
+            <<: *container
+            env:
+              <<: *env
+              MODEL: Phi-3.5-vision-instruct-q4f16_1-MLC
+      mistral:
+        strategy: RollingUpdate
+        containers:
+          *app :
+            <<: *container
+            env:
+              <<: *env
+              MODEL: Mistral-7B-Instruct-v0.3-q4f16_1-MLC
+      gemma:
+        strategy: RollingUpdate
+        containers:
+          *app :
+            <<: *container
+            env:
+              <<: *env
+              MODEL: gemma-3-12b-it-q4f16_1-MLC
     service:
-      llama3: &svc
-        controller: llama3
-        ports:
+      qwen:
+        controller: qwen
+        ports: &ports
           http:
             port: *port
-    route:
-      llama3:
-        hostnames:
-          - llama3.${SECRET_DOMAIN}
-        parentRefs: &pr
-          - name: internal
-            namespace: network
-            sectionName: https
-        rules:
-          - backendRefs:
-              - name: llama3
-                port: *port
+      phi:
+        controller: phi
+        ports: *ports
+      mistral:
+        controller: mistral
+        ports: *ports
+      gemma:
+        controller: gemma
+        ports: *ports
     persistence:
       data:
         existingClaim: mlc-llm-data
