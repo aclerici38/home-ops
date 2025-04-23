@@ -1,0 +1,98 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app ollama
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    defaultPodOptions:
+      nodeSelector:
+        kubernetes.io/hostname: bonds
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: Always
+        seccompProfile: { type: RuntimeDefault }
+      runtimeClassName: nvidia
+    controllers:
+      llama3: &controller
+        strategy: RollingUpdate
+        containers:
+          *app : &container
+            image:
+              repository: ghcr.io/jjgadgets/mlc-llm-cuda
+              tag: 0.19.0@sha256:8b201c0797b6131b85ee5cb9447f316a273d2183897ccdf3333eb5d7be17c384
+            args:
+              - HF://mlc-ai/$(MODEL)
+              - --enable-debug
+              - --overrides
+              - max_num_sequence=1;max_total_seq_length=$(CONTEXT_SIZE)
+            env: &env
+              MLC_JIT_POLICY: ON
+              MLC_DOWNLOAD_CACHE_POLICY: ON
+              MODEL: Llama-3.2-3B-Instruct-q4f16_1-MLC
+              CONTEXT_SIZE: 32768
+            securityContext: &sc
+              readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                cpu: 1000m
+                memory: 7.5Gi
+                nvidia.com/gpu: 1
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  periodSeconds: 2
+                  failureThreshold: 300
+                  tcpSocket:
+                    port: &port 8080
+    service:
+      llama3: &svc
+        controller: llama3
+        ports:
+          http:
+            port: *port
+    route:
+      llama3:
+        hostnames:
+          - llama3.${SECRET_DOMAIN}
+        parentRefs: &pr
+          - name: internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: llama3
+                port: *port
+    persistence:
+      data:
+        existingClaim: mlc-llm-data

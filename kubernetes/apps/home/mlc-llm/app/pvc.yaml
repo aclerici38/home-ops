@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: ollama
+  name: mlc-llm-data
 spec:
   storageClassName: zfs-nvme
   resources:
