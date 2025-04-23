@@ -52,10 +52,12 @@ spec:
                     - |
                       ln -sf /opt/ffmpeg/bin/ffmpeg /usr/local/bin/ffmpeg && \
                       ln -sf /opt/ffmpeg/bin/ffmpeg /usr/local/bin/ffmpeg7 && \
-                      ln -sf /opt/ffmpeg/bin/ffprobe /usr/local/bin/ffprobe
+                      ln -sf /opt/ffmpeg/bin/ffprobe /usr/local/bin/ffprobe && \
+                      cp -r /usr/local/lib/* /opt/ffmpeg/lib/
             env: &env
               PUID: 1000
               PGID: 1000
+              LD_LIBRARY_PATH: /opt/ffmpeg/lib:$LD_LIBRARY_PATH
             resources:
               requests:
                 cpu: 100m
