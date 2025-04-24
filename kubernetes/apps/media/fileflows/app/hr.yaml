@@ -135,7 +135,7 @@ spec:
       plugins:
         type: emptyDir
         globalMounts:
-          - /app/Plugins
+          - path: /app/Plugins
       media:
         existingClaim: media
         globalMounts:
