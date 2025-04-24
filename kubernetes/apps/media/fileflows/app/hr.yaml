@@ -29,7 +29,9 @@ spec:
           *name : &container
             image:
               repository: ghcr.io/ant385525/fileflows
-              tag: 25.4.5.5322@sha256:9bbfc49bc208f269a6f6c26d3fe9d6a0d2fb36d3e936b58ce16e24920a8cd994
+              tag: 25.4.5.5322@sha256:892ef33e94c695fa5faa02976533e8a1b67ceb038d40761428fe96e778723211
+            env:
+              PORT: &port 5000
             resources:
               requests:
                 cpu: 100m
@@ -55,7 +57,7 @@ spec:
         controller: server
         ports:
           http:
-            port: &port 5000
+            port: *port
       kube-bonds:
         controller: node
         ports:
