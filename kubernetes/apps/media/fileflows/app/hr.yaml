@@ -119,7 +119,7 @@ spec:
         enabled: true
         type: emptyDir
         globalMounts:
-          - path: /app/temp
+          - path: /temp
             subPath: temp
           # Needed for global mutex
           - path: /tmp
