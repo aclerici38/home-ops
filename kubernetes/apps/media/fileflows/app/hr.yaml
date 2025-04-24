@@ -132,6 +132,10 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /app/DockerMods
+      plugins:
+        type: emptyDir
+        globalMounts:
+          - /app/Plugins
       media:
         existingClaim: media
         globalMounts:
