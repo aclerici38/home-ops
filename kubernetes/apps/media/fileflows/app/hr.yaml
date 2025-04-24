@@ -29,7 +29,7 @@ spec:
           *name : &container
             image:
               repository: ghcr.io/ant385525/fileflows
-              tag: 25.4.5.5322@sha256:4b044aa117ec0dd730cda5a9f879020aaaff665620e43e78cbe642ce30ec113c
+              tag: 25.4.5.5322@sha256:8231ec405e9d228ed05832cfbe17247eb1affe58e354b07c92a3c458b596ab59
             resources:
               requests:
                 cpu: 100m
@@ -110,6 +110,11 @@ spec:
       temp:
         enabled: true
         type: emptyDir
+        globalMounts:
+          - path: /temp
+            subPath: temp
+          - path: /tmp
+            subPath: tmp
       common:
         type: emptyDir
         globalMounts:
