@@ -29,7 +29,7 @@ spec:
           *name : &container
             image:
               repository: ghcr.io/ant385525/fileflows
-              tag: 25.4.5.5322@sha256:44566658aac74ee38e3de92f2b9223c993b585be12964d2837f283c9bbfb51be
+              tag: 25.4.5.5322@sha256:55867ff7cf7d8fd7ad8203cbbadad820f0886d083b17deb4e6f2bbf90f469d89
             env:
               PORT: &port 5000
             resources:
@@ -41,7 +41,7 @@ spec:
                 nvidia.com/gpu: 1
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities: { drop: ["ALL"] }
       node:
         pod:
@@ -124,22 +124,6 @@ spec:
           # Needed for global mutex
           - path: /tmp
             subPath: tmp
-      common:
-        type: emptyDir
-        globalMounts:
-          - path: /app/common
-      dockermods:
-        type: emptyDir
-        globalMounts:
-          - path: /app/DockerMods
-      plugins:
-        type: emptyDir
-        globalMounts:
-          - path: /app/Plugins
-      i18n:
-        type: emptyDir
-        globalMounts:
-          - path: /app/Server/wwwroot/i18n
       media:
         existingClaim: media
         globalMounts:
