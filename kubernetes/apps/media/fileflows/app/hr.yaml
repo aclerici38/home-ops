@@ -25,57 +25,11 @@ spec:
       server:
         pod:
           hostname: &name ff-server
-        initContainers: &init
-          ffmpeg-download:
-            image:
-              repository: docker.io/library/debian
-              tag: bookworm-slim
-            command:
-              - sh
-              - -c
-              - |
-                # Install if ffmpeg version doesn't exist
-                if [ ! -d "/opt/ffmpeg/${FFMPEG_VERSION}" ]; then
-                  echo "Installing ffmpeg ${FFMPEG_VERSION}"
-                  rm -rf /opt/ffmpeg/*
-
-                  apt-get update && apt-get install -y --no-install-suggests --no-install-recommends \
-                      curl \
-                      gnupg \
-                      ca-certificates \
-                      apt-transport-https
-
-                  curl -m15 -fsSL https://repo.jellyfin.org/debian/jellyfin_team.gpg.key | gpg --dearmor -o /etc/apt/trusted.gpg.d/jellyfin.gpg
-                  . /etc/os-release && \
-                    echo "deb [arch=$(dpkg --print-architecture)] https://repo.jellyfin.org/$ID $VERSION_CODENAME main" \
-                    > /etc/apt/sources.list.d/jellyfin.list
-                  apt-get update && \
-                  apt-get install -y --no-install-suggests --no-install-recommends jellyfin-ffmpeg7
-                  cp -r /usr/lib/jellyfin-ffmpeg/ /opt/ffmpeg/${FFMPEG_VERSION}/
-                  echo "ffmpeg ${FFMPEG_VERSION} successfully installed"
-                  ls -la /opt/ffmpeg/${FFMPEG_VERSION}/
-                else
-                  echo ffmpeg ${FFMPEG_VERSION} already installed
-                  ls -la /opt/ffmpeg/${FFMPEG_VERSION}/
-                fi
         containers:
           *name : &container
             image:
-              repository: docker.io/revenz/fileflows
-              tag: 25.04@sha256:86c48b6119439dd07c771485520f9066973c7e8e30943a754643038a8137154e
-            lifecycle:
-              postStart:
-                exec:
-                  command:
-                    - sh
-                    - -c
-                    - |
-                      ln -sf /opt/ffmpeg/${FFMPEG_VERSION}/ffmpeg /usr/local/bin/ffmpeg && \
-                      ln -sf /opt/ffmpeg/${FFMPEG_VERSION}/ffprobe /usr/local/bin/ffprobe
-            env: &env
-              PUID: 1000
-              PGID: 1000
-              LD_LIBRARY_PATH: /opt/ffmpeg/${FFMPEG_VERSION}/lib
+              repository: ghcr.io/ant385525/fileflows
+              tag: 25.4.5.5322@sha256:1b74a5c0556cd1a93da74fee8bf5349a214ed5e728da0bc621e2d9e11ca20111
             resources:
               requests:
                 cpu: 100m
@@ -84,18 +38,16 @@ spec:
                 memory: 12Gi
                 nvidia.com/gpu: 1
             securityContext:
-              allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: false
-              seccompProfile: { type: RuntimeDefault }
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
       node:
         pod:
           hostname: &name ff-kube-bonds
-        initContainers: *init
         containers:
           *name :
             <<: *container
             env:
-              <<: *env
               FFNODE: 1
               ServerUrl: http://fileflows-server:5000
     service:
@@ -126,9 +78,12 @@ spec:
     defaultPodOptions:
       runtimeClassName: nvidia
       securityContext:
-        runAsUser: 0
-        runAsGroup: 0
-        runAsNonRoot: false
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: Always
+        runAsNonRoot: true
+        seccompProfile: { type: RuntimeDefault }
     persistence:
       config:
         existingClaim: *app
@@ -148,25 +103,21 @@ spec:
             ff-kube-bonds:
               - path: /app/Logs
                 subPath: ff-kube-bonds
-      temp:
-        enabled: true
-        type: emptyDir
-      common:
-        existingClaim: fileflows-common
-        globalMounts:
-          - path: /app/common
-      ffmpeg:
-        existingClaim: fileflows-ffmpeg
-        globalMounts:
-          - path: /opt/ffmpeg
-      dockermods:
-        type: emptyDir
-        globalMounts:
-          - path: /app/DockerMods
       manually-added:
         existingClaim: fileflows-manually-added
         globalMounts:
           - path: /app/ManuallyAdded
+      temp:
+        enabled: true
+        type: emptyDir
+      common:
+        type: emptyDir
+        globalMounts:
+          - path: /app/common
+      dockermods:
+        type: emptyDir
+        globalMounts:
+          - path: /app/DockerMods
       media:
         existingClaim: media
         globalMounts:
