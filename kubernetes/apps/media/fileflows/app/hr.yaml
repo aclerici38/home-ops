@@ -29,7 +29,7 @@ spec:
           *name : &container
             image:
               repository: ghcr.io/ant385525/fileflows
-              tag: 25.4.5.5322@sha256:8231ec405e9d228ed05832cfbe17247eb1affe58e354b07c92a3c458b596ab59
+              tag: 25.4.5.5322@sha256:9bbfc49bc208f269a6f6c26d3fe9d6a0d2fb36d3e936b58ce16e24920a8cd994
             resources:
               requests:
                 cpu: 100m
@@ -113,6 +113,7 @@ spec:
         globalMounts:
           - path: /temp
             subPath: temp
+          # Needed for global mutex
           - path: /tmp
             subPath: tmp
       common:
