@@ -29,7 +29,7 @@ spec:
           *name : &container
             image:
               repository: ghcr.io/ant385525/fileflows
-              tag: 25.4.5.5322@sha256:892ef33e94c695fa5faa02976533e8a1b67ceb038d40761428fe96e778723211
+              tag: 25.4.5.5322@sha256:f493c6747f17774c1a0938e640dfe9f00344135e3ba79f3d15d0d5ad3b568b87
             env:
               PORT: &port 5000
             resources:
@@ -93,6 +93,12 @@ spec:
           server:
             ff-server:
               - path: /app/Data
+      node-data:
+        type: emptyDir
+        advancedMounts:
+          node:
+            ff-kube-bonds:
+              - path: /app/Data
       logs:
         enabled: true
         existingClaim: fileflows-logs
@@ -113,7 +119,7 @@ spec:
         enabled: true
         type: emptyDir
         globalMounts:
-          - path: /temp
+          - path: /app/temp
             subPath: temp
           # Needed for global mutex
           - path: /tmp
