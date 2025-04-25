@@ -29,8 +29,7 @@ spec:
           *name : &container
             image:
               repository: ghcr.io/ant385525/fileflows
-              tag: 25.4.5.5322
-              pullPolicy: Always
+              tag: 25.4.5.5322@sha256:937268ebce044e48a493f31b903c0e4744c16e54a919e1285f5c9951d09bf01f
             env:
               PORT: &port 5000
             resources:
@@ -122,6 +121,7 @@ spec:
         globalMounts:
           - path: /temp
             subPath: temp
+          # Mutex
           - path: /tmp
             subPath: tmp
       common:
