@@ -138,6 +138,10 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /app/Templates
+      i18n:
+        type: emptyDir
+        globalMounts:
+          - path: /app/Server/wwwroot/i18n
       media:
         existingClaim: media
         globalMounts:
