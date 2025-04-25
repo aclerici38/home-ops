@@ -122,6 +122,8 @@ spec:
         globalMounts:
           - path: /temp
             subPath: temp
+          - path: /tmp
+            subPath: tmp
       common:
         type: emptyDir
         globalMounts:
