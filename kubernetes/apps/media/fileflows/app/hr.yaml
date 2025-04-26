@@ -74,6 +74,11 @@ spec:
         ports:
           http:
             port: *port
+      kube-bonds:
+        controller: node
+        ports:
+          http:
+            port: *port
     route:
       *app :
         hostnames:
