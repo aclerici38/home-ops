@@ -29,9 +29,21 @@ spec:
           *name : &container
             image:
               repository: ghcr.io/ant385525/fileflows
-              tag: 25.4.6.5339@sha256:b7fc0923529a59bbbdcb0ffb42e12a3ed10af85c091562296f78f0baf2390aa2
+              tag: 25.4.6.5339@sha256:7de2ccc6c865a010a9add61a793f3f6831dbb2cec90637c9fdcc2a4650ac35ee
             env:
               PORT: &port 5000
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/status
+                    port: *port
+                  initialDelaySeconds: 5
+                  periodSeconds: 5
+                  failureThreshold: 5
+              readiness: *probes
             resources:
               requests:
                 cpu: 100m
