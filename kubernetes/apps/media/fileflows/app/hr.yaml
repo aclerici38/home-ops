@@ -61,6 +61,17 @@ spec:
         containers:
           *name :
             <<: *container
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 5000
+                  initialDelaySeconds: 2
+                  periodSeconds: 5
+                  failureThreshold: 5
+              readiness: *probes
             env:
               FFNODE: 1
               ServerUrl: http://fileflows-server:5000
