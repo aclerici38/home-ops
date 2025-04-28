@@ -34,7 +34,6 @@ spec:
       runtimeClassName: nvidia
     controllers:
       qwen:
-        strategy: RollingUpdate
         containers:
           *app : &container
             image:
