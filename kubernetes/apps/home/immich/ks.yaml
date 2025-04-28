@@ -41,7 +41,7 @@ spec:
       VOLSYNC_CAPACITY: 2Ti
       VOLSYNC_STORAGECLASS: truenas-nfs
       VOLSYNC_SNAPSHOTCLASS: truenas-nfs
-      # renovate: datasource=docker registryUrls=https://ghcr.io/v2/ depName=immich-app/immich-machine-learning
+      # renovate: datasource=docker depName=ghcr.io/immich-app/immich-machine-learning
       IMMICH_VERSION: v1.132.1
   patches:
     - patch: |-
