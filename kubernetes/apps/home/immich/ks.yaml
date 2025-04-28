@@ -41,8 +41,8 @@ spec:
       VOLSYNC_CAPACITY: 2Ti
       VOLSYNC_STORAGECLASS: truenas-nfs
       VOLSYNC_SNAPSHOTCLASS: truenas-nfs
-      # renovate: datasource=github-releases depName=immich-app/immich
-      IMMICH_VERSION: v1.132.3
+      # renovate: datasource=docker registryUrls=https://ghcr.io/v2/ depName=immich-app/immich-machine-learning
+      IMMICH_VERSION: v1.132.1
   patches:
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1
