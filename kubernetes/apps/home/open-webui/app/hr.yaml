@@ -38,7 +38,7 @@ spec:
               SEARXNG_QUERY_URL: http://searxng.home.svc.cluster.local:8080/search?q=<query>
 
               ENABLE_OLLAMA_API: false
-              OPENAI_API_BASE_URLS: "http://mlc-llm-gemma.home.svc.cluster.local:8080/v1;http://mlc-llm-mistral.home.svc.cluster.local:8080/v1;http://mlc-llm-r1-phi.home.svc.cluster.local:8080/v1;http://mlc-llm-qwen.home.svc.cluster.local:8080/v1"
+              OPENAI_API_BASE_URLS: "http://mlc-llm-mistral.home.svc.cluster.local:8080/v1;http://mlc-llm-r1-phi.home.svc.cluster.local:8080/v1;http://mlc-llm-qwen.home.svc.cluster.local:8080/v1"
 
               ENABLE_RAG_WEB_SEARCH: true
               RAG_WEB_SEARCH_ENGINE: searxng

@@ -62,19 +62,19 @@ spec:
                 cpu: 1000m
                 memory: 7.5Gi
                 nvidia.com/gpu: 1
-            # probes:
-            #   liveness:
-            #     enabled: true
-            #   readiness:
-            #     enabled: true
-            #   startup:
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       periodSeconds: 2
-            #       failureThreshold: 300
-            #       tcpSocket:
-            #         port: &port 8080
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  periodSeconds: 2
+                  failureThreshold: 300
+                  tcpSocket:
+                    port: &port 8080
       phi:
         strategy: RollingUpdate
         containers:
@@ -91,14 +91,6 @@ spec:
             env:
               <<: *env
               MODEL: Mistral-7B-Instruct-v0.3-q4f16_1-MLC
-      gemma:
-        strategy: RollingUpdate
-        containers:
-          *app :
-            <<: *container
-            env:
-              <<: *env
-              MODEL: gemma-3-12b-it-q4f16_1-MLC
     service:
       qwen:
         controller: qwen
@@ -110,9 +102,6 @@ spec:
         ports: *ports
       mistral:
         controller: mistral
-        ports: *ports
-      gemma:
-        controller: gemma
         ports: *ports
     persistence:
       data:
