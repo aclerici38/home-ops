@@ -1,9 +1,9 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
 # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-talosVersion: v1.10.0
+talosVersion: v1.9.5
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-kubernetesVersion: v1.33.0
+kubernetesVersion: v1.32.3
 
 clusterName: dormammu
 endpoint: https://192.168.9.25:6443
@@ -58,7 +58,6 @@ nodes:
             - siderolabs/nonfree-kmod-nvidia-production
             - siderolabs/zfs
             - siderolabs/amd-ucode
-            # - siderolabs/nfsd
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
