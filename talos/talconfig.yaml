@@ -1,7 +1,7 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
 # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-talosVersion: v1.9.5
+talosVersion: v1.10.0
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
 kubernetesVersion: v1.32.3
 
@@ -50,14 +50,26 @@ nodes:
       - name: nvidia_drm
       - name: nvidia_modeset
       - name: zfs
-    schematic:
-      customization:
-        systemExtensions:
-          officialExtensions:
-            - siderolabs/nvidia-container-toolkit-production
-            - siderolabs/nonfree-kmod-nvidia-production
-            - siderolabs/zfs
-            - siderolabs/amd-ucode
+    # customization:
+    #   extraKernelArgs:
+    #     - -selinux
+    #     - amd_pstate=active
+    #     - cpufreq.default_governor=performance
+    #     - apparmor=0
+    #     - iommu.passthrough=1
+    #     - init_on_alloc=0
+    #     - init_on_free=0
+    #     - mitigations=off
+    #     - security=none
+    #     - enforcing=0
+    #   systemExtensions:
+    #     officialExtensions:
+    #         - siderolabs/amd-ucode
+    #         - siderolabs/nfsd
+    #         - siderolabs/nvidia-container-toolkit-production
+    #         - siderolabs/nvidia-open-gpu-kernel-modules-production
+    #         - siderolabs/zfs
+    talosImageURL: factory.talos.dev/installer/04ce240689845129990952e496121f34639e59e239b71efd714b93fc1a16dc0b
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -102,9 +114,6 @@ nodes:
     patches:
       - |-
         machine:
-          install:
-            extraKernelArgs:
-              - amd_pstate=active
           udev:
             rules:
               - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
@@ -132,7 +141,7 @@ nodes:
             - siderolabs/nvidia-container-toolkit-production
             - siderolabs/nonfree-kmod-nvidia-production
             - siderolabs/amd-ucode
-    controlPlane: false
+    controlPlane: true
     nodeTaints:
       location: house:NoSchedule
     networkInterfaces:
@@ -175,12 +184,6 @@ nodes:
                 - 10.40.40.41/32
                 - 10.10.0.3/32
               persistentKeepaliveInterval: 10s
-    patches:
-      - |-
-        machine:
-          install:
-            extraKernelArgs:
-              - amd_pstate=active
   - hostname: "madbum"
     ipAddress: "10.40.40.41"
     installDiskSelector:
@@ -190,7 +193,7 @@ nodes:
       mode: cloud
     nodeLabels:
       location: "cloud"
-    controlPlane: false
+    controlPlane: true
     nodeTaints:
       location: cloud:NoSchedule
     networkInterfaces:
