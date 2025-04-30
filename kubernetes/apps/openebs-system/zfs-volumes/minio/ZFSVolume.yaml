@@ -4,7 +4,8 @@ metadata:
   name: minio
   namespace: openebs-system
   finalizers:
-    - cluster.local/data-protectionspec:
+    - cluster.local/data-protection
+spec:
   capacity: "47983374630912"
   fsType: zfs
   ownerNodeID: bonds
