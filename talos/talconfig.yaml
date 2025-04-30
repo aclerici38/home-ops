@@ -21,7 +21,6 @@ additionalApiServerCertSans: &sans
   - "10.10.0.1"
   - "10.10.0.2"
   - "10.10.0.3"
-  - "10.40.40.41"
   - "127.0.0.1"
   - "${CLOUD_IP}"
   - "posey"
@@ -89,7 +88,7 @@ nodes:
           listenPort: 51820
           peers:
             - publicKey: ${POSEY_WG_PUBKEY}
-              endpoint: ${HOUSE_WG_ENDPOINT}
+              endpoint: ${POSEY_WG_ENDPOINT}
               allowedIPs:
                 - 10.0.30.0/24
                 - 10.10.0.2/32
@@ -133,7 +132,7 @@ nodes:
             - siderolabs/nvidia-container-toolkit-production
             - siderolabs/nonfree-kmod-nvidia-production
             - siderolabs/amd-ucode
-    controlPlane: true
+    controlPlane: false
     nodeTaints:
       location: house:NoSchedule
     networkInterfaces:
@@ -165,7 +164,7 @@ nodes:
           listenPort: 51820
           peers:
             - publicKey: ${BONDS_WG_PUBKEY}
-              endpoint: ${APARTMENT_WG_ENDPOINT}
+              endpoint: ${BONDS_WG_ENDPOINT}
               allowedIPs:
                 - 192.168.9.0/24
                 - 10.10.0.1/32
@@ -191,7 +190,7 @@ nodes:
       mode: cloud
     nodeLabels:
       location: "cloud"
-    controlPlane: true
+    controlPlane: false
     nodeTaints:
       location: cloud:NoSchedule
     networkInterfaces:
@@ -217,18 +216,22 @@ nodes:
           listenPort: 51820
           peers:
             - publicKey: ${BONDS_WG_PUBKEY}
-              endpoint: ${APARTMENT_WG_ENDPOINT}
+              endpoint: ${BONDS_WG_ENDPOINT}
               allowedIPs:
                 - 192.168.9.0/24
                 - 10.10.0.1/32
               persistentKeepaliveInterval: 10s
             - publicKey: ${POSEY_WG_PUBKEY}
-              endpoint: ${HOUSE_WG_ENDPOINT}
+              endpoint: ${POSEY_WG_ENDPOINT}
               allowedIPs:
                 - 10.0.30.0/24
                 - 10.10.0.2/32
               persistentKeepaliveInterval: 10s
-
+            - publicKey: ${APARTMENT_WG_PUBKEY}
+              endpoint: ${APARTMENT_WG_ENDPOINT}
+              allowedIPs:
+                - 192.168.1.0/24
+                - 10.10.0.4/32
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"

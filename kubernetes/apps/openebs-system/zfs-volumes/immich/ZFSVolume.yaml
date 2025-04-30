@@ -3,7 +3,8 @@ kind: ZFSVolume
 metadata:
   name: immich
   namespace: openebs-system
-  finalizers: []
+  finalizers:
+    - cluster.local/data-protection
 spec:
   capacity: "47983374630912"
   fsType: zfs

@@ -3,8 +3,8 @@ kind: ZFSVolume
 metadata:
   name: minio
   namespace: openebs-system
-  finalizers: []
-spec:
+  finalizers:
+    - cluster.local/data-protectionspec:
   capacity: "47983374630912"
   fsType: zfs
   ownerNodeID: bonds
