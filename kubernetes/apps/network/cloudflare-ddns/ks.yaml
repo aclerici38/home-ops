@@ -7,12 +7,12 @@ metadata:
   namespace: &ns network
 spec:
   path: "./kubernetes/apps/network/cloudflare-ddns/app/"
-  components:
-    - ../../../../components/external-secret
   prune: true
   wait: true
   dependsOn:
     - name: external-secrets-stores
+      namespace: cluster-utilities
+    - name: cert-manager
       namespace: cluster-utilities
   sourceRef:
     kind: GitRepository
@@ -24,6 +24,3 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  postBuild:
-    substitute:
-      APP: cloudflare
