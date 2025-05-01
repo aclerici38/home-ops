@@ -77,7 +77,7 @@ nodes:
       - interface: wg0
         addresses:
           - 10.10.0.1/24
-        mtu: 1380
+        mtu: 1320
         routes:
           - network: 10.0.30.0/24
             gateway: 10.10.0.2
@@ -153,7 +153,7 @@ nodes:
       - interface: wg0
         addresses:
           - 10.10.0.2/24
-        mtu: 1380
+        mtu: 1320
         routes:
           - network: 192.168.9.0/24
             gateway: 10.10.0.1
@@ -205,7 +205,7 @@ nodes:
       - interface: wg0
         addresses:
           - 10.10.0.3/24
-        mtu: 1380
+        mtu: 1320
         routes:
           - network: 192.168.9.0/24
             gateway: 10.10.0.1
