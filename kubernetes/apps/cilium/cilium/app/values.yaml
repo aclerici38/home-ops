@@ -64,6 +64,10 @@ loadBalancer:
   algorithm: maglev
   mode: "dsr"
   dsrDispatch: geneve
+pmtuDiscovery:
+  enabled: true
+MTU: 1380
+devices: 'wg+ enp+'
 nodePort:
   enabled: true
 operator:
