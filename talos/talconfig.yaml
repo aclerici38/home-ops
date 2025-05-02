@@ -98,6 +98,7 @@ nodes:
               allowedIPs:
                 - 10.40.40.41/32
                 - 10.10.0.3/32
+                - 192.168.9.25/32
               persistentKeepaliveInterval: 10s
     patches:
       - |-
@@ -220,6 +221,7 @@ nodes:
               allowedIPs:
                 - 192.168.9.25/32
                 - 10.10.0.1/32
+                - 10.40.40.41/32
               persistentKeepaliveInterval: 10s
             - publicKey: ${POSEY_WG_PUBKEY}
               endpoint: ${POSEY_WG_ENDPOINT}

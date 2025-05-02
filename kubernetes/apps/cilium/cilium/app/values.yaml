@@ -45,6 +45,8 @@ hubble:
       serviceMonitor:
         enabled: true
         trustCRDsExist: true
+daemon:
+  enableSourceIPVerification: false
 envoy:
   enabled: false
 gatewayAPI:
