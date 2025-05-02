@@ -7,6 +7,8 @@ bpf:
   masquerade: true
   preallocateMaps: true
   tproxy: true
+  distributedLRU:
+    enabled: true
 bpfClockProbe: true
 bandwidthManager:
   enabled: true
