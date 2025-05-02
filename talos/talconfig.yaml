@@ -207,7 +207,7 @@ nodes:
           - 10.10.0.3/24
         mtu: 1420
         routes:
-          - network: 192.168.9.0/24
+          - network: 192.168.9.25/32
             gateway: 10.10.0.1
           - network: 10.0.30.0/24
             gateway: 10.10.0.2
@@ -218,7 +218,7 @@ nodes:
             - publicKey: ${BONDS_WG_PUBKEY}
               endpoint: ${BONDS_WG_ENDPOINT}
               allowedIPs:
-                - 192.168.9.0/24
+                - 192.168.9.25/32
                 - 10.10.0.1/32
               persistentKeepaliveInterval: 10s
             - publicKey: ${POSEY_WG_PUBKEY}
