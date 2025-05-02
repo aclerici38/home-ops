@@ -92,8 +92,14 @@ prometheus:
     enabled: true
     trustCRDsExist: true
 rollOutCiliumPods: true
-routingMode: tunnel
-tunnelProtocol: geneve
+# routingMode:
+routingMode: native
+# tunnelProtocol: geneve
+encryption:
+  enabled: true
+  type: wireguard
+  wireguard:
+    persistentKeepalive: 10s
 bgpControlPlane:
   enabled: true
 cluster:
