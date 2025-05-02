@@ -8,6 +8,9 @@ bpf:
   preallocateMaps: true
   tproxy: true
 bpfClockProbe: true
+bandwidthManager:
+  enabled: true
+  bbr: true
 cgroup:
   automount:
     enabled: false
