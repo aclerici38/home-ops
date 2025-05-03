@@ -6,7 +6,7 @@ talosVersion: v1.9.5
 kubernetesVersion: v1.32.3
 
 clusterName: dormammu
-endpoint: https://apartment.${SECRET_DOMAIN}:6443
+endpoint: https://cloud.${SECRET_DOMAIN}:6443
 
 clusterPodNets:
   - "172.16.0.0/16"
@@ -62,7 +62,7 @@ nodes:
             - siderolabs/nonfree-kmod-nvidia-production
             - siderolabs/zfs
             - siderolabs/amd-ucode
-    controlPlane: true
+    controlPlane: false
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "a0:36:9f:09:4c:8f"
@@ -144,7 +144,7 @@ nodes:
       mode: cloud
     nodeLabels:
       location: "cloud"
-    controlPlane: false
+    controlPlane: true
     nodeTaints:
       location: cloud:NoSchedule
     networkInterfaces:
