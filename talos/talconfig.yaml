@@ -6,7 +6,7 @@ talosVersion: v1.9.5
 kubernetesVersion: v1.32.3
 
 clusterName: dormammu
-endpoint: https://192.168.9.25:6443
+endpoint: https://apartment.${SECRET_DOMAIN}:6443
 
 clusterPodNets:
   - "172.16.0.0/16"

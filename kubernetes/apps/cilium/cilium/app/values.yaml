@@ -71,7 +71,7 @@ l2announcements:
 loadBalancer:
   algorithm: maglev
   mode: "dsr"
-  dsrDispatch: geneve
+  # dsrDispatch: geneve
 pmtuDiscovery:
   enabled: true
 nodePort:
