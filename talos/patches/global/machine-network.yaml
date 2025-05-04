@@ -1,7 +1,8 @@
 machine:
   network:
     kubespan:
-      enabled: false
+      enabled: true
+      advertiseKubernetesNetworks: false
     disableSearchDomain: true
     nameservers:
       - 1.1.1.1

@@ -71,7 +71,7 @@ l2announcements:
 loadBalancer:
   algorithm: maglev
   mode: "dsr"
-  dsrDispatch: geneve
+  dsrDispatch: opt
 pmtuDiscovery:
   enabled: true
 nodePort:
@@ -92,9 +92,8 @@ prometheus:
     enabled: true
     trustCRDsExist: true
 rollOutCiliumPods: true
-# routingMode:
 routingMode: native
-tunnelProtocol: geneve
+tunnelProtocol: ""
 encryption:
   enabled: true
   type: wireguard

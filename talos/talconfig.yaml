@@ -38,7 +38,7 @@ cniConfig:
 
 nodes:
   - hostname: "bonds"
-    ipAddress: "apartment.${SECRET_DOMAIN}"
+    ipAddress: "192.168.9.25"
     installDiskSelector:
       wwid: eui.000000000000000100a07523458d4f6c
     machineSpec:
@@ -89,7 +89,7 @@ nodes:
               - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
               - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
   - hostname: "posey"
-    ipAddress: "house.${SECRET_DOMAIN}"
+    ipAddress: "10.0.30.28"
     installDiskSelector:
       model: "KINGSTON SNV2S1000G"
     machineSpec:
@@ -136,7 +136,7 @@ nodes:
             extraKernelArgs:
               - amd_pstate=active
   - hostname: "madbum"
-    ipAddress: "cloud.${SECRET_DOMAIN}"
+    ipAddress: "10.40.40.41"
     installDiskSelector:
       size: ">= 10GB"
     machineSpec:
