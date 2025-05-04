@@ -94,11 +94,6 @@ prometheus:
 rollOutCiliumPods: true
 routingMode: tunnel
 tunnelProtocol: geneve
-# encryption:
-#   enabled: true
-#   type: wireguard
-#   wireguard:
-#     persistentKeepalive: 10s
 bgpControlPlane:
   enabled: true
 cluster:
