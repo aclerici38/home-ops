@@ -18,11 +18,9 @@ additionalApiServerCertSans: &sans
   - "192.168.9.25"
   - "10.0.30.28"
   - "10.40.40.41"
-  - "10.10.0.1"
-  - "10.10.0.2"
-  - "10.10.0.3"
   - "10.40.40.41"
   - "127.0.0.1"
+  - "172.17.0.1"
   - "${CLOUD_IP}"
   - "posey"
   - "bonds"
@@ -78,6 +76,10 @@ nodes:
       - deviceSelector:
           hardwareAddr: a8:a1:59:dd:87:18
         ignore: true
+      - interface: kubespan
+        routes:
+          - network: 10.40.40.41/32
+
     patches:
       - |-
         machine:
@@ -166,6 +168,9 @@ patches:
   - "@./patches/global/machine-install.yaml"
   - "@./patches/global/machine-kernel.yaml"
   - "@./patches/global/machine-features.yaml"
+
+extraManifests:
+  
 
 # Controller patches
 controlPlane:

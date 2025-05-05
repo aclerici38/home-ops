@@ -42,6 +42,20 @@ releases:
         service:
           name: kube-dns
           clusterIP: 172.17.0.10
+        tolerations:
+          - key: CriticalAddonsOnly
+            operator: Exists
+          - key: node-role.kubernetes.io/control-plane
+            operator: Exists
+            effect: NoSchedule
+          - key: "location"
+            operator: "Equal"
+            value: "cloud"
+            effect: "NoSchedule"
+          - key: "location"
+            operator: "Equal"
+            value: "house"
+            effect: "NoSchedule"
     needs:
       - cilium/cilium
 
