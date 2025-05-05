@@ -22,12 +22,14 @@ additionalApiServerCertSans: &sans
   - "127.0.0.1"
   - "172.17.0.1"
   - "${CLOUD_IP}"
+  - "${MADBUM_WG_IP}"
+  - "${BONDS_WG_IP}"
+  - "${POSEY_WG_IP}"
+  - "10.10.0.2"
   - "posey"
   - "bonds"
   - "madbum"
-  - "apartment.${SECRET_DOMAIN}"
   - "cloud.${SECRET_DOMAIN}"
-  - "house.${SECRET_DOMAIN}"
 additionalMachineCertSans: *sans
 
 # Disable built-in Flannel to use Cilium
@@ -76,10 +78,23 @@ nodes:
       - deviceSelector:
           hardwareAddr: a8:a1:59:dd:87:18
         ignore: true
-      - interface: kubespan
+      - interface: wg0
+        mtu: 1340
+        addresses:
+          - ${BONDS_WG_IP}/24
         routes:
           - network: 10.40.40.41/32
-
+            gateway: 10.10.0.3
+        wireguard:
+          privateKey: ${BONDS_WG_PRIVATE_KEY}
+          listenPort: 51820
+          peers:
+            - publicKey: ${MADBUM_WG_PUBKEY}
+              endpoint: ${MADBUM_WG_ENDPOINT}
+              persistentKeepaliveInterval: 10s
+              allowedIPs:
+                - ${MADBUM_WG_IP}/32
+                - 10.40.40.41/32
     patches:
       - |-
         machine:
@@ -158,6 +173,23 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "10.40.40.1"
         mtu: 1500
+      - interface: wg0
+        mtu: 1340
+        addresses:
+          - ${MADBUM_WG_IP}/24
+        routes:
+          - network: 192.168.9.25/32
+            gateway: 10.10.0.1
+        wireguard:
+          privateKey: ${MADBUM_WG_PRIVATE_KEY}
+          listenPort: 51820
+          peers:
+            - publicKey: ${BONDS_WG_PUBKEY}
+              endpoint: ${BONDS_WG_ENDPOINT}
+              persistentKeepaliveInterval: 10s
+              allowedIPs:
+                - ${BONDS_WG_IP}/32
+                - 192.168.9.25/32
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
@@ -168,9 +200,6 @@ patches:
   - "@./patches/global/machine-install.yaml"
   - "@./patches/global/machine-kernel.yaml"
   - "@./patches/global/machine-features.yaml"
-
-extraManifests:
-  
 
 # Controller patches
 controlPlane:
