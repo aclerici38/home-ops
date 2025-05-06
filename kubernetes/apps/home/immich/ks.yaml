@@ -38,7 +38,7 @@ spec:
       CNPG_IMAGE: ghcr.io/tensorchord/cloudnative-pgvecto.rs
       CNPG_VERSION: "16.3"
       CNPG_CAPACITY: 20Gi
-      # renovate: datasource=docker packageName=ghcr.io/immich-app/immich-machine-learning versioning=docker
+      # renovate: datasource=docker depName=ghcr.io/immich-app/immich-machine-learning
       IMMICH_VERSION: v1.132.1
   patches:
     - patch: |-
