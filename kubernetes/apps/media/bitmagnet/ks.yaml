@@ -28,21 +28,4 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      CNPG_CAPACITY: 10Gi
-  patches:
-    - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
-          name: patch
-        spec:
-          affinity:
-            nodeSelector:
-              location: cloud
-            tolerations:
-              - key: "location"
-                operator: "Equal"
-                value: "cloud"
-                effect: "NoSchedule"
-      target:
-        kind: Cluster
+      CNPG_CAPACITY: 300Gi
