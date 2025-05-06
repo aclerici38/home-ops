@@ -6,7 +6,7 @@ talosVersion: v1.9.5
 kubernetesVersion: v1.32.3
 
 clusterName: dormammu
-endpoint: https://cloud.${SECRET_DOMAIN}:6443
+endpoint: https://${CLOUD_IP}:6443
 
 clusterPodNets:
   - "172.16.0.0/16"
@@ -15,17 +15,16 @@ clusterSvcNets:
 
 additionalApiServerCertSans: &sans
   - "10.38.55.200"
-  - "192.168.9.25"
-  - "10.0.30.28"
-  - "10.40.40.41"
-  - "10.40.40.41"
+  - "${BONDS_IP}"
+  - "${POSEY_IP}"
+  - "${MADBUM_IP}"
+  - "${MADBUM_IP}"
   - "127.0.0.1"
   - "172.17.0.1"
   - "${CLOUD_IP}"
   - "${MADBUM_WG_IP}"
   - "${BONDS_WG_IP}"
   - "${POSEY_WG_IP}"
-  - "10.10.0.2"
   - "posey"
   - "bonds"
   - "madbum"
@@ -38,7 +37,7 @@ cniConfig:
 
 nodes:
   - hostname: "bonds"
-    ipAddress: "192.168.9.25"
+    ipAddress: "${BONDS_IP}"
     installDiskSelector:
       wwid: eui.000000000000000100a07523458d4f6c
     machineSpec:
@@ -67,7 +66,7 @@ nodes:
       - deviceSelector:
           hardwareAddr: "a0:36:9f:09:4c:8f"
         addresses:
-          - "192.168.9.25/24"
+          - "${BONDS_IP}/24"
         routes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
@@ -79,12 +78,13 @@ nodes:
           hardwareAddr: a8:a1:59:dd:87:18
         ignore: true
       - interface: wg0
-        mtu: 1340
         addresses:
           - ${BONDS_WG_IP}/24
         routes:
-          - network: 10.40.40.41/32
-            gateway: 10.10.0.3
+          - network: ${MADBUM_IP}/32
+            gateway: ${MADBUM_WG_IP}
+          - network: ${POSEY_IP}/32
+            gateway: ${POSEY_WG_IP}
         wireguard:
           privateKey: ${BONDS_WG_PRIVATE_KEY}
           listenPort: 51820
@@ -94,7 +94,13 @@ nodes:
               persistentKeepaliveInterval: 10s
               allowedIPs:
                 - ${MADBUM_WG_IP}/32
-                - 10.40.40.41/32
+                - ${MADBUM_IP}/32
+            - publicKey: ${POSEY_WG_PUBKEY}
+              endpoint: ${POSEY_WG_ENDPOINT}
+              persistentKeepaliveInterval: 10s
+              allowedIPs:
+                - ${POSEY_WG_IP}/32
+                - ${POSEY_IP}/32
     patches:
       - |-
         machine:
@@ -106,7 +112,7 @@ nodes:
               - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
               - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
   - hostname: "posey"
-    ipAddress: "10.0.30.28"
+    ipAddress: "${POSEY_IP}"
     installDiskSelector:
       model: "KINGSTON SNV2S1000G"
     machineSpec:
@@ -135,7 +141,7 @@ nodes:
       - deviceSelector:
           hardwareAddr: "c4:62:37:01:8c:ce"
         addresses:
-          - "10.0.30.28/24"
+          - "${POSEY_IP}/24"
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.0.30.1"
@@ -146,6 +152,30 @@ nodes:
       - deviceSelector:
           hardwareAddr: a8:5e:45:9c:d0:99
         ignore: true
+      - interface: wg0
+        addresses:
+          - ${POSEY_WG_IP}/24
+        routes:
+          - network: ${BONDS_IP}/32
+            gateway: ${BONDS_WG_IP}
+          - network: ${MADBUM_IP}/32
+            gateway: ${MADBUM_WG_IP}
+        wireguard:
+          privateKey: ${POSEY_WG_PRIVATE_KEY}
+          listenPort: 51820
+          peers:
+            - publicKey: ${BONDS_WG_PUBKEY}
+              endpoint: ${BONDS_WG_ENDPOINT}
+              persistentKeepaliveInterval: 10s
+              allowedIPs:
+                - ${BONDS_WG_IP}/32
+                - ${BONDS_IP}/32
+            - publicKey: ${MADBUM_WG_PUBKEY}
+              endpoint: ${MADBUM_WG_ENDPOINT}
+              persistentKeepaliveInterval: 10s
+              allowedIPs:
+                - ${MADBUM_WG_IP}/32
+                - 10.40.40.40/32
     patches:
       - |-
         machine:
@@ -153,7 +183,7 @@ nodes:
             extraKernelArgs:
               - amd_pstate=active
   - hostname: "madbum"
-    ipAddress: "10.40.40.41"
+    ipAddress: "${MADBUM_IP}"
     installDiskSelector:
       size: ">= 10GB"
     machineSpec:
@@ -168,18 +198,19 @@ nodes:
       - interface: eth0
         dhcp: false
         addresses:
-          - 10.40.40.41/24
+          - ${MADBUM_IP}/24
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.40.40.1"
         mtu: 1500
       - interface: wg0
-        mtu: 1340
         addresses:
           - ${MADBUM_WG_IP}/24
         routes:
-          - network: 192.168.9.25/32
-            gateway: 10.10.0.1
+          - network: ${BONDS_IP}/32
+            gateway: ${BONDS_WG_IP}
+          - network: ${POSEY_IP}/32
+            gateway: ${POSEY_WG_IP}
         wireguard:
           privateKey: ${MADBUM_WG_PRIVATE_KEY}
           listenPort: 51820
@@ -189,7 +220,13 @@ nodes:
               persistentKeepaliveInterval: 10s
               allowedIPs:
                 - ${BONDS_WG_IP}/32
-                - 192.168.9.25/32
+                - ${BONDS_IP}/32
+            - publicKey: ${POSEY_WG_PUBKEY}
+              endpoint: ${POSEY_WG_ENDPOINT}
+              persistentKeepaliveInterval: 10s
+              allowedIPs:
+                - ${POSEY_WG_IP}/32
+                - ${POSEY_IP}/32
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
