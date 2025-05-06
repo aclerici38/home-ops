@@ -13,8 +13,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
       namespace: cluster-utilities
-    - name: cert-manager
-      namespace: cluster-utilities
+    - name: cloudflare-ddns
   path: ./kubernetes/apps/network/external-dns/cloudflare
   prune: true
   sourceRef:
