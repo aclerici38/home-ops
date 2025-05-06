@@ -24,6 +24,19 @@ spec:
     controllers:
       main:
         type: statefulset
+        pod:
+          nodeSelector:
+            location: cloud
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "cloud"
+              effect: "NoSchedule"
+          securityContext:
+            runAsUser: 65534
+            runAsGroup: 65534
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
         initContainers:
           gluetun:
             image:
@@ -58,8 +71,8 @@ spec:
             env:
               CLASSIFIER_DELETE_XXX: true
               LOG_LEVEL: 'info'
-              METAINFO_REQUESTER_REQUEST_TIMEOUT: 10s
-              DHT_SERVER_QUERY_TIMEOUT: 10s
+              METAINFO_REQUESTER_REQUEST_TIMEOUT: 20s
+              DHT_SERVER_QUERY_TIMEOUT: 20s
               POSTGRES_HOST:
                 valueFrom:
                   secretKeyRef:
@@ -91,19 +104,13 @@ spec:
                 cpu: 100m
                 memory: 100Mi
               limits:
-                cpu: 4000m
                 memory: 4Gi
             securityContext:
-              runAsUser: 65534
-              runAsGroup: 65534
               readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
               allowPrivilegeEscalation: false
-              runAsNonRoot: true
-              seccompProfile: { type: RuntimeDefault }
-
     service:
       ui:
         controller: main
