@@ -31,6 +31,15 @@ spec:
               operator: "Equal"
               value: "house"
               effect: "NoSchedule"
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name":"multus-house-management-net",
+                  "namespace": "network",
+                  "ips": ["10.0.10.28/24"]
+                }
+              ]
           securityContext:
               runAsUser: 1000
               runAsGroup: 1000
@@ -93,9 +102,6 @@ spec:
             port: *port
       controller:
         controller: main
-        type: LoadBalancer
-        annotations:
-          lbipam.cilium.io/ips: 10.38.55.10
         ports:
           manage-http:
             port: 8088
