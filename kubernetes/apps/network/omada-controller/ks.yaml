@@ -15,6 +15,7 @@ spec:
       namespace: storage
     - name: minio
       namespace: cluster-utilities
+    - name: multus
   path: ./kubernetes/apps/network/omada-controller/app
   components:
     - ../../../../components/volsync/minio
