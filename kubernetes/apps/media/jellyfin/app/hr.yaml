@@ -78,6 +78,8 @@ spec:
         existingClaim: jellyfin-cache
       transcode:
         type: emptyDir
+        globalMounts:
+          - path: /cache/transcode
       tmp:
         type: emptyDir
       media:
