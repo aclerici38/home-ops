@@ -70,7 +70,7 @@ nodes:
         routes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
-        mtu: 1500
+        mtu: 9000
       - deviceSelector:
           hardwareAddr: a0:36:9f:09:4c:8e
         ignore: true
@@ -78,7 +78,7 @@ nodes:
           hardwareAddr: a8:a1:59:dd:87:18
         ignore: true
       - interface: wg0
-        mtu: 1420
+        mtu: 8920
         addresses:
           - ${BONDS_WG_IP}/24
         routes:
@@ -146,7 +146,7 @@ nodes:
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.0.30.1"
-        mtu: 1500
+        mtu: 9000
       - deviceSelector:
           hardwareAddr: "c4:62:37:01:8c:cf"
         ignore: true
@@ -154,7 +154,7 @@ nodes:
           hardwareAddr: a8:5e:45:9c:d0:99
         ignore: true
       - interface: wg0
-        mtu: 1420
+        mtu: 8920
         addresses:
           - ${POSEY_WG_IP}/24
         routes:
@@ -204,9 +204,9 @@ nodes:
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.40.40.1"
-        mtu: 1500
+        mtu: 9000
       - interface: wg0
-        mtu: 1420
+        mtu: 8920
         addresses:
           - ${MADBUM_WG_IP}/24
         routes:
