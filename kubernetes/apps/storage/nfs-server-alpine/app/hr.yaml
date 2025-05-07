@@ -45,7 +45,7 @@ spec:
             #       periodSeconds: 10
             #       timeoutSeconds: 1
             #       failureThreshold: 3
-              liveness: *probes
+              # liveness: *probes
             resources:
               requests:
                 cpu: 10m
