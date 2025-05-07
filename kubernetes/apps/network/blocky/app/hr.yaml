@@ -25,6 +25,7 @@ spec:
       main:
         strategy: RollingUpdate
         replicas: 3
+        nameOverride: *app
         containers:
           *app :
             image:
@@ -136,6 +137,8 @@ spec:
             port: 3000
     route:
       *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: network
