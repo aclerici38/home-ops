@@ -24,6 +24,17 @@ spec:
     controllers:
       main:
         pod:
+          nodeSelector:
+            location: "cloud"
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "house"
+              effect: "NoSchedule"
+            - key: "location"
+              operator: "Equal"
+              value: "cloud"
+              effect: "NoSchedule"
           securityContext:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
