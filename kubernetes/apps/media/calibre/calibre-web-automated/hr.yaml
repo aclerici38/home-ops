@@ -84,6 +84,10 @@ spec:
           - path: /config
       cache:
         type: emptyDir
+      hack:
+        type: emptyDir
+        globalMounts:
+          - path: /app/calibre-web-automated
       media:
         existingClaim: media
         globalMounts:
