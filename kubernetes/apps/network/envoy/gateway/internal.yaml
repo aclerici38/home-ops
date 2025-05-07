@@ -41,3 +41,9 @@ spec:
           selector:
             matchLabels:
               kubernetes.io/metadata.name: d3savant
+    - name: blocky-udp
+      protocol: UDP
+      port: 53
+      allowedRoutes:
+        namespaces:
+          from: Same

@@ -104,6 +104,17 @@ spec:
         runAsNonRoot: true
         runAsUser: 65534
         runAsGroup: 65534
+    route:
+      blocky-udp:
+        kind: UDPRoute
+        parentRefs:
+          - name: internal
+            namespace: network
+            sectionName: blocky-udp
+        rules:
+          - backendRefs:
+              - name: *app
+                port: 53
     service:
       *app : &svc
         controller: main
