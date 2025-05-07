@@ -21,3 +21,10 @@ spec:
                       operator: "Equal"
                       value: "cloud"
                       effect: "NoSchedule"
+      envoyService:
+        patch:
+          value:
+            spec:
+              topologyKeys:
+                - "kubernetes.io/hostname"
+                - "*"

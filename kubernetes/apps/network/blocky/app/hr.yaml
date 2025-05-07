@@ -147,7 +147,7 @@ spec:
           - backendRefs:
               - name: ui
                 port: 3000
-      blocky-udp:
+      dns-udp:
         kind: UDPRoute
         parentRefs:
           - name: internal

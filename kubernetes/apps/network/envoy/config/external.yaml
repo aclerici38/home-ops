@@ -25,6 +25,9 @@ spec:
         patch:
           value:
             spec:
+              topologyKeys:
+                - "kubernetes.io/hostname"
+                - "*"
               ports:
                 - name: https-443
                   port: 443
