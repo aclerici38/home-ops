@@ -1,0 +1,75 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app nfs-server-alpine
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      main:
+        strategy: RollingUpdate
+        containers:
+          *app :
+            image:
+              repository: quay.io/aminvakil/alpine-nfs-server
+              tag: latest@sha256:b4b6fda64e589b78043af5a771cc0651e65fb913641b9b7929448d367975e5b3
+            env:
+              SYNC: true
+              SHARED_DIRECTORY: /export
+            # probes:
+            #   readiness: &probes
+            #     enabled: true
+            #     custom: true
+            #     spec:
+            #       exec:
+            #         command:
+            #           - /app/nfs-server-alpine
+            #           - healthcheck
+            #       initialDelaySeconds: 0
+            #       periodSeconds: 10
+            #       timeoutSeconds: 1
+            #       failureThreshold: 3
+              liveness: *probes
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: true
+              readOnlyRootFilesystem: true
+              privileged: true
+              # capabilities:
+              #   drop:
+              #     - ALL
+              #   add:
+              #     - SYS_ADMIN
+              #     - SETPCAP
+    service:
+      *app : &svc
+        controller: main
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: 10.38.55.10
+        ports:
+          nfs:
+            port: 2049
+    persistence:
+      export:
+        existingClaim: nfs-pvc
