@@ -1,0 +1,15 @@
+machine:
+  network:
+    interfaces:
+      - interface: wg0
+        routes:
+          - network: ${BONDS_IP}/32
+            gateway: ${BONDS_WG_IP}
+        wireguard:
+          peers:
+            - publicKey: ${BONDS_WG_PUBKEY}
+              endpoint: ${BONDS_WG_ENDPOINT}:${BONDS_WG_PORT}
+              persistentKeepaliveInterval: 10s
+              allowedIPs:
+                - ${BONDS_WG_IP}/32
+                - ${BONDS_IP}/32

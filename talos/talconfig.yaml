@@ -1,7 +1,7 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
 # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-talosVersion: v1.9.5
+talosVersion: v1.10.1
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
 kubernetesVersion: v1.32.3
 
@@ -42,7 +42,9 @@ nodes:
       wwid: eui.000000000000000100a07523458d4f6c
     machineSpec:
       secureboot: false
+      arch: amd64
       mode: metal
+      useUKI: true
     nodeLabels:
       location: "apartment"
       nvidia.com/gpu.present: "true"
@@ -55,13 +57,34 @@ nodes:
       - name: zfs
     schematic:
       customization:
+        extraKernelArgs: &amdArgs
+          - amd_pstate=active
+          - cpufreq.default_governor=performance
+          - apparmor=0
+          - iommu.passthrough=1
+          - init_on_alloc=0
+          - init_on_free=0
+          - mitigations=off
+          - security=none
+          - enforcing=0
+          - -selinux
         systemExtensions:
           officialExtensions:
             - siderolabs/nvidia-container-toolkit-production
             - siderolabs/nonfree-kmod-nvidia-production
             - siderolabs/zfs
             - siderolabs/amd-ucode
+            - siderolabs/nfsd
     controlPlane: false
+    patches:
+      - "@./patches/wireguard/posey.yaml"
+      - "@./patches/wireguard/madbum.yaml"
+      - |-
+        machine:
+          udev:
+            rules:
+              - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
+              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "a0:36:9f:09:4c:8f"
@@ -81,37 +104,9 @@ nodes:
         mtu: 1420
         addresses:
           - ${BONDS_WG_IP}/24
-        routes:
-          - network: ${MADBUM_IP}/32
-            gateway: ${MADBUM_WG_IP}
-          - network: ${POSEY_IP}/32
-            gateway: ${POSEY_WG_IP}
         wireguard:
           privateKey: ${BONDS_WG_PRIVATE_KEY}
-          listenPort: 51820
-          peers:
-            - publicKey: ${MADBUM_WG_PUBKEY}
-              endpoint: ${MADBUM_WG_ENDPOINT}
-              persistentKeepaliveInterval: 10s
-              allowedIPs:
-                - ${MADBUM_WG_IP}/32
-                - ${MADBUM_IP}/32
-            - publicKey: ${POSEY_WG_PUBKEY}
-              endpoint: ${POSEY_WG_ENDPOINT}
-              persistentKeepaliveInterval: 10s
-              allowedIPs:
-                - ${POSEY_WG_IP}/32
-                - ${POSEY_IP}/32
-    patches:
-      - |-
-        machine:
-          install:
-            extraKernelArgs:
-              - amd_pstate=active
-          udev:
-            rules:
-              - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
-              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
+          listenPort: ${BONDS_WG_PORT}
   - hostname: "posey"
     ipAddress: "${POSEY_IP}"
     installDiskSelector:
@@ -119,6 +114,8 @@ nodes:
     machineSpec:
       secureboot: false
       mode: metal
+      useUKI: true
+      arch: amd64
     nodeLabels:
       location: "house"
       nvidia.com/gpu.present: "true"
@@ -130,6 +127,7 @@ nodes:
       - name: nvidia_modeset
     schematic:
       customization:
+        extraKernelArgs: *amdArgs
         systemExtensions:
           officialExtensions:
             - siderolabs/nvidia-container-toolkit-production
@@ -138,6 +136,9 @@ nodes:
     controlPlane: false
     nodeTaints:
       location: house:NoSchedule
+    patches:
+      - "@./patches/wireguard/bonds.yaml"
+      - "@./patches/wireguard/madbum.yaml"
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "c4:62:37:01:8c:ce"
@@ -157,33 +158,9 @@ nodes:
         mtu: 1420
         addresses:
           - ${POSEY_WG_IP}/24
-        routes:
-          - network: ${BONDS_IP}/32
-            gateway: ${BONDS_WG_IP}
-          - network: ${MADBUM_IP}/32
-            gateway: ${MADBUM_WG_IP}
         wireguard:
           privateKey: ${POSEY_WG_PRIVATE_KEY}
-          listenPort: 51820
-          peers:
-            - publicKey: ${BONDS_WG_PUBKEY}
-              endpoint: ${BONDS_WG_ENDPOINT}
-              persistentKeepaliveInterval: 10s
-              allowedIPs:
-                - ${BONDS_WG_IP}/32
-                - ${BONDS_IP}/32
-            - publicKey: ${MADBUM_WG_PUBKEY}
-              endpoint: ${MADBUM_WG_ENDPOINT}
-              persistentKeepaliveInterval: 10s
-              allowedIPs:
-                - ${MADBUM_WG_IP}/32
-                - ${MADBUM_IP}/32
-    patches:
-      - |-
-        machine:
-          install:
-            extraKernelArgs:
-              - amd_pstate=active
+          listenPort: ${POSEY_WG_PORT}
   - hostname: "madbum"
     ipAddress: "${MADBUM_IP}"
     installDiskSelector:
@@ -191,11 +168,27 @@ nodes:
     machineSpec:
       secureboot: false
       mode: cloud
+      arch: arm64
+      useUKI: true
+    schematic:
+      customization:
+        extraKernelArgs:
+          - talos.platform=oracle
+          - cpufreq.default_governor=performance
+          - apparmor=0
+          - iommu.passthrough=1
+          - init_on_alloc=0
+          - init_on_free=0
+          - mitigations=off
+          - security=none
+          - enforcing=0
+          - -selinux
     nodeLabels:
       location: "cloud"
     controlPlane: true
-    nodeTaints:
-      location: cloud:NoSchedule
+    patches:
+      - "@./patches/wireguard/bonds.yaml"
+      - "@./patches/wireguard/posey.yaml"
     networkInterfaces:
       - interface: eth0
         dhcp: false
@@ -209,27 +202,9 @@ nodes:
         mtu: 1420
         addresses:
           - ${MADBUM_WG_IP}/24
-        routes:
-          - network: ${BONDS_IP}/32
-            gateway: ${BONDS_WG_IP}
-          - network: ${POSEY_IP}/32
-            gateway: ${POSEY_WG_IP}
         wireguard:
           privateKey: ${MADBUM_WG_PRIVATE_KEY}
-          listenPort: 51820
-          peers:
-            - publicKey: ${BONDS_WG_PUBKEY}
-              endpoint: ${BONDS_WG_ENDPOINT}
-              persistentKeepaliveInterval: 10s
-              allowedIPs:
-                - ${BONDS_WG_IP}/32
-                - ${BONDS_IP}/32
-            - publicKey: ${POSEY_WG_PUBKEY}
-              endpoint: ${POSEY_WG_ENDPOINT}
-              persistentKeepaliveInterval: 10s
-              allowedIPs:
-                - ${POSEY_WG_IP}/32
-                - ${POSEY_IP}/32
+          listenPort: ${MADBUM_WG_PORT}
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"

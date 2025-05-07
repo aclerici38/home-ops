@@ -1,0 +1,15 @@
+machine:
+  network:
+    interfaces:
+      - interface: wg0
+        routes:
+          - network: ${POSEY_IP}/32
+            gateway: ${POSEY_WG_IP}
+        wireguard:
+          peers:
+            - publicKey: ${POSEY_WG_PUBKEY}
+              endpoint: ${POSEY_WG_ENDPOINT}:${POSEY_WG_PORT}
+              persistentKeepaliveInterval: 10s
+              allowedIPs:
+                - ${POSEY_WG_IP}/32
+                - ${POSEY_IP}/32

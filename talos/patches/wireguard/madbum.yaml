@@ -1,0 +1,15 @@
+machine:
+  network:
+    interfaces:
+      - interface: wg0
+        routes:
+          - network: ${MADBUM_IP}/32
+            gateway: ${MADBUM_WG_IP}
+        wireguard:
+          peers:
+            - publicKey: ${MADBUM_WG_PUBKEY}
+              endpoint: ${MADBUM_WG_ENDPOINT}:${MADBUM_WG_PORT}
+              persistentKeepaliveInterval: 10s
+              allowedIPs:
+                - ${MADBUM_WG_IP}/32
+                - ${MADBUM_IP}/32
