@@ -78,7 +78,7 @@ nodes:
           hardwareAddr: a8:a1:59:dd:87:18
         ignore: true
       - interface: wg0
-        mtu: 8920
+        mtu: 1420
         addresses:
           - ${BONDS_WG_IP}/24
         routes:
@@ -154,7 +154,7 @@ nodes:
           hardwareAddr: a8:5e:45:9c:d0:99
         ignore: true
       - interface: wg0
-        mtu: 8920
+        mtu: 1420
         addresses:
           - ${POSEY_WG_IP}/24
         routes:
@@ -206,7 +206,7 @@ nodes:
             gateway: "10.40.40.1"
         mtu: 9000
       - interface: wg0
-        mtu: 8920
+        mtu: 1420
         addresses:
           - ${MADBUM_WG_IP}/24
         routes:
