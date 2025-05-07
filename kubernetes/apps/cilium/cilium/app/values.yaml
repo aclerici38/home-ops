@@ -27,6 +27,18 @@ sysctlfix:
   enabled: false
 hubble:
   enabled: true
+  tolerations:
+    - key: "location"
+      operator: "Equal"
+      value: "cloud"
+      effect: "NoSchedule"
+  affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: Exists
   ui:
     enabled: true
     rollOutPods: true
@@ -72,6 +84,7 @@ loadBalancer:
   algorithm: maglev
   mode: "dsr"
   dsrDispatch: geneve
+  acceleration: native
 pmtuDiscovery:
   enabled: true
 nodePort:

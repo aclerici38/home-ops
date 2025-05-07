@@ -177,7 +177,7 @@ nodes:
               persistentKeepaliveInterval: 10s
               allowedIPs:
                 - ${MADBUM_WG_IP}/32
-                - 10.40.40.40/32
+                - ${MADBUM_IP}/32
     patches:
       - |-
         machine:
