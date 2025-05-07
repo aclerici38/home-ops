@@ -29,6 +29,10 @@ spec:
               operator: "Equal"
               value: "house"
               effect: "NoSchedule"
+            - key: "location"
+              operator: "Equal"
+              value: "cloud"
+              effect: "NoSchedule"
           securityContext:
             runAsNonRoot: true
             runAsUser: 65534
@@ -112,11 +116,10 @@ spec:
               - name: *app
                 port: 53
     service:
-      *app : &svc
+      *app :
         controller: main
-        type: LoadBalancer
-        annotations:
-          io.cilium/lb-ipam-ips: 10.38.55.25
+        type: ClusterIP
+        clusterIP: 172.17.0.11
         ports:
           http:
             port: 4000
@@ -129,11 +132,7 @@ spec:
             protocol: UDP
           dns-tls:
             port: 853
-            protocol: TCP
-      blocky-internal:
-        <<: *svc
-        type: ClusterIP
-        clusterIP: 172.17.0.11
+            protocol: TCP 
     persistence:
       config:
         type: configMap
