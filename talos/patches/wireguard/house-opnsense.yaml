@@ -1,0 +1,15 @@
+machine:
+  network:
+    interfaces:
+      - interface: wg0
+        routes:
+          - network: 10.0.30.1/32
+            gateway: 10.10.0.5
+        wireguard:
+          peers:
+            - publicKey: ${HOUSE_WG_PUBKEY}
+              endpoint: ${HOUSE_WG_ENDPOINT}:${HOUSE_WG_PORT}
+              persistentKeepaliveInterval: 10s
+              allowedIPs:
+                - 10.0.30.1/32
+                - 10.10.0.5/32

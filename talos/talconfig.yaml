@@ -79,6 +79,7 @@ nodes:
     patches:
       - "@./patches/wireguard/posey.yaml"
       - "@./patches/wireguard/madbum.yaml"
+      - "@./patches/wireguard/house-opnsense.yaml"
       - |-
         machine:
           udev:
@@ -139,6 +140,7 @@ nodes:
     patches:
       - "@./patches/wireguard/bonds.yaml"
       - "@./patches/wireguard/madbum.yaml"
+      - "@./patches/wireguard/apartment-opnsense.yaml"
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "c4:62:37:01:8c:ce"
@@ -189,6 +191,8 @@ nodes:
     patches:
       - "@./patches/wireguard/bonds.yaml"
       - "@./patches/wireguard/posey.yaml"
+      - "@./patches/wireguard/house-opnsense.yaml"
+      - "@./patches/wireguard/apartment-opnsense.yaml"
     networkInterfaces:
       - interface: eth0
         dhcp: false

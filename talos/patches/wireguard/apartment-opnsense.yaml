@@ -1,0 +1,15 @@
+machine:
+  network:
+    interfaces:
+      - interface: wg0
+        routes:
+          - network: 192.168.9.1/32
+            gateway: 10.10.0.4
+        wireguard:
+          peers:
+            - publicKey: ${APARTMENT_WG_PUBKEY}
+              endpoint: ${APARTMENT_WG_ENDPOINT}:${APARTMENT_WG_PORT}
+              persistentKeepaliveInterval: 10s
+              allowedIPs:
+                - 192.168.9.1/32
+                - 10.10.0.4/32
