@@ -23,21 +23,6 @@ spec:
   values:
     controllers:
       main:
-        pod:
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
-            - key: "location"
-              operator: "Equal"
-              value: "cloud"
-              effect: "NoSchedule"
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 65534
-            runAsGroup: 65534
-            seccompProfile: { type: RuntimeDefault }
         strategy: RollingUpdate
         replicas: 3
         containers:
@@ -91,7 +76,7 @@ spec:
                 cpu: 10m
               limits:
                 memory: 512Mi
-            securityContext:
+            securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities:
@@ -99,12 +84,66 @@ spec:
                   - NET_BIND_SERVICE
                 drop:
                   - ALL
+      ui:
+        strategy: RollingUpdate
+        containers:
+          ui:
+            image:
+              repository: ghcr.io/ivvija/blocky-ui
+              tag: v0.1@sha256:ae84fc71b4550f34a06c0cc8acce78d2accb8de8c57ce220e6b293cfa6689e20
+            env:
+              API_BASE_URL: http://blocky:4000/api
+            securityContext: *sec
     defaultPodOptions:
+      tolerations:
+        - key: "location"
+          operator: "Equal"
+          value: "house"
+          effect: "NoSchedule"
+        - key: "location"
+          operator: "Equal"
+          value: "cloud"
+          effect: "NoSchedule"
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
         runAsGroup: 65534
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      *app :
+        controller: main
+        ports:
+          http:
+            port: 4000
+      dns:
+        controller: main
+        clusterIP: 172.17.0.11
+        ports:
+          dns-tcp:
+            port: 53
+            protocol: TCP
+          dns-udp:
+            primary: true
+            port: 53
+            protocol: UDP
+          dns-tls:
+            port: 853
+            protocol: TCP
+      ui:
+        controller: ui
+        ports:
+          http:
+            port: 3000
     route:
+      *app :
+        parentRefs:
+          - name: internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: ui
+                port: 3000
       blocky-udp:
         kind: UDPRoute
         parentRefs:
@@ -113,26 +152,8 @@ spec:
             sectionName: blocky-udp
         rules:
           - backendRefs:
-              - name: *app
+              - name: dns
                 port: 53
-    service:
-      *app :
-        controller: main
-        type: ClusterIP
-        clusterIP: 172.17.0.11
-        ports:
-          http:
-            port: 4000
-            primary: true
-          dns-tcp:
-            port: 53
-            protocol: TCP
-          dns-udp:
-            port: 53
-            protocol: UDP
-          dns-tls:
-            port: 853
-            protocol: TCP 
     persistence:
       config:
         type: configMap
