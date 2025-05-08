@@ -76,7 +76,7 @@ spec:
     route:
       *app :
         hostnames:
-          - calibre-downloader.${SECRET_DOMAIN}
+          - books.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: network
