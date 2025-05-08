@@ -74,9 +74,9 @@ spec:
           http:
             port: *port
     route:
-      *app :
+      ${APP}:
         hostnames:
-          - books.${SECRET_DOMAIN}
+          - ${APP}.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: network
