@@ -75,9 +75,8 @@ spec:
             port: *port
     route:
       *app :
-        nameOverride: ${APP}
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - books.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: network

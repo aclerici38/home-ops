@@ -55,5 +55,16 @@ spec:
   timeout: 5m
   postBuild:
     substitute:
-      APP: books
+      APP: *app
       CLIENT_ID: 022da642-3926-4abb-9b95-73ae841c6f8b
+  patches:
+    - patch: |-
+        apiVersion: gateway.envoyproxy.io/v1alpha1
+        kind: SecurityPolicy
+        metadata:
+          name: patch
+        spec:
+          oidc:
+            redirectURL: "https://books.${SECRET_DOMAIN}/oauth2/callback"
+      target:
+        kind: SecurityPolicy
