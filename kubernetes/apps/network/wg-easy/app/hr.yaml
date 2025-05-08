@@ -41,11 +41,6 @@ spec:
             image:
               repository: ghcr.io/wg-easy/wg-easy
               tag: 15.0.0-beta.12
-            env:
-              # Only apply on initial setup
-              INIT_ENABLED: true
-              INIT_DNS: 172.17.0.11
-              INIT_PORT: &wgPort 123
             envFrom:
               - secretRef:
                   name: ${APP}-secret
