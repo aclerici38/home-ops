@@ -12,6 +12,8 @@ spec:
       namespace: storage
     - name: minio
       namespace: cluster-utilities
+    - name: external-secrets-stores
+      namespace: cluster-utilities
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

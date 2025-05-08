@@ -98,3 +98,5 @@ spec:
         existingClaim: *app
         globalMounts:
           - path: /etc/wireguard
+      run:
+        type: emptyDir
