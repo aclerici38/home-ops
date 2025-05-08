@@ -72,9 +72,9 @@ spec:
         type: NodePort
         ports:
           vpn:
-            targetPort: *wgPort
-            port: *wgPort
-            nodePort: *wgPort
+            targetPort: 123
+            port: 123
+            nodePort: 123
             protocol: UDP
     route:
       *app :
