@@ -35,23 +35,20 @@ spec:
             runAsNonRoot: false
             runAsUser: 0
             runAsGroup: 0
-            fsGroup: 0
-            fsGroupChangePolicy: Always
+            seccompProfile: { type: RuntimeDefault }
         containers:
           *app :
             image:
               repository: ghcr.io/wg-easy/wg-easy
-              tag: 14@sha256:66352ccb4b5095992550aa567df5118a5152b6ed31be34b0a8e118a3c3a35bf5
+              tag: 15.0.0-beta.12
             env:
-              LANG: EN
-              WG_HOST: &host cloud.${SECRET_DOMAIN}
-              WG_DEFAULT_DNS: &dns 172.17.0.11 # blocky
-              WG_PORT: &wgPort 123
-              WG_MTU: 1280 # Geneve + wireguard
-              WG_PERSISTENT_KEEPALIVE: 25
-              WG_ALLOWED_IPS: 0.0.0.0/0
-              UI_TRAFFIC_STATS: "true"
-              UI_CHART_TYPE: 1
+              # Only apply on initial setup
+              INIT_ENABLED: true
+              INIT_DNS: 172.17.0.11
+              INIT_PORT: &wgPort 123
+            envFrom:
+              - secretRef:
+                  name: ${APP}-secret
             resources:
               requests:
                 cpu: 50m
@@ -59,7 +56,7 @@ spec:
                 memory: 256Mi
             securityContext:
               allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               capabilities:
                 add:
                   - NET_ADMIN

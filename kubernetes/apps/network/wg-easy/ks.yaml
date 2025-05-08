@@ -18,6 +18,7 @@ spec:
   path: ./kubernetes/apps/network/wg-easy/app
   components:
     - ../../../../components/volsync/minio
+    - ../../../../components/external-secret
   prune: true
   sourceRef:
     kind: GitRepository
