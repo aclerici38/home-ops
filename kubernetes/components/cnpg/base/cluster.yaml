@@ -6,7 +6,7 @@ metadata:
   name: ${APP}-db
 spec:
   instances: ${CNPG_REPLICAS:=1}
-  imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql}:${CNPG_VERSION:-17.4}
+  imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql}:${CNPG_VERSION:-17.5}
   primaryUpdateStrategy: unsupervised
   storage:
     size: ${CNPG_CAPACITY:=2Gi}
