@@ -7,12 +7,7 @@ annotations:
   secret.reloader.stakater.com/reload: &sname cluster-secrets
 certManager:
   enabled: true
-configMaps:
-  - create: true
-    name: cluster-config
-    data:
-      # renovate: datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
-      CNPG_VERSION: '17.4'
+configMaps: []
 secrets:
   - create: false
     name: *sname
