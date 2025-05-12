@@ -12,7 +12,7 @@ configMaps:
     name: cluster-config
     data:
       # renovate: datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
-      CNPG_VERSION: 17.4
+      CNPG_VERSION: '17.4'
 secrets:
   - create: false
     name: *sname

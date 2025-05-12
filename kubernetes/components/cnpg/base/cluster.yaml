@@ -6,11 +6,7 @@ metadata:
   name: &db ${APP}-db
 spec:
   instances: ${CNPG_REPLICAS:=1}
-  env:
-    - name: CNPG_VERSION
-      # renovate: datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
-      value: '17.4'
-  imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql}:${CNPG_VERSION:-$(CNPG_VERSION)}
+  imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql}:${CNPG_VERSION}
   primaryUpdateStrategy: unsupervised
   storage:
     size: ${CNPG_CAPACITY:=2Gi}
