@@ -23,12 +23,15 @@
       ],
       datasourceTemplate: "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
     },
-    // {
-    //   "customType": "regex",
-    //   "description": ["Process any imageName keys in YAML files (cloudnative-pg)"],
-    //   "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml$"],
-    //   "matchStrings": ["imageName: (?<depName>[^\\s:]+):(?<currentValue>\\S+)(@(?<currentDigest>sha256:\\S+)?)"],
-    //   "datasourceTemplate": "docker"
-    // },
+    {
+      "customType": "regex",
+      "description": ["Process any imageName keys in YAML files (cloudnative-pg)"],
+      "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml$"],
+      "matchStrings": [
+        "imageName: (?<depName>[^\\s:]+):(?<currentValue>\\S+)(@(?<currentDigest>sha256:\\S+)?)",
+        "imageName:\\s*\\$\\{CNPG_IMAGE:=(?<depName>[^}]+)\\}:\\$\\{CNPG_VERSION:-(?<currentValue>\\d+\\.\\d+)\\}",
+      ],
+      "datasourceTemplate": "docker"
+    },
   ]
 }
