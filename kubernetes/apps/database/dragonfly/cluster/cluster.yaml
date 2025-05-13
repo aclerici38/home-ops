@@ -6,7 +6,7 @@ metadata:
   name: dragonfly-db
 spec:
   image: ghcr.io/dragonflydb/dragonfly:v1.30.0@sha256:9e1cef2265638959a81e43a96913b01f0532ace8665f3684fe24036a425ce68e
-  replicas: 2
+  replicas: 1
   env:
     - name: MAX_MEMORY
       valueFrom:
@@ -17,12 +17,13 @@ spec:
     - --maxmemory=$(MAX_MEMORY)Mi
     - --proactor_threads=2
     - --cluster_mode=emulated
-    - --default_lua_flags=allow-undeclared-keys
+    - --lock_on_hashtags
+    # - --default_lua_flags=allow-undeclared-keys
   resources:
     requests:
       cpu: 100m
     limits:
-      memory: 512Mi
+      memory: 1Gi
   tolerations:
     - key: "location"
       operator: "Equal"

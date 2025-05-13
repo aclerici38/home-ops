@@ -8,7 +8,7 @@ spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: app-template
+    name: dragonfly-operator
     namespace: flux-system
   install:
     crds: CreateReplace
@@ -21,82 +21,16 @@ spec:
     remediation:
       retries: 1
   values:
-    controllers:
-      main:
-        strategy: RollingUpdate
-        pod:
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "cloud"
-              effect: "NoSchedule"
-            - key: "location"
-              operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 65534
-            runAsGroup: 65534
-            seccompProfile: { type: RuntimeDefault }
-        containers:
-          *app :
-            image:
-              repository: ghcr.io/dragonflydb/operator
-              tag: v1.1.11@sha256:11cef45ec1079b9d97930fc99ecd08ba29d4eca55cdb45887cb0ac40ee4e4d24
-            command: ["/manager"]
-            args:
-              - --health-probe-bind-address=:8081
-              - --metrics-bind-address=:8080
-            probes:
-              liveness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /healthz
-                    port: &port 8081
-                  initialDelaySeconds: 15
-                  periodSeconds: 20
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /readyz
-                    port: *port
-                  initialDelaySeconds: 5
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 128Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
-    service:
-      *app :
-        controller: main
-        ports:
-          http:
-            port: *port
-          metrics:
-            port: 8080
-    serviceMonitor:
-      *app :
-        serviceName: *app
-        endpoints:
-          - port: metrics
-            scheme: http
-            path: /metrics
-            interval: 2m
-            scrapeTimeout: 10s
-    serviceAccount:
-      create: true
-      name: *app
+    replicaCount: 2
+    manager:
+      topologySpreadConstraints:
+        - maxSkew: 1 # Skew of 1 allows for rolling updates
+          topologyKey: kubernetes.io/hostname
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: *app_name
+          whenUnsatisfiable: DoNotSchedule
+    # serviceMonitor:
+    #   enabled: true
+    grafanaDashboard:
+      enabled: true
