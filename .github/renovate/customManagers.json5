@@ -34,8 +34,8 @@
       "matchStrings": [
         "imageName: (?<depName>[^\\s:]+):(?<currentValue>\\S+)(@(?<currentDigest>sha256:\\S+)?)",
         "imageName:\\s*\\$\\{CNPG_IMAGE:=(?<depName>[^}]+)\\}:\\$\\{CNPG_VERSION:-(?<currentValue>\\d+\\.\\d+)\\}",
-      ]
-      "datasourceTemplate": "docker"
+      ],
+      "datasourceTemplate": "docker",
     },
   ]
 }
