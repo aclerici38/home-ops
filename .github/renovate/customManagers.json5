@@ -8,6 +8,7 @@
       "matchStrings": [
         // Example: `k3s_release_version: "v1.27.3+k3s1"` (general regex matcher)
         "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\n.*?\"(?<currentValue>.*)\"\n",
+        "(?m)datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)(?:\\s+versioning=(?<versioning>\\S+))?[\\s\\S]*?^\\s*\\S+:\\s*(?<currentValue>\\S+)",
         // Example: `- https://github.com/rancher/system-upgrade-controller/releases/download/v0.11.0/crd.yaml` (e.g. kustomization.yaml lists)
         "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\n.*?-\\s(.*?)\/(?<currentValue>[^/]+)\/[^/]+\n",
         // for: apiVersion=helm.cattle.io/v1 kind=HelmChart
