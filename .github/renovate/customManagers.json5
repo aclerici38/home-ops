@@ -2,26 +2,30 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   customManagers: [
     {
-      customType: "regex",
-      description: "Process annotated dependencies",
-      fileMatch: [
-        "(^|/).+\\.env$",
-        "(^|/).+\\.sh$",
-        "(^|/).+\\.ya?ml(?:\\.j2)?$",
+      "description": ["Process various other dependencies"],
+      "customType": "regex",
+      "fileMatch": [".*"], // process regex from everywhere
+      "matchStrings": [
+        // Example: `k3s_release_version: "v1.27.3+k3s1"` (general regex matcher)
+        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\n.*?\"(?<currentValue>.*)\"\n",
+        // Example: `- https://github.com/rancher/system-upgrade-controller/releases/download/v0.11.0/crd.yaml` (e.g. kustomization.yaml lists)
+        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\n.*?-\\s(.*?)\/(?<currentValue>[^/]+)\/[^/]+\n",
+        // for: apiVersion=helm.cattle.io/v1 kind=HelmChart
+        "datasource=(?<datasource>\\S+)\n.*?repo: (?<registryUrl>\\S+)\n.*?chart: (?<depName>\\S+)\n.*?version: (?<currentValue>\\S+)\n"
       ],
-      matchStrings: [
-        // # renovate: datasource=github-releases depName=k3s-io/k3s
-        // k3s_release_version: &version v1.29.0+k3s1
-        // # renovate: datasource=helm depName=cilium repository=https://helm.cilium.io
-        // version: 1.15.1
-        // # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-        // KUBERNETES_VERSION=v1.31.1
-        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( repository=(?<registryUrl>\\S+))?\\n.+(:\\s|=)(&\\S+\\s)?(?<currentValue>\\S+)",
-        // # renovate: datasource=docker depName=ghcr.io/prometheus-operator/prometheus-operator
-        // https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.0/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagerconfigs.yaml
-        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n.+/(?<currentValue>(v|\\d)[^/]+)",
+      "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    },
+    {
+      "description": ["app-template schemas"],
+      "customType": "regex",
+      "fileMatch": ["^kube/.+\\.ya?ml$"],
+      "matchStrings": [
+        "\\# yaml\\-language\\-server\\: \\$schema\\=https\\:\\/\\/raw\\.githubusercontent\\.com\\/(?<packageName>[\\w\\-]+\\/[\\w\\-]+)\\/(?<currentValue>app\\-template\\-[\\d\\.]+)"
       ],
-      datasourceTemplate: "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
+      "datasourceTemplate": "github-tags",
+      "versioningTemplate": "semver",
+      "extractVersionTemplate": "^app-template-(?<version>.*)$"
     },
     {
       "customType": "regex",
