@@ -28,7 +28,7 @@ spec:
           topologyKey: kubernetes.io/hostname
           labelSelector:
             matchLabels:
-              app.kubernetes.io/instance: *app_name
+              app.kubernetes.io/instance: *app
           whenUnsatisfiable: DoNotSchedule
     # serviceMonitor:
     #   enabled: true
