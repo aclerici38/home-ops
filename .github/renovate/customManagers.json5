@@ -3,35 +3,29 @@
   customManagers: [
     {
       customType: "regex",
-      description: "Process annotated dependencies",
+      description: "Process all `# renovate:` hints for Docker, GitHub‑Releases, Helm, etc.",
       fileMatch: [
         "(^|/).+\\.env$",
         "(^|/).+\\.sh$",
-        "(^|/).+\\.ya?ml(?:\\.j2)?$",
+        "(^|/).+\\.ya?ml(?:\\.j2)?$"
       ],
       matchStrings: [
-        // # renovate: datasource=github-releases depName=k3s-io/k3s
-        // k3s_release_version: &version v1.29.0+k3s1
-        // # renovate: datasource=helm depName=cilium repository=https://helm.cilium.io
-        // version: 1.15.1
-        // # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-        // KUBERNETES_VERSION=v1.31.1
-        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( repository=(?<registryUrl>\\S+))?\\n.+(:\\s|=)(&\\S+\\s)?(?<currentValue>\\S+)",
-        // # renovate: datasource=docker depName=ghcr.io/prometheus-operator/prometheus-operator
-        // https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.80.0/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagerconfigs.yaml
-        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n.+/(?<currentValue>(v|\\d)[^/]+)",
+        "(?m)^\\s*# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: repository=(?<registryUrl>\\S+))?(?: versioning=(?<versioning>\\S+))?\\s*$\\n\\s*[A-Za-z0-9_]+\\s*(?:=|:)\\s*(?:&\\S+\\s*)?(?<currentValue>\\S+)"
       ],
-      datasourceTemplate: "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
+      datasourceTemplate: "{{datasource}}",
+      depNameTemplate: "{{depName}}",
+      registryUrls: ["{{registryUrl}}"],
+      versioningTemplate: "{{#if versioning}}{{versioning}}{{else}}semver{{/if}}"
     },
     {
-      "customType": "regex",
-      "description": ["Process any imageName keys in YAML files (cloudnative-pg)"],
-      "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml$"],
-      "matchStrings": [
+      customType: "regex",
+      description: ["Process any imageName keys in YAML files (cloudnative-pg)"],
+      fileMatch: ["(^|/)kubernetes/.+\\.ya?ml$"],
+      matchStrings: [
         "imageName: (?<depName>[^\\s:]+):(?<currentValue>\\S+)(@(?<currentDigest>sha256:\\S+)?)",
-        "imageName:\\s*\\$\\{CNPG_IMAGE:=(?<depName>[^}]+)\\}:\\$\\{CNPG_VERSION:-(?<currentValue>\\d+\\.\\d+)\\}",
+        "imageName:\\s*\\$\\{CNPG_IMAGE:=(?<depName>[^}]+)\\}:\\$\\{CNPG_VERSION:-(?<currentValue>\\d+\\.\\d+)\\}"
       ],
-      "datasourceTemplate": "docker"
-    },
+      datasourceTemplate: "docker"
+    }
   ]
 }
