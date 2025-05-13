@@ -4,7 +4,7 @@
     {
       customType: "regex",
       description: "Process annotated dependencies",
-      managerFilePatterns: [
+      fileMatch: [
         "(^|/).+\\.env$",
         "(^|/).+\\.sh$",
         "(^|/).+\\.ya?ml(?:\\.j2)?$",
