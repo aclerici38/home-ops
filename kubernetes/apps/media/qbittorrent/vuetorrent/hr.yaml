@@ -64,7 +64,7 @@ spec:
                   failureThreshold: 3
               readiness: *probes
             env:
-              # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
+              # renovate: datasource=github-tags depName=vuetorrent/vuetorrent versioning=semver
               RELEASE_TYPE: v2.24.2
               PORT: *port
               QBIT_BASE: http://qbittorrent:8080
