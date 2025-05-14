@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tautulli-cache
+spec:
+  storageClassName: zfs-nvme
+  resources:
+    requests:
+      storage: 50Gi
+  accessModes:
+    - ReadWriteMany
