@@ -115,6 +115,7 @@ cni:
   exclusive: false
 socketLB:
   enabled: true
+  terminatePodConnections: true
 securityContext:
   capabilities:
     ciliumAgent:
