@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: files-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 43.6Ti
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: files
+    namespace: cluster-utilities
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: tank
+    volumeHandle: files
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - bonds
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: zfs-tank
+  volumeMode: Filesystem

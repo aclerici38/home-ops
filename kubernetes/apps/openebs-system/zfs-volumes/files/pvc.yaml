@@ -1,0 +1,13 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: files
+  namespace: home
+spec:
+  storageClassName: zfs-tank
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 43.6Ti
