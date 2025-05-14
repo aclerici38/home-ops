@@ -47,3 +47,21 @@ spec:
       allowedRoutes:
         namespaces:
           from: Same
+    - name: syncthing-quic
+      protocol: UDP
+      port: 22000
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: home
+    - name: syncthing-tcp
+      protocol: TCP
+      port: 22000
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: home
