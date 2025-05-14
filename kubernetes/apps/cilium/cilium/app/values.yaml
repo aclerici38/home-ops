@@ -115,6 +115,7 @@ cni:
   exclusive: false
 socketLB:
   enabled: true
+  hostNamespaceOnly: true
   terminatePodConnections: true
 securityContext:
   capabilities:
