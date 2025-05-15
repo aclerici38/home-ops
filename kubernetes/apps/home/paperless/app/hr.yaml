@@ -162,6 +162,27 @@ spec:
                 cpu: 10m
               limits:
                 memory: 6Gi
+      fileflows:
+        pod:
+          hostname: ff-paperless
+        containers:
+          fileflows:
+            image:
+              repository: ghcr.io/ant385525/fileflows
+              tag: 25.5.1.5375@sha256:d8753f7f4fda5921ea857f29d2f275c1cc84f3c2662b4d9e1c083d1ef3fc2d26
+            env:
+              FFNODE: 1
+              ServerUrl: http://fileflows-server.media.svc.cluster.local:5000
+            securityContext: *sc
+            probes:
+              liveness: &probes
+                enabled: false
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 200Mi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -186,6 +207,11 @@ spec:
         ports:
           http:
             port: 3000
+      fileflows:
+        controller: fileflows
+        ports:
+          http:
+            port: 5000
     route:
       *app :
         hostnames:
@@ -213,9 +239,20 @@ spec:
         advancedMounts:
           main:
             *app :
-              - path: /usr/src/paperless/consume
-                subPath: documents
               - path: /usr/src/paperless/export
                 subPath: paperless-export
+          fileflows:
+            fileflows:
+              - path: /mnt/documents
+                subPath: documents
+      consume:
+        existingClaim: paperless-consume
+        advancedMounts:
+          main:
+            *app :
+              - path: /usr/src/paperless/consume
+          fileflows:
+            fileflows:
+              - path: /mnt/paperless/consume
       tmp:
         type: emptyDir
