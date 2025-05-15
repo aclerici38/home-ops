@@ -59,6 +59,8 @@ spec:
             configBlock: |-
               pods insecure
               fallthrough in-addr.arpa ip6.arpa
+          - name: autopath
+            parameters: "@kubernetes"
           - name: forward
             parameters: . 172.17.0.11
           - name: reload
