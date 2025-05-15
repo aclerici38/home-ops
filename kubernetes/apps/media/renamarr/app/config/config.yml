@@ -1,7 +1,7 @@
 ---
 sonarr:
   - name: sonarr
-    url: https://sonarr:8989
+    url: http://sonarr:8989
     api_key: ${SONARR_API_KEY}
     renamarr:
       enabled: true
@@ -12,7 +12,7 @@ sonarr:
       hourly_job: true
 radarr:
   - name: radarr
-    url: https://radarr:7878
+    url: http://radarr:7878
     api_key: ${RADARR_API_KEY}
     renamarr:
       enabled: true
