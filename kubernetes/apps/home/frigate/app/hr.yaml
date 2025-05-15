@@ -95,7 +95,7 @@ spec:
         rules:
           - backendRefs:
               - name: *app
-                port: *http-auth
+                port: *http
     persistence:
       config:
         existingClaim: *app
