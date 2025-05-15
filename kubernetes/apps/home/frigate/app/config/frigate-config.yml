@@ -7,7 +7,6 @@ mqtt:
   user: "{FRIGATE_MQTT_USER}"
   password: "{FRIGATE_MQTT_PASS}"
 
-# For when I get this cluster a connection to minio
 database:
   path: /database/frigate.db
 
@@ -22,7 +21,7 @@ auth:
 ffmpeg:
   input_args: preset-rtsp-restream
   output_args:
-    record: preset-record-generic-audio-copy
+    record: preset-record-generic-audio-aac
 
 record:
   enabled: True
@@ -94,10 +93,8 @@ semantic_search:
   model_size: small
 genai:
   enabled: False
-  provider: ollama
-  base_url: http://ollama:11434
-  model: minicpm-v:8b
-  prompt: Analyze the {label} in this image from a security camera. Return a MINIMAL, multi-word description of the {label}. For example, "man in a white shirt", "white dog", "delivery vehicle"
+lpr:
+  enabled: True
 
 go2rtc:
   streams:
