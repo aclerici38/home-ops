@@ -50,7 +50,7 @@ spec:
               PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://paperless-gotenberg:3000
               USERMAP_UID: 1000
               USERMAP_GID: 1000
-              PAPERLESS_DISABLE_REGULAR_LOGIN: true
+              # PAPERLESS_DISABLE_REGULAR_LOGIN: true
               PAPERLESS_SOCIAL_AUTO_SIGNUP: true
               PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
               PAPERLESS_DBENGINE: postgresql
@@ -130,7 +130,7 @@ spec:
               requests:
                 cpu: 10m
               limits:
-                memory: 2Gi
+                memory: 6Gi
       gotenberg:
         strategy: RollingUpdate
         containers:
@@ -161,7 +161,7 @@ spec:
               requests:
                 cpu: 10m
               limits:
-                memory: 2Gi
+                memory: 6Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
