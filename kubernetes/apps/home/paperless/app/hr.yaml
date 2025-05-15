@@ -210,5 +210,11 @@ spec:
                 subPath: documents
               - path: /usr/src/paperless/export
                 subPath: paperless-export
+      run:
+        type: emptyDir
+        advancedMounts:
+          main:
+            *app :
+              - path: /run
       tmp:
         type: emptyDir
