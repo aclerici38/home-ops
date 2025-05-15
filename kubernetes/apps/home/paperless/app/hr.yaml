@@ -23,6 +23,12 @@ spec:
   values:
     controllers:
       main:
+        pod:
+          securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 0
+            seccompProfile: { type: RuntimeDefault }
         containers:
           *app :
             image:
@@ -77,8 +83,8 @@ spec:
               limits:
                 memory: 6Gi
             securityContext:
-              runAsNonRoot: true
-              allowPrivilegeEscalation: false
+              runAsNonRoot: false
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
               capabilities:
                 drop:
@@ -210,11 +216,5 @@ spec:
                 subPath: documents
               - path: /usr/src/paperless/export
                 subPath: paperless-export
-      run:
-        type: emptyDir
-        advancedMounts:
-          main:
-            *app :
-              - path: /run
       tmp:
         type: emptyDir
