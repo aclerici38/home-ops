@@ -13,10 +13,17 @@ spec:
   dependsOn:
     - name: files-zfs-volume
       namespace: openebs-system
+    - name: minio
+      namespace: cluster-utilities
+    - name: volsync
+      namespace: storage
+    - name: cloudnative-pg
+      namespace: database
   path: ./kubernetes/apps/home/paperless/app
   components:
     - ../../../../components/external-secret
     - ../../../../components/cnpg/init
+    - ../../../../components/volsync/minio
   prune: true
   sourceRef:
     kind: GitRepository
@@ -28,3 +35,4 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_CAPACITY: 500Gi
