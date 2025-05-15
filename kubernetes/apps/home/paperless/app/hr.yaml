@@ -41,8 +41,8 @@ spec:
               PAPERLESS_TASK_WORKERS: 6
               PAPERLESS_THREADS_PER_WORKER: 5
               PAPERLESS_CONSUMER_RECURSIVE: true
-              PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: true
-              PAPERLESS_FILENAME_FORMAT: "{{`{{`}} created_year {{`}}`}}/{{`{{`}} created_month {{`}}`}}/{{`{{`}} correspondent {{`}}`}}/{{`{{`}} title {{`}}`}}"
+              # PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: true
+              # PAPERLESS_FILENAME_FORMAT: "{{`{{`}} created_year {{`}}`}}/{{`{{`}} created_month {{`}}`}}/{{`{{`}} correspondent {{`}}`}}/{{`{{`}} title {{`}}`}}"
               PAPERLESS_OCR_LANGUAGE: eng
               PAPERLESS_REDIS: redis://dragonfly-db.database.svc.cluster.local:6379/0
               PAPERLESS_TIKA_ENABLED: true
