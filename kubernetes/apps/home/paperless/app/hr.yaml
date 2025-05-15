@@ -50,7 +50,7 @@ spec:
               PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://paperless-gotenberg:3000
               USERMAP_UID: 1000
               USERMAP_GID: 1000
-              # PAPERLESS_DISABLE_REGULAR_LOGIN: true
+              PAPERLESS_DISABLE_REGULAR_LOGIN: true
               PAPERLESS_SOCIAL_AUTO_SIGNUP: true
               PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
               PAPERLESS_DBENGINE: postgresql
@@ -215,6 +215,7 @@ spec:
             *app :
               - path: /usr/src/paperless/consume
                 subPath: documents
+                readOnly: true
               - path: /usr/src/paperless/export
                 subPath: paperless-export
       tmp:
