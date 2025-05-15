@@ -1,0 +1,20 @@
+---
+sonarr:
+  - name: sonarr
+    url: https://sonarr:8989
+    api_key: ${SONARR_API_KEY}
+    renamarr:
+      enabled: true
+      hourly_job: true
+      analyze_files: true
+    series_scanner:
+      enabled: true
+      hourly_job: true
+radarr:
+  - name: radarr
+    url: https://radarr:7878
+    api_key: ${RADARR_API_KEY}
+    renamarr:
+      enabled: true
+      hourly_job: true
+      analyze_files: false
