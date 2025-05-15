@@ -10,3 +10,15 @@ spec:
       storage: 50Gi
   accessModes:
     - ReadWriteMany
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paperless-export
+spec:
+  storageClassName: zfs-nvme
+  resources:
+    requests:
+      storage: 100Gi
+  accessModes:
+    - ReadWriteMany
