@@ -38,7 +38,8 @@ spec:
               PAPERLESS_URL: https://paperless.${SECRET_DOMAIN}
               PAPERLESS_TIME_ZONE: ${TZ}
               PAPERLESS_WEBSERVER_WORKERS: 2
-              PAPERLESS_TASK_WORKERS: 6
+              PAPERLESS_TASK_WORKERS: 8
+              PAPERLESS_THREADS_PER_WORKER: 3
               PAPERLESS_CONSUMER_RECURSIVE: true
               PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: true
               PAPERLESS_FILENAME_FORMAT: "{{`{{`}} created_year {{`}}`}}/{{`{{`}} created_month {{`}}`}}/{{`{{`}} correspondent {{`}}`}}/{{`{{`}} title {{`}}`}}"
@@ -49,7 +50,7 @@ spec:
               PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://paperless-gotenberg:3000
               USERMAP_UID: 1000
               USERMAP_GID: 1000
-              PAPERLESS_DISABLE_REGULAR_LOGIN: true
+              # PAPERLESS_DISABLE_REGULAR_LOGIN: true
               PAPERLESS_SOCIAL_AUTO_SIGNUP: true
               PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
               PAPERLESS_DBENGINE: postgresql
