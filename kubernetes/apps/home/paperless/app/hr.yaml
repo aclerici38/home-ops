@@ -37,7 +37,7 @@ spec:
             env:
               PAPERLESS_URL: https://paperless.${SECRET_DOMAIN}
               PAPERLESS_TIME_ZONE: ${TZ}
-              PAPERLESS_WEBSERVER_WORKERS: 1
+              PAPERLESS_WEBSERVER_WORKERS: 3
               PAPERLESS_TASK_WORKERS: 6
               PAPERLESS_THREADS_PER_WORKER: 5
               PAPERLESS_CONSUMER_RECURSIVE: true
