@@ -76,12 +76,20 @@ spec:
                 memory: 2Gi
               limits:
                 memory: 6Gi
-            securityContext: &sc
+            securityContext:
               runAsNonRoot: true
               allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
+                add:
+                  # S6
+                  - CHOWN
+                  - SETUID
+                  - SETGID
+                  - FOWNER
+                  - DAC_OVERRIDE
             probes:
               liveness:
                 enabled: true
@@ -99,7 +107,13 @@ spec:
             image:
               repository: ghcr.io/paperless-ngx/tika
               tag: 2.9.1-minimal
-            securityContext: *sc
+            securityContext: &sc
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
             probes:
               liveness:
                 enabled: true
