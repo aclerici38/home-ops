@@ -129,19 +129,23 @@ spec:
     route:
       apt: &route
         hostnames:
-          - apt-${APP}.${SECRET_DOMAIN}
+          - apt-z2m.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: network
             sectionName: https
         rules:
           - backendRefs:
-              - name: *app
+              - name: apt
                 port: *port
       house:
         <<: *route
         hostnames:
-          - house-${APP}.${SECRET_DOMAIN}
+          - house-z2m.${SECRET_DOMAIN}
+        rules:
+          - backendRefs:
+              - name: house
+                port: *port
     persistence:
       apt-data:
         existingClaim: *app
