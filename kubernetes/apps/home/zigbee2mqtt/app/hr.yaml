@@ -22,13 +22,13 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      apt:
         containers:
-          *app :
+          *app : &container
             image:
               repository: ghcr.io/koenkk/zigbee2mqtt
               tag: 2.3.0
-            env:
+            env: &env
               ZIGBEE2MQTT_DATA: /data
               ZIGBEE2MQTT_CONFIG_ADVANCED_LAST_SEEN: ISO_8601
               ZIGBEE2MQTT_CONFIG_ADVANCED_LEGACY_API: false
@@ -42,7 +42,7 @@ spec:
               ZIGBEE2MQTT_CONFIG_DEVICE_OPTIONS_RETAIN: true
               ZIGBEE2MQTT_CONFIG_EXPERIMENTAL_NEW_API: true
               ZIGBEE2MQTT_CONFIG_FRONTEND_PORT: &port 8080
-              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://zigbee2mqtt.${SECRET_DOMAIN}
+              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://apt-zigbee2mqtt.${SECRET_DOMAIN}
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_DISCOVERY_TOPIC: homeassistant
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_EXPERIMENTAL_EVENT_ENTITIES: true
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_LEGACY_ENTITY_ATTRIBUTES: false
@@ -73,17 +73,38 @@ spec:
             envFrom:
               - secretRef:
                   name: zigbee2mqtt-secret
-            resources:
+            resources: &res
               requests:
                 cpu: 5m
                 memory: 202Mi
-              limits:
-                squat.ai/zigbee: 1
+              limits: &limits
+                squat.ai/apt-zigbee: 1
                 memory: 512Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+      house:
+        pod:
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "house"
+              effect: "NoSchedule"
+          nodeSelector:
+            location: house
+        containers:
+          *app :
+            <<: *container
+            env:
+              <<: *env
+              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://house-zigbee2mqtt.${SECRET_DOMAIN}
+              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
+            resources:
+              <<: *res
+              limits:
+                <<: *limits
+                squat.ai/house-zigbee: 1
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -93,21 +114,22 @@ spec:
         fsGroupChangePolicy: Always
         supplementalGroups:
           - 20
-
     service:
-      *app :
-        controller: main
-        ports:
+      apt:
+        controller: apt
+        ports: &ports
           http:
             primary: true
             port: *port
           metrics:
             port: 9000
-
+      house:
+        controller: house
+        ports: *ports
     route:
-      *app :
+      apt: &route
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - apt-${APP}.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: network
@@ -116,9 +138,20 @@ spec:
           - backendRefs:
               - name: *app
                 port: *port
-
+      house:
+        <<: *route
+        hostnames:
+          - house-${APP}.${SECRET_DOMAIN}
     persistence:
-      config:
+      apt-data:
         existingClaim: *app
-        globalMounts:
-          - path: /data
+        advancedMounts:
+          apt:
+            *app :
+              - path: /data
+      house-data:
+        existingClaim: z2m-house
+        advancedMounts:
+          house:
+            *app :
+              - path: /data

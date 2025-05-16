@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: z2m-house
+spec:
+  storageClassName: local-hostpath-posey
+  resources:
+    requests:
+      storage: 5Gi
+  accessModes:
+    - ReadWriteMany
