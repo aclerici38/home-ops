@@ -77,7 +77,7 @@ spec:
               requests:
                 cpu: 5m
                 memory: 202Mi
-              limits: &limits
+              limits:
                 squat.ai/apt-zigbee: 1
                 memory: 512Mi
             securityContext:
@@ -103,8 +103,8 @@ spec:
             resources:
               <<: *res
               limits:
-                <<: *limits
                 squat.ai/house-zigbee: 1
+                memory: 512Mi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
