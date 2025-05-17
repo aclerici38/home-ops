@@ -84,7 +84,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: *app
+              - identifier: *app
                 port: *port
             timeouts:
               request: 0s
@@ -96,7 +96,7 @@ spec:
             sectionName: syncthing-tcp
         rules:
           - backendRefs:
-              - name: *app
+              - identifier: *app
                 port: 22000
       quic:
         kind: UDPRoute
@@ -106,7 +106,7 @@ spec:
             sectionName: syncthing-quic
         rules:
           - backendRefs:
-              - name: *app
+              - identifier: *app
                 port: 22000
     persistence:
       config:

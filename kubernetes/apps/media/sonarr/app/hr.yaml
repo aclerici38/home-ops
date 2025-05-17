@@ -106,7 +106,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: *app
+              - identifier: *app
                 port: *port
             timeouts:
               request: 3m
