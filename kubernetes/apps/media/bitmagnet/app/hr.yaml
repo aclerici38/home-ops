@@ -108,7 +108,7 @@ spec:
               allowPrivilegeEscalation: false
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: &port 3333
