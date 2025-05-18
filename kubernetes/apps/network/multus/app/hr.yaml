@@ -24,6 +24,8 @@ spec:
     controllers:
       multus:
         type: daemonset
+        serviceAccount:
+          identifier: *app
         pod:
           hostNetwork: true
           tolerations:
@@ -64,5 +66,4 @@ spec:
         globalMounts:
           - path: /host/opt/cni/bin
     serviceAccount:
-      create: true
-      name: multus
+      multus: {}
