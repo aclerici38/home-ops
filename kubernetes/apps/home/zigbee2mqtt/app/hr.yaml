@@ -137,7 +137,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: apt
+              - identifier: apt
                 port: *port
       house:
         <<: *route
@@ -145,7 +145,7 @@ spec:
           - house-z2m.${SECRET_DOMAIN}
         rules:
           - backendRefs:
-              - name: house
+              - identifier: house
                 port: *port
     persistence:
       apt-data:

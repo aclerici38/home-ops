@@ -142,7 +142,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: apartment
+              - identifier: apartment
                 port: *port
       house:
         hostnames:
@@ -150,7 +150,7 @@ spec:
         parentRefs: *pRef
         rules:
           - backendRefs:
-              - name: house
+              - identifier: house
                 port: *port
       cloud:
         hostnames:
@@ -158,5 +158,5 @@ spec:
         parentRefs: *pRef
         rules:
           - backendRefs:
-              - name: cloud
+              - identifier: cloud
                 port: *port

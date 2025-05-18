@@ -25,7 +25,6 @@ spec:
       main:
         strategy: RollingUpdate
         replicas: 3
-        nameOverride: *app
         containers:
           *app :
             image:
@@ -145,7 +144,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: ui
+              - identifier: ui
                 port: 3000
       dns-udp:
         kind: UDPRoute
@@ -155,7 +154,7 @@ spec:
             sectionName: blocky-udp
         rules:
           - backendRefs:
-              - name: dns
+              - identifier: dns
                 port: 53
     persistence:
       config:
