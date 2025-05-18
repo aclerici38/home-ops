@@ -26,8 +26,15 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          *app :
             image:
               repository: ghcr.io/home-operations/bazarr
               tag: 1.5.2
@@ -82,16 +89,8 @@ spec:
                 memory: 100Mi
               limits:
                 memory: 4Gi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: Always
-        seccompProfile: { type: RuntimeDefault }
     service:
-      app:
+      *app :
         controller: main
         ports:
           http:
