@@ -24,6 +24,12 @@ spec:
     controllers:
       main:
         type: statefulset
+        pod:
+          securityContext:
+            runAsUser: 65534
+            runAsGroup: 65534
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
         initContainers:
           gluetun:
             image:
@@ -50,6 +56,7 @@ spec:
                 add:
                   - NET_ADMIN
               allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
         containers:
           bitmagnet:
             image:
@@ -94,30 +101,21 @@ spec:
                 cpu: 4000m
                 memory: 4Gi
             securityContext:
-              runAsUser: 65534
-              runAsGroup: 65534
               readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
               allowPrivilegeEscalation: false
-              runAsNonRoot: true
-              seccompProfile: { type: RuntimeDefault }
-
     service:
-      ui:
+      *app :
         controller: main
-        primary: true
         ports:
           http:
             port: &port 3333
-      bittorrent:
-        controller: main
-        ports:
-          tcp:
+          bittorrent-tcp:
             protocol: TCP
             port: &torrentPort 3334
-          udp:
+          bittorrent-udp:
             protocol: UDP
             port: *torrentPort
     route:
