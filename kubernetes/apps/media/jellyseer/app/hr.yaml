@@ -23,8 +23,16 @@ spec:
   values:
     controllers:
       jellyseerr:
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          *app :
             image:
               repository: ghcr.io/fallenbagel/jellyseerr
               tag: 2.5.2@sha256:2a611369ad1d0d501c2d051fc89b6246ff081fb4a30879fdc75642cf6a37b1a6
@@ -57,20 +65,13 @@ spec:
               limits:
                 memory: 600M
             securityContext:
+              readOnlyRootzFilesystem: true
               allowPrivilegeEscalation: false
               capabilities:
                 drop:
                   - ALL
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: Always
-        seccompProfile: { type: RuntimeDefault }
     service:
-      app:
+      *app :
         controller: jellyseerr
         ports:
           http:
