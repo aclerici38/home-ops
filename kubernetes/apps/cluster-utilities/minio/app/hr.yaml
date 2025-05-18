@@ -72,7 +72,7 @@ spec:
               limits:
                 memory: 2Gi
     service:
-      app:
+      *app :
         controller: *app
         ports:
           http:
