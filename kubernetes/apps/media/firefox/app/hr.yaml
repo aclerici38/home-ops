@@ -65,7 +65,7 @@ spec:
                 memory: 500Mi
               limits:
                 memory: 4Gi
-                nvidia.com/gpu: 1
+                gpu.intel.com/i915: 1
     service:
       *app :
         controller: main

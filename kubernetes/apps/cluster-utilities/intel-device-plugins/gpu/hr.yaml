@@ -21,7 +21,7 @@ spec:
     remediation:
       retries: 1
   dependsOn:
-    - name: intel-device-plugins-operator
+    - name: intel-device-plugin-operator
       namespace: cluster-utilities
   values:
     name: intel-device-plugin-gpu

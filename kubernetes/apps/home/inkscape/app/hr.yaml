@@ -54,7 +54,7 @@ spec:
                 memory: 600Mi
               limits:
                 memory: 6Gi
-                nvidia.com/gpu: 1
+                gpu.intel.com/i915: 1
     service:
       *app :
         controller: main

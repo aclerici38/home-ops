@@ -60,7 +60,7 @@ spec:
               limits:
                 cpu: 1000m
                 memory: 7.5Gi
-                nvidia.com/gpu: 1
+                gpu.intel.com/i915: 1
             probes:
               liveness:
                 enabled: true
