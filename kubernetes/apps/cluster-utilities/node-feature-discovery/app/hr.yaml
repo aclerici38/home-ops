@@ -20,9 +20,6 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
-  dependsOn:
-    - name: intel-device-plugin-operator
-      namespace: cluster-utilities
   values:
     worker:
       config:
