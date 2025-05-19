@@ -47,6 +47,11 @@ spec:
           secretKeyRef:
             name: mqtt-secret
             key: MQTT_PASS
+    statefulset:
+      livenessProbe:
+        initialDelaySeconds: 5
+      readinessProbe:
+        initialDelaySeconds: 5
     tolerations:
       - key: "location"
         operator: "Equal"
