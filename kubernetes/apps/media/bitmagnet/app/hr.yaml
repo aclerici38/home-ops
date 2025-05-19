@@ -142,3 +142,9 @@ spec:
           *app :
             gluetun:
               - path: /run
+      gluetun:
+        type: emptyDir
+        advancedMounts:
+          *app :
+            gluetun:
+              - path: /gluetun
