@@ -16,12 +16,12 @@ spec:
       version: 2.0.1
   install:
     crds: CreateReplace
-    timeout: 2m
+    timeout: 5m
     remediation:
       retries: 1
   upgrade:
     crds: CreateReplace
-    timeout: 2m
+    timeout: 5m
     remediation:
       retries: 1
   values:
