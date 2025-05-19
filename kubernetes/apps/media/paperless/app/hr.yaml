@@ -36,6 +36,7 @@ spec:
               tag: 2.16.0
             env:
               PAPERLESS_URL: https://paperless.${SECRET_DOMAIN}
+              PAPERLESS_CONSUMER_DELETE_DUPLICATES: true
               PAPERLESS_TIME_ZONE: ${TZ}
               PAPERLESS_WEBSERVER_WORKERS: 3
               PAPERLESS_TASK_WORKERS: 6
