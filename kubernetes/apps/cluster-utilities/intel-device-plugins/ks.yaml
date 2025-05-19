@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/cluster-utilities/intel-device-plugins-operator/operator
+  path: ./kubernetes/apps/cluster-utilities/intel-device-plugins/operator
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -34,7 +34,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/cluster-utilities/intel-device-plugins-operator/gpu
+  path: ./kubernetes/apps/cluster-utilities/intel-device-plugins/gpu
   sourceRef:
     kind: GitRepository
     name: flux-system
