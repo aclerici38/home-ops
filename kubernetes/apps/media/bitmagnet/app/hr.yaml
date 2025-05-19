@@ -110,7 +110,7 @@ spec:
                 add:
                   - NET_ADMIN
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
     service:
       *app :
         controller: *app
@@ -135,28 +135,3 @@ spec:
           - backendRefs:
               - identifier: *app
                 port: *port
-    persistence:
-      run:
-        type: emptyDir
-        advancedMounts:
-          *app :
-            gluetun:
-              - path: /run
-      tmp:
-        type: emptyDir
-        advancedMounts:
-          *app :
-            gluetun:
-              - path: /tmp
-      etc:
-        type: emptyDir
-        advancedMounts:
-          *app :
-            gluetun:
-              - path: /etc
-      gluetun:
-        type: emptyDir
-        advancedMounts:
-          *app :
-            gluetun:
-              - path: /gluetun
