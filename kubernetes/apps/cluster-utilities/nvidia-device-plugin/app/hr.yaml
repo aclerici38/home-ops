@@ -25,10 +25,10 @@ spec:
     nodeSelector:
       kubernetes.io/hostname: "posey"
     tolerations:
-    - key: "location"
-      operator: "Equal"
-      value: "house"
-      effect: "NoSchedule"
+      - key: "location"
+        operator: "Equal"
+        value: "house"
+        effect: "NoSchedule"
     config:
       map:
         default: |-

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app intel-device-plugins-gpu
+  name: &app node-feature-discovery
 spec:
   interval: 1h
   chartRef:
@@ -24,8 +24,18 @@ spec:
     - name: intel-device-plugin-operator
       namespace: cluster-utilities
   values:
-    name: intel-device-plugin-gpu
-    sharedDevNum: 99
-    nodeFeatureRule: false
-    nodeSelector:
-      kubernetes.io/hostname: "bonds"
+    worker:
+      config:
+        core:
+          labelSources: ["pci", "system", "usb"]
+      tolerations:
+        - key: "location"
+          operator: "Equal"
+          value: "house"
+          effect: "NoSchedule"
+        - key: "location"
+          operator: "Equal"
+          value: "cloud"
+          effect: "NoSchedule"
+    prometheus:
+      enable: true
