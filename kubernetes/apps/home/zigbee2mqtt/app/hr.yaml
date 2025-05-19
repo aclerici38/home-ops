@@ -84,28 +84,28 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-      house:
-        pod:
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
-          nodeSelector:
-            location: house
-        containers:
-          *app :
-            <<: *container
-            env:
-              <<: *env
-              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://house-zigbee2mqtt.${SECRET_DOMAIN}
-              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
-              ZIGBEE2MQTT_CONFIG_SERIAL_RTSCTS: true
-            resources:
-              <<: *res
-              limits:
-                squat.ai/house-zigbee: 1
-                memory: 512Mi
+      # house:
+      #   pod:
+      #     tolerations:
+      #       - key: "location"
+      #         operator: "Equal"
+      #         value: "house"
+      #         effect: "NoSchedule"
+      #     nodeSelector:
+      #       location: house
+      #   containers:
+      #     *app :
+      #       <<: *container
+      #       env:
+      #         <<: *env
+      #         ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://house-zigbee2mqtt.${SECRET_DOMAIN}
+      #         ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
+      #         ZIGBEE2MQTT_CONFIG_SERIAL_RTSCTS: true
+      #       resources:
+      #         <<: *res
+      #         limits:
+      #           squat.ai/house-zigbee: 1
+      #           memory: 512Mi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -124,9 +124,9 @@ spec:
             port: *port
           metrics:
             port: 9000
-      house:
-        controller: house
-        ports: *ports
+      # house:
+      #   controller: house
+      #   ports: *ports
     route:
       apt: &route
         hostnames:
@@ -139,14 +139,14 @@ spec:
           - backendRefs:
               - identifier: apt
                 port: *port
-      house:
-        <<: *route
-        hostnames:
-          - house-z2m.${SECRET_DOMAIN}
-        rules:
-          - backendRefs:
-              - identifier: house
-                port: *port
+      # house:
+      #   <<: *route
+      #   hostnames:
+      #     - house-z2m.${SECRET_DOMAIN}
+      #   rules:
+      #     - backendRefs:
+      #         - identifier: house
+      #           port: *port
     persistence:
       apt-data:
         existingClaim: *app
@@ -154,9 +154,9 @@ spec:
           apt:
             *app :
               - path: /data
-      house-data:
-        existingClaim: z2m-house
-        advancedMounts:
-          house:
-            *app :
-              - path: /data
+      # house-data:
+      #   existingClaim: z2m-house
+      #   advancedMounts:
+      #     house:
+      #       *app :
+      #         - path: /data
