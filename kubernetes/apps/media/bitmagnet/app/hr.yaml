@@ -148,6 +148,12 @@ spec:
           *app :
             gluetun:
               - path: /tmp
+      etc:
+        type: emptyDir
+        advancedMounts:
+          *app :
+            gluetun:
+              - path: /etc
       gluetun:
         type: emptyDir
         advancedMounts:
