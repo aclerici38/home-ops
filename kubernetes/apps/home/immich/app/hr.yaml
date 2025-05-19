@@ -80,7 +80,7 @@ spec:
           immich-ml:
             image:
               repository: ghcr.io/immich-app/immich-machine-learning
-              tag:  ${IMMICH_VERSION}-cuda
+              tag:  ${IMMICH_VERSION}-openvino
             env:
               MACHINE_LEARNING_MODEL_TTL: 0
               MACHINE_LEARNING_CACHE_FOLDER: /cache

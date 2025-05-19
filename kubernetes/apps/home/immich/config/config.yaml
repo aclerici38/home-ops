@@ -10,8 +10,8 @@ ffmpeg:
   refs: 0
   gopSize: 0
   twoPass: true
-  preferredHwDevice: cuda
-  accel: nvenc
+  preferredHwDevice: vaapi
+  accel: vaapi
   accelDecode: true
   tonemap: "reinhard"
   temporalAQ: true
