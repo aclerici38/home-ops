@@ -46,7 +46,7 @@ spec:
                 squat.ai/tun: 1
             restartPolicy: Always
             securityContext:
-              runAsNonRoot: true
+              runAsNonRoot: false
               seccompProfile: { type: RuntimeDefault }
               capabilities:
                 drop:
