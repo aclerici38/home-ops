@@ -32,21 +32,3 @@ spec:
   postBuild:
     substitute:
       APP: *app
-  patches:
-    - patch: |-
-        - op: add
-          path: /spec/data/-
-          value:
-            secretKey: ZIGBEE2MQTT_CONFIG_MQTT_USER
-            remoteRef:
-              key: "emqx"
-              property: "X_EMQX_MQTT_USERNAME"
-        - op: add
-          path: /spec/data/-
-          value:
-            secretKey: ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD
-            remoteRef:
-              key: "emqx"
-              property: "X_EMQX_MQTT_PASSWORD"
-      target:
-        kind: ExternalSecret

@@ -18,7 +18,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
       namespace: cluster-utilities
-    - name: emqx-cluster
+    - name: vernemq
       namespace: database
   prune: true
   sourceRef:
@@ -43,14 +43,14 @@ spec:
           value:
             secretKey: FRIGATE_MQTT_USER
             remoteRef:
-              key: "emqx"
-              property: "X_EMQX_MQTT_USERNAME"
+              key: "mqtt"
+              property: "MQTT_USER"
         - op: add
           path: /spec/data/-
           value:
             secretKey: FRIGATE_MQTT_PASS
             remoteRef:
-              key: "emqx"
-              property: "X_EMQX_MQTT_PASSWORD"
+              key: "mqtt"
+              property: "MQTT_PASS"
       target:
         kind: ExternalSecret
