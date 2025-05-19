@@ -94,7 +94,6 @@ spec:
             timeouts:
               request: 0s
     defaultPodOptions:
-      runtimeClassName: nvidia
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
@@ -102,6 +101,8 @@ spec:
         fsGroupChangePolicy: Always
         runAsNonRoot: true
         seccompProfile: { type: RuntimeDefault }
+        supplementalGroups:
+          - 44
     persistence:
       config:
         existingClaim: *app

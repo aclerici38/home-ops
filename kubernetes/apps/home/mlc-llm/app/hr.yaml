@@ -31,7 +31,8 @@ spec:
         fsGroup: 1000
         fsGroupChangePolicy: Always
         seccompProfile: { type: RuntimeDefault }
-      runtimeClassName: nvidia
+        supplementalGroups:
+          - 44
     controllers:
       qwen:
         containers:

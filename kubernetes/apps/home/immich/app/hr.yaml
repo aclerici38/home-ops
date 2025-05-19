@@ -112,7 +112,6 @@ spec:
                   failureThreshold: 60
             securityContext: *contSec
     defaultPodOptions:
-      runtimeClassName: nvidia
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -120,6 +119,8 @@ spec:
         fsGroup: 1000
         fsGroupChangePolicy: Always
         seccompProfile: { type: RuntimeDefault }
+        supplementalGroups:
+          - 44
     service:
       *app :
         controller: server

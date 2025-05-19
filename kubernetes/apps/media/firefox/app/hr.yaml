@@ -37,7 +37,8 @@ spec:
             runAsUser: 0
             runAsGroup: 0
             seccompProfile: { type: RuntimeDefault }
-          runtimeClassName: nvidia
+            supplementalGroups:
+              - 44
         containers:
           *app :
             image:

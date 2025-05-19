@@ -24,12 +24,13 @@ spec:
     controllers:
       main:
         pod:
-          runtimeClassName: nvidia
           securityContext:
             runAsNonRoot: false
             runAsUser: 0
             runAsGroup: 0
             seccompProfile: { type: RuntimeDefault }
+            supplementalGroups:
+              - 44
         containers:
           *app :
             image:

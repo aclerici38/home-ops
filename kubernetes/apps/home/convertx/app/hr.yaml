@@ -24,12 +24,13 @@ spec:
     controllers:
       main:
         pod:
-          runtimeClassName: nvidia
           securityContext:
             runAsUser: 65534
             runAsGroup: 65533
             fsGroup: 65533
             fsGroupChangePolicy: Always
+            supplementalGroups:
+              - 44
         containers:
           *app :
             image:
