@@ -15,8 +15,23 @@ spec:
   rules:
     - matches:
         - path:
-            type: PathPrefix
-            value: /
-      backendRefs:
+            value: /status.json
+      backendRefs: &backendRefs
         - name: vernemq-headless
           port: 8888
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /status
+      backendRefs: *backendRefs
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs: *backendRefs
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /status
