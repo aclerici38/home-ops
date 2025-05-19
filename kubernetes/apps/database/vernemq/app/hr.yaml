@@ -41,7 +41,7 @@ spec:
     additionalEnv:
       - name: DOCKER_VERNEMQ_ACCEPT_EULA
         value: "yes"
-      # Creates user MQTT_USER with password MQTT_PASS
+      # Creates user dormammu with password MQTT_PASS
       - name: DOCKER_VERNEMQ_USER_dormammu
         valueFrom:
           secretKeyRef:
