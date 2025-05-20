@@ -85,7 +85,13 @@ spec:
               MACHINE_LEARNING_MODEL_TTL: 0
               MACHINE_LEARNING_CACHE_FOLDER: /cache
               MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: ViT-SO400M-16-SigLIP2-384__webli
-            resources: *resources
+            resources: &resources
+              requests:
+                cpu: 500m
+                memory: 500Mi
+              limits:
+                memory: 16Gi
+                gpu.intel.com/i915: 1
             probes:
               liveness: &probes
                 enabled: true
