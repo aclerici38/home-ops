@@ -22,10 +22,16 @@ spec:
       retries: 1
   values:
     controllers:
-      echo-server:
+      *app :
         strategy: RollingUpdate
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            runAsGroup: 65534
+            seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          *app :
             image:
               repository: ghcr.io/mendhak/http-https-echo
               tag: 36@sha256:43bdfe52abc5baed00706337efe26825c86360c6b9b74659a72a9aa2fca8bd55
@@ -56,20 +62,14 @@ spec:
                 cpu: 10m
               limits:
                 memory: 64Mi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
-        seccompProfile: { type: RuntimeDefault }
     service:
-      app:
+      *app :
         controller: echo-server
         ports:
           http:
             port: *port
     serviceMonitor:
-      app:
+      *app :
         serviceName: echo-server
         endpoints:
           - port: http
