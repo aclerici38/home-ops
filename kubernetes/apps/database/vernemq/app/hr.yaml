@@ -30,12 +30,11 @@ spec:
       create: true
     ingress:
       enabled: false
-    resources:
-      requests:
-        cpu: 20m
-        memory: 128Mi
-      limits:
-        memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 192Mi
+    limits:
+      memory: 384Mi
     persistentVolume:
       enabled: false
     additionalEnv:
