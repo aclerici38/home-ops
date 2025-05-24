@@ -74,12 +74,14 @@ spec:
                     path: /healthz
                     port: &port 1411
                   initialDelaySeconds: 10
-                  periodSeconds: 90
-                  timeoutSeconds: 5
+                  periodSeconds: 10
+                  timeoutSeconds: 2
                   failureThreshold: 2
               readiness: *probes
             securityContext:
+              allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 10m
