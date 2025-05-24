@@ -44,7 +44,6 @@ spec:
             image:
               repository: ghcr.io/pocket-id/pocket-id
               tag: v1.0.0@sha256:5e968f55c1399456588f28ca7302c697769a60d85a3b340a61f3ac1096c347bc
-            command: ["/bin/sh", "/app/scripts/docker/entrypoint.sh"]
             env:
               APP_URL: https://id.${SECRET_DOMAIN}
               TRUST_PROXY: "true"
