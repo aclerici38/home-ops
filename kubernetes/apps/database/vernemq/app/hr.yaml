@@ -41,6 +41,21 @@ spec:
     additionalEnv:
       - name: DOCKER_VERNEMQ_ACCEPT_EULA
         value: "yes"
+      - name: DOCKER_VERNEMQ_ALLOW_REGISTER_DURING_NETSPLIT
+        value: 'on'
+      - name: DOCKER_VERNEMQ_ALLOW_PUBLISH_DURING_NETSPLIT
+        value: 'on'
+      - name: DOCKER_VERNEMQ_ALLOW_SUBSCRIBE_DURING_NETSPLIT
+        value: 'on'
+      - name: DOCKER_VERNEMQ_ALLOW_UNSUBSCRIBE_DURING_NETSPLIT
+        value: 'on'
+      # Prevent OOMs
+      - name: DOCKER_VERNEMQ_LEVELDB__MAXIMUM_MEMORY
+        value: "31457280" # 30 MB
+      - name: DOCKER_VERNEMQ_LEVELDB__WRITE_BUFFER_SIZE_MIN
+        value: "3145728"   # 3 MB
+      - name: DOCKER_VERNEMQ_LEVELDB__WRITE_BUFFER_SIZE_MAX
+        value: "6291456"   # 6 MB
       # Creates user dormammu with password MQTT_PASS
       - name: DOCKER_VERNEMQ_USER_dormammu
         valueFrom:
