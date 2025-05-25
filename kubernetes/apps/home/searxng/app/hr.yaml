@@ -79,11 +79,11 @@ spec:
               capabilities:
                 drop:
                   - ALL
-                # add:
-                #   - CHOWN
-                #   - SETGID
-                #   - SETUID
-                #   - DAC_OVERRIDE
+                add:
+                  - CHOWN
+                  - SETGID
+                  - SETUID
+                  - DAC_OVERRIDE
     service:
       *app :
         controller: main
@@ -103,6 +103,7 @@ spec:
           - backendRefs:
               - identifier: *app
                 port: *port
+
     persistence:
       config:
         type: configMap
@@ -115,10 +116,7 @@ spec:
             subPath: limiter.toml
             readOnly: true
       tmp:
+        enabled: true
         type: emptyDir
         globalMounts:
           - path: /tmp
-      etc:
-        type: emptyDir
-        globalMounts:
-          - path: /etc/searxng
