@@ -34,12 +34,12 @@ spec:
               value: "house"
               effect: "NoSchedule"
         strategy: RollingUpdate
-        replicas: 2
+        replicas: 3
         containers:
           *app :
             image:
               repository: ghcr.io/klutchell/dnscrypt-proxy
-              tag: 2.1.8@sha256:68b62ba30b6cf95861aef45878428622e453a4e91de76abfe040381be4049f53
+              tag: 2.1.11
             resources:
               requests:
                 cpu: 10m
