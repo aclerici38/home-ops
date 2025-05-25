@@ -45,7 +45,6 @@ spec:
               ShowAlbumName: false
               ImageZoom: false
               BaseFontSize: 20
-              RenewImagesDuration: 1
             envFrom:
               - secretRef:
                   name: ${APP}-secret
