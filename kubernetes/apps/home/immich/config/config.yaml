@@ -54,7 +54,7 @@ machineLearning:
 
 oauth:
   enabled: true
-  issuerUrl: https://id.${SECRET_DOMAIN}/
+  issuerUrl: http://pocket-id.home.svc.cluster.local:1411
   autoLaunch: false
   autoRegister: true
   buttonText: Login with Pocket ID
