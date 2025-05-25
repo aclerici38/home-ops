@@ -22,7 +22,7 @@ spec:
       namespace: openebs-system
   path: ./kubernetes/apps/home/immich/app
   components:
-    - ../../../../components/cnpg/restore
+    - ../../../../components/cnpg/overlay/restore
     - ../../../../components/external-secret
   prune: true
   sourceRef:

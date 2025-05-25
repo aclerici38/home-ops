@@ -21,7 +21,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media/bazarr/app
   components:
-    - ../../../../components/cnpg/restore
+    - ../../../../components/cnpg/overlay/restore
     - ../../../../components/volsync/minio
   prune: true
   sourceRef:

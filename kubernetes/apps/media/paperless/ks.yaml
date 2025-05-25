@@ -22,7 +22,7 @@ spec:
   path: ./kubernetes/apps/media/paperless/app
   components:
     - ../../../../components/external-secret
-    - ../../../../components/cnpg/init
+    - ../../../../components/cnpg/overlay/init
     - ../../../../components/volsync/minio
   prune: true
   sourceRef:
