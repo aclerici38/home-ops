@@ -9,6 +9,8 @@ spec:
   cluster:
     name: immich-db
   extensions:
+    - ensure: present
+      name: vector
     - name: vchord
       ensure: present
     - name: earthdistance
