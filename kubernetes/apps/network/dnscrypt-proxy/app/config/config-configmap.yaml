@@ -51,10 +51,6 @@ data:
 
     use_syslog = true
 
-    [monitoring_ui]
-      enabled = false
-      prometheus_enabled: true
-
     [sources]
       [sources.public-resolvers]
         urls = ['https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md', 'https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md']
