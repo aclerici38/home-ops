@@ -129,10 +129,12 @@ spec:
         controller: house
         ports: *ports
       global:
+        controller: apt
         extraSelectorLabels:
           app.kubernetes.io/instance: *app
         ports: *ports
       internal-dns: &dnsSvc
+        controller: apt
         clusterIP: 172.17.0.11
         extraSelectorLabels:
           app.kubernetes.io/instance: *app
