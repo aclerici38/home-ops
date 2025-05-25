@@ -45,6 +45,7 @@ spec:
               ShowAlbumName: false
               ImageZoom: false
               BaseFontSize: 20
+              Style: solid
             envFrom:
               - secretRef:
                   name: ${APP}-secret
