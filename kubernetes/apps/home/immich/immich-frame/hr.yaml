@@ -44,8 +44,8 @@ spec:
               Interval: 60
               ShowAlbumName: false
               ImageZoom: false
-              BaseFontSize: 20
               Style: transition
+              Layout: single
             envFrom:
               - secretRef:
                   name: ${APP}-secret
