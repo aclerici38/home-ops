@@ -69,7 +69,7 @@ spec:
                   - ALL
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: &port 8080
@@ -85,6 +85,3 @@ spec:
           - backendRefs:
               - identifier: *app
                 port: *port
-    persistence:
-      config:
-        type: emptyDir
