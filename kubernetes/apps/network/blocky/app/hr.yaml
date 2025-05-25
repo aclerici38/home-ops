@@ -27,7 +27,7 @@ spec:
         replicas: 2
         pod:
           nodeSelector:
-            loaction: apartment
+            location: apartment
         containers:
           *app :
             image:
