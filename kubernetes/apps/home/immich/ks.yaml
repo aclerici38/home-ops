@@ -35,7 +35,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      CNPG_IMAGE: ghcr.io/tensorchord/cloudnative-vectorchord:17.5
+      # CNPG_IMAGE: ghcr.io/tensorchord/cloudnative-pgvecto.rs:17.5
       CNPG_CAPACITY: 20Gi
       # renovate: datasource=docker depName=ghcr.io/immich-app/immich-machine-learning
       IMMICH_VERSION: v1.133.1
