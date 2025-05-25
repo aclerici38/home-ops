@@ -22,9 +22,12 @@ spec:
       retries: 1
   values:
     controllers:
-      *app :
+      apt: &controller
         strategy: RollingUpdate
-        replicas: 3
+        replicas: 2
+        pod:
+          nodeSelector:
+            loaction: apartment
         containers:
           *app :
             image:
@@ -84,40 +87,55 @@ spec:
                   - NET_BIND_SERVICE
                 drop:
                   - ALL
+      house:
+        <<: *controller
+        pod:
+          tolerations: &tol
+            - key: "location"
+              operator: "Equal"
+              value: "house"
+              effect: "NoSchedule"
+            - key: "location"
+              operator: "Equal"
+              value: "cloud"
+              effect: "NoSchedule"
+          nodeSelector:
+            location: house
       ui:
         strategy: RollingUpdate
+        pod:
+          tolerations: *tol
         containers:
           ui:
             image:
               repository: ghcr.io/ivvija/blocky-ui
               tag: v0.1@sha256:ae84fc71b4550f34a06c0cc8acce78d2accb8de8c57ce220e6b293cfa6689e20
             env:
-              API_BASE_URL: http://blocky:4000/api
+              API_BASE_URL: http://blocky-global:4000/api
             securityContext: *sec
     defaultPodOptions:
-      tolerations:
-        - key: "location"
-          operator: "Equal"
-          value: "house"
-          effect: "NoSchedule"
-        - key: "location"
-          operator: "Equal"
-          value: "cloud"
-          effect: "NoSchedule"
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
         runAsGroup: 65534
         seccompProfile: { type: RuntimeDefault }
     service:
-      *app :
-        controller: *app
-        ports:
+      apt:
+        controller: apt
+        ports: &ports
           http:
             port: 4000
-      dns:
-        controller: *app
+      house:
+        controller: house
+        ports: *ports
+      global:
+        extraSelectorLabels:
+          app.kubernetes.io/instance: *app
+        ports: *ports
+      internal-dns: &dnsSvc
         clusterIP: 172.17.0.11
+        extraSelectorLabels:
+          app.kubernetes.io/instance: *app
         ports:
           dns-tcp:
             port: 53
@@ -129,6 +147,11 @@ spec:
           dns-tls:
             port: 853
             protocol: TCP
+      external-dns:
+        <<: *dnsSvc
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: 10.38.55.25
       ui:
         controller: ui
         ports:
@@ -154,7 +177,7 @@ spec:
             sectionName: blocky-udp
         rules:
           - backendRefs:
-              - identifier: dns
+              - identifier: internal-dns
                 port: 53
     persistence:
       config:
