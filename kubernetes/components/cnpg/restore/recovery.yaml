@@ -3,13 +3,13 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: &db ${APP}-db
+  name: recovery-patch
   annotations:
     cnpg.io/skipEmptyWalArchiveCheck: 'enabled'
 spec:
   bootstrap:
     recovery:
-      source: *db
+      source: &db ${APP}-db
   externalClusters:
     - name: *db
       plugin:
