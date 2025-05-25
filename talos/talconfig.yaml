@@ -134,11 +134,6 @@ nodes:
       - "@./patches/wireguard/bonds.yaml"
       - "@./patches/wireguard/madbum.yaml"
       - "@./patches/wireguard/apartment-opnsense.yaml"
-      - |-
-        machine:
-          udev:
-            rules:
-              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "c4:62:37:01:8c:ce"
