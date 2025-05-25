@@ -115,7 +115,10 @@ spec:
             subPath: limiter.toml
             readOnly: true
       tmp:
-        enabled: true
         type: emptyDir
         globalMounts:
           - path: /tmp
+      etc:
+        type: emptyDir
+        globalMounts:
+          - path: /etc/searxng
