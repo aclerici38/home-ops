@@ -36,6 +36,8 @@ spec:
               value: "cloud"
               effect: "NoSchedule"
           securityContext:
+            runAsUser: 65543
+            runAsGroup: 65543
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         strategy: RollingUpdate
@@ -77,12 +79,11 @@ spec:
               capabilities:
                 drop:
                   - ALL
-                add:
-                  - CHOWN
-                  - SETGID
-                  - SETUID
-                  - DAC_OVERRIDE
-
+                # add:
+                #   - CHOWN
+                #   - SETGID
+                #   - SETUID
+                #   - DAC_OVERRIDE
     service:
       *app :
         controller: main
@@ -95,14 +96,13 @@ spec:
         hostnames:
           - search.${SECRET_DOMAIN}
         parentRefs:
-          - name: internal
+          - name: external
             namespace: network
             sectionName: https
         rules:
           - backendRefs:
               - identifier: *app
                 port: *port
-
     persistence:
       config:
         type: configMap
