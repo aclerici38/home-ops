@@ -11,12 +11,7 @@ spec:
   extensions:
     - name: pgvector
       ensure: present
-      # renovate: datasource=github-tags depName=pgvector/pgvector
-      version: v0.8.0
     - name: vchord
       ensure: present
-      # renovate: datasource=docker depName=ghcr.io/tensorchord/cloudnative-vectorchord
-      version: 0.3.0
     - name: earthdistance
       ensure: present
-    
