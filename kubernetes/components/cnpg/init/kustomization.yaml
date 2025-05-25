@@ -5,3 +5,8 @@ kind: Component
 resources:
   - ../base
   - ../common
+patches:
+  - path: ../common/plugins.yaml
+    target:
+      kind: Cluster
+      name: ${APP}-db
