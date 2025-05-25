@@ -36,8 +36,6 @@ spec:
               value: "cloud"
               effect: "NoSchedule"
           securityContext:
-            runAsUser: 65543
-            runAsGroup: 65543
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         strategy: RollingUpdate
@@ -84,6 +82,7 @@ spec:
                   - SETGID
                   - SETUID
                   - DAC_OVERRIDE
+
     service:
       *app :
         controller: main
