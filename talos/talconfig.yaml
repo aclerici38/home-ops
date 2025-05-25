@@ -138,7 +138,7 @@ nodes:
         machine:
           udev:
             rules:
-              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
+              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "c4:62:37:01:8c:ce"
