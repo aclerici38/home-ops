@@ -152,6 +152,7 @@ spec:
       external-dns:
         <<: *dnsSvc
         type: LoadBalancer
+        externalTrafficPolicy: Local
         annotations:
           lbipam.cilium.io/ips: 10.38.55.25
       ui:
