@@ -90,6 +90,8 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: immich
+    - name: external-secrets-stores
+      namespace: cluster-utilities
   path: ./kubernetes/apps/home/immich/immich-frame
   components:
     - ../../../../components/external-secret
