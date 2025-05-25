@@ -1,0 +1,23 @@
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: ${APP}
+spec:
+  retentionPolicy: 7d
+  configuration:
+    data:
+      compression: bzip2
+    wal:
+      compression: bzip2
+      maxParallel: 8
+    destinationPath: s3://backups/cnpg
+    endpointURL: http://minio.cluster-utilities.svc.cluster.local:9000
+    serverName: ${APP}-db
+    s3Credentials:
+      accessKeyId:
+        name: cloudnative-pg-secret
+        key: minio-access-key-id
+      secretAccessKey:
+        name: cloudnative-pg-secret
+        key: minio-secret-access-key

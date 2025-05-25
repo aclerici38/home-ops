@@ -10,3 +10,6 @@ spec:
   backupOwnerReference: self
   cluster:
     name: ${APP}-db
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io

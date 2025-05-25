@@ -6,4 +6,7 @@ resources:
   - ../base
   - ../common
 patches:
-  - path: patch.yaml
+  - path: ./patch.yaml
+    target:
+      kind: Cluster
+      name: ${APP}-db
