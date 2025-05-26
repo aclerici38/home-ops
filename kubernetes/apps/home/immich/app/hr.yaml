@@ -23,13 +23,15 @@ spec:
   values:
     controllers:
       server:
+        strategy: RollingUpdate
         containers:
-          immich-server:
+          app: &container
             image:
               repository: ghcr.io/immich-app/immich-server
               tag:  ${IMMICH_VERSION}
-            env:
+            env: &env
               IMMICH_LOG_LEVEL: log
+              IMMICH_WORKERS_INCLUDE: api
               REDIS_HOSTNAME: dragonfly-db.database.svc.cluster.local
               REDIS_DBINDEX: 2
               IMMICH_TELEMETRY_INCLUDE: all
@@ -68,16 +70,36 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-            resources: &resources
+            resources:
               requests:
-                cpu: 500m
-                memory: 500Mi
+                cpu: 100m
+                memory: 200Mi
               limits:
-                memory: 8Gi
+                memory: 2Gi
                 gpu.intel.com/i915: 1
-      machine-learning:
+      microservices:
+        strategy: RollingUpdate
         containers:
-          immich-ml:
+          app:
+            <<: *container
+            env:
+              <<: *env
+              IMMICH_WORKERS_INCLUDE: api
+            resources:
+              requests:
+                cpu: 100m
+                memory: 200Mi
+              limits:
+                memory: 2Gi
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+      machine-learning:
+        strategy: RollingUpdate
+        containers:
+          app:
             image:
               repository: ghcr.io/immich-app/immich-machine-learning
               tag:  ${IMMICH_VERSION}-openvino
@@ -85,7 +107,7 @@ spec:
               MACHINE_LEARNING_MODEL_TTL: 0
               MACHINE_LEARNING_CACHE_FOLDER: /cache
               MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: ViT-SO400M-16-SigLIP2-384__webli
-            resources: &resources
+            resources:
               requests:
                 cpu: 500m
                 memory: 500Mi
@@ -128,13 +150,16 @@ spec:
         supplementalGroups:
           - 44
     service:
-      *app :
+      server:
         controller: server
         ports:
           http:
             port: *port
           metrics-api:
             port: 8081
+      microservices:
+        controller: microservices
+        ports:
           metrics-ms:
             port: 8082
       ml:
@@ -143,11 +168,14 @@ spec:
           http:
             port: *mlPort
     serviceMonitor:
-      *app :
-        serviceName: *app
+      server:
+        serviceName: server
         endpoints:
           - port: metrics-api
             scheme: http
+      microservices:
+        serviceName: microservices
+        endpoints:
           - port: metrics-ms
             scheme: http
     route:
@@ -160,48 +188,56 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: *app
+              - identifier: server
                 port: *port
             timeouts:
-              request: 3m
+              request: 0s
     persistence:
       media:
         enabled: true
         existingClaim: *app
         advancedMounts:
           server:
-            immich-server:
+            app: &mounts
               - path: /usr/src/app/upload/upload
                 subPath: upload
               - path: /usr/src/app/upload/profile
                 subPath: profile
               - path: /usr/src/app/upload/library
                 subPath: library
+          microservices:
+            app: *mounts
       thumbnails:
         existingClaim: immich-thumbnails
         advancedMounts:
           server:
-            immich-server:
+            app: &mounts
               - path: /usr/src/app/upload/thumbs
+          microservices:
+            app: *mounts
       encoded-video:
         existingClaim: immich-encoded-video
         advancedMounts:
           server:
-            immich-server:
+            app: &mounts
               - path: /usr/src/app/upload/encoded-video
+          microservices:
+            app: *mounts
       config:
         type: configMap
         name: immich-config
         advancedMounts:
           server:
-            immich-server:
+            app: &mounts
               - path: *config
                 subPath: config.yaml
+          microservices:
+            app: *mounts
       cache:
         existingClaim: immich-ml-cache
         advancedMounts:
           machine-learning:
-            immich-ml:
+            app:
               - path: /cache
       tmp:
         type: emptyDir
