@@ -30,7 +30,7 @@ spec:
       checkpoint_timeout: "${CNPG_CHECKPOINT_TIMEOUT:=10min}"
       max_wal_size: "${CNPG_MAX_WAL_SIZE:=512MB}"
       min_wal_size: "${CNPG_MIN_WAL_SIZE:=128MB}"
-      checkpoint_completion_target: "${CNPG_CHECKPOINT_COMPLETION_TARGET:=0.9}"
+      checkpoint_completion_target: "${CNPG_CHECKPOINT_COMPLETION_TARGET:='0.9'}"
 
       log_min_duration_statement: "500"
       log_checkpoints: "on"
@@ -38,7 +38,7 @@ spec:
       log_temp_files: "128MB"
       log_lock_waits: "on"
 
-      autovacuum_vacuum_cost_limit: "${CNPG_AUTOVACUUM_COST_LIMIT:=2000}"
-      autovacuum_max_workers: "${CNPG_AUTOVACUUM_MAX_WORKERS:=3}"
+      autovacuum_vacuum_cost_limit: "${CNPG_AUTOVACUUM_COST_LIMIT:='2000'}"
+      autovacuum_max_workers: "${CNPG_AUTOVACUUM_MAX_WORKERS:='3'}"
       autovacuum_naptime: "${CNPG_AUTOVACUUM_NAPTIME:=20s}"
 
