@@ -239,5 +239,9 @@ spec:
           machine-learning:
             app:
               - path: /cache
+              - path: /.config/matplotlib
+                subPath: matplotlib-config
+              - path: /.cache/matplotlib
+                subPath: matplotlib-cache
       tmp:
         type: emptyDir
