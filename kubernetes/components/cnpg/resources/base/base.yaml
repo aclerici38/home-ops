@@ -5,10 +5,11 @@ kind: Cluster
 metadata:
   name: ${APP}-db
 spec:
-  instances: ${CNPG_REPLICAS:=1}
+  instances: ${CNPG_REPLICAS:=2}
+  primaryUpdateStrategy: unsupervised
+  primaryUpdateMethod: switchover
   # renovate: datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
   imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql:17.5}
-  primaryUpdateStrategy: unsupervised
   storage:
     size: ${CNPG_CAPACITY:=2Gi}
     storageClass: ${CNPG_STORAGECLASS:=zfs-nvme}
