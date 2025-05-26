@@ -76,12 +76,8 @@ spec:
                 memory: 200Mi
               limits:
                 memory: 2Gi
-                gpu.intel.com/i915: 1
       microservices:
         strategy: RollingUpdate
-        pod:
-          securityContext:
-            supplementalGroups: [44, 104, 109, 128, 226]
         containers:
           app:
             <<: *container
@@ -93,7 +89,8 @@ spec:
                 cpu: 100m
                 memory: 200Mi
               limits:
-                memory: 2Gi
+                memory: 8Gi
+                gpu.intel.com/i915: 1
             probes:
               liveness:
                 enabled: true
@@ -101,9 +98,6 @@ spec:
                 enabled: true
       machine-learning:
         strategy: RollingUpdate
-        pod:
-          securityContext:
-            supplementalGroups: [44, 104, 109, 128, 226]
         containers:
           app:
             image:
@@ -153,6 +147,8 @@ spec:
         fsGroup: 1000
         fsGroupChangePolicy: Always
         seccompProfile: { type: RuntimeDefault }
+        supplementalGroups:
+          - 44
     service:
       server:
         controller: server
