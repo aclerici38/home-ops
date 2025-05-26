@@ -84,13 +84,18 @@ spec:
             <<: *container
             env:
               <<: *env
-              IMMICH_WORKERS_INCLUDE: api
+              IMMICH_WORKERS_INCLUDE: microservices
             resources:
               requests:
                 cpu: 100m
                 memory: 200Mi
               limits:
                 memory: 2Gi
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
       machine-learning:
         strategy: RollingUpdate
         containers:
