@@ -23,10 +23,6 @@ spec:
   values:
     controllers:
       apt:
-        pod:
-          securityContext:
-            supplementalGroups:
-              - 20
         containers:
           *app : &container
             image:
@@ -118,6 +114,8 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: Always
+        supplementalGroups:
+          - 20
     service:
       apt:
         controller: apt
