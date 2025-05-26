@@ -91,11 +91,6 @@ spec:
                 memory: 200Mi
               limits:
                 memory: 2Gi
-            probes:
-              liveness:
-                enabled: true
-              readiness:
-                enabled: true
       machine-learning:
         strategy: RollingUpdate
         containers:
