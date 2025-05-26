@@ -46,6 +46,7 @@ spec:
               ImageZoom: false
               Style: transition
               Layout: single
+              ImageLocationFormat: City,State
             envFrom:
               - secretRef:
                   name: ${APP}-secret
