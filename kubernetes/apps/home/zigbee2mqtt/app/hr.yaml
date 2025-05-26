@@ -53,7 +53,7 @@ spec:
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_LEGACY_TRIGGERS: false
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_STATUS_TOPIC: homeassistant/status
               ZIGBEE2MQTT_CONFIG_MQTT_INCLUDE_DEVICE_INFORMATION: true
-              ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: *app
+              ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: z2m-apartment
               ZIGBEE2MQTT_CONFIG_MQTT_KEEPALIVE: 60
               ZIGBEE2MQTT_CONFIG_MQTT_REJECT_UNAUTHORIZED: true
               ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://vernemq.database.svc.cluster.local
@@ -106,6 +106,7 @@ spec:
               ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://10.0.30.102:6638
               ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack
               ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: 20
+              ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: z2m-house
             resources:
               <<: *res
               limits:
