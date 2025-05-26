@@ -23,6 +23,10 @@ spec:
   values:
     controllers:
       apt:
+        pod:
+          securityContext:
+            supplementalGroups:
+              - 20
         containers:
           *app : &container
             image:
@@ -99,12 +103,12 @@ spec:
             env:
               <<: *env
               ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://house-zigbee2mqtt.${SECRET_DOMAIN}
-              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
-              ZIGBEE2MQTT_CONFIG_SERIAL_RTSCTS: true
+              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://10.0.30.102:6638
+              ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack
+              ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: 20
             resources:
               <<: *res
               limits:
-                squat.ai/house-zigbee: 1
                 memory: 512Mi
     defaultPodOptions:
       securityContext:
@@ -113,8 +117,6 @@ spec:
         runAsGroup: 65534
         fsGroup: 65534
         fsGroupChangePolicy: Always
-        supplementalGroups:
-          - 20
     service:
       apt:
         controller: apt
