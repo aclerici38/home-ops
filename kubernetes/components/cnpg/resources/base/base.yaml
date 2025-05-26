@@ -8,6 +8,7 @@ spec:
   instances: ${CNPG_REPLICAS:=2}
   primaryUpdateStrategy: unsupervised
   primaryUpdateMethod: switchover
+  enablePDB: ${CNPG_PDB:=false}
   # renovate: datasource=docker depName=ghcr.io/cloudnative-pg/postgresql
   imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql:17.5}
   storage:
