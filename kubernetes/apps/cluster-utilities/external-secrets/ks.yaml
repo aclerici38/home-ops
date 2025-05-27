@@ -30,7 +30,6 @@ metadata:
   name: &app external-secrets-stores
   namespace: &ns cluster-utilities
 spec:
-  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
