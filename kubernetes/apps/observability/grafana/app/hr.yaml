@@ -119,6 +119,7 @@ spec:
             jsonData:
               implementation: prometheus
           - name: blocky-postgres
+            uid: blocky-postgres
             type: postgres
             access: proxy
             url: blocky-db-ro.network.svc.cluster.local:5432
