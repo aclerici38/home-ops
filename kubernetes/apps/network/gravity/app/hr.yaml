@@ -59,10 +59,10 @@ spec:
               - secretRef:
                   name: ${APP}-secret
             probes:
-              readiness: &probes
+              readiness:
                 enabled: true
                 custom: true
-                spec:
+                spec: &probes
                   httpGet:
                     path: /healthz/ready
                     port: &metrics 8009
@@ -74,7 +74,7 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  <<: &probes
+                  <<: *probes
                   httpGet:
                     path: /healthz/live
                     port: &metrics 8009
