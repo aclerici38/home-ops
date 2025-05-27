@@ -22,31 +22,33 @@ spec:
       retries: 1
   values:
     controllers:
-      etcd-1: &controller
+      etcd-1:
         strategy: RollingUpdate
         type: statefulset
         pod:
           nodeSelector:
             location: apartment
         containers:
-          app:
+          app: &container
             image:
               repository: quay.io/coreos/etcd
               tag: v3.5.21
             command:
               - /usr/local/bin/etcd
-              - --name=$(HOSTNAME)
-              - --initial-advertise-peer-urls=http://$(HOSTNAME):2380
+              - --name=$(POD_NAME)
+              - --data-dir=/data
+              - --initial-advertise-peer-urls=http://$(POD_NAME):2380
               - --listen-peer-urls=http://0.0.0.0:2380
               - --listen-client-urls=http://0.0.0.0:2379
-              - --advertise-client-urls=http://$(HOSTNAME):2379
+              - --advertise-client-urls=http://$(POD_NAME):2379
               - --heartbeat-interval=400
               - --election-timeout=2000
               - --initial-cluster=etcd-1=http://etcd-1:2380,etcd-2=http://etcd-2:2380,etcd-3=http://etcd-3:2380
               - --initial-cluster-state=new
               - --initial-cluster-token=$(ETCD_TOKEN)
             env:
-              ETCD_TOKEN:
+              POD_NAME: etcd-1
+              ETCD_TOKEN: &token
                 valueFrom:
                   secretKeyRef:
                     name: ${APP}-secret
@@ -58,15 +60,29 @@ spec:
                 drop:
                   - ALL
       etcd-2:
+        strategy: RollingUpdate
+        type: statefulset
         pod:
           nodeSelector:
             location: house
-        <<: *controller
+        containers:
+          app:
+            <<: *container
+            env:
+              POD_NAME: etcd-2
+              ETCD_TOKEN: *token
       etcd-3:
+        strategy: RollingUpdate
+        type: statefulset
         pod:
           nodeSelector:
-            location: cloud
-        <<: *controller
+            location: house
+        containers:
+          app:
+            <<: *container
+            env:
+              POD_NAME: etcd-3
+              ETCD_TOKEN: *token
     defaultPodOptions:
       tolerations:
         - key: "location"
@@ -98,7 +114,7 @@ spec:
         advancedMounts: &mount
           *instance :
             app:
-              - path: /etcd_data
+              - path: /data
       etcd-2:
         existingClaim: &instance etcd-2
         advancedMounts: *mount
