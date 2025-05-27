@@ -38,7 +38,7 @@ spec:
       CNPG_IMAGE: ghcr.io/tensorchord/cloudnative-vectorchord:17.5-0.3.0
       CNPG_CAPACITY: 20Gi
       # renovate: datasource=docker depName=ghcr.io/immich-app/immich-machine-learning
-      IMMICH_VERSION: v1.133.1
+      IMMICH_VERSION: v1.134.0
   patches:
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1
