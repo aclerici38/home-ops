@@ -111,13 +111,19 @@ spec:
     persistence:
       etcd-1:
         existingClaim: &instance etcd-1
-        advancedMounts: &mount
+        advancedMounts:
           *instance :
             app:
               - path: /data
       etcd-2:
         existingClaim: &instance etcd-2
-        advancedMounts: *mount
+        advancedMounts:
+          *instance :
+            app:
+              - path: /data
       etcd-3:
-        existingClaim: &instance etcd-2
-        advancedMounts: *mount
+        existingClaim: &instance etcd-3
+        advancedMounts:
+          *instance :
+            app:
+              - path: /data
