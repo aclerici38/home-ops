@@ -125,19 +125,19 @@ spec:
         ports: *ports
     persistence:
       etcd-1:
-        existingClaim: &instance etcd-1
+        existingClaim: &instance '1'
         advancedMounts:
           *instance :
             app:
               - path: /data
       etcd-2:
-        existingClaim: &instance etcd-2
+        existingClaim: &instance '2'
         advancedMounts:
           *instance :
             app:
               - path: /data
       etcd-3:
-        existingClaim: &instance etcd-3
+        existingClaim: &instance '3'
         advancedMounts:
           *instance :
             app:
