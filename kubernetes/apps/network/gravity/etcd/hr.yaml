@@ -102,7 +102,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       global:
-        controller: etcd-1
+        controller: '1'
         extraSelectorLabels:
           app.kubernetes.io/instance: *app
         ports:
@@ -111,17 +111,17 @@ spec:
           etcd-peer:
             port: 2380
       '1':
-        controller: etcd-1
+        controller: '1'
         ports: &ports
           etcd-client:
             port: 2379
           etcd-peer:
             port: 2380
       '2':
-        controller: etcd-2
+        controller: '2'
         ports: *ports
       '3':
-        controller: etcd-3
+        controller: '3'
         ports: *ports
     persistence:
       etcd-1:
