@@ -10,5 +10,6 @@ spec:
       server:
         caProvider:
           type: ConfigMap
+          namespace: cluster-utilities
           name: kube-root-ca.crt
           key: ca.crt
