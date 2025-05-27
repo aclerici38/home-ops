@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      1:
+      '1':
         strategy: RollingUpdate
         type: statefulset
         pod:
@@ -59,7 +59,7 @@ spec:
               capabilities:
                 drop:
                   - ALL
-      2:
+      '2':
         strategy: RollingUpdate
         type: statefulset
         pod:
@@ -71,7 +71,7 @@ spec:
             env:
               POD_NAME: gravity-etcd-2
               ETCD_TOKEN: *token
-      3:
+      '3':
         strategy: RollingUpdate
         type: statefulset
         pod:
@@ -110,17 +110,17 @@ spec:
             port: 2379
           etcd-peer:
             port: 2380
-      1:
+      '1':
         controller: etcd-1
         ports: &ports
           etcd-client:
             port: 2379
           etcd-peer:
             port: 2380
-      2:
+      '2':
         controller: etcd-2
         ports: *ports
-      3:
+      '3':
         controller: etcd-3
         ports: *ports
     persistence:
