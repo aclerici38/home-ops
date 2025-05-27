@@ -22,12 +22,19 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "house"
+              effect: "NoSchedule"
+          nodeSelector:
+            location: house
           securityContext:
             runAsUser: 65534
-            runAsGroup: 65533
-            fsGroup: 65533
+            runAsGroup: 65534
+            fsGroup: 65534
             fsGroupChangePolicy: Always
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
@@ -36,13 +43,13 @@ spec:
             k8s.v1.cni.cncf.io/networks: |
               [
                 {
-                  "name":"multus-apt-net",
+                  "name":"multus-house-net",
                   "namespace": "network",
-                  "ips": ["192.168.1.25/24"]
+                  "ips": ["10.0.40.28/24"]
                 }
               ]
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/home-operations/home-assistant
               tag: 2025.5.3
@@ -61,12 +68,12 @@ spec:
                   - ALL
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: 8123
     route:
-      app:
+      *app :
         hostnames:
           - hass.${SECRET_DOMAIN}
         parentRefs:
@@ -80,15 +87,10 @@ spec:
     persistence:
       config:
         existingClaim: *app
-        globalMounts:
-          - path: /config
       hass-cache:
         existingClaim: hass-cache
-        advancedMounts:
-          main:
-            *app :
-              - path: /venv
-                subPath: hass-venv
+        globalMounts:
+          - path: /venv
       dockerenv:
         # Because of https://github.com/home-assistant/core/blob/0d66d298ec57b8e50379cc2ec31cbebf771705c3/homeassistant/util/package.py#L29
         enabled: true
@@ -110,8 +112,6 @@ spec:
       dbus:
         type: hostPath
         hostPath: /run/dbus
-        advancedMounts:
-          main :
-            *app :
-              - path: /run/dbus
-                readOnly: true
+        globalMounts:
+          - path: /run/dbus
+            readOnly: true
