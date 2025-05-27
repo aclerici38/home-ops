@@ -103,6 +103,7 @@ spec:
     service:
       apartment:
         controller: apartment
+        clusterIP: None
         ports: &ports
           etcd-client:
             port: 2379
@@ -110,9 +111,11 @@ spec:
             port: 2380
       house:
         controller: house
+        clusterIP: None
         ports: *ports
       cloud:
         controller: cloud
+        clusterIP: None
         ports: *ports
     persistence:
       etcd-apartment:
