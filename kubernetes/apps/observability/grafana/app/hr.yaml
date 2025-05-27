@@ -222,6 +222,13 @@ spec:
           datasource:
             - name: DS_BLOCKY-POSTGRESQL
               value: blocky-postgres
+        vernemq:
+          # renovate: depName="VerneMQ Cluster"
+          gnetId: 23485
+          revision: 1
+          datasource:
+            - name: DS_PROMETHEUS
+              value: Prometheus
     sidecar:
       dashboards:
         enabled: true
