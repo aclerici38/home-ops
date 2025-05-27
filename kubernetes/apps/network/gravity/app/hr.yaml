@@ -51,7 +51,7 @@ spec:
               tag: v0.27.0
             env:
               BOOTSTRAP_ROLES: dns;dhcp;api;discovery;monitoring;tsdb;tftp
-              LOG_LEVEL: info
+              LOG_LEVEL: debug
               # INSTANCE_IP: &lbIp 10.38.55.26
               INSTANCE_LISTEN: 0.0.0.0
               ETCD_ENDPOINT: gravity-etcd-global

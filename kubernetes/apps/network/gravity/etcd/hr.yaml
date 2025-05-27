@@ -101,15 +101,6 @@ spec:
         fsGroupChangePolicy: Always
         seccompProfile: { type: RuntimeDefault }
     service:
-      global:
-        controller: apartment
-        extraSelectorLabels:
-          app.kubernetes.io/instance: *app
-        ports:
-          etcd-client:
-            port: 2379
-          etcd-peer:
-            port: 2380
       apartment:
         controller: apartment
         ports: &ports
