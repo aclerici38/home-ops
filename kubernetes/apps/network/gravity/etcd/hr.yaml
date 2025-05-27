@@ -37,10 +37,10 @@ spec:
               - /usr/local/bin/etcd
               - --name=$(POD_NAME)
               - --data-dir=/data
-              - --initial-advertise-peer-urls=http://$(POD_NAME)-0:2380
+              - --initial-advertise-peer-urls=http://$(POD_NAME):2380
               - --listen-peer-urls=http://0.0.0.0:2380
               - --listen-client-urls=http://0.0.0.0:2379
-              - --advertise-client-urls=http://$(POD_NAME)-0:2379
+              - --advertise-client-urls=http://$(POD_NAME):2379
               - --heartbeat-interval=400
               - --election-timeout=2000
               - --initial-cluster=gravity-etcd-apartment=http://gravity-etcd-apartment:2380,gravity-etcd-house=http://gravity-etcd-house:2380,gravity-etcd-cloud=http://gravity-etcd-cloud:2380
