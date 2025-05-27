@@ -125,19 +125,19 @@ spec:
         ports: *ports
     persistence:
       etcd-apartment:
-        existingClaim: &instance apartment
+        existingClaim: &instance etcd-apartment
         advancedMounts:
           *instance :
             app:
               - path: /data
       etcd-house:
-        existingClaim: &instance house
+        existingClaim: &instance etcd-house
         advancedMounts:
           *instance :
             app:
               - path: /data
       etcd-cloud:
-        existingClaim: &instance cloud
+        existingClaim: &instance etcd-cloud
         advancedMounts:
           *instance :
             app:

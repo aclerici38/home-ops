@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: etcd-1
+  name: etcd-apartment
 spec:
   storageClassName: zfs-nvme
   resources:
@@ -14,7 +14,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: etcd-2
+  name: etcd-house
 spec:
   storageClassName: local-hostpath-posey
   resources:
@@ -26,7 +26,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: etcd-3
+  name: etcd-cloud
 spec:
   storageClassName: local-hostpath-madbum
   resources:
