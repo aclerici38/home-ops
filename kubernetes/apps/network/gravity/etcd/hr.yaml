@@ -76,7 +76,7 @@ spec:
         type: statefulset
         pod:
           nodeSelector:
-            location: house
+            location: cloud
         containers:
           app:
             <<: *container
