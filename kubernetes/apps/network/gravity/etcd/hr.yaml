@@ -37,10 +37,10 @@ spec:
               - /usr/local/bin/etcd
               - --name=$(POD_NAME)
               - --data-dir=/data
-              - --initial-advertise-peer-urls=http://$(POD_NAME):2380
+              - --initial-advertise-peer-urls=http://$(POD_NAME)-0:2380
               - --listen-peer-urls=http://0.0.0.0:2380
               - --listen-client-urls=http://0.0.0.0:2379
-              - --advertise-client-urls=http://$(POD_NAME):2379
+              - --advertise-client-urls=http://$(POD_NAME)-0:2379
               - --heartbeat-interval=400
               - --election-timeout=2000
               - --initial-cluster=etcd-1=http://etcd-1:2380,etcd-2=http://etcd-2:2380,etcd-3=http://etcd-3:2380
@@ -101,7 +101,7 @@ spec:
         fsGroupChangePolicy: Always
         seccompProfile: { type: RuntimeDefault }
     service:
-      *app :
+      global:
         controller: etcd-1
         extraSelectorLabels:
           app.kubernetes.io/instance: *app
@@ -110,6 +110,19 @@ spec:
             port: 2379
           etcd-peer:
             port: 2380
+      etcd-1:
+        controller: etcd-1
+        ports: &ports
+          etcd-client:
+            port: 2379
+          etcd-peer:
+            port: 2380
+      etcd-2:
+        controller: etcd-2
+        ports: *ports
+      etcd-3:
+        controller: etcd-3
+        ports: *ports
     persistence:
       etcd-1:
         existingClaim: &instance etcd-1

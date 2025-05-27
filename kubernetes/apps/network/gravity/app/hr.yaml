@@ -54,7 +54,7 @@ spec:
               LOG_LEVEL: info
               INSTANCE_IP: &lbIp 10.38.55.26
               INSTANCE_LISTEN: 0.0.0.0
-              ETCD_ENDPOINT: gravity-etcd
+              ETCD_ENDPOINT: gravity-etcd-global
             envFrom:
               - secretRef:
                   name: ${APP}-secret
