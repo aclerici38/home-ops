@@ -92,7 +92,7 @@ spec:
               repository: ghcr.io/ivvija/blocky-ui
               tag: v0.1@sha256:ae84fc71b4550f34a06c0cc8acce78d2accb8de8c57ce220e6b293cfa6689e20
             env:
-              API_BASE_URL: http://blocky:4000/api
+              API_BASE_URL: http://blocky-http:4000/api
             securityContext: *sec
     defaultPodOptions:
       tolerations:
@@ -117,7 +117,7 @@ spec:
         runAsGroup: 65534
         seccompProfile: { type: RuntimeDefault }
     service:
-      *app :
+      http:
         controller: *app
         ports:
           http:
