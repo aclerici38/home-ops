@@ -1,15 +1,15 @@
-# home/eso-k8s-store-sa.yaml
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: k8s-home-sa
-  namespace: home
+  name: k8s-network-sa
+  namespace: network
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: read-blocky-db-secret
-  namespace: home
+  namespace: network
 rules:
   - apiGroups: [""]
     resources: ["secrets"]
@@ -23,11 +23,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: bind-read-blocky-db-secret
-  namespace: home
+  namespace: network
 subjects:
   - kind: ServiceAccount
-    name: k8s-home-sa
-    namespace: home
+    name: k8s-network-sa
+    namespace: network
 roleRef:
   kind: Role
   name: read-blocky-db-secret
