@@ -10,6 +10,8 @@ spec:
   dependsOn:
     - name: cloudnative-pg
       namespace: database
+    - name: external-secrets-stores
+      namespace: cluster-utilities
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

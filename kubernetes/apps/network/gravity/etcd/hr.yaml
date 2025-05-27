@@ -1,0 +1,107 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app gravity-etcd
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      etcd-1: &controller
+        strategy: RollingUpdate
+        type: statefulset
+        pod:
+          nodeSelector:
+            location: apartment
+        containers:
+          app:
+            image:
+              repository: quay.io/coreos/etcd
+              tag: v3.5.21
+            command:
+              - /usr/local/bin/etcd
+              - --name=$(HOSTNAME)
+              - --initial-advertise-peer-urls=http://$(HOSTNAME):2380
+              - --listen-peer-urls=http://0.0.0.0:2380
+              - --listen-client-urls=http://0.0.0.0:2379
+              - --advertise-client-urls=http://$(HOSTNAME):2379
+              - --heartbeat-interval=500
+              - --election-timeout=2000
+              - --initial-cluster=etcd-1=http://etcd-1:2380,etcd-2=http://etcd-2:2380,etcd-3=http://etcd-3:2380
+              - --initial-cluster-state=new
+              - --initial-cluster-token=$(ETCD_TOKEN)
+            env:
+              ETCD_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-secret
+                    key: ETCD_TOKEN
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+      etcd-2:
+        pod:
+          nodeSelector:
+            location: house
+        <<: *controller
+      etcd-3:
+        pod:
+          nodeSelector:
+            location: cloud
+        <<: *controller
+    defaultPodOptions:
+      tolerations:
+        - key: "location"
+          operator: "Equal"
+          value: "house"
+          effect: "NoSchedule"
+        - key: "location"
+          operator: "Equal"
+          value: "cloud"
+          effect: "NoSchedule"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      *app :
+        controller: etcd-1
+        extraSelectorLabels:
+          app.kubernetes.io/instance: *app
+        ports:
+          etcd-client:
+            port: 2379
+          etcd-peer:
+            port: 2380
+    persistence:
+      etcd-1:
+        existingClaim: &instance etcd-1
+        advancedMounts: &mount
+          *instance :
+            app:
+              - path: /etcd_data
+      etcd-2:
+        existingClaim: &instance etcd-2
+        advancedMounts: *mount
+      etcd-3:
+        existingClaim: &instance etcd-2
+        advancedMounts: *mount

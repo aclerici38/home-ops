@@ -1,0 +1,143 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app gravity
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  dependsOn:
+    - name: gravity-etcd
+  values:
+    controllers:
+      *app :
+        strategy: RollingUpdate
+        type: statefulset
+        replicas: 5
+        pod:
+          hostname: gravity
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "house"
+              effect: "NoSchedule"
+            - key: "location"
+              operator: "Equal"
+              value: "cloud"
+              effect: "NoSchedule"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            runAsGroup: 65534
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          app:
+            image:
+              repository: ghcr.io/beryju/gravity
+              tag: v0.27.0
+            env:
+              BOOTSTRAP_ROLES: dns;dhcp;api;discovery;monitoring;tsdb;tftp
+              LOG_LEVEL: info
+              INSTANCE_IP: &lbIp 10.38.55.26
+              INSTANCE_LISTEN: 0.0.0.0
+              ETCD_ENDPOINT: gravity-etcd
+            envFrom:
+              - secretRef:
+                  name: ${APP}-secret
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz/ready
+                    port: &metrics 8009
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  <<: &probes
+                  httpGet:
+                    path: /healthz/live
+                    port: &metrics 8009
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                add:
+                  - NET_BIND_SERVICE
+                drop:
+                  - ALL
+    service:
+      http:
+        controller: *app
+        ports:
+          http:
+            port: &port 8008
+          metrics:
+            port: *metrics
+      external-dns:
+        controller: *app
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        annotations:
+          lbipam.cilium.io/ips: *lbIp
+        ports: &dnsPorts
+          dns-tcp:
+            port: 53
+            protocol: TCP
+          dns-udp:
+            primary: true
+            port: 53
+            protocol: UDP
+          dns-tls:
+            port: 853
+            protocol: TCP
+          dhcp:
+            port: 67
+            protocol: UDP
+          dhcp-alt:
+            port: 68
+            protocol: UDP
+          tftp:
+            port: 69
+            protocol: UDP
+      # internal-dns:
+      #   controller: *app
+      #   clusterIP: 172.17.0.11
+      #   ports: *dnsPorts
+    route:
+      *app :
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: http
+                port: *port
