@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      '1':
+      apartment:
         strategy: RollingUpdate
         type: statefulset
         pod:
@@ -43,11 +43,11 @@ spec:
               - --advertise-client-urls=http://$(POD_NAME)-0:2379
               - --heartbeat-interval=400
               - --election-timeout=2000
-              - --initial-cluster=etcd-1=http://gravity-etcd-1:2380,etcd-2=http://gravity-etcd-2:2380,etcd-3=http://gravity-etcd-3:2380
+              - --initial-cluster=etcd-apartment=http://gravity-etcd-apartment:2380,etcd-house=http://gravity-etcd-house:2380,etcd-cloud=http://gravity-etcd-cloud:2380
               - --initial-cluster-state=new
               - --initial-cluster-token=$(ETCD_TOKEN)
             env:
-              POD_NAME: gravity-etcd-1
+              POD_NAME: gravity-etcd-apartment
               ETCD_TOKEN: &token
                 valueFrom:
                   secretKeyRef:
@@ -59,7 +59,7 @@ spec:
               capabilities:
                 drop:
                   - ALL
-      '2':
+      house:
         strategy: RollingUpdate
         type: statefulset
         pod:
@@ -69,9 +69,9 @@ spec:
           app:
             <<: *container
             env:
-              POD_NAME: gravity-etcd-2
+              POD_NAME: gravity-etcd-house
               ETCD_TOKEN: *token
-      '3':
+      cloud:
         strategy: RollingUpdate
         type: statefulset
         pod:
@@ -81,7 +81,7 @@ spec:
           app:
             <<: *container
             env:
-              POD_NAME: gravity-etcd-3
+              POD_NAME: gravity-etcd-cloud
               ETCD_TOKEN: *token
     defaultPodOptions:
       tolerations:
@@ -102,7 +102,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       global:
-        controller: '1'
+        controller: apartment
         extraSelectorLabels:
           app.kubernetes.io/instance: *app
         ports:
@@ -110,34 +110,34 @@ spec:
             port: 2379
           etcd-peer:
             port: 2380
-      '1':
-        controller: '1'
+      apartment:
+        controller: apartment
         ports: &ports
           etcd-client:
             port: 2379
           etcd-peer:
             port: 2380
-      '2':
-        controller: '2'
+      house:
+        controller: house
         ports: *ports
-      '3':
-        controller: '3'
+      cloud:
+        controller: cloud
         ports: *ports
     persistence:
-      etcd-1:
-        existingClaim: &instance '1'
+      etcd-apartment:
+        existingClaim: &instance apartment
         advancedMounts:
           *instance :
             app:
               - path: /data
-      etcd-2:
-        existingClaim: &instance '2'
+      etcd-house:
+        existingClaim: &instance house
         advancedMounts:
           *instance :
             app:
               - path: /data
-      etcd-3:
-        existingClaim: &instance '3'
+      etcd-cloud:
+        existingClaim: &instance cloud
         advancedMounts:
           *instance :
             app:
