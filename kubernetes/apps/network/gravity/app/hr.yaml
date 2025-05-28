@@ -99,7 +99,7 @@ spec:
           http:
             port: &port 8008
           metrics:
-            port: *metrics
+            port: 8009
       external-dns:
         controller: *app
         type: LoadBalancer
