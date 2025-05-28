@@ -6,24 +6,24 @@ metadata:
   name: &app gravity
   namespace: &ns network
 spec:
-  path: ./kubernetes/apps/network/gravity/app
-  components:
-    - ../../../../components/external-secret
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  interval: 30m
-  timeout: 3m
   targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  path: ./kubernetes/apps/network/gravity/app
+  components:
+    - ../../../../components/external-secret
   dependsOn:
     - name: external-secrets-stores
       namespace: cluster-utilities
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  prune: true
+  wait: false
+  interval: 30m
+  timeout: 5m
   postBuild:
     substitute:
       APP: *app
@@ -35,25 +35,24 @@ metadata:
   name: &app gravity-etcd
   namespace: &ns network
 spec:
-  path: ./kubernetes/apps/network/gravity/etcd
-  components:
-    - ../../../../components/external-secret
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  interval: 30m
-  timeout: 3m
   targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  path: ./kubernetes/apps/network/gravity-etcd/app
+  components:
+    - ../../../../components/external-secret
   dependsOn:
     - name: external-secrets-stores
       namespace: cluster-utilities
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  prune: true
+  wait: false
+  interval: 30m
+  timeout: 5m
   postBuild:
     substitute:
       APP: *app
-
