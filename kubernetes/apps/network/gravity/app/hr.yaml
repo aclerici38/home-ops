@@ -95,18 +95,16 @@ spec:
     service:
       http:
         controller: *app
-        ports:
-          http:
-            port: &port 8008
-          metrics:
-            port: 8009
-      external-dns:
-        controller: *app
         type: LoadBalancer
         externalTrafficPolicy: Local
         annotations:
           lbipam.cilium.io/ips: 10.38.55.26
-        ports: &dnsPorts
+        ports: &ports
+          http:
+            port: &port 8008
+            primary: true
+          metrics:
+            port: 8009
           dns-tcp:
             port: 53
             protocol: TCP
@@ -129,7 +127,7 @@ spec:
       # internal-dns:
       #   controller: *app
       #   clusterIP: 172.17.0.11
-      #   ports: *dnsPorts
+      #   ports: *ports
     route:
       *app :
         hostnames:
