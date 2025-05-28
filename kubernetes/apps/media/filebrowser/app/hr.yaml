@@ -84,8 +84,8 @@ spec:
         existingClaim: filebrowser
         globalMounts:
           - path: /home/filebrowser/database
-      tmp:
-        type: emptyDir
+      cache:
+        existingClaim: filebrowser-cache
       config:
         type: configMap
         name: filebrowser-config
