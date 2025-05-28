@@ -46,13 +46,6 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media/filebrowser/config
   prune: true
-  dependsOn:
-    - name: volsync
-      namespace: storage
-    - name: minio
-      namespace: cluster-utilities
-    - name: media-zfs-volume
-      namespace: openebs-system
   sourceRef:
     kind: GitRepository
     name: flux-system
