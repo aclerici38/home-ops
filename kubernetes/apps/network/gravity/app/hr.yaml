@@ -41,8 +41,8 @@ spec:
               effect: "NoSchedule"
           securityContext:
           #   runAsNonRoot: true
-          #   runAsUser: 65534
-          #   runAsGroup: 65534
+            runAsUser: 0
+            runAsGroup: 0
             seccompProfile: { type: Unconfined }
         containers:
           app:
@@ -84,11 +84,12 @@ spec:
               limits:
                 memory: 512Mi
             securityContext:
+              privileged: true
             #   allowPrivilegeEscalation: false
             #   readOnlyRootFilesystem: true
-              capabilities:
-                add:
-                  - SYS_ADMIN
+              # capabilities:
+              #   add:
+              #     - SYS_ADMIN
             #     drop:
             #       - ALL
     service:
