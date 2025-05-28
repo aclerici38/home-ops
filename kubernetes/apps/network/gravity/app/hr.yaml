@@ -50,14 +50,14 @@ spec:
               repository: ghcr.io/beryju/gravity
               tag: v0.27.0
             env:
-              BOOTSTRAP_ROLES: dns;dhcp;api;discovery;monitoring;tsdb;tftp
+              # BOOTSTRAP_ROLES: dns;dhcp;api;discovery;monitoring;tsdb;tftp
               LOG_LEVEL: debug
               INSTANCE_IP: &lbIp 10.38.55.26
               INSTANCE_LISTEN: 0.0.0.0
-              ETCD_ENDPOINT: gravity-etcd-global
-            envFrom:
-              - secretRef:
-                  name: ${APP}-secret
+              ETCD_ENDPOINT: gravity-etcd-global.network.svc.cluster.local
+            # envFrom:
+            #   - secretRef:
+            #       name: ${APP}-secret
             # probes:
             #   readiness:
             #     enabled: true
