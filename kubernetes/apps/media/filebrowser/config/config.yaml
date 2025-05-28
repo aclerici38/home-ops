@@ -1,0 +1,20 @@
+server:
+  port: 8080
+  externalUrl: https://filebrowser.${SECRET_DOMAIN}
+  internalUrl: http://filebrowser.media.svc.cluster.local:8080
+  cacheDir: /cache
+  database: /home/filebrowser/database/filebrowser.db
+  sources:
+    - name: media
+      path: /mnt/media
+auth:
+  methods:
+    noauth: false
+    password:
+      enabled: false
+    oidc:
+      enabled: true
+      clientId: "${CLIENT_ID}"
+      clientSecret: "${CLIENT_SECRET}"
+      issuerUrl: https://id.${SECRET_DOMAIN}
+      scopes: "email openid profile"
