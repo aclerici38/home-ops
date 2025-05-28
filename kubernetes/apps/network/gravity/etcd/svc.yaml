@@ -6,6 +6,7 @@ metadata:
 spec:
   selector:
     app.kubernetes.io/instance: gravity-etcd
+  internalTrafficPolicy: Local
   ports:
     - name: etcd-client
       port: 2379
