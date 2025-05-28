@@ -58,26 +58,26 @@ spec:
             envFrom:
               - secretRef:
                   name: ${APP}-secret
-            probes:
-              readiness:
-                enabled: true
-                custom: true
-                spec: &probes
-                  httpGet:
-                    path: /healthz/ready
-                    port: &metrics 8009
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              liveness:
-                enabled: true
-                custom: true
-                spec:
-                  <<: *probes
-                  httpGet:
-                    path: /healthz/live
-                    port: &metrics 8009
+            # probes:
+            #   readiness:
+            #     enabled: true
+            #     custom: true
+            #     spec: &probes
+            #       httpGet:
+            #         path: /healthz/ready
+            #         port: &metrics 8009
+            #       initialDelaySeconds: 0
+            #       periodSeconds: 10
+            #       timeoutSeconds: 1
+            #       failureThreshold: 3
+            #   liveness:
+            #     enabled: true
+            #     custom: true
+            #     spec:
+            #       <<: *probes
+            #       httpGet:
+            #         path: /healthz/live
+                    # port: &metrics 8009
             resources:
               requests:
                 cpu: 10m
