@@ -39,7 +39,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/network/gravity-etcd/app
+  path: ./kubernetes/apps/network/gravity/etcd
   components:
     - ../../../../components/external-secret
   dependsOn:
