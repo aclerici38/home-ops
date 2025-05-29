@@ -45,10 +45,7 @@ spec:
             image:
               repository: docker.io/octoprint/octoprint
               tag: 1.11.1-minimal
-            command: ["octoprint"]
             args:
-              - "--basedir=/octoprint/octoprint"
-              - "serve"
               - "--port=5000"
             env:
               VENV_FOLDER: /venv
