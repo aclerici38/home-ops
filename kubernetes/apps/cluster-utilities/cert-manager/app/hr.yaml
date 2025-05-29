@@ -26,6 +26,15 @@ spec:
     replicaCount: 1
     dns01RecursiveNameservers: https://1.1.1.1:443/dns-query,https://1.0.0.1:443/dns-query
     dns01RecursiveNameserversOnly: true
+    tolerations:
+      - key: "location"
+        operator: "Equal"
+        value: "cloud"
+        effect: "NoSchedule"
+      - key: "location"
+        operator: "Equal"
+        value: "house"
+        effect: "NoSchedule"
     prometheus:
       enabled: true
       servicemonitor:
