@@ -1,0 +1,87 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app octoprint
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      *app :
+        pod:
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "house"
+              effect: "NoSchedule"
+          nodeSelector:
+            location: house
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
+            supplementalGroups:
+              - 20
+        containers:
+          app:
+            image:
+              repository: docker.io/octoprint/octoprint
+              tag: 1.11.1-minimal
+            command: ["octoprint"]
+            args:
+              - "--basedir=/octoprint/octoprint"
+              - "serve"
+              - "--port=5000"
+            env:
+              VENV_FOLDER: /venv
+            resources:
+              requests:
+                cpu: 50m
+              limits:
+                memory: 500Mi
+                squat.ai/anycubic-kobra: 1
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      *app :
+        controller: *app
+        ports:
+          http:
+            port: &port 5000
+    route:
+      *app :
+        hostnames:
+          - hass.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: *app
+                port: *port
+    persistence:
+      octoprint:
+        existingClaim: *app
