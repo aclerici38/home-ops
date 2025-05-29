@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
@@ -92,7 +92,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       sonarr:
-        controller: main
+        controller: *app
         ports:
           http:
             port: *port

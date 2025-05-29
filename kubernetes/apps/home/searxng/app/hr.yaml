@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           nodeSelector:
             location: "cloud"
@@ -40,7 +40,7 @@ spec:
             seccompProfile: { type: RuntimeDefault }
         strategy: RollingUpdate
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/searxng/searxng
               tag: 2025.5.28-2288f07
@@ -85,7 +85,7 @@ spec:
 
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: *port

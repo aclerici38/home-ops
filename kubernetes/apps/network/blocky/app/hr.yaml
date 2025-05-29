@@ -26,7 +26,7 @@ spec:
         strategy: RollingUpdate
         replicas: 6
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/0xerr0r/blocky
               tag: v0.26.2

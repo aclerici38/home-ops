@@ -57,7 +57,7 @@ spec:
                   - NET_ADMIN
               readOnlyRootFilesystem: false
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/bitmagnet-io/bitmagnet
               tag: v0.10.0@sha256:cf2c16fac5b51f1c18e630b4710175d35d7e44b83012cfd05a2b43712feec05e

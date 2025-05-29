@@ -22,10 +22,10 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         strategy: RollingUpdate
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/open-webui/open-webui
               tag: 0.6.12@sha256:25742de8224233a186cf517144506d001e6588c1b9d53f5b3a02c15b180107e2
@@ -75,7 +75,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: &port 8080

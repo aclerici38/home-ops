@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
@@ -36,7 +36,7 @@ spec:
             supplementalGroups:
               - 44
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/home-operations/plex
               tag: 1.41.7.9823
@@ -74,7 +74,7 @@ spec:
                 memory: 6Gi
     service:
       *app :
-        controller: main
+        controller: *app
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 10.38.55.5

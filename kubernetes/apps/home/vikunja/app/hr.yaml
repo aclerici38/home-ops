@@ -22,9 +22,9 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         containers:
-          *app :
+          app:
             image:
               repository: docker.io/vikunja/vikunja
               tag: 0.24.6@sha256:ed1f3ed467fecec0b57e9de7bc6607f8bbcbb23ffced6a81f5dfefc794cdbe3b
@@ -103,7 +103,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: *port

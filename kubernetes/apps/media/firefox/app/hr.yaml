@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           affinity:
             nodeAffinity:
@@ -40,7 +40,7 @@ spec:
             supplementalGroups:
               - 44
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/linuxserver/firefox
               tag: 138.0.4@sha256:1fa495bfaf5d27640fc6aa87ca470be934b0360c6113ad9fbd7ecd4ef5e08b3f
@@ -69,7 +69,7 @@ spec:
                 gpu.intel.com/i915: 1
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: &port 3000

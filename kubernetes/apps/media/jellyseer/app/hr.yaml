@@ -32,7 +32,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/fallenbagel/jellyseerr
               tag: 2.5.2@sha256:2a611369ad1d0d501c2d051fc89b6246ff081fb4a30879fdc75642cf6a37b1a6

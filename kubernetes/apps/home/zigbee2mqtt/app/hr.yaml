@@ -24,7 +24,7 @@ spec:
     controllers:
       apt:
         containers:
-          *app : &container
+          app: &container
             image:
               repository: ghcr.io/koenkk/zigbee2mqtt
               tag: 2.3.0
@@ -94,7 +94,7 @@ spec:
           nodeSelector:
             location: house
         containers:
-          *app :
+          app:
             <<: *container
             env:
               <<: *env

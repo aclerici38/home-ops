@@ -22,10 +22,10 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         strategy: RollingUpdate
         containers:
-          *app :
+          app:
             image:
               repository: quay.io/aminvakil/alpine-nfs-server
               tag: latest@sha256:b4b6fda64e589b78043af5a771cc0651e65fb913641b9b7929448d367975e5b3
@@ -63,7 +63,7 @@ spec:
               #     - SETPCAP
     service:
       *app : &svc
-        controller: main
+        controller: *app
         type: LoadBalancer
         annotations:
           io.cilium/lb-ipam-ips: 10.38.55.10
