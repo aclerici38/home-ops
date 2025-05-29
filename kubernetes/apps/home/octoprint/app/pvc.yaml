@@ -9,3 +9,14 @@ spec:
     requests:
       storage: 25Gi
   storageClassName: local-hostpath-posey
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ${APP}-cache
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: local-hostpath-posey

@@ -48,7 +48,7 @@ spec:
             args:
               - "--port=5000"
             env:
-              VENV_FOLDER: /venv
+              PIP_CACHE_DIR: /cache
             resources:
               requests:
                 cpu: 50m
@@ -72,7 +72,7 @@ spec:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:
-          - name: external
+          - name: internal
             namespace: network
             sectionName: https
         rules:
@@ -80,7 +80,9 @@ spec:
               - identifier: *app
                 port: *port
     persistence:
-      octoprint:
+      *app :
         existingClaim: *app
         globalMounts:
           - path: /octoprint/octoprint
+      cache:
+        existingClaim: octoprint-cache
