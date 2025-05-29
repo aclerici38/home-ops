@@ -82,3 +82,5 @@ spec:
     persistence:
       octoprint:
         existingClaim: *app
+        globalMounts:
+          - path: /octoprint/octoprint
