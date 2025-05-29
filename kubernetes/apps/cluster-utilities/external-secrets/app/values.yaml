@@ -4,15 +4,26 @@ installCRDs: true
 namespaceOverride: cluster-utilities
 replicaCount: 2
 leaderElect: true
+tolerations: &tol
+  - key: "location"
+    operator: "Equal"
+    value: "cloud"
+    effect: "NoSchedule"
+  - key: "location"
+    operator: "Equal"
+    value: "house"
+    effect: "NoSchedule"
 image:
   repository: ghcr.io/external-secrets/external-secrets
 webhook:
+  tolerations: *tol
   image:
     repository: ghcr.io/external-secrets/external-secrets
   serviceMonitor:
     enabled: true
     interval: 1m
 certController:
+  tolerations: *tol
   image:
     repository: ghcr.io/external-secrets/external-secrets
   serviceMonitor:

@@ -2,8 +2,23 @@ controllers:
   onepassword-connect:
     strategy: RollingUpdate
     replicas: 1
-    annotations:
-      reloader.stakater.com/auto: "true"
+    pod:
+      tolerations: &tol
+        - key: "location"
+          operator: "Equal"
+          value: "cloud"
+          effect: "NoSchedule"
+        - key: "location"
+          operator: "Equal"
+          value: "house"
+          effect: "NoSchedule"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 999
+        fsGroupChangePolicy: Always
+        seccompProfile: { type: RuntimeDefault }
     containers:
       api:
         image:
@@ -82,16 +97,8 @@ controllers:
               initialDelaySeconds: 15
         securityContext: *securityContext
         resources: *resources
-defaultPodOptions:
-  securityContext:
-    runAsNonRoot: true
-    runAsUser: 999
-    runAsGroup: 999
-    fsGroup: 999
-    fsGroupChangePolicy: Always
-    seccompProfile: { type: RuntimeDefault }
 service:
-  app:
+  onepassword-connect:
     controller: onepassword-connect
     ports:
       http:
