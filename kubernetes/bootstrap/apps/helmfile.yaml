@@ -122,7 +122,7 @@ releases:
     namespace: flux-system
     atomic: true
     chart: oci://ghcr.io/xunholy/charts/kustomize-mutating-webhook
-    version: 0.4.3
+    version: 0.5.0
     values:
       - /Users/anthony/home-ops/kubernetes/apps/flux-system/kustomize-mutating-webhook/app/values.yaml
     needs:
