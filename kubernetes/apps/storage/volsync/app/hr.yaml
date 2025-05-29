@@ -21,6 +21,15 @@ spec:
     remediation:
       retries: 1
   values:
+    tolerations:
+      - key: "location"
+        operator: "Equal"
+        value: "cloud"
+        effect: "NoSchedule"
+      - key: "location"
+        operator: "Equal"
+        value: "house"
+        effect: "NoSchedule"
     manageCRDs: true
     metrics:
       disableAuth: true

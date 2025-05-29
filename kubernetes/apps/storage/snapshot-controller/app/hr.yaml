@@ -22,6 +22,15 @@ spec:
       retries: 1
   values:
     controller:
+      tolerations:
+        - key: "location"
+          operator: "Equal"
+          value: "cloud"
+          effect: "NoSchedule"
+        - key: "location"
+          operator: "Equal"
+          value: "house"
+          effect: "NoSchedule"
       args:
         enableDistributedSnapshotting: true
       serviceMonitor:

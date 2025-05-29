@@ -27,11 +27,6 @@ sysctlfix:
   enabled: false
 hubble:
   enabled: true
-  tolerations:
-    - key: "location"
-      operator: "Equal"
-      value: "cloud"
-      effect: "NoSchedule"
   affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
@@ -42,6 +37,15 @@ hubble:
   ui:
     enabled: true
     rollOutPods: true
+    tolerations: &tol
+      - key: "location"
+        operator: "Equal"
+        value: "cloud"
+        effect: "NoSchedule"
+      - key: "location"
+        operator: "Equal"
+        value: "house"
+        effect: "NoSchedule"
   metrics:
     enabled:
       - "dns:query"
@@ -59,6 +63,7 @@ hubble:
   relay:
     enabled: true
     rollOutPods: true
+    tolerations: *tol
     prometheus:
       serviceMonitor:
         enabled: true
