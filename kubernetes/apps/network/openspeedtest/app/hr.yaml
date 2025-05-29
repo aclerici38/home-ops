@@ -22,9 +22,9 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         containers:
-          *app :
+          app:
             image:
               repository: docker.io/openspeedtest/latest
               tag: v2.0.6
@@ -51,7 +51,7 @@ spec:
                 memory: 2G
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: 3000

@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
@@ -34,7 +34,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/ant385525/calibre-web-automated
               tag: 3.0.4@sha256:a8cea956a0cdb90ee383ee71a4532549c4aded8952121a1b7d49ae2c6bf35716
@@ -60,7 +60,7 @@ spec:
                   - ALL
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: &port 8083

@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           securityContext:
             runAsNonRoot: true
@@ -32,7 +32,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/gtsteffaniak/filebrowser
               tag: 0.7.5-beta
@@ -61,7 +61,7 @@ spec:
                 memory: 1Gi
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: *port

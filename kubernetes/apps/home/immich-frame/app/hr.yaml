@@ -33,7 +33,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/immichframe/immichframe
               tag: v1.0.26.1

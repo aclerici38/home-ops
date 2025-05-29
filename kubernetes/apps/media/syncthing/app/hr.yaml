@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           nodeSelector:
             kubernetes.io/hostname: bonds
@@ -34,7 +34,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/syncthing/syncthing
               tag: 1.29.6
@@ -65,7 +65,7 @@ spec:
               readiness: *probes
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: &port 8384

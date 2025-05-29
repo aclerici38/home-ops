@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           securityContext:
             runAsUser: 1000
@@ -31,7 +31,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/joryirving/tautulli
               tag: 2.15.2
@@ -59,7 +59,7 @@ spec:
                 memory: 1Gi
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: *port

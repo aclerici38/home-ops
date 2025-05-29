@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           securityContext:
             runAsNonRoot: false
@@ -32,7 +32,7 @@ spec:
             supplementalGroups:
               - 44
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/linuxserver/inkscape
               tag: 1.4-r0-ls28@sha256:e9014bb38e3ef5cc521ff21a4baf22841ad286364ecc4ff4af5e98f6641a04e8
@@ -58,7 +58,7 @@ spec:
                 gpu.intel.com/i915: 1
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: &port 3000

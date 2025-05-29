@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           securityContext:
             runAsGroup: 1000
@@ -30,7 +30,7 @@ spec:
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/hollanbm/renamarr
               tag: 1.0.6@sha256:4795978d5edbeb087cc26c9c3874583ccab3f1327006efff8bd3541f8334c2b7
@@ -61,5 +61,5 @@ spec:
         type: configMap
     service:
       app:
-        controller: main
+        controller: *app
         enabled: false

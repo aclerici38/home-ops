@@ -22,11 +22,19 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65543
+            runAsGroup: 65543
+            fsGroup: 65543
+            fsGroupChangePolicy: Always
+            seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
-              repository: redis/redisinsight
+              repository: docker.io/redis/redisinsight
               tag: 2.70.0@sha256:d9f6c54d4a3dcfcdfd54659bd88b66ae883251cea0f6e73ae70ed74811f227f5
             env:
               RI_FILES_LOGGER: false
@@ -41,17 +49,9 @@ spec:
                 memory: 128Mi
               limits:
                 memory: 512Mi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 65543
-        runAsGroup: 65543
-        fsGroup: 65543
-        fsGroupChangePolicy: Always
-        seccompProfile: { type: RuntimeDefault }
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: &port 5540

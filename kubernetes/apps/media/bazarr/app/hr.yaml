@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
@@ -34,7 +34,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/home-operations/bazarr
               tag: 1.5.2
@@ -91,7 +91,7 @@ spec:
                 memory: 4Gi
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: *port

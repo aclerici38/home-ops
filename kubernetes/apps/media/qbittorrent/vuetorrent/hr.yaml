@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         strategy: RollingUpdate
         pod:
           nodeSelector:
@@ -34,7 +34,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/vuetorrent/vuetorrent-backend
               tag: 2.4.0
@@ -70,7 +70,7 @@ spec:
               QBIT_BASE: http://qbittorrent:8080
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: *port

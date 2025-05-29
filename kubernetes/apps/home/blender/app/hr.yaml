@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           securityContext:
             runAsNonRoot: false
@@ -32,7 +32,7 @@ spec:
             supplementalGroups:
               - 44
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/linuxserver/blender
               tag: 4.4.3@sha256:dc910756186873c36840ca568803e000cc6b518e391f5c72d7e212efbbb719ea
@@ -58,7 +58,7 @@ spec:
                 gpu.intel.com/i915: 1
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: &port 3000

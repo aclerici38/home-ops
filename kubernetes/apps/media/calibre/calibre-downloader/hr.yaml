@@ -21,7 +21,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           securityContext:
             runAsUser: 1000
@@ -30,7 +30,7 @@ spec:
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/calibrain/calibre-web-automated-book-downloader
               tag: 20250506@sha256:97a636efe3b78e1306ff521aa09256125aacdb1a04e628df294d7b6da3fe7b4a
@@ -69,7 +69,7 @@ spec:
               allowPrivilegeEscalation: false
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: *port

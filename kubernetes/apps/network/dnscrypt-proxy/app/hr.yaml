@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           tolerations:
             - key: "location"
@@ -36,7 +36,7 @@ spec:
         strategy: RollingUpdate
         replicas: 3
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/klutchell/dnscrypt-proxy
               tag: 2.1.12
@@ -72,7 +72,7 @@ spec:
               liveness: *probes
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           dns-tcp:
             targetPort: &targetPort 5053

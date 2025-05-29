@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           securityContext:
             runAsNonRoot: true
@@ -32,7 +32,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/mealie-recipes/mealie
               tag: v2.8.0@sha256:63aef46d90975d9cf9c0fdb9399fc2fe36acd222e1db6be99c504b9ccdbee967
@@ -87,7 +87,7 @@ spec:
                 memory: 2Gi
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: &port 9000

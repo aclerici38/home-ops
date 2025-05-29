@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           nodeSelector:
             location: cloud
@@ -37,7 +37,7 @@ spec:
             runAsGroup: 0
             seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/wg-easy/wg-easy
               tag: 15.0.0-beta.12
@@ -62,13 +62,13 @@ spec:
                   - ALL
     service:
       ui:
-        controller: main
+        controller: *app
         primary: true
         ports:
           http:
             port: &uiPort 51821
       wg:
-        controller: main
+        controller: *app
         type: NodePort
         ports:
           vpn:

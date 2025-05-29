@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           nodeSelector:
             kubernetes.io/hostname: "posey"
@@ -38,7 +38,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/blakeblackshear/frigate
               tag: 0.16.0-beta2@sha256:1e7eacf4259f9409f028535dc1b8cdc5d42fa66ec83ec45ff375682e8eca46e4
@@ -68,7 +68,7 @@ spec:
                 memory: 16Gi
     service:
       *app :
-        controller: main
+        controller: *app
         type: ClusterIP
         ports:
           http-auth:

@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      *app :
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
@@ -33,7 +33,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          *app :
+          app:
             image:
               repository: ghcr.io/advplyr/audiobookshelf
               tag: 2.23.0@sha256:2d8bee3e87e860d67e11e13b5c42d97cb1fe071de53dea5502b3a9292e75e024
@@ -64,7 +64,7 @@ spec:
                 memory: 5Gi
     service:
       *app :
-        controller: main
+        controller: *app
         ports:
           http:
             port: *port
