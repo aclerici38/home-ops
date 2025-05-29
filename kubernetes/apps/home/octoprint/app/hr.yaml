@@ -70,7 +70,7 @@ spec:
     route:
       *app :
         hostnames:
-          - hass.${SECRET_DOMAIN}
+          - ${APP}.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: network
