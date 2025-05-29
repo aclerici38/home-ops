@@ -26,7 +26,7 @@ spec:
     replicaCount: 2
     dns01RecursiveNameservers: https://1.1.1.1:443/dns-query,https://1.0.0.1:443/dns-query
     dns01RecursiveNameserversOnly: true
-    tolerations:
+    tolerations: &tol
       - key: "location"
         operator: "Equal"
         value: "cloud"
@@ -35,6 +35,10 @@ spec:
         operator: "Equal"
         value: "house"
         effect: "NoSchedule"
+    webhook:
+      tolerations: *tol
+    cainjector:
+      tolerations: *tol
     prometheus:
       enabled: true
       servicemonitor:
