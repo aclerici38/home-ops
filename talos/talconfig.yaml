@@ -62,6 +62,7 @@ nodes:
           - security=none
           - enforcing=0
           - -selinux
+          # - i915.enable_guc=2 # TODO HUC on intel arc card
         systemExtensions:
           officialExtensions:
             - siderolabs/i915
