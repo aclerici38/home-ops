@@ -34,7 +34,6 @@
       "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml$"],
       "matchStrings": [
         "imageName: (?<depName>[^\\s:]+):(?<currentValue>\\S+)(@(?<currentDigest>sha256:\\S+)?)",
-        "imageName: \\$\\{CNPG_IMAGE:=(?<depName>[^\\s:]+\\:(?<currentValue>\\S+)(@(?<currentDigest>sha256:\\S+)?)}",
         "imageName: \\$\\{CNPG_IMAGE:=(?<depName>[^:@\\s]+(?:/[^:@\\s]+)*):(?<currentValue>[^@\\s]+)@(?<currentDigest>sha256:[a-fA-F0-9]{64})}"
       ],
       "datasourceTemplate": "docker",
