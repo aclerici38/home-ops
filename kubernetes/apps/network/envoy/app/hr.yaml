@@ -24,7 +24,7 @@ spec:
     deployment:
       replicas: 2
       pod:
-        tolerations:
+        tolerations: &tol
           - key: "location"
             operator: "Equal"
             value: "cloud"
@@ -33,3 +33,6 @@ spec:
             operator: "Equal"
             value: "house"
             effect: "NoSchedule"
+    certgen:
+      job:
+        tolerations: *tol
