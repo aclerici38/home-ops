@@ -153,11 +153,11 @@ spec:
         existingClaim: *app
         advancedMounts:
           apt:
-            *app :
+            app:
               - path: /data
       house-data:
         existingClaim: z2m-house
         advancedMounts:
           house:
-            *app :
+            app:
               - path: /data
