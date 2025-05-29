@@ -24,13 +24,6 @@ spec:
     controllers:
       main:
         pod:
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "cloud"
-              effect: "NoSchedule"
-          nodeSelector:
-            kubernetes.io/hostname: cloud
           securityContext:
             runAsUser: 65534
             runAsGroup: 65533
@@ -93,6 +86,6 @@ spec:
                 port: *port
     persistence:
       data:
-        existingClaim: *app
+        type: emptyDir
         globalMounts:
           - path: /app/data
