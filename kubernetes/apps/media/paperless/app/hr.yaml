@@ -203,8 +203,8 @@ spec:
       data:
         existingClaim: *app
         advancedMounts:
-          main:
-            *app :
+          *app :
+            app:
               - path: /usr/src/paperless/data
                 subPath: data
               - path: /usr/src/paperless/media
@@ -212,14 +212,14 @@ spec:
       consume:
         existingClaim: paperless-consume
         advancedMounts:
-          main:
-            *app :
+          *app :
+            app:
               - path: /usr/src/paperless/consume
       export:
         existingClaim: paperless-export
         advancedMounts:
-          main:
-            *app :
+          *app :
+            app:
               - path: /usr/src/paperless/export
       tmp:
         type: emptyDir
