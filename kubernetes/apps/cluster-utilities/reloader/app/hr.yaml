@@ -28,3 +28,12 @@ spec:
       podMonitor:
         enabled: true
         namespace: "{{ .Release.Namespace }}"
+      tolerations:
+        - key: "location"
+          operator: "Equal"
+          value: "cloud"
+          effect: "NoSchedule"
+        - key: "location"
+          operator: "Equal"
+          value: "house"
+          effect: "NoSchedule"
