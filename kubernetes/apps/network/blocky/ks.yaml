@@ -29,6 +29,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      CNPG_STORAGECLASS: local-hostpath-madbum
   patches:
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1
