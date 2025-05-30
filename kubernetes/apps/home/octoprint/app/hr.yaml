@@ -47,8 +47,6 @@ spec:
               tag: 1.11.1-minimal
             args:
               - "--port=5000"
-            env:
-              PIP_CACHE_DIR: /cache
             resources:
               requests:
                 cpu: 50m
@@ -86,5 +84,3 @@ spec:
           - path: /octoprint/octoprint
           - path: /octoprint/plugins
             subPath: plugins
-      cache:
-        existingClaim: octoprint-cache
