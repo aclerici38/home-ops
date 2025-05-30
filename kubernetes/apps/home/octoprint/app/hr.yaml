@@ -84,5 +84,7 @@ spec:
         existingClaim: *app
         globalMounts:
           - path: /octoprint/octoprint
+          - path: /octoprint/plugins
+            subPath: plugins
       cache:
         existingClaim: octoprint-cache
