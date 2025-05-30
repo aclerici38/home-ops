@@ -40,7 +40,7 @@ spec:
             seccompProfile: { type: RuntimeDefault }
             supplementalGroups:
               - 20
-        # Octoprint saves plugins to /octoprint/plugins
+        # Octoprint saves plugins to /octoprint/plugins, I'd like to persist plugins
         # But this can't be mounted because the user's PATH is also /octoprint/plugins
         # Make sure this only runs on init and if plugins is empty obv
         # TODO build a custom container that fixes this
