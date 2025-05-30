@@ -22,6 +22,15 @@ spec:
       retries: 1
   values:
     replicaCount: 2
+    tolerations:
+      - key: "location"
+        operator: "Equal"
+        value: "cloud"
+        effect: "NoSchedule"
+      - key: "location"
+        operator: "Equal"
+        value: "house"
+        effect: "NoSchedule"
     manager:
       topologySpreadConstraints:
         - maxSkew: 1 # Skew of 1 allows for rolling updates
