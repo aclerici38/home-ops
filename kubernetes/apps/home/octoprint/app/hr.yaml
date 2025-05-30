@@ -40,6 +40,22 @@ spec:
             seccompProfile: { type: RuntimeDefault }
             supplementalGroups:
               - 20
+        # Octoprint saves plugins to /octoprint/plugins
+        # But this can't be mounted because the user's PATH is also /octoprint/plugins
+        # Make sure this only runs on init and if plugins is empty obv
+        # TODO build a custom container that fixes this
+        initContainers:
+          plugin-init:
+            image:
+              repository: docker.io/octoprint/octoprint
+              tag: 1.11.1-minimal
+            command:
+              - /bin/sh
+              - -c
+              - |
+                if [ -z "$(ls -A /tmp/plugins)" ]; then
+                  cp -r /octoprint/plugins/* /tmp/plugins/
+                fi
         containers:
           app:
             image:
@@ -82,3 +98,11 @@ spec:
         existingClaim: *app
         globalMounts:
           - path: /octoprint/octoprint
+      plugins:
+        existingClaim: octoprint-plugins
+        advancedMounts:
+          *app :
+            plugin-init:
+              - path: /tmp/plugins
+            app:
+              - path: /octoprint/plugins
