@@ -35,7 +35,7 @@ spec:
             runAsNonRoot: false
             runAsUser: 0
             runAsGroup: 0
-            fsGroupChangePolicy: Always
+            fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
         containers:
           app:
