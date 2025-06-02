@@ -46,7 +46,7 @@ spec:
         # TODO build a custom container that fixes this
         initContainers:
           plugin-init:
-            image:
+            image: &img
               repository: docker.io/octoprint/octoprint
               tag: 1.11.1-minimal
             command:
@@ -56,25 +56,22 @@ spec:
                 if [ -z "$(ls -A /tmp/plugins)" ]; then
                   cp -r /octoprint/plugins/* /tmp/plugins/
                 fi
+            securityContext: &sec
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
         containers:
           app:
-            image:
-              repository: docker.io/octoprint/octoprint
-              tag: 1.11.1-minimal
-            args:
-              - "--port=5000"
+            image: *img
             resources:
               requests:
                 cpu: 50m
               limits:
                 memory: 500Mi
                 squat.ai/anycubic-kobra: 1
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
+            securityContext: *sec
     service:
       *app :
         controller: *app
