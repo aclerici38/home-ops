@@ -37,19 +37,14 @@ spec:
       VOLSYNC_CAPACITY: 10Gi
   patches:
     - patch: |-
-        [{
-          "op": "replace",
-          "path": "/spec/bootstrap/recovery",
-          "value": {
-            "backup": {
-              "name": "bazarr-20250603040000"
-            }
-          }
-        },
-        {
-          "op": "replace",
-          "path": "/spec/externalClusters",
-          "value": []
-        }]
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Cluster
+        metadata:
+          name: patch
+        spec:
+          bootstrap:
+            recovery:
+              recoveryTarget:
+                backupID: "20250603T110006"
       target:
         kind: Cluster
