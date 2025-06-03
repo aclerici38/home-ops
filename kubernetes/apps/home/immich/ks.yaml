@@ -49,12 +49,6 @@ spec:
           postgresql:
             shared_preload_libraries:
               - "vchord.so"
-          bootstrap:
-            recovery:
-              recoveryTarget:
-                backupID: "20250603T110001"
-                targetImmediate: true
-                targetTLI: "5"
       target:
         kind: Cluster
 ---
