@@ -15,7 +15,7 @@ spec:
     - name: volsync
     - name: backups-zfs-volume
       namespace: openebs-system
-  path: ./kubernetes/apps/cluster-utilities/minio/app
+  path: ./kubernetes/apps/storage/minio/app
   components:
     - ../../../../components/external-secret
   prune: true
