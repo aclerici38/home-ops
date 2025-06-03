@@ -4,6 +4,8 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: ${APP}-db
+  annotations:
+    k8tz.io/inject: false
 spec:
   instances: ${CNPG_REPLICAS:=2}
   primaryUpdateStrategy: unsupervised
