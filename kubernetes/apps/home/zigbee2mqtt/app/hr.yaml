@@ -27,7 +27,7 @@ spec:
           app: &container
             image:
               repository: ghcr.io/koenkk/zigbee2mqtt
-              tag: 2.3.0
+              tag: 2.4.0
             env: &env
               ZIGBEE2MQTT_DATA: /data
               ZIGBEE2MQTT_CONFIG_ADVANCED_LAST_SEEN: ISO_8601
