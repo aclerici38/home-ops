@@ -37,14 +37,14 @@ spec:
       VOLSYNC_CAPACITY: 10Gi
   patches:
     - patch: |-
-        [
-          {
-            "op": "replace",
-            "path": "/spec/bootstrap/recovery",
-            "value": {
-              "backup": {
-                "name": "bazarr-20250603040000"
-              }
+        [{
+          "op": "replace",
+          "path": "/spec/bootstrap/recovery",
+          "value": {
+            "backup": {
+              "name": "bazarr-20250603040000"
             }
           }
-        ]
+        }]
+      target:
+        kind: Cluster
