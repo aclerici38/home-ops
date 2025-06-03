@@ -3,7 +3,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app minio
-  namespace: &ns cluster-utilities
+  namespace: &ns storage
 spec:
   targetNamespace: *ns
   commonMetadata:
@@ -13,8 +13,7 @@ spec:
     - name: external-secrets-stores
       namespace: cluster-utilities
     - name: volsync
-      namespace: storage
-    - name: minio-zfs-volume
+    - name: backups-zfs-volume
       namespace: openebs-system
   path: ./kubernetes/apps/cluster-utilities/minio/app
   components:
