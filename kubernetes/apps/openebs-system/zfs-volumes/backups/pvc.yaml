@@ -1,0 +1,13 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: backups
+  namespace: storage
+spec:
+  storageClassName: zfs-nvme
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 3.29Ti

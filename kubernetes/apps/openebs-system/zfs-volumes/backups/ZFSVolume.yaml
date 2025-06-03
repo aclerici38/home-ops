@@ -1,0 +1,15 @@
+apiVersion: zfs.openebs.io/v1
+kind: ZFSVolume
+metadata:
+  name: backups
+  namespace: openebs-system
+  finalizers:
+    - cluster.local/data-protection
+spec:
+  capacity: "3620000000000"
+  fsType: zfs
+  ownerNodeID: bonds
+  poolName: nvme
+  volumeType: DATASET
+  shared: "yes"
+  thinProvision: "yes"

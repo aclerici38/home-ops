@@ -1,0 +1,48 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/external-secrets.io/externalsecret_v1beta1.json
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: "backups-volsync-storj-secret"
+  namespace: "storage"
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    template:
+      engineVersion: v2
+      data:
+        RESTIC_REPOSITORY: "{{ .RESTIC_REPOSITORY }}/kube/backups"
+        RESTIC_PASSWORD: "{{ .RESTIC_PASSWORD }}"
+        AWS_ACCESS_KEY_ID: "{{ .AWS_ACCESS_KEY_ID }}"
+        AWS_SECRET_ACCESS_KEY: "{{ .AWS_SECRET_ACCESS_KEY }}"
+  dataFrom:
+    - extract:
+        key: storj
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/volsync.backube/replicationsource_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: "backups"
+  namespace: "storage"
+spec:
+  sourcePVC: "backups"
+  trigger:
+    schedule: "0 3 * * *"
+  restic:
+    copyMethod: Snapshot
+    pruneIntervalDays: 14
+    volumeSnapshotClassName: "openebs-zfs"
+    repository: "backups-volsync-storj-secret"
+    cacheAccessModes: ["ReadWriteMany"]
+    storageClassName: "zfs-nvme"
+    accessModes: ["ReadWriteMany"]
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    retain:
+      hourly: 24
+      daily: 7
