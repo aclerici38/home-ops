@@ -11,7 +11,7 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     name: backups
-    namespace: cluster-utilities
+    namespace: storage
   csi:
     driver: zfs.csi.openebs.io
     fsType: zfs
