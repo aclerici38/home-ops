@@ -45,6 +45,11 @@ spec:
               "name": "bazarr-20250603040000"
             }
           }
+        },
+        {
+          "op": "replace",
+          "path": "/spec/externalClusters",
+          "value": []
         }]
       target:
         kind: Cluster
