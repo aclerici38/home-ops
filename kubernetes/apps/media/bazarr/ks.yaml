@@ -35,18 +35,3 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 10Gi
-  patches:
-    - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
-          name: patch
-        spec:
-          bootstrap:
-            recovery:
-              recoveryTarget:
-                backupID: "20250603T110006"
-                targetImmediate: true
-                targetTLI: "20"
-      target:
-        kind: Cluster
