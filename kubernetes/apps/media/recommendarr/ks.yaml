@@ -18,7 +18,7 @@ spec:
     - name: volsync
       namespace: storage
     - name: minio
-      namespace: cluster-utilities
+      namespace: storage
   prune: true
   sourceRef:
     kind: GitRepository

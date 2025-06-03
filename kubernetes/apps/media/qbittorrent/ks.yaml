@@ -28,7 +28,7 @@ spec:
     - name: external-secrets-stores
       namespace: cluster-utilities
     - name: minio
-      namespace: cluster-utilities
+      namespace: storage
     - name: media-zfs-volume
       namespace: openebs-system
   postBuild:

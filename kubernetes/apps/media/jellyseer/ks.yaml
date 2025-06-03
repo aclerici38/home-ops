@@ -13,7 +13,7 @@ spec:
     - name: volsync
       namespace: storage
     - name: minio
-      namespace: cluster-utilities
+      namespace: storage
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
