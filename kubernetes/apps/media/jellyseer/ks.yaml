@@ -19,7 +19,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media/jellyseer/app
   components:
-    - ../../../../components/cnpg/overlay/init
+    - ../../../../components/cnpg/overlay/restore
     - ../../../../components/volsync/minio
   prune: true
   sourceRef:
