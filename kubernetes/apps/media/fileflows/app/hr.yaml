@@ -28,9 +28,8 @@ spec:
         containers:
           *name : &container
             image:
-              repository: ant385525/fileflows
-              tag: test
-              pullPolicy: Always
+              repository: ghcr.io/ant385525/fileflows
+              tag: 25.5.9.5493@sha256:ecdf9517016baebd3430a7749579e34bce6eb42f20f57e8e8fd9f9a687e4ebb2
             env:
               PORT: &port 5000
             probes:
