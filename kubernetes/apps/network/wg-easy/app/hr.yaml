@@ -32,15 +32,27 @@ spec:
               value: "cloud"
               effect: "NoSchedule"
           securityContext:
-            runAsNonRoot: false
-            runAsUser: 0
-            runAsGroup: 0
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
             seccompProfile: { type: RuntimeDefault }
+            sysctls:
+              - name: net.ipv4.ip_forward
+                value: '1'
+              - name: net.ipv4.conf.all.src_valid_mark
+                value: '1'
+              - name: net.ipv6.conf.all.disable_ipv6
+                value: '0'
+              - name: net.ipv6.conf.all.forwarding
+                value: '1'
+              - name: net.ipv6.conf.default.forwarding
+                value: '1'
         containers:
           app:
             image:
               repository: ghcr.io/wg-easy/wg-easy
-              tag: 15.0.0-beta.12
+              tag: 15.0.0
             envFrom:
               - secretRef:
                   name: ${APP}-secret
@@ -50,7 +62,7 @@ spec:
               limits:
                 memory: 256Mi
             securityContext:
-              allowPrivilegeEscalation: true
+              allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities:
                 add:
@@ -95,3 +107,8 @@ spec:
           - path: /etc/wireguard
       run:
         type: emptyDir
+      modules:
+        type: hostPath
+        hostPath: /lib/modules
+        globalMounts:
+          - readOnly: true
