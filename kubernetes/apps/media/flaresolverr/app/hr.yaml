@@ -23,6 +23,7 @@ spec:
   values:
     controllers:
       flaresolverr:
+        strategy: RollingUpdate
         containers:
           app:
             image:
@@ -44,7 +45,7 @@ spec:
                 drop:
                   - ALL
     service:
-      app:
+      *app :
         controller: flaresolverr
         ports:
           http:
