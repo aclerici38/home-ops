@@ -39,6 +39,7 @@ spec:
               FLASK_PORT: &port 8084
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
+              DEFAULT_SLEEP: 15
             command:
               - /bin/sh
               - -c
