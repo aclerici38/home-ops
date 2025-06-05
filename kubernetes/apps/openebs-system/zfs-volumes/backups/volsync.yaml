@@ -39,7 +39,6 @@ spec:
     cacheAccessModes: ["ReadWriteMany"]
     storageClassName: "zfs-nvme"
     accessModes: ["ReadWriteMany"]
-    capacity: "3620000000000"
     moverSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
