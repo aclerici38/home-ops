@@ -23,6 +23,7 @@ spec:
   values:
     controllers:
       jellyseerr:
+        type: statefulset
         pod:
           securityContext:
             runAsNonRoot: true

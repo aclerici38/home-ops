@@ -23,6 +23,7 @@ spec:
   values:
     controllers:
       server:
+        type: statefulset
         pod:
           hostname: &name ff-server
         containers:
@@ -56,6 +57,7 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
       node:
+        type: statefulset
         pod:
           hostname: &name ff-kube-bonds
         containers:

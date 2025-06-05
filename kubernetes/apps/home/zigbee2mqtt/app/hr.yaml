@@ -23,6 +23,7 @@ spec:
   values:
     controllers:
       apt:
+        type: statefulset
         containers:
           app: &container
             image:
@@ -85,6 +86,7 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
       house:
+        type: statefulset
         pod:
           tolerations:
             - key: "location"

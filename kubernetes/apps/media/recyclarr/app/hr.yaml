@@ -23,6 +23,7 @@ spec:
   values:
     controllers:
       recyclarr:
+        type: statefulset
         containers:
           app:
             image:

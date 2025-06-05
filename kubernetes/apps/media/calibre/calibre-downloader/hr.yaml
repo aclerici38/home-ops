@@ -22,6 +22,7 @@ spec:
   values:
     controllers:
       *app :
+        strategy: RollingUpdate
         pod:
           securityContext:
             runAsUser: 1000
