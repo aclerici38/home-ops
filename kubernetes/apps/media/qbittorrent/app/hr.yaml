@@ -56,9 +56,16 @@ spec:
               - secretRef:
                   name: qbittorrent-secret
             securityContext:
+              runAsUser: 0
+              runAsGroup: 0
+              runAsNonRoot: false
+              seccompProfile: { type: RuntimeDefault }
               capabilities:
+                drop:
+                  - ALL
                 add:
                   - NET_ADMIN
+              readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
         containers:
           qbit:
@@ -114,10 +121,3 @@ spec:
         existingClaim: media
         globalMounts:
           - path: /allMedia
-      qbtun:
-        type: hostPath
-        hostPath: /dev/net
-        advancedMounts:
-          qbit:
-            gluetun:
-              - path: /dev/net
