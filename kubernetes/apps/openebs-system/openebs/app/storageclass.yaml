@@ -7,18 +7,7 @@ metadata:
     storageclass.kubernetes.io/is-default-class: "true"
 allowVolumeExpansion: true
 parameters:
-  poolname: "nvme/pvc"
-  fstype: "zfs"
-  shared: "yes"
-provisioner: zfs.csi.openebs.io
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: zfs-nvme-backups
-allowVolumeExpansion: true
-parameters:
-  poolname: "nvme/backups"
+  poolname: "nvme"
   fstype: "zfs"
   shared: "yes"
 provisioner: zfs.csi.openebs.io
