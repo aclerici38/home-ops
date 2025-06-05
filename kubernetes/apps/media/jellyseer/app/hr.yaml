@@ -93,3 +93,7 @@ spec:
         existingClaim: jellyseer
         globalMounts:
           - path: /app/config
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /app/.next/cache
