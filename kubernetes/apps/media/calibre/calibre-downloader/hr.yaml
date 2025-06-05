@@ -98,10 +98,6 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /app/downloaded_files
-      driver:
-        type: emptyDir
-        globalMounts:
-          - path: /usr/local/lib/python3.10/site-packages/seleniumbase/drivers/uc_driver
       log:
         type: emptyDir
         globalMounts:
