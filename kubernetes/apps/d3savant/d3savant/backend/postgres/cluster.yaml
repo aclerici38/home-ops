@@ -32,16 +32,16 @@ spec:
       wal:
         compression: bzip2
         maxParallel: 8
-      destinationPath: s3://backups/cnpg
-      endpointURL: http://minio.storage.svc.cluster.local:9000
+      destinationPath: s3://cnpg
+      endpointURL: http://versity.storage.svc.cluster.local:7070
       serverName: *db
       s3Credentials:
         accessKeyId:
           name: cloudnative-pg-secret
-          key: minio-access-key-id
+          key: versity-access-key-id
         secretAccessKey:
           name: cloudnative-pg-secret
-          key: minio-secret-access-key
+          key: versity-secret-access-key
   # bootstrap:
   #   recovery:
   #     source: *db

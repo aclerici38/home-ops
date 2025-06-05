@@ -14,7 +14,7 @@ spec:
     - ../../../../components/volsync/versity
   prune: true
   dependsOn:
-    - name: minio
+    - name: versity
       namespace: storage
   sourceRef:
     kind: GitRepository

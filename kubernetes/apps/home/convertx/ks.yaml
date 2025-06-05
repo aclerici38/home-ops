@@ -12,7 +12,7 @@ spec:
   dependsOn:
     - name: volsync
       namespace: storage
-    - name: minio
+    - name: versity
       namespace: storage
   path: ./kubernetes/apps/home/convertx/app
   prune: true
