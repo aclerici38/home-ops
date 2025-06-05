@@ -15,10 +15,10 @@ provisioner: zfs.csi.openebs.io
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: zfs-ssd
+  name: zfs-nvme-backups
 allowVolumeExpansion: true
 parameters:
-  poolname: "ssd"
+  poolname: "nvme/backups"
   fstype: "zfs"
   shared: "yes"
 provisioner: zfs.csi.openebs.io

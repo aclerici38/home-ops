@@ -5,7 +5,7 @@ metadata:
   name: backups
   namespace: storage
 spec:
-  storageClassName: zfs-nvme
+  storageClassName: zfs-nvme-backups
   accessModes:
     - ReadWriteMany
   resources:

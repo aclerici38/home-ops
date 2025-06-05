@@ -37,7 +37,7 @@ spec:
     volumeSnapshotClassName: "openebs-zfs"
     repository: "backups-volsync-storj-secret"
     cacheAccessModes: ["ReadWriteMany"]
-    storageClassName: "zfs-nvme"
+    storageClassName: "zfs-nvme-backups"
     accessModes: ["ReadWriteMany"]
     moverSecurityContext:
       runAsUser: 1000
