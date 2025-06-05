@@ -22,11 +22,11 @@ spec:
     - secretKey: AWS_ACCESS_KEY_ID
       remoteRef:
         key: "versity"
-        property: "access-key-id"
+        property: "ROOT_ACCESS_KEY_ID"
     - secretKey: AWS_SECRET_ACCESS_KEY
       remoteRef:
         key: "versity"
-        property: "secret-access-key"
+        property: "ROOT_SECRET_ACCESS_KEY"
     - secretKey: RESTIC_PASSWORD
       remoteRef:
         key: "versity"

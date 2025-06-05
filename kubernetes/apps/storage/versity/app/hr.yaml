@@ -23,6 +23,7 @@ spec:
   values:
     controllers:
       *app :
+        strategy: RollingUpdate
         pod:
           securityContext:
             runAsNonRoot: true
