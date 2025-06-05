@@ -42,6 +42,7 @@ spec:
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
               HOME: /tmp
+              SB_LOCK_DIR: /tmp/selenium_locks
             command: ["python", "-m", "app"]
             probes:
               liveness: &probes
