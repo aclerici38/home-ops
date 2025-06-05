@@ -25,13 +25,18 @@ spec:
       *app :
         strategy: RollingUpdate
         pod:
+          nodeSelector:
+            location: cloud
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "cloud"
+              effect: "NoSchedule"
           securityContext:
             runAsUser: 65534
             runAsGroup: 65533
             fsGroup: 65533
             fsGroupChangePolicy: Always
-            supplementalGroups:
-              - 44
         containers:
           app:
             image:
@@ -47,7 +52,6 @@ spec:
                 cpu: 100m
               limits:
                 memory: 12Gi
-                gpu.intel.com/i915: 1
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
