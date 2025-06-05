@@ -42,7 +42,7 @@ spec:
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
               HOME: /tmp
-              SB_LOCK_DIR: /tmp/selenium_locks
+              SB_LOCK_DIR: /tmp
             command:
               - /bin/sh
               - -c
@@ -68,7 +68,7 @@ spec:
               limits:
                 memory: 2Gi
             securityContext:
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
