@@ -48,19 +48,19 @@ spec:
               - secretRef:
                   name: actual-secret
             probes:
-              liveness:
-                enabled: true
-              readiness:
+              readiness: &probes
                 enabled: true
                 custom: true
                 spec:
-                  httpGet:
-                    path: /
-                    port: &port 5006
+                  exec:
+                    command:
+                      - node
+                      - src/scripts/health-check.js
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 3
+              liveness: *probes
             resources:
               requests:
                 cpu: 12m
