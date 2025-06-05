@@ -37,8 +37,6 @@ spec:
               tag: 20250506@sha256:97a636efe3b78e1306ff521aa09256125aacdb1a04e628df294d7b6da3fe7b4a
             env:
               FLASK_PORT: &port 8084
-              FLASK_DEBUG: true
-              LOG_LEVEL: debug
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
             command:
