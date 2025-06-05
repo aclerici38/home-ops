@@ -61,6 +61,11 @@ spec:
                   - SETGID
                   - FOWNER
                   - DAC_OVERRIDE
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
             resources:
               requests:
                 cpu: 1000m
