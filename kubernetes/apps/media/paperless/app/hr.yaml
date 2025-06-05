@@ -34,7 +34,7 @@ spec:
           app:
             image:
               repository: ghcr.io/paperless-ngx/paperless-ngx
-              tag: 2.16.2
+              tag: 2.16.3
             env:
               PAPERLESS_URL: https://paperless.${SECRET_DOMAIN}
               PAPERLESS_CONSUMER_DELETE_DUPLICATES: true
