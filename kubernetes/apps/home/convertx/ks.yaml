@@ -15,8 +15,6 @@ spec:
     - name: minio
       namespace: storage
   path: ./kubernetes/apps/home/convertx/app
-  components:
-    - ../../../../components/volsync/minio
   prune: true
   sourceRef:
     kind: GitRepository

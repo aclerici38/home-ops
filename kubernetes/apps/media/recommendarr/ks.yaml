@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media/recommendarr/app
   components:
-    - ../../../../components/volsync/minio
+    - ../../../../components/volsync/versity
     - ../../../../components/external-secret
   dependsOn:
     - name: volsync

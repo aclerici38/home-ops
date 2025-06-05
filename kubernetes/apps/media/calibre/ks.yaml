@@ -17,7 +17,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media/calibre/calibre-web-automated
   components:
-    - ../../../../components/volsync/minio
+    - ../../../../components/volsync/versity
   prune: true
   sourceRef:
     kind: GitRepository

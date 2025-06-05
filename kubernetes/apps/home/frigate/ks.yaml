@@ -13,7 +13,7 @@ spec:
   path: ./kubernetes/apps/home/frigate/app
   components:
     - ../../../../components/external-secret
-    - ../../../../components/volsync/minio
+    - ../../../../components/volsync/versity
     - ../../../../components/envoy/oauth
   dependsOn:
     - name: external-secrets-stores

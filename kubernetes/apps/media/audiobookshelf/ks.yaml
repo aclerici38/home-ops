@@ -18,7 +18,7 @@ spec:
       namespace: openebs-system
   path: ./kubernetes/apps/media/audiobookshelf/app
   components:
-    - ../../../../components/volsync/minio
+    - ../../../../components/volsync/versity
   prune: true
   sourceRef:
     kind: GitRepository

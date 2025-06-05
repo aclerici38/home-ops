@@ -15,7 +15,7 @@ spec:
   path: ./kubernetes/apps/media/qbittorrent/app
   components:
     - ../../../../components/external-secret
-    - ../../../../components/volsync/minio
+    - ../../../../components/volsync/versity
   prune: true
   sourceRef:
     kind: GitRepository

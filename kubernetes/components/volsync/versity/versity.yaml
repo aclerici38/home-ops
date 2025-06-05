@@ -3,7 +3,7 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: "${APP}-volsync-minio-secret"
+  name: "${APP}-volsync-versity-secret"
   namespace: "${NAMESPACE}"
 spec:
   secretStoreRef:
@@ -21,23 +21,23 @@ spec:
   data:
     - secretKey: AWS_ACCESS_KEY_ID
       remoteRef:
-        key: "minio"
+        key: "versity"
         property: "access-key-id"
     - secretKey: AWS_SECRET_ACCESS_KEY
       remoteRef:
-        key: "minio"
+        key: "versity"
         property: "secret-access-key"
     - secretKey: RESTIC_PASSWORD
       remoteRef:
-        key: "minio"
+        key: "versity"
         property: "RESTIC_PASSWORD"
     - secretKey: BUCKET
       remoteRef:
-        key: "minio"
+        key: "versity"
         property: "BUCKET"
     - secretKey: RESTIC_REPOSITORY
       remoteRef:
-        key: "minio"
+        key: "versity"
         property: "RESTIC_REPOSITORY"
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/volsync.backube/replicationsource_v1alpha1.json
@@ -55,7 +55,7 @@ spec:
     pruneIntervalDays: 14
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-openebs-zfs}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-zfs-nvme}"
-    repository: "${APP}-volsync-minio-secret"
+    repository: "${APP}-volsync-versity-secret"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteMany}"]
     storageClassName: "${VOLSYNC_STORAGECLASS:-zfs-nvme}"
     accessModes: ["${VOLSYNC_SNAP_ACCESSMODES:-ReadWriteMany}"]
@@ -78,7 +78,7 @@ spec:
   trigger:
     manual: restore-once
   restic:
-    repository: "${APP}-volsync-minio-secret"
+    repository: "${APP}-volsync-versity-secret"
     copyMethod: Snapshot
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-openebs-zfs}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-zfs-nvme}"

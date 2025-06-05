@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media/firefox/app
   components:
-    - ../../../../components/volsync/minio
+    - ../../../../components/volsync/versity
   prune: true
   dependsOn:
     - name: volsync

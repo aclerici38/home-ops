@@ -15,7 +15,7 @@ spec:
       namespace: openebs-system
   path: ./kubernetes/apps/media/syncthing/app
   components:
-    - ../../../../components/volsync/minio
+    - ../../../../components/volsync/versity
   prune: true
   sourceRef:
     kind: GitRepository

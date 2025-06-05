@@ -22,7 +22,7 @@ spec:
   path: ./kubernetes/apps/media/bazarr/app
   components:
     - ../../../../components/cnpg/overlay/restore
-    - ../../../../components/volsync/minio
+    - ../../../../components/volsync/versity
   prune: true
   sourceRef:
     kind: GitRepository
