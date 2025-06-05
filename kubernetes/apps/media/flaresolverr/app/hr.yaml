@@ -24,6 +24,14 @@ spec:
     controllers:
       flaresolverr:
         strategy: RollingUpdate
+        pod:
+          nodeSelector:
+            location: cloud
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "cloud"
+              effect: "NoSchedule"
         containers:
           app:
             image:
