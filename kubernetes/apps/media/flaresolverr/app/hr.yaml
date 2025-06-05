@@ -25,13 +25,11 @@ spec:
       flaresolverr:
         strategy: RollingUpdate
         pod:
-          nodeSelector:
-            location: cloud
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "cloud"
-              effect: "NoSchedule"
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
         containers:
           app:
             image:
@@ -44,11 +42,7 @@ spec:
               limits:
                 memory: 2Gi
             securityContext:
-              runAsUser: 1000
-              runAsGroup: 1000
-              runAsNonRoot: true
               allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
               capabilities:
                 drop:
                   - ALL
