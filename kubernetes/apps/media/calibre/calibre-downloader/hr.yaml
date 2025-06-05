@@ -41,8 +41,6 @@ spec:
               LOG_LEVEL: debug
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
-              HOME: /tmp
-              SB_LOCK_DIR: /tmp
             command:
               - /bin/sh
               - -c
@@ -96,6 +94,10 @@ spec:
     persistence:
       tmp:
         type: emptyDir
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /app/downloaded_files
       log:
         type: emptyDir
         globalMounts:
