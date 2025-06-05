@@ -66,7 +66,7 @@ spec:
               limits:
                 memory: 2Gi
             securityContext:
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
