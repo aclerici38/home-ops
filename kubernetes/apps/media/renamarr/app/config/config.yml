@@ -5,7 +5,7 @@ sonarr:
     api_key: ${SONARR_API_KEY}
     renamarr:
       enabled: true
-      hourly_job: true
+      hourly_job: false
       analyze_files: true
     series_scanner:
       enabled: true
@@ -16,5 +16,5 @@ radarr:
     api_key: ${RADARR_API_KEY}
     renamarr:
       enabled: true
-      hourly_job: true
-      analyze_files: false
+      hourly_job: false
+      analyze_files: true
