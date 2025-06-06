@@ -23,7 +23,7 @@ spec:
   values:
     controllers:
       *app :
-        strategy: RollingUpdate
+        # strategy: RollingUpdate
         containers:
           app:
             image:
@@ -53,12 +53,13 @@ spec:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
               privileged: true
-              # capabilities:
+              capabilities:
               #   drop:
               #     - ALL
-              #   add:
-              #     - SYS_ADMIN
-              #     - SETPCAP
+                add:
+                  - SYS_ADMIN
+                  - SETPCAP
+                  - NET_BIND_SERVICE
     service:
       *app : &svc
         controller: *app
