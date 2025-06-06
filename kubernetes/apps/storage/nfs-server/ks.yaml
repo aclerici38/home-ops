@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/storage/nfs-server-alpine/app
+  path: ./kubernetes/apps/storage/nfs-server/app
   prune: true
   sourceRef:
     kind: GitRepository
