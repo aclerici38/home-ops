@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app nfs-server-alpine
+  name: &app nfs-server
 spec:
   interval: 1h
   chartRef:
@@ -27,11 +27,9 @@ spec:
         containers:
           app:
             image:
-              repository: quay.io/aminvakil/alpine-nfs-server
-              tag: latest@sha256:f9701ce09662d86944cf942ec73873ee770dde15b23eca295fe3bfbdc95c875e
-            env:
-              SYNC: true
-              SHARED_DIRECTORY: /export
+              repository: docker.io/ant385525/nfs-server
+              tag: test
+              pullPolicy: Always
             # probes:
             #   readiness: &probes
             #     enabled: true
@@ -68,8 +66,30 @@ spec:
         annotations:
           io.cilium/lb-ipam-ips: 10.38.55.10
         ports:
-          nfs:
+          rpcbind-tcp:
+            port: 111
+            protocol: TCP
+          rpcbind-udp:
+            port: 111
+            protocol: UDP
+          mountd-tcp:
+            port: 20048
+            protocol: TCP
+          mountd-udp:
+            port: 20048
+            protocol: UDP
+          nfs-tcp:
             port: 2049
+            protocol: TCP
+          nfs-udp:
+            port: 2049
+            protocol: UDP
+          statd-tcp:
+            port: 662
+            protocol: TCP
+          statd-udp:
+            port: 662
+            protocol: UDP
     persistence:
       export:
         existingClaim: nfs-pvc
