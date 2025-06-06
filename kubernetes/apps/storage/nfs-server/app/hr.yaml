@@ -51,7 +51,7 @@ spec:
                 memory: 512Mi
             securityContext:
               allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               privileged: true
               # capabilities:
               #   drop:
