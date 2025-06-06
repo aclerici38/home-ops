@@ -30,6 +30,7 @@ spec:
               repository: docker.io/ant385525/nfs-server
               tag: test
               pullPolicy: Always
+            command: ['sh']
             # probes:
             #   readiness: &probes
             #     enabled: true
