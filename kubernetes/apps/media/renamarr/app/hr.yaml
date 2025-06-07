@@ -38,7 +38,7 @@ spec:
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/hollanbm/renamarr
               tag: 1.0.6@sha256:4795978d5edbeb087cc26c9c3874583ccab3f1327006efff8bd3541f8334c2b7

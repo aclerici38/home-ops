@@ -33,7 +33,7 @@ spec:
             seccompProfile: { type: RuntimeDefault }
             fsGroupChangePolicy: Always
         containers:
-          app:
+          main:
             image:
               repository: docker.io/tannermiddleton/recommendarr
               tag: v1.4.4
@@ -68,13 +68,13 @@ spec:
                 cpu: 10m
                 memory: 50Mi
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: *port
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

@@ -32,7 +32,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/joryirving/tautulli
               tag: 2.15.2
@@ -59,13 +59,13 @@ spec:
               limits:
                 memory: 1Gi
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: *port
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

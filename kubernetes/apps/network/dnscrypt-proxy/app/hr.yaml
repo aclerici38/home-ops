@@ -36,7 +36,7 @@ spec:
         strategy: RollingUpdate
         replicas: 3
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/klutchell/dnscrypt-proxy
               tag: 2.1.12
@@ -71,7 +71,7 @@ spec:
                   failureThreshold: 10
               liveness: *probes
     service:
-      *app :
+      main:
         controller: *app
         ports:
           dns-tcp:

@@ -34,7 +34,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/vuetorrent/vuetorrent-backend
               tag: 2.5.1
@@ -69,13 +69,13 @@ spec:
               PORT: *port
               QBIT_BASE: http://qbittorrent:8080
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: *port
     route:
-      *app :
+      main:
         hostnames:
           - qbit.${SECRET_DOMAIN}
         parentRefs:

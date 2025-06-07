@@ -33,7 +33,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/mealie-recipes/mealie
               tag: v2.8.0@sha256:63aef46d90975d9cf9c0fdb9399fc2fe36acd222e1db6be99c504b9ccdbee967
@@ -87,13 +87,13 @@ spec:
               limits:
                 memory: 2Gi
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: &port 9000
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

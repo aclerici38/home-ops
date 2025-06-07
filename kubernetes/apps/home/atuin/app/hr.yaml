@@ -24,7 +24,7 @@ spec:
     controllers:
       *app :
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/atuinsh/atuin
               tag: v18.6.1@sha256:869a85bcc169ae9a3ea65dcf32a99dae982d28d8562172e2712d3313d7349203
@@ -69,13 +69,13 @@ spec:
         fsGroupChangePolicy: Always
         seccompProfile: { type: RuntimeDefault }
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: *port
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

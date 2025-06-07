@@ -33,7 +33,7 @@ spec:
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/actualbudget/actual
               tag: 25.6.1-alpine
@@ -75,13 +75,13 @@ spec:
                 drop:
                   - ALL
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: &port 5006
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

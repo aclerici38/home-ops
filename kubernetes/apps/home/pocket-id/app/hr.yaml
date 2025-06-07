@@ -89,13 +89,13 @@ spec:
               limits:
                 memory: 256Mi
     service:
-      *app :
+      main:
         controller: main
         ports:
           http:
             port: *port
     route:
-      *app :
+      main:
         hostnames:
           - id.${SECRET_DOMAIN}
         parentRefs:

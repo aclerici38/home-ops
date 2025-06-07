@@ -31,7 +31,7 @@ spec:
             runAsGroup: 0
             seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/paperless-ngx/paperless-ngx
               tag: 2.16.3
@@ -173,7 +173,7 @@ spec:
         fsGroupChangePolicy: Always
         seccompProfile: { type: RuntimeDefault }
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
@@ -189,7 +189,7 @@ spec:
           http:
             port: 3000
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

@@ -25,7 +25,7 @@ spec:
       *app :
         type: statefulset
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/home-operations/prowlarr
               tag: 1.37.0.5076
@@ -89,13 +89,13 @@ spec:
         fsGroupChangePolicy: Always
         seccompProfile: { type: RuntimeDefault }
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: *port
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

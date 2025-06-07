@@ -24,7 +24,7 @@ spec:
     controllers:
       *app :
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/bjw-s-labs/it-tools
               tag: 2024.10.22@sha256:4dfe650a4be1e13d59e37f2b2aa6b8faf915c8afb53a379ea5eaaba679a0a456
@@ -41,13 +41,13 @@ spec:
                 drop:
                   - ALL
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: &port 8080
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

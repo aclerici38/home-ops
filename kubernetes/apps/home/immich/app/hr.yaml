@@ -25,7 +25,7 @@ spec:
       server:
         strategy: RollingUpdate
         containers:
-          app: &container
+          main: &container
             image:
               repository: ghcr.io/immich-app/immich-server
               tag:  ${IMMICH_VERSION}
@@ -79,7 +79,7 @@ spec:
       microservices:
         strategy: RollingUpdate
         containers:
-          app:
+          main:
             <<: *container
             env:
               <<: *env
@@ -99,7 +99,7 @@ spec:
       machine-learning:
         strategy: RollingUpdate
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/immich-app/immich-machine-learning
               tag:  ${IMMICH_VERSION}-openvino
@@ -179,7 +179,7 @@ spec:
           - port: metrics-ms
             scheme: http
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

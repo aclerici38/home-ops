@@ -33,7 +33,7 @@ spec:
             supplementalGroups:
               - 44
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/linuxserver/blender
               tag: 4.4.3
@@ -58,13 +58,13 @@ spec:
                 memory: 6Gi
                 gpu.intel.com/i915: 1
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: &port 3000
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

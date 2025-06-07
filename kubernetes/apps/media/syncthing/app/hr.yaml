@@ -35,7 +35,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/syncthing/syncthing
               tag: 1.29.7
@@ -65,7 +65,7 @@ spec:
                   failureThreshold: 3
               readiness: *probes
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
@@ -76,7 +76,7 @@ spec:
             port: 22000
             protocol: UDP
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

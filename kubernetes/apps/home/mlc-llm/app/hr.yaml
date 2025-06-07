@@ -36,7 +36,7 @@ spec:
     controllers:
       qwen:
         containers:
-          app: &container
+          main: &container
             image:
               repository: ghcr.io/jjgadgets/mlc-llm-cuda
               tag: 0.19.0@sha256:8b201c0797b6131b85ee5cb9447f316a273d2183897ccdf3333eb5d7be17c384
@@ -78,7 +78,7 @@ spec:
       phi:
         strategy: RollingUpdate
         containers:
-          app:
+          main:
             <<: *container
             env:
               <<: *env
@@ -86,7 +86,7 @@ spec:
       mistral:
         strategy: RollingUpdate
         containers:
-          app:
+          main:
             <<: *container
             env:
               <<: *env

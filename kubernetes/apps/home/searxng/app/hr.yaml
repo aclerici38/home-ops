@@ -40,7 +40,7 @@ spec:
             seccompProfile: { type: RuntimeDefault }
         strategy: RollingUpdate
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/searxng/searxng
               tag: 2025.6.6-33891e5
@@ -84,14 +84,14 @@ spec:
                   - DAC_OVERRIDE
 
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: *port
 
     route:
-      *app :
+      main:
         hostnames:
           - search.${SECRET_DOMAIN}
         parentRefs:

@@ -33,7 +33,7 @@ spec:
             supplementalGroups:
               - 44
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/linuxserver/inkscape
               tag: 1.4-r0-ls28@sha256:e9014bb38e3ef5cc521ff21a4baf22841ad286364ecc4ff4af5e98f6641a04e8
@@ -58,13 +58,13 @@ spec:
                 memory: 6Gi
                 gpu.intel.com/i915: 1
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: &port 3000
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

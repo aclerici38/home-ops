@@ -25,7 +25,7 @@ spec:
       *app :
         type: statefulset
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/karakeep-app/karakeep
               tag: 0.24.1
@@ -136,7 +136,7 @@ spec:
                   - ALL
 
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
@@ -152,7 +152,7 @@ spec:
           http:
             port: 7700
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

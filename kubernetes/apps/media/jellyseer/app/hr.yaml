@@ -33,7 +33,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/fallenbagel/jellyseerr
               tag: 2.5.2@sha256:2a611369ad1d0d501c2d051fc89b6246ff081fb4a30879fdc75642cf6a37b1a6
@@ -72,13 +72,13 @@ spec:
                 drop:
                   - ALL
     service:
-      *app :
+      main:
         controller: jellyseerr
         ports:
           http:
             port: &port 5055
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

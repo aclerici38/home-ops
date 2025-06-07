@@ -33,7 +33,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/versity/versitygw
               tag: v1.0.14@sha256:5192635d035301e7b7c46857a3bad8453d7b4253a8aac36e0be0f1cf30129984
@@ -70,13 +70,13 @@ spec:
               limits:
                 memory: 100Mi
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: *port
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

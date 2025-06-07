@@ -25,7 +25,7 @@ spec:
       *app :
         # strategy: RollingUpdate
         containers:
-          app:
+          main:
             image:
               repository: docker.io/ant385525/nfs-server
               tag: test
@@ -62,7 +62,7 @@ spec:
                   - SETPCAP
                   - NET_BIND_SERVICE
     service:
-      *app : &svc
+      main: &svc
         controller: *app
         type: LoadBalancer
         annotations:

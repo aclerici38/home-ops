@@ -37,7 +37,7 @@ spec:
             supplementalGroups:
               - 44
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/home-operations/plex
               tag: 1.41.7.9823
@@ -74,7 +74,7 @@ spec:
                 gpu.intel.com/i915: 1
                 memory: 6Gi
     service:
-      *app :
+      main:
         controller: *app
         type: LoadBalancer
         externalTrafficPolicy: Local
@@ -84,7 +84,7 @@ spec:
           http:
             port: &port 32400
     route:
-      *app :
+      main:
         kind: TCPRoute
         parentRefs:
           - name: external

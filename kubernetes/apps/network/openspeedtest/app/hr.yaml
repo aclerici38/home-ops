@@ -24,7 +24,7 @@ spec:
     controllers:
       *app :
         containers:
-          app:
+          main:
             image:
               repository: docker.io/openspeedtest/latest
               tag: v2.0.6
@@ -50,7 +50,7 @@ spec:
               limits:
                 memory: 2G
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:

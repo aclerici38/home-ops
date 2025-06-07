@@ -33,7 +33,7 @@ spec:
             supplementalGroups:
               - 44
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/c4illin/convertx
               tag: v0.14.1
@@ -68,7 +68,7 @@ spec:
           failureThreshold: 3
       readiness: *probes
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:

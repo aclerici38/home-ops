@@ -39,7 +39,7 @@ spec:
             fsGroup: 1000
             seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/wg-easy/wg-easy
               tag: 15.0.0
@@ -79,7 +79,7 @@ spec:
             nodePort: 123
             protocol: UDP
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

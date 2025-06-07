@@ -51,7 +51,7 @@ spec:
                 }
               ]
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/home-operations/home-assistant
               tag: 2025.5.3
@@ -69,13 +69,13 @@ spec:
                 drop:
                   - ALL
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: 8123
     route:
-      *app :
+      main:
         hostnames:
           - hass.${SECRET_DOMAIN}
         parentRefs:

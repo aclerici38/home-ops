@@ -25,7 +25,7 @@ spec:
       apt:
         type: statefulset
         containers:
-          app: &container
+          main: &container
             image:
               repository: ghcr.io/koenkk/zigbee2mqtt
               tag: 2.4.0
@@ -96,7 +96,7 @@ spec:
           nodeSelector:
             location: house
         containers:
-          app:
+          main:
             <<: *container
             env:
               <<: *env

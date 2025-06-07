@@ -58,7 +58,7 @@ spec:
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/bitmagnet-io/bitmagnet
               tag: v0.10.0@sha256:cf2c16fac5b51f1c18e630b4710175d35d7e44b83012cfd05a2b43712feec05e
@@ -113,7 +113,7 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
@@ -125,7 +125,7 @@ spec:
             protocol: UDP
             port: *torrentPort
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

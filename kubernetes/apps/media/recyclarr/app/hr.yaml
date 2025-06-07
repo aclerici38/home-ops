@@ -25,7 +25,7 @@ spec:
       recyclarr:
         type: statefulset
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/recyclarr/recyclarr
               tag: 7.4.1@sha256:759540877f95453eca8a26c1a93593e783a7a824c324fbd57523deffb67f48e1

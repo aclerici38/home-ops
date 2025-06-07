@@ -33,7 +33,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/immichframe/immichframe
               tag: v1.0.26.2
@@ -73,13 +73,13 @@ spec:
                 drop:
                   - ALL
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: &port 8080
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

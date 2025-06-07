@@ -64,7 +64,7 @@ spec:
                 drop:
                   - ALL
         containers:
-          app:
+          main:
             image: *img
             resources:
               requests:
@@ -74,13 +74,13 @@ spec:
                 squat.ai/anycubic-kobra: 1
             securityContext: *sec
     service:
-      *app :
+      main:
         controller: *app
         ports:
           http:
             port: &port 5000
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

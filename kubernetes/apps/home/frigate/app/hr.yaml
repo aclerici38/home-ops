@@ -39,7 +39,7 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/blakeblackshear/frigate
               tag: 0.16.0-beta3
@@ -82,7 +82,7 @@ spec:
               limits:
                 memory: 16Gi
     service:
-      *app :
+      main:
         controller: *app
         type: ClusterIP
         ports:
@@ -100,7 +100,7 @@ spec:
             port: &webrtc 8555
             targetPort: *webrtc
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:

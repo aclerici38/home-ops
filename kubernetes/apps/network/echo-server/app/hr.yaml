@@ -31,7 +31,7 @@ spec:
             runAsGroup: 65534
             seccompProfile: { type: RuntimeDefault }
         containers:
-          app:
+          main:
             image:
               repository: ghcr.io/mendhak/http-https-echo
               tag: 37@sha256:f55000d9196bd3c853d384af7315f509d21ffb85de315c26e9874033b9f83e15
@@ -63,7 +63,7 @@ spec:
               limits:
                 memory: 64Mi
     service:
-      *app :
+      main:
         controller: echo-server
         ports:
           http:
@@ -78,7 +78,7 @@ spec:
             interval: 2m
             scrapeTimeout: 10s
     route:
-      *app :
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:
