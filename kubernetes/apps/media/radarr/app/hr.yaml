@@ -92,8 +92,8 @@ spec:
         fsGroupChangePolicy: Always
         seccompProfile: { type: RuntimeDefault }
     service:
-      radarr:
-        controller: radarr
+      main:
+        controller: *app
         ports:
           http:
             port: *port

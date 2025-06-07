@@ -108,7 +108,7 @@ spec:
                   type: PathPrefix
                   value: /
             backendRefs:
-              - identifier: *app
+              - identifier: main
                 port: *port
     persistence:
       data:

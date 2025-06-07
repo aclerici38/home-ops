@@ -92,7 +92,7 @@ spec:
         fsGroupChangePolicy: Always
         seccompProfile: { type: RuntimeDefault }
     service:
-      sonarr:
+      main:
         controller: *app
         ports:
           http:
