@@ -39,6 +39,8 @@ spec:
               tag: 3.0.4
             env:
               CACHE_DIR: /cache
+              PUID: 1000
+              PGID: 1000
             probes:
               liveness: &probes
                 enabled: true
