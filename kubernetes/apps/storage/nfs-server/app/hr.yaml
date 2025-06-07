@@ -78,9 +78,3 @@ spec:
     persistence:
       export:
         existingClaim: nfs-pvc
-      var:
-        type: emptyDir
-        globalMounts:
-          - path: /var/lib/nfs
-      etc:
-        type: emptyDir
