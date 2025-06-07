@@ -25,10 +25,16 @@ spec:
       *app :
         strategy: RollingUpdate
         pod:
+          nodeSelector:
+            location: cloud
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "cloud"
+              effect: "NoSchedule"
           securityContext:
             runAsUser: 0
             runAsGroup: 0
-            fsGroup: 1000
             runAsNonRoot: false
             seccompProfile: { type: Unconfined }
         containers:
@@ -41,11 +47,8 @@ spec:
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
               DEFAULT_SLEEP: 15
-            command:
-              - /bin/sh
-              - -c
-              - |
-                gunicorn -t 300 -b 0.0.0.0:8084 app:app
+              UID: 1000
+              GID: 1000
             probes:
               liveness: &probes
                 enabled: true
@@ -106,7 +109,9 @@ spec:
         globalMounts:
           - path: /var/log/cwa-book-downloader/
       ingest:
-        existingClaim: media
+        type: nfs
+        server: 10.38.55.11
+        path: /
         globalMounts:
           - path: *ingest
             subPath: books/calibre/ingest
