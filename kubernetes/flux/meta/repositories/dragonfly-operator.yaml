@@ -6,6 +6,7 @@ metadata:
   name: dragonfly-operator
 spec:
   interval: 1h
+  maxHistory: 1
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy

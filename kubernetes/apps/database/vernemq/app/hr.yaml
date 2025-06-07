@@ -6,6 +6,7 @@ metadata:
   name: &app vernemq
 spec:
   interval: 1h
+  maxHistory: 1
   chart:
     spec:
       chart: vernemq

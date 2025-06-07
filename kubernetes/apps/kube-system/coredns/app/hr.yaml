@@ -6,6 +6,7 @@ metadata:
   name: &app coredns
 spec:
   interval: 1h
+  maxHistory: 1
   dependsOn:
     - name: dnscrypt-proxy
       namespace: network

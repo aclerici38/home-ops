@@ -6,6 +6,7 @@ metadata:
   name: &app local-path-posey
 spec:
   interval: 1h
+  maxHistory: 1
   chartRef:
     kind: OCIRepository
     name: democratic-csi
