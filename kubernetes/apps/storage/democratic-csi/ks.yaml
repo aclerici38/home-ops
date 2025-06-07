@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: nfs-server-alpine
+    - name: nfs-server
   path: ./kubernetes/apps/storage/democratic-csi/bonds-nfs
   prune: true
   sourceRef:
