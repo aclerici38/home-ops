@@ -83,9 +83,9 @@ spec:
           - backendRefs:
             - identifier: main
               port: *port
-      calibre-kobo:
+      kobo:
         hostnames:
-          - calibre.${SECRET_DOMAIN}
+          - kobo.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: network
