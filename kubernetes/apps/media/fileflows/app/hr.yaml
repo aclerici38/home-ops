@@ -27,7 +27,7 @@ spec:
         pod:
           hostname: &name ff-server
         containers:
-          *name : &container
+          main: &container
             image:
               repository: ghcr.io/ant385525/fileflows
               tag: 25.5.9.5493@sha256:6aeea0a41033fa31e1a993b64fc7129526dac4bcf8658ae21f9b3eeaa951a4e7
@@ -61,7 +61,7 @@ spec:
         pod:
           hostname: &name ff-kube-bonds
         containers:
-          *name :
+          main:
             <<: *container
             probes:
               liveness: &probes
@@ -109,24 +109,24 @@ spec:
         existingClaim: *app
         advancedMounts:
           server:
-            ff-server:
+            main:
               - path: /app/Data
       node-data:
         type: emptyDir
         advancedMounts:
           node:
-            ff-kube-bonds:
+            main:
               - path: /app/Data
       logs:
         enabled: true
         existingClaim: fileflows-logs
         advancedMounts:
           server:
-            ff-server:
+            main:
               - path: /app/Logs
                 subPath: ff-server
           node:
-            ff-kube-bonds:
+            main:
               - path: /app/Logs
                 subPath: ff-kube-bonds
       manually-added:

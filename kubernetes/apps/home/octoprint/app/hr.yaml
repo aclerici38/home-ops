@@ -99,7 +99,7 @@ spec:
       plugins:
         existingClaim: octoprint-plugins
         advancedMounts:
-          *app :
+          main:
             plugin-init:
               - path: /tmp/plugins
             app:

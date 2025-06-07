@@ -68,7 +68,7 @@ spec:
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
         containers:
-          qbit:
+          main:
             image:
               repository: ghcr.io/home-operations/qbittorrent
               tag: 5.1.0
@@ -109,7 +109,7 @@ spec:
         existingClaim: qbittorrent
         advancedMounts:
           qbit:
-            qbit:
+            main:
               - path: /config
       tmp:
         type: emptyDir

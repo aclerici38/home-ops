@@ -198,7 +198,7 @@ spec:
         existingClaim: *app
         advancedMounts:
           server:
-            app: &mounts
+            main: &mounts
               - path: /usr/src/app/upload/upload
                 subPath: upload
               - path: /usr/src/app/upload/profile
@@ -206,38 +206,38 @@ spec:
               - path: /usr/src/app/upload/library
                 subPath: library
           microservices:
-            app: *mounts
+            main: *mounts
       thumbnails:
         existingClaim: immich-thumbnails
         advancedMounts:
           server:
-            app: &mounts
+            main: &mounts
               - path: /usr/src/app/upload/thumbs
           microservices:
-            app: *mounts
+            main: *mounts
       encoded-video:
         existingClaim: immich-encoded-video
         advancedMounts:
           server:
-            app: &mounts
+            main: &mounts
               - path: /usr/src/app/upload/encoded-video
           microservices:
-            app: *mounts
+            main: *mounts
       config:
         type: configMap
         name: immich-config
         advancedMounts:
           server:
-            app: &mounts
+            main: &mounts
               - path: *config
                 subPath: config.yaml
           microservices:
-            app: *mounts
+            main: *mounts
       cache:
         existingClaim: immich-ml-cache
         advancedMounts:
           machine-learning:
-            app:
+            main:
               - path: /cache
               - path: /.config/matplotlib
                 subPath: matplotlib-config

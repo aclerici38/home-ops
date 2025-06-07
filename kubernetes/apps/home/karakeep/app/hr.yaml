@@ -168,7 +168,7 @@ spec:
         existingClaim: *app
         advancedMounts:
           *app :
-            app:
+            main:
               - path: /data
                 subPath: *app
           meilisearch:
