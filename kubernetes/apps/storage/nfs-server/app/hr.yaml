@@ -30,7 +30,7 @@ spec:
             runAsUser: 0
             runAsGroup: 0
             runAsNonRoot: false
-            seccompProfile: { type: Unconfined }
+            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
@@ -56,15 +56,18 @@ spec:
             resources:
               requests:
                 cpu: 10m
+                memory: 10Mi
               limits:
                 memory: 512Mi
             securityContext:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
-              privileged: true
               capabilities:
-                add:
+                drop:
                   - ALL
+                add:
+                  - SYS_ADMIN
+                  - SETPCAP
     service:
       main:
         controller: *app
