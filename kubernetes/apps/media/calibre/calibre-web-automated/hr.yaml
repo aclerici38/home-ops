@@ -28,21 +28,17 @@ spec:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
           securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            runAsNonRoot: true
-            fsGroupChangePolicy: Always
+            runAsUser: 0
+            runAsGroup: 0
+            runAsNonRoot: false
             seccompProfile: { type: RuntimeDefault }
         containers:
           app:
             image:
-              repository: ghcr.io/ant385525/calibre-web-automated
-              tag: 3.0.4@sha256:a8cea956a0cdb90ee383ee71a4532549c4aded8952121a1b7d49ae2c6bf35716
-              pullPolicy: Always
+              repository: docker.io/crocodilestick/calibre-web-automated
+              tag: 3.0.4
             env:
               CACHE_DIR: /cache
-              ENABLE_CWA_UPDATE_NOTIFICATION: 0
             probes:
               liveness: &probes
                 enabled: true
@@ -54,11 +50,18 @@ spec:
               limits:
                 memory: 600Mi
             securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: true
+              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
+                add:
+                  # S6
+                  - CHOWN
+                  - SETUID
+                  - SETGID
+                  - FOWNER
+                  - DAC_OVERRIDE
     service:
       *app :
         controller: *app
@@ -88,10 +91,6 @@ spec:
         type: emptyDir
       tmp:
         type: emptyDir
-      hack:
-        type: emptyDir
-        globalMounts:
-          - path: /app/calibre-web-automated
       media:
         existingClaim: media
         globalMounts:
