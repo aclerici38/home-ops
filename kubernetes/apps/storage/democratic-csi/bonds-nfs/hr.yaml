@@ -5,6 +5,7 @@ kind: HelmRelease
 metadata:
   name: &name bonds-nfs
 spec:
+  maxHistory: 1
   interval: 30m
   chartRef:
     kind: OCIRepository
@@ -42,7 +43,7 @@ spec:
       externalSnapshotter:
         enabled: true
     csiDriver:
-      name: synology-nfs
+      name: bonds-nfs
     node:
       tolerations: *tol
       driver:
@@ -50,7 +51,7 @@ spec:
         lifecycle:
           postStart:
             exec:
-              command: ["/bin/sh", "-c", "mkdir -p /mnt/pvc; mount -o nolock,nfsvers=4.1 10.38.55.10:/export /mnt/pvc"]
+              command: ["/bin/sh", "-c", "mkdir -p /mnt/pvc; mount -o nolock,vers=4.1 10.38.55.10:/export /mnt/pvc"]
           preStop:
             exec:
               command: ["/bin/sh", "-c", "umount /mnt/pvc"]
