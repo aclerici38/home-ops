@@ -40,7 +40,7 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: Always
             runAsNonRoot: false
-            seccompProfile: { type: Unconfined }
+            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
