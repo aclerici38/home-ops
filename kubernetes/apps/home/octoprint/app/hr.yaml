@@ -91,7 +91,7 @@ spec:
         rules:
           - backendRefs:
             - identifier: main
-              port: *port *port
+              port: *port
     persistence:
       *app :
         existingClaim: *app

@@ -85,7 +85,7 @@ spec:
         rules:
           - backendRefs:
             - identifier: main
-              port: *port *port
+              port: *port
     persistence:
       data:
         type: emptyDir

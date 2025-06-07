@@ -81,7 +81,7 @@ spec:
         rules:
           - backendRefs:
             - identifier: main
-              port: *port *port
+              port: *port
     persistence:
       config:
         existingClaim: audiobookshelf
