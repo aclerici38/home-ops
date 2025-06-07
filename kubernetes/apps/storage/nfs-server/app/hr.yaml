@@ -24,13 +24,13 @@ spec:
   values:
     controllers:
       *app :
-        # strategy: RollingUpdate
+        strategy: RollingUpdate
         pod:
           securityContext:
             runAsUser: 0
             runAsGroup: 0
             runAsNonRoot: false
-            seccompProfile: { type: Unconfined }
+            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
@@ -62,12 +62,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
-              capabilities:
-                drop:
-                  - ALL
-                add:
-                  - SYS_ADMIN
-                  - SETPCAP
+              privileged: true
     service:
       main:
         controller: *app
