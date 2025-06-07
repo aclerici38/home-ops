@@ -20,6 +20,8 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  dependsOn:
+    - name: media-nfs-server
   values:
     controllers:
       *app :
@@ -33,8 +35,10 @@ spec:
               value: "cloud"
               effect: "NoSchedule"
           securityContext:
-            runAsUser: 0
-            runAsGroup: 0
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
             runAsNonRoot: false
             seccompProfile: { type: Unconfined }
         containers:
@@ -47,8 +51,12 @@ spec:
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
               DEFAULT_SLEEP: 15
-              UID: 1000
-              GID: 1000
+              USE_CF_BYPASS: false
+            command:
+              - /bin/sh
+              - -c
+              - |
+                gunicorn -t 300 -b 0.0.0.0:8084 app:app
             probes:
               liveness: &probes
                 enabled: true
@@ -67,15 +75,12 @@ spec:
                 cpu: 10m
                 memory: 150Mi
               limits:
-                memory: 2Gi
+                memory: 500Mi
             securityContext:
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
-                add:
-                  - SYS_ADMIN
-                  - IPC_LOCK
               allowPrivilegeEscalation: false
     service:
       main:
