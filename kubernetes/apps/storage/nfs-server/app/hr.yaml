@@ -64,7 +64,7 @@ spec:
                   - SETPCAP
                   - NET_BIND_SERVICE
     service:
-      main: &svc
+      main:
         controller: *app
         type: LoadBalancer
         annotations:
