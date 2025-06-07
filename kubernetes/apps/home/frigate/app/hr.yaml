@@ -111,7 +111,7 @@ spec:
         rules:
           - backendRefs:
             - identifier: main
-              port: *port *http
+              port: *http
     persistence:
       config:
         existingClaim: *app

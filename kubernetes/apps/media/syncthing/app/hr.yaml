@@ -99,7 +99,7 @@ spec:
         rules:
           - backendRefs:
             - identifier: main
-              port: *port 22000
+              port: 22000
       quic:
         kind: UDPRoute
         parentRefs:
@@ -109,7 +109,7 @@ spec:
         rules:
           - backendRefs:
             - identifier: main
-              port: *port 22000
+              port: 22000
     persistence:
       config:
         existingClaim: *app
