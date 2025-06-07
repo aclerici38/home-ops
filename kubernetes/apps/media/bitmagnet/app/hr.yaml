@@ -134,8 +134,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: main
-                port: *port
+            - identifier: main
+              port: *port *port
     persistence:
       tmp:
         type: emptyDir

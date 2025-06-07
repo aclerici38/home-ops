@@ -84,8 +84,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: main
-                port: 8123
+            - identifier: main
+              port: *port 8123
     persistence:
       config:
         existingClaim: *app

@@ -80,8 +80,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: main
-                port: *port
+            - identifier: main
+              port: *port *port
       calibre-kobo:
         hostnames:
           - calibre.${SECRET_DOMAIN}

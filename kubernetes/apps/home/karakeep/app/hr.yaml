@@ -134,7 +134,6 @@ spec:
               capabilities:
                 drop:
                   - ALL
-
     service:
       main:
         controller: *app
@@ -161,8 +160,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: main
-                port: *port
+            - identifier: main
+              port: *port
     persistence:
       data:
         existingClaim: *app

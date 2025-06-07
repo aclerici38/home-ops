@@ -107,8 +107,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: main
-                port: *port
+            - identifier: main
+              port: *port *port
             timeouts:
               request: 3m
     persistence:

@@ -109,8 +109,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: main
-                port: *http
+            - identifier: main
+              port: *port *http
     persistence:
       config:
         existingClaim: *app
