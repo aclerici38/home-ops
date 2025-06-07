@@ -134,7 +134,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: *app
+              - identifier: main
                 port: *port
     persistence:
       tmp:

@@ -92,7 +92,7 @@ spec:
             sectionName: plex-tcp
         rules:
           - backendRefs:
-              - identifier: *app
+              - identifier: main
                 port: *port
     persistence:
       config:

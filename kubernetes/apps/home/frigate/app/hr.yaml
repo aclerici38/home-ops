@@ -109,7 +109,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: *app
+              - identifier: main
                 port: *http
     persistence:
       config:
