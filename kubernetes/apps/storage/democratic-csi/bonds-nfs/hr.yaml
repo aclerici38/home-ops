@@ -51,7 +51,7 @@ spec:
         lifecycle:
           postStart:
             exec:
-              command: ["/bin/sh", "-c", "mkdir -p /mnt/pvc; mount -o nolock,vers=4.1 10.38.55.10:/export /mnt/pvc"]
+              command: ["/bin/sh", "-c", "mkdir -p /mnt/pvc; mount -o nolock,nfsvers=4.1 10.38.55.10:/export /mnt/pvc"]
           preStop:
             exec:
               command: ["/bin/sh", "-c", "umount /mnt/pvc"]
