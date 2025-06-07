@@ -66,8 +66,8 @@ spec:
                     path: /request/api/status
                     port: *port
                   initialDelaySeconds: 5
-                  periodSeconds: 30
-                  timeoutSeconds: 30
+                  periodSeconds: 10
+                  timeoutSeconds: 1
                   failureThreshold: 5
               readiness: *probes
             resources:
