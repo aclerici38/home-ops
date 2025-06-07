@@ -82,8 +82,21 @@ spec:
           - backendRefs:
               - identifier: *app
                 port: *port
-            timeouts:
-              request: 0s
+      calibre-kobo:
+        hostnames:
+          - calibre.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: network
+            sectionName: https
+        rules:
+          - matches:
+            - path:
+                type: PathPrefix
+                value: /kobo
+            backendRefs:
+              - identifier: *app
+                port: *port
     persistence:
       config:
         existingClaim: *app
