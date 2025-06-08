@@ -6,6 +6,7 @@ metadata:
   name: ${APP}-db
   annotations:
     k8tz.io/inject: false
+    alpha.cnpg.io/livenessPinger: '{"enabled": true}'
 spec:
   instances: ${CNPG_REPLICAS:=2}
   primaryUpdateStrategy: unsupervised
