@@ -48,8 +48,9 @@ spec:
           bootstrap:
             recovery:
               recoveryTarget:
-                backupID: 20250607T110004
+                backupID: 20250606T110018
                 targetImmediate: true
+                targetTLI: "20"
       target:
         kind: Cluster
   postBuild:
