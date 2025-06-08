@@ -19,7 +19,7 @@ spec:
     name: flux-system
     namespace: flux-system
   interval: 30m
-  timeout: 5m
+  timeout: 3m
   wait: true
 ---
 # yaml-language-server: $schema=https://kube-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
@@ -40,7 +40,7 @@ spec:
     name: flux-system
     namespace: flux-system
   interval: 30m
-  timeout: 5m
+  timeout: 3m
   wait: true
 ---
 # yaml-language-server: $schema=https://kube-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
@@ -63,7 +63,7 @@ spec:
     name: flux-system
     namespace: flux-system
   interval: 30m
-  timeout: 5m
+  timeout: 3m
   wait: true
   postBuild:
     substitute:
@@ -89,7 +89,7 @@ spec:
     name: flux-system
     namespace: flux-system
   interval: 30m
-  timeout: 5m
+  timeout: 3m
   wait: true
   postBuild:
     substitute:

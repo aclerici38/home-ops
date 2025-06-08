@@ -21,7 +21,7 @@ spec:
     namespace: flux-system
   wait: true
   interval: 30m
-  timeout: 5m
+  timeout: 3m
   postBuild:
     substitute:
       APP: *app
@@ -48,7 +48,7 @@ spec:
     namespace: flux-system
   wait: true
   interval: 30m
-  timeout: 5m
+  timeout: 3m
   postBuild:
     substitute:
       APP: *app
@@ -74,4 +74,4 @@ spec:
     namespace: flux-system
   wait: true
   interval: 30m
-  timeout: 5m
+  timeout: 3m

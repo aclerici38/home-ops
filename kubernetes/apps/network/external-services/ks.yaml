@@ -18,7 +18,7 @@ spec:
   prune: true
   wait: true
   interval: 30m
-  timeout: 5m
+  timeout: 3m
   postBuild:
     substitute:
       APP: synology
@@ -44,7 +44,7 @@ spec:
   prune: true
   wait: true
   interval: 30m
-  timeout: 5m
+  timeout: 3m
   postBuild:
     substitute:
       APP: house-opnsense
@@ -70,7 +70,7 @@ spec:
   prune: true
   wait: true
   interval: 30m
-  timeout: 5m
+  timeout: 3m
   postBuild:
     substitute:
       APP: apt-opnsense

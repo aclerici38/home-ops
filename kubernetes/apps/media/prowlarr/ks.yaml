@@ -29,7 +29,7 @@ spec:
     namespace: flux-system
   wait: true
   interval: 30m
-  timeout: 5m
+  timeout: 3m
   patches:
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1

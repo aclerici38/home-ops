@@ -20,7 +20,7 @@ spec:
   prune: true
   wait: false
   interval: 30m
-  timeout: 5m
+  timeout: 3m
   postBuild:
     substitute:
       APP: *app
