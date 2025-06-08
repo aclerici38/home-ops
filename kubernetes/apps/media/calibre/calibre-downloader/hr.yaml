@@ -44,8 +44,8 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/calibrain/calibre-web-automated-book-downloader
-              tag: 20250506@sha256:97a636efe3b78e1306ff521aa09256125aacdb1a04e628df294d7b6da3fe7b4a
+              repository: ghcr.io/ant385525/calibre-web-automated-book-downloader
+              tag: 20250506@sha256:7e0196799041c5bfc66efd92c674b2f731fbc49d8d911a97267876ae892a4468
             env:
               FLASK_PORT: &port 8084
               INGEST_DIR: &ingest /cwa-book-ingest
