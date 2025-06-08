@@ -60,9 +60,9 @@ spec:
     storageClassName: "${VOLSYNC_STORAGECLASS:-zfs-nvme}"
     accessModes: ["${VOLSYNC_SNAP_ACCESSMODES:-ReadWriteMany}"]
     moverSecurityContext:
-      runAsUser: ${VOLSYNC_PUID:-0}
-      runAsGroup: ${VOLSYNC_PGID:-0}
-      fsGroup: ${VOLSYNC_PGID:-0}
+      runAsUser: ${VOLSYNC_PUID:-1000}
+      runAsGroup: ${VOLSYNC_PGID:-1000}
+      fsGroup: ${VOLSYNC_PGID:-1000}
     retain:
       hourly: 24
       daily: 7
@@ -87,9 +87,9 @@ spec:
     accessModes: ["${VOLSYNC_ACCESSMODES:-ReadWriteMany}"]
     capacity: "${VOLSYNC_CAPACITY:-5Gi}"
     moverSecurityContext:
-      runAsUser: ${VOLSYNC_PUID:-0}
-      runAsGroup: ${VOLSYNC_PGID:-0}
-      fsGroup: ${VOLSYNC_PGID:-0}
+      runAsUser: ${VOLSYNC_PUID:-1000}
+      runAsGroup: ${VOLSYNC_PGID:-1000}
+      fsGroup: ${VOLSYNC_PGID:-1000}
       fsGroupChangePolicy: Always
     enableFileDeletion: true
     cleanupCachePVC: true
