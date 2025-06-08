@@ -45,11 +45,6 @@ spec:
                 operator: "Equal"
                 value: "cloud"
                 effect: "NoSchedule"
-          bootstrap:
-            recovery:
-              recoveryTarget:
-                backupID: 20250605T110007
-                targetImmediate: true
       target:
         kind: Cluster
   postBuild:
