@@ -25,6 +25,21 @@ spec:
     controllers:
       *app :
         type: statefulset
+        pod:
+          nodeSelector:
+            location: cloud
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "cloud"
+              effect: "NoSchedule"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
@@ -81,14 +96,6 @@ spec:
                 memory: 100Mi
               limits:
                 memory: 2Gi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: Always
-        seccompProfile: { type: RuntimeDefault }
     service:
       main:
         controller: *app
