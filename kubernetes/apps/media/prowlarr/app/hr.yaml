@@ -118,6 +118,4 @@ spec:
               request: 3m
     persistence:
       config:
-        existingClaim: prowlarr-metadata
-        globalMounts:
-          - path: /config
+        type: emptyDir

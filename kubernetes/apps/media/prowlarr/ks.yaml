@@ -30,6 +30,24 @@ spec:
   wait: true
   interval: 30m
   timeout: 5m
+  patches:
+    - patch: |-
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Cluster
+        metadata:
+          name: patch
+        spec:
+          affinity:
+            nodeSelector:
+              location: cloud
+            tolerations:
+              - key: "location"
+                operator: "Equal"
+                value: "cloud"
+                effect: "NoSchedule"
+      target:
+        kind: Cluster
   postBuild:
     substitute:
       APP: *app
+      CNPG_STORAGECLASS: local-hostpath-madbum
