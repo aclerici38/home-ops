@@ -62,7 +62,7 @@ spec:
     moverSecurityContext:
       runAsUser: ${VOLSYNC_PUID:-0}
       runAsGroup: ${VOLSYNC_PGID:-0}
-      fsGroup: ${VOLSYNC_PGID:-1000}
+      fsGroup: ${VOLSYNC_PGID:-0}
     retain:
       hourly: 24
       daily: 7
@@ -89,7 +89,8 @@ spec:
     moverSecurityContext:
       runAsUser: ${VOLSYNC_PUID:-0}
       runAsGroup: ${VOLSYNC_PGID:-0}
-      fsGroup: ${VOLSYNC_PGID:-1000}
+      fsGroup: ${VOLSYNC_PGID:-0}
+      fsGroupChangePolicy: Always
     enableFileDeletion: true
     cleanupCachePVC: true
     cleanupTempPVC: true
