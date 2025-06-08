@@ -45,6 +45,10 @@ spec:
                 operator: "Equal"
                 value: "cloud"
                 effect: "NoSchedule"
+          bootstrap:
+            recovery:
+              recoveryTarget:
+                targetTLI: "21"
       target:
         kind: Cluster
   postBuild:
