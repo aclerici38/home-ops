@@ -24,7 +24,7 @@ spec:
   values:
     controllers:
       *app :
-        type: statefulset
+        strategy: RollingUpdate
         initContainers:
           gluetun:
             image:
