@@ -26,17 +26,12 @@ spec:
       *app :
         type: statefulset
         pod:
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
           nodeSelector:
-            location: house
+            kubernetes.io/hostname: bonds
           securityContext:
-            runAsUser: 65534
-            runAsGroup: 65534
-            fsGroup: 65534
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
             fsGroupChangePolicy: Always
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
@@ -45,9 +40,9 @@ spec:
             k8s.v1.cni.cncf.io/networks: |
               [
                 {
-                  "name":"multus-house-net",
+                  "name":"multus-apt-net",
                   "namespace": "network",
-                  "ips": ["10.0.40.28/24"],
+                  "ips": ["192.168.1.25/24"],
                   "mac": "64:16:7F:E9:23:A5"
                 }
               ]
