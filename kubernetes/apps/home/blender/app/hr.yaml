@@ -39,18 +39,10 @@ spec:
               repository: ghcr.io/linuxserver/blender
               tag: 4.4.3@sha256:d466705884eb29d4749dea24ef09447964ce57a3624ddfd434015313089a195d
             probes:
-              liveness: &probes
+              liveness:
                 enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /
-                    port: &port 3000
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
+              readiness:
+                enabled: true
             securityContext:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
