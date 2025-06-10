@@ -29,7 +29,7 @@ spec:
     dns01RecursiveNameserversOnly: true
     image:
       repository: quay.io/jetstack/cert-manager-controller
-      tag: v1.18.0
+      tag: v1.18.0@sha256:54afe84015542e9451da8934fca82f8c1402a6f3a212983c26a25d4b3ea3d31d
     tolerations: &tol
       - key: "location"
         operator: "Equal"
