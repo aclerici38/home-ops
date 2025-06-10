@@ -27,7 +27,7 @@ spec:
         strategy: RollingUpdate
         pod:
           nodeSelector:
-            location: cloud
+            location: house
           tolerations:
             - key: "location"
               operator: "Equal"
