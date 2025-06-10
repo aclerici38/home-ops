@@ -25,21 +25,32 @@ spec:
     controllers:
       *app :
         type: statefulset
+        pod:
+          securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 0
+            seccompProfile: { type: RuntimeDefault }
+            supplementalGroups:
+              - 44
         containers:
           main:
             image:
               repository: ghcr.io/linuxserver/blender
               tag: 4.4.3@sha256:d466705884eb29d4749dea24ef09447964ce57a3624ddfd434015313089a195d
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
-              readiness:
-                enabled: true
-              startup:
-                enabled: true
+                custom: true
                 spec:
-                  failureThreshold: 5
-                  periodSeconds: 5
+                  httpGet:
+                    path: /
+                    port: &port 3000
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
             securityContext:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
@@ -60,20 +71,12 @@ spec:
               limits:
                 memory: 6Gi
                 gpu.intel.com/i915: 1
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: false
-        runAsUser: 0
-        runAsGroup: 0
-        seccompProfile: { type: RuntimeDefault }
-        supplementalGroups:
-          - 44
     service:
       main:
         controller: *app
         ports:
           http:
-            port: &port 3000
+            port: *port
     route:
       main:
         hostnames:

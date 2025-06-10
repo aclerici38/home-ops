@@ -22,6 +22,23 @@ controllers:
           cpu: 10m
         limits:
           memory: 256M
+    pod:
+      tolerations:
+        - key: "location"
+          operator: "Equal"
+          value: "cloud"
+          effect: "NoSchedule"
+        - key: "location"
+          operator: "Equal"
+          value: "house"
+          effect: "NoSchedule"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 999
+        fsGroupChangePolicy: Always
+        seccompProfile: { type: RuntimeDefault }
     containers:
       api:
         image:
@@ -59,23 +76,6 @@ controllers:
           OP_BUS_PORT: 11221
           OP_BUS_PEERS: localhost:11220
         probes: *probes
-defaultPodOptions:
-  tolerations:
-    - key: "location"
-      operator: "Equal"
-      value: "cloud"
-      effect: "NoSchedule"
-    - key: "location"
-      operator: "Equal"
-      value: "house"
-      effect: "NoSchedule"
-  securityContext:
-    runAsNonRoot: true
-    runAsUser: 999
-    runAsGroup: 999
-    fsGroup: 999
-    fsGroupChangePolicy: Always
-    seccompProfile: { type: RuntimeDefault }
 service:
   onepassword-connect:
     controller: onepassword-connect

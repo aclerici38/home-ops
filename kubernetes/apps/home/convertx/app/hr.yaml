@@ -25,6 +25,16 @@ spec:
     controllers:
       *app :
         strategy: RollingUpdate
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            seccompProfile: { type: RuntimeDefault }
+            supplementalGroups:
+              - 44
         containers:
           main:
             image:
@@ -62,14 +72,6 @@ spec:
               capabilities:
                 drop:
                   - ALL
-    defaultPodOptions:
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: Always
-        supplementalGroups:
-          - 44
     service:
       main:
         controller: *app

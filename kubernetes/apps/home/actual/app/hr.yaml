@@ -25,6 +25,14 @@ spec:
     controllers:
       *app :
         type: statefulset
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
@@ -65,14 +73,6 @@ spec:
               allowPrivilegeEscalation: false
               seccompProfile: { type: RuntimeDefault }
               capabilities: { drop: ["ALL"] }
-    defaultPodOptions:
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: Always
-        runAsNonRoot: true
-        seccompProfile: { type: RuntimeDefault }
     service:
       main:
         controller: *app

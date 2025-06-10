@@ -43,7 +43,7 @@ spec:
           main:
             image:
               repository: ghcr.io/blakeblackshear/frigate
-              tag: 0.16.0-beta3
+              tag: 0.16.0-beta3@sha256:sha256:944dbf199f1cbe99cfedc74b7cd9791daa68a334d4e9f74214a06dde58c1458a
             env:
               YOLO_MODELS: yolov7x-320
             envFrom:
@@ -69,7 +69,7 @@ spec:
                 type: HTTP
                 spec:
                   httpGet:
-                    path: /
+                    path: /api/version
                     port: 5000
                   initialDelaySeconds: 5
                   periodSeconds: 10
