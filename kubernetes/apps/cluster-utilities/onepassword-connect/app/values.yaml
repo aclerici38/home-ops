@@ -4,6 +4,7 @@ controllers:
   onepassword-connect:
     strategy: RollingUpdate
     replicas: 1
+    defaultContainerOptionsStrategy: merge
     defaultContainerOptions:
       env:
         XDG_DATA_HOME: &configDir /config
