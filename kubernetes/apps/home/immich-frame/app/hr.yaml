@@ -28,16 +28,16 @@ spec:
         pod:
           securityContext:
             runAsNonRoot: true
-            runAsUser: 65534
-            runAsGroup: 65534
-            fsGroup: 65534
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
               repository: ghcr.io/immichframe/immichframe
-              tag: v1.0.26.2
+              tag: v1.0.26.2@sha256:50670a520ec7b1aa26282b39cd0e412ce457868144478564c607d87a0c16b642
             env:
               Language: en
               ImmichServerUrl: http://immich-server:2283
