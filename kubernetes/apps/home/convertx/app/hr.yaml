@@ -25,14 +25,6 @@ spec:
     controllers:
       *app :
         strategy: RollingUpdate
-        pod:
-          securityContext:
-            runAsUser: 65534
-            runAsGroup: 65533
-            fsGroup: 65533
-            fsGroupChangePolicy: Always
-            supplementalGroups:
-              - 44
         containers:
           main:
             image:
@@ -43,11 +35,26 @@ spec:
               HTTP_ALLOWED: false
               ALLOW_UNAUTHENTICATED: true
               AUTO_DELETE_EVERY_N_HOURS: 1
+              FFMPEG_ARGS: -hwaccel vaapi
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: &port 3000
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
             resources:
               requests:
                 cpu: 100m
+                memory: 115Mi
               limits:
-                memory: 12Gi
+                memory: 8Gi
                 gpu.intel.com/i915: 1
             securityContext:
               allowPrivilegeEscalation: false
@@ -55,19 +62,14 @@ spec:
               capabilities:
                 drop:
                   - ALL
-    probes:
-      liveness: &probes
-        enabled: true
-        custom: true
-        spec:
-          httpGet:
-            path: /
-            port: &port 3000
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          timeoutSeconds: 1
-          failureThreshold: 3
-      readiness: *probes
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: Always
+        supplementalGroups:
+          - 44
     service:
       main:
         controller: *app

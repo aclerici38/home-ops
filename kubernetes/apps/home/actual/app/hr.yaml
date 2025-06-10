@@ -25,19 +25,11 @@ spec:
     controllers:
       *app :
         type: statefulset
-        pod:
-          securityContext:
-            runAsUser: 65534
-            runAsGroup: 65534
-            fsGroup: 655334
-            fsGroupChangePolicy: Always
-            runAsNonRoot: true
-            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
               repository: ghcr.io/actualbudget/actual
-              tag: 25.6.1-alpine
+              tag: 25.6.1-alpine@sha256:2c16d9e3a3651aaee102e6f4357d959e08ccee911afabc1b9c1d16a6eb9a854f
             env:
               ACTUAL_LOGIN_METHOD: openid
               ACTUAL_ALLOWED_LOGIN_METHODS: '[openid]'
@@ -72,9 +64,15 @@ spec:
               runAsNonRoot: true
               allowPrivilegeEscalation: false
               seccompProfile: { type: RuntimeDefault }
-              capabilities:
-                drop:
-                  - ALL
+              capabilities: { drop: ["ALL"] }
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: Always
+        runAsNonRoot: true
+        seccompProfile: { type: RuntimeDefault }
     service:
       main:
         controller: *app

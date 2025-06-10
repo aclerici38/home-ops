@@ -51,22 +51,25 @@ spec:
               startup:
                 enabled: true
                 spec:
-                  failureThreshold: 30
+                  failureThreshold: 5
                   periodSeconds: 5
             resources:
               requests:
                 cpu: 10m
-                memory: 128Mi
+                memory: 20Mi
               limits:
-                memory: 1Gi
+                memory: 100Mi
             securityContext:
-              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities: { drop: ["ALL"] }
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
-        fsGroup: 65534
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         fsGroupChangePolicy: Always
         seccompProfile: { type: RuntimeDefault }
     service:

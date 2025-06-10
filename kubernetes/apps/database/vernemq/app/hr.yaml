@@ -67,6 +67,11 @@ spec:
         initialDelaySeconds: 5
       readinessProbe:
         initialDelaySeconds: 5
+    securityContext:
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities: { drop: ["ALL"] }
     tolerations:
       - key: "location"
         operator: "Equal"

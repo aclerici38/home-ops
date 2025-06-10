@@ -26,26 +26,6 @@ spec:
       *app :
         replicas: 2
         strategy: RollingUpdate
-        pod:
-          # No ARM image
-          nodeSelector:
-            kubernetes.io/arch: amd64
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "cloud"
-              effect: "NoSchedule"
-            - key: "location"
-              operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 65543
-            runAsGroup: 65543
-            fsGroup: 65543
-            fsGroupChangePolicy: Always
-            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
@@ -63,6 +43,11 @@ spec:
                 enabled: true
               readiness:
                 enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 5
+                  periodSeconds: 5
             resources:
               requests:
                 cpu: 10m
@@ -72,6 +57,26 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+    defaultPodOptions:
+      # No ARM image
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      tolerations:
+        - key: "location"
+          operator: "Equal"
+          value: "cloud"
+          effect: "NoSchedule"
+        - key: "location"
+          operator: "Equal"
+          value: "house"
+          effect: "NoSchedule"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: Always
+        seccompProfile: { type: RuntimeDefault }
     service:
       main:
         controller: *app
