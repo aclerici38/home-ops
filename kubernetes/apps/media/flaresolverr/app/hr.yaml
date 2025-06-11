@@ -58,3 +58,7 @@ spec:
     persistence:
       tmp:
         type: emptyDir
+      app:
+        type: emptyDir
+        globalMounts:
+          - path: /app/.local
