@@ -25,16 +25,6 @@ spec:
     controllers:
       apt:
         type: statefulset
-        pod:
-          hostUsers: false
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            fsGroupChangePolicy: Always
-            supplementalGroups:
-              - 20
         containers:
           main: &container
             image:
@@ -120,6 +110,15 @@ spec:
               <<: *res
               limits:
                 memory: 512Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: Always
+        supplementalGroups:
+          - 20
     service:
       apt:
         controller: apt
