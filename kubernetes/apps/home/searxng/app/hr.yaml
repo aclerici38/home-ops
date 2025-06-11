@@ -25,6 +25,7 @@ spec:
     controllers:
       *app :
         pod:
+          hostUsers: false
           nodeSelector:
             location: "cloud"
           tolerations:

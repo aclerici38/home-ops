@@ -25,6 +25,14 @@ spec:
     controllers:
       recyclarr:
         type: statefulset
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroupChangePolicy: Always
+            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
@@ -41,12 +49,12 @@ spec:
               requests:
                 cpu: 10m
                 memory: 50Mi
-    defaultPodOptions:
-      securityContext:
-        fsGroup: 1000
-        fsGroupChangePolicy: Always
-        runAsGroup: 1000
-        runAsUser: 1000
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
     persistence:
       config:
         existingClaim: recyclarr-config

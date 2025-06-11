@@ -25,6 +25,12 @@ spec:
     controllers:
       *app :
         type: statefulset
+        pod:
+          securityContext:
+            runAsNonRoot: false
+            seccompProfile: { type: RuntimeDefault }
+            runAsUser: 0
+            runAsGroup: 0
         containers:
           main:
             image:
@@ -49,10 +55,8 @@ spec:
               - secretRef:
                   name: karakeep-secret
             securityContext:
-              runAsNonRoot: false
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
               capabilities:
                 drop:
                   - ALL
@@ -73,13 +77,6 @@ spec:
               limits:
                 memory: 1Gi
       chrome:
-        pod:
-          securityContext: &sec
-            runAsGroup: 65543
-            runAsUser: 65543
-            runAsNonRoot: true
-            fsGroup: 65543
-            fsGroupChangePolicy: Always
         containers:
           chrome:
             image:
@@ -95,18 +92,14 @@ spec:
               - --remote-debugging-address=0.0.0.0
               - --remote-debugging-port=9222
               - --hide-scrollbars
-            securityContext:
-              runAsNonRoot: true
+            securityContext: &sec
               readOnlyRootFilesystem: true
               allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
               capabilities:
                 drop:
                   - ALL
             resources: *res
       meilisearch:
-        pod:
-          securityContext: *sec
         containers:
           meilisearch:
             image:
@@ -127,14 +120,17 @@ spec:
                 cpu: 10m
               limits:
                 memory: 4Gi
-            securityContext:
-              runAsNonRoot: true
-              readOnlyRootFilesystem: true
-              allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
-              capabilities:
-                drop:
-                  - ALL
+            securityContext: *sec
+    defaultPodOptionsStrategy: merge
+    defaultPodOptions:
+      hostUsers: false
+      securityContext:
+        runAsGroup: 1000
+        runAsUser: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
+        fsGroupChangePolicy: Always
+        seccompProfile: { type: RuntimeDefault }
     service:
       main:
         controller: *app

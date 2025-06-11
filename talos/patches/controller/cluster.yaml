@@ -39,5 +39,5 @@ cluster:
   apiServer:
     extraArgs:
       runtime-config: admissionregistration.k8s.io/v1alpha1=true
-      feature-gates: MutatingAdmissionPolicy=true
+      feature-gates: MutatingAdmissionPolicy=true,UserNamespacesSupport=true,UserNamespacesPodSecurityStandards=true
       service-node-port-range: "123-32767"

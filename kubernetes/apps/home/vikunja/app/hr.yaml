@@ -25,6 +25,15 @@ spec:
     controllers:
       *app :
         type: statefulset
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
@@ -88,21 +97,15 @@ spec:
                   failureThreshold: 3
               readiness: *probes
             securityContext:
+              allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 100m
-                memory: 100Mi
+                memory: 20Mi
               limits:
-                memory: 8Gi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
-        fsGroup: 65534
-        fsGroupChangePolicy: Always
-        seccompProfile: { type: RuntimeDefault }
+                memory: 150Mi
     service:
       main:
         controller: *app

@@ -25,6 +25,7 @@ spec:
     controllers:
       *app :
         pod:
+          hostUsers: false
           tolerations:
             - key: "location"
               operator: "Equal"
@@ -34,6 +35,11 @@ spec:
               operator: "Equal"
               value: "house"
               effect: "NoSchedule"
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
         strategy: RollingUpdate
         replicas: 3
         containers:
@@ -48,11 +54,8 @@ spec:
               limits:
                 memory: 2Gi
             securityContext:
-              runAsUser: 65534
-              runAsGroup: 65534
-              runAsNonRoot: true
               allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL

@@ -26,6 +26,7 @@ spec:
       *app :
         type: statefulset
         pod:
+          hostUsers: false
           nodeSelector:
             location: cloud
           tolerations:

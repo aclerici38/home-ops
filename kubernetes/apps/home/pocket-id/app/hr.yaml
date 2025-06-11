@@ -25,6 +25,7 @@ spec:
     controllers:
       main:
         pod:
+          hostUsers: false
           nodeSelector:
             location: cloud
           tolerations:
@@ -34,9 +35,9 @@ spec:
               effect: "NoSchedule"
           securityContext:
             runAsNonRoot: true
-            runAsUser: 65534
-            runAsGroup: 65534
-            fsGroup: 65534
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         strategy: RollingUpdate

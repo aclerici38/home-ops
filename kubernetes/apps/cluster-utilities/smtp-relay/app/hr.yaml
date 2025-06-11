@@ -27,6 +27,7 @@ spec:
         replicas: 2
         strategy: RollingUpdate
         pod:
+          hostUsers: false
           # No ARM image
           nodeSelector:
             kubernetes.io/arch: amd64

@@ -26,25 +26,20 @@ spec:
       *app :
         strategy: RollingUpdate
         pod:
+          hostUsers: false
           nodeSelector:
             location: "apartment"
           securityContext:
             runAsNonRoot: true
-            runAsUser: 65543
-            runAsGroup: 65543
+            runAsUser: 1000
+            runAsGroup: 1000
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
               repository: ghcr.io/vuetorrent/vuetorrent-backend
-              tag: 2.5.1
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
-              capabilities:
-                drop:
-                  - ALL
+              tag: 2.5.1@sha256:bd7cb19459a664073a05e8c4c8482888a2f41f307aa2fce2b1d329e35db7b358
             resources:
               requests:
                 cpu: 10m
@@ -69,6 +64,12 @@ spec:
               RELEASE_TYPE: v2.25.0
               PORT: *port
               QBIT_BASE: http://qbittorrent:8080
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
     service:
       main:
         controller: *app

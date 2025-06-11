@@ -96,6 +96,7 @@ spec:
               API_BASE_URL: http://blocky-http:4000/api
             securityContext: *sec
     defaultPodOptions:
+      hostUsers: false
       tolerations:
         - key: "location"
           operator: "Equal"
@@ -114,8 +115,8 @@ spec:
               app.kubernetes.io/controller: blocky
       securityContext:
         runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
+        runAsUser: 1000
+        runAsGroup: 1000
         seccompProfile: { type: RuntimeDefault }
     service:
       http:

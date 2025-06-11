@@ -25,6 +25,7 @@ spec:
     controllers:
       *app :
         pod:
+          hostUsers: false
           securityContext:
             runAsNonRoot: true
             runAsGroup: 1000

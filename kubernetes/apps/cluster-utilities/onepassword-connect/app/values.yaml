@@ -23,6 +23,7 @@ controllers:
         limits:
           memory: 256M
     pod:
+      hostUsers: false
       tolerations:
         - key: "location"
           operator: "Equal"

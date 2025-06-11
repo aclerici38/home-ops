@@ -26,10 +26,11 @@ spec:
       *app :
         strategy: RollingUpdate
         pod:
+          hostUsers: false
           securityContext:
             runAsNonRoot: true
-            runAsUser: 65534
-            runAsGroup: 65534
+            runAsUser: 1000
+            runAsGroup: 1000
             seccompProfile: { type: RuntimeDefault }
         containers:
           main:

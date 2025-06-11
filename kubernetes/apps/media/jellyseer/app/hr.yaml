@@ -26,6 +26,7 @@ spec:
       jellyseerr:
         type: statefulset
         pod:
+          hostUsers: false
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000

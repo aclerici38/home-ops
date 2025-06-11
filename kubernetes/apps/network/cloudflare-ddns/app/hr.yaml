@@ -66,6 +66,10 @@ spec:
                 cpu: 10m
               limits:
                 memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
       house:
         pod:
           nodeSelector:
@@ -104,6 +108,14 @@ spec:
               - cloud.${SECRET_DOMAIN}
               - --provider
               - random
+    defaultPodOptionsStrategy: merge
+    defaultPodOptions:
+      hostUsers: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile: { type: RuntimeDefault }
     service:
       apartment:
         controller: apartment
