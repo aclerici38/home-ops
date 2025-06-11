@@ -116,3 +116,7 @@ spec:
         type: emptyDir
       nonexistent:
         type: emptyDir
+      nltk:
+        type: emptyDir
+        globalMounts:
+          - path: /nltk_data
