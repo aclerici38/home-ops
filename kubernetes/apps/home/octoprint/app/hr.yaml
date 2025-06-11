@@ -26,7 +26,6 @@ spec:
       *app :
         type: statefulset
         pod:
-          hostUsers: false
           tolerations:
             - key: "location"
               operator: "Equal"
