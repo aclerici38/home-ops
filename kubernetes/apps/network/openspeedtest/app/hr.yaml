@@ -25,10 +25,10 @@ spec:
     controllers:
       *app :
         pod:
-          hostUsers: false
+          # hostUsers: false
           securityContext:
             runAsNonRoot: true
-            runAsUser: 1000
+            runAsUser: &id 1000
             runAsGroup: 1000
             seccompProfile: { type: RuntimeDefault }
         containers:
@@ -42,6 +42,8 @@ spec:
               - daemon off;
               - -c
               - /etc/nginx/conf.d/OpenSpeedTest-Server.conf
+            env:
+              SET_USER: *id
             probes:
               liveness: &probes
                 enabled: true
