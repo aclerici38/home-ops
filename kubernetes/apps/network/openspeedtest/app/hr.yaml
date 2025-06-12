@@ -36,7 +36,7 @@ spec:
             image:
               repository: docker.io/openspeedtest/latest
               tag: v2.0.6@sha256:a6a7e3b3e9e93cfe7b9b2eb49c60b2a93644149a0a600845d4df57148b193ff6
-            command: ["/usr/bin/nginx"]
+            command: ["nginx"]
             args:
               - -g
               - daemon off;
