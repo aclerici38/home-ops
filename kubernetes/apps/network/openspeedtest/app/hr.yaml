@@ -28,15 +28,22 @@ spec:
           hostUsers: false
           securityContext:
             runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
+            runAsUser: 101
+            runAsGroup: 101
             seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
-              repository: docker.io/ant385525/openspeedtest
-              tag: test
-              pullPolicy: Always
+              repository: docker.io/openspeedtest/latest
+              tag: v2.0.6@sha256:a6a7e3b3e9e93cfe7b9b2eb49c60b2a93644149a0a600845d4df57148b193ff6
+            command: ["nginx"]
+            args:
+              - -g
+              - daemon off;
+              - -c
+              - /etc/nginx/conf.d/OpenSpeedTest-Server.conf
+            env:
+              DOMAIN_NAME: ${SECRET_DOMAIN}
             probes:
               liveness: &probes
                 enabled: true
@@ -44,7 +51,7 @@ spec:
                 spec:
                   httpGet:
                     path: /
-                    port: &port 8080
+                    port: &port 3000
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
