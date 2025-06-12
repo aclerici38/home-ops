@@ -1,0 +1,10 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: openspeedtest-request-buffer
+spec:
+  targetRefs:
+    - kind: HTTPRoute
+      name: ${APP}
+  requestBuffer:
+    limit: 35Mi
