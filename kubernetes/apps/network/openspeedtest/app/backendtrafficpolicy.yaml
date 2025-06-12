@@ -4,7 +4,8 @@ metadata:
   name: openspeedtest-request-buffer
 spec:
   targetRefs:
-    - kind: HTTPRoute
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
       name: ${APP}
   requestBuffer:
     limit: 35Mi
