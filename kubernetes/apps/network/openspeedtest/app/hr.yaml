@@ -41,7 +41,7 @@ spec:
               - -g
               - daemon off;
               - -c
-              - /etc/nginx/conf.d/nginx.conf
+              - /etc/nginx/nginx.conf
             env:
               DOMAIN_NAME: ${SECRET_DOMAIN}
             probes:
