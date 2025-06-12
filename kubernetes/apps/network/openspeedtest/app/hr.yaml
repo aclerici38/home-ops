@@ -68,7 +68,5 @@ spec:
           http:
             port: 3000
     persistence:
-      nginx:
+      tmp:
         type: emptyDir
-        globalMounts:
-          - path: /etc/nginx
