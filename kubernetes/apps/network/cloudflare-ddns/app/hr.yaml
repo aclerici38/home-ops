@@ -26,9 +26,9 @@ spec:
       apartment:
         pod:
           nodeSelector:
-            location: &location apartment
+            location: apartment
         containers:
-          *location : &container
+          main: &container
             image:
               repository: ghcr.io/larivierec/cloudflare-ddns
               tag: v1.0.10@sha256:ca4f721aa0445eb82d1c1c307833e11d457f9a6d059201ceac72696a87c55c9d
@@ -80,7 +80,7 @@ spec:
               value: *location
               effect: "NoSchedule"
         containers:
-          *location :
+          main:
             <<: *container
             args:
               - --zone-name
@@ -99,7 +99,7 @@ spec:
               value: *location
               effect: "NoSchedule"
         containers:
-          *location :
+          main:
             <<: *container
             args:
               - --zone-name
@@ -145,31 +145,4 @@ spec:
       cloud:
         serviceName: cloud
         endpoints: *endp
-    route:
-      apartment:
-        hostnames:
-          - apartment-ddns.${SECRET_DOMAIN}
-        parentRefs: &pRef
-          - name: internal
-            namespace: network
-            sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: apartment
-                port: *port
-      house:
-        hostnames:
-          - house-ddns.${SECRET_DOMAIN}
-        parentRefs: *pRef
-        rules:
-          - backendRefs:
-              - identifier: house
-                port: *port
-      cloud:
-        hostnames:
-          - cloud-ddns.${SECRET_DOMAIN}
-        parentRefs: *pRef
-        rules:
-          - backendRefs:
-              - identifier: cloud
-                port: *port
+    
