@@ -65,9 +65,5 @@ spec:
             - identifier: main
               port: *port
     persistence:
-      cache:
+      tmp:
         type: emptyDir
-        sizeLimit: 2Gi
-        globalMounts:
-          - path: /var/cache/nginx
-
