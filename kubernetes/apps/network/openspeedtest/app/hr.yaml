@@ -88,6 +88,8 @@ spec:
               - identifier: main
                 port: *port
     persistence:
+      tmp:
+        type: emptyDir
       cache:
         type: emptyDir
         globalMounts:
