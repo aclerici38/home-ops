@@ -68,17 +68,18 @@ spec:
         ports:
           http:
             port: *port
-    main:
-      hostnames:
-        - ${APP}.${SECRET_DOMAIN}
-      parentRefs:
-        - name: internal
-          namespace: network
-          sectionName: https
-      rules:
-        - backendRefs:
-            - identifier: main
-              port: *port
+    route:
+      main:
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: main
+                port: *port
     persistence:
       tmp:
         type: emptyDir
