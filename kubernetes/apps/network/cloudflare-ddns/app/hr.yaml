@@ -24,6 +24,7 @@ spec:
   values:
     controllers:
       apartment:
+        strategy: RollingUpdate
         pod:
           nodeSelector:
             location: apartment
@@ -71,13 +72,14 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
       house:
+        strategy: RollingUpdate
         pod:
           nodeSelector:
-            location: house
+            location: &location house
           tolerations:
             - key: "location"
               operator: "Equal"
-              value: house
+              value: *location
               effect: "NoSchedule"
         containers:
           main:
@@ -90,13 +92,14 @@ spec:
               - --provider
               - random
       cloud:
+        strategy: RollingUpdate
         pod:
           nodeSelector:
-            location: cloud
+            location: &location cloud
           tolerations:
             - key: "location"
               operator: "Equal"
-              value: cloud
+              value: *location
               effect: "NoSchedule"
         containers:
           main:
@@ -108,7 +111,6 @@ spec:
               - cloud.${SECRET_DOMAIN}
               - --provider
               - random
-    defaultPodOptionsStrategy: merge
     defaultPodOptions:
       hostUsers: false
       securityContext:
