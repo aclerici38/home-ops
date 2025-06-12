@@ -90,3 +90,7 @@ spec:
     persistence:
       tmp:
         type: emptyDir
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /var/cache/nginx
