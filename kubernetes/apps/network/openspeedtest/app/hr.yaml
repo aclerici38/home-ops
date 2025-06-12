@@ -35,7 +35,13 @@ spec:
           main:
             image:
               repository: docker.io/openspeedtest/latest
-              tag: v2.0.6
+              tag: v2.0.6@sha256:a6a7e3b3e9e93cfe7b9b2eb49c60b2a93644149a0a600845d4df57148b193ff6
+            command: ["/usr/bin/nginx"]
+            args:
+              - -g
+              - daemon off;
+              - -c
+              - /etc/nginx/nginx.conf
             probes:
               liveness: &probes
                 enabled: true
@@ -67,6 +73,6 @@ spec:
         ports:
           http:
             port: 3000
-    persistence:
-      tmp:
-        type: emptyDir
+    # persistence:
+    #   tmp:
+    #     type: emptyDir
