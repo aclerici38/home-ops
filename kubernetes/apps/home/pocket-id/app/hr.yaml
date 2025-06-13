@@ -75,9 +75,9 @@ spec:
                   httpGet:
                     path: /healthz
                     port: &port 1411
-                  initialDelaySeconds: 10
+                  initialDelaySeconds: 0
                   periodSeconds: 10
-                  timeoutSeconds: 2
+                  timeoutSeconds: 1
                   failureThreshold: 2
               readiness: *probes
             securityContext:

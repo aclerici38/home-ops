@@ -64,6 +64,16 @@ spec:
                   - NET_RAW
                 drop:
                   - ALL
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - /bin/sh
+                      - -c
+                      - "/usr/bin/wg show | /bin/grep -q interface || exit 1"
     service:
       ui:
         controller: *app
@@ -99,8 +109,3 @@ spec:
           - path: /etc/wireguard
       run:
         type: emptyDir
-      modules:
-        type: hostPath
-        hostPath: /lib/modules
-        globalMounts:
-          - readOnly: true

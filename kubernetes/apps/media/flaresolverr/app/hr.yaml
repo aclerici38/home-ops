@@ -49,16 +49,25 @@ spec:
               capabilities:
                 drop:
                   - ALL
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 8191
+                    path: /health
+              readiness: *probes
     service:
       main:
         controller: flaresolverr
         ports:
           http:
-            port: 8191
+            port: *port
     persistence:
       tmp:
         type: emptyDir
-      app:
+      local:
         type: emptyDir
         globalMounts:
           - path: /app/.local

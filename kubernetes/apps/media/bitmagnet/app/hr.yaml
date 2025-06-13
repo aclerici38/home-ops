@@ -58,6 +58,16 @@ spec:
                   - NET_ADMIN
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - /gluetun-entrypoint
+                      - healthcheck
+              liveness: *probes
         containers:
           main:
             image:
@@ -111,12 +121,21 @@ spec:
                   - ALL
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 3333
+                    path: /webui/dashboard
+              readiness: *probes
     service:
       main:
         controller: *app
         ports:
           http:
-            port: &port 3333
+            port: *port
           bittorrent-tcp:
             protocol: TCP
             port: &torrentPort 3334

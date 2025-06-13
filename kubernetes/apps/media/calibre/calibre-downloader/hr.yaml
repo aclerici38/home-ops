@@ -66,10 +66,6 @@ spec:
                   httpGet:
                     path: /request/api/status
                     port: *port
-                  initialDelaySeconds: 5
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 5
               readiness: *probes
             resources:
               requests:

@@ -74,6 +74,13 @@ spec:
                 memory: 500Mi
                 squat.ai/anycubic-kobra: 1
             securityContext: *sec
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+              readiness:
+                enabled: true
+                type: HTTP
     service:
       main:
         controller: *app

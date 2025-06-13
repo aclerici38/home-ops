@@ -67,10 +67,14 @@ spec:
                   - FOWNER
                   - DAC_OVERRIDE
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
-              readiness:
-                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 3000
+                    path: /api/health
+              readiness: *probes
             resources: &res
               requests:
                 cpu: 10m
@@ -99,6 +103,13 @@ spec:
                 drop:
                   - ALL
             resources: *res
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+              readiness:
+                enabled: true
+                type: HTTP
       meilisearch:
         containers:
           meilisearch:
@@ -121,6 +132,14 @@ spec:
               limits:
                 memory: 4Gi
             securityContext: *sec
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: 7700
+                    path: /health
     defaultPodOptionsStrategy: merge
     defaultPodOptions:
       hostUsers: false
@@ -136,7 +155,7 @@ spec:
         controller: *app
         ports:
           http:
-            port: &port 3000
+            port: *port
       chrome:
         controller: chrome
         ports:

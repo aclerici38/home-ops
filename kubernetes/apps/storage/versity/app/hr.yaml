@@ -55,10 +55,6 @@ spec:
                   httpGet:
                     path: /healthz
                     port: &port 7070
-                  initialDelaySeconds: 5
-                  periodSeconds: 10
-                  timeoutSeconds: 2
-                  failureThreshold: 6
               readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false

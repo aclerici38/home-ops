@@ -54,10 +54,9 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  exec:
-                    command:
-                      - node
-                      - src/scripts/health-check.js
+                  httpGet:
+                    port: &port 5006
+                    path: /health
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -79,7 +78,7 @@ spec:
         controller: *app
         ports:
           http:
-            port: &port 5006
+            port: *port
     route:
       main:
         hostnames:

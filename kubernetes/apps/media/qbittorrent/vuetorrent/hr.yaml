@@ -54,10 +54,6 @@ spec:
                   httpGet:
                     path: /backend/ping
                     port: &port 8080
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
               readiness: *probes
             env:
               # renovate: datasource=github-releases depName=VueTorrent/VueTorrent

@@ -64,11 +64,6 @@ spec:
                 enabled: true
               readiness:
                 enabled: true
-              startup:
-                enabled: true
-                spec:
-                  failureThreshold: 5
-                  periodSeconds: 5
             resources:
               requests:
                 cpu: 10m

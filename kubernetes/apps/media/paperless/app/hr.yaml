@@ -26,11 +26,11 @@ spec:
       *app :
         type: statefulset
         pod:
+          hostUsers: true
           securityContext:
             runAsNonRoot: false
             runAsUser: 0
             runAsGroup: 0
-            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
@@ -101,15 +101,14 @@ spec:
                   - FOWNER
                   - DAC_OVERRIDE
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
-              readiness:
-                enabled: true
-              startup:
-                enabled: true
+                custom: true
                 spec:
-                  failureThreshold: 30
-                  periodSeconds: 10
+                  httpGet:
+                    port: &port 8000
+                    path: /accounts/login
+              readiness: *probes
       tika:
         strategy: RollingUpdate
         containers:
@@ -165,7 +164,9 @@ spec:
                 cpu: 10m
               limits:
                 memory: 6Gi
+    defaultPodOptionsStrategy: merge
     defaultPodOptions:
+      hostUsers: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -178,7 +179,7 @@ spec:
         controller: *app
         ports:
           http:
-            port: &port 8000
+            port: *port
       tika:
         controller: tika
         ports:

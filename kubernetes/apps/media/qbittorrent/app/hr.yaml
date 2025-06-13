@@ -68,21 +68,21 @@ spec:
                   - NET_ADMIN
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - /gluetun-entrypoint
+                      - healthcheck
+              liveness: *probes
         containers:
           main:
             image:
               repository: ghcr.io/home-operations/qbittorrent
               tag: 5.1.0
-            probes:
-              liveness:
-                enabled: true
-              readiness:
-                enabled: true
-              startup:
-                enabled: true
-                spec:
-                  failureThreshold: 30
-                  periodSeconds: 5
             resources:
               requests:
                 cpu: 49m
@@ -99,6 +99,13 @@ spec:
               capabilities:
                 drop:
                   - ALL
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+              readiness:
+                enabled: true
+                type: HTTP
     service:
       qbit:
         controller: qbit

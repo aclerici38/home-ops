@@ -52,11 +52,6 @@ spec:
             envFrom:
               - secretRef:
                   name: ${APP}-secret
-            probes:
-              liveness:
-                enabled: true
-              readiness:
-                enabled: true
             securityContext:
               readOnlyRootFilesystem: true
               capabilities:
@@ -69,6 +64,13 @@ spec:
               requests:
                 cpu: 10m
                 memory: 50Mi
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+              readiness:
+                enabled: true
+                type: HTTP
     service:
       main:
         controller: *app

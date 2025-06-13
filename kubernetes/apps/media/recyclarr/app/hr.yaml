@@ -38,11 +38,6 @@ spec:
             image:
               repository: ghcr.io/recyclarr/recyclarr
               tag: 7.4.1@sha256:759540877f95453eca8a26c1a93593e783a7a824c324fbd57523deffb67f48e1
-            probes:
-              liveness:
-                enabled: true
-              readiness:
-                enabled: true
             resources:
               limits:
                 memory: 200Mi
@@ -55,6 +50,16 @@ spec:
               capabilities:
                 drop:
                   - ALL
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - recyclarr
+                      - --version
+              readiness: *probes
     persistence:
       config:
         existingClaim: recyclarr-config

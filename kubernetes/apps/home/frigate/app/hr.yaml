@@ -66,14 +66,13 @@ spec:
               liveness: &probes
                 enabled: true
                 custom: true
-                type: HTTP
                 spec:
                   httpGet:
                     path: /api/version
                     port: 5000
                   initialDelaySeconds: 5
                   periodSeconds: 10
-                  timeoutSeconds: 2
+                  timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
             resources:

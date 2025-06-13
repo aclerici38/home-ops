@@ -50,10 +50,6 @@ spec:
                       - sh
                       - -c
                       - "showmount -e localhost | grep -q $(SHARED_DIRECTORY)"
-                  initialDelaySeconds: 1
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 2
               liveness: *probes
             resources:
               requests:

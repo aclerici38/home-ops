@@ -61,9 +61,6 @@ spec:
                       - sh
                       - -c
                       - 'curl -fkLsS -m 2 127.0.0.1:8384/rest/noauth/health | grep -o --color=never OK || exit 1'
-                  periodSeconds: 60
-                  timeoutSeconds: 10
-                  failureThreshold: 3
               readiness: *probes
     service:
       main:

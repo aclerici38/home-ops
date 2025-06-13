@@ -42,10 +42,6 @@ spec:
               CACHE_DIR: /cache
               PUID: 1000
               PGID: 1000
-            probes:
-              liveness: &probes
-                enabled: true
-              readiness: *probes
             resources:
               requests:
                 cpu: 50m
@@ -65,12 +61,21 @@ spec:
                   - SETGID
                   - FOWNER
                   - DAC_OVERRIDE
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 8083
+                    path: /login
+              readiness: *probes
     service:
       main:
         controller: *app
         ports:
           http:
-            port: &port 8083
+            port: *port
     route:
       main:
         hostnames:

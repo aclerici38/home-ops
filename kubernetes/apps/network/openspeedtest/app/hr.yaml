@@ -50,8 +50,6 @@ spec:
                 enabled: true
                 type: HTTP
               readiness: *probes
-              startup:
-                enabled: false
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true

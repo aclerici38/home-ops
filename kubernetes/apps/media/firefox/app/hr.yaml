@@ -69,6 +69,13 @@ spec:
               limits:
                 memory: 8Gi
                 gpu.intel.com/i915: 1
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+              readiness:
+                enabled: true
+                type: HTTP
     service:
       main:
         controller: *app

@@ -86,6 +86,13 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+              probes:
+                liveness:
+                  enabled: true
+                  type: HTTP
+                readiness:
+                  enabled: true
+                  type: HTTP
       house:
         type: statefulset
         pod:

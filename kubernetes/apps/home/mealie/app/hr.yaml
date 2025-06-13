@@ -88,12 +88,25 @@ spec:
                 memory: 100Mi
               limits:
                 memory: 2Gi
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 9000
+                    path: /api/app/about
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 2
+              readiness: *probes
     service:
       main:
         controller: *app
         ports:
           http:
-            port: &port 9000
+            port: *port
     route:
       main:
         hostnames:
