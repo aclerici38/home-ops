@@ -69,7 +69,7 @@ spec:
         controller: *app
         ports:
           http:
-            port: *port
+            port: &port 3000
     route:
       app:
         hostnames:
