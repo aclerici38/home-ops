@@ -26,6 +26,12 @@ spec:
     remediation:
       retries: 1
   values:
+    loki:
+      enabled: false
+    alloy:
+      enabled: false
+    minio:
+      enabled: false
     openebs-crds:
       csi:
         volumeSnapshots:
