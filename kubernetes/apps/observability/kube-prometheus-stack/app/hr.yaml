@@ -30,8 +30,23 @@ spec:
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
       enabled: true
+      tolerations: &tol
+        - key: "location"
+          operator: "Equal"
+          value: "cloud"
+          effect: "NoSchedule"
+      nodeSelector: &ns
+        location: "cloud"
       ingress:
         enabled: false
+      route:
+        main:
+          enabled: true
+          hostnames: ["alertmanager.${SECRET_DOMAIN}"]
+          parentRefs:
+            - name: internal
+              namespace: network
+              sectionName: https
       alertmanagerSpec:
         alertmanagerConfiguration:
           name: alertmanager
@@ -41,10 +56,10 @@ spec:
         storage:
           volumeClaimTemplate:
             spec:
-              storageClassName: zfs-nvme
+              storageClassName: local-hostpath-madbum
               resources:
                 requests:
-                  storage: 10Gi
+                  storage: 5Gi
     kubeEtcd:
       service:
         selector:
@@ -52,20 +67,33 @@ spec:
     kubeProxy:
       enabled: false
     prometheus:
-      ingress:
-        enabled: false
+      tolerations: *tol
+      nodeSelector: *ns
+      route:
+        main:
+          enabled: true
+          hostnames: ["prometheus.devbu.io"]
+          parentRefs:
+            - name: internal
+              namespace: kube-system
+              sectionName: https
       prometheusSpec:
+        image:
+          registry: docker.io
+          repository: prompp/prompp
+          tag: 2.53.2-0.2.5
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          fsGroup: 1000
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
         ruleSelectorNilUsesHelmValues: false
         scrapeConfigSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
-        enableAdminAPI: true
-        walCompression: true
-        enableFeatures:
-          - memory-snapshot-on-shutdown
         retention: 14d
-        retentionSize: 50GB
+        retentionSize: 10GB
         resources:
           requests:
             cpu: 100m
@@ -74,7 +102,7 @@ spec:
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: zfs-nvme
+              storageClassName: local-hostpath-madbum
               resources:
                 requests:
                   storage: 50Gi
