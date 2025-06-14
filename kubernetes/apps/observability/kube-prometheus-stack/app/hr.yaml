@@ -30,13 +30,6 @@ spec:
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
       enabled: true
-      tolerations: &tol
-        - key: "location"
-          operator: "Equal"
-          value: "cloud"
-          effect: "NoSchedule"
-      nodeSelector: &ns
-        location: "cloud"
       ingress:
         enabled: false
       route:
@@ -48,6 +41,13 @@ spec:
               namespace: network
               sectionName: https
       alertmanagerSpec:
+        tolerations: &tol
+          - key: "location"
+            operator: "Equal"
+            value: "cloud"
+            effect: "NoSchedule"
+        nodeSelector: &ns
+          location: "cloud"
         alertmanagerConfiguration:
           name: alertmanager
           global:
@@ -67,8 +67,6 @@ spec:
     kubeProxy:
       enabled: false
     prometheus:
-      tolerations: *tol
-      nodeSelector: *ns
       route:
         main:
           enabled: true
@@ -78,6 +76,8 @@ spec:
               namespace: kube-system
               sectionName: https
       prometheusSpec:
+        tolerations: *tol
+        nodeSelector: *ns
         image:
           registry: docker.io
           repository: prompp/prompp
