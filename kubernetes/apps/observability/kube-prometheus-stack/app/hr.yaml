@@ -75,10 +75,10 @@ spec:
       route:
         main:
           enabled: true
-          hostnames: ["prometheus.devbu.io"]
+          hostnames: ["prometheus.${SECRET_DOMAIN}"]
           parentRefs:
             - name: internal
-              namespace: kube-system
+              namespace: network
               sectionName: https
       prometheusSpec:
         tolerations: *tol
