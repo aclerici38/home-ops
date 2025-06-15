@@ -61,6 +61,9 @@ spec:
                   secretKeyRef:
                     name: ${APP}-db-app
                     key: dbname
+            envFrom:
+              - secretRef:
+                  name: ${APP}-secret
             probes:
               liveness: &probes
                 enabled: true

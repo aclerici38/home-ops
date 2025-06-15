@@ -9,7 +9,7 @@ sonarr:
         standard: default
         daily: default
     base_url: http://sonarr:8989
-    api_key: ${SONARR_API_KEY}
+    api_key: ${SONARR__AUTH__APIKEY}
 
     # Custom Format Configuration
     delete_old_custom_formats: true
@@ -166,7 +166,7 @@ radarr:
         standard: plex-tmdb
 
     base_url: http://radarr:7878
-    api_key: ${RADARR_API_KEY}
+    api_key: ${RADARR__AUTH__APIKEY}
 
     # Custom Format Configuration
     delete_old_custom_formats: true

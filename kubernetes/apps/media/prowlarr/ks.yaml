@@ -22,6 +22,7 @@ spec:
   path: ./kubernetes/apps/media/prowlarr/app
   components:
     - ../../../../components/cnpg/overlay/restore
+    - ../../../../components/external-secret
   prune: true
   sourceRef:
     kind: GitRepository
