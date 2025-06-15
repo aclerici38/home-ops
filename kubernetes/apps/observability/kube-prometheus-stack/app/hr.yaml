@@ -111,6 +111,11 @@ spec:
               resources:
                 requests:
                   storage: 50Gi
+        # Silence memory warnings on zfs node
+        alertRelabelConfigs:
+          - action: drop
+            source_labels: [alertname, instance]
+            regex: NodeMemoryHighUtilization;192\.168\.9\.25(:9100)?
     prometheus-node-exporter:
       fullnameOverride: node-exporter
       prometheus:
