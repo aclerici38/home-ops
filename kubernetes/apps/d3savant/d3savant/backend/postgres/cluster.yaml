@@ -11,7 +11,7 @@ spec:
   affinity:
     nodeSelector:
       kubernetes.io/hostname: bonds
-  imageName: ghcr.io/cloudnative-pg/postgresql:17.5@sha256:857313fcb91856c8eb7e8d281c732174b01b495b0fce2ac81bd464e6162b2260
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.5@sha256:ce4f594010149f48592359ddd87fb0ba8a99cbc871965d2aaa770d025c5c6025
   primaryUpdateStrategy: unsupervised
   postgresql:
     pg_hba:
