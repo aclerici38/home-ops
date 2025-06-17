@@ -38,6 +38,10 @@ spec:
               value: "cloud"
               effect: "NoSchedule"
           securityContext:
+            runAsNonRoot: true
+            runAsUser: &uid 977 # upstream `searxng` user
+            runAsGroup: *uid
+            fsGroup: *uid
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         strategy: RollingUpdate
@@ -45,12 +49,18 @@ spec:
           main:
             image:
               repository: ghcr.io/searxng/searxng
-              tag: 2025.6.14-e52e9bb
+              tag: 2025.6.14-e52e9bb@sha256:a6ad4d72e07b3dc7b6cd80ed6d08e215fcea81b8165c9eeb3bf2b4c27a601f31
+            command: ["/usr/local/searxng/venv/bin/uwsgi", "--master", "/usr/local/searxng/.template/uwsgi.ini"]
             env:
               SEARXNG_BASE_URL: &url https://search.${SECRET_DOMAIN}
               SEARXNG_URL: *url
               SEARXNG_PORT: &port 8080
               SEARXNG_REDIS_URL: redis://dragonfly-db.database.svc.cluster.local:6379/3
+              UWSGI_THREADS:
+                valueFrom:
+                  resourceFieldRef:
+                    containerName: main
+                    resource: limits.cpu
             envFrom:
               - secretRef:
                   name: searxng-secret
@@ -79,19 +89,12 @@ spec:
               capabilities:
                 drop:
                   - ALL
-                add:
-                  - CHOWN
-                  - SETGID
-                  - SETUID
-                  - DAC_OVERRIDE
-
     service:
       main:
         controller: *app
         ports:
           http:
             port: *port
-
     route:
       main:
         hostnames:
@@ -104,7 +107,6 @@ spec:
           - backendRefs:
             - identifier: main
               port: *port
-
     persistence:
       config:
         type: configMap
