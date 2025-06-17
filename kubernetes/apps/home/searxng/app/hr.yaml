@@ -25,7 +25,7 @@ spec:
     controllers:
       *app :
         pod:
-          hostUsers: false
+          # hostUsers: false
           nodeSelector:
             location: "cloud"
           tolerations:
@@ -110,13 +110,10 @@ spec:
     persistence:
       config:
         type: configMap
-        name: ${APP}-config
+        name: searxng-config
         globalMounts:
           - path: /etc/searxng/settings.yml
             subPath: settings.yml
             readOnly: true
       tmp:
-        enabled: true
         type: emptyDir
-        globalMounts:
-          - path: /tmp
