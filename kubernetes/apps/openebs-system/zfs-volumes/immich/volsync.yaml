@@ -32,7 +32,6 @@ spec:
   trigger:
     schedule: "0 23 * * *"
   restic:
-    unlock: immich
     copyMethod: Snapshot
     pruneIntervalDays: 14
     volumeSnapshotClassName: openebs-zfs
