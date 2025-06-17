@@ -61,6 +61,7 @@ spec:
                   resourceFieldRef:
                     containerName: main
                     resource: limits.cpu
+              UWSGI_WORKERS: 1
             envFrom:
               - secretRef:
                   name: searxng-secret
@@ -70,12 +71,12 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    path: /stats
+                    path: /healthz
                     port: *port
-                  initialDelaySeconds: 0
+                  initialDelaySeconds: 1
                   periodSeconds: 10
                   timeoutSeconds: 1
-                  failureThreshold: 3
+                  failureThreshold: 2
               readiness: *probes
             resources:
               requests:
