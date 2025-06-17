@@ -91,3 +91,7 @@ spec:
           - path: /config/dnscrypt-proxy.toml
             subPath: config.toml
             readOnly: true
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /config
