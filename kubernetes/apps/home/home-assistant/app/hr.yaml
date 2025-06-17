@@ -77,6 +77,12 @@ spec:
             namespace: network
             sectionName: https
         rules:
+          # Block webhook path
+          - matches:
+              - path:
+                  type: pathPrefix
+                  value: /api/webhook
+            backendRefs: []
           - backendRefs:
             - identifier: main
               port: *port
