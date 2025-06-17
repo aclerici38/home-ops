@@ -67,8 +67,10 @@ spec:
                   exec:
                     command:
                       - /usr/local/bin/dnsprobe
-                      - google.com
+                      - cloudflare.com
                       - 127.0.0.1:5053
+                    timeoutSeconds: 5s
+                    failureThreshold: 2
               liveness: *probes
     service:
       main:
