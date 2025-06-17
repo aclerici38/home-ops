@@ -31,7 +31,7 @@ spec:
           concurrencyPolicy: Forbid
           successfulJobsHistory: 1
           failedJobsHistory: 1
-          ttlSecondsAfterFinished: 86400
+          startingDeadlineSeconds: 300
         pod:
           hostUsers: false
           securityContext:
