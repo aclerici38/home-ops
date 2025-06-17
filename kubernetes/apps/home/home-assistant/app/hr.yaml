@@ -80,7 +80,7 @@ spec:
           # Block webhook path
           - matches:
               - path:
-                  type: pathPrefix
+                  type: PathPrefix
                   value: /api/webhook
             backendRefs: []
           - backendRefs:
