@@ -44,6 +44,11 @@ spec:
             image:
               repository: ghcr.io/wg-easy/wg-easy
               tag: 15.0.0@sha256:07ed8f95eeeb4082c2e6afe3f5f3991723f496a21dd2dc25860b119a728b9ab0
+            env:
+              INIT_ENABLED: true
+              INIT_HOST: cloud.${SECRET_DOMAIN}
+              INIT_PORT: &wgPort 123
+              INIT_DNS: 172.17.0.11
             envFrom:
               - secretRef:
                   name: ${APP}-secret
@@ -85,9 +90,9 @@ spec:
         type: NodePort
         ports:
           vpn:
-            targetPort: 123
-            port: 123
-            nodePort: 123
+            targetPort: *wgPort
+            port: *wgPort
+            nodePort: *wgPort
             protocol: UDP
     route:
       main:
