@@ -36,15 +36,14 @@ spec:
               effect: "NoSchedule"
           securityContext:
             runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
+            runAsUser: 0
+            runAsGroup: 0
             seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
               repository: ghcr.io/wg-easy/wg-easy
-              tag: 15.0.0
+              tag: 15.0.0@sha256:07ed8f95eeeb4082c2e6afe3f5f3991723f496a21dd2dc25860b119a728b9ab0
             envFrom:
               - secretRef:
                   name: ${APP}-secret
