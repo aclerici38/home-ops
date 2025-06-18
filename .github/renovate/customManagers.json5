@@ -20,7 +20,7 @@
     {
       "description": ["app-template schemas"],
       "customType": "regex",
-      "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml$"],
+      "fileMatch": [".*"], // process regex from everywhere
       "matchStrings": [
         "\\# yaml\\-language\\-server\\: \\$schema\\=https\\:\\/\\/raw\\.githubusercontent\\.com\\/(?<packageName>[\\w\\-]+\\/[\\w\\-]+)\\/(?<currentValue>app\\-template\\-[\\d\\.]+)"
       ],
@@ -31,7 +31,7 @@
     {
       "customType": "regex",
       "description": ["Process any imageName keys in YAML files (cloudnative-pg)"],
-      "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml$"],
+      "fileMatch": [".*"], // process regex from everywhere
       "matchStrings": [
         "imageName: (?<depName>[^\\s:]+):(?<currentValue>\\S+)(@(?<currentDigest>sha256:\\S+)?)",
         "imageName:\\s+\\$\\{CNPG_IMAGE:?=(?<depName>[^:@]+:[^:@]+):(?<currentValue>[^@]+)@sha256:(?<currentDigest>[a-f0-9]{64})\\}",
