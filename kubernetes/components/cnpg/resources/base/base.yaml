@@ -9,9 +9,9 @@ metadata:
     alpha.cnpg.io/livenessPinger: '{"enabled": true}'
 spec:
   instances: ${CNPG_REPLICAS:=2}
-  primaryUpdateStrategy: ${CNPG_UPDATE_STRAT:=supervised}
+  primaryUpdateStrategy: ${CNPG_UPDATE_STRAT:=unsupervised}
   primaryUpdateMethod: switchover
-  enablePDB: false
+  enablePDB: true
   imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql:17.5@sha256:ce4f594010149f48592359ddd87fb0ba8a99cbc871965d2aaa770d025c5c6025}
   storage:
     size: ${CNPG_CAPACITY:=2Gi}
