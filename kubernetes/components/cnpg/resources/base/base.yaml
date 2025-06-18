@@ -12,7 +12,7 @@ spec:
   primaryUpdateStrategy: ${CNPG_UPDATE_STRAT:=supervised}
   primaryUpdateMethod: switchover
   enablePDB: false
-  imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql:17.5@sha256:2ec17b4c713d5293cb869f8d7b8aca2a9096ad6a775a77b14c35434e598ac210}
+  imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql:17.5@sha256:ce4f594010149f48592359ddd87fb0ba8a99cbc871965d2aaa770d025c5c6025}
   storage:
     size: ${CNPG_CAPACITY:=2Gi}
     storageClass: ${CNPG_STORAGECLASS:=zfs-nvme}
