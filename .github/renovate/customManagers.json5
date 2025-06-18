@@ -33,7 +33,7 @@
       "description": ["Process any imageName keys in YAML files (cloudnative-pg)"],
       "fileMatch": [".*"], // process regex from everywhere
       "matchStrings": [
-        "imageName:\\s+\\$\\{CNPG_IMAGE:=\\s*(?<depName>[^:@\\s}]+):(?<currentValue>[^@\\s}]+)@sha256:(?<currentDigest>[a-f0-9]{64})\\}"
+        "imageName:\\s+\\$\\{CNPG_IMAGE:=\\s*(?<depName>[^:@\\s}]+):(?<currentValue>[^@\\s}]+)(@(?<currentDigest>sha256:\\S+)?)}"
       ],
       "datasourceTemplate": "docker",
     },
