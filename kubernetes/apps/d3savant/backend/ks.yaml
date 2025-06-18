@@ -70,8 +70,8 @@ spec:
                       name: d3savant-db-external
                       annotations:
                         lbipam.cilium.io/ips: "10.38.55.38"
-                      spec:
-                        type: LoadBalancer
-                        externalTrafficPolicy: Local
+                    spec:
+                      type: LoadBalancer
+                      externalTrafficPolicy: Local
       target:
         kind: Cluster
