@@ -20,7 +20,7 @@
     {
       "description": ["app-template schemas"],
       "customType": "regex",
-      "fileMatch": ["^kube/.+\\.ya?ml$"],
+      "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml$"],
       "matchStrings": [
         "\\# yaml\\-language\\-server\\: \\$schema\\=https\\:\\/\\/raw\\.githubusercontent\\.com\\/(?<packageName>[\\w\\-]+\\/[\\w\\-]+)\\/(?<currentValue>app\\-template\\-[\\d\\.]+)"
       ],
@@ -34,7 +34,7 @@
       "fileMatch": ["(^|/)kubernetes/.+\\.ya?ml$"],
       "matchStrings": [
         "imageName: (?<depName>[^\\s:]+):(?<currentValue>\\S+)(@(?<currentDigest>sha256:\\S+)?)",
-        "imageName: \\$\\{CNPG_IMAGE:=(?<depName>[^:@\\s]+(?:/[^:@\\s]+)*):(?<currentValue>[^@\\s]+)@(?<currentDigest>sha256:[a-fA-F0-9]{64})}"
+        "imageName:\\s+\\$\\{CNPG_IMAGE:?=(?<depName>[^:@]+:[^:@]+):(?<currentValue>[^@]+)@sha256:(?<currentDigest>[a-f0-9]{64})\\}",
       ],
       "datasourceTemplate": "docker",
     },
