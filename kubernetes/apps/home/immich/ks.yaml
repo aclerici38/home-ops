@@ -35,10 +35,11 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      CNPG_IMAGE: ghcr.io/tensorchord/cloudnative-vectorchord:17.5-0.3.0
+      # renovate: datasource=docker depName=ghcr.io/tensorchord/cloudnative-vectorchord
+      CNPG_IMAGE: ghcr.io/tensorchord/cloudnative-vectorchord:17.5-0.4.2
       CNPG_CAPACITY: 20Gi
       # renovate: datasource=docker depName=ghcr.io/immich-app/immich-machine-learning
-      IMMICH_VERSION: v1.134.0
+      IMMICH_VERSION: v1.135.0
   patches:
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1
