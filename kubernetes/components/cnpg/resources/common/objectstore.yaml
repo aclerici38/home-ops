@@ -4,7 +4,7 @@ kind: ObjectStore
 metadata:
   name: ${APP}-store
 spec:
-  retentionPolicy: 7d
+  retentionPolicy: 10d
   configuration:
     data:
       compression: bzip2
