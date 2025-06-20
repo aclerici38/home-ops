@@ -1,0 +1,13 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: d3savant
+spec:
+  name: app
+  owner: jensen
+  cluster:
+    name: ${APP}-db
+  extensions:
+    - ensure: present
+      name: pgvector
