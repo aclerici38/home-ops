@@ -25,49 +25,24 @@ spec:
     controllers:
       *app :
         strategy: RollingUpdate
-        initContainers:
-          gluetun:
-            image:
-              repository: ghcr.io/qdm12/gluetun
-              tag: v3.40.0@sha256:2b42bfa046757145a5155acece417b65b4443c8033fb88661a8e9dcf7fda5a00
-            env:
-              DOT: "off"
-              VPN_SERVICE_PROVIDER: custom
-              VPN_TYPE: wireguard
-              VPN_INTERFACE: wg0
-              WIREGUARD_ENDPOINT_PORT: 51820
-              FIREWALL_INPUT_PORTS: "3333,3334"
-              FIREWALL_OUTBOUND_SUBNETS: 172.16.0.0/16,172.17.0.0/16
-              DNS_KEEP_NAMESERVER: on
-            envFrom: &envFrom
-              - secretRef:
-                  name: bitmagnet-secret
-            resources:
-              limits:
-                squat.ai/tun: 1
-            restartPolicy: Always
-            securityContext:
-              runAsUser: 0
-              runAsGroup: 0
-              runAsNonRoot: false
-              seccompProfile: { type: RuntimeDefault }
-              capabilities:
-                drop:
-                  - ALL
-                add:
-                  - NET_ADMIN
-              readOnlyRootFilesystem: false
-              allowPrivilegeEscalation: false
-            probes:
-              readiness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  exec:
-                    command:
-                      - /gluetun-entrypoint
-                      - healthcheck
-              liveness: *probes
+        pod:
+          hostUsers: false
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "cloud"
+              effect: "NoSchedule"
+            - key: "location"
+              operator: "Equal"
+              value: "house"
+              effect: "NoSchedule"
+          nodeSelector:
+            location: cloud
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
@@ -98,7 +73,9 @@ spec:
                   secretKeyRef:
                     name: ${APP}-db-app
                     key: dbname
-            envFrom: *envFrom
+            envFrom:
+              - secretRef:
+                  name: bitmagnet-secret
             command:
               - bitmagnet
               - worker
@@ -112,10 +89,6 @@ spec:
                 cpu: 4000m
                 memory: 4Gi
             securityContext:
-              runAsUser: 1000
-              runAsGroup: 1000
-              runAsNonRoot: true
-              seccompProfile: { type: RuntimeDefault }
               capabilities:
                 drop:
                   - ALL
