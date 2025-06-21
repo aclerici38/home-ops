@@ -186,3 +186,9 @@ spec:
           - path: /app/config.yml
             subPath: config.yml
             readOnly: true
+      allow:
+        type: configMap
+        name: blocky-allowlist
+        globalMounts:
+          - path: /allow.txt
+            subPath: allow.txt
