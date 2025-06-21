@@ -14,7 +14,5 @@ auth:
       enabled: false
     oidc:
       enabled: true
-      clientId: "${CLIENT_ID}"
-      clientSecret: "${CLIENT_SECRET}"
       issuerUrl: https://id.${SECRET_DOMAIN}
       scopes: "email openid profile"
