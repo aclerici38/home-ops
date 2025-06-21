@@ -73,3 +73,7 @@ spec:
     persistence:
       config:
         existingClaim: *app
+        globalMounts:
+          - path: /opt/data
+      tmp:
+        type: emptyDir
