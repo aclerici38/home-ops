@@ -26,7 +26,6 @@ spec:
       *app :
         type: statefulset
         pod:
-          hostUsers: false
           securityContext:
             runAsUser: &id 1000
             runAsGroup: *id
@@ -51,12 +50,6 @@ spec:
                     port: &port 6246
                     path: /api/app/status
               readiness: *probes
-              startup:
-                enabled: true
-                type: HTTP
-                spec:
-                  failureThreshold: 30
-                  periodSeconds: 5
             resources:
               requests:
                 cpu: 10m
