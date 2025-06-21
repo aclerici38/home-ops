@@ -31,6 +31,7 @@ spec:
             runAsGroup: *id
             fsGroup: *id
             fsGroupChangePolicy: Always
+            runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
         containers:
           main:
