@@ -45,8 +45,18 @@ spec:
             probes:
               liveness: &probes
                 enabled: true
-                type: HTTP
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 6246
+                    path: /api/app/status
               readiness: *probes
+              startup:
+                enabled: true
+                type: HTTP
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
             resources:
               requests:
                 cpu: 10m
@@ -57,7 +67,7 @@ spec:
         controller: *app
         ports:
           http:
-            port: &port 6246
+            port: *port
     route:
       main:
         hostnames:
