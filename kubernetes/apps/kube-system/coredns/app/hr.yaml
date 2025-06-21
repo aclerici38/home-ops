@@ -31,7 +31,7 @@ spec:
     fullnameOverride: coredns
     image:
       repository: mirror.gcr.io/coredns/coredns
-    replicaCount: 2
+    replicaCount: 3
     k8sAppLabelOverride: kube-dns
     serviceAccount:
       create: true
@@ -66,13 +66,6 @@ spec:
             parameters: . 172.17.0.11
           - name: reload
           - name: loadbalance
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: node-role.kubernetes.io/control-plane
-                  operator: Exists
     tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
