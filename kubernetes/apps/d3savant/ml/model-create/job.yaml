@@ -26,6 +26,8 @@ spec:
             seccompProfile:
               type: RuntimeDefault
           resources:
+            requests:
+              memory: "2Gi"
             limits:
               memory: "24Gi"
               gpu.intel.com/i915: 1
