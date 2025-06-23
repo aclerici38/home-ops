@@ -7,11 +7,6 @@ spec:
   template:
     spec:
       restartPolicy: Never
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: "OnRootMismatch"
       containers:
         - name: model-generator
           image: ant385525/d3savant-ml:latest
@@ -19,13 +14,6 @@ spec:
           volumeMounts:
             - name: ml-data
               mountPath: /app/models
-          securityContext:
-            allowPrivilegeEscalation: false
-            runAsNonRoot: true
-            capabilities:
-              drop: ["ALL"]
-            seccompProfile:
-              type: RuntimeDefault
           resources:
             requests:
               memory: "2Gi"
