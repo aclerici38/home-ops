@@ -1,0 +1,94 @@
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: harbor
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: harbor
+      version: 1.17.1
+      sourceRef:
+        kind: HelmRepository
+        name: harbor
+        namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  valuesFrom:
+    - kind: Secret
+      name: postgres-harbor
+      valuesKey: username
+      targetPath: database.external.username
+      optional: false
+    - kind: Secret
+      name: ${APP}-db-app
+      valuesKey: password
+      targetPath: database.external.password
+      optional: false
+    - kind: Secret
+      name: ${APP}-db-app
+      valuesKey: host
+      targetPath: database.external.host
+      optional: false
+    - kind: Secret
+      name: ${APP}-db-app
+      valuesKey: dbname
+      targetPath: database.external.coreDatabase
+      optional: false
+  values:
+    expose:
+      type: clusterIP
+    externalURL: https://harbor.${SECRET_DOMAIN}
+    ipFamily:
+      ipv6:
+        enabled: false
+    persistence:
+      enabled: true
+      persistentVolumeClaim:
+        registry:
+          existingClaim: harbor-registry-v1
+        jobservice:
+          jobLog:
+            storageClass: zfs-nvme
+            size: 1Gi
+        database:
+          storageClass: local-hostpath
+          size: 1Gi
+        redis:
+          storageClass: local-hostpath
+          size: 1Gi
+    redis:
+      type: external
+      external:
+        addr: dragonfly-db.database.svc.cluster.local:6379
+        coreDatabaseIndex: &idx 5
+        jobserviceDatabaseIndex: *idx
+        registryDatabaseIndex: *idx
+        trivyAdapterIndex: *idx
+        harborDatabaseIndex: *idx
+        cacheLayerDatabaseIndex: *idx
+    database:
+      type: external
+    existingSecretAdminPassword: ${APP}-secret
+    existingSecretAdminPasswordKey: password
+    # The secret key used for encryption. Must be a string of 16 chars.
+    existingSecretSecretKey: "${APP}-secret"
+    cache:
+      enabled: true
+    notary:
+      enabled: false
+    serviceMonitor:
+      enabled: true
+    nginx:
+      podAnnotations:
+        secret.reloader.stakater.com/reload: tls.harbor

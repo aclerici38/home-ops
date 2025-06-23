@@ -48,7 +48,7 @@ spec:
       - --default-targets=cloud.${SECRET_DOMAIN}
     policy: sync
     triggerLoopOnEvent: true
-    sources: ["crd", "gateway-httproute", "service"]
+    sources: ["crd", "gateway-httproute"]
     txtPrefix: k8s.
     txtOwnerId: default
     domainFilters: ["${SECRET_DOMAIN}"]
