@@ -36,6 +36,7 @@ spec:
             lifecycle:
               postStart:
                 exec:
+                  # https://github.com/qdm12/gluetun-wiki/blob/main/setup/advanced/kubernetes.md#adding-ipv6-rule--file-exists
                   command: ["/bin/sh", "-c", "(ip rule del table 51820; ip -6 rule del table 51820) || true"]
             image:
               repository: ghcr.io/qdm12/gluetun
