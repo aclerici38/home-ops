@@ -19,7 +19,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/d3savant/backend/postgres
+  path: ./kubernetes/apps/d3savant/postgres/cnpg
   components:
     - ../../../../components/cnpg/overlay/init
   prune: true

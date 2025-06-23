@@ -5,4 +5,5 @@ kind: Kustomization
 resources:
   - ./ns.yaml
 
-  - ./backend/ks.yaml
+  - ./postgres/ks.yaml
+  - ./ml/ks.yaml
