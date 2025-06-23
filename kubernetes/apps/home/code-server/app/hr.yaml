@@ -57,7 +57,7 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    port: *port
+                    port: 8080
                     path: /healthz
               liveness: *probes
             resources:
@@ -80,7 +80,7 @@ spec:
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - *host
         parentRefs:
           - name: internal
             namespace: network
