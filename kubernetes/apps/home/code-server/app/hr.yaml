@@ -1,0 +1,95 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: code-server
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      ${APP}:
+        type: statefulset
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          main:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.101.1@sha256:d53815bc6b7590a62f20a373bec4a527481b2a3439ae3635d1619d5567abb71c
+            args:
+              - --auth
+              - none
+              - --user-data-dir
+              - /home/coder/.vscode
+              - --extensions-dir
+              - /home/coder/.vscode
+              - --port
+              - &port "8080"
+              - --proxy-domain
+              - &host "code.${SECRET_DOMAIN}"
+              - /home/coder
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: *port
+                    path: /healthz
+              liveness: *probes
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128M
+              limits:
+                gpu.intel.com/i915: 1
+            securityContext:
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities: { drop: ["ALL"] }
+    service:
+      main:
+        controller: ${app}
+        ports:
+          http:
+            port: *port
+    route:
+      main:
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: main
+              port: *port
+    persistence:
+      data:
+        existingClaim: ${app}
+
