@@ -11,6 +11,21 @@ spec:
         - name: model-generator
           image: ant385525/d3savant-ml:latest
           imagePullPolicy: Always
+          env:
+            - name: PG_USER
+              valueFrom:
+                secretKeyRef:
+                  name: jensen-d3savant-secret
+                  key: username
+            - name: PG_NAME
+              value: app
+            - name: PG_HOST
+              value: d3savant-postgres-pooler-rw.d3savant.svc.cluster.local
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jensen-d3savant-secret
+                  key: password
           volumeMounts:
             - name: ml-data
               mountPath: /app/models
