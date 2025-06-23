@@ -15,6 +15,7 @@ spec:
       containers:
         - name: model-generator
           image: ant385525/d3savant-ml:latest
+          imagePullPolicy: Always
           volumeMounts:
             - name: ml-data
               mountPath: /app/models
