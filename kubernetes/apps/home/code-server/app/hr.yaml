@@ -73,7 +73,7 @@ spec:
               capabilities: { drop: ["ALL"] }
     service:
       main:
-        controller: ${app}
+        controller: ${APP}
         ports:
           http:
             port: *port
@@ -91,5 +91,7 @@ spec:
               port: *port
     persistence:
       data:
-        existingClaim: ${app}
+        existingClaim: ${APP}
+        globalMounts:
+          - path: /home/coder
 
