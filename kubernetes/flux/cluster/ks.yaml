@@ -10,9 +10,12 @@ spec:
   timeout: 10m
   path: ./kubernetes/apps/
   prune: false
+  wait: true
   dependsOn:
     - name: flux-settings
+      namespace: flux-system
     - name: flux-repos
+      namespace: flux-system
   sourceRef:
     kind: GitRepository
     name: flux-system
