@@ -59,7 +59,7 @@ spec:
       enabled: true
       persistentVolumeClaim:
         registry:
-          existingClaim: harbor-registry-v1
+          existingClaim: harbor-registry
         jobservice:
           jobLog:
             storageClass: zfs-nvme
