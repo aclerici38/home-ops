@@ -48,6 +48,8 @@ spec:
   values:
     expose:
       type: clusterIP
+      tls:
+        enabed: false
     externalURL: https://harbor.${SECRET_DOMAIN}
     ipFamily:
       ipv6:
