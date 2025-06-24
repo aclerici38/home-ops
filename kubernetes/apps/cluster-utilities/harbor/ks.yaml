@@ -11,6 +11,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-utilities/harbor/app
+  components:
+    - ../../../../components/cnpg/overlay/init
   prune: true
   sourceRef:
     kind: GitRepository
