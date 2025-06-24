@@ -7,6 +7,7 @@ metadata:
 spec:
   dnsNames:
     - harbor.${SECRET_DOMAIN}
+    - 10.38.55.20
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
