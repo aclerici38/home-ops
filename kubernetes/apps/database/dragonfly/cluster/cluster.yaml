@@ -15,11 +15,8 @@ spec:
           divisor: 1Mi
   args:
     - --maxmemory=$(MAX_MEMORY)Mi
-    - --cluster_mode=emulated
-    - --lock_on_hashtags
     - --default_lua_flags=allow-undeclared-keys
     - --proactor_threads=4
-    - --lua_auto_async
     - --master_reconnect_timeout_ms=10000
   resources:
     requests:
