@@ -6,7 +6,7 @@ metadata:
   name: harbor
 spec:
   parentRefs:
-    - name: external
+    - name: internal
       kind: Gateway
       namespace: network
       sectionName: https

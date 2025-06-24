@@ -80,6 +80,11 @@ nodes:
             rules:
               - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
               - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
+          network:
+            extraHostEntries:
+              - ip: 10.38.55.80
+                aliases:
+                  - harbor.${SECRET_DOMAIN}
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "a0:36:9f:09:4c:8f"
