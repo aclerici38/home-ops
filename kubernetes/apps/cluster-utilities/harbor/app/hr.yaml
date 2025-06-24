@@ -47,7 +47,15 @@ spec:
       optional: false
   values:
     expose:
-      type: ingress
+      type: Loadbalancer
+      tls:
+        certSource: secret
+        secret:
+          secretName: tls.harbor
+      loadBalancer:
+        name: harbor
+        annotations:
+          lbipam.cilium.io/ips: "10.38.55.20"
     externalURL: https://harbor.${SECRET_DOMAIN}
     ipFamily:
       ipv6:
@@ -92,3 +100,6 @@ spec:
     metrics:
       serviceMonitor:
         enabled: true
+    nginx:
+      podAnnotations:
+        secret.reloader.stakater.com/reload: tls.harbor
