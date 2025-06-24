@@ -50,6 +50,7 @@ spec:
       type: clusterIP
       tls:
         enabed: false
+        certSource: none
     externalURL: https://harbor.${SECRET_DOMAIN}
     ipFamily:
       ipv6:
