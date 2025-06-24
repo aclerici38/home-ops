@@ -13,6 +13,7 @@ spec:
   path: ./kubernetes/apps/cluster-utilities/harbor/app
   components:
     - ../../../../components/cnpg/overlay/init
+    - ../../../../components/external-secret
   prune: true
   sourceRef:
     kind: GitRepository
