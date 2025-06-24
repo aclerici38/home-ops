@@ -86,6 +86,7 @@ spec:
     existingSecretAdminPasswordKey: password
     # The secret key used for encryption. Must be a string of 16 chars.
     existingSecretSecretKey: "${APP}-secret"
+    enableMigrateHelmHook: true
     cache:
       enabled: true
     notary:
