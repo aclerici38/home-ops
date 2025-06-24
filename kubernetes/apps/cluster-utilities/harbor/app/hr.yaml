@@ -47,20 +47,13 @@ spec:
       optional: false
   values:
     expose:
-      type: loadBalancer
-      tls:
-        certSource: secret
-        secret:
-          secretName: tls.harbor
-      loadBalancer:
-        name: harbor
-        annotations:
-          lbipam.cilium.io/ips: "10.38.55.20"
+      type: ingress
     externalURL: https://harbor.${SECRET_DOMAIN}
     ipFamily:
       ipv6:
         enabled: false
     persistence:
+      enabled: true
       persistentVolumeClaim:
         registry:
           existingClaim: harbor-registry
@@ -97,9 +90,5 @@ spec:
       enabled: false
     trivy:
       enabled: false
-    metrics:
-      serviceMonitor:
-        enabled: true
-    nginx:
-      podAnnotations:
-        secret.reloader.stakater.com/reload: tls.harbor
+    serviceMonitor:
+      enabled: true
