@@ -9,7 +9,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: model-generator
-          image: ant385525/d3savant-ml:latest
+          image: 10.38.55.20/d3savant/machine-learning
           imagePullPolicy: Always
           env:
             - name: PG_USER
