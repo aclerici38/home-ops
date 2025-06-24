@@ -28,7 +28,6 @@ spec:
           value: /c/
       backendRefs:
         - name: harbor-core
-          namespace: "harbor"
           port: 80
     - matches:
       - path:
@@ -36,5 +35,4 @@ spec:
           value: /
       backendRefs:
         - name: harbor-portal
-          namespace: "harbor"
           port: 80
