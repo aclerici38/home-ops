@@ -47,16 +47,12 @@ spec:
       optional: false
   values:
     expose:
-      type: clusterIP
-      tls:
-        enabed: false
-        certSource: none
+      type: ingress
     externalURL: https://harbor.${SECRET_DOMAIN}
     ipFamily:
       ipv6:
         enabled: false
     persistence:
-      enabled: true
       persistentVolumeClaim:
         registry:
           existingClaim: harbor-registry
@@ -93,8 +89,6 @@ spec:
       enabled: false
     trivy:
       enabled: false
-    serviceMonitor:
-      enabled: true
-    nginx:
-      podAnnotations:
-        secret.reloader.stakater.com/reload: tls.harbor
+    metrics:
+      serviceMonitor:
+        enabled: true
