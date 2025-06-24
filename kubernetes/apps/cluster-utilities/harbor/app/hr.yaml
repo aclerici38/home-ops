@@ -74,7 +74,7 @@ spec:
       type: external
       external:
         addr: dragonfly-db.database.svc.cluster.local:6379
-        coreDatabaseIndex: &idx 5
+        coreDatabaseIndex: &idx "5"
         jobserviceDatabaseIndex: *idx
         registryDatabaseIndex: *idx
         trivyAdapterIndex: *idx
