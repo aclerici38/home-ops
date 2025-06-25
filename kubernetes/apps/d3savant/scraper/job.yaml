@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: d3savant-scraper
+spec:
+  completions: 1
+  parallelism: 1
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: scraper
+          image: d3savant/scraper
+          imagePullPolicy: Always
+          env:
+            - name: PG_USER
+              valueFrom:
+                secretKeyRef:
+                  name: jensen-d3savant-secret
+                  key: username
+            - name: PG_NAME
+              value: app
+            - name: PG_HOST
+              value: d3savant-postgres-pooler-rw.d3savant.svc.cluster.local
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jensen-d3savant-secret
+                  key: password
