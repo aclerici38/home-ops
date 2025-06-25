@@ -10,10 +10,4 @@ spec:
     name: ${APP}-db
   extensions:
     - ensure: present
-      name: vector
-    - ensure: present
       name: pg_trgm
-    - ensure: present
-      name: fuzzystrmatch
-    - ensure: present
-      name: pgcrypto
