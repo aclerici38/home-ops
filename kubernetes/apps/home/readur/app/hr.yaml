@@ -93,7 +93,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-            - name: main
+            - identifier: main
               port: *port
     persistence:
       files:
