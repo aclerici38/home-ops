@@ -3,8 +3,8 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app paperless
-  namespace: &ns media
+  name: &app syncthing
+  namespace: &ns home
 spec:
   targetNamespace: *ns
   commonMetadata:
@@ -13,16 +13,8 @@ spec:
   dependsOn:
     - name: files-zfs-volume
       namespace: openebs-system
-    - name: versity
-      namespace: storage
-    - name: volsync
-      namespace: storage
-    - name: cloudnative-pg
-      namespace: database
-  path: ./kubernetes/apps/media/paperless/app
+  path: ./kubernetes/apps/home/syncthing/app
   components:
-    - ../../../../components/external-secret
-    - ../../../../components/cnpg/overlay/init
     - ../../../../components/volsync/versity
   prune: true
   sourceRef:
@@ -35,4 +27,3 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_CAPACITY: 500Gi

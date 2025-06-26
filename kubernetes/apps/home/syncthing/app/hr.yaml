@@ -113,7 +113,6 @@ spec:
         globalMounts:
           - path: /var/syncthing
       files:
-        existingClaim: media
+        existingClaim: files
         globalMounts:
           - path: /var/mnt/files
-            subPath: files

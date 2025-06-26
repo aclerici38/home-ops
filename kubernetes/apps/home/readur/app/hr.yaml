@@ -24,6 +24,7 @@ spec:
   values:
     controllers:
       ${APP}:
+        strategy: RollingUpdate
         pod:
           securityContext:
             runAsNonRoot: true
@@ -103,3 +104,4 @@ spec:
             subPath: readur-uploads
           - path: /watch
             subPath: documents
+            readOnly: true
