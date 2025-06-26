@@ -8,10 +8,10 @@ spec:
   backoffLimit: 0
   template:
     spec:
-      restartPolicy: Never
+      restartPolicy: Always
       containers:
         - name: scraper
-          image: d3savant/scraper
+          image: harbor.${SECRET_DOMAIN}/d3savant/scraper
           imagePullPolicy: Always
           env:
             - name: PG_USER
