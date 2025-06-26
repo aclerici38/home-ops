@@ -3,13 +3,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: app-template
+  name: readur
 spec:
   interval: 1h
   maxHistory: 1
   chartRef:
     kind: OCIRepository
-    name: readur
+    name: app-template
     namespace: flux-system
   install:
     crds: CreateReplace
