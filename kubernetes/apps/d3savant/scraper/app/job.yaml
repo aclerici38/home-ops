@@ -8,7 +8,7 @@ spec:
   backoffLimit: 0
   template:
     spec:
-      restartPolicy: Always
+      restartPolicy: OnFailure
       containers:
         - name: scraper
           image: harbor.${SECRET_DOMAIN}/d3savant/scraper
