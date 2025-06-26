@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      main:
         pod:
           securityContext:
             runAsNonRoot: true
@@ -33,7 +33,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          main:
+          readur:
             image:
               repository: ghcr.io/readur/readur
               tag: 2.2.3@sha256:313398c36d5ebf595b527d50118daecd843819afdcf3583da60aefd4bbbc4e78
