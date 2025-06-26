@@ -40,7 +40,7 @@ spec:
           from: Selector
           selector:
             matchLabels:
-              kubernetes.io/metadata.name: media
+              kubernetes.io/metadata.name: home
     - name: syncthing-tcp
       protocol: TCP
       port: 22000
@@ -49,4 +49,4 @@ spec:
           from: Selector
           selector:
             matchLabels:
-              kubernetes.io/metadata.name: media
+              kubernetes.io/metadata.name: home
