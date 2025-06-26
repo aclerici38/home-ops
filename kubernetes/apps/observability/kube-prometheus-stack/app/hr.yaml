@@ -86,6 +86,7 @@ spec:
         image:
           registry: docker.io
           repository: prompp/prompp
+          # renovate: datasource=github-releases depName=deskhouse/prompp versioning=loose
           tag: 2.53.2-0.2.5
         securityContext:
           runAsNonRoot: true
