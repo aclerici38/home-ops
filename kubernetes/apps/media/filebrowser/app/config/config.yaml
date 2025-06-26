@@ -5,10 +5,10 @@ server:
   cacheDir: /cache
   database: /home/filebrowser/database/filebrowser.db
   sources:
-    - name: media
+    - name: Media
       path: /mnt/media
-    - name: files
-      path: /mnt/files
+    - name: Documents
+      path: /mnt/documents
 auth:
   methods:
     noauth: false
