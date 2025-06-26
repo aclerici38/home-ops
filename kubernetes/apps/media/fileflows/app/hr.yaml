@@ -130,10 +130,6 @@ spec:
         existingClaim: fileflows-manually-added
         globalMounts:
           - path: /app/ManuallyAdded
-      paperless-consume:
-        existingClaim: paperless-consume
-        globalMounts:
-          - path: /mnt/paperless/consume
       temp:
         enabled: true
         type: emptyDir
