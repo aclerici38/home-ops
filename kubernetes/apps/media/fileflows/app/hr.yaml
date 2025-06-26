@@ -143,10 +143,6 @@ spec:
           # Mutex
           - path: /tmp
             subPath: tmp
-      common:
-        type: emptyDir
-        globalMounts:
-          - path: /app/common
       dockermods:
         type: emptyDir
         globalMounts:
