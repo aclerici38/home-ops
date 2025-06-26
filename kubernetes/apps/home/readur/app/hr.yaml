@@ -96,13 +96,10 @@ spec:
             - name: main
               port: *port
     persistence:
-      uploads:
+      files:
         existingClaim: files
         globalMounts:
           - path: /uploads
             subPath: readur-uploads
-      watch:
-        existingClaim: files
-        globalMounts:
-          - path: documents
-
+          - path: /watch
+            subPath: documents
