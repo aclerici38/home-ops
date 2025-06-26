@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: readur
+  name: app-template
 spec:
   interval: 1h
   maxHistory: 1
@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      ${APP}:
         pod:
           securityContext:
             runAsNonRoot: true
@@ -33,7 +33,7 @@ spec:
             fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
-          readur:
+          main:
             image:
               repository: ghcr.io/readur/readur
               tag: 2.2.3@sha256:313398c36d5ebf595b527d50118daecd843819afdcf3583da60aefd4bbbc4e78
@@ -63,6 +63,16 @@ spec:
                 memory: 256Mi
               limits:
                 memory: 1Gi
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 8000
+                    path: /api/health
+              liveness: *probes
+
             securityContext:
               allowPrivilegeEscalation: false
               seccompProfile: { type: RuntimeDefault }
@@ -72,7 +82,7 @@ spec:
         controller: ${APP}
         ports:
           http:
-            port: &port 8000
+            port: *port
     route:
       main:
         hostnames:
