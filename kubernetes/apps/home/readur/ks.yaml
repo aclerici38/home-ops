@@ -20,6 +20,7 @@ spec:
   path: ./kubernetes/apps/home/readur/app
   components:
     - ../../../../components/cnpg/overlay/init
+    - ../../../../components/external-secret
   prune: true
   sourceRef:
     kind: GitRepository
