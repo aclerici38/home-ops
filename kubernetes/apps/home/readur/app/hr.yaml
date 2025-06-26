@@ -1,0 +1,98 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: readur
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: readur
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      ${APP}:
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          main:
+            image:
+              repository: ghcr.io/readur/readur
+              tag: 2.2.3@sha256:313398c36d5ebf595b527d50118daecd843819afdcf3583da60aefd4bbbc4e78
+            env:
+              MAX_FILE_SIZE_MB: "5000"
+              MEMORY_LIMIT_MB:
+                valueFrom:
+                  resourceFieldRef:
+                    containerName: main
+                    resource: limits.memory
+                    divisor: 1Mi
+              CONCURRENT_OCR_JOBS: "6"
+              UPLOAD_PATH: "/uploads"
+              WATCH_FOLDER: "/watch"
+              ENABLE_AUTO_CLEANUP: false
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: uri
+            envFrom:
+              - secretRef:
+                  name: ${APP}-secret
+            resources:
+              requests:
+                cpu: 200m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities: { drop: ["ALL"] }
+    service:
+      main:
+        controller: ${APP}
+        ports:
+          http:
+            port: &port 8000
+    route:
+      main:
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: main
+              port: *port
+    persistence:
+      uploads:
+        existingClaim: files
+        globalMounts:
+          - path: /uploads
+            subPath: readur-uploads
+      watch:
+        existingClaim: files
+        globalMounts:
+          - path: documents
+
