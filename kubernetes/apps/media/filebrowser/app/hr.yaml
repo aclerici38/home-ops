@@ -97,3 +97,9 @@ spec:
         existingClaim: media
         globalMounts:
           - path: /mnt/media
+      files:
+        type: nfs
+        server: 10.38.55.12
+        path: /
+        globalMounts:
+          - path: /mnt/files
