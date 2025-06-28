@@ -21,44 +21,67 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  dependsOn:
+    - name: gravity-etcd
   values:
     controllers:
       gravity:
         type: statefulset
         strategy: RollingUpdate
         replicas: 6
+        pod:
+          # hostUsers: false
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "house"
+              effect: "NoSchedule"
+            - key: "location"
+              operator: "Equal"
+              value: "cloud"
+              effect: "NoSchedule"
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: gravity
+          # securityContext:
+          #   runAsNonRoot: true
+          #   runAsUser: 1000
+          #   runAsGroup: 1000
+          #   seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
               repository: ghcr.io/beryju/gravity
               tag: v0.27.0@sha256:bb9c210959b09d0a4bee5c707ff4ac9a4bd376e14c818fc00331b16d16ebc79a
             env:
-              # BOOTSTRAP_ROLES: "dns;dhcp;api;discovery;monitoring;tsdb"
-              BOOTSTRAP_ROLES: "dns;api"
-              ETCD_ENDPOINT: gravity-etcd-headless.network:2379
+              BOOTSTRAP_ROLES: "dns;dhcp;api;discovery;monitoring;tsdb"
+              ETCD_ENDPOINT: gravity-etcd.network.svc:2379
               LOG_LEVEL: debug
-              LISTEN_ONLY: true
-              # INSTANCE_IP: &lbIp 10.38.55.30
-              # INSTANCE_LISTEN: 0.0.0.0
+              INSTANCE_IP: &lbIp 10.38.55.30
+              INSTANCE_LISTEN: 0.0.0.0
               INSTANCE_IDENTIFIER: k8s
             envFrom:
               - secretRef:
                   name: ${APP}-secret
-            # probes:
-            #   readiness: &probes
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       httpGet:
-            #         port: &metrics 8009
-            #         path: /healthz/ready
-            #   liveness:
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       httpGet:
-            #         port: *metrics
-            #         path: /healthz/live
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &metrics 8009
+                    path: /healthz/ready
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: *metrics
+                    path: /healthz/live
             resources:
               requests:
                 cpu: 10m
@@ -68,77 +91,6 @@ spec:
               privileged: true
             #   allowPrivilegeEscalation: false
             #   readOnlyRootFilesystem: true
-              capabilities:
-                add:
-                  - NET_BIND_SERVICE
-                  - NET_ADMIN
-                  - SYS_ADMIN
-      etcd:
-        type: statefulset
-        strategy: RollingUpdate
-        replicas: 3
-        containers:
-          main:
-            image:
-              repository: quay.io/coreos/etcd
-              tag: v3.6.1
-            command: [etcd]
-            args:
-              - --name=$(POD_NAME)
-              - --listen-metrics-urls=http://0.0.0.0:2381
-              - --listen-peer-urls=http://0.0.0.0:2380
-              - --listen-client-urls=http://0.0.0.0:2379
-              - --initial-advertise-peer-urls=http://$(POD_NAME).gravity-etcd-headless.$(POD_NAMESPACE).svc:2380
-              - --advertise-client-urls=http://$(POD_NAME).gravity-etcd-headless.$(POD_NAMESPACE).svc:2379
-              - --data-dir=/var/run/etcd/default.etcd
-              - --initial-cluster=gravity-etcd-0=http://gravity-etcd-0.gravity-etcd-headless.$(POD_NAMESPACE).svc:2380,gravity-etcd-1=http://gravity-etcd-1.gravity-etcd-headless.$(POD_NAMESPACE).svc:2380,gravity-etcd-2=http://gravity-etcd-2.gravity-etcd-headless.$(POD_NAMESPACE).svc:2380
-              - --initial-cluster-state=new
-              - --initial-cluster-token=etcd-cluster
-              - --auto-compaction-retention=5m
-              - --snapshot-count=10000
-              - --quota-backend-bytes=5100273664
-            env:
-              POD_NAME:
-                valueFrom:
-                  fieldRef:
-                    fieldPath: metadata.name
-              POD_NAMESPACE:
-                valueFrom:
-                  fieldRef:
-                    fieldPath: metadata.namespace
-    statefulset:
-      volumeClaimTemplates:
-        - name: data
-          advancedMounts:
-            etcd:
-              main:
-                - path: /var/run/etcd
-          accessMode: "ReadWriteOnce"
-          storageClass: local-path
-          size: 5Gi
-    defaultPodOptions:
-      # hostUsers: false
-      tolerations:
-        - key: "location"
-          operator: "Equal"
-          value: "house"
-          effect: "NoSchedule"
-        - key: "location"
-          operator: "Equal"
-          value: "cloud"
-          effect: "NoSchedule"
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: DoNotSchedule
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/instance: gravity
-      # securityContext:
-      #   runAsNonRoot: true
-      #   runAsUser: 1000
-      #   runAsGroup: 1000
-      #   seccompProfile: { type: RuntimeDefault }
     service:
       http:
         controller: ${APP}
@@ -170,16 +122,6 @@ spec:
         annotations:
           lbipam.cilium.io/ips: 10.38.55.30
         ports: *ports
-      etcd-headless:
-        controller: etcd
-        clusterIP: None
-        ports:
-          client:
-            port: 2379
-          peer:
-            port: 2380
-          metrics:
-            port: 2381
     route:
       main:
         hostnames:
