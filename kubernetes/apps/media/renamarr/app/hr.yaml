@@ -48,7 +48,7 @@ spec:
             args:
               - |
                 apk add --no-cache jq;
-                until true; do
+                while true; do
                   echo "Checking fileflows status..."
                   STATUS=$(curl -s --max-time 3 http://fileflows:5000/api/status)
                   if [ $? -ne 0 ]; then
