@@ -46,9 +46,10 @@ spec:
               readiness: *probes
             resources:
               requests:
-                cpu: 100m
+                cpu: 500m
                 memory: 350M
               limits:
+                cpu: "24"
                 memory: 12Gi
                 gpu.intel.com/i915: 1
             securityContext:
