@@ -103,12 +103,10 @@ spec:
       subdomain: gravity-etcd
       volumeClaimTemplates:
         - name: data
-          advancedMounts:
-            etcd:
-              main:
-                - path: /var/run/etcd
+          globalMounts:
+            - path: /var/run/etcd
           accessMode: "ReadWriteOnce"
-          storageClass: local-path
+          storageClass: local-hostpath
           size: 5Gi
     service:
       etcd:
