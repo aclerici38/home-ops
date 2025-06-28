@@ -1,0 +1,190 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gravity
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      gravity:
+        type: statefulset
+        replicas: 6
+        containers:
+          main:
+            image:
+              repository: ghcr.io/beryju/gravity
+              tag: v0.27.0@sha256:bb9c210959b09d0a4bee5c707ff4ac9a4bd376e14c818fc00331b16d16ebc79a
+            env:
+              BOOTSTRAP_ROLES: "dns;dhcp;api;discovery;monitoring;tsdb"
+              ETCD_ENDPOINT: gravity-etcd-headless:2379
+              LOG_LEVEL: debug
+              INSTANCE_IP: &lbIp 10.38.55.30
+              INSTANCE_LISTEN: 0.0.0.0
+              INSTANCE_IDENTIFIER: k8s
+            envFrom:
+              - secretRef:
+                  name: ${APP}-secret
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &metrics 8009
+                    path: /healthz/ready
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: *metrics
+                    path: /healthz/live
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
+            securityContext: &sec
+              privileged: true
+            #   allowPrivilegeEscalation: false
+            #   readOnlyRootFilesystem: true
+            #   capabilities:
+            #     add:
+            #       - NET_BIND_SERVICE
+            #     drop:
+            #       - ALL
+      etcd:
+        type: statefulset
+        replicas: 3
+        containers:
+          main:
+            image:
+              repository: quay.io/coreos/etcd
+              tag: v3.6.1
+            command: [etcd]
+            args:
+              - --name=$(POD_NAME)
+              - --listen-metrics-urls=http://0.0.0.0:2381
+              - --listen-peer-urls=http://0.0.0.0:2380
+              - --listen-client-urls=http://0.0.0.0:2379
+              - --initial-advertise-peer-urls=http://$(POD_NAME).gravity-etcd-headless.$(POD_NAMESPACE).svc:2380
+              - --advertise-client-urls=http://$(POD_NAME).gravity-etcd-headless.$(POD_NAMESPACE).svc:2379
+              - --data-dir=/var/run/etcd/default.etcd
+              - --initial-cluster=etcd-0=http://etcd-0.etcd-headless:2380,etcd-1=http://etcd-1.etcd-headless:2380,etcd-2=http://etcd-2.etcd-headless:2380
+              - --initial-cluster-state=existing
+              - --initial-cluster-token=etcd-cluster
+              - --auto-compaction-retention=5m
+              - --snapshot-count=10000
+              - --quota-backend-bytes=5100273664
+            env:
+              POD_NAME:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.name
+              POD_NAMESPACE:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
+    statefulset:
+      volumeClaimTemplates:
+        - name: data
+          advancedMounts:
+            etcd:
+              main:
+                - path: /var/run/etcd
+          accessMode: "ReadWriteOnce"
+          storageClass: local-path
+          size: 5Gi
+    defaultPodOptions:
+      # hostUsers: false
+      tolerations:
+        - key: "location"
+          operator: "Equal"
+          value: "house"
+          effect: "NoSchedule"
+        - key: "location"
+          operator: "Equal"
+          value: "cloud"
+          effect: "NoSchedule"
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/controller: gravity
+      # securityContext:
+      #   runAsNonRoot: true
+      #   runAsUser: 1000
+      #   runAsGroup: 1000
+      #   seccompProfile: { type: RuntimeDefault }
+    service:
+      http:
+        controller: ${APP}
+        ports:
+          http:
+            port: &port 8008
+          metrics:
+            port: 8009
+      internal-dns:
+        controller: ${APP}
+        ports: &ports
+          dns-tcp:
+            port: 53
+            protocol: TCP
+          dns-udp:
+            primary: true
+            port: 53
+            protocol: UDP
+          dns-tls:
+            port: 853
+            protocol: TCP
+          dhcp:
+            port: 67
+            protocol: UDP
+      external-dns:
+        controller: ${APP}
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        annotations:
+          lbipam.cilium.io/ips: *lbIp
+        ports: *ports
+      etcd-headless:
+        controller: etcd
+        clusterIP: None
+        ports:
+          client:
+            port: 2379
+          peer:
+            port: 2380
+          metrics:
+            port: 2381
+    route:
+      main:
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: http
+                port: *port
