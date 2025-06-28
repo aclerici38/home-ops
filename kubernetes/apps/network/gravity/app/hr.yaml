@@ -36,28 +36,28 @@ spec:
               # BOOTSTRAP_ROLES: "dns;dhcp;api;discovery;monitoring;tsdb"
               BOOTSTRAP_ROLES: "dns;api"
               ETCD_ENDPOINT: gravity-etcd-headless.network:2379
-              LOG_LEVEL: trace
+              LOG_LEVEL: debug
               # INSTANCE_IP: &lbIp 10.38.55.30
               # INSTANCE_LISTEN: 0.0.0.0
               INSTANCE_IDENTIFIER: k8s
             envFrom:
               - secretRef:
                   name: ${APP}-secret
-            probes:
-              readiness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    port: &metrics 8009
-                    path: /healthz/ready
-              liveness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    port: *metrics
-                    path: /healthz/live
+            # probes:
+            #   readiness: &probes
+            #     enabled: true
+            #     custom: true
+            #     spec:
+            #       httpGet:
+            #         port: &metrics 8009
+            #         path: /healthz/ready
+            #   liveness:
+            #     enabled: true
+            #     custom: true
+            #     spec:
+            #       httpGet:
+            #         port: *metrics
+            #         path: /healthz/live
             resources:
               requests:
                 cpu: 10m
