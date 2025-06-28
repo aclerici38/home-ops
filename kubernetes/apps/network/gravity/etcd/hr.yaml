@@ -93,13 +93,13 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             probes:
-              liveness: &probes
+              liveness: &probes &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
                     port: &metrics 2381
-                    path: /livez
+                    path: /health
               readiness: *probes
     service:
       etcd:
