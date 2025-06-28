@@ -131,7 +131,7 @@ spec:
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
             matchLabels:
-              app.kubernetes.io/controller: gravity
+              app.kubernetes.io/instance: gravity
       # securityContext:
       #   runAsNonRoot: true
       #   runAsUser: 1000
