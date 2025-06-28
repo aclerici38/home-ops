@@ -93,27 +93,21 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    port: &client 2379
+                    port: &metrics 2381
                     path: /livez
-              readiness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    port: *client
-                    path: readyz
+              readiness: *probes
     service:
       etcd:
         controller: etcd
         clusterIP: None
         ports:
           client:
-            port: *client
+            port: 2379
           peer:
             port: 2380
           metrics:
