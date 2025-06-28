@@ -78,7 +78,6 @@ spec:
           dirPermissionsUser: 0
           dirPermissionsGroup: 0
     node:
-      nodeSelector: *ns
       tolerations: *tol
       driver:
         extraVolumeMounts:
