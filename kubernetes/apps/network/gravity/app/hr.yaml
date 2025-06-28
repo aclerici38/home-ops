@@ -166,7 +166,7 @@ spec:
         type: LoadBalancer
         externalTrafficPolicy: Local
         annotations:
-          lbipam.cilium.io/ips: *lbIp
+          lbipam.cilium.io/ips: 10.38.55.30
         ports: *ports
       etcd-headless:
         controller: etcd
