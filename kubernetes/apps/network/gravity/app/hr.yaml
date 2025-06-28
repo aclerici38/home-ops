@@ -34,10 +34,10 @@ spec:
               tag: v0.27.0@sha256:bb9c210959b09d0a4bee5c707ff4ac9a4bd376e14c818fc00331b16d16ebc79a
             env:
               BOOTSTRAP_ROLES: "dns;dhcp;api;discovery;monitoring;tsdb"
-              ETCD_ENDPOINT: gravity-etcd-headless:2379
+              ETCD_ENDPOINT: gravity-etcd-headless.network:2379
               LOG_LEVEL: debug
-              INSTANCE_IP: &lbIp 10.38.55.30
-              INSTANCE_LISTEN: 0.0.0.0
+              # INSTANCE_IP: &lbIp 10.38.55.30
+              # INSTANCE_LISTEN: 0.0.0.0
               INSTANCE_IDENTIFIER: k8s
             envFrom:
               - secretRef:
@@ -90,7 +90,7 @@ spec:
               - --advertise-client-urls=http://$(POD_NAME).gravity-etcd-headless.$(POD_NAMESPACE).svc:2379
               - --data-dir=/var/run/etcd/default.etcd
               - --initial-cluster=gravity-etcd-0=http://gravity-etcd-0.gravity-etcd-headless.$(POD_NAMESPACE).svc:2380,gravity-etcd-1=http://gravity-etcd-1.gravity-etcd-headless.$(POD_NAMESPACE).svc:2380,gravity-etcd-2=http://gravity-etcd-2.gravity-etcd-headless.$(POD_NAMESPACE).svc:2380
-              - --initial-cluster-state=new
+              - --initial-cluster-state=existing
               - --initial-cluster-token=etcd-cluster
               - --auto-compaction-retention=5m
               - --snapshot-count=10000
