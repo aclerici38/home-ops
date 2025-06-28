@@ -27,6 +27,14 @@ spec:
         type: statefulset
         strategy: RollingUpdate
         replicas: 3
+        statefulset:
+          volumeClaimTemplates:
+            - name: data
+              globalMounts:
+                - path: /var/run/etcd
+              accessMode: "ReadWriteOnce"
+              storageClass: local-hostpath
+              size: 5Gi
         pod:
           tolerations:
             - key: "location"
@@ -99,15 +107,6 @@ spec:
                   httpGet:
                     port: *client
                     path: readyz
-    statefulset:
-      subdomain: gravity-etcd
-      volumeClaimTemplates:
-        - name: data
-          globalMounts:
-            - path: /var/run/etcd
-          accessMode: "ReadWriteOnce"
-          storageClass: local-hostpath
-          size: 5Gi
     service:
       etcd:
         controller: etcd
