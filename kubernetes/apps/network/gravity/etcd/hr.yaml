@@ -45,11 +45,11 @@ spec:
               labelSelector:
                 matchLabels:
                   app.kubernetes.io/instance: gravity
-          # securityContext:
-          #   runAsNonRoot: true
-          #   runAsUser: 1000
-          #   runAsGroup: 1000
-          #   seccompProfile: { type: RuntimeDefault }
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
@@ -65,7 +65,7 @@ spec:
               - --advertise-client-urls=http://$(POD_NAME).gravity-etcd.$(POD_NAMESPACE).svc:2379
               - --data-dir=/var/run/etcd/default.etcd
               - --initial-cluster=gravity-etcd-0=http://gravity-etcd-0.gravity-etcd.$(POD_NAMESPACE).svc:2380,gravity-etcd-1=http://gravity-etcd-1.gravity-etcd.$(POD_NAMESPACE).svc:2380,gravity-etcd-2=http://gravity-etcd-2.gravity-etcd.$(POD_NAMESPACE).svc:2380
-              - --initial-cluster-state=new
+              - --initial-cluster-state=existing
               - --initial-cluster-token=etcd-cluster
               - --auto-compaction-retention=5m
               - --snapshot-count=10000
@@ -79,6 +79,25 @@ spec:
                 valueFrom:
                   fieldRef:
                     fieldPath: metadata.namespace
+            securityContext: &sec
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &client 2379
+                    path: /livez
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: *client
+                    path: readyz
     statefulset:
       subdomain: gravity-etcd
       volumeClaimTemplates:
@@ -96,7 +115,7 @@ spec:
         clusterIP: None
         ports:
           client:
-            port: 2379
+            port: *client
           peer:
             port: 2380
           metrics:

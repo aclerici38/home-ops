@@ -30,7 +30,7 @@ spec:
         strategy: RollingUpdate
         replicas: 6
         pod:
-          # hostUsers: false
+          hostUsers: false
           tolerations:
             - key: "location"
               operator: "Equal"
@@ -47,20 +47,20 @@ spec:
               labelSelector:
                 matchLabels:
                   app.kubernetes.io/instance: gravity
-          # securityContext:
-          #   runAsNonRoot: true
-          #   runAsUser: 1000
-          #   runAsGroup: 1000
-          #   seccompProfile: { type: RuntimeDefault }
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
               repository: ghcr.io/beryju/gravity
               tag: v0.27.0@sha256:bb9c210959b09d0a4bee5c707ff4ac9a4bd376e14c818fc00331b16d16ebc79a
             env:
-              BOOTSTRAP_ROLES: "dns;dhcp;api;discovery;monitoring;tsdb"
+              BOOTSTRAP_ROLES: "dns;dhcp;api;backup;discovery;monitoring;debug;tsdb"
               ETCD_ENDPOINT: gravity-etcd.network.svc:2379
-              LOG_LEVEL: debug
+              # LOG_LEVEL: debug
               INSTANCE_IP: &lbIp 10.38.55.30
               INSTANCE_LISTEN: 0.0.0.0
               INSTANCE_IDENTIFIER: k8s
@@ -86,11 +86,11 @@ spec:
               requests:
                 cpu: 10m
               limits:
-                memory: 512Mi
+                memory: 200Mi
             securityContext: &sec
-              privileged: true
-            #   allowPrivilegeEscalation: false
-            #   readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
     service:
       http:
         controller: ${APP}
@@ -134,3 +134,10 @@ spec:
           - backendRefs:
               - identifier: http
                 port: *port
+    persistence:
+      data:
+        type: emptyDir
+      run:
+        type: emptyDir
+        globalMounts:
+          - path: /var/run
