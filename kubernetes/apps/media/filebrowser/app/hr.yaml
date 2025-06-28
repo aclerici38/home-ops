@@ -37,7 +37,7 @@ spec:
           main:
             image:
               repository: ghcr.io/gtsteffaniak/filebrowser
-              tag: 0.7.10-beta@sha256:13e9a2a53a59d00142aa3c3416190a50d4005a7391ce1f00c62a3edeb5512a85
+              tag: 0.7.11-beta@sha256:768471134e2294eb9a8a26d83a06b8132c2cd6b25418ed6b36753af4036775ce
             envFrom:
               - secretRef:
                   name: ${APP}-secret
