@@ -28,7 +28,6 @@ spec:
         strategy: RollingUpdate
         replicas: 3
         pod:
-          # hostUsers: false
           tolerations:
             - key: "location"
               operator: "Equal"
@@ -49,6 +48,8 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
             runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
         containers:
           main:
@@ -65,7 +66,7 @@ spec:
               - --advertise-client-urls=http://$(POD_NAME).gravity-etcd.$(POD_NAMESPACE).svc:2379
               - --data-dir=/var/run/etcd/default.etcd
               - --initial-cluster=gravity-etcd-0=http://gravity-etcd-0.gravity-etcd.$(POD_NAMESPACE).svc:2380,gravity-etcd-1=http://gravity-etcd-1.gravity-etcd.$(POD_NAMESPACE).svc:2380,gravity-etcd-2=http://gravity-etcd-2.gravity-etcd.$(POD_NAMESPACE).svc:2380
-              - --initial-cluster-state=existing
+              - --initial-cluster-state=new
               - --initial-cluster-token=etcd-cluster
               - --auto-compaction-retention=5m
               - --snapshot-count=10000
