@@ -93,7 +93,7 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             probes:
-              liveness: &probes &probes
+              liveness: &probes
                 enabled: true
                 custom: true
                 spec:
