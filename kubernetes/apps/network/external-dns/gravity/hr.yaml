@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app external-dns-cloudflare
+  name: &app external-dns-gravity
 spec:
   interval: 1h
   maxHistory: 1
@@ -35,20 +35,27 @@ spec:
       repository: registry.k8s.io/external-dns/external-dns
       tag: v0.17.0
     provider:
-      name: cloudflare
-    env:
-      - name: CF_API_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: cloudflare-secret
-            key: CLOUDFLARE_API_TOKEN
-    extraArgs:
-      - --cloudflare-dns-records-per-page=1000
-      - --gateway-name=external
-      - --default-targets=cloud.${SECRET_DOMAIN}
+      name: webhook
+      webhook:
+        image:
+        repository: ghcr.io/beryju/gravity-external-dns
+        tag: v0.27.0@sha256:74253ebd722481e45fa775649ad36a1f22e5894f6083bcf25ccfd3a4ed513dc0
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        allowPrivilegeEscalation: false
+      env:
+        - name: GRAVITY_URL
+          value: http://gravity-http.network.svc.cluster.local:8008/
+        - name: GRAVITY_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: external-dns-gravity-secret
+              key: TOKEN
     policy: sync
     triggerLoopOnEvent: true
-    sources: ["crd", "gateway-httproute"]
+    sources: ["crd", "gateway-httproute", "service"]
     txtPrefix: k8s.
     txtOwnerId: default
     domainFilters: ["${SECRET_DOMAIN}"]
