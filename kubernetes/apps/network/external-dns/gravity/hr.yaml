@@ -53,6 +53,8 @@ spec:
               secretKeyRef:
                 name: external-dns-gravity-secret
                 key: TOKEN
+          - name: ETCD_ENDPOINT
+            value: gravity-etcd.network.svc:2379
     policy: sync
     triggerLoopOnEvent: true
     sources: ["crd", "gateway-httproute", "service"]
