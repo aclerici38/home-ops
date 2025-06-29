@@ -64,7 +64,7 @@ spec:
               INSTANCE_IP: &lbIp 10.38.55.30
               INSTANCE_LISTEN: 0.0.0.0
               INSTANCE_IDENTIFIER: k8s
-              LISTEN_ONLY: true
+              # LISTEN_ONLY: true
             envFrom:
               - secretRef:
                   name: ${APP}-secret
