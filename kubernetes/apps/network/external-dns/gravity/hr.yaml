@@ -73,6 +73,8 @@ spec:
         emptyDir: {}
       - name: run
         emptyDir: {}
+    extraArgs:
+      - --webhook-provider-url=http://localhost:8080
     policy: sync
     triggerLoopOnEvent: true
     sources: ["crd", "gateway-httproute", "service"]
