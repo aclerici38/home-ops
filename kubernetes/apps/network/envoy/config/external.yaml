@@ -6,8 +6,7 @@ spec:
   provider:
     type: Kubernetes
     kubernetes:
-      envoyDeployment:
-        replicas: 3
+      envoyDaemonset:
         patch:
           value:
             spec:
@@ -22,13 +21,6 @@ spec:
                       operator: "Equal"
                       value: "cloud"
                       effect: "NoSchedule"
-                  topologySpreadConstraints:
-                    - maxSkew: 1
-                      topologyKey: kubernetes.io/hostname
-                      whenUnsatisfiable: DoNotSchedule
-                      labelSelector:
-                        matchLabels:
-                          gateway.envoyproxy.io/owning-gateway-name: external
       envoyService:
         patch:
           value:
