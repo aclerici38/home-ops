@@ -7,7 +7,7 @@ spec:
     type: Kubernetes
     kubernetes:
       envoyDeployment:
-        replicas: 6
+        replicas: 3
         patch:
           value:
             spec:
