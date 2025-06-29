@@ -40,19 +40,19 @@ spec:
         image:
           repository: ghcr.io/beryju/gravity-external-dns
           tag: v0.27.0@sha256:74253ebd722481e45fa775649ad36a1f22e5894f6083bcf25ccfd3a4ed513dc0
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        allowPrivilegeEscalation: false
-      env:
-        - name: GRAVITY_URL
-          value: http://gravity-http.network.svc.cluster.local:8008/
-        - name: GRAVITY_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: external-dns-gravity-secret
-              key: TOKEN
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+        env:
+          - name: GRAVITY_URL
+            value: http://gravity-http.network.svc.cluster.local:8008/
+          - name: GRAVITY_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: external-dns-gravity-secret
+                key: TOKEN
     policy: sync
     triggerLoopOnEvent: true
     sources: ["crd", "gateway-httproute", "service"]
