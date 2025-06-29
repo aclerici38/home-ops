@@ -41,7 +41,7 @@ spec:
       namespace: cluster-utilities
   path: ./kubernetes/apps/network/external-dns/gravity
   components:
-    - ../../../../external-secret
+    - ../../../../components/external-secret
   prune: true
   sourceRef:
     kind: GitRepository
