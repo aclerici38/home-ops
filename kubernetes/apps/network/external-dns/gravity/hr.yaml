@@ -34,13 +34,12 @@ spec:
     image:
       repository: registry.k8s.io/external-dns/external-dns
       tag: v0.17.0
-      pullPolicy: IfNotPresent
     provider:
       name: webhook
       webhook:
         image:
-        repository: ghcr.io/beryju/gravity-external-dns
-        tag: v0.27.0@sha256:74253ebd722481e45fa775649ad36a1f22e5894f6083bcf25ccfd3a4ed513dc0
+          repository: ghcr.io/beryju/gravity-external-dns
+          tag: v0.27.0@sha256:74253ebd722481e45fa775649ad36a1f22e5894f6083bcf25ccfd3a4ed513dc0
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
