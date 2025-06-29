@@ -58,8 +58,12 @@ spec:
         extraVolumeMounts:
           - name: data
             mountPath: /data
+          - name: run
+            mountPath: /var/run
     extraVolumes:
       - name: data
+        emptyDir: {}
+      - name: run
         emptyDir: {}
     policy: sync
     triggerLoopOnEvent: true
