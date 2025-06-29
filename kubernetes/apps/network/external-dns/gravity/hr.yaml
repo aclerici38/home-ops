@@ -47,12 +47,12 @@ spec:
           allowPrivilegeEscalation: false
         env:
           - name: GRAVITY_URL
-            value: http://gravity-http.gravity:8008/
+            value: http://gravity-http:8008/
           - name: GRAVITY_TOKEN
             valueFrom:
               secretKeyRef:
-                name: gravity
-                key: ADMIN_TOKEN
+                name: ${APP}-secret
+                key: TOKEN
     policy: sync
     triggerLoopOnEvent: true
     sources: ["crd", "gateway-httproute", "service"]
