@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app external-dns-gravity
+  name: external-dns-gravity
 spec:
   interval: 1h
   maxHistory: 1
@@ -74,7 +74,7 @@ spec:
       - name: run
         emptyDir: {}
     extraArgs:
-      - --webhook-provider-url=http://localhost:8080
+      - --webhook-provider-url=http://localhost:8008
     policy: sync
     triggerLoopOnEvent: true
     sources: ["crd", "gateway-httproute", "service"]
