@@ -44,6 +44,7 @@ spec:
           runAsNonRoot: true
           runAsUser: 1000
           runAsGroup: 1000
+          fsGroup: 1000
           allowPrivilegeEscalation: false
         env:
           - name: GRAVITY_URL
@@ -60,6 +61,13 @@ spec:
             mountPath: /data
           - name: run
             mountPath: /var/run
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      fsGroup: 1000
+      runAsGroup: 1000
+      seccompProfile:
+        type: RuntimeDefault
     extraVolumes:
       - name: data
         emptyDir: {}
