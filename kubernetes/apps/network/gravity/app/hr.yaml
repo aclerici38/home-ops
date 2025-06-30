@@ -33,6 +33,16 @@ spec:
           hostname: gravity-apartment
           nodeSelector:
             location: apartment
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name":"multus-apt-lab-net",
+                  "namespace": "network",
+                  "ips": ["192.168.9.38/24"],
+                  "mac": "64:16:7F:79:24:FD"
+                }
+              ]
         containers:
           main: &container
             image:
@@ -49,7 +59,7 @@ spec:
               - secretRef:
                   name: ${APP}-secret
             probes:
-              readiness: &probes
+              readiness:
                 enabled: true
                 custom: true
                 spec:
@@ -85,6 +95,16 @@ spec:
               effect: "NoSchedule"
           nodeSelector:
             location: house
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name":"multus-house-lab-net",
+                  "namespace": "network",
+                  "ips": ["10.0.30.38/24"],
+                  "mac": "64:16:7F:82:62:EB"
+                }
+              ]
         containers:
           main:
             <<: *container
