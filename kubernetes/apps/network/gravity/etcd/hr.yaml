@@ -77,6 +77,8 @@ spec:
               - --auto-compaction-retention=5m
               - --snapshot-count=10000
               - --quota-backend-bytes=5100273664
+              - --heartbeat-interval=75
+              - --election-timeout=750
             env:
               POD_NAME:
                 valueFrom:
