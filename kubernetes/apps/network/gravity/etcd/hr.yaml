@@ -39,12 +39,10 @@ spec:
           tolerations:
             - key: "location"
               operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
-            - key: "location"
-              operator: "Equal"
               value: "cloud"
               effect: "NoSchedule"
+          nodeSelector:
+            location: cloud
           topologySpreadConstraints:
             - maxSkew: 1
               topologyKey: kubernetes.io/hostname
