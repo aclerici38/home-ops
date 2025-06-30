@@ -52,7 +52,6 @@ spec:
               ETCD_ENDPOINT: gravity-etcd.network.svc:2379
               # LOG_LEVEL: debug
               INSTANCE_IP: 192.168.9.38
-              INSTANCE_LISTEN: 0.0.0.0
               INSTANCE_IDENTIFIER: apartment
             envFrom:
               - secretRef:
@@ -130,6 +129,7 @@ spec:
               <<: *env
               INSTANCE_IDENTIFIER: cloud
               LISTEN_ONLY: true
+              INSTANCE_LISTEN: 0.0.0.0
     defaultPodOptions:
       hostUsers: false
       securityContext:
