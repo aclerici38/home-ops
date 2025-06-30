@@ -28,7 +28,7 @@ spec:
       apartment:
         type: deployment
         strategy: RollingUpdate
-        replicas: 2
+        replicas: &replicas 1
         pod:
           hostname: gravity-apartment
           nodeSelector:
@@ -75,7 +75,7 @@ spec:
       house:
         type: deployment
         strategy: RollingUpdate
-        replicas: 2
+        replicas: *replicas
         pod:
           hostname: gravity-house
           tolerations:
@@ -94,7 +94,7 @@ spec:
       cloud:
         type: deployment
         strategy: RollingUpdate
-        replicas: 2
+        replicas: *replicas
         pod:
           hostname: gravity-cloud
           tolerations:
