@@ -25,45 +25,26 @@ spec:
     - name: gravity-etcd
   values:
     controllers:
-      gravity:
-        type: statefulset
+      apartment:
+        type: deployment
         strategy: RollingUpdate
-        replicas: 3
+        replicas: 2
         pod:
-          hostUsers: false
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
-            - key: "location"
-              operator: "Equal"
-              value: "cloud"
-              effect: "NoSchedule"
-          topologySpreadConstraints:
-            - maxSkew: 1
-              topologyKey: kubernetes.io/hostname
-              whenUnsatisfiable: DoNotSchedule
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/instance: gravity
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            seccompProfile: { type: RuntimeDefault }
+          hostname: gravity-apartment
+          nodeSelector:
+            location: apartment
         containers:
-          main:
+          main: &container
             image:
               repository: ghcr.io/beryju/gravity
               tag: v0.27.0@sha256:bb9c210959b09d0a4bee5c707ff4ac9a4bd376e14c818fc00331b16d16ebc79a
-            env:
+            env: &env
               BOOTSTRAP_ROLES: "dns;dhcp;api;backup;discovery;monitoring;debug;tsdb"
               ETCD_ENDPOINT: gravity-etcd.network.svc:2379
               # LOG_LEVEL: debug
               INSTANCE_IP: &lbIp 10.38.55.30
               INSTANCE_LISTEN: 0.0.0.0
-              INSTANCE_IDENTIFIER: k8s
+              INSTANCE_IDENTIFIER: apartment
             envFrom:
               - secretRef:
                   name: ${APP}-secret
@@ -87,20 +68,68 @@ spec:
                 cpu: 10m
               limits:
                 memory: 200Mi
-            securityContext: &sec
+            securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+      house:
+        type: deployment
+        strategy: RollingUpdate
+        replicas: 2
+        pod:
+          hostname: gravity-house
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "house"
+              effect: "NoSchedule"
+          nodeSelector:
+            location: house
+        containers:
+          main:
+            <<: *container
+            env:
+              <<: *env
+              INSTANCE_IDENTIFIER: house
+      cloud:
+        type: deployment
+        strategy: RollingUpdate
+        replicas: 2
+        pod:
+          hostname: gravity-cloud
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "cloud"
+              effect: "NoSchedule"
+          nodeSelector:
+            location: cloud
+        containers:
+          main:
+            <<: *container
+            env:
+              <<: *env
+              INSTANCE_IDENTIFIER: cloud
+    defaultPodOptions:
+      hostUsers: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile: { type: RuntimeDefault }
     service:
       http:
-        controller: ${APP}
+        controller: apartment
+        extraSelectorLabels: &esl
+          app.kubernetes.io/instance: ${APP}
         ports:
           http:
             port: &port 8008
           metrics:
             port: 8009
       internal-dns:
-        controller: ${APP}
+        controller: apartment
+        extraSelectorLabels: *esl
         ports: &ports
           dns-tcp:
             port: 53
@@ -116,7 +145,8 @@ spec:
             port: 67
             protocol: UDP
       external-dns:
-        controller: ${APP}
+        controller: apartment
+        extraSelectorLabels: *esl
         type: LoadBalancer
         externalTrafficPolicy: Local
         annotations:
