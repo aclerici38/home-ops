@@ -45,13 +45,13 @@ spec:
               operator: "Equal"
               value: "cloud"
               effect: "NoSchedule"
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchLabels:
-                      app.kubernetes.io/instance: gravity-etcd
-                  topologyKey: kubernetes.io/hostname
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: gravity-etcd
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -74,7 +74,7 @@ spec:
               - --advertise-client-urls=http://$(POD_NAME).gravity-etcd.$(POD_NAMESPACE).svc:2379
               - --data-dir=/var/run/etcd/default.etcd
               - --initial-cluster=gravity-etcd-0=http://gravity-etcd-0.gravity-etcd.$(POD_NAMESPACE).svc:2380,gravity-etcd-1=http://gravity-etcd-1.gravity-etcd.$(POD_NAMESPACE).svc:2380,gravity-etcd-2=http://gravity-etcd-2.gravity-etcd.$(POD_NAMESPACE).svc:2380
-              - --initial-cluster-state=new
+              - --initial-cluster-state=existing
               - --initial-cluster-token=etcd-cluster
               - --auto-compaction-retention=5m
               - --snapshot-count=10000
