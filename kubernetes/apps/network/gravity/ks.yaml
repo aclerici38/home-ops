@@ -9,6 +9,8 @@ spec:
   path: "./kubernetes/apps/network/gravity/app/"
   components:
     - ../../../../components/external-secret
+  dependsOn:
+    - name: multus-networks
   prune: true
   wait: true
   sourceRef:

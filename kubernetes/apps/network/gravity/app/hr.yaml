@@ -52,7 +52,7 @@ spec:
               BOOTSTRAP_ROLES: "dns;dhcp;api;backup;discovery;monitoring;debug;tsdb"
               ETCD_ENDPOINT: gravity-etcd.network.svc:2379
               # LOG_LEVEL: debug
-              INSTANCE_IP: &lbIp 10.38.55.30
+              INSTANCE_IP: 192.168.9.38
               INSTANCE_LISTEN: 0.0.0.0
               INSTANCE_IDENTIFIER: apartment
             envFrom:
@@ -110,6 +110,7 @@ spec:
             <<: *container
             env:
               <<: *env
+              INSTANCE_IP: 10.0.30.38
               INSTANCE_IDENTIFIER: house
       cloud:
         type: deployment
@@ -130,6 +131,7 @@ spec:
             env:
               <<: *env
               INSTANCE_IDENTIFIER: cloud
+              LISTEN_ONLY: true
     defaultPodOptions:
       hostUsers: false
       securityContext:
