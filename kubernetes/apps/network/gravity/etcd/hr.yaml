@@ -94,7 +94,7 @@ spec:
               capabilities: { drop: ["ALL"] }
           etcd-ctl:
             image:
-              repository: ghcr.io/ant385525/ectd-ctl
+              repository: ghcr.io/ant385525/etcd-ctl
               tag: 3.5.18@sha256:fd716c05b8ce9bc9bb4d2098c87691dc2ed4fda73fb2efbae5f2a747619a7a26
             securityContext: *sec
     service:
