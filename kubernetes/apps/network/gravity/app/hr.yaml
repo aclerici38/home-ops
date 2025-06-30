@@ -27,7 +27,6 @@ spec:
     controllers:
       apartment:
         type: deployment
-        strategy: RollingUpdate
         replicas: &replicas 1
         pod:
           hostname: gravity-apartment
@@ -84,7 +83,6 @@ spec:
               capabilities: { drop: ["ALL"] }
       house:
         type: deployment
-        strategy: RollingUpdate
         replicas: *replicas
         pod:
           hostname: gravity-house
