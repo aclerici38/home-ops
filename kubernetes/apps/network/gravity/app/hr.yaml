@@ -147,10 +147,10 @@ spec:
             port: &port 8008
           metrics:
             port: 8009
-      internal-dns:
+      dns:
         controller: apartment
         extraSelectorLabels: *esl
-        ports: &ports
+        ports:
           dns-tcp:
             port: 53
             protocol: TCP
@@ -158,20 +158,9 @@ spec:
             primary: true
             port: 53
             protocol: UDP
-          dns-tls:
-            port: 853
-            protocol: TCP
           dhcp:
             port: 67
             protocol: UDP
-      external-dns:
-        controller: apartment
-        extraSelectorLabels: *esl
-        type: LoadBalancer
-        externalTrafficPolicy: Local
-        annotations:
-          lbipam.cilium.io/ips: 10.38.55.30
-        ports: *ports
     route:
       main:
         hostnames:
