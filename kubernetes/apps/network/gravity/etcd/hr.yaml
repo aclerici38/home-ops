@@ -72,7 +72,7 @@ spec:
               - --advertise-client-urls=http://$(POD_NAME).gravity-etcd.$(POD_NAMESPACE).svc:2379
               - --data-dir=/var/run/etcd/default.etcd
               - --initial-cluster=gravity-etcd-0=http://gravity-etcd-0.gravity-etcd.$(POD_NAMESPACE).svc:2380,gravity-etcd-1=http://gravity-etcd-1.gravity-etcd.$(POD_NAMESPACE).svc:2380,gravity-etcd-2=http://gravity-etcd-2.gravity-etcd.$(POD_NAMESPACE).svc:2380
-              - --initial-cluster-state=new
+              - --initial-cluster-state=existing
               - --initial-cluster-token=etcd-cluster
               - --auto-compaction-retention=5m
               - --snapshot-count=10000
@@ -95,7 +95,7 @@ spec:
           etcd-ctl:
             image:
               repository: ghcr.io/ant385525/etcd-ctl
-              tag: 3.5.18@sha256:fd716c05b8ce9bc9bb4d2098c87691dc2ed4fda73fb2efbae5f2a747619a7a26
+              tag: 3.5.18@sha256:d746eb56220f75ed7c8998416ad4bff9aa70b2b878a235413368c36944043a7b
             securityContext: *sec
     service:
       etcd:
