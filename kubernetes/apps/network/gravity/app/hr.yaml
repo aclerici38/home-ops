@@ -44,14 +44,15 @@ spec:
               ]
         containers:
           main: &container
+            dependsOn: grpc-proxy
             image:
               repository: ghcr.io/beryju/gravity
               tag: v0.27.0@sha256:bb9c210959b09d0a4bee5c707ff4ac9a4bd376e14c818fc00331b16d16ebc79a
             env: &env
               BOOTSTRAP_ROLES: "dns;dhcp;api;backup;discovery;monitoring;debug;tsdb"
-              ETCD_ENDPOINT: gravity-etcd.network.svc:2379
+              ETCD_ENDPOINT: 127.0.0.1:23790
               # LOG_LEVEL: debug
-              INSTANCE_IP: 192.168.9.38
+              INSTANCE_IP: 10.38.55.30
               INSTANCE_LISTEN: 0.0.0.0
               INSTANCE_IDENTIFIER: apartment
             envFrom:
@@ -77,10 +78,39 @@ spec:
                 cpu: 10m
               limits:
                 memory: 200Mi
-            securityContext:
+            securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+          grpc-proxy: &proxy
+            image:
+              repository: quay.io/coreos/etcd
+              tag: v3.6.1
+            command: ["etcd"]
+            args:
+              - grpc-proxy
+              - start
+              - --listen-addr=0.0.0.0:23790
+              - --endpoints=http://gravity-etcd-0.gravity-etcd.network.svc:2379,http://gravity-etcd-1.gravity-etcd.network.svc:2379,http://gravity-etcd-2.gravity-etcd.network.svc:2379
+              - --dial-keep-alive-time=5s
+              - --dial-keep-alive-timeout=10s
+              - --metrics-addr https://0.0.0.0:4443
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: 4443
+                    path: /health
+              liveness: *probes
+            resources:
+              requests:
+                cpu: 10m
+                memory: 40Mi
+              limits:
+                memory: 200Mi
+            securityContext: *sec
       house:
         type: deployment
         replicas: *replicas
@@ -110,6 +140,7 @@ spec:
               <<: *env
               INSTANCE_IP: 10.0.30.38
               INSTANCE_IDENTIFIER: house
+          grpc-proxy: *proxy
       cloud:
         type: deployment
         strategy: RollingUpdate
@@ -130,6 +161,7 @@ spec:
               <<: *env
               INSTANCE_IDENTIFIER: cloud
               LISTEN_ONLY: true
+          grpc-proxy: *proxy
     defaultPodOptions:
       hostUsers: false
       securityContext:
