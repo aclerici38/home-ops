@@ -181,7 +181,7 @@ spec:
             port: 8009
       dns:
         controller: apartment
-        extraSelectorLabels: *esl
+        # extraSelectorLabels: *esl
         ports:
           dns-tcp:
             port: 53
