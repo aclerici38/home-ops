@@ -174,7 +174,6 @@ spec:
               LISTEN_ONLY: true
           grpc-proxy: *proxy
     defaultPodOptions:
-      hostUsers: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
