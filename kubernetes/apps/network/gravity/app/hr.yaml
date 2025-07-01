@@ -51,7 +51,7 @@ spec:
             env: &env
               BOOTSTRAP_ROLES: "dns;dhcp;api;backup;discovery;monitoring;debug;tsdb"
               ETCD_ENDPOINT: 127.0.0.1:23790
-              LOG_LEVEL: debug
+              # LOG_LEVEL: debug
               INSTANCE_IP: &lbIp 10.38.55.28
               INSTANCE_LISTEN: 0.0.0.0
               INSTANCE_IDENTIFIER: apartment
@@ -79,8 +79,12 @@ spec:
               limits:
                 memory: 200Mi
             securityContext:
-              allowPrivilegeEscalation: true
+              allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
+              runAsNonRoot: false
+              # Need to run as root for nmap?
+              runAsUser: 0
+              runAsGroup: 0
               capabilities:
                 add:
                   - NET_BIND_SERVICE
@@ -117,9 +121,13 @@ spec:
               limits:
                 memory: 200Mi
             securityContext:
-              securityContext: &sec
+              securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
+              runAsNonRoot: false
+              # Need to run as root for nmap?
+              runAsUser: 1000
+              runAsGroup: 1000
               capabilities:
                 drop:
                   - ALL
@@ -175,10 +183,7 @@ spec:
           grpc-proxy: *proxy
     defaultPodOptions:
       securityContext:
-        runAsNonRoot: false
-        runAsUser: 0
-        runAsGroup: 0
-        seccompProfile: { type: Unconfined }
+        seccompProfile: { type: RuntimeDefault }
     service:
       http:
         controller: apartment
