@@ -90,21 +90,6 @@ spec:
                 valueFrom:
                   fieldRef:
                     fieldPath: metadata.namespace
-            probes:
-              liveness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    port: 2381
-                    path: /livez
-              readiness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    port: 2381
-                    path: /readyz
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
