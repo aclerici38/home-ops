@@ -69,7 +69,7 @@ spec:
               limits:
                 memory: 200Mi
             securityContext:
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: true
               runAsNonRoot: false
               # Need to run as root for nmap?
@@ -115,7 +115,6 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               runAsNonRoot: false
-              # Need to run as root for nmap?
               runAsUser: 1000
               runAsGroup: 1000
               capabilities:
@@ -163,7 +162,7 @@ spec:
           grpc-proxy: *proxy
     defaultPodOptions:
       securityContext:
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: { type: Unconfined }
     service:
       http:
         controller: apartment
