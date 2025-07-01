@@ -36,9 +36,9 @@ spec:
             k8s.v1.cni.cncf.io/networks: |
               [
                 {
-                  "name":"multus-apt-lab-net",
+                  "name":"multus-apt-lan-net",
                   "namespace": "network",
-                  "ips": ["192.168.9.38/24"],
+                  "ips": ["192.168.1.38/24"],
                   "mac": "64:16:7F:79:24:FD"
                 }
               ]
@@ -49,10 +49,10 @@ spec:
               repository: ghcr.io/beryju/gravity
               tag: v0.27.0@sha256:bb9c210959b09d0a4bee5c707ff4ac9a4bd376e14c818fc00331b16d16ebc79a
             env: &env
-              BOOTSTRAP_ROLES: "dns;dhcp;api;etcd;backup;discovery;monitoring;debug;tsdb"
+              # BOOTSTRAP_ROLES: "dns;dhcp;api;etcd;backup;discovery;monitoring;debug;tsdb"
               # ETCD_ENDPOINT: 127.0.0.1:23790
-              # LOG_LEVEL: debug
-              INSTANCE_IP: 192.168.9.38
+              LOG_LEVEL: debug
+              INSTANCE_IP: 192.168.1.38
               INSTANCE_LISTEN: 0.0.0.0
               # INSTANCE_IDENTIFIER: apartment
             envFrom:
