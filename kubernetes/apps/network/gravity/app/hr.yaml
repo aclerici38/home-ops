@@ -52,9 +52,9 @@ spec:
               BOOTSTRAP_ROLES: "dns;dhcp;api;etcd;backup;discovery;monitoring;debug;tsdb"
               # ETCD_ENDPOINT: 127.0.0.1:23790
               # LOG_LEVEL: debug
-              INSTANCE_IP: 10.38.55.30
+              INSTANCE_IP: 192.168.9.38
               INSTANCE_LISTEN: 0.0.0.0
-              INSTANCE_IDENTIFIER: apartment
+              # INSTANCE_IDENTIFIER: apartment
             envFrom:
               - secretRef:
                   name: ${APP}-secret
