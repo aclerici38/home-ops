@@ -32,6 +32,16 @@ spec:
           hostname: gravity-apartment
           nodeSelector:
             location: apartment
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name":"multus-apt-lan-net",
+                  "namespace": "network",
+                  "ips": ["192.168.1.38/24"],
+                  "mac": "64:16:7F:79:24:FD"
+                }
+              ]
         containers:
           main: &container
             dependsOn: grpc-proxy
@@ -39,10 +49,10 @@ spec:
               repository: ghcr.io/beryju/gravity
               tag: v0.27.0@sha256:bb9c210959b09d0a4bee5c707ff4ac9a4bd376e14c818fc00331b16d16ebc79a
             env: &env
-              BOOTSTRAP_ROLES: "dns;dhcp;api;backup;monitoring;debug;tsdb"
+              BOOTSTRAP_ROLES: "dns;dhcp;api;backup;discovery;monitoring;debug;tsdb"
               ETCD_ENDPOINT: 127.0.0.1:23790
               LOG_LEVEL: debug
-              INSTANCE_IP: &lbIp 10.38.55.28
+              INSTANCE_IP: 192.168.1.38
               INSTANCE_LISTEN: 0.0.0.0
               INSTANCE_IDENTIFIER: apartment
             envFrom:
@@ -69,7 +79,7 @@ spec:
               limits:
                 memory: 200Mi
             securityContext:
-              allowPrivilegeEscalation: true
+              allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               runAsNonRoot: false
               # Need to run as root for nmap?
@@ -115,6 +125,7 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               runAsNonRoot: false
+              # Need to run as root for nmap?
               runAsUser: 1000
               runAsGroup: 1000
               capabilities:
@@ -132,6 +143,16 @@ spec:
               effect: "NoSchedule"
           nodeSelector:
             location: house
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name":"multus-house-lan-net",
+                  "namespace": "network",
+                  "ips": ["10.0.40.38/24"],
+                  "mac": "64:16:7F:82:62:EB"
+                }
+              ]
         containers:
           main:
             <<: *container
@@ -162,7 +183,7 @@ spec:
           grpc-proxy: *proxy
     defaultPodOptions:
       securityContext:
-        seccompProfile: { type: Unconfined }
+        seccompProfile: { type: RuntimeDefault }
     service:
       http:
         controller: apartment
@@ -191,7 +212,7 @@ spec:
         type: LoadBalancer
         externalTrafficPolicy: Local
         annotations:
-          lbipam.cilium.io/ips: *lbIp
+          lbipam.cilium.io/ips: 10.38.55.28
         ports:
           <<: *ports
           dhcp:
