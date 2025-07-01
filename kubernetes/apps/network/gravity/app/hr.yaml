@@ -79,7 +79,7 @@ spec:
               limits:
                 memory: 200Mi
             securityContext:
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: true
               capabilities:
                 add:
