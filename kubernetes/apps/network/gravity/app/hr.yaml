@@ -92,8 +92,8 @@ spec:
               - start
               - --listen-addr=0.0.0.0:23790
               - --endpoints=http://gravity-etcd-0.gravity-etcd.network.svc:2379,http://gravity-etcd-1.gravity-etcd.network.svc:2379,http://gravity-etcd-2.gravity-etcd.network.svc:2379
-              - --dial-keep-alive-time=5s
-              - --dial-keep-alive-timeout=10s
+              - --dial-keepalive-time=5s
+              - --dial-keepalive-timeout=10s
               - --metrics-addr https://0.0.0.0:4443
             probes:
               readiness: &probes
