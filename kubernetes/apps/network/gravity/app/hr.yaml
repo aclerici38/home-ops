@@ -49,12 +49,12 @@ spec:
               repository: ghcr.io/beryju/gravity
               tag: v0.27.0@sha256:bb9c210959b09d0a4bee5c707ff4ac9a4bd376e14c818fc00331b16d16ebc79a
             env: &env
-              # BOOTSTRAP_ROLES: "dns;dhcp;api;etcd;backup;discovery;monitoring;debug;tsdb"
-              # ETCD_ENDPOINT: 127.0.0.1:23790
+              BOOTSTRAP_ROLES: "dns;dhcp;api;backup;discovery;monitoring;debug;tsdb"
+              ETCD_ENDPOINT: 127.0.0.1:23790
               LOG_LEVEL: debug
-              INSTANCE_IP: 192.168.1.38
+              INSTANCE_IP: &lbIp 10.38.55.28
               INSTANCE_LISTEN: 0.0.0.0
-              # INSTANCE_IDENTIFIER: apartment
+              INSTANCE_IDENTIFIER: apartment
             envFrom:
               - secretRef:
                   name: ${APP}-secret
@@ -139,9 +139,9 @@ spec:
             k8s.v1.cni.cncf.io/networks: |
               [
                 {
-                  "name":"multus-house-lab-net",
+                  "name":"multus-house-lan-net",
                   "namespace": "network",
-                  "ips": ["10.0.30.38/24"],
+                  "ips": ["10.0.40.38/24"],
                   "mac": "64:16:7F:82:62:EB"
                 }
               ]
@@ -150,7 +150,6 @@ spec:
             <<: *container
             env:
               <<: *env
-              INSTANCE_IP: 10.0.30.38
               INSTANCE_IDENTIFIER: house
           grpc-proxy: *proxy
       cloud:
@@ -184,17 +183,17 @@ spec:
     service:
       http:
         controller: apartment
-        # extraSelectorLabels: &esl
-        #   app.kubernetes.io/instance: ${APP}
+        extraSelectorLabels: &esl
+          app.kubernetes.io/instance: ${APP}
         ports:
           http:
             port: &port 8008
           metrics:
             port: 8009
-      dns:
+      internal-dns:
         controller: apartment
-        # extraSelectorLabels: *esl
-        ports:
+        extraSelectorLabels: *esl
+        ports: &ports
           dns-tcp:
             port: 53
             protocol: TCP
@@ -202,6 +201,13 @@ spec:
             primary: true
             port: 53
             protocol: UDP
+      external-dns:
+        controller: apartment
+        extraSelectorLabels: *esl
+        annotations:
+          lbipam.cilium.io/ips: *lbIp
+        ports:
+          <<: *ports
           dhcp:
             port: 67
             protocol: UDP
