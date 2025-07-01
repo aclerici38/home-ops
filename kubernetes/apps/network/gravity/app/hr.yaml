@@ -237,3 +237,9 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /var/run
+      allowlist:
+        type: configMap
+        name: dns-allowlist
+        globalMounts:
+          - path: /allow.txt
+            subPath: allow.txt
