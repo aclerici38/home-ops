@@ -47,7 +47,7 @@ spec:
             dependsOn: grpc-proxy
             image:
               repository: ghcr.io/beryju/gravity
-              tag: v0.27.0@sha256:bb9c210959b09d0a4bee5c707ff4ac9a4bd376e14c818fc00331b16d16ebc79a
+              tag: latest
             env: &env
               BOOTSTRAP_ROLES: "dns;dhcp;api;backup;discovery;monitoring;debug;tsdb"
               ETCD_ENDPOINT: 127.0.0.1:23790
