@@ -172,8 +172,8 @@ spec:
     service:
       http:
         controller: apartment
-        extraSelectorLabels: &esl
-          app.kubernetes.io/instance: ${APP}
+        # extraSelectorLabels: &esl
+        #   app.kubernetes.io/instance: ${APP}
         ports:
           http:
             port: &port 8008
