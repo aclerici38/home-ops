@@ -27,7 +27,7 @@ spec:
     controllers:
       apartment:
         type: deployment
-        replicas: &replicas 1
+        strategy: recreate # multus
         pod:
           hostname: gravity-apartment
           nodeSelector:
@@ -49,12 +49,11 @@ spec:
               repository: ghcr.io/beryju/gravity
               tag: v0.27.0@sha256:bb9c210959b09d0a4bee5c707ff4ac9a4bd376e14c818fc00331b16d16ebc79a
             env: &env
-              BOOTSTRAP_ROLES: "dns;dhcp;api;backup;discovery;monitoring;debug;tsdb"
+              BOOTSTRAP_ROLES: "dns;dhcp;backup;discovery;monitoring;tsdb"
               ETCD_ENDPOINT: 127.0.0.1:23790
               LOG_LEVEL: debug
               INSTANCE_IP: 192.168.1.38
               INSTANCE_LISTEN: 0.0.0.0
-              INSTANCE_IDENTIFIER: apartment
             envFrom:
               - secretRef:
                   name: ${APP}-secret
@@ -79,7 +78,7 @@ spec:
               limits:
                 memory: 200Mi
             securityContext:
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: true
               runAsNonRoot: false
               # Need to run as root for nmap?
@@ -125,7 +124,6 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               runAsNonRoot: false
-              # Need to run as root for nmap?
               runAsUser: 1000
               runAsGroup: 1000
               capabilities:
@@ -133,7 +131,7 @@ spec:
                   - ALL
       house:
         type: deployment
-        replicas: *replicas
+        strategy: recreate # multus
         pod:
           hostname: gravity-house
           tolerations:
@@ -158,18 +156,21 @@ spec:
             <<: *container
             env:
               <<: *env
-              INSTANCE_IDENTIFIER: house
+              INSTANCE_IP: 10.0.40.38
           grpc-proxy: *proxy
-      cloud:
-        type: deployment
+      k8s:
+        type: statefulset
+        replicas: 2
         strategy: RollingUpdate
-        replicas: *replicas
         pod:
-          hostname: gravity-cloud
           tolerations:
             - key: "location"
               operator: "Equal"
               value: "cloud"
+              effect: "NoSchedule"
+            - key: "location"
+              operator: "Equal"
+              value: "house"
               effect: "NoSchedule"
           nodeSelector:
             location: cloud
@@ -178,46 +179,30 @@ spec:
             <<: *container
             env:
               <<: *env
-              INSTANCE_IDENTIFIER: cloud
               LISTEN_ONLY: true
+              BOOTSTRAP_ROLES: "dns;api;backup;monitoring;tsdb"
           grpc-proxy: *proxy
     defaultPodOptions:
       securityContext:
         seccompProfile: { type: RuntimeDefault }
     service:
-      http:
-        controller: apartment
-        extraSelectorLabels: &esl
-          app.kubernetes.io/instance: ${APP}
+      main:
+        controller: k8s
         ports:
           http:
-            primary: true
             port: &port 8008
           metrics:
-            port: 8009
-      internal-dns:
-        controller: apartment
-        extraSelectorLabels: *esl
-        ports: &ports
-          dns-tcp:
-            port: 53
-            protocol: TCP
-          dns-udp:
-            primary: true
-            port: 53
-            protocol: UDP
-      external-dns:
-        controller: apartment
-        extraSelectorLabels: *esl
-        type: LoadBalancer
-        externalTrafficPolicy: Local
-        annotations:
-          lbipam.cilium.io/ips: 10.38.55.28
+            port: *metrics
+      dns:
+        controller: k8s
+        clusterIP: 172.17.0.14
         ports:
-          <<: *ports
-          dhcp:
-            port: 67
+          dns-tcp:
+            protocol: TCP
+            port: 53
+          dns-udp:
             protocol: UDP
+            port: 53
     route:
       main:
         hostnames:
@@ -228,7 +213,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: http
+              - identifier: main
                 port: *port
     persistence:
       data:

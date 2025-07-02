@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app dnscrypt-proxy
+  name: dnscrypt-proxy
 spec:
   interval: 1h
   maxHistory: 1
@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      *app :
+      ${APP}:
         pod:
           hostUsers: false
           tolerations:
@@ -75,7 +75,7 @@ spec:
               liveness: *probes
     service:
       main:
-        controller: *app
+        controller: ${APP}
         ports:
           dns-tcp:
             targetPort: &targetPort 5053
