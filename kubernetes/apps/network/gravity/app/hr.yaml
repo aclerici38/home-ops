@@ -27,7 +27,7 @@ spec:
     controllers:
       apartment:
         type: deployment
-        strategy: recreate # multus
+        strategy: Recreate # multus
         pod:
           hostname: gravity-apartment
           nodeSelector:
@@ -131,7 +131,7 @@ spec:
                   - ALL
       house:
         type: deployment
-        strategy: recreate # multus
+        strategy: Recreate # multus
         pod:
           hostname: gravity-house
           tolerations:
