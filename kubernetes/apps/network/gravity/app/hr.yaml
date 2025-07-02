@@ -180,7 +180,7 @@ spec:
             env:
               <<: *env
               LISTEN_ONLY: true
-              BOOTSTRAP_ROLES: "dns;api;backup;monitoring;tsdb"
+              BOOTSTRAP_ROLES: "dns;api;dhcp;backup;discovery;monitoring;tsdb"
           grpc-proxy: *proxy
     defaultPodOptions:
       securityContext:
