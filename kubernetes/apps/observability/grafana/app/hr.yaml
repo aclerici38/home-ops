@@ -49,18 +49,6 @@ spec:
         secretKeyRef:
           name: ${APP}-db-app
           key: dbname
-      BLOCKY_DB_USER:
-        secretKeyRef:
-          name: blocky-db-secret
-          key: user
-      BLOCKY_DB_PASS:
-        secretKeyRef:
-          name: blocky-db-secret
-          key: password
-      BLOCKY_DB_NAME:
-        secretKeyRef:
-          name: blocky-db-secret
-          key: dbname
     grafana.ini:
       analytics:
         check_for_updates: false
@@ -119,19 +107,6 @@ spec:
             url: http://alertmanager-operated.observability.svc.cluster.local:9093
             jsonData:
               implementation: prometheus
-          - name: blocky-postgres
-            uid: blocky-postgres
-            type: postgres
-            access: proxy
-            url: blocky-db-ro.network.svc.cluster.local:5432
-            user: $__env{BLOCKY_DB_USER}
-            secureJsonData:
-              password: $__env{BLOCKY_DB_PASS}
-            jsonData:
-              database: $__env{BLOCKY_DB_NAME}
-              sslmode: 'disable'
-              postgresVersion: 1705
-              timescaledb: false
     dashboards:
       default:
         cert-manager:
@@ -230,6 +205,9 @@ spec:
           datasource:
             - name: DS_PROMETHEUS
               value: Prometheus
+        gravity:
+          url: https://raw.githubusercontent.com/BeryJu/gravity/refs/heads/main/extras/grafana/dashboard.json
+          datasource: prometheus
     sidecar:
       dashboards:
         enabled: true

@@ -185,6 +185,11 @@ spec:
     defaultPodOptions:
       securityContext:
         seccompProfile: { type: RuntimeDefault }
+    serviceMonitor:
+      main:
+        serviceName: main
+        endpoints:
+          - port: metrics
     service:
       main:
         controller: k8s
