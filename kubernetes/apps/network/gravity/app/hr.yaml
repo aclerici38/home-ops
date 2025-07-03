@@ -200,7 +200,7 @@ spec:
             port: *metrics
       dns:
         controller: k8s
-        clusterIP: 172.17.0.14
+        clusterIP: 172.17.0.11
         ports:
           dns-tcp:
             protocol: TCP

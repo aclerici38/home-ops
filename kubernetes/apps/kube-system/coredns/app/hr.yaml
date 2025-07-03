@@ -10,7 +10,7 @@ spec:
   dependsOn:
     - name: dnscrypt-proxy
       namespace: network
-    - name: blocky
+    - name: gravity
       namespace: network
   chartRef:
     kind: OCIRepository
@@ -63,7 +63,7 @@ spec:
           - name: autopath
             parameters: "@kubernetes"
           - name: forward
-            parameters: . 172.17.0.14
+            parameters: . 172.17.0.11
           - name: reload
           - name: loadbalance
     tolerations:
