@@ -26,22 +26,13 @@ spec:
   values:
     controllers:
       apartment:
-        type: deployment
-        strategy: Recreate # multus
+        type: statefulset
+        replicas: 2
+        strategy: RollingUpdate
         pod:
           hostname: gravity-apartment
           nodeSelector:
             location: apartment
-          annotations:
-            k8s.v1.cni.cncf.io/networks: |
-              [
-                {
-                  "name":"multus-apt-lan-net",
-                  "namespace": "network",
-                  "ips": ["192.168.1.38/24"],
-                  "mac": "64:16:7F:79:24:FD"
-                }
-              ]
         containers:
           main: &container
             dependsOn: grpc-proxy
@@ -130,8 +121,9 @@ spec:
                 drop:
                   - ALL
       house:
-        type: deployment
-        strategy: Recreate # multus
+        type: statefulset
+        replicas: 2
+        strategy: RollingUpdate
         pod:
           hostname: gravity-house
           tolerations:
@@ -141,22 +133,8 @@ spec:
               effect: "NoSchedule"
           nodeSelector:
             location: house
-          annotations:
-            k8s.v1.cni.cncf.io/networks: |
-              [
-                {
-                  "name":"multus-house-lan-net",
-                  "namespace": "network",
-                  "ips": ["10.0.40.38/24"],
-                  "mac": "64:16:7F:82:62:EB"
-                }
-              ]
         containers:
-          main:
-            <<: *container
-            env:
-              <<: *env
-              INSTANCE_IP: 10.0.40.38
+          main: *container
           grpc-proxy: *proxy
       k8s:
         type: statefulset
@@ -208,7 +186,7 @@ spec:
           dns-udp:
             protocol: UDP
             port: 53
-      external-dns:
+      internal:
         controller: apartment
         type: LoadBalancer
         annotations:

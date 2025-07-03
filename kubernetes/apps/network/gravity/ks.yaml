@@ -10,7 +10,8 @@ spec:
   components:
     - ../../../../components/external-secret
   dependsOn:
-    - name: multus-networks
+    - name: external-secrets-stores
+      namespace: cluster-utilities
   prune: true
   wait: true
   sourceRef:
