@@ -47,7 +47,7 @@ spec:
           allowPrivilegeEscalation: false
         env:
           - name: GRAVITY_URL
-            value: http://gravity-http:8008/
+            value: http://gravity-main:8008/
           - name: GRAVITY_TOKEN
             valueFrom:
               secretKeyRef:
