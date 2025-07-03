@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app coredns
+  name: coredns
 spec:
   interval: 1h
   maxHistory: 1
@@ -63,7 +63,7 @@ spec:
           - name: autopath
             parameters: "@kubernetes"
           - name: forward
-            parameters: . 172.17.0.11
+            parameters: . 172.17.0.14
           - name: reload
           - name: loadbalance
     tolerations:
