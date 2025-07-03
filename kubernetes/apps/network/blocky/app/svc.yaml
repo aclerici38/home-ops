@@ -19,7 +19,7 @@ spec:
       protocol: UDP
       port: 53
       targetPort: 53
-    - dns-tls:
+    - name: dns-tls
       protocol: TCP
       port: 853
       targetPort: 853
@@ -41,7 +41,7 @@ spec:
       protocol: UDP
       port: 53
       targetPort: 53
-    - dns-tls:
+    - name: dns-tls
       protocol: TCP
       port: 853
       targetPort: 853
@@ -54,7 +54,7 @@ spec:
   selector:
     app.kubernetes.io/instance: blocky
   ports:
-    - http:
+    - name: blocky-http
       protocol: TCP
       port: 4000
       targetPort: 4000
