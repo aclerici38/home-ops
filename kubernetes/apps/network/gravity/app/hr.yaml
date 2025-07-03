@@ -43,7 +43,7 @@ spec:
               BOOTSTRAP_ROLES: "dns;dhcp;backup;discovery;monitoring;tsdb"
               ETCD_ENDPOINT: 127.0.0.1:23790
               LOG_LEVEL: debug
-              INSTANCE_IP: &lbIp "10.38.55.40"
+              INSTANCE_IP: "10.38.55.40"
               INSTANCE_LISTEN: 0.0.0.0
             envFrom:
               - secretRef:
@@ -176,7 +176,7 @@ spec:
             port: &port 8008
           metrics:
             port: *metrics
-      dns:
+      internal:
         controller: k8s
         clusterIP: 172.17.0.11
         ports:
@@ -186,21 +186,6 @@ spec:
           dns-udp:
             protocol: UDP
             port: 53
-      internal:
-        controller: apartment
-        type: LoadBalancer
-        annotations:
-          lbipam.cilium.io/ips: *lbIp
-        ports:
-          dns-tcp:
-            protocol: TCP
-            port: 53
-          dns-udp:
-            protocol: UDP
-            port: 53
-          dhcp:
-            protocol: UDP
-            port: 67
     route:
       main:
         hostnames:
