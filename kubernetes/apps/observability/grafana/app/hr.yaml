@@ -191,13 +191,6 @@ spec:
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
             - { name: VAR_REPLICATIONDESTNAME, value: .*-dst }
-        blocky-postgresql:
-          # renovate: depName="Blocky-Postgres"
-          gnetId: 17996
-          revision: 12
-          datasource:
-            - name: DS_BLOCKY-POSTGRESQL
-              value: blocky-postgres
         vernemq:
           # renovate: depName="VerneMQ Cluster"
           gnetId: 23485
