@@ -198,9 +198,6 @@ spec:
           datasource:
             - name: DS_PROMETHEUS
               value: Prometheus
-        gravity:
-          url: https://raw.githubusercontent.com/BeryJu/gravity/refs/heads/main/extras/grafana/dashboard.json
-          datasource: Prometheus
     sidecar:
       dashboards:
         enabled: true
