@@ -32,16 +32,16 @@ spec:
           hostname: gravity-apartment
           nodeSelector:
             location: apartment
-          # annotations:
-          #   k8s.v1.cni.cncf.io/networks: |
-          #     [
-          #       {
-          #         "name":"multus-apt-lan-net",
-          #         "namespace": "network",
-          #         "ips": ["192.168.1.38/24"],
-          #         "mac": "64:16:7F:79:24:FD"
-          #       }
-          #     ]
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name":"multus-apt-lan-net",
+                  "namespace": "network",
+                  "ips": ["192.168.1.38/24"],
+                  "mac": "64:16:7F:79:24:FD"
+                }
+              ]
         containers:
           main: &container
             dependsOn: grpc-proxy
@@ -52,7 +52,7 @@ spec:
               BOOTSTRAP_ROLES: "dns;dhcp;backup;discovery;monitoring;tsdb"
               ETCD_ENDPOINT: 127.0.0.1:23790
               LOG_LEVEL: debug
-              INSTANCE_IP: &lbIp 10.38.55.40
+              INSTANCE_IP: 192.168.1.38
               INSTANCE_LISTEN: 0.0.0.0
             envFrom:
               - secretRef:
@@ -211,7 +211,7 @@ spec:
       external-dns:
         controller: apartment
         annotations:
-          lbipam.cilium.io/ips: *lbIp
+          lbipam.cilium.io/ips: "10.38.55.40"
         ports:
           dns-tcp:
             protocol: TCP
