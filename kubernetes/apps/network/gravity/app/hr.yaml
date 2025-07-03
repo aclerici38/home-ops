@@ -52,7 +52,7 @@ spec:
               BOOTSTRAP_ROLES: "dns;dhcp;backup;discovery;monitoring;tsdb"
               ETCD_ENDPOINT: 127.0.0.1:23790
               LOG_LEVEL: debug
-              INSTANCE_IP: 192.168.1.38
+              INSTANCE_IP: &lbIp "10.38.55.40"
               INSTANCE_LISTEN: 0.0.0.0
             envFrom:
               - secretRef:
@@ -210,8 +210,9 @@ spec:
             port: 53
       external-dns:
         controller: apartment
+        type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: "10.38.55.40"
+          lbipam.cilium.io/ips: *lbIp
         ports:
           dns-tcp:
             protocol: TCP
