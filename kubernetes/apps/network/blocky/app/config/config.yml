@@ -56,8 +56,8 @@ redis:
 queryLog:
   type: postgresql
   logRetentionDays: 0
-  creationAttempts: 3
-  creationCooldown: 5s
+  creationAttempts: 5
+  creationCooldown: 10s
   # optional: Which fields should be logged. You can choose one or more from: clientIP, clientName, responseReason, responseAnswer, question, duration. If not defined, it logs all fields
   fields:
     - clientIP
