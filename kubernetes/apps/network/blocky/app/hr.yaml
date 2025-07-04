@@ -140,7 +140,7 @@ spec:
         annotations:
           lbipam.cilium.io/ips: "10.38.55.25"
       k8s:
-        <<: svc
+        <<: *svc
         controller: k8s
         type: ClusterIP
         clusterIP: 172.17.0.11
