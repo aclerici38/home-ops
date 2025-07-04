@@ -50,6 +50,10 @@ spec:
       - name: forward
         parameters: 168.192.in-addr.arpa 192.168.9.1
       - name: forward
+        parameters: cluster.local 172.17.0.10
+      - name: forward
+        parameters: 16.172.in-addr.arpa. 172.17.0.10
+      - name: forward
         parameters: . 172.17.0.12
     service:
       type: ClusterIP
