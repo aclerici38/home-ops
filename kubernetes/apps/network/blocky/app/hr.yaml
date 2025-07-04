@@ -94,16 +94,6 @@ spec:
         strategy: RollingUpdate
         replicas: 2
         containers: *container
-      ui:
-        strategy: RollingUpdate
-        containers:
-          ui:
-            image:
-              repository: ghcr.io/ivvija/blocky-ui
-              tag: v0.1@sha256:ae84fc71b4550f34a06c0cc8acce78d2accb8de8c57ce220e6b293cfa6689e20
-            env:
-              API_BASE_URL: http://blocky-http:4000/api
-            securityContext: *sec
     defaultPodOptions:
       hostUsers: false
       tolerations:
@@ -144,23 +134,6 @@ spec:
         controller: k8s
         type: ClusterIP
         clusterIP: 172.17.0.11
-      ui:
-        controller: ui
-        ports:
-          http:
-            port: 3000
-    route:
-      main:
-        hostnames:
-          - ${APP}.${SECRET_DOMAIN}
-        parentRefs:
-          - name: internal
-            namespace: network
-            sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: ui
-                port: 3000
     persistence:
       config:
         type: configMap
