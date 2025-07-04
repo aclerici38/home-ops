@@ -33,10 +33,10 @@ conditional:
     # Apartment
     samthony.: 192.168.9.1
     168.192.in-addr.arpa.: 192.168.9.1
-    
+
 # Lookup goes to blocky, which conditionally sends to correct dhcp server
-clientLookup:
-  upstream: 127.0.0.1
+# clientLookup:
+#   upstream: 127.0.0.1
 
 upstreams:
   groups:
