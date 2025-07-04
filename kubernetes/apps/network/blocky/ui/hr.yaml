@@ -48,6 +48,13 @@ spec:
               tag: v0.1@sha256:ae84fc71b4550f34a06c0cc8acce78d2accb8de8c57ce220e6b293cfa6689e20
             env:
               API_BASE_URL: http://blocky-http:4000/api
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+              readiness:
+                enabled: true
+                type: HTTP
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -56,7 +63,7 @@ spec:
                   - ALL
     service:
       main:
-        controller: ui
+        controller: blocky-ui
         ports:
           http:
             port: &port 3000
