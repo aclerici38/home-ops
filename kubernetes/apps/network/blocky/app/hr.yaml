@@ -121,6 +121,29 @@ spec:
         runAsGroup: 1000
         seccompProfile: { type: RuntimeDefault }
     service:
+      apartment: &svc
+        controller: apartment
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: "10.38.55.26"
+        ports:
+          dns-tcp:
+            port: 53
+          dns-udp:
+            port: 53
+            protocol: UDP
+          dns-tls:
+            port: 853
+      house:
+        <<: *svc
+        controller: house
+        annotations:
+          lbipam.cilium.io/ips: "10.38.55.25"
+      k8s:
+        <<: svc
+        controller: k8s
+        type: ClusterIP
+        clusterIP: 172.17.0.11
       ui:
         controller: ui
         ports:
