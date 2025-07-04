@@ -23,7 +23,7 @@ prometheus:
   path: /metrics
 
 conditional:
-  fallbackUpstream: true
+  fallbackUpstream: false
   mapping:
     ${SECRET_DOMAIN}: 172.17.0.13:53
     # DHCP servers
