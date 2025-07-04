@@ -26,17 +26,10 @@ conditional:
   fallbackUpstream: true
   mapping:
     ${SECRET_DOMAIN}: 172.17.0.13:53
-    # DHCP servers
-    # House
-    clerici.me.: 10.0.30.1
-    0.10.in-addr.arpa.: 10.0.30.1
-    # Apartment
-    samthony.: 192.168.9.1
-    168.192.in-addr.arpa.: 192.168.9.1
 
-# Lookup goes to blocky, which conditionally sends to correct dhcp server
-# clientLookup:
-#   upstream: 127.0.0.1
+# Lookup goes to k8s-gateway, which conditionally sends to correct dhcp server
+clientLookup:
+  upstream: 172.17.0.13
 
 upstreams:
   groups:
