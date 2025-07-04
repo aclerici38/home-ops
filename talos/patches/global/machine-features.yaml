@@ -1,9 +1,9 @@
 machine:
   features:
     hostDNS:
-      enabled: true
-      resolveMemberNames: true
-      forwardKubeDNSToHost: false
+      enabled: false
+      # resolveMemberNames: true
+      # forwardKubeDNSToHost: false
     rbac: true
     stableHostname: true
     apidCheckExtKeyUsage: true
