@@ -41,6 +41,7 @@ spec:
               TV_DIRECTORY: /media/tv
               MOVIE_DIRECTORY: /media/movies
               TORRENT_DIRECTORY: /media/download/completed
+              LOG_FILEPATH: /logs/log.txt
               EMAIL_SMTP_HOST: smtp-relay.cluster-utilities.svc.cluster.local
               EMAIL_SMTP_PORT: 25
               EMAIL_FROM_EMAIL: bot@${SECRET_DOMAIN}
@@ -201,3 +202,9 @@ spec:
           backend:
             main:
               - path: /tmp
+      logs:
+        type: emptyDir
+        advancedMounts:
+          backend:
+            main:
+              - path: /logs
