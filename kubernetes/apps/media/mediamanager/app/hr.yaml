@@ -178,7 +178,13 @@ spec:
     persistence:
       data:
         existingClaim: ${APP}
+        advancedMounts:
+          backend:
+            main:
+              - path: /data
       media:
         existingClaim: media
-        globalMounts:
-          - path: /media
+        advancedMounts:
+          backend:
+            main:
+              - path: /media
