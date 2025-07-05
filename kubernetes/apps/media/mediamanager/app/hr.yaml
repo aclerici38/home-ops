@@ -194,3 +194,9 @@ spec:
           backend:
             main:
               - path: "/.cache"
+      tmp:
+        type: emptyDir
+        advancedMounts:
+          backend:
+            main:
+              - path: /tmp
