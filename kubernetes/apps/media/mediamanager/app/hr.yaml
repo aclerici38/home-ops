@@ -1,0 +1,184 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mediamanager
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      backend:
+        strategy: RollingUpdate
+        containers:
+          main:
+            image:
+              repository: ghcr.io/maxdorninger/mediamanager/backend
+              tag: v1.3.0@sha256:c8f221afe019c8c3b73070c463184e4abf1b2571879e0b49e1b6559a89e0dbbe
+            env:
+              OPENID_ENABLED: true
+              OPENID_CONFIGURATION_ENDPOINT: id.${SECRET_DOMAIN}
+              OPENID_NAME: "Pocket ID"
+              FRONTEND_URL: https://media.${SECRET_DOMAIN}
+              CORS_URLS: "[https://media.${SECRET_DOMAIN}]"
+              API_BASE_PATH: &api /api/v1
+              TV_DIRECTORY: /media/tv
+              MOVIE_DIRECTORY: /media/movies
+              TORRENT_DIRECTORY: /media/download/completed
+              EMAIL_SMTP_HOST: smtp-relay.cluster-utilities.svc.cluster.local
+              EMAIL_SMTP_PORT: 25
+              EMAIL_FROM_EMAIL: bot@${SECRET_DOMAIN}
+              EMAIL_USE_TLS: false
+              QBITTORRENT_HOST: qbittorrent
+              QBITTORRENT_USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: qbittorrent-secret
+                    key: username
+              QBITTORRENT_PASSWORD:
+                  secretKeyRef:
+                    name: qbittorrent-secret
+                    key: password
+              PROWLARR_ENABLED: true
+              PROWLARR_URL: http://prowlarr:9696
+              PROWLARR_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: prowlarr-secret
+                    key: PROWLARR__AUTH__APIKEY
+              DB_HOST:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: host
+              DB_USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: username
+              DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: password
+              DB_DBNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-db-app
+                    key: dbname
+            envFrom:
+              - secretRef:
+                  name: ${APP}-secret
+            # probes:
+            #   liveness: &probes
+            #     enabled: true
+            #     custom: true
+            #     spec:
+            #       httpGet:
+            #         path: /ping
+            #         port: *port
+            #   readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+              limits:
+                memory: 4Gi
+      frontend:
+        strategy: RollingUpdate
+        containers:
+          main:
+            image:
+              repository: ghcr.io/maxdorninger/mediamanager/frontend
+              tag: v1.3.0@sha256:d4402758b0800dd46ce08963ebe4dcf9d9c8db19950514c26e190f9a656b562d
+            env:
+              PUBLIC_API_URL: https://media.${SECRET_DOMAIN}/api/v1
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+              readiness:
+                enabled: true
+                type: HTTP
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+              limits:
+                memory: 512Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: Always
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      backend:
+        controller: backend
+        ports:
+          http:
+            port: &back 8000
+      frontend:
+        controller: frontend
+        ports:
+          http:
+            port: &front 3000
+    route:
+      main:
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: network
+            sectionName: https
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: *api
+            backendRefs:
+              - identifier: backend
+                port: *back
+            timeouts:
+              request: 3m
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: frontend
+                port: *front
+            timeouts:
+              request: 3m
+    persistence:
+      data:
+        existingClaim: ${APP}
+      media:
+        existingClaim: media
+        globalMounts:
+          - path: /media
