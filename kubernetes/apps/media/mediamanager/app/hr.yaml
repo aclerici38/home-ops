@@ -33,7 +33,7 @@ spec:
               pullPolicy: Always
             env:
               OPENID_ENABLED: true
-              OPENID_CONFIGURATION_ENDPOINT: id.${SECRET_DOMAIN}
+              OPENID_CONFIGURATION_ENDPOINT: https://id.${SECRET_DOMAIN}
               OPENID_NAME: "Pocket ID"
               FRONTEND_URL: https://media.${SECRET_DOMAIN}
               CORS_URLS: "[https://media.${SECRET_DOMAIN}]"
@@ -86,15 +86,15 @@ spec:
             envFrom:
               - secretRef:
                   name: ${APP}-secret
-            # probes:
-            #   liveness: &probes
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       httpGet:
-            #         path: /ping
-            #         port: *port
-            #   readiness: *probes
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: *api
+                    port: 8000
+              readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
