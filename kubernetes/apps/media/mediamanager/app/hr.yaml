@@ -188,3 +188,9 @@ spec:
           backend:
             main:
               - path: /media
+      cache:
+        type: emptyDir
+        advancedMounts:
+          backend:
+            main:
+              - path: "/.cache"
