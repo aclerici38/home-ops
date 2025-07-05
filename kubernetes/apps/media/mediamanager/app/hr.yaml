@@ -28,8 +28,9 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/maxdorninger/mediamanager/backend
-              tag: v1.3.0@sha256:c8f221afe019c8c3b73070c463184e4abf1b2571879e0b49e1b6559a89e0dbbe
+              repository: harbor.${SECRET_DOMAIN}/containers/mediamanager
+              tag: test
+              pullPolicy: Always
             env:
               OPENID_ENABLED: true
               OPENID_CONFIGURATION_ENDPOINT: id.${SECRET_DOMAIN}
