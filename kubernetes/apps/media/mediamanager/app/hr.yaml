@@ -47,7 +47,7 @@ spec:
               EMAIL_FROM_EMAIL: bot@${SECRET_DOMAIN}
               EMAIL_USE_TLS: false
               QBITTORRENT_HOST: qbittorrent
-              QBITTORRENT_USER:
+              QBITTORRENT_USERNAME:
                 valueFrom:
                   secretKeyRef:
                     name: qbittorrent-secret
