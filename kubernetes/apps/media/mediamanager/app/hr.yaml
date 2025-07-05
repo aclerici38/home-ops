@@ -36,8 +36,8 @@ spec:
               OPENID_ENABLED: true
               OPENID_CONFIGURATION_ENDPOINT: https://id.${SECRET_DOMAIN}/.well-known/openid-configuration
               OPENID_NAME: "PocketID"
-              FRONTEND_URL: &fqdn https://media.${SECRET_DOMAIN}/
-              CORS_URLS: '["https://media.${SECRET_DOMAIN}/"]'
+              FRONTEND_URL: https://media.${SECRET_DOMAIN}/
+              CORS_URLS_0: '["https://media.${SECRET_DOMAIN}/"]'
               API_BASE_PATH: &api /api/v1
               TV_DIRECTORY: /media/tv
               MOVIE_DIRECTORY: /media/movies
