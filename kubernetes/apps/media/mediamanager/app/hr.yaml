@@ -96,14 +96,14 @@ spec:
                     path: *api
                     port: 8000
               readiness: *probes
-            securityContext:
+            securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 100m
-                memory: 100Mi
+                memory: 200Mi
               limits:
                 memory: 4Gi
       frontend:
@@ -122,10 +122,7 @@ spec:
               readiness:
                 enabled: true
                 type: HTTP
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+            securityContext: *sec
             resources:
               requests:
                 cpu: 100m
