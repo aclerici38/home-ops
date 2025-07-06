@@ -73,13 +73,8 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  httpGet:
-                    path: /healthz
-                    port: &port 1411
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 2
+                  exec:
+                    command: ["/app/pocket-id", "healthcheck"]
               readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
