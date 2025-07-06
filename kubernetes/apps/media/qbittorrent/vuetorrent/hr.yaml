@@ -84,3 +84,6 @@ spec:
           - backendRefs:
             - identifier: main
               port: *port
+    persistence:
+      vuetorrent:
+        type: emptyDir
