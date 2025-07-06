@@ -110,6 +110,6 @@ spec:
                 port: *port
     persistence:
       data:
-        existingClaim: *app
+        type: emptyDir
         globalMounts:
           - path: /app/data
