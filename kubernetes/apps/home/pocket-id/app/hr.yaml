@@ -45,13 +45,14 @@ spec:
           *app :
             image:
               repository: ghcr.io/pocket-id/pocket-id
-              tag: v1.5.0@sha256:37c92ec26cb4f425f0485147d22fa0e9780b29e3d467a4e855e7353a62c110c0
+              tag: v1.6.0
             env:
               APP_URL: https://id.${SECRET_DOMAIN}
               TRUST_PROXY: "true"
               DB_PROVIDER: postgres
               UPDATE_CHECK_DISABLED: "true"
               SESSION_DURATION: 1440
+              KEYS_STORAGE: database
 
               EMAIL_LOGIN_NOTIFICATION_ENABLED: true
               SMTP_HOST: smtp-relay.cluster-utilities.svc.cluster.local
