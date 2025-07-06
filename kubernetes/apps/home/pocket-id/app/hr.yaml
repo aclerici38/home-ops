@@ -45,7 +45,7 @@ spec:
           *app :
             image:
               repository: ghcr.io/pocket-id/pocket-id
-              tag: v1.6.0
+              tag: v1.6.0-distroless
             env:
               APP_URL: https://id.${SECRET_DOMAIN}
               TRUST_PROXY: "true"
@@ -110,6 +110,4 @@ spec:
                 port: *port
     persistence:
       data:
-        existingClaim: *app
-        globalMounts:
-          - path: /app/data
+        type: emptyDir
