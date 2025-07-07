@@ -47,7 +47,7 @@ spec:
               CHAPTARR__AUTH__REQUIRED: DisabledForLocalAddresses
               CHAPTARR__LOG__DBENABLED: "False"
               CHAPTARR__LOG__LEVEL: info
-              CHAPTARR__SERVER__PORT: &port 8989
+              CHAPTARR__SERVER__PORT: &port 8789
               # CHAPTARR__POSTGRES__HOST:
               #   valueFrom:
               #     secretKeyRef:
@@ -92,7 +92,7 @@ spec:
         controller: *app
         ports:
           http:
-            port: &port 8789
+            port: *port
     route:
       main:
         hostnames:
@@ -112,11 +112,8 @@ spec:
         existingClaim: *app
         globalMounts:
           - path: /config
-      temp:
-        enabled: true
+      tmp:
         type: emptyDir
-        globalMounts:
-          - path: /tmp
       media:
         existingClaim: media
         globalMounts:
