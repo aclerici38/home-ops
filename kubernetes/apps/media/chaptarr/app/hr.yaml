@@ -40,6 +40,8 @@ spec:
             image:
               repository: docker.io/robertlordhood/chaptarr
               tag: beta@sha256:2fefc474e7b9c29ac29cdfe14b918857f671bf1996b97a48008b091a02e1f45b
+            env:
+              CHAPTARR__AUTH__REQUIRED: DisabledForLocalAddresses
             probes:
               liveness: &probes
                 enabled: true
