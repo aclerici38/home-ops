@@ -48,26 +48,26 @@ spec:
               CHAPTARR__LOG__DBENABLED: "False"
               CHAPTARR__LOG__LEVEL: info
               CHAPTARR__SERVER__PORT: &port 8989
-              CHAPTARR__POSTGRES__HOST:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-db-app
-                    key: host
-              CHAPTARR__POSTGRES__USER:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-db-app
-                    key: username
-              CHAPTARR__POSTGRES__PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-db-app
-                    key: password
-              CHAPTARR__POSTGRES__MAINDB:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-db-app
-                    key: dbname
+              # CHAPTARR__POSTGRES__HOST:
+              #   valueFrom:
+              #     secretKeyRef:
+              #       name: ${APP}-db-app
+              #       key: host
+              # CHAPTARR__POSTGRES__USER:
+              #   valueFrom:
+              #     secretKeyRef:
+              #       name: ${APP}-db-app
+              #       key: username
+              # CHAPTARR__POSTGRES__PASSWORD:
+              #   valueFrom:
+              #     secretKeyRef:
+              #       name: ${APP}-db-app
+              #       key: password
+              # CHAPTARR__POSTGRES__MAINDB:
+              #   valueFrom:
+              #     secretKeyRef:
+              #       name: ${APP}-db-app
+              #       key: dbname
             probes:
               liveness: &probes
                 enabled: true
