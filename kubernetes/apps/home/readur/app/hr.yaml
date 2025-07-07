@@ -50,6 +50,9 @@ spec:
               UPLOAD_PATH: "/uploads"
               WATCH_FOLDER: "/watch"
               ENABLE_AUTO_CLEANUP: false
+              OIDC_ENABLED: true
+              OIDC_ISSUER_URL: https://id.${SECRET_DOMAIN}
+              OIDC_REDIRECT_URI: https://readur.${SECRET_DOMAIN}/auth/oidc/callback
               DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
