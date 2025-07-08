@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app redisinsight
+  name: &app redis-commander
 spec:
   interval: 1h
   maxHistory: 1
@@ -36,22 +36,23 @@ spec:
         containers:
           main:
             image:
-              repository: docker.io/redis/redisinsight
-              tag: 2.70.0@sha256:d9f6c54d4a3dcfcdfd54659bd88b66ae883251cea0f6e73ae70ed74811f227f5
+              repository: ghcr.io/joeferner/redis-commander
+              tag: 0.9.0@ sha256:7a07cf66d7af8135750b80dc7c75b831cef8e41ed07d1a7822a73d92eb885d6b
             env:
-              RI_FILES_LOGGER: false
-              RI_STDOUT_LOGGER: true
+              REDIS_HOSTS: dragonfly-db.database.svc:6379
+              TRUST_PROXY: true
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
-                type: HTTP
-              readiness:
-                enabled: true
-                type: HTTP
+                custom: true
+                spec:
+                  exec:
+                    command: ["/redis-commander/bin/healthcheck.js"]
+              readiness: *probes
             resources:
               requests:
                 cpu: 10m
@@ -63,7 +64,7 @@ spec:
         controller: *app
         ports:
           http:
-            port: &port 5540
+            port: &port 8081
     route:
       main:
         hostnames:
@@ -76,6 +77,3 @@ spec:
           - backendRefs:
             - identifier: main
               port: *port
-    persistence:
-      data:
-        existingClaim: *app
