@@ -39,7 +39,7 @@ spec:
               repository: ghcr.io/joeferner/redis-commander
               tag: 0.9.0@sha256:7a07cf66d7af8135750b80dc7c75b831cef8e41ed07d1a7822a73d92eb885d6b
             env:
-              REDIS_HOSTS: dragonfly-db.database.svc:6379
+              REDIS_HOSTS: dragonfly:dragonfly-db.database.svc.cluster.local
               TRUST_PROXY: true
             securityContext:
               allowPrivilegeEscalation: false

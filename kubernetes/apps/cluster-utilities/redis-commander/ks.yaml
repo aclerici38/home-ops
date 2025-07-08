@@ -11,9 +11,6 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-utilities/redis-commander/app
   prune: true
-  dependsOn:
-    - name: versity
-      namespace: storage
   sourceRef:
     kind: GitRepository
     name: flux-system
