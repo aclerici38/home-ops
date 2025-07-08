@@ -41,6 +41,7 @@ spec:
             env:
               REDIS_HOSTS: dragonfly:dragonfly-db.database.svc.cluster.local
               TRUST_PROXY: true
+              REDIS_LABEL: local
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
