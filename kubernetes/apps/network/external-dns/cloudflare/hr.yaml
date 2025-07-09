@@ -46,7 +46,7 @@ spec:
       - --cloudflare-dns-records-per-page=1000
       - --gateway-name=external
       - --default-targets=cloud.${SECRET_DOMAIN}
-      - force-default-targets=true
+      - --force-default-targets=true
     policy: sync
     triggerLoopOnEvent: true
     sources: ["crd", "gateway-httproute"]
