@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      *app :
+      ${APP}:
         strategy: RollingUpdate
         pod:
           tolerations:
@@ -65,7 +65,7 @@ spec:
                   - ALL
     service:
       main:
-        controller: *app
+        controller: ${APP}
         ports:
           http:
             port: &port 8080
