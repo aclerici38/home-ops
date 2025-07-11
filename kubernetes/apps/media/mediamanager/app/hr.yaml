@@ -112,7 +112,7 @@ spec:
           main:
             image:
               repository: ghcr.io/maxdorninger/mediamanager/frontend
-              tag: v1.3.0@sha256:d4402758b0800dd46ce08963ebe4dcf9d9c8db19950514c26e190f9a656b562d
+              tag: v1.4.0@sha256:4403dfc31552dc0cdfd7d219cb536b3a2adca50d1befe499837e24a7deda8c82
             env:
               PUBLIC_API_URL: https://media.${SECRET_DOMAIN}/api/v1
             probes:
