@@ -24,7 +24,7 @@ spec:
   values:
     controllers:
       ${APP}:
-        type: statefulset
+        strategy: RollingUpdate
         pod:
           hostUsers: false
           securityContext:
