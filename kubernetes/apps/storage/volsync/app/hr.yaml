@@ -3,13 +3,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app volsync
+  name: volsync
 spec:
   interval: 1h
   maxHistory: 1
   chartRef:
     kind: OCIRepository
-    name: *app
+    name: ${APP}
     namespace: flux-system
   install:
     crds: CreateReplace
@@ -40,7 +40,7 @@ spec:
       runAsGroup: 1000
       seccompProfile: { type: RuntimeDefault }
     image: &image
-      repository: ghcr.io/home-operations/volsync
-      tag: 0.12.1
+      repository: quay.io/backube/volsync
+      tag: 0.13.0-rc.3@sha256:d230bb1df6c62eb076efb4798ca51b81863b3e6b8f4042a8062a68a058ef59fc
     restic: *image
     rclone: *image
