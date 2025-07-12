@@ -37,7 +37,7 @@ spec:
       ingester:
         chunk_encoding: snappy
       limits_config:
-        retention_period: 14d
+        retention_period: 5d
       storage:
         type: filesystem
       schemaConfig:
@@ -64,7 +64,7 @@ spec:
       persistence:
         enabled: true
         storageClass: zfs-nvme
-        size: 100Gi
+        size: 500Gi
     gateway:
       replicas: 0
     backend:
