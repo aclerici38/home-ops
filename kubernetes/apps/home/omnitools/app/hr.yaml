@@ -24,6 +24,7 @@ spec:
   values:
     controllers:
       ${APP}:
+        strategy: RollingUpdate
         pod:
           hostUsers: false
           securityContext:
@@ -74,6 +75,8 @@ spec:
               port: *port
     persistence:
       tmp:
+        type: emptyDir
+      run:
         type: emptyDir
       cache:
         type: emptyDir
