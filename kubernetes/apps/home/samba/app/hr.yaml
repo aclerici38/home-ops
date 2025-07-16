@@ -60,6 +60,10 @@ spec:
             port: 445
             protocol: TCP
     persistence:
+      log:
+        type: emptyDir
+        globalMounts:
+          - path: /var/log/samba
       data:
         existingClaim: files
         globalMounts:
