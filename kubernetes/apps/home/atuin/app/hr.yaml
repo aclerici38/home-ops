@@ -24,6 +24,7 @@ spec:
   values:
     controllers:
       *app :
+        strategy: RollingUpdate
         pod:
           hostUsers: false
           securityContext:
