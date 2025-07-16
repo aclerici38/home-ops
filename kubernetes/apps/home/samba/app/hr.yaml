@@ -25,13 +25,13 @@ spec:
     controllers:
       ${APP}:
         strategy: RollingUpdate
-        # pod:
-        #   securityContext:
-        #     runAsNonRoot: true
-        #     runAsGroup: 1000
-        #     runAsUser: 1000
-        #     fsGroup: 1000
-        #     seccompProfile: { type: RuntimeDefault }
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsGroup: 1000
+            runAsUser: 1000
+            fsGroup: 1000
+            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
@@ -44,12 +44,13 @@ spec:
               limits:
                 memory: 512Mi
             securityContext:
-              privileged: true
-              # allowPrivilegeEscalation: false
-              # readOnlyRootFilesystem: true
-              # capabilities:
-              #   drop:
-              #     - ALL
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+                add:
+                  - NET_BIND_SERVICE
     service:
       main:
         controller: ${APP}
