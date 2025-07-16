@@ -14,7 +14,7 @@ auth:
   methods:
     noauth: false
     password:
-      enabled: false
+      enabled: true
     oidc:
       enabled: true
       issuerUrl: https://id.${SECRET_DOMAIN}
