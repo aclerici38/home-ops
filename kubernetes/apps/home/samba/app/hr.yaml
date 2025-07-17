@@ -53,10 +53,12 @@ spec:
             port: 445
             protocol: TCP
     persistence:
-      log:
-        type: emptyDir
+      config:
+        type: configMap
+        name: ${APP}-config
         globalMounts:
-          - path: /var/log/samba
+          - path: /etc/samba/smb.conf
+            subPath: smb.conf
       data:
         existingClaim: files
         globalMounts:

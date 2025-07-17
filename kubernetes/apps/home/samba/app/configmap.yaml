@@ -1,0 +1,39 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ${APP}-config
+data:
+  smb.conf: |
+    [global]
+       workgroup = WORKGROUP
+       security = user
+       map to guest = Never
+       guest account = smbuser
+
+       # Logging
+       log level = 2
+       logging = syslog
+       syslog only = yes
+       syslog = 0
+
+       load printers = no
+       disable spoolss = yes
+       smb ports = 445
+
+       # macOS
+       fruit:metadata = stream
+       fruit:resource = file
+       fruit:locking = netatalk
+       vfs objects = catia fruit streams_xattr
+
+    [data]
+       path = /data
+       browseable = yes
+       writable = yes
+       guest ok = no
+       valid users = smbuser
+       force user = smbuser
+       force group = smbuser
+       create mask = 0666
+       directory mask = 0775
