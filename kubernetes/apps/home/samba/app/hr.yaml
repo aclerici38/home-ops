@@ -36,6 +36,18 @@ spec:
             image:
               repository: ghcr.io/uhthomas/uhthomas/samba
               tag: latest@sha256:314854054bfcd63dc3ea538abcc179364eebad6fc4d493c29ee2968af300529d
+            lifecycle:
+              postStart:
+                exec:
+                  command:
+                    - /bin/sh
+                    - -c
+                    - |
+                      echo "$SMB_PASS" | smbpasswd -s -a smb_user
+                      smbpasswd -e smb_user
+            envFrom:
+              - secretRef:
+                  name: ${APP}-secret
             resources:
               requests:
                 cpu: 10m
