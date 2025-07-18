@@ -3,7 +3,7 @@ image:
   repsotory: ghcr.io/xunholy/kustomize-mutating-webhook
   pullPolicy: IfNotPresent
 replicaCount: 2
-tolerations: &tol
+tolerations:
   - key: "location"
     operator: "Equal"
     value: "cloud"
@@ -16,7 +16,16 @@ annotations:
   secret.reloader.stakater.com/reload: &sname cluster-secrets
 certManager:
   enabled: true
-configMaps: []
+configMaps:
+  - create: true
+    name: cluster-config
+    optional: false
+    data:
+      TZ: "America/Los_Angeles"
+      BLOCKY_CLUSTER_IP: "172.17.0.11"
+      DNSCRYPT_CLUSTER_IP: "172.17.0.12"
+      K8S-GATEWAY_CLUSTER_IP: "172.17.0.13"
+      COREDNS_CLUSTER_IP: "172.17.0.10"
 secrets:
   - create: false
     name: *sname
