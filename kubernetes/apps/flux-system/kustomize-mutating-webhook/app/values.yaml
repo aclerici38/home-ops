@@ -24,7 +24,7 @@ configMaps:
       TZ: "America/Los_Angeles"
       BLOCKY_CLUSTER_IP: "172.17.0.11"
       DNSCRYPT_CLUSTER_IP: "172.17.0.12"
-      K8S-GATEWAY_CLUSTER_IP: "172.17.0.13"
+      K8S_GATEWAY_CLUSTER_IP: "172.17.0.13"
       COREDNS_CLUSTER_IP: "172.17.0.10"
 secrets:
   - create: false
