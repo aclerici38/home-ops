@@ -49,7 +49,7 @@ spec:
         controller: ${APP}
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: 10.38.55.13
+          lbipam.cilium.io/ips: ${SAMBA_LB_IP}
         ports:
           smb:
             port: 445

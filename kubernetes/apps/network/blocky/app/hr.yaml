@@ -115,7 +115,7 @@ spec:
         controller: apartment
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: "10.38.55.26"
+          lbipam.cilium.io/ips: "${BLOCKY_APT_LB_IP}"
         ports:
           dns-tcp:
             port: 53
@@ -128,12 +128,12 @@ spec:
         <<: *svc
         controller: house
         annotations:
-          lbipam.cilium.io/ips: "10.38.55.25"
+          lbipam.cilium.io/ips: "${BLOCKY_HOUSE_LB_IP}"
       k8s:
         <<: *svc
         controller: k8s
         type: ClusterIP
-        clusterIP: 172.17.0.11
+        clusterIP: ${BLOCKY_CLUSTER_IP}
     persistence:
       config:
         type: configMap

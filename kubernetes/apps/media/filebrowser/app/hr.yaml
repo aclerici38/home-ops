@@ -99,7 +99,7 @@ spec:
           - path: /mnt/media
       files:
         type: nfs
-        server: 10.38.55.12
+        server: ${FILES_NFS_LB_IP}
         path: /
         globalMounts:
           - path: /mnt/documents

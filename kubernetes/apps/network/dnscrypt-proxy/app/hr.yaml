@@ -85,7 +85,7 @@ spec:
             targetPort: *targetPort
             port: *port
             protocol: UDP
-        clusterIP: 172.17.0.12
+        clusterIP: ${DNSCRYPT_CLUSTER_IP}
     persistence:
       config:
         type: configMap

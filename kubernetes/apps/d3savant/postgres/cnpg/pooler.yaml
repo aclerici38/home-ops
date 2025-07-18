@@ -10,7 +10,7 @@ spec:
   serviceTemplate:
     metadata:
       annotations:
-        lbipam.cilium.io/ips: "10.38.55.38"
+        lbipam.cilium.io/ips: "${D3SAVANT_LB_IP}"
     spec:
       type: LoadBalancer
   deploymentStrategy:

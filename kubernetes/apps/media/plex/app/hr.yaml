@@ -43,7 +43,7 @@ spec:
               repository: ghcr.io/home-operations/plex
               tag: 1.41.9.9961
             env:
-              PLEX_ADVERTISE_URL: https://10.38.55.5:32400,https://${CLOUD_IP}:32400
+              PLEX_ADVERTISE_URL: https://${PLEX_LB_IP}:32400,https://${CLOUD_IP}:32400
               PLEX_NO_AUTH_NETWORKS: 192.168.9.0/24
             probes:
               liveness: &probes
@@ -71,7 +71,7 @@ spec:
         type: LoadBalancer
         externalTrafficPolicy: Local
         annotations:
-          lbipam.cilium.io/ips: 10.38.55.5
+          lbipam.cilium.io/ips: ${PLEX_LB_IP}
         ports:
           http:
             port: &port 32400

@@ -8,7 +8,7 @@ spec:
   gatewayClassName: envoy
   infrastructure:
     annotations:
-      lbipam.cilium.io/ips: 10.38.55.80
+      lbipam.cilium.io/ips: ${ENVOY_INTERNAL_LB_IP}
     parametersRef:
       group: gateway.envoyproxy.io
       kind: EnvoyProxy

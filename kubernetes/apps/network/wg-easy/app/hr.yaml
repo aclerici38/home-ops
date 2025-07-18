@@ -48,7 +48,7 @@ spec:
               INIT_ENABLED: true
               INIT_HOST: cloud.${SECRET_DOMAIN}
               INIT_PORT: &wgPort 123
-              INIT_DNS: 172.17.0.11
+              INIT_DNS: ${BLOCKY_CLUSTER_IP}
             envFrom:
               - secretRef:
                   name: ${APP}-secret

@@ -41,7 +41,7 @@ releases:
           create: true
         service:
           name: kube-dns
-          clusterIP: 172.17.0.10
+          clusterIP: ${COREDNS_CLUSTER_IP}
         tolerations:
           - key: CriticalAddonsOnly
             operator: Exists

@@ -112,7 +112,7 @@ spec:
           - path: /var/log/cwa-book-downloader/
       ingest:
         type: nfs
-        server: 10.38.55.11
+        server: ${MEDIA_NFS_LB_IP}
         path: /
         globalMounts:
           - path: *ingest
