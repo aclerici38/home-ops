@@ -23,21 +23,21 @@ configMaps:
     data:
       TZ: "America/Los_Angeles"
 
-      COREDNS_CLUSTER_IP: "'172.17.0.10'"
-      BLOCKY_CLUSTER_IP: "'172.17.0.11'"
-      DNSCRYPT_CLUSTER_IP: "'172.17.0.12'"
-      K8S_GATEWAY_CLUSTER_IP: "'172.17.0.13'"
+      COREDNS_CLUSTER_IP: "172.17.0.10"
+      BLOCKY_CLUSTER_IP: "172.17.0.11"
+      DNSCRYPT_CLUSTER_IP: "172.17.0.12"
+      K8S_GATEWAY_CLUSTER_IP: "172.17.0.13"
 
-      PLEX_LB_IP: "'10.38.55.2'"
-      NFS_PVC_LB_IP: "'10.38.55.10'"
-      MEDIA_NFS_LB_IP: "'10.38.55.11'"
-      FILES_NFS_LB_IP: "'10.38.55.12'"
-      SAMBA_LB_IP: "'10.38.55.13'"
-      BLOCKY_HOUSE_LB_IP: "'10.38.55.25'"
-      BLOCKY_APT_LB_IP: "'10.38.55.26'"
-      D3SAVANT_LB_IP: "'10.38.55.38'"
-      ENVOY_INTERNAL_LB_IP: "'10.38.55.80'"
-      ENVOY_EXTERNAL_LB_IP: "'10.38.55.81'"
+      PLEX_LB_IP: "10.38.55.2"
+      NFS_PVC_LB_IP: "10.38.55.10"
+      MEDIA_NFS_LB_IP: "10.38.55.11"
+      FILES_NFS_LB_IP: "10.38.55.12"
+      SAMBA_LB_IP: "10.38.55.13"
+      BLOCKY_HOUSE_LB_IP: "10.38.55.25"
+      BLOCKY_APT_LB_IP: "10.38.55.26"
+      D3SAVANT_LB_IP: "10.38.55.38"
+      ENVOY_INTERNAL_LB_IP: "10.38.55.80"
+      ENVOY_EXTERNAL_LB_IP: "10.38.55.81"
 secrets:
   - create: false
     name: *sname
