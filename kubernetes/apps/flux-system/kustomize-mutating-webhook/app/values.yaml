@@ -22,18 +22,12 @@ configMaps:
     optional: false
     data:
       TZ: "America/Los_Angeles"
-  - create: true
-    name: cluster-ips
-    optional: false
-    data:
+
       COREDNS_CLUSTER_IP: "172.17.0.10"
       BLOCKY_CLUSTER_IP: "172.17.0.11"
       DNSCRYPT_CLUSTER_IP: "172.17.0.12"
       K8S_GATEWAY_CLUSTER_IP: "172.17.0.13"
-  - create: true
-    name: cluster-lb-ips
-    optional: false
-    data:
+
       PLEX_LB_IP: "10.38.55.2"
       NFS_PVC_LB_IP: "10.38.55.10"
       MEDIA_NFS_LB_IP: "10.38.55.11"
