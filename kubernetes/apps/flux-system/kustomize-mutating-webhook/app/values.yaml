@@ -21,6 +21,7 @@ configMaps:
     name: cluster-config
     optional: false
     data:
+      TZ: "America/Los_Angeles"
   - create: true
     name: cluster-ips
     optional: false
