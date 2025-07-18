@@ -30,21 +30,11 @@ spec:
             runAsNonRoot: false
             runAsGroup: 0
             runAsUser: 0
-            fsGroup: 1000
         containers:
           main:
             image:
-              repository: ghcr.io/uhthomas/uhthomas/samba
-              tag: latest@sha256:314854054bfcd63dc3ea538abcc179364eebad6fc4d493c29ee2968af300529d
-            lifecycle:
-              postStart:
-                exec:
-                  command:
-                    - /bin/sh
-                    - -c
-                    - |
-                      echo "$SMB_PASS" | smbpasswd -s -a smb_user
-                      smbpasswd -e smb_user
+              repository: ghcr.io/crazy-max/samba
+              tag: 4.21.4@sha256:75f5037770eab774b82f298268305af8a18a01a1daad679f8d2d17c54059c847
             envFrom:
               - secretRef:
                   name: ${APP}-secret
@@ -69,10 +59,10 @@ spec:
         type: configMap
         name: ${APP}-config
         globalMounts:
-          - path: /etc/samba/smb.conf
-            subPath: smb.conf
-      data:
+          - path: /data/config.yml
+            subPath: config.yml
+      time-machine:
         existingClaim: files
         globalMounts:
-          - path: data
+          - path: /samba/time-machine
             subPath: time-machine
