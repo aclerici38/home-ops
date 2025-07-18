@@ -18,6 +18,8 @@ global:
   - "aio read size = 1"
   - "aio write size = 1"
   - "spotlight = no"
+  # Allow use of LB IP
+  - "parse dfs path = no"
 
 share:
   - name: time_machine
