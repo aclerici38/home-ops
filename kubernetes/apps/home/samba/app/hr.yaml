@@ -38,17 +38,6 @@ spec:
             envFrom:
               - secretRef:
                   name: ${APP}-secret
-            probes:
-              readiness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  exec:
-                    command:
-                      - sh
-                      - -c
-                      - "ssmbclient -L \\localhost -U % -m SMB3"
-              liveness: *probes
             resources:
               requests:
                 cpu: 10m
