@@ -40,10 +40,10 @@ spec:
                   name: ${APP}-secret
             resources:
               requests:
-                cpu: 10m
-                memory: 10Mi
+                cpu: 500m
+                memory: 20Mi
               limits:
-                memory: 512Mi
+                memory: 1Gi
     service:
       main:
         controller: ${APP}
