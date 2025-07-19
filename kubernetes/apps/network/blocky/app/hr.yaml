@@ -76,7 +76,7 @@ spec:
                 memory: 25Mi
               limits:
                 memory: 512Mi
-            securityContext: &sec
+            securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities:
@@ -116,7 +116,7 @@ spec:
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: "${BLOCKY_APT_LB_IP}"
-        ports:
+        ports: &p
           dns-tcp:
             port: 53
           dns-udp:
@@ -130,10 +130,9 @@ spec:
         annotations:
           lbipam.cilium.io/ips: "${BLOCKY_HOUSE_LB_IP}"
       k8s:
-        <<: *svc
         controller: k8s
-        type: ClusterIP
         clusterIP: "${BLOCKY_CLUSTER_IP}"
+        ports: *p
     persistence:
       config:
         type: configMap
