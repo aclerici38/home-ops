@@ -1,13 +1,14 @@
 auth:
   - user: anthony
-    group: time-machine-users
+    group: tmusers
     uid: 1000
-    gid: 1000
+    gid: 2000
     password: $${ANTHONY_SMB_PASS}
+
   - user: sammy
-    group: time-machine-users
+    group: tmusers
     uid: 1001
-    gid: 1001
+    gid: 2000
     password: $${SAMMY_SMB_PASS}
 
 global:
@@ -36,3 +37,9 @@ share:
     guestok: no
     validusers: anthony,sammy
     writelist: anthony,sammy
+    extra:
+      - "force group = tmusers"
+      - "create mask = 0664"
+      - "directory mask = 2775"
+      - "force create mode = 0664"
+      - "force directory mode = 2775"
