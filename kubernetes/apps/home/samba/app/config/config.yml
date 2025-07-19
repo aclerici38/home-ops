@@ -3,7 +3,12 @@ auth:
     group: time-machine-users
     uid: 1000
     gid: 1000
-    password: $${SMB_PASS}
+    password: $${ANTHONY_SMB_PASS}
+  - user: sammy
+    group: time-machine-users
+    uid: 1001
+    gid: 1001
+    password: $${SAMMY_SMB_PASS}
 
 global:
   - "vfs objects = catia fruit streams_xattr"
@@ -27,5 +32,5 @@ share:
     browsable: yes
     readonly: no
     guestok: no
-    validusers: anthony
-    writelist: anthony
+    validusers: anthony,sammy
+    writelist: anthony,sammy
