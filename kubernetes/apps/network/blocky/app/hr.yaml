@@ -133,7 +133,7 @@ spec:
         <<: *svc
         controller: k8s
         type: ClusterIP
-        clusterIP: ${BLOCKY_CLUSTER_IP}
+        clusterIP: "${BLOCKY_CLUSTER_IP}"
     persistence:
       config:
         type: configMap
