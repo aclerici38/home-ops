@@ -1,12 +1,12 @@
 auth:
   - user: anthony
-    group: tmusers
+    group: users
     uid: 1000
     gid: 1000
     password: $${ANTHONY_SMB_PASS}
 
   - user: sammy
-    group: tmusers
+    group: users
     uid: 1001
     gid: 1000
     password: $${SAMMY_SMB_PASS}
@@ -28,6 +28,8 @@ global:
   - "server max protocol = SMB3"
   # Allow use of LB IP
   - "host msdfs = no"
+  # Force group so share is writable by all users
+  - - "force group = users"
 
 share:
   - name: time_machine
