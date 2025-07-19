@@ -1,15 +1,9 @@
 auth:
-  - user: anthony
-    group: users
+  - user: time_machine_users
+    group: time_machine_users
     uid: 1000
     gid: 1000
-    password: $${ANTHONY_SMB_PASS}
-
-  - user: sammy
-    group: users
-    uid: 1001
-    gid: 1000
-    password: $${SAMMY_SMB_PASS}
+    password: $${SMB_PASS}
 
 global:
   - "vfs objects = catia fruit streams_xattr"
@@ -28,8 +22,6 @@ global:
   - "server max protocol = SMB3"
   # Allow use of LB IP
   - "host msdfs = no"
-  # Force group so share is writable by all users
-  - "force group = users"
 
 share:
   - name: time_machine
@@ -37,5 +29,5 @@ share:
     browsable: yes
     readonly: no
     guestok: no
-    validusers: anthony,sammy
-    writelist: anthony,sammy
+    validusers: time_machine_users
+    writelist: time_machine_users
