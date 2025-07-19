@@ -93,10 +93,6 @@ spec:
     persistence:
       config:
         type: emptyDir
-      tor:
-        type: emptyDir
-        globalMounts:
-          - path: /var/lib/tor
       build:
         type: emptyDir
         globalMounts:
