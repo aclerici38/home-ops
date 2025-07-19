@@ -24,8 +24,6 @@ prometheus:
 
 conditional:
   fallbackUpstream: false
-  rewrite:
-    google.com: whoogle.${SECRET_DOMAIN}
   mapping:
     ${SECRET_DOMAIN}: ${K8S_GATEWAY_CLUSTER_IP}:53
     # DHCP servers
