@@ -29,7 +29,7 @@ global:
   # Allow use of LB IP
   - "host msdfs = no"
   # Force group so share is writable by all users
-  - - "force group = users"
+  - "force group = users"
 
 share:
   - name: time_machine
