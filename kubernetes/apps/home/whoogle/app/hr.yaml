@@ -90,3 +90,6 @@ spec:
           - backendRefs:
             - identifier: main
               port: *port
+    persistence:
+      config:
+        type: emptyDir
