@@ -23,6 +23,8 @@ global:
   - "aio read size = 1"
   - "aio write size = 1"
   - "spotlight = no"
+  - "server min protocol = SMB3"
+  - "server max protocol = SMB3"
   # Allow use of LB IP
   - "host msdfs = no"
 
