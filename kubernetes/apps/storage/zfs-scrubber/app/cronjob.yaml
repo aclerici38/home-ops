@@ -24,9 +24,6 @@ spec:
                   value: "false"
                 - name: TALOS_VERSION
                   value: "${TALOS_VERSION}"
-              envFrom:
-                - secretRef:
-                    name: zfs-scrubber-secret
               securityContext:
                 privileged: true
               volumeMounts:
