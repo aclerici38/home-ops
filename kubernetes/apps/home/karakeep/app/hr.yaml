@@ -46,8 +46,8 @@ spec:
               # INFERENCE_TEXT_MODEL: gemma3:12b
               # INFERENCE_IMAGE_MODEL: llava:13b
 
-              # S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
-              # S6_READ_ONLY_ROOT: 1
+              S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
+              S6_READ_ONLY_ROOT: 1
             envFrom:
               - secretRef:
                   name: karakeep-secret
