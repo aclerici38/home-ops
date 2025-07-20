@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: ${POOL}-zfs-scrubber
 spec:
-  schedule: "0 0 1,15 * *"
+  schedule: "${SCRUB_SCHEDULE}"
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
   concurrencyPolicy: Forbid
