@@ -124,6 +124,7 @@ spec:
               - --experimental-dumpless-upgrade
             env:
               MEILI_NO_ANALYTICS: true
+              TMPDIR: /meili_data/tmp
               MEILI_MASTER_KEY:
                 valueFrom:
                   secretKeyRef:
