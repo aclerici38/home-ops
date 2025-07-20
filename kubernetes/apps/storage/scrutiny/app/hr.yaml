@@ -74,13 +74,19 @@ spec:
             securityContext: *sec
       collector:
         type: daemonset
+        pod:
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "house"
+              effect: "NoSchedule"
         containers:
           main:
             image:
               repository: ghcr.io/analogj/scrutiny
               tag: v0.8.1-collector@sha256:5f6536d68be2d7424627647cdd658e6b4c1f69751a21622fb97b999a3155ba86
             env:
-              COLLECTOR_RUN_STARTUP: false
+              COLLECTOR_RUN_STARTUP: true
               COLLECTOR_API_ENDPOINT: 'http://scrutiny-scrutiny:8080'
               COLLECTOR_HOST_ID:
                 valueFrom:
