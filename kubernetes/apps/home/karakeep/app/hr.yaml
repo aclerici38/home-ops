@@ -25,12 +25,6 @@ spec:
     controllers:
       ${APP}:
         type: statefulset
-        pod:
-          securityContext:
-            runAsNonRoot: false
-            seccompProfile: { type: RuntimeDefault }
-            runAsUser: 0
-            runAsGroup: 0
         containers:
           main:
             image:
@@ -52,13 +46,13 @@ spec:
               # INFERENCE_TEXT_MODEL: gemma3:12b
               # INFERENCE_IMAGE_MODEL: llava:13b
 
-              S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
-              S6_READ_ONLY_ROOT: 1
+              # S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
+              # S6_READ_ONLY_ROOT: 1
             envFrom:
               - secretRef:
                   name: karakeep-secret
             securityContext:
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               allowPrivilegeEscalation: false
               capabilities:
                 drop:
@@ -144,9 +138,7 @@ spec:
                     port: 7700
                     path: /health
               readiness: *probes
-    defaultPodOptionsStrategy: merge
     defaultPodOptions:
-      hostUsers: false
       securityContext:
         runAsGroup: 1000
         runAsUser: 1000
@@ -196,7 +188,6 @@ spec:
                 subPath: meilisearch
       tmp:
         type: emptyDir
-        medium: Memory
       run:
         type: emptyDir
         advancedMounts:
