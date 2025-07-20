@@ -26,6 +26,15 @@ spec:
       *app :
         type: statefulset
         pod:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: location
+                    operator: In
+                    values:
+                      - "apartment"
           securityContext:
             runAsUser: 0
             runAsGroup: 0
@@ -40,11 +49,9 @@ spec:
             env:
               PUID: 1000
               PGID: 1000
-              S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
-              S6_READ_ONLY_ROOT: 1
             securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: true
+              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
@@ -88,8 +95,6 @@ spec:
             - identifier: main
               port: *port
     persistence:
-      run:
-        type: emptyDir
       config:
         existingClaim: firefox
       data:
