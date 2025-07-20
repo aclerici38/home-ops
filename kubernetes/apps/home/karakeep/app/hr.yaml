@@ -124,7 +124,6 @@ spec:
               - --experimental-dumpless-upgrade
             env:
               MEILI_NO_ANALYTICS: true
-              TMPDIR: /meili_data/tmp
               MEILI_MASTER_KEY:
                 valueFrom:
                   secretKeyRef:
@@ -197,6 +196,7 @@ spec:
                 subPath: meilisearch
       tmp:
         type: emptyDir
+        medium: memory
       run:
         type: emptyDir
         advancedMounts:
