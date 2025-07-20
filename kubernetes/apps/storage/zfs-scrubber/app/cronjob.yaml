@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ${POOL}-zfs-scrubber
+spec:
+  schedule: "0 0 1,15 * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          containers:
+            - name: zfs-scrubber
+              image: ghcr.io/heavybullets8/zfs-scrubber:1.0.9@sha256:2e63ef0fb0f6a34aff2f48faeffd848e6c693a062bb0436f266d02dee717e114
+              env:
+                - name: ACTION
+                  value: "scrub"
+                - name: ZFS_POOL
+                  value: "${POOL}"
+                - name: PUSHOVER_NOTIFICATION
+                  value: "false"
+                - name: TALOS_VERSION
+                  value: "${TALOS_VERSION}"
+              envFrom:
+                - secretRef:
+                    name: zfs-scrubber-secret
+              securityContext:
+                privileged: true
+              volumeMounts:
+                - name: dev
+                  mountPath: /dev/zfs
+          restartPolicy: Never
+          volumes:
+            - name: dev
+              hostPath:
+                path: /dev/zfs

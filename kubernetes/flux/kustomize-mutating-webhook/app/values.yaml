@@ -38,6 +38,10 @@ configMaps:
       D3SAVANT_LB_IP: "10.38.55.38"
       ENVOY_INTERNAL_LB_IP: "10.38.55.80"
       ENVOY_EXTERNAL_LB_IP: "10.38.55.81"
+  - name: talos-config
+    create: false
+    optional: false
+    
 secrets:
   - create: false
     name: *sname
