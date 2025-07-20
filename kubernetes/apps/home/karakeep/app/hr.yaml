@@ -57,12 +57,6 @@ spec:
               capabilities:
                 drop:
                   - ALL
-                add:
-                  - CHOWN
-                  - SETUID
-                  - SETGID
-                  - FOWNER
-                  - DAC_OVERRIDE
             probes:
               liveness: &probes
                 enabled: true
