@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app karakeep
+  name: karakeep
 spec:
   interval: 1h
   maxHistory: 1
@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      *app :
+      ${APP}:
         type: statefulset
         pod:
           securityContext:
@@ -48,9 +48,12 @@ spec:
               COREPACK_INTEGRITY_KEYS: 0
               DISABLE_PASSWORD_AUTH: true
               OAUTH_PROVIDER_NAME: Pocket ID
-              OLLAMA_BASE_URL: http://ollama:11434
-              INFERENCE_TEXT_MODEL: gemma3:12b
-              INFERENCE_IMAGE_MODEL: llava:13b
+              # OLLAMA_BASE_URL: http://ollama:11434
+              # INFERENCE_TEXT_MODEL: gemma3:12b
+              # INFERENCE_IMAGE_MODEL: llava:13b
+
+              S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
+              S6_READ_ONLY_ROOT: 1
             envFrom:
               - secretRef:
                   name: karakeep-secret
@@ -140,6 +143,7 @@ spec:
                   httpGet:
                     port: 7700
                     path: /health
+              readiness: *probes
     defaultPodOptionsStrategy: merge
     defaultPodOptions:
       hostUsers: false
@@ -152,7 +156,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       main:
-        controller: *app
+        controller: ${APP}
         ports:
           http:
             port: *port
@@ -180,15 +184,21 @@ spec:
               port: *port
     persistence:
       data:
-        existingClaim: *app
+        existingClaim: ${APP}
         advancedMounts:
-          *app :
+          ${APP}:
             main:
               - path: /data
-                subPath: *app
+                subPath: ${APP}
           meilisearch:
             meilisearch:
               - path: /meili_data
                 subPath: meilisearch
       tmp:
         type: emptyDir
+      run:
+        type: emptyDir
+        advancedMounts:
+          ${APP}:
+            main:
+              - path: /run
