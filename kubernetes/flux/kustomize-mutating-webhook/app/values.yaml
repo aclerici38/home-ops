@@ -2,7 +2,7 @@
 image:
   repsotory: ghcr.io/xunholy/kustomize-mutating-webhook
   pullPolicy: IfNotPresent
-replicaCount: 2
+replicas: 2
 tolerations:
   - key: "location"
     operator: "Equal"
@@ -22,6 +22,10 @@ configMaps:
     optional: false
     data:
       TZ: "America/Los_Angeles"
+      # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
+      TALOS_VERSION: v1.10.5
+      # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+      KUBE_VERSION: v1.33.3
 
       COREDNS_CLUSTER_IP: "172.17.0.10"
       BLOCKY_CLUSTER_IP: "172.17.0.11"
@@ -38,10 +42,7 @@ configMaps:
       D3SAVANT_LB_IP: "10.38.55.38"
       ENVOY_INTERNAL_LB_IP: "10.38.55.80"
       ENVOY_EXTERNAL_LB_IP: "10.38.55.81"
-  - name: talos-config
-    create: false
-    optional: false
-    
+
 secrets:
   - create: false
     name: *sname
