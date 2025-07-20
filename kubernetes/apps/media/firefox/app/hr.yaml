@@ -26,18 +26,12 @@ spec:
       *app :
         type: statefulset
         pod:
-          affinity:
-            nodeAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                nodeSelectorTerms:
-                - matchExpressions:
-                  - key: location
-                    operator: In
-                    values:
-                      - "apartment"
           securityContext:
-            runAsUser: 0
-            runAsGroup: 0
+            runAsGroup: 1000
+            runAsUser: 1000
+            runAsNonRoot: true
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
             seccompProfile: { type: RuntimeDefault }
             supplementalGroups:
               - 44
@@ -47,21 +41,21 @@ spec:
               repository: ghcr.io/linuxserver/firefox
               tag: 1140.0.4@sha256:9c85b6abf34e293b4fdf38a2d641d93f05e92a89cbc28ea3f432275ce8087115
             env:
-              PUID: 1000
-              PGID: 1000
+              S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
+              S6_READ_ONLY_ROOT: 1
             securityContext:
               allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
-                add:
+                # add:
                   # S6
-                  - CHOWN
-                  - SETUID
-                  - SETGID
-                  - FOWNER
-                  - DAC_OVERRIDE
+                  # - CHOWN
+                  # - SETUID
+                  # - SETGID
+                  # - FOWNER
+                  # - DAC_OVERRIDE
             resources:
               requests:
                 cpu: 100m
@@ -95,6 +89,8 @@ spec:
             - identifier: main
               port: *port
     persistence:
+      run:
+        type: emptyDir
       config:
         existingClaim: firefox
       data:
