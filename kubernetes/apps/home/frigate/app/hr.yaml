@@ -86,6 +86,7 @@ spec:
                 memory: 2Gi
               limits:
                 memory: 16Gi
+                gpu.intel.com/i915: 1
     service:
       main:
         controller: ${APP}
