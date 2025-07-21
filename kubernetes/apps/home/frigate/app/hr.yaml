@@ -132,3 +132,7 @@ spec:
           - path: /tmp/cache
       run:
         type: emptyDir
+      nginx:
+        type: emptyDir
+        globalMounts:
+          - path: /usr/local/nginx/conf
