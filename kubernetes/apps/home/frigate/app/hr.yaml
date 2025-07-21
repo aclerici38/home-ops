@@ -49,11 +49,11 @@ spec:
             command: ["sh", "-c"]
             args:
               - |
-                huggingface-cli download PierreMarieCurie/rf-detr-onnx rfdetr.onnx \
+                huggingface-cli download PierreMarieCurie/rf-detr-onnx rf-detr-base.onnx \
                   --local-dir /config/model_cache \
                   --local-dir-use-symlinks False \
                   --resume-download
-                ls -lah /model_cache
+                ls -lah /config/model_cache
             env:
               HF_HOME: /tmp
         containers:
