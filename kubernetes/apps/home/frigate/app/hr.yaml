@@ -132,11 +132,9 @@ spec:
               port: *http
     persistence:
       config:
-        # existingClaim: ${APP}
-        existingClaim: ${APP}-test
+        existingClaim: ${APP}
       media:
-        # existingClaim: frigate-media
-        type: emptyDir
+        existingClaim: frigate-media
         globalMounts:
           - path: /media/frigate
       run:
