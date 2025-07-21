@@ -21,7 +21,6 @@ spec:
     scopes: ["openid", "profile", "email"]
     cookieNames:
       idToken: IdToken
-      bearerToken: BearerToken
   jwt:
     providers:
       - name: ${APP}-id-cookie
