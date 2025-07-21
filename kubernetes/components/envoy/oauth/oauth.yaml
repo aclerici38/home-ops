@@ -19,18 +19,3 @@ spec:
     redirectURL: "https://${APP}.${SECRET_DOMAIN}/oauth2/callback"
     logoutPath: "${LOGOUT_PATH:-/logout}"
     scopes: ["openid", "profile", "email"]
-    cookieNames:
-      idToken: IdToken
-  jwt:
-    providers:
-      - name: ${APP}-id-cookie
-        issuer: https://id.${SECRET_DOMAIN}
-        remoteJWKS:
-          uri: https://id.${SECRET_DOMAIN}/.well-known/jwks.json
-        extractFrom:
-          cookies:
-            - IdToken
-        claimToHeaders:
-          - header: X-Forwarded-User
-            claim: preferred_username
-

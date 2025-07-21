@@ -110,7 +110,7 @@ spec:
         rules:
           - backendRefs:
             - identifier: main
-              port: *http-auth
+              port: *http
     persistence:
       config:
         existingClaim: *app
