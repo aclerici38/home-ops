@@ -78,6 +78,7 @@ spec:
                   - SETGID
                   - FOWNER
                   - DAC_OVERRIDE
+                  - CAP_PERFMON
             probes:
               liveness: &probes
                 enabled: true
