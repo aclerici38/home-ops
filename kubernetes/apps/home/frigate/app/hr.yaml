@@ -46,7 +46,7 @@ spec:
               tag: 0.16.0-beta4
             env:
               YOLO_MODELS: yolov7x-320
-              TRANSFORMERS_CACHE: /tmp
+              HF_HOME: /tmp
 
               S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
               S6_READ_ONLY_ROOT: 1
@@ -54,7 +54,7 @@ spec:
               - secretRef:
                   name: frigate-secret
             securityContext:
-              allowPrivilegeEscalation: true
+              allowPrivilegeEscalation: false
               # Frigate does in-place nginx config editing, so no true readonly root fs
               readOnlyRootFilesystem: false
               capabilities:
