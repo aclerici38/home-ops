@@ -1,7 +1,7 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/AlexxIT/go2rtc/master/website/schema.json
 ffmpeg:
-  h264_1m: "-codec:v libx264 -b:v 1000k -maxrate 1100k -bufsize 2000k -preset veryfast -tune zerolatency -g:v 16 -pix_fmt yuv420p -an -vf scale=1920:1080,fps=8"
+  h264_1m: "-codec:v libx264 -b:v 1000k -maxrate 1100k -bufsize 2000k -preset veryfast -tune zerolatency -g:v 16 -pix_fmt yuv420p -an -vf scale=1920:1080,fps=20"
 
 rtsp:
   username: $${RTSP_USER}
