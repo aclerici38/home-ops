@@ -134,7 +134,7 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp/cache
-      nginx:
+      letsencrypt:
         type: emptyDir
         globalMounts:
-          - path: /usr/local/nginx/conf
+          - path: /etc/letsencrypt
