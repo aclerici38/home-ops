@@ -39,8 +39,7 @@ spec:
             runAsGroup: 0
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
-            supplementalGroups:
-              - 44
+            supplementalGroups: [44, 104, 109, 128, 226]
         initContainers:
           model-download:
             image: &image
@@ -49,10 +48,7 @@ spec:
             command: ["sh", "-c"]
             args:
               - |
-                huggingface-cli download PierreMarieCurie/rf-detr-onnx rf-detr-base.onnx \
-                  --local-dir /config/model_cache \
-                  --local-dir-use-symlinks False \
-                  --resume-download
+                huggingface-cli download PierreMarieCurie/rf-detr-onnx rf-detr-base.onnx --local-dir /config/model_cache
                 ls -lah /config/model_cache
             env:
               HF_HOME: /tmp
