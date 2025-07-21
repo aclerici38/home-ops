@@ -26,7 +26,6 @@ spec:
       ${APP}:
         strategy: RollingUpdate
         pod:
-          hostUsers: false
           nodeSelector:
             kubernetes.io/hostname: "posey"
           tolerations:
