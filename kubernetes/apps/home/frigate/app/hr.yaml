@@ -39,11 +39,26 @@ spec:
             runAsGroup: 0
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
-        containers:
-          main:
-            image:
+            supplementalGroups:
+              - 44
+        initContainers:
+          model-download:
+            image: &image
               repository: ghcr.io/blakeblackshear/frigate
               tag: 0.16.0-beta4
+            command: ["sh", "-c"]
+            args:
+              - |
+                huggingface-cli download PierreMarieCurie/rf-detr-onnx rfdetr.onnx \
+                  --local-dir /config/model_cache \
+                  --local-dir-use-symlinks False \
+                  --resume-download
+                ls -lah /model_cache
+            env:
+              HF_HOME: /tmp
+        containers:
+          main:
+            image: *image
             env:
               YOLO_MODELS: yolov7x-320
               HF_HOME: /tmp
