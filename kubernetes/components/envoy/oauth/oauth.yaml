@@ -20,13 +20,15 @@ spec:
     logoutPath: "${LOGOUT_PATH:-/logout}"
     scopes: ["openid", "profile", "email"]
   jwt:
-    extractFrom:
-      - cookie: IdToken
     providers:
-      - name: id-cookie
-        issuer: *issuer
+      - name: ${APP}-id-cookie
+        issuer: https://id.${SECRET_DOMAIN}
         remoteJWKS:
           uri: https://id.${SECRET_DOMAIN}/.well-known/jwks.json
+        extractFrom:
+          cookies:
+            - IdToken
         claimToHeaders:
           - header: X-Forwarded-User
             claim: preferred_username
+
