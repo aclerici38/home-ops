@@ -39,7 +39,8 @@ spec:
             runAsGroup: 0
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: Unconfined }
-            supplementalGroups: [44, 104, 109, 128, 226]
+            supplementalGroups:
+              - 44
         initContainers:
           model-download:
             image: &image
