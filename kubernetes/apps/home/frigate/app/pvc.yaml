@@ -10,3 +10,15 @@ spec:
       storage: 2Ti
   accessModes:
     - ReadWriteMany
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: frigate-test
+spec:
+  storageClassName: zfs-nvme
+  resources:
+    requests:
+      storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
