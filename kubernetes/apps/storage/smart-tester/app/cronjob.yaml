@@ -18,10 +18,10 @@ spec:
               command: ["sh", "-c"]
               args:
                 - |
-                  for disk in /dev/sd? /dev/nvme?n?; do
-                    if [ -b "$disk" ] && [ "$(lsblk -no TYPE "$disk")" = "disk" ]; then
+                  for disk in $(smartctl --scan | awk '{print $1}'); do
+                    if [ -b "$disk" ] && smartctl -i "$disk" >/dev/null 2>&1; then
                       echo "Running ${TEST_TYPE} test on $disk"
-                      smartctl -t ${TEST_TYPE} "$disk"
+                      smartctl -t "${TEST_TYPE}" "$disk"
                     fi
                   done
               securityContext:
