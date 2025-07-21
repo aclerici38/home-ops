@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ${TEST_TYPE}-smart-test
+spec:
+  schedule: "${TEST_SCHEDULE}"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          containers:
+            - name: smart-tester
+              image: ghcr.io/ant385525/smartmontools:7.5.0@sha256:eb8dce2e0f7ec6c5b7da428cf71f86a29ffe8366f3ce73a1c198c36d6e1e1d40
+              args:
+                - |
+                  for disk in /dev/sd? /dev/nvme?n?; do
+                    if [ -b "$disk" ] && [ "$(lsblk -no TYPE "$disk")" = "disk" ]; then
+                      echo "Running ${TEST_TYPE} test on $disk"
+                      smartctl -t ${TEST_TYPE} "$disk"
+                    fi
+                  done
+              securityContext:
+                privileged: true
+              volumeMounts:
+                - name: dev
+                  mountPath: /dev
+          restartPolicy: Never
+          volumes:
+            - name: dev
+              hostPath:
+                path: /dev
