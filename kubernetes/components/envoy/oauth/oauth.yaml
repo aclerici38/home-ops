@@ -19,6 +19,9 @@ spec:
     redirectURL: "https://${APP}.${SECRET_DOMAIN}/oauth2/callback"
     logoutPath: "${LOGOUT_PATH:-/logout}"
     scopes: ["openid", "profile", "email"]
+    cookieNames:
+      idToken: IdToken
+      bearerToken: BearerToken
   jwt:
     providers:
       - name: ${APP}-id-cookie
