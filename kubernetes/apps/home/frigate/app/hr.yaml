@@ -121,6 +121,10 @@ spec:
         existingClaim: frigate-media
         globalMounts:
           - path: /media/frigate
+      run:
+        type: emptyDir
+      tmp:
+        type: emptyDir
       shm:
         enabled: true
         type: emptyDir
@@ -130,8 +134,6 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp/cache
-      run:
-        type: emptyDir
       nginx:
         type: emptyDir
         globalMounts:
