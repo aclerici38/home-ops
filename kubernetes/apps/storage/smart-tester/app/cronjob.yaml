@@ -15,6 +15,7 @@ spec:
           containers:
             - name: smart-tester
               image: ghcr.io/ant385525/smartmontools:7.5.0@sha256:eb8dce2e0f7ec6c5b7da428cf71f86a29ffe8366f3ce73a1c198c36d6e1e1d40
+              command: ["sh", "-c"]
               args:
                 - |
                   for disk in /dev/sd? /dev/nvme?n?; do
