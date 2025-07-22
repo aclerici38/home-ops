@@ -48,11 +48,14 @@ spec:
               VPN_TYPE: wireguard
               VPN_INTERFACE: wg0
               WIREGUARD_ENDPOINT_PORT: 51820
+              WIREGUARD_MTU: 1420
+              WIREGUARD_PERSISTENT_KEEPALIVE_INTERVAL: 25s
               VPN_PORT_FORWARDING: on
               VPN_PORT_FORWARDING_PROVIDER: protonvpn
               FIREWALL_INPUT_PORTS: &port 8080
               FIREWALL_OUTBOUND_SUBNETS: 172.16.0.0/16,172.17.0.0/16
               DNS_KEEP_NAMESERVER: on
+              HEALTH_TARGET_ADDRESS: 1.1.1.1:443
               VPN_PORT_FORWARDING_UP_COMMAND: /bin/sh -c '/usr/bin/wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{`{{PORTS}}`}}}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'
             resources:
               limits:
