@@ -1,0 +1,90 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: komga
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      ${APP}:
+        strategy: RollingUpdate
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          main:
+            image:
+              repository: ghcr.io/gotson/komga
+              tag: 1.22.1@sha256:578aa62d7d73aaa1b1fa30e82e28b874bb4643bf1f69cb8320d5ebf1fe6c608f
+            env:
+              SERVER_PORT: &port 8080
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /actuator/health
+                    port: *port
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 15m
+                memory: 1Gi
+              limits:
+                memory: 4Gi
+            securityContext:
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+              allowPrivilegeEscalation: false
+    service:
+      main:
+        controller: ${APP}
+        ports:
+          http:
+            port: *port
+    route:
+      main:
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: main
+              port: *port
+            timeouts:
+              request: 0s
+    persistence:
+      config:
+        existingClaim: ${APP}
+      library:
+        existingClaim: media
+        globalMounts:
+          - path: /calibre-library
+            subPath: books/calibre/library
