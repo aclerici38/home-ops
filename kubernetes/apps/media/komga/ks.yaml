@@ -13,6 +13,7 @@ spec:
   path: ./kubernetes/apps/media/komga/app
   components:
     - ../../../../components/volsync/versity
+    - ../../../../components/external-secret
   prune: true
   sourceRef:
     kind: GitRepository
