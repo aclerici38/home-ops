@@ -35,7 +35,7 @@ spec:
           coredns:
             image:
               repository: mirror.gcr.io/coredns/coredns
-              tag: 1.12.1
+              tag: 1.12.2
             args:
               - -conf
               - /etc/coredns/Corefile
@@ -58,8 +58,6 @@ spec:
               VPN_TYPE: wireguard
               VPN_INTERFACE: wg0
               WIREGUARD_ENDPOINT_PORT: 51820
-              WIREGUARD_MTU: 1420
-              WIREGUARD_PERSISTENT_KEEPALIVE_INTERVAL: 25s
               VPN_PORT_FORWARDING: on
               VPN_PORT_FORWARDING_PROVIDER: protonvpn
               FIREWALL_INPUT_PORTS: &port 8080
