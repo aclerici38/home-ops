@@ -126,7 +126,7 @@ spec:
           qbit:
             main:
               - path: /config
-      Corefile:
+      corefile:
         type: configMap
         name: ${APP}-config
         advancedMounts:
