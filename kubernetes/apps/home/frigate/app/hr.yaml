@@ -41,21 +41,11 @@ spec:
             seccompProfile: { type: Unconfined }
             supplementalGroups:
               - 44
-        initContainers:
-          model-download:
-            image: &image
-              repository: ghcr.io/blakeblackshear/frigate
-              tag: 0.16.0-beta4
-            command: ["sh", "-c"]
-            args:
-              - |
-                huggingface-cli download PierreMarieCurie/rf-detr-onnx rf-detr-base.onnx --local-dir /config/model_cache
-                ls -lah /config/model_cache
-            env:
-              HF_HOME: /tmp
         containers:
           main:
-            image: *image
+            image:
+              repository: ghcr.io/blakeblackshear/frigate
+              tag: 0.16.0-beta4
             env:
               YOLO_MODELS: yolov7x-320
               HF_HOME: /tmp
