@@ -59,6 +59,10 @@ spec:
                   httpGet:
                     path: /api/server/ping
                     port: *port
+                  periodSeconds: 5
+                  failureThreshold: 18
+                  initialDelaySeconds: 2
+                  timeoutSeconds: 1
             securityContext: &contSec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
