@@ -94,4 +94,12 @@ spec:
         existingClaim: ${APP}
         globalMounts:
           - path: /home/coder
+      frigate:
+        existingClaim: frigate
+        globalMounts:
+          - path: /home/coder/frigate
+      hass:
+        existingClaim: hass
+        globalMounts:
+          - path: /home/coder/hass
 
