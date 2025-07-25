@@ -45,7 +45,7 @@ spec:
               HTTP_ALLOWED: false
               ALLOW_UNAUTHENTICATED: true
               AUTO_DELETE_EVERY_N_HOURS: 1
-              FFMPEG_ARGS: -hwaccel vaapi
+              FFMPEG_ARGS: -hwaccel qsv
             probes:
               liveness: &probes
                 enabled: true
