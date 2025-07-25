@@ -28,5 +28,16 @@
         "commitMessageTopic": "{{{groupName}}} group"
       }
     },
+    {
+      description: "Immich Group",
+      groupName: "Immich",
+      matchPackagePatterns: ["immich"],
+      matchDatasources: ["docker", "github-releases", "helm"],
+      matchUpdateTypes: ["minor", "patch"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+      separateMinorPatch: false
+    },
   ]
 }

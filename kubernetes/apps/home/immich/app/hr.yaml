@@ -29,7 +29,7 @@ spec:
           main: &container
             image:
               repository: ghcr.io/immich-app/immich-server
-              tag:  ${IMMICH_VERSION}
+              tag: v1.136.0@sha256:4bfc6985eca8290bc56c4ef89a138b0ead985be31aa11f8c49ed07868b23a46c
             env: &env
               IMMICH_LOG_LEVEL: log
               IMMICH_WORKERS_INCLUDE: api
@@ -99,7 +99,7 @@ spec:
           main:
             image:
               repository: ghcr.io/immich-app/immich-machine-learning
-              tag:  ${IMMICH_VERSION}-openvino
+              tag: v1.136.0-openvino@sha256:2d97a3f0be01b17b99246bd06699aa53d65157d503a51741d74f7fa4373a3944
             env:
               MACHINE_LEARNING_MODEL_TTL: 0
               MACHINE_LEARNING_CACHE_FOLDER: /cache
