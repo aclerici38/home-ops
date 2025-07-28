@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: immich-frame
+  name: &app immich-frame
 spec:
   interval: 1h
   maxHistory: 1
@@ -23,13 +23,23 @@ spec:
       retries: 1
   values:
     controllers:
-      tv:
+      *app :
+        strategy: RollingUpdate
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            seccompProfile: { type: RuntimeDefault }
         containers:
-          main: &container
+          main:
             image:
               repository: ghcr.io/immichframe/immichframe
-              tag: v1.0.28.0@sha256:f6a2800749e4b02e6312e595764d4b27a84a1d9716e0f023de89a5e5120778e7
-            env: &env
+              tag: v1.0.28.0
+            env:
               Language: en
               ImmichServerUrl: http://immich-server:2283
               Albums: d64b33a8-d61d-4468-9403-f7a594ed6bd9
@@ -54,34 +64,14 @@ spec:
               capabilities:
                 drop:
                   - ALL
-      danny:
-        containers:
-          main:
-            <<: *container
-            env:
-              <<: *env
-              Albums: 8554707a-bfe0-414d-8d7f-ffe3151a8e54
-    defaultPodOptions:
-      hostUsers: false
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: Always
-        seccompProfile: { type: RuntimeDefault }
     service:
-      tv:
-        controller: tv
-        ports: &ports
+      main:
+        controller: *app
+        ports:
           http:
             port: &port 8080
-      danny:
-        controller: danny
-        ports: *ports
-
     route:
-      tv: &route
+      main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:
@@ -89,27 +79,6 @@ spec:
             namespace: network
             sectionName: https
         rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /tv
-            filters: &filters
-              - type: URLRewrite
-                urlRewrite:
-                  path:
-                    type: ReplacePrefixMatch
-                    replacePrefixMatch: /
-            backendRefs:
-              - identifier: tv
-                port: *port
-      danny:
-        <<: *route
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /danny
-            filters: *filters
-            backendRefs:
-              - identifier: danny
-                port: *port
+          - backendRefs:
+            - identifier: main
+              port: *port
