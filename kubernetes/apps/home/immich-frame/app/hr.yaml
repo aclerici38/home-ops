@@ -93,6 +93,9 @@ spec:
               - path:
                   type: PathPrefix
                   value: /tv
+              - path:
+                  type: PathPrefix
+                  value: /
             backendRefs:
             - identifier: tv
               port: *port
