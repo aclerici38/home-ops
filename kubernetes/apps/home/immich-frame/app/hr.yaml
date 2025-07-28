@@ -93,12 +93,14 @@ spec:
               - path:
                   type: PathPrefix
                   value: /tv
-              - path:
-                  type: PathPrefix
-                  value: /
+            filters:
+              - type: URLRewrite
+                urlRewrite:
+                  path:
+                    replacePrefixMatch: /
             backendRefs:
-            - identifier: tv
-              port: *port
+              - identifier: tv
+                port: *port
       danny:
         <<: *route
         rules:
@@ -106,6 +108,11 @@ spec:
               - path:
                   type: PathPrefix
                   value: /danny
+            filters:
+              - type: URLRewrite
+                urlRewrite:
+                  path:
+                    replacePrefixMatch: /
             backendRefs:
-            - identifier: danny
-              port: *port
+              - identifier: danny
+                port: *port
