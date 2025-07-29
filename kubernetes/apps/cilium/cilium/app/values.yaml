@@ -95,6 +95,15 @@ nodePort:
   enabled: true
 operator:
   replicas: 2
+  tolerations:
+    - key: "location"
+      operator: "Equal"
+      value: "cloud"
+      effect: "NoSchedule"
+    - key: "location"
+      operator: "Equal"
+      value: "house"
+      effect: "NoSchedule"
   rollOutPods: true
   prometheus:
     enabled: true
