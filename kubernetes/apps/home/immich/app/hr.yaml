@@ -192,11 +192,11 @@ spec:
         advancedMounts:
           server:
             main: &mounts
-              - path: /usr/src/app/upload/upload
+              - path: /data/upload
                 subPath: upload
-              - path: /usr/src/app/upload/profile
+              - path: /data/profile
                 subPath: profile
-              - path: /usr/src/app/upload/library
+              - path: /data/library
                 subPath: library
           microservices:
             main: *mounts
@@ -205,7 +205,7 @@ spec:
         advancedMounts:
           server:
             main: &mounts
-              - path: /usr/src/app/upload/thumbs
+              - path: /data/thumbs
           microservices:
             main: *mounts
       encoded-video:
@@ -213,7 +213,7 @@ spec:
         advancedMounts:
           server:
             main: &mounts
-              - path: /usr/src/app/upload/encoded-video
+              - path: /data/encoded-video
           microservices:
             main: *mounts
       config:
