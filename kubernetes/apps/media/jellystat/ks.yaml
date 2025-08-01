@@ -17,7 +17,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media/jellystat/app
   components:
-    - ../../../../components/cnpg/overlay/no-backup
+    - ../../../../components/cnpg/overlay/init
     - ../../../../components/external-secret
   prune: true
   sourceRef:
