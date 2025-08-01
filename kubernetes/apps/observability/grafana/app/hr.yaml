@@ -235,6 +235,10 @@ spec:
           gnetId: 19580
           revision: 10
           datasource: Prometheus
+        jellyfin:
+          url: https://raw.githubusercontent.com/rebelcore/jellyfin_grafana/refs/heads/master/dashboards/jellyfin.json
+          datasource:
+            - { name: DS_PROMETHEUS, value: Prometheus }
     sidecar:
       dashboards:
         enabled: true
