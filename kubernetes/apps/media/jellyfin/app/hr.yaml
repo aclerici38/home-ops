@@ -66,10 +66,25 @@ spec:
         ports:
           http:
             port: *port
+    serviceMonitor:
+      main:
+        serviceName: ${APP}
+        endpoints:
+          - port: http
     route:
       main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
+        rules:
+          # Block metrics path
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /metrics
+            backendRefs: []
+          - backendRefs:
+            - identifier: main
+              port: *port
         parentRefs:
           - name: external
             namespace: network
