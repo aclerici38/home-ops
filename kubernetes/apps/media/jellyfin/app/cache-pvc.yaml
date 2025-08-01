@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jellyfin-cache
+spec:
+  storageClassName: zfs-nvme
+  resources:
+    requests:
+      storage: 300Gi
+  accessModes:
+    - ReadWriteOnce
