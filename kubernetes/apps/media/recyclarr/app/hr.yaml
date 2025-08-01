@@ -50,16 +50,6 @@ spec:
               capabilities:
                 drop:
                   - ALL
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  exec:
-                    command:
-                      - recyclarr
-                      - --version
-              readiness: *probes
     persistence:
       config:
         existingClaim: recyclarr-config
