@@ -61,10 +61,6 @@ spec:
             subPath: assets
           - path: /manualassets
             subPath: manualassets
-      backup:
-        type: emptyDir
-        globalMounts:
-          - path: /assetsbackup
       tmpfs:
         type: emptyDir
         globalMounts:
@@ -74,3 +70,5 @@ spec:
             subPath: cache
           - path: /.local
             subPath: local
+          - path: /config`
+            subPath: config
