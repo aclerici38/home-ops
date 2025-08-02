@@ -3,7 +3,7 @@
 sonarr:
   sonarr:
     media_naming:
-      series: plex-tvdb
+      series: jellyfin-tvdb
       episodes:
         rename: true
         standard: default
@@ -162,10 +162,10 @@ sonarr:
 radarr:
   radarr:
     media_naming:
-      folder:  plex-tmdb
+      folder:  jellyfin-tmdb
       movie:
         rename: true
-        standard: plex-tmdb
+        standard: jellyfin-tmdb
 
     base_url: http://radarr:7878
     api_key: ${RADARR__AUTH__APIKEY}
