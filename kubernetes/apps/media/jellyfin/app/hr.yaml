@@ -57,7 +57,7 @@ spec:
                     path: /health
                     port: *port
                   periodSeconds: 5
-                  failureThreshold: 12
+                  failureThreshold: 15
                   initialDelaySeconds: 4
                   timeoutSeconds: 1
             securityContext:
