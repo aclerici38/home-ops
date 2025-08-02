@@ -1,5 +1,7 @@
 {
   "ApiPart": {
+    "PlexToken": "NA",
+    "EmbyApiKey": "NA",
     "tvdbapi": "${TVDB_API_KEY}",
     "tmdbtoken": "${TMDB_API_KEY}",
     "FanartTvAPIKey": "${FANART_API_KEY}",
@@ -24,6 +26,29 @@
       "en"
     ]
   },
+  "PlexPart": {
+    "LibstoExclude": [
+      "Youtube",
+      "Audiobooks",
+      "Kids Audiobooks",
+      "Tech Trainings"
+    ],
+    "PlexUrl": "http://192.168.1.93:32400",
+    "UsePlex": "false",
+    "UploadExistingAssets": "false"
+  },
+  "EmbyPart": {
+    "LibstoExclude": [
+      "Youtube",
+      "Audiobooks",
+      "KidsAudiobooks",
+      "TechTrainings"
+    ],
+    "EmbyUrl": "http://192.168.1.93:8096/emby",
+    "UseEmby": "false",
+    "UploadExistingAssets": "false",
+    "ReplaceThumbwithBackdrop": "false"
+  },
   "JellyfinPart": {
     "LibstoExclude": [
       "Top Gear Extras"
@@ -32,6 +57,14 @@
     "UseJellyfin": "true",
     "UploadExistingAssets": "false",
     "ReplaceThumbwithBackdrop": "false"
+  },
+  "Notification": {
+    "SendNotification": "false",
+    "DiscordUserName": "Posterizarr",
+    "UseUptimeKuma": "false",
+    "AppriseUrl": "discord://{WebhookID}/{WebhookToken}/",
+    "Discord": "https://discordapp.com/api/webhooks/{WebhookID}/{WebhookToken}",
+    "UptimeKumaUrl": "https://uptime-kuma.domain.com/api/push/qXpb7Mf1vW"
   },
   "PrerequisitePart": {
     "AssetPath": "/assets",
