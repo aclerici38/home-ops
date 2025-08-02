@@ -49,6 +49,17 @@ spec:
                     path: /health
                     port: &port 8096
               readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *port
+                  periodSeconds: 5
+                  failureThreshold: 12
+                  initialDelaySeconds: 4
+                  timeoutSeconds: 1
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
