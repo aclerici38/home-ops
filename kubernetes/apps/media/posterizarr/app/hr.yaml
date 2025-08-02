@@ -65,5 +65,10 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /assetsbackup
-      temp:
+      tmpfs:
         type: emptyDir
+        globalMounts:
+          - path: /assetsbackup
+            subPath: backup
+          - path: /.cache
+            subPath: cache
