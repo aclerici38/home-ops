@@ -12,6 +12,12 @@
       matchDatasources: ["docker"],
       versioning: "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(-(?<compatibility>beta)(?<build>\\d+))?$",
       matchPackagePatterns: ["frigate"]
-    }
+    },
+    {
+      "description": ["Custom versioning for calibre-web-automated (V)"],
+      "matchDatasources": ["docker"],
+      "matchPackagePatterns": ["calibre-web-automated"],
+      "versioning": "regex:^V(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+    },
   ]
 }
