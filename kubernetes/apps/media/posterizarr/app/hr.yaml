@@ -38,7 +38,7 @@ spec:
               repository: ghcr.io/fscorrupt/posterizarr
               tag: 1.9.71@sha256:49d0c6a5d7b356cdae14ccf279f0c5d27380d333a02979d9f7f7331959588d5f
             env:
-              RUN_TIME: "disabled"
+              RUN_TIME: "05:00"
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -63,15 +63,6 @@ spec:
             subPath: assets
           - path: /manualassets
             subPath: manualassets
-      media:
-        existingClaim: media
-        globalMounts:
-          - path: /config/watcher/tv
-            subPath: tv
-          - path: /config/watcher/movies
-            subPath: movies
-          - path: /config/watcher/anime
-            subPath: anime
       tmpfs:
         type: emptyDir
         globalMounts:
