@@ -39,5 +39,27 @@
       },
       separateMinorPatch: false
     },
+    {
+      description: "External Secrets Group",
+      groupName: "External Secrets",
+      matchPackagePatterns: ["external-secrets"],
+      matchDatasources: ["docker", "github-releases", "helm"],
+      matchUpdateTypes: ["minor", "patch"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+      separateMinorPatch: false
+    },
+    {
+      description: "Cilium group",
+      groupName: "Cilium",
+      matchPackagePatterns: ["cilium"],
+      matchDatasources: ["docker", "github-releases", "helm"],
+      matchUpdateTypes: ["minor", "patch"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+      separateMinorPatch: false
+    },
   ]
 }
