@@ -1,0 +1,15 @@
+machine:
+  network:
+    interfaces:
+      - interface: wg0
+        routes:
+          - network: ${TIMMY_IP}/32
+            gateway: ${TIMMY_WG_IP}
+        wireguard:
+          peers:
+            - publicKey: ${TIMMY_WG_PUBKEY}
+              endpoint: ${TIMMY_WG_ENDPOINT}:${TIMMY_WG_PORT}
+              persistentKeepaliveInterval: 10s
+              allowedIPs:
+                - ${TIMMY_WG_IP}/32
+                - ${TIMMY_IP}/32
