@@ -16,16 +16,18 @@ additionalApiServerCertSans: &sans
   - "${BONDS_IP}"
   - "${POSEY_IP}"
   - "${MADBUM_IP}"
-  - "${MADBUM_IP}"
+  - "${TIMMY_IP}"
   - "127.0.0.1"
   - "172.17.0.1"
   - "${CLOUD_IP}"
   - "${MADBUM_WG_IP}"
   - "${BONDS_WG_IP}"
   - "${POSEY_WG_IP}"
+  - "${TIMMY_WG_IP}"
   - "posey"
   - "bonds"
   - "madbum"
+  - "timmy"
   - "cloud.${SECRET_DOMAIN}"
 additionalMachineCertSans: *sans
 
@@ -78,11 +80,6 @@ nodes:
             rules:
               - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
               - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
-          network:
-            extraHostEntries:
-              - ip: 10.38.55.80
-                aliases:
-                  - harbor.${SECRET_DOMAIN}
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "a0:36:9f:09:4c:8f"
@@ -135,7 +132,6 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
         mtu: 1500
-        ignore: true
       - interface: wg0
         mtu: 1420
         addresses:
