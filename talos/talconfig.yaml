@@ -102,12 +102,6 @@ nodes:
         wireguard:
           privateKey: ${BONDS_WG_PRIVATE_KEY}
           listenPort: ${BONDS_WG_PORT}
-    userVolumes:
-      - name: local-hostpath
-        provisioning:
-          maxSize: "900GiB"
-          diskSelector:
-            match: disk.transport == 'nvme' && disk.size < 4u * TiB
   - hostname: "timmy"
     ipAddress: "${TIMMY_IP}"
     installDiskSelector:
@@ -144,12 +138,6 @@ nodes:
         wireguard:
           privateKey: ${TIMMY_WG_PRIVATE_KEY}
           listenPort: ${TIMMY_WG_PORT}
-    userVolumes:
-      - name: local-hostpath
-        provisioning:
-          maxSize: "900GiB"
-          diskSelector:
-            match: disk.transport == 'nvme'
   - hostname: "posey"
     ipAddress: "${POSEY_IP}"
     installDiskSelector:
@@ -211,12 +199,6 @@ nodes:
         wireguard:
           privateKey: ${POSEY_WG_PRIVATE_KEY}
           listenPort: ${POSEY_WG_PORT}
-    userVolumes:
-      - name: local-hostpath
-        provisioning:
-          maxSize: "900GiB"
-          diskSelector:
-            match: disk.transport == 'nvme'
   - hostname: "madbum"
     ipAddress: "${MADBUM_IP}"
     installDiskSelector:

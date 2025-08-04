@@ -28,6 +28,10 @@ spec:
           operator: "Equal"
           value: "house"
           effect: "NoSchedule"
+        - key: "location"
+          operator: "Equal"
+          value: "cloud"
+          effect: "NoSchedule"
       enabled: true
       strategy: node
       externalAttacher:
@@ -68,7 +72,7 @@ spec:
       config:
         driver: local-hostpath
         local-hostpath:
-          shareBasePath: &storagePath /var/mnt/local-hostpath
+          shareBasePath: &storagePath /var/lib/csi-local-hostpath/global
           controllerBasePath: *storagePath
           dirPermissionsMode: "0770"
           dirPermissionsUser: 0
