@@ -25,6 +25,7 @@ spec:
     controllers:
       apartment:
         strategy: RollingUpdate
+        replicas: 2
         pod:
           nodeSelector:
             location: apartment
