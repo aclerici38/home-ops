@@ -28,10 +28,6 @@ spec:
           operator: "Equal"
           value: "house"
           effect: "NoSchedule"
-        - key: "location"
-          operator: "Equal"
-          value: "cloud"
-          effect: "NoSchedule"
       enabled: true
       strategy: node
       externalAttacher:
