@@ -72,7 +72,7 @@ spec:
       config:
         driver: local-hostpath
         local-hostpath:
-          shareBasePath: &storagePath /var/lib/csi-local-hostpath/global
+          shareBasePath: &storagePath /var/mnt/local-hostpath
           controllerBasePath: *storagePath
           dirPermissionsMode: "0770"
           dirPermissionsUser: 0
