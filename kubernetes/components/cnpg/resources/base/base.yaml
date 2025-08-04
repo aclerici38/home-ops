@@ -14,7 +14,7 @@ spec:
   imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql:17.5@sha256:a02f8de086c02c6b932df4114f97594803ef99cd5782e52100f24ed40034bac1}
   storage:
     size: ${CNPG_CAPACITY:=2Gi}
-    storageClass: ${CNPG_STORAGECLASS:=zfs-nvme}
+    storageClass: ${CNPG_STORAGECLASS:=local-hostpath}
   superuserSecret:
     name: cloudnative-pg-secret
   enableSuperuserAccess: true
