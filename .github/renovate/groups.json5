@@ -61,5 +61,16 @@
       },
       separateMinorPatch: false
     },
+    {
+      description: "Coredns group",
+      groupName: "Coredns",
+      matchPackagePatterns: ["coredns"],
+      matchDatasources: ["docker", "github-releases", "helm"],
+      matchUpdateTypes: ["minor", "patch"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+      separateMinorPatch: false
+    },
   ]
 }
