@@ -118,8 +118,7 @@ nodes:
       - |-
         - op: replace
           path: /machine/install/image
-          # renovate: datasource=docker depName=ghcr.io/talos-rpi5/installer versioning=docker
-          value: ghcr.io/talos-rpi5/installer:v1.10.5-rpi5
+          value: ghcr.io/talos-rpi5/installer:${TALOS_PI5_VERSION}
       - "@./patches/wireguard/posey.yaml"
       - "@./patches/wireguard/madbum.yaml"
       - "@./patches/wireguard/house-opnsense.yaml"
