@@ -198,24 +198,24 @@ spec:
                 subPath: profile
               - path: /data/library
                 subPath: library
-          # server:
-          #   main: *mounts
+          server:
+            main: *mounts
       thumbnails:
         existingClaim: immich-thumbnails
         advancedMounts:
           microservices:
             main: &mounts
               - path: /data/thumbs
-          # server:
-          #   main: *mounts
+          server:
+            main: *mounts
       encoded-video:
         existingClaim: immich-encoded-video
         advancedMounts:
           microservices:
             main: &mounts
               - path: /data/encoded-video
-          # server:
-          #   main: *mounts
+          server:
+            main: *mounts
       config:
         type: configMap
         name: immich-config
