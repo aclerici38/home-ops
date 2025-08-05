@@ -173,7 +173,7 @@ spec:
               size: 1
               min_size: 1
               requireSafeReplicaSize: false
-          preservePoolsOnDelete: true
+          preservePoolsOnDelete: false
           gateway:
             port: &s3Port 8080
             resources:
