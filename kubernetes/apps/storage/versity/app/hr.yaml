@@ -85,7 +85,7 @@ spec:
             - identifier: main
               port: *port
             timeouts:
-              request: 1m
+              request: 0s
     persistence:
       data:
         existingClaim: backups
