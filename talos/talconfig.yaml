@@ -138,6 +138,22 @@ nodes:
         wireguard:
           privateKey: ${TIMMY_WG_PRIVATE_KEY}
           listenPort: ${TIMMY_WG_PORT}
+    volumes:
+      - name: EPHEMERAL
+        provisioning:
+          diskSelector:
+            match: system_disk
+          maxSize: 500GiB
+          grow: false
+    userVolumes:
+      - name: local-hostpath
+        provisioning:
+          diskSelector:
+            match: system_disk
+          maxSize: "750GiB"
+          grow: false
+        filesystem:
+          type: xfs
   - hostname: "posey"
     ipAddress: "${POSEY_IP}"
     installDiskSelector:
