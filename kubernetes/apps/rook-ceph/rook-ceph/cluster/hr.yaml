@@ -187,6 +187,8 @@ spec:
           enabled: true
           host:
             name: s3.${SECRET_DOMAIN}
+            path: /
+            pathType: PathPrefix
           parentRefs:
             - name: internal
               namespace: network
