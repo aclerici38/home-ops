@@ -175,16 +175,18 @@ spec:
               requireSafeReplicaSize: false
           preservePoolsOnDelete: true
           gateway:
+            port: &s3Port 8080
             resources:
-          limits:
-            memory: "2Gi"
-          requests:
-            cpu: "100m"
-            memory: "125Mi"
+              limits:
+                memory: "2Gi"
+              requests:
+                cpu: "100m"
+                memory: "125Mi"
         storageClass:
           enabled: false
         route:
           enabled: true
+          port: *s3Port
           host:
             name: s3.${SECRET_DOMAIN}
             path: /
