@@ -190,7 +190,7 @@ spec:
         enabled: true
         existingClaim: *app
         advancedMounts:
-          server:
+          microservices:
             main: &mounts
               - path: /data/upload
                 subPath: upload
@@ -198,24 +198,24 @@ spec:
                 subPath: profile
               - path: /data/library
                 subPath: library
-          microservices:
-            main: *mounts
+          # server:
+          #   main: *mounts
       thumbnails:
         existingClaim: immich-thumbnails
         advancedMounts:
-          server:
+          microservices:
             main: &mounts
               - path: /data/thumbs
-          microservices:
-            main: *mounts
+          # server:
+          #   main: *mounts
       encoded-video:
         existingClaim: immich-encoded-video
         advancedMounts:
-          server:
+          microservices:
             main: &mounts
               - path: /data/encoded-video
-          microservices:
-            main: *mounts
+          # server:
+          #   main: *mounts
       config:
         type: configMap
         name: immich-config
