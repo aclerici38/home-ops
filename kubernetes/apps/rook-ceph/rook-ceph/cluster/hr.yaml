@@ -158,4 +158,36 @@ spec:
     # NOTE: After disabling the filesystem, the filesystem can be removed with the following commands:
     # ceph fs fail ceph-filesystem && ceph fs rm ceph-filesystem --yes-i-really-mean-it
     cephFileSystems: []
-    cephObjectStores: []
+    cephObjectStores:
+      - name: ceph-objectstore
+        spec:
+          metadataPool:
+            failureDomain: host
+            replicated:
+              size: 1
+              min_size: 1
+              requireSafeReplicaSize: false
+          dataPool:
+            failureDomain: host
+            replicated:
+              size: 1
+              min_size: 1
+              requireSafeReplicaSize: false
+          preservePoolsOnDelete: true
+          gateway:
+            resources:
+          limits:
+            memory: "2Gi"
+          requests:
+            cpu: "100m"
+            memory: "125Mi"
+        storageClass:
+          enabled: false
+        route:
+          enabled: true
+          host:
+            name: s3.${SECRET_DOMAIN}
+          parentRefs:
+            - name: internal
+              namespace: network
+              sectionName: https
