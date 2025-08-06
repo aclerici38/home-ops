@@ -76,13 +76,24 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    path: /api/version
-                    port: 5000
+                    path: &path /api/version
+                    port: &http 5000
                   initialDelaySeconds: 5
                   periodSeconds: 15
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: *path
+                    port: *http
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 60
             resources:
               requests:
                 cpu: 1000m
@@ -100,7 +111,7 @@ spec:
             targetPort: *http-auth
           http:
             primary: true
-            port: &http 5000
+            port: *http
             targetPort: *http
           rtsp:
             port: &rtsp 8554
