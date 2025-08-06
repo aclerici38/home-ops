@@ -8,13 +8,6 @@
       "versioning": "loose"
     },
     {
-      description: ["Custom versioning for frigate"],
-      matchDatasources: ["docker"],
-      versioning: "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:-(?<prerelease>(?:beta|rc))(?<build>\\d+))?$",
-      matchPackagePatterns: ["frigate"],
-      ignoreUnstable: false,
-    },
-    {
       "description": ["Custom versioning for calibre-web-automated (V)"],
       "matchDatasources": ["docker"],
       "matchPackagePatterns": ["calibre-web-automated"],
