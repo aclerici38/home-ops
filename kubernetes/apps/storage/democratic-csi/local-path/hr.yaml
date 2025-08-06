@@ -23,15 +23,15 @@ spec:
       retries: 1
   values:
     controller:
-      tolerations: &tol
-        - key: "location"
-          operator: "Equal"
-          value: "house"
-          effect: "NoSchedule"
-        - key: "location"
-          operator: "Equal"
-          value: "cloud"
-          effect: "NoSchedule"
+      affinity: &aff
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                  - timmy
       enabled: true
       strategy: node
       externalAttacher:
@@ -78,7 +78,7 @@ spec:
           dirPermissionsUser: 0
           dirPermissionsGroup: 0
     node:
-      tolerations: *tol
+      affinity: *aff
       driver:
         extraVolumeMounts:
           - name: local-hostpath
