@@ -93,13 +93,11 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  httpGet:
-                    port: &port 9000
-                    path: /api/app/about
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 2
+                  exec:
+                    command:
+                      - python
+                      - -m
+                      - mealie.scripts.healthcheck
               readiness: *probes
     service:
       main:
