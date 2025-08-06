@@ -52,9 +52,7 @@ spec:
                   - ALL
     persistence:
       config:
-        existingClaim: recyclarr-config
-        globalMounts:
-          - path: /config
+        type: emptyDir
       config-file:
         globalMounts:
           - path: /config/recyclarr.yml
