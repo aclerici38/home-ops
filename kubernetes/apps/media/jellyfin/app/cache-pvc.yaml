@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: jellyfin-cache
 spec:
-  storageClassName: zfs-nvme
+  storageClassName: local-hostpath
   resources:
     requests:
-      storage: 300Gi
+      storage: 100Gi
   accessModes:
     - ReadWriteOnce

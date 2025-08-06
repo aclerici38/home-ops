@@ -63,8 +63,8 @@ spec:
       replicas: 1
       persistence:
         enabled: true
-        storageClass: zfs-nvme
-        size: 500Gi
+        storageClass: ceph-block
+        size: 300Gi
     gateway:
       replicas: 0
     backend:

@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: immich-ml-cache
 spec:
-  storageClassName: zfs-nvme
+  storageClassName: local-hostpath
   resources:
     requests:
       storage: 50Gi
@@ -16,7 +16,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: immich-thumbnails
 spec:
-  storageClassName: zfs-nvme
+  storageClassName: local-hostpath
   resources:
     requests:
       storage: 100Gi
@@ -28,7 +28,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: immich-encoded-video
 spec:
-  storageClassName: zfs-nvme
+  storageClassName: local-hostpath
   resources:
     requests:
       storage: 500Gi

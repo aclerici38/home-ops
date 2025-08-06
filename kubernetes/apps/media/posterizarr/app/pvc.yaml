@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: ${APP}
 spec:
-  storageClassName: zfs-nvme
+  storageClassName: ceph-block
   resources:
     requests:
-      storage: 100Gi
+      storage: 10Gi
   accessModes:
     - ReadWriteOnce

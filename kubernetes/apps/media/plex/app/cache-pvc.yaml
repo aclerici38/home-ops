@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: plex-cache
 spec:
-  storageClassName: zfs-nvme
+  storageClassName: local-hostpath
   resources:
     requests:
-      storage: 300Gi
+      storage: 100Gi
   accessModes:
     - ReadWriteOnce

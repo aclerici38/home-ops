@@ -116,21 +116,9 @@ spec:
             main:
               - path: /app/Data
       logs:
-        enabled: true
-        existingClaim: fileflows-logs
-        advancedMounts:
-          server:
-            main:
-              - path: /app/Logs
-                subPath: ff-server
-          node:
-            main:
-              - path: /app/Logs
-                subPath: ff-kube-bonds
-      manually-added:
-        existingClaim: fileflows-manually-added
+        type: emptyDir
         globalMounts:
-          - path: /app/ManuallyAdded
+          - path: /app/Logs
       temp:
         enabled: true
         type: emptyDir

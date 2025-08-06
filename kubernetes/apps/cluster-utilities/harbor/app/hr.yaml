@@ -59,7 +59,7 @@ spec:
           existingClaim: harbor-registry
         jobservice:
           jobLog:
-            storageClass: zfs-nvme
+            storageClass: ceph-block
             size: 1Gi
         database:
           storageClass: local-hostpath
