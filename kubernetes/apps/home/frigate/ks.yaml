@@ -31,7 +31,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_ACCESSMODES: ReadWriteMany
       VOLSYNC_CAPACITY: 25Gi
       CLIENT_ID: "217756b8-feda-4f0d-abb4-3ebd151f662d"
   patches:
