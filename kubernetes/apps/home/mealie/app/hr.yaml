@@ -104,7 +104,7 @@ spec:
         controller: ${APP}
         ports:
           http:
-            port: *port
+            port: &port 9000
     route:
       main:
         hostnames:
@@ -123,11 +123,12 @@ spec:
         globalMounts:
           - path: /app/data
       # Needed for recipe parser
-      tmp:
-        type: emptyDir
-      nonexistent:
-        type: emptyDir
-      nltk:
+      tmpfs:
         type: emptyDir
         globalMounts:
+          - path: /tmp
+            subPath: tmp
+          - path: /nonexistent
+            subPath: nonexistent
           - path: /nltk_data
+            subPath: nltk_data
