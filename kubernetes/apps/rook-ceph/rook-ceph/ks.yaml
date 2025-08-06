@@ -11,11 +11,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/rook-ceph/rook-ceph/app
-  components:
-    - ../../../../components/external-secret
-  dependsOn:
-    - name: external-secrets-stores
-      namespace: cluster-utilities
   prune: true
   sourceRef:
     kind: GitRepository
