@@ -7,7 +7,7 @@ metadata:
   annotations:
     k8tz.io/inject: false
 spec:
-  instances: ${CNPG_REPLICAS:=2}
+  instances: ${CNPG_REPLICAS:=1}
   primaryUpdateStrategy: ${CNPG_UPDATE_STRAT:=unsupervised}
   primaryUpdateMethod: switchover
   enablePDB: true
