@@ -16,7 +16,7 @@ spec:
     driver: zfs.csi.openebs.io
     fsType: zfs
     volumeAttributes:
-      openebs.io/poolname: nvme
+      openebs.io/poolname: ssd
     volumeHandle: backups
   nodeAffinity:
     required:
@@ -27,5 +27,5 @@ spec:
               values:
                 - bonds
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: zfs-nvme
+  storageClassName: zfs-ssd
   volumeMode: Filesystem
