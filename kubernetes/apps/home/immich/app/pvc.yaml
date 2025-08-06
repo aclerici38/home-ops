@@ -9,7 +9,7 @@ spec:
     requests:
       storage: 50Gi
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -33,4 +33,4 @@ spec:
     requests:
       storage: 500Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
