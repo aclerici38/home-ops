@@ -37,7 +37,7 @@ spec:
     volumeSnapshotClassName: openebs-zfs
     repository: "immich-volsync-storj-secret"
     cacheAccessModes: ["ReadWriteOnce"]
-    cacheStorageClassName: zfs-nvme
+    cacheStorageClassName: zfs-ssd
     cacheCapacity: 500Gi
     storageClassName: "zfs-tank"
     accessModes: ["ReadWriteMany"]
