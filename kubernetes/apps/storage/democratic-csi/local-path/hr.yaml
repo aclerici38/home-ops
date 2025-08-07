@@ -23,15 +23,6 @@ spec:
       retries: 1
   values:
     controller:
-      affinity: &aff
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: NotIn
-                values:
-                  - timmy
       enabled: true
       strategy: node
       externalAttacher:
@@ -72,13 +63,12 @@ spec:
       config:
         driver: local-hostpath
         local-hostpath:
-          shareBasePath: &storagePath /var/lib/csi-local-hostpath/global
+          shareBasePath: &storagePath /var/mnt/local-hostpath
           controllerBasePath: *storagePath
           dirPermissionsMode: "0770"
           dirPermissionsUser: 0
           dirPermissionsGroup: 0
     node:
-      affinity: *aff
       driver:
         extraVolumeMounts:
           - name: local-hostpath
