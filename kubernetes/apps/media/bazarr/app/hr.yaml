@@ -92,7 +92,7 @@ spec:
         controller: *app
         ports:
           http:
-            port: *port
+            port: &port 6767
     route:
       main:
         hostnames:
