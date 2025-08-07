@@ -40,8 +40,9 @@ spec:
           value: /tmp
       deviceClasses:
         - name: vg0
-          volumeGroup: topolvm
+          volume-group: topolvm
           default: true
+          spare-gb: 10
           thinPoolConfig:
             name: thinpool
             overprovisionRatio: 10
