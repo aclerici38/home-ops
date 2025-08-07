@@ -137,6 +137,21 @@ spec:
         cert-manager:
           url: https://raw.githubusercontent.com/kashalls/home-cluster/refs/heads/main/kubernetes/apps/monitoring/grafana/app/dashboards/cert-manager.json
           datasource: Prometheus
+        ceph-cluster:
+          # renovate: depName="Ceph Cluster"
+          gnetId: 2842
+          revision: 18
+          datasource: Prometheus
+        ceph-osd:
+          # renovate: depName="Ceph - OSD (Single)"
+          gnetId: 5336
+          revision: 9
+          datasource: Prometheus
+        ceph-pools:
+          # renovate: depName="Ceph - Pools"
+          gnetId: 5342
+          revision: 9
+          datasource: Prometheus
         external-dns:
           # renovate: depName="External-dns"
           gnetId: 15038
@@ -231,9 +246,9 @@ spec:
             - name: DS_PROMETHEUS
               value: Prometheus
         zfs:
-          # renovate: depName="ZFS dashboard"
-          gnetId: 19580
-          revision: 10
+          # renovate: depName="ZFS"
+          gnetId: 7845
+          revision: 4
           datasource: Prometheus
         jellyfin:
           url: https://raw.githubusercontent.com/rebelcore/jellyfin_grafana/refs/heads/master/dashboards/jellyfin.json
