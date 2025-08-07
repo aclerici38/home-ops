@@ -49,6 +49,11 @@ spec:
           postgresql:
             shared_preload_libraries:
               - "vchord.so"
+          bootstrap:
+            recovery:
+              recoveryTarget:
+                targetLSN:"64/B0A17F8"
+                exclusive: true
       target:
         kind: Cluster
 ---
