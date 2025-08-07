@@ -88,21 +88,21 @@ spec:
                 memory: 100Mi
               limits:
                 memory: 2Gi
-            # probes:
-            #   liveness: &probes
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       exec:
-            #         command:
-            #           - python
-            #           - -m
-            #           - mealie.scripts.healthcheck
-            #       periodSeconds: 10
-            #       failureThreshold: 12
-            #       initialDelaySeconds: 10
-            #       timeoutSeconds: 1
-            #   readiness: *probes
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - python
+                      - -m
+                      - mealie.scripts.healthcheck
+                  periodSeconds: 10
+                  failureThreshold: 12
+                  initialDelaySeconds: 10
+                  timeoutSeconds: 1
+              readiness: *probes
     service:
       main:
         controller: ${APP}

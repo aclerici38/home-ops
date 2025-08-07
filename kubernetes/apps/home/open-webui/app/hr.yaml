@@ -74,9 +74,9 @@ spec:
                   httpGet:
                     path: /health
                     port: &port 8080
-                  initialDelaySeconds: 3
                   periodSeconds: 10
-                  failureThreshold: 3
+                  failureThreshold: 12
+                  initialDelaySeconds: 10
               readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false

@@ -67,15 +67,19 @@ spec:
                   secretKeyRef:
                     name: ${APP}-db-app
                     key: dbname
-            # probes:
-            #   liveness: &probes
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       httpGet:
-            #         path: /health
-            #         port: &port 6767
-            #   readiness: *probes
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: &port 6767
+                  periodSeconds: 10
+                  failureThreshold: 12
+                  initialDelaySeconds: 10
+                  timeoutSeconds: 1
+              readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
