@@ -111,15 +111,13 @@ spec:
             timeouts:
               request: 3m
     persistence:
-      config:
-        existingClaim: *app
-        globalMounts:
-          - path: /config
-      temp:
-        enabled: true
+      tmfs:
         type: emptyDir
         globalMounts:
           - path: /tmp
+            subPath: tmp
+          - path: /config
+            subPath: config
       media:
         existingClaim: media
         globalMounts:
