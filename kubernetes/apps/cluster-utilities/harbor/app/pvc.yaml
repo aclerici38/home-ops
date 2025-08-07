@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: harbor-registry
 spec:
-  storageClassName: ceph-block
+  storageClassName: topolvm
   resources:
     requests:
       storage: 100Gi

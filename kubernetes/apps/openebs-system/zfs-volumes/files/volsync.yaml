@@ -37,7 +37,7 @@ spec:
     volumeSnapshotClassName: openebs-zfs
     repository: "files-volsync-storj-secret"
     cacheAccessModes: ["ReadWriteOnce"]
-    cacheStorageClassName: ceph-block
+    cacheStorageClassName: topolvm
     cacheCapacity: 100Gi
     storageClassName: "zfs-tank"
     accessModes: ["ReadWriteMany"]

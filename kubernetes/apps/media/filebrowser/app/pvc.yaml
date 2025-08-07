@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: filebrowser-cache
 spec:
-  storageClassName: ceph-block
+  storageClassName: topolvm
   resources:
     requests:
       storage: 30Gi

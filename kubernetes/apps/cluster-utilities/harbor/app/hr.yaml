@@ -59,7 +59,7 @@ spec:
           existingClaim: harbor-registry
         jobservice:
           jobLog:
-            storageClass: ceph-block
+            storageClass: topolvm
             size: 1Gi
         database:
           storageClass: local-hostpath

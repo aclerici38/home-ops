@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: open-webui
 spec:
-  storageClassName: ceph-block
+  storageClassName: topolvm
   resources:
     requests:
       storage: 10Gi

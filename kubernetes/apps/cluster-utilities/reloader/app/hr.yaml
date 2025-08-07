@@ -25,7 +25,6 @@ spec:
     reloader:
       autoReloadAll: true
       readOnlyRootFileSystem: true
-      ignoreNamespaces: rook-ceph
       podMonitor:
         enabled: true
         namespace: "{{ .Release.Namespace }}"

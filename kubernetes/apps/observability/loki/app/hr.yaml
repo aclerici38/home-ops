@@ -63,7 +63,7 @@ spec:
       replicas: 1
       persistence:
         enabled: true
-        storageClass: ceph-block
+        storageClass: topolvm
         size: 300Gi
     gateway:
       replicas: 0
