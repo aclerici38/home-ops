@@ -98,6 +98,10 @@ spec:
                       - python
                       - -m
                       - mealie.scripts.healthcheck
+                  periodSeconds: 10
+                  failureThreshold: 6
+                  initialDelaySeconds: 10
+                  timeoutSeconds: 1
               readiness: *probes
     service:
       main:
