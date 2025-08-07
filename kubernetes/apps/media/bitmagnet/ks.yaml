@@ -43,3 +43,5 @@ spec:
           affinity:
             nodeSelector:
               kubernetes.io/hostname: bonds
+      target:
+        kind: Cluster
