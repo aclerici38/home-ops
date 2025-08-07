@@ -93,11 +93,9 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  exec:
-                    command:
-                      - python
-                      - -m
-                      - mealie.scripts.healthcheck
+                  httpGet:
+                    port: &port 9000
+                    path: /api/app/about
                   periodSeconds: 10
                   failureThreshold: 12
                   initialDelaySeconds: 10
@@ -108,7 +106,7 @@ spec:
         controller: ${APP}
         ports:
           http:
-            port: &port 9000
+            port: *port
     route:
       main:
         hostnames:
