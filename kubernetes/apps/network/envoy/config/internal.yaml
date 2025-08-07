@@ -12,6 +12,11 @@ spec:
             spec:
               template:
                 spec:
+                  containers:
+                    - name: envoy
+                      resources:
+                        requests:
+                          memory: "128Mi"
                   tolerations:
                     - key: "location"
                       operator: "Equal"
