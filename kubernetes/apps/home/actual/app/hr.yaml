@@ -24,9 +24,8 @@ spec:
   values:
     controllers:
       *app :
-        type: statefulset
+        strategy: Recreate
         pod:
-          hostUsers: false
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
