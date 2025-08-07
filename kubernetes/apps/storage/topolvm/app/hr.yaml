@@ -46,7 +46,7 @@ spec:
           spare-gb: 10
           thin-pool:
             name: thinpool
-            overprovisionRatio: 10
+            overprovisionRatio: 5.0
           devices:
             - /dev/disk/by-partlabel/r-topolvm
       prometheus:
