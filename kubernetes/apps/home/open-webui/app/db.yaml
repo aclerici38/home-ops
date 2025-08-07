@@ -1,0 +1,13 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: ${APP}
+spec:
+  name: app
+  owner: app
+  cluster:
+    name: ${APP}-db
+  extensions:
+    - ensure: present
+      name: vector
