@@ -24,7 +24,6 @@ spec:
   values:
     controllers:
       jellyseerr:
-        type: statefulset
         pod:
           hostUsers: false
           securityContext:

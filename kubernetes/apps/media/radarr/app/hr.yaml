@@ -24,7 +24,6 @@ spec:
   values:
     controllers:
       radarr:
-        type: statefulset
         pod:
           nodeSelector:
             location: apartment

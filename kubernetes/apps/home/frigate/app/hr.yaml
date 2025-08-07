@@ -24,7 +24,6 @@ spec:
   values:
     controllers:
       ${APP}:
-        type: statefulset
         pod:
           # nodeSelector:
           #   kubernetes.io/hostname: "posey"

@@ -24,7 +24,6 @@ spec:
   values:
     controllers:
       ${APP}:
-        type: statefulset
         containers:
           main:
             image:

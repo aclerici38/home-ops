@@ -24,7 +24,6 @@ spec:
   values:
     controllers:
       apt:
-        type: statefulset
         containers:
           main: &container
             image:
@@ -94,7 +93,6 @@ spec:
                   enabled: true
                   type: HTTP
       house:
-        type: statefulset
         containers:
           main:
             <<: *container

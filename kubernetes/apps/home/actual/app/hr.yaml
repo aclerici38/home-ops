@@ -24,7 +24,7 @@ spec:
   values:
     controllers:
       *app :
-        strategy: Recreate
+        
         pod:
           securityContext:
             runAsUser: 1000

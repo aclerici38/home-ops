@@ -24,7 +24,6 @@ spec:
   values:
     controllers:
       *app :
-        type: statefulset
         pod:
           securityContext:
             runAsNonRoot: true

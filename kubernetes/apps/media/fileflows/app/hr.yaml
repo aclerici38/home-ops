@@ -24,7 +24,8 @@ spec:
   values:
     controllers:
       server:
-        type: statefulset
+        pod:
+          hostname: ff-server
         containers:
           main: &container
             image:
@@ -57,7 +58,10 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
       node:
-        type: statefulset
+        pod:
+          hostname: ff-node-bonds
+          nodeSelector:
+            kubernetes.io/hostname: bonds
         containers:
           main:
             <<: *container
