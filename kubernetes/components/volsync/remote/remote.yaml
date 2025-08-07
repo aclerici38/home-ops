@@ -33,7 +33,7 @@ spec:
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     pruneIntervalDays: 14
     repository: "${APP}-volsync-r2-secret"
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-topolvmpool}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-topolvm}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-topolvm}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]
     storageClassName: "${VOLSYNC_STORAGECLASS:-topolvm}"
@@ -58,7 +58,7 @@ spec:
   restic:
     repository: "${APP}-volsync-r2-secret"
     copyMethod: Snapshot
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-topolvmpool}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-topolvm}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-topolvm}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]
     cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:-2Gi}"

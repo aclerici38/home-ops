@@ -53,7 +53,7 @@ spec:
   restic:
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     pruneIntervalDays: 14
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-topolvmpool}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-topolvm}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-topolvm}"
     repository: "${APP}-volsync-versity-secret"
     cacheAccessModes: ["ReadWriteOnce"]
@@ -80,7 +80,7 @@ spec:
   restic:
     repository: "${APP}-volsync-versity-secret"
     copyMethod: Snapshot
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-topolvmpool}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-topolvm}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-topolvm}"
     cacheAccessModes: ["ReadWriteOnce"]
     storageClassName: "${VOLSYNC_STORAGECLASS:-topolvm}"
