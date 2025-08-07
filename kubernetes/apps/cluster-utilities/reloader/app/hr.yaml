@@ -22,10 +22,10 @@ spec:
     remediation:
       retries: 1
   values:
-    fullnameOverride: *app
     reloader:
       autoReloadAll: true
       readOnlyRootFileSystem: true
+      ignoreNamespaces: rook-ceph
       podMonitor:
         enabled: true
         namespace: "{{ .Release.Namespace }}"
