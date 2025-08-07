@@ -32,7 +32,7 @@ spec:
       tag: 0.37.0@sha256:1c18d5e7a0b2f4ca970f5b73b9781f8bdb7b2236f717926e7c9f8eb61c6ab56a
       pullPolicy: IfNotPresent
     lvmd:
-      managed: false
+      managed: true
       nodeSelector: &ns
         kubernetes.io/hostname: bonds
       env:
@@ -47,13 +47,11 @@ spec:
           thin-pool:
             name: thinpool
             overprovision-ratio: 5.0
-          devices:
-            - /dev/disk/by-partlabel/r-topolvm
       prometheus:
         podMonitor:
           enabled: true
     node:
-      lvmdEmbedded: true
+      lvmdEmbedded: false
       nodeSelector: *ns
       prometheus:
         podMonitor:
