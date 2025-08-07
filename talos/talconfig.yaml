@@ -49,6 +49,8 @@ nodes:
       location: "apartment"
     kernelModules:
       - name: zfs
+      - name: dm_thin_pool
+      - name: dm_mod
     schematic:
       customization:
         extraKernelArgs: &amdArgs
