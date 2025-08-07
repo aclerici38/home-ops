@@ -32,7 +32,7 @@ spec:
       tag: 0.37.0@sha256:1c18d5e7a0b2f4ca970f5b73b9781f8bdb7b2236f717926e7c9f8eb61c6ab56a
       pullPolicy: IfNotPresent
     lvmd:
-      managed: true
+      managed: false
       nodeSelector: &ns
         kubernetes.io/hostname: bonds
       env:
@@ -53,7 +53,7 @@ spec:
         podMonitor:
           enabled: true
     node:
-      lvmdEmbedded: false
+      lvmdEmbedded: true
       nodeSelector: *ns
       prometheus:
         podMonitor:
