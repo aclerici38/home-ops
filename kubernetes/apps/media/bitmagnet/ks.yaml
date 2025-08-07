@@ -32,7 +32,7 @@ spec:
       APP: *app
       CNPG_CAPACITY: 300Gi
       CNPG_REPLICAS: '1'
-      CNPG_STORAGECLASS: local-hostpath
+      CNPG_STORAGECLASS: topolvm
   patches:
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1

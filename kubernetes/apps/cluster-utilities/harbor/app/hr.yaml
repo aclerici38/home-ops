@@ -62,10 +62,10 @@ spec:
             storageClass: topolvm
             size: 1Gi
         database:
-          storageClass: local-hostpath
+          storageClass: topolvm
           size: 1Gi
         redis:
-          storageClass: local-hostpath
+          storageClass: topolvm
           size: 1Gi
     redis:
       type: external

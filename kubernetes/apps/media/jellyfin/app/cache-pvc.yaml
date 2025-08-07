@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: jellyfin-cache
 spec:
-  storageClassName: local-hostpath
+  storageClassName: topolvm
   resources:
     requests:
       storage: 100Gi

@@ -34,7 +34,7 @@ spec:
     substitute:
       APP: *app
       CNPG_CAPACITY: 500Gi
-      CNPG_STORAGECLASS: local-hostpath
+      CNPG_STORAGECLASS: topolvm
       CNPG_REPLICAS: '2'
   patches:
     - patch: |-
