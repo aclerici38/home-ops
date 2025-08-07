@@ -42,6 +42,7 @@ spec:
         - name: vg0
           volume-group: topolvm
           default: true
+          type: thin
           spare-gb: 10
           thin-pool:
             name: thinpool
