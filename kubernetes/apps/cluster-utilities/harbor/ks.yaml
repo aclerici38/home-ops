@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-utilities/harbor/app
   components:
-    - ../../../../components/cnpg/overlay/restore
+    - ../../../../components/cnpg/overlay/init
     - ../../../../components/external-secret
   prune: true
   sourceRef:
