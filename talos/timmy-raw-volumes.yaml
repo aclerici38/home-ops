@@ -1,9 +1,0 @@
----
-apiVersion: v1alpha1
-kind: RawVolumeConfig
-name: ceph-block
-provisioning:
-  diskSelector:
-    match: "system_disk"
-  maxSize: 1Ti
-  grow: false

@@ -165,12 +165,10 @@ nodes:
         provisioning:
           diskSelector:
             match: system_disk
-          maxSize: "500GiB"
-          grow: false
+          minSize: "500GiB"
+          grow: true
         filesystem:
           type: xfs
-    extraManifests:
-      - timmy-raw-volumes.yaml
   - hostname: "posey"
     ipAddress: "${POSEY_IP}"
     installDiskSelector:
