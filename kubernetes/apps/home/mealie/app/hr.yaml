@@ -99,7 +99,7 @@ spec:
                       - -m
                       - mealie.scripts.healthcheck
                   periodSeconds: 10
-                  failureThreshold: 6
+                  failureThreshold: 12
                   initialDelaySeconds: 10
                   timeoutSeconds: 1
               readiness: *probes
