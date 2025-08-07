@@ -43,7 +43,7 @@ spec:
           volume-group: topolvm
           default: true
           spare-gb: 10
-          thinPoolConfig:
+          thin-pool:
             name: thinpool
             overprovisionRatio: 10
           devices:
