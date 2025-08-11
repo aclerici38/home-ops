@@ -69,6 +69,7 @@ spec:
                 memory: 500Mi
               limits:
                 gpu.intel.com/i915: 1
+                cpu: "8"
                 memory: 8Gi
     service:
       main:
