@@ -121,6 +121,9 @@ spec:
                   httpGet:
                     path: /ping
                     port: &mlPort 3003
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  failureThreshold: 6
               readiness: *probes
               startup:
                 enabled: true
@@ -131,7 +134,6 @@ spec:
                     port: *mlPort
                   initialDelaySeconds: 0
                   periodSeconds: 10
-                  timeoutSeconds: 2
                   failureThreshold: 60
             securityContext: *contSec
     defaultPodOptions:
