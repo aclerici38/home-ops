@@ -78,6 +78,8 @@ spec:
         containers:
           main:
             <<: *container
+            probes:
+              enabled: false
             env:
               <<: *env
               IMMICH_WORKERS_INCLUDE: microservices
