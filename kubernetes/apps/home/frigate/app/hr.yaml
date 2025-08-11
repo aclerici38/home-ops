@@ -25,26 +25,24 @@ spec:
     controllers:
       ${APP}:
         pod:
-          # nodeSelector:
-          #   kubernetes.io/hostname: "posey"
-          # tolerations:
-          #   - key: "location"
-          #     operator: "Equal"
-          #     value: "house"
-          #     effect: "NoSchedule"
+          nodeSelector:
+            kubernetes.io/hostname: "posey"
+          tolerations:
+            - key: "location"
+              operator: "Equal"
+              value: "house"
+              effect: "NoSchedule"
           securityContext:
             runAsNonRoot: false
             runAsUser: 0
             runAsGroup: 0
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: Unconfined }
-            supplementalGroups:
-              - 44
         containers:
           main:
             image:
               repository: ghcr.io/blakeblackshear/frigate
-              tag: 0.16.0-rc2@sha256:f86041603153a2ac7394259fa32fe70d23c56b863e58226e7d24aceda7b42c57
+              tag: 0.16.0-rc4
             env:
               YOLO_MODELS: yolov7x-320
               HF_HOME: /tmp
@@ -94,11 +92,10 @@ spec:
                   failureThreshold: 60
             resources:
               requests:
-                cpu: 1000m
+                cpu: 2000m
                 memory: 2Gi
               limits:
                 memory: 16Gi
-                gpu.intel.com/i915: 1
     service:
       main:
         controller: ${APP}
@@ -136,16 +133,14 @@ spec:
         existingClaim: frigate-media
         globalMounts:
           - path: /media/frigate
-      run:
-        type: emptyDir
-      tmp:
-        type: emptyDir
-      shm:
-        enabled: true
+      tmpfs:
         type: emptyDir
         globalMounts:
+          - path: /run
+            subPath: run
+          - path: /tmp
+            subPath: tmp
           - path: /dev/shm
-      letsencrypt:
-        type: emptyDir
-        globalMounts:
+            subPath: shm
           - path: /etc/letsencrypt
+            subPath: letsencrypt

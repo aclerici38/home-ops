@@ -4,9 +4,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: frigate-media
 spec:
-  storageClassName: zfs-tank
+  storageClassName: synology-nfs
   resources:
     requests:
       storage: 5Ti
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
