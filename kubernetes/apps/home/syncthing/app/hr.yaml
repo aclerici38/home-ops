@@ -55,18 +55,16 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  exec:
-                    command:
-                      - sh
-                      - -c
-                      - 'curl -fkLsS -m 2 127.0.0.1:8384/rest/noauth/health | grep -o --color=never OK || exit 1'
+                  httpGet:
+                    port: &port 8384
+                    path: /rest/noauth/health
               readiness: *probes
     service:
       main:
         controller: *app
         ports:
           http:
-            port: &port 8384
+            port: *port
           tcp:
             port: 22000
           quic:
