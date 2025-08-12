@@ -187,6 +187,8 @@ nodes:
       - name: nvidia_uvm
       - name: nvidia_drm
       - name: nvidia_modeset
+      - name: dm_thin_pool
+      - name: dm_mod
     schematic:
       customization:
         extraKernelArgs: *amdArgs

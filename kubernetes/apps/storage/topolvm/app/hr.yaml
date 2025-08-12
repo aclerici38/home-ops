@@ -33,8 +33,26 @@ spec:
       pullPolicy: IfNotPresent
     lvmd:
       managed: true
-      nodeSelector: &ns
-        kubernetes.io/hostname: bonds
+      tolerations: &tol
+        - key: "location"
+          operator: "Equal"
+          value: "cloud"
+          effect: "NoSchedule"
+        - key: "location"
+          operator: "Equal"
+          value: "house"
+          effect: "NoSchedule"
+      affinity: &aff
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - bonds
+                      - posey
+
       env:
         - name: LVM_SYSTEM_DIR
           value: /tmp
@@ -52,7 +70,8 @@ spec:
           enabled: true
     node:
       lvmdEmbedded: false
-      nodeSelector: *ns
+      affinity: *aff
+      tolerations: *tol
       prometheus:
         podMonitor:
           enabled: true
@@ -60,15 +79,7 @@ spec:
       prometheus:
         podMonitor:
           enabled: true
-      tolerations:
-        - key: "location"
-          operator: "Equal"
-          value: "cloud"
-          effect: "NoSchedule"
-        - key: "location"
-          operator: "Equal"
-          value: "house"
-          effect: "NoSchedule"
+      tolerations: *tol
     snapshot:
       enabled: true
     cert-manager:
