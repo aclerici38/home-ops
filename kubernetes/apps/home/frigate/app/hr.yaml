@@ -106,7 +106,7 @@ spec:
             targetPort: *http-auth
           http:
             primary: true
-            port: *http
+            port: &http 5000
             targetPort: *http
           rtsp:
             port: &rtsp 8554
