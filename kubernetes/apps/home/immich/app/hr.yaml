@@ -121,7 +121,7 @@ spec:
                     port: &mlPort 3003
                   initialDelaySeconds: 0
                   periodSeconds: 10
-                  failureThreshold: 6
+                  failureThreshold: 10
               readiness: *probes
               startup:
                 enabled: true
