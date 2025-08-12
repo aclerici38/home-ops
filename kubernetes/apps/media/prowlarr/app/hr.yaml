@@ -115,7 +115,7 @@ spec:
             - identifier: main
               port: *port
             timeouts:
-              request: 3m
+              request: 0s
     persistence:
       config:
         type: emptyDir
