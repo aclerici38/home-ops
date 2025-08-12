@@ -2,22 +2,11 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: ${APP}
-spec:
-  accessModes: ["ReadWriteOnce"]
-  resources:
-    requests:
-      storage: 25Gi
-  storageClassName: local-hostpath-posey
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
   name: ${APP}-plugins
 spec:
   accessModes: ["ReadWriteOnce"]
   resources:
     requests:
       storage: 10Gi
-  storageClassName: local-hostpath-posey
+  storageClassName: topolvm
 
