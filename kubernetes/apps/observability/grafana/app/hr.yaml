@@ -254,6 +254,11 @@ spec:
           url: https://raw.githubusercontent.com/rebelcore/jellyfin_grafana/refs/heads/master/dashboards/jellyfin.json
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
+        cnpg:
+          # renovate: depName="Cloudnative-PG"
+          gnetId: 20417
+          revision: 4
+          datasource: Prometheus
     sidecar:
       dashboards:
         enabled: true
