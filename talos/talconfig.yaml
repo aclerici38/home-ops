@@ -115,7 +115,7 @@ nodes:
         filesystem:
           type: xfs
     extraManifests:
-      - bonds-raw-volumes.yaml
+      - ./volumes/bonds-raw-volumes.yaml
   - hostname: "timmy"
     ipAddress: "${TIMMY_IP}"
     installDiskSelector:
@@ -157,18 +157,11 @@ nodes:
         provisioning:
           diskSelector:
             match: system_disk
-          maxSize: 100GiB
+          maxSize: 200GB
           grow: false
     # TODO: Update with raw volumes once supported
-    userVolumes:
-      - name: local-hostpath
-        provisioning:
-          diskSelector:
-            match: system_disk
-          minSize: "500GiB"
-          grow: true
-        filesystem:
-          type: xfs
+    extraManifests:
+      - ./volumes/timmy-raw-volumes.yaml
   - hostname: "posey"
     ipAddress: "${POSEY_IP}"
     installDiskSelector:
@@ -240,7 +233,7 @@ nodes:
           maxSize: 200GB
           grow: false
     extraManifests:
-      - posey-raw-volumes.yaml
+      - ./volumes/posey-raw-volumes.yaml
   - hostname: "madbum"
     ipAddress: "${MADBUM_IP}"
     installDiskSelector:
