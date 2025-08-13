@@ -37,7 +37,6 @@ spec:
       APP: *app
       CNPG_IMAGE: ghcr.io/tensorchord/cloudnative-vectorchord:17.5-0.4.3@sha256:acebb38ca309938bc05ce268b019c98aa718cb554dd54e4443654d9d00a0d498
       CNPG_CAPACITY: 20Gi
-      CNPG_STORAGECLASS: local-hostpath
       CNPG_REPLICAS: '2'
   patches:
     - patch: |-
