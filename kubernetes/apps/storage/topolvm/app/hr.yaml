@@ -89,7 +89,7 @@ spec:
         storageClass:
           fsType: xfs
           isDefaultClass: true
-          volumeBindingMode: Immediate
+          volumeBindingMode: WaitForFirstConsumer
           allowVolumeExpansion: true
           additionalParameters:
             "topolvm.io/device-class": "vg0"
