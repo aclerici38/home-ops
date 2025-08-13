@@ -1,0 +1,14 @@
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: HTTPRouteFilter
+metadata:
+  name: robots
+spec:
+  directResponse:
+    contentType: text/plain
+    statusCode: 200
+    body:
+      type: ValueRef
+      valueRef:
+        kind: ConfigMap
+        name: envoy-robots-txt
