@@ -128,11 +128,11 @@ nodes:
     nodeLabels:
       location: "apartment"
     controlPlane: false
+    talosImageURL: ghcr.io/ant385525/installer
+    kernelModules:
+      - name: dm_thin_pool
+      - name: dm_mod
     patches:
-      - |-
-        - op: replace
-          path: /machine/install/image
-          value: ghcr.io/ant385525/installer:v1.11.0-beta.2-rpi5
       - "@./patches/wireguard/posey.yaml"
       - "@./patches/wireguard/madbum.yaml"
       - "@./patches/wireguard/house-opnsense.yaml"
