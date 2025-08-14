@@ -34,13 +34,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_STORAGECLASS: &sc local-hostpath-madbum
-      CNPG_REPLICAS: '2'
-      VOLSYNC_SNAPSHOTCLASS: *sc
-      VOLSYNC_CACHE_STORAGECLASS: *sc
-      CNPG_STORAGECLASS: *sc
-      VOLSYNC_CAPACITY: 500Mi
-      VOLSYNC_COPYMETHOD: Direct
+      CNPG_STORAGECLASS: local-hostpath-madbum
       CNPG_AFFINITY_TYPE: preferred
   patches:
     - patch: |-
