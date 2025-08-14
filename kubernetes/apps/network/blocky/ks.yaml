@@ -30,6 +30,7 @@ spec:
     substitute:
       APP: *app
       CNPG_STORAGECLASS: local-hostpath-madbum
+      CNPG_AFFINITY_TYPE: preferred
   patches:
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1
