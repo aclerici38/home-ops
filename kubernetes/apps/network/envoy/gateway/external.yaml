@@ -32,9 +32,3 @@ spec:
         certificateRefs:
           - kind: Secret
             name: ${SECRET_DOMAIN/./-}-tls
-    - name: plex-tcp
-      protocol: TCP
-      port: 32400
-      allowedRoutes:
-        namespaces:
-          from: All
