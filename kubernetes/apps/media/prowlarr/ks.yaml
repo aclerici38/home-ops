@@ -34,5 +34,3 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      CNPG_STORAGECLASS: local-hostpath-madbum
-      CNPG_AFFINITY_TYPE: preferred
