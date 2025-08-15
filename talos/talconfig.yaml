@@ -4,7 +4,7 @@ talosVersion: ${TALOS_VERSION}
 kubernetesVersion: ${KUBE_VERSION}
 
 clusterName: dormammu
-endpoint: https://${CLOUD_IP}:6443
+endpoint: https://${MADBUM_IP}:6443
 
 clusterPodNets:
   - "172.16.0.0/16"
@@ -28,7 +28,6 @@ additionalApiServerCertSans: &sans
   - "bonds"
   - "madbum"
   - "timmy"
-  - "cloud.${SECRET_DOMAIN}"
 additionalMachineCertSans: *sans
 
 # Disable built-in Flannel to use Cilium
