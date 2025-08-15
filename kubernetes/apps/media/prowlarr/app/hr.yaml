@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app prowlarr
+  name: prowlarr
 spec:
   interval: 1h
   maxHistory: 1
@@ -23,17 +23,10 @@ spec:
       retries: 1
   values:
     controllers:
-      *app :
+      ${APP}:
         strategy: RollingUpdate
         pod:
           hostUsers: false
-          nodeSelector:
-            location: cloud
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "cloud"
-              effect: "NoSchedule"
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -98,7 +91,7 @@ spec:
                 memory: 2Gi
     service:
       main:
-        controller: *app
+        controller: ${APP}
         ports:
           http:
             port: *port
