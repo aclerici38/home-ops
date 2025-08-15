@@ -8,7 +8,7 @@ metadata:
     k8tz.io/inject: false
 spec:
   affinity:
-    podAntiAffinityType: ${CNPG_AFFINITY_TYPE:=required}
+    podAntiAffinityType: ${CNPG_AFFINITY_TYPE:=preferred}
   instances: ${CNPG_REPLICAS:=2}
   primaryUpdateStrategy: ${CNPG_UPDATE_STRAT:=unsupervised}
   primaryUpdateMethod: switchover
