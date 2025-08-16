@@ -39,7 +39,6 @@ spec:
       APP: *app
       VOLSYNC_CAPACITY: 10Gi
   patches:
-    # Fileflows doesn't allow db config via envs, set a static password to prevent rolling it on db restores
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1
         kind: Cluster
@@ -50,8 +49,8 @@ spec:
             recovery:
               source: mealie-db
               recoveryTarget:
-                targetTime: "2025-08-14T03:16:00Z"
-                exclusive: true
+                backupID: "20250814T110022"
                 targetTLI: "56"
+                exclusive: true
       target:
         kind: Cluster
