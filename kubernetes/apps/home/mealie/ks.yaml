@@ -47,7 +47,8 @@ spec:
         spec:
           bootstrap:
             recovery:
-              recoveryTarget: "20250812T110015"
-              targetImmediate: true
+              recoveryTarget:
+                backupID: "20250812T110015"
+                targetImmediate: true
       target:
         kind: Cluster
