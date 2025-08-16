@@ -49,6 +49,10 @@ spec:
               capabilities:
                 drop:
                   - ALL
+    service:
+      app:
+        controller: recyclarr
+        enabled: false
     persistence:
       config:
         type: emptyDir
@@ -58,7 +62,3 @@ spec:
             subPath: recyclarr.yml
         name: recyclarr-config
         type: configMap
-    service:
-      app:
-        controller: recyclarr
-        enabled: false

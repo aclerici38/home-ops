@@ -111,7 +111,7 @@ spec:
             timeouts:
               request: 0s
     persistence:
-      tmfs:
+      tmpfs:
         type: emptyDir
         globalMounts:
           - path: /tmp

@@ -110,7 +110,10 @@ spec:
             timeouts:
               request: 0s
     persistence:
-      config:
+      tmpfs:
         type: emptyDir
-      tmp:
-        type: emptyDir
+        globalMounts:
+          - path: /config
+            subPath: config
+          - path: /tmp
+            subPath: tmp

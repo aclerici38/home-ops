@@ -65,9 +65,10 @@ spec:
           http:
             port: *port
     persistence:
-      tmp:
-        type: emptyDir
-      local:
+      tmpfs:
         type: emptyDir
         globalMounts:
+          - path: /tmp
+            subPath: tmp
           - path: /app/.local
+            subPath: local

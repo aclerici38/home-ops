@@ -79,9 +79,10 @@ spec:
               - identifier: main
                 port: *port
     persistence:
-      tmp:
-        type: emptyDir
-      cache:
+      tmpfs:
         type: emptyDir
         globalMounts:
+          - path: /tmp
+            subPath: tmp
           - path: /var/cache/nginx
+            subPath: nginx

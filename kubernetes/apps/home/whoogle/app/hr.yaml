@@ -91,9 +91,10 @@ spec:
             - identifier: main
               port: *port
     persistence:
-      config:
-        type: emptyDir
-      build:
+      tmpfs:
         type: emptyDir
         globalMounts:
+          - path: /config
+            subPath: config
           - path: /whoogle/app/static/build
+            subPath: build

@@ -100,16 +100,15 @@ spec:
             timeouts:
               request: 0s
     persistence:
-      tmp:
-        type: emptyDir
-      cache:
+      tmpfs:
         type: emptyDir
         globalMounts:
+          - path: /tmp
+            subPath: tmp
           - path: /app/downloaded_files
-      log:
-        type: emptyDir
-        globalMounts:
+            subPath: downloads
           - path: /var/log/cwa-book-downloader/
+            subPath: logs
       ingest:
         type: nfs
         server: ${MEDIA_NFS_LB_IP}

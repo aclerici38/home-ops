@@ -92,24 +92,18 @@ spec:
         existingClaim: hass-cache
         globalMounts:
           - path: /venv
-      dockerenv:
-        # Because of https://github.com/home-assistant/core/blob/0d66d298ec57b8e50379cc2ec31cbebf771705c3/homeassistant/util/package.py#L29
-        enabled: true
+      tmpfs:
         type: emptyDir
         globalMounts:
+          # Because of https://github.com/home-assistant/core/blob/0d66d298ec57b8e50379cc2ec31cbebf771705c3/homeassistant/util/package.py#L29
           - path: /.dockerenv
-      logs:
-        type: emptyDir
-        globalMounts:
+            subPath: dockerenv
           - path: /config/logs
-      tts:
-        type: emptyDir
-        globalMounts:
+            subPath: logs
           - path: /config/tts
-      tmp:
-        type: emptyDir
-        globalMounts:
+            subPath: tts
           - path: /tmp
+            subPath: tmp
       dbus:
         type: hostPath
         hostPath: /run/dbus

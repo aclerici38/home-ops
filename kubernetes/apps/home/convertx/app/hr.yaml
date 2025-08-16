@@ -81,9 +81,10 @@ spec:
             - identifier: main
               port: *port
     persistence:
-      data:
+      tmpfs:
         type: emptyDir
         globalMounts:
           - path: /app/data
-      nonexistent:
-        type: emptyDir
+            subPath: data
+          - path: /nonexistent
+            subPath: nonexistent

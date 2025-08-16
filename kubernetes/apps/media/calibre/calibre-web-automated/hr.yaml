@@ -107,10 +107,13 @@ spec:
         existingClaim: *app
         globalMounts:
           - path: /config
-      cache:
+      tmpfs:
         type: emptyDir
-      tmp:
-        type: emptyDir
+        globalMounts:
+          - path: /cache
+            subPath: cache
+          - path: /tmp
+            subPath: tmp
       media:
         existingClaim: media
         globalMounts:
