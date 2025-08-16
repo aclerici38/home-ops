@@ -33,6 +33,7 @@ spec:
               tag: 25.8.3.5839@sha256:3c66305f918f7eee63124aed6347b880a1cdbfdb4231f1ec793ea7e68a8e015b
             env:
               PORT: &port 5000
+              BASE_DIR: &dir /config
             probes:
               liveness: &probes
                 enabled: true
@@ -112,19 +113,14 @@ spec:
         advancedMounts:
           server:
             main:
-              - path: /app/Data
+              - path: *dir
       node-data:
         type: emptyDir
         advancedMounts:
           node:
             main:
               - path: /app/Data
-      logs:
-        type: emptyDir
-        globalMounts:
-          - path: /app/Logs
-      temp:
-        enabled: true
+      tmpfs:
         type: emptyDir
         globalMounts:
           - path: /temp
@@ -132,22 +128,16 @@ spec:
           # Mutex
           - path: /tmp
             subPath: tmp
-      dockermods:
-        type: emptyDir
-        globalMounts:
+          - path: /app/Logs
+            subPath: logs
           - path: /app/DockerMods
-      plugins:
-        type: emptyDir
-        globalMounts:
+            subPath: dockermods
           - path: /app/Plugins
-      templates:
-        type: emptyDir
-        globalMounts:
+            subPath: plugins
           - path: /app/Templates
-      i18n:
-        type: emptyDir
-        globalMounts:
+            subPath: templates
           - path: /app/Server/wwwroot/i18n
+            subPath: i18n
       media:
         existingClaim: media
         globalMounts:
