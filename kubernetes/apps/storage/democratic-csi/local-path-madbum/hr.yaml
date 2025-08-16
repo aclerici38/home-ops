@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app local-path-madbum
+  name: local-path-madbum
 spec:
   interval: 1h
   maxHistory: 1

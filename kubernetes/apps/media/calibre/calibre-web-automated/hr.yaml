@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app calibre-web-automated
+  name: calibre-web-automated
 spec:
   interval: 1h
   maxHistory: 1
@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      *app :
+      ${APP}:
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
@@ -71,7 +71,7 @@ spec:
               readiness: *probes
     service:
       main:
-        controller: *app
+        controller: ${APP}
         ports:
           http:
             port: *port
@@ -104,7 +104,7 @@ spec:
                 port: *port
     persistence:
       config:
-        existingClaim: *app
+        existingClaim: ${APP}
         globalMounts:
           - path: /config
       tmpfs:

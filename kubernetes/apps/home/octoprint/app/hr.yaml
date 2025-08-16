@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app octoprint
+  name: octoprint
 spec:
   interval: 1h
   maxHistory: 1
@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      *app :
+      ${APP}:
         pod:
           tolerations:
             - key: "location"
@@ -82,7 +82,7 @@ spec:
                 type: HTTP
     service:
       main:
-        controller: *app
+        controller: ${APP}
         ports:
           http:
             port: &port 5000
@@ -99,14 +99,14 @@ spec:
             - identifier: main
               port: *port
     persistence:
-      *app :
-        existingClaim: *app
+      ${APP}:
+        existingClaim: ${APP}
         globalMounts:
           - path: /octoprint/octoprint
       plugins:
         existingClaim: octoprint-plugins
         advancedMounts:
-          *app :
+          ${APP}:
             plugin-init:
               - path: /tmp/plugins
             app:

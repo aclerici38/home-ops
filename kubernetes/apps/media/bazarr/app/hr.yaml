@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app bazarr
+  name: bazarr
 spec:
   interval: 1h
   maxHistory: 1
@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      *app :
+      ${APP}:
         pod:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
@@ -92,7 +92,7 @@ spec:
                 memory: 4Gi
     service:
       main:
-        controller: *app
+        controller: ${APP}
         ports:
           http:
             port: &port 6767
@@ -112,7 +112,7 @@ spec:
               request: 0s
     persistence:
       config:
-        existingClaim: *app
+        existingClaim: ${APP}
         globalMounts:
           - path: /config
       media:

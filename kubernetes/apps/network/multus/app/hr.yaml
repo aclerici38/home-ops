@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app multus
+  name: multus
 spec:
   interval: 1h
   maxHistory: 1
@@ -26,7 +26,7 @@ spec:
       multus:
         type: daemonset
         serviceAccount:
-          identifier: *app
+          identifier: ${APP}
         pod:
           hostNetwork: true
           tolerations:

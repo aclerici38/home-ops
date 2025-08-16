@@ -3,13 +3,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app envoy
+  name: envoy
 spec:
   interval: 1h
   maxHistory: 1
   chartRef:
     kind: OCIRepository
-    name: *app
+    name: ${APP}
     namespace: flux-system
   install:
     crds: CreateReplace

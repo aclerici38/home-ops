@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app immich
+  name: immich
 spec:
   interval: 1h
   maxHistory: 1
@@ -190,7 +190,7 @@ spec:
     persistence:
       media:
         enabled: true
-        existingClaim: *app
+        existingClaim: ${APP}
         advancedMounts:
           microservices:
             main: &mounts

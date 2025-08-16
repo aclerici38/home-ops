@@ -3,13 +3,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app k8s-gateway
+  name: k8s-gateway
 spec:
   interval: 1h
   maxHistory: 1
   chartRef:
     kind: OCIRepository
-    name: *app
+    name: ${APP}
     namespace: flux-system
   install:
     crds: CreateReplace
@@ -62,7 +62,7 @@ spec:
       enabled: true
     serviceAccount:
       create: true
-      name: *app
+      name: ${APP}
     tolerations:
       - key: "location"
         operator: "Equal"

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app zigbee2mqtt
+  name: zigbee2mqtt
 spec:
   interval: 1h
   maxHistory: 1
@@ -150,14 +150,14 @@ spec:
                 port: *port
     persistence:
       apt-data:
-        existingClaim: *app
+        existingClaim: ${APP}
         advancedMounts:
           apt:
             main:
               - path: /data
                 subPath: apt
       house-data:
-        existingClaim: *app
+        existingClaim: ${APP}
         advancedMounts:
           house:
             main:

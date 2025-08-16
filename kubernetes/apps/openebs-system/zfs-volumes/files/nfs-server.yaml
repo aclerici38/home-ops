@@ -24,7 +24,7 @@ spec:
       retries: 1
   values:
     controllers:
-      *app :
+      ${APP}:
         strategy: RollingUpdate
         pod:
           securityContext:
@@ -63,7 +63,7 @@ spec:
               privileged: true
     service:
       main:
-        controller: *app
+        controller: ${APP}
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: ${FILES_NFS_LB_IP}

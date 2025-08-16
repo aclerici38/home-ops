@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app bitmagnet
+  name: bitmagnet
 spec:
   interval: 1h
   maxHistory: 1
@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      *app :
+      ${APP}:
         strategy: RollingUpdate
         pod:
           hostUsers: false
@@ -104,7 +104,7 @@ spec:
               readiness: *probes
     service:
       main:
-        controller: *app
+        controller: ${APP}
         ports:
           http:
             port: *port
@@ -130,6 +130,6 @@ spec:
       tmp:
         type: emptyDir
         advancedMounts:
-          *app :
+          ${APP}:
             gluetun:
               - path: /tmp/gluetun

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app searxng
+  name: searxng
 spec:
   interval: 1h
   maxHistory: 1
@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      *app :
+      ${APP}:
         pod:
           # hostUsers: false
           nodeSelector:
@@ -91,7 +91,7 @@ spec:
                   - ALL
     service:
       main:
-        controller: *app
+        controller: ${APP}
         ports:
           http:
             port: *port

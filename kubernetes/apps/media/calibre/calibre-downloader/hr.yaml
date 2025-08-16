@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app calibre-downloader
+  name: calibre-downloader
 spec:
   interval: 1h
   maxHistory: 1
@@ -24,7 +24,7 @@ spec:
     - name: media-nfs-server
   values:
     controllers:
-      *app :
+      ${APP}:
         strategy: RollingUpdate
         pod:
           nodeSelector:
@@ -81,7 +81,7 @@ spec:
               allowPrivilegeEscalation: false
     service:
       main:
-        controller: *app
+        controller: ${APP}
         ports:
           http:
             port: *port

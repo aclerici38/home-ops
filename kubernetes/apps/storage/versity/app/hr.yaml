@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app versity
+  name: versity
 spec:
   interval: 1h
   maxHistory: 1
@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      *app :
+      ${APP}:
         strategy: RollingUpdate
         pod:
           securityContext:
@@ -68,7 +68,7 @@ spec:
                 memory: 512Mi
     service:
       main:
-        controller: *app
+        controller: ${APP}
         ports:
           http:
             port: *port
