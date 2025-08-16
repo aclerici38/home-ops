@@ -33,7 +33,6 @@ spec:
               tag: 25.8.3.5839@sha256:3c66305f918f7eee63124aed6347b880a1cdbfdb4231f1ec793ea7e68a8e015b
             env:
               PORT: &port 5000
-              BASE_DIR: &dir /config
             probes:
               liveness: &probes
                 enabled: true
@@ -113,7 +112,7 @@ spec:
         advancedMounts:
           server:
             main:
-              - path: *dir
+              - path: /app/Data
       node-data:
         type: emptyDir
         advancedMounts:
