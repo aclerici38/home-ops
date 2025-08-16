@@ -39,39 +39,39 @@ spec:
             runAsUser: 1000
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
-        # initContainers:
-        #   fileflows-check:
-        #     image:
-        #       repository: docker.io/alpine/curl
-        #       tag: latest
-        #     command: ["/bin/sh", "-c"]
-        #     args:
-        #       - |
-        #         apk add --no-cache jq;
-        #         while true; do
-        #           echo "Checking fileflows status..."
-        #           STATUS=$(curl -s --max-time 3 http://fileflows-server:5000/api/status)
-        #           if [ $? -ne 0 ]; then
-        #             echo "fileflows unreachable, proceeding"
-        #             exit 0
-        #           fi
+        initContainers:
+          fileflows-check:
+            image:
+              repository: docker.io/alpine/curl
+              tag: latest
+            command: ["/bin/sh", "-c"]
+            args:
+              - |
+                apk add --no-cache jq;
+                while true; do
+                  echo "Checking fileflows status..."
+                  STATUS=$(curl -s --max-time 3 http://fileflows-server:5000/api/status)
+                  if [ $? -ne 0 ]; then
+                    echo "fileflows unreachable, proceeding"
+                    exit 0
+                  fi
 
-        #           PROCESSING=$(echo "$STATUS" | jq '.processing // 0')
-        #           QUEUE=$(echo "$STATUS" | jq '.queue // 0')
-        #           echo "Processing: $PROCESSING, Queue: $QUEUE"
+                  PROCESSING=$(echo "$STATUS" | jq '.processing // 0')
+                  QUEUE=$(echo "$STATUS" | jq '.queue // 0')
+                  echo "Processing: $PROCESSING, Queue: $QUEUE"
 
-        #           if [ "$PROCESSING" -eq 0 ] && [ "$QUEUE" -eq 0 ]; then
-        #             echo "Processing and Queue are both 0"
-        #             exit 0
-        #           fi
+                  if [ "$PROCESSING" -eq 0 ] && [ "$QUEUE" -eq 0 ]; then
+                    echo "Processing and Queue are both 0"
+                    exit 0
+                  fi
 
-        #           echo "Processing or Queue > 0, waiting"
-        #           sleep 120
-        #         done
-        #     securityContext:
-        #       runAsUser: 0
-        #       runAsGroup: 0
-        #       runAsNonRoot: false
+                  echo "Processing or Queue > 0, waiting"
+                  sleep 120
+                done
+            securityContext:
+              runAsUser: 0
+              runAsGroup: 0
+              runAsNonRoot: false
         containers:
           main:
             image:
