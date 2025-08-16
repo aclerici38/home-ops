@@ -48,7 +48,9 @@ spec:
         spec:
           bootstrap:
             recovery:
-              backup:
-                name: mealie-20250814040000
+              source: origin
+              recoveryTarget:
+                targetTime: "2025-08-14T03:16:00Z"
+                exclusive: true
       target:
         kind: Cluster
