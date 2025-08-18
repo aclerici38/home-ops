@@ -84,8 +84,8 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    path: *path
-                    port: *http
+                    path: /api/version
+                    port: &http 5000
                   initialDelaySeconds: 5
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -106,7 +106,7 @@ spec:
             targetPort: *http-auth
           http:
             primary: true
-            port: &http 5000
+            port: *http
             targetPort: *http
           rtsp:
             port: &rtsp 8554
