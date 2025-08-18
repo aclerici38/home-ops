@@ -67,18 +67,18 @@ spec:
                   - DAC_OVERRIDE
                   - PERFMON
             probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: &path /api/version
-                    port: &http 5000
-                  initialDelaySeconds: 5
-                  periodSeconds: 15
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
+              # liveness: &probes
+              #   enabled: true
+              #   custom: true
+              #   spec:
+              #     httpGet:
+              #       path: &path /api/version
+              #       port: &http 5000
+              #     initialDelaySeconds: 5
+              #     periodSeconds: 15
+              #     timeoutSeconds: 1
+              #     failureThreshold: 3
+              # readiness: *probes
               startup:
                 enabled: true
                 custom: true
