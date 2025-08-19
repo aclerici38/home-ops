@@ -37,7 +37,7 @@ spec:
           main:
             image:
               repository: ghcr.io/mealie-recipes/mealie
-              tag: 3.1.0@sha256:a55437e3e40715eeaecddfa2c5d9ba6cf169eb914f0e9d81b752066a450e4276
+              tag: v3.1.1@sha256:c15f70d7f301145ffa49c988db33071a4585fabf214c2da08bc2cd62737043c8
             env:
               BASE_URL: https://mealie.${SECRET_DOMAIN}
               DAILY_SCHEDULE_TIME: 05:00
