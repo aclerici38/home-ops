@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app files-nfs-server
+  name: files-nfs-server
   namespace: home
 spec:
   interval: 1h
@@ -24,7 +24,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      files-nfs-server:
         strategy: RollingUpdate
         pod:
           securityContext:
@@ -63,7 +63,7 @@ spec:
               privileged: true
     service:
       main:
-        controller: ${APP}
+        controller: files-nfs-server
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: ${FILES_NFS_LB_IP}
