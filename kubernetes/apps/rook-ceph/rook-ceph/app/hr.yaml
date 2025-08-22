@@ -21,7 +21,7 @@ spec:
     remediation:
       retries: 1
   values:
-    tolerations:
+    tolerations: &tol
       - key: "location"
         operator: "Equal"
         value: "cloud"
@@ -36,6 +36,9 @@ spec:
       enableCephfsDriver: true
       enableCephfsSnapshotter: true
       enableLiveness: true
+      provisionerReplicas: 3
+      provisionerTolerations: *tol
+      pluginTolerations: *tol
       serviceMonitor:
         enabled: true
     enableDiscoveryDaemon: true

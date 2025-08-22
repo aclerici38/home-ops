@@ -37,6 +37,7 @@ spec:
             namespace: network
             sectionName: https
     cephClusterSpec:
+      
       mon:
         count: 3
       cephConfig:
@@ -157,7 +158,7 @@ spec:
                 memory: 1Gi
               limits:
                 memory: 4Gi
-        
+
         storageClass:
           enabled: true
           isDefault: true
