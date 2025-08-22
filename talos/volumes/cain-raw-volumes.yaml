@@ -1,0 +1,9 @@
+---
+apiVersion: v1alpha1
+kind: RawVolumeConfig
+name: topolvm
+provisioning:
+  diskSelector:
+    match: "'/dev/disk/by-id/nvme-eui.6479a79d30000001' in disk.symlinks"
+  maxSize: 1.8TB
+  grow: true

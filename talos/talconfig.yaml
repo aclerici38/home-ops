@@ -115,6 +115,80 @@ nodes:
           type: xfs
     extraManifests:
       - ./volumes/bonds-raw-volumes.yaml
+  - hostname: "cain"
+    ipAddress: "${CAIN_IP}"
+    installDiskSelector:
+      wwid: eui.6479a79d30000001
+    machineSpec:
+      secureboot: false
+      arch: amd64
+      mode: metal
+      useUKI: true
+    nodeLabels:
+      location: "apartment"
+    kernelModules:
+      - name: dm_thin_pool
+      - name: dm_mod
+    schematic:
+      customization:
+        extraKernelArgs:
+          - -init_on_alloc
+          - -init_on_free
+          - -selinux
+          - apparmor=0
+          - init_on_alloc=0
+          - init_on_free=0
+          - intel_iommu=on
+          - iommu=pt
+          - mitigations=off
+          - security=none
+          - sysctl.kernel.kexec_load_disabled=1
+          - talos.auditd.disabled=1
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/i915
+            - siderolabs/mei
+            - siderolabs/intel-ucode
+    controlPlane: false
+    patches:
+      - "@./patches/wireguard/posey.yaml"
+      - "@./patches/wireguard/madbum.yaml"
+      - "@./patches/wireguard/house-opnsense.yaml"
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "58:47:ca:7c:77:20"
+        addresses:
+          - "${CAIN_IP}/24"
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "192.168.9.1"
+        mtu: 1500
+      - deviceSelector:
+          hardwareAddr: 58:47:ca:7c:77:1f
+        ignore: true
+      - deviceSelector:
+          hardwareAddr: 58:47:ca:7c:77:1e
+        ignore: true
+      - deviceSelector:
+          hardwareAddr: 58:47:ca:7c:77:1d
+        ignore: true
+      - interface: wg0
+        mtu: 1420
+        addresses:
+          - ${CAIN_WG_IP}/24
+        wireguard:
+          privateKey: ${CAIN_WG_PRIVATE_KEY}
+          listenPort: ${CAIN_WG_PORT}
+    # TODO: Update with raw volumes once supported
+    userVolumes:
+      - name: EPHEMERAL
+        provisioning:
+          diskSelector:
+            match: system_disk
+          maxSize: 200GB
+          grow: false
+    extraManifests:
+      - ./volumes/cain-raw-volumes.yaml
   - hostname: "timmy"
     ipAddress: "${TIMMY_IP}"
     installDiskSelector:
@@ -194,7 +268,7 @@ nodes:
       location: house:NoSchedule
     patches:
       - "@./patches/wireguard/bonds.yaml"
-      - "@./patches/wireguard/timmy.yaml"
+      - "@./patches/wireguard/cain.yaml"
       - "@./patches/wireguard/madbum.yaml"
       - "@./patches/wireguard/apartment-opnsense.yaml"
       - |-
@@ -260,7 +334,7 @@ nodes:
     controlPlane: true
     patches:
       - "@./patches/wireguard/bonds.yaml"
-      - "@./patches/wireguard/timmy.yaml"
+      - "@./patches/wireguard/cain.yaml"
       - "@./patches/wireguard/posey.yaml"
       - "@./patches/wireguard/house-opnsense.yaml"
       - "@./patches/wireguard/apartment-opnsense.yaml"
