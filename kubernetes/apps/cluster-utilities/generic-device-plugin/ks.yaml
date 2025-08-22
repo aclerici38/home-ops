@@ -19,3 +19,6 @@ spec:
   timeout: 3m
   prune: true
   wait: true
+  postBuild:
+    substitute:
+      APP: *app
