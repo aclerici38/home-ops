@@ -80,7 +80,7 @@ spec:
       - name: topolvm
         storageClass:
           fsType: xfs
-          isDefaultClass: true
+          isDefaultClass: false
           volumeBindingMode: WaitForFirstConsumer
           allowVolumeExpansion: true
           additionalParameters:
