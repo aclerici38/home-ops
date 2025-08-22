@@ -25,15 +25,8 @@ spec:
     controllers:
       apartment:
         strategy: RollingUpdate
-        replicas: 2
+        replicas: 1
         pod:
-          topologySpreadConstraints:
-            - maxSkew: 1
-              topologyKey: kubernetes.io/hostname
-              whenUnsatisfiable: DoNotSchedule
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/controller: apartment
           nodeSelector:
             location: apartment
         containers: &container
@@ -95,27 +88,12 @@ spec:
       house:
         strategy: RollingUpdate
         pod:
-          topologySpreadConstraints:
-            - maxSkew: 1
-              topologyKey: kubernetes.io/hostname
-              whenUnsatisfiable: DoNotSchedule
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/controller: house
           nodeSelector:
             location: house
         containers: *container
       k8s:
         strategy: RollingUpdate
         replicas: 2
-        pod:
-          topologySpreadConstraints:
-            - maxSkew: 1
-              topologyKey: kubernetes.io/hostname
-              whenUnsatisfiable: DoNotSchedule
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/controller: k8s
         containers: *container
     defaultPodOptions:
       hostUsers: false
