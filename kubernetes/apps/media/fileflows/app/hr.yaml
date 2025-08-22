@@ -50,8 +50,7 @@ spec:
                 cpu: 500m
                 memory: 350M
               limits:
-                cpu: "12"
-                memory: 16Gi
+                memory: 2Gi
                 gpu.intel.com/i915: 1
             securityContext:
               allowPrivilegeEscalation: false
@@ -63,9 +62,17 @@ spec:
           hostname: ff-node-bonds
           nodeSelector:
             kubernetes.io/hostname: bonds
-        containers: &nodeContainers
+        containers:
           main:
             <<: *container
+            resources:
+              requests:
+                cpu: 4
+                memory: 350M
+              limits:
+                cpu: 12
+                memory: 16Gi
+                gpu.intel.com/i915: 1
             probes:
               liveness: &probes
                 enabled: false
@@ -78,7 +85,17 @@ spec:
           hostname: ff-node-cain
           nodeSelector:
             kubernetes.io/hostname: cain
-        containers: *nodeContainers
+        containers:
+          main:
+            <<: *container
+            resources:
+              requests:
+                cpu: 4
+                memory: 350M
+              limits:
+                cpu: 8
+                memory: 4Gi
+                gpu.intel.com/i915: 1
     service:
       server:
         controller: server
@@ -124,7 +141,10 @@ spec:
       node-data:
         type: emptyDir
         advancedMounts:
-          node:
+          node-bonds:
+            main:
+              - path: /app/Data
+          node-cain:
             main:
               - path: /app/Data
       tmpfs:
