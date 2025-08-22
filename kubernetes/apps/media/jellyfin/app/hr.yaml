@@ -70,7 +70,7 @@ spec:
               limits:
                 gpu.intel.com/i915: 1
                 cpu: "16"
-                memory: 8Gi
+                memory: 12Gi
     service:
       main:
         controller: ${APP}
