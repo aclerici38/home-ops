@@ -53,11 +53,11 @@ spec:
   restic:
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     pruneIntervalDays: 14
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-topolvm}"
-    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-topolvm}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-ceph-filesystem}"
+    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-ceph-filesystem}"
     repository: "${APP}-volsync-versity-secret"
     cacheAccessModes: ["ReadWriteOnce"]
-    storageClassName: "${VOLSYNC_STORAGECLASS:-topolvm}"
+    storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-filesystem}"
     accessModes: ["ReadWriteOnce"]
     moverSecurityContext:
       runAsUser: ${VOLSYNC_PUID:-1000}
@@ -80,10 +80,10 @@ spec:
   restic:
     repository: "${APP}-volsync-versity-secret"
     copyMethod: Snapshot
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-topolvm}"
-    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-topolvm}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-ceph-filesystem}"
+    cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-ceph-filesystem}"
     cacheAccessModes: ["ReadWriteOnce"]
-    storageClassName: "${VOLSYNC_STORAGECLASS:-topolvm}"
+    storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-filesystem}"
     accessModes: ["ReadWriteOnce"]
     capacity: "${VOLSYNC_CAPACITY:-5Gi}"
     moverSecurityContext:

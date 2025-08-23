@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: ${APP}
 spec:
-  storageClassName: topolvm
+  storageClassName: ceph-filesystem
   resources:
     requests:
       storage: 10Gi

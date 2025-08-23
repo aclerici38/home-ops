@@ -59,13 +59,13 @@ spec:
           existingClaim: harbor-registry
         jobservice:
           jobLog:
-            storageClass: topolvm
+            storageClass: ceph-filesystem
             size: 1Gi
         database:
-          storageClass: topolvm
+          storageClass: ceph-filesystem
           size: 1Gi
         redis:
-          storageClass: topolvm
+          storageClass: ceph-filesystem
           size: 1Gi
     redis:
       type: external

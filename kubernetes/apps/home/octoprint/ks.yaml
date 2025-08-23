@@ -29,3 +29,5 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 25Gi
+      VOLSYNC_STORAGECLASS: &sc topolvm
+      VOLSYNC_SNAPSHOTCLASS: *sc
