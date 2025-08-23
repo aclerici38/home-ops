@@ -50,6 +50,7 @@ nodes:
       - name: zfs
       - name: dm_thin_pool
       - name: dm_mod
+      - name: nbd
     schematic:
       customization:
         extraKernelArgs: &amdArgs
@@ -119,6 +120,7 @@ nodes:
     kernelModules:
       - name: dm_thin_pool
       - name: dm_mod
+      - name: nbd
     schematic:
       customization:
         extraKernelArgs:

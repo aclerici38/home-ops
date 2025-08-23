@@ -23,7 +23,7 @@ spec:
   values:
     currentNamespaceOnly: true
     csi:
-      cephFSKernelMountOptions: ms_mode=prefer-crc
+      cephFSKernelMountOptions: ms_mode=crc
       enableCephfsDriver: true
       enableCephfsSnapshotter: true
       enableLiveness: true
