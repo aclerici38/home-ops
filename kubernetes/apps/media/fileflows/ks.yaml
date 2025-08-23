@@ -34,19 +34,19 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 10Gi
-  patches:
+  # patches:
     # Fileflows doesn't allow db config via envs, set a static password to prevent rolling it on db restores
-    - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
-          name: patch
-        spec:
-          bootstrap:
-            initdb:
-              database: app
-              owner: fileflows
-              secret:
-                name: fileflows-secret
-      target:
-        kind: Cluster
+    # - patch: |-
+    #     apiVersion: postgresql.cnpg.io/v1
+    #     kind: Cluster
+    #     metadata:
+    #       name: patch
+    #     spec:
+    #       bootstrap:
+    #         initdb:
+    #           database: app
+    #           owner: fileflows
+    #           secret:
+    #             name: fileflows-secret
+    #   target:
+    #     kind: Cluster
