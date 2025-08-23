@@ -37,9 +37,8 @@ spec:
             namespace: network
             sectionName: https
     cephClusterSpec:
-
       mon:
-        count: 3
+        count: 2
       cephConfig:
         global:
           bdev_enable_discard: "true" # quote
@@ -81,46 +80,6 @@ spec:
           - name: "cain"
             devices:
               - name: "/dev/disk/by-id/nvme-eui.000000000000000100a075254e4190df"
-      placement:
-        mon:
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
-            - key: "location"
-              operator: "Equal"
-              value: "cloud"
-              effect: "NoSchedule"
-          nodeAffinity:
-            preferredDuringSchedulingIgnoredDuringExecution:
-              # Prefer apartment node for latency
-              - weight: 100
-                preference:
-                  matchExpressions:
-                    - key: location
-                      operator: In
-                      values: ["apartment"]
-              # Schedule 3rd mon somewhere else
-              - weight: 60
-                preference:
-                  matchExpressions:
-                    - key: location
-                      operator: In
-                      values: ["cloud"]
-              - weight: 40
-                preference:
-                  matchExpressions:
-                    - key: location
-                      operator: In
-                      values: ["house"]
-          topologySpreadConstraints:
-            - maxSkew: 1
-              topologyKey: kubernetes.io/hostname
-              whenUnsatisfiable: DoNotSchedule
-              labelSelector:
-                matchLabels:
-                  app: rook-ceph-mon
     cephFileSystems:
       - name: &cephFileSystemName ceph-filesystem
         spec:
