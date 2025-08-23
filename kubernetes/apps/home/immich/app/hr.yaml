@@ -196,9 +196,9 @@ spec:
           machine-learning:
             main:
               - path: /cache
-              - path: /.config/matplotlib
-                subPath: matplotlib-config
-              - path: /.cache/matplotlib
-                subPath: matplotlib-cache
+              # - path: /.config/matplotlib
+              #   subPath: matplotlib-config
+              # - path: /.cache/matplotlib
+              #   subPath: matplotlib-cache
       tmp:
         type: emptyDir
