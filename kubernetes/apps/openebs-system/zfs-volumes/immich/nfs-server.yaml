@@ -1,0 +1,76 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich-nfs-server
+  namespace: home
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      immich-nfs-server:
+        strategy: RollingUpdate
+        pod:
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            runAsNonRoot: false
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          main:
+            image:
+              repository: quay.io/aminvakil/alpine-nfs-server
+              tag: latest@sha256:640999d23e9b731b61e203de4ca9cfe9f6bd39979472397f5201e7e9728fc525
+            env:
+              SHARED_DIRECTORY: /immich
+              SYNC: true
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - "showmount -e localhost | grep -q $(SHARED_DIRECTORY)"
+              liveness: *probes
+            resources:
+              requests:
+                cpu: 10m
+                memory: 10Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: true
+              readOnlyRootFilesystem: false
+              privileged: true
+    service:
+      main:
+        controller: immich-nfs-server
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: ${IMMICH_NFS_LB_IP}
+        ports:
+          nfs:
+            port: 2049
+            protocol: TCP
+    persistence:
+      immich:
+        existingClaim: immich

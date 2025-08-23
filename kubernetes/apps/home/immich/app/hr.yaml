@@ -21,10 +21,22 @@ spec:
     timeout: 5m
     remediation:
       retries: 1
+  dependsOn:
+    - name: immich-nfs-server
   values:
     controllers:
       server:
         strategy: RollingUpdate
+        replicas: 2
+        pod:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/controller: server
+                      app.kubernetes.io/instance: immich
+                  topologyKey: kubernetes.io/hostname
         containers:
           main:
             image:
@@ -159,8 +171,9 @@ spec:
               request: 0s
     persistence:
       media:
-        enabled: true
-        existingClaim: ${APP}
+        type: nfs
+        server: ${IMMICH_NFS_LB_IP}
+        path: /
         advancedMounts:
           server:
             main:
