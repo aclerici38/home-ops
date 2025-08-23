@@ -60,7 +60,7 @@ spec:
         driver: nfs-client
         nfs:
           shareHost: ${NFS_PVC_LB_IP}
-          shareBasePath: "/"
+          shareBasePath: "/export"
           controllerBasePath: "/mnt/pvc"
     csiProxy:
       enabled: true
