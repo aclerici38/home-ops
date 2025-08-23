@@ -26,7 +26,6 @@ spec:
   values:
     controllers:
       server:
-        strategy: RollingUpdate
         replicas: 2
         pod:
           affinity:
