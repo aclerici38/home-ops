@@ -7,9 +7,9 @@ spec:
   storageClassName: ceph-filesystem
   resources:
     requests:
-      storage: 50Gi
+      storage: 15Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -21,7 +21,7 @@ spec:
     requests:
       storage: 100Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -31,6 +31,6 @@ spec:
   storageClassName: bonds-nfs
   resources:
     requests:
-      storage: 500Gi
+      storage: 300Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
