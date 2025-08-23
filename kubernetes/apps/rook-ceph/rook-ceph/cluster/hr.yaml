@@ -37,7 +37,7 @@ spec:
             namespace: network
             sectionName: https
     cephClusterSpec:
-      
+
       mon:
         count: 3
       cephConfig:
@@ -83,7 +83,7 @@ spec:
               - name: "/dev/disk/by-id/nvme-eui.000000000000000100a075254e4190df"
       placement:
         mon:
-          tolerations: &tol
+          tolerations:
             - key: "location"
               operator: "Equal"
               value: "house"
@@ -121,8 +121,6 @@ spec:
               labelSelector:
                 matchLabels:
                   app: rook-ceph-mon
-        mgr:
-          tolerations: *tol
     cephFileSystems:
       - name: &cephFileSystemName ceph-filesystem
         spec:

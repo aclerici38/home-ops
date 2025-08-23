@@ -21,24 +21,13 @@ spec:
     remediation:
       retries: 1
   values:
-    tolerations: &tol
-      - key: "location"
-        operator: "Equal"
-        value: "cloud"
-        effect: "NoSchedule"
-      - key: "location"
-        operator: "Equal"
-        value: "house"
-        effect: "NoSchedule"
     currentNamespaceOnly: true
     csi:
       cephFSKernelMountOptions: ms_mode=prefer-crc
       enableCephfsDriver: true
       enableCephfsSnapshotter: true
       enableLiveness: true
-      provisionerReplicas: 3
-      provisionerTolerations: *tol
-      pluginTolerations: *tol
+      provisionerReplicas: 2
       serviceMonitor:
         enabled: true
     enableDiscoveryDaemon: true
