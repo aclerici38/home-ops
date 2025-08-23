@@ -64,6 +64,9 @@ spec:
             enabled: true
           - name: rook
             enabled: true
+        resources:
+          limits:
+            memory: 4Gi
       network:
         provider: host
         connections:
