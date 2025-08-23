@@ -28,7 +28,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: immich-encoded-video
 spec:
-  storageClassName: bonds-nfs
+  storageClassName: ceph-filesystem
   resources:
     requests:
       storage: 300Gi
