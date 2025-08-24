@@ -21,8 +21,6 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
-  dependsOn:
-    - name: nfs-server-synology
   values:
     nodeSelector:
       location: house
