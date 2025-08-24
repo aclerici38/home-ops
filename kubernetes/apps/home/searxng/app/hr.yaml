@@ -42,7 +42,7 @@ spec:
             runAsUser: &uid 977 # upstream `searxng` user
             runAsGroup: *uid
             fsGroup: *uid
-            fsGroupChangePolicy: Always
+            fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
         strategy: RollingUpdate
         containers:

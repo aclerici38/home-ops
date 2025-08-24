@@ -31,7 +31,7 @@ spec:
             runAsUser: &id 1000
             runAsGroup: *id
             fsGroup: *id
-            fsGroupChangePolicy: Always
+            fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
         containers:
           main:

@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: jellyfin-cache
 spec:
-  storageClassName: ceph-filesystem
+  storageClassName: nfs-tank
   resources:
     requests:
-      storage: 20Gi
+      storage: 500Gi
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce

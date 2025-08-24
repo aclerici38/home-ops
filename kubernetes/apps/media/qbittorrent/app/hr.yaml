@@ -38,7 +38,7 @@ spec:
             args:
               - -conf
               - /etc/coredns/Corefile
-            restartPolicy: Always
+            restartPolicy: OnRootMismatch
           gluetun:
             lifecycle:
               postStart:
@@ -65,7 +65,7 @@ spec:
             resources:
               limits:
                 squat.ai/tun: 1
-            restartPolicy: Always
+            restartPolicy: OnRootMismatch
             envFrom:
               - secretRef:
                   name: qbittorrent-secret

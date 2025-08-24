@@ -12,7 +12,7 @@ spec:
       containers:
         - name: scraper
           image: harbor.${SECRET_DOMAIN}/d3savant/scraper
-          imagePullPolicy: Always
+          imagePullPolicy: OnRootMismatch
           env:
             - name: PG_USER
               valueFrom:

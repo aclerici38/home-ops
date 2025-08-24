@@ -38,7 +38,7 @@ controllers:
         runAsUser: 999
         runAsGroup: 999
         fsGroup: 999
-        fsGroupChangePolicy: Always
+        fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     containers:
       api:
