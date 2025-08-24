@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: immich-ml-cache
 spec:
-  storageClassName: ceph-filesystem
+  storageClassName: nfs-ssd
   resources:
     requests:
       storage: 15Gi
@@ -16,10 +16,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: immich-thumbnails
 spec:
-  storageClassName: ceph-filesystem
+  storageClassName: nfs-ssd
   resources:
     requests:
-      storage: 100Gi
+      storage: 200Gi
   accessModes:
     - ReadWriteMany
 ---
@@ -28,9 +28,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: immich-encoded-video
 spec:
-  storageClassName: ceph-filesystem
+  storageClassName: nfs-tank
   resources:
     requests:
-      storage: 300Gi
+      storage: 500Gi
   accessModes:
     - ReadWriteMany
