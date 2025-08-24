@@ -26,13 +26,18 @@ spec:
       name: csi-nfs-synology-controller
       nodeSelector: &ns
         location: house
+      tolerations:
+        - key: "location"
+          operator: "Equal"
+          value: "house"
+          effect: "NoSchedule"
       livenessProbe:
-        healthPort: 29654
+        healthPort: 29656
     node:
       name: csi-nfs-synology-node
       nodeSelector: *ns
       livenessProbe:
-        healthPort: 29655
+        healthPort: 29657
     storageClass:
       create: true
       name: nfs-synology
