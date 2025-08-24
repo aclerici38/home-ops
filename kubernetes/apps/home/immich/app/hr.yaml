@@ -93,9 +93,11 @@ spec:
             <<: *container
             probes:
               liveness:
-                enabled: false
+                enabled: true
+                type: TCP
               readiness:
-                enabled: false
+                enabled: true
+                type: TCP
             env:
               <<: *env
               IMMICH_WORKERS_INCLUDE: microservices
@@ -167,6 +169,11 @@ spec:
             port: *port
           metrics-api:
             port: 8081
+      microservices:
+        controller: microservices
+        ports:
+          metrics-ms:
+            port: 8082
       ml:
         controller: machine-learning
         ports:
@@ -177,6 +184,11 @@ spec:
         serviceName: server
         endpoints:
           - port: metrics-api
+            scheme: http
+      microservices:
+        serviceName: microservices
+        endpoints:
+          - port: metrics-ms
             scheme: http
     route:
       main:
