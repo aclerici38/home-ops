@@ -91,26 +91,6 @@ spec:
               - house.${SECRET_DOMAIN}
               - --provider
               - random
-      cloud:
-        strategy: RollingUpdate
-        pod:
-          nodeSelector:
-            location: &location cloud
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: *location
-              effect: "NoSchedule"
-        containers:
-          main:
-            <<: *container
-            args:
-              - --zone-name
-              - ${SECRET_DOMAIN}
-              - --record-name
-              - cloud.${SECRET_DOMAIN}
-              - --provider
-              - random
     defaultPodOptions:
       hostUsers: false
       securityContext:
@@ -129,9 +109,6 @@ spec:
       house:
         controller: house
         ports: *ports
-      cloud:
-        controller: cloud
-        ports: *ports
     serviceMonitor:
       apartment:
         serviceName: apartment
@@ -143,7 +120,4 @@ spec:
             scrapeTimeout: 30s
       house:
         serviceName: house
-        endpoints: *endp
-      cloud:
-        serviceName: cloud
         endpoints: *endp
