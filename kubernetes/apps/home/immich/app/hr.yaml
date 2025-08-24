@@ -93,9 +93,9 @@ spec:
             <<: *container
             probes:
               liveness:
-                enabled: true
+                enabled: false
               readiness:
-                enabled: true
+                enabled: false
             env:
               <<: *env
               IMMICH_WORKERS_INCLUDE: microservices
