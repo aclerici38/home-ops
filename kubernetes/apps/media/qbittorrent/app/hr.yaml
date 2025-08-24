@@ -29,7 +29,8 @@ spec:
             kubernetes.io/hostname: "bonds"
           securityContext:
             fsGroup: 1000
-            fsGroupChangePolicy: "Always"
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
         initContainers:
           coredns:
             image:
@@ -38,7 +39,7 @@ spec:
             args:
               - -conf
               - /etc/coredns/Corefile
-            restartPolicy: OnRootMismatch
+            restartPolicy: Always
           gluetun:
             lifecycle:
               postStart:
@@ -65,7 +66,7 @@ spec:
             resources:
               limits:
                 squat.ai/tun: 1
-            restartPolicy: OnRootMismatch
+            restartPolicy: Always
             envFrom:
               - secretRef:
                   name: qbittorrent-secret

@@ -165,6 +165,15 @@ spec:
             - identifier: main
               port: *port
     persistence:
+      corefile:
+        type: configMap
+        name: ${APP}-config
+        advancedMounts:
+          qbit:
+            coredns:
+              - path: /etc/coredns/Corefile
+                subPath: Corefile
+                readOnly: true
       tmp:
         type: emptyDir
         advancedMounts:
