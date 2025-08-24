@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: frigate-media
 spec:
-  storageClassName: synology-nfs
+  storageClassName: nfs-synology
   resources:
     requests:
       storage: 5Ti
