@@ -62,7 +62,9 @@ spec:
           - path: /data/config.yml
             subPath: config.yml
       time-machine:
-        existingClaim: files
+        type: nfs
+        server: ${FILES_NFS_LB_IP}
+        path: /
         globalMounts:
           - path: /samba/time-machine
             subPath: time-machine

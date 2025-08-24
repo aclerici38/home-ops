@@ -110,6 +110,8 @@ spec:
         globalMounts:
           - path: /var/syncthing
       files:
-        existingClaim: files
+        type: nfs
+        server: ${FILES_NFS_LB_IP}
+        path: /
         globalMounts:
           - path: /var/mnt/files
