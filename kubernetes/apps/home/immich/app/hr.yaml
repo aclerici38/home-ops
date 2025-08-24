@@ -27,6 +27,10 @@ spec:
     controllers:
       server:
         replicas: 2
+        strategy: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 1
+          maxSurge: 0
         pod:
           affinity:
             podAntiAffinity:
