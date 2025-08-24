@@ -76,18 +76,6 @@ spec:
       microservices:
         replicas: 2
         strategy: RollingUpdate
-        rollingUpdate:
-          maxUnavailable: 1
-          maxSurge: 0
-        pod:
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchLabels:
-                      app.kubernetes.io/controller: microservices
-                      app.kubernetes.io/instance: immich
-                  topologyKey: kubernetes.io/hostname
         containers:
           main:
             <<: *container
@@ -210,34 +198,42 @@ spec:
         server: ${IMMICH_NFS_LB_IP}
         path: /
         advancedMounts:
-          server:
-            main:
+          microservices:
+            main: &mounts
               - path: /data/upload
                 subPath: upload
               - path: /data/profile
                 subPath: profile
               - path: /data/library
                 subPath: library
+          server:
+            main: *mounts
       thumbnails:
         existingClaim: immich-thumbnails
         advancedMounts:
-          server:
-            main:
+          microservices:
+            main: &mounts
               - path: /data/thumbs
+          server:
+            main: *mounts
       encoded-video:
         existingClaim: immich-encoded-video
         advancedMounts:
-          server:
-            main:
+          microservices:
+            main: &mounts
               - path: /data/encoded-video
+          server:
+            main: *mounts
       config:
         type: configMap
         name: immich-config
         advancedMounts:
           server:
-            main:
+            main: &mounts
               - path: *config
                 subPath: config.yaml
+          microservices:
+            main: *mounts
       cache:
         existingClaim: immich-ml-cache
         advancedMounts:
