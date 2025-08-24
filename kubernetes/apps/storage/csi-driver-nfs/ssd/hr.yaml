@@ -26,8 +26,12 @@ spec:
   values:
     controller:
       name: csi-nfs-ssd-controller
+      livenessProbe:
+        healthPort: 29654
     node:
       name: csi-nfs-ssd-node
+      livenessProbe:
+        healthPort: 29655
     storageClass:
       create: true
       name: nfs-ssd
