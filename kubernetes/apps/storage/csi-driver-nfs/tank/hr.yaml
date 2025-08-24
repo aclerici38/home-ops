@@ -24,6 +24,10 @@ spec:
   dependsOn:
     - name: nfs-server-tank
   values:
+    controller:
+      name: csi-nfs-tank-controller
+    node:
+      name: csi-nfs-tank-node
     storageClass:
       create: true
       name: nfs-tank

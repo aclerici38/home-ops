@@ -24,6 +24,10 @@ spec:
   dependsOn:
     - name: nfs-server-ssd
   values:
+    controller:
+      name: csi-nfs-ssd-controller
+    node:
+      name: csi-nfs-ssd-node
     storageClass:
       create: true
       name: nfs-ssd
