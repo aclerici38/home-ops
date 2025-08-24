@@ -25,15 +25,6 @@ spec:
     controllers:
       ${APP}:
         pod:
-          affinity:
-            nodeAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                nodeSelectorTerms:
-                - matchExpressions:
-                  - key: location
-                    operator: In
-                    values:
-                      - "apartment"
           securityContext:
             runAsUser: 0
             runAsGroup: 0

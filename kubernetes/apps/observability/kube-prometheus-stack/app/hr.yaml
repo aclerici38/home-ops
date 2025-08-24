@@ -27,11 +27,6 @@ spec:
       upgradeJob:
         enabled: true
         forceConflicts: true
-        tolerations: &tol
-          - key: "location"
-            operator: "Equal"
-            value: "house"
-            effect: "NoSchedule"
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
       enabled: true
@@ -46,9 +41,6 @@ spec:
               namespace: network
               sectionName: https
       alertmanagerSpec:
-        tolerations: *tol
-        nodeSelector: &ns
-          location: "cloud"
         alertmanagerConfiguration:
           name: alertmanager
           global:
@@ -77,8 +69,6 @@ spec:
               namespace: network
               sectionName: https
       prometheusSpec:
-        tolerations: *tol
-        nodeSelector: *ns
         image:
           registry: docker.io
           repository: prompp/prompp

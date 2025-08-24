@@ -25,8 +25,13 @@ spec:
     controllers:
       ${APP}:
         pod:
-          nodeSelector:
-            kubernetes.io/hostname: "bonds"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
         containers:
           sonarr:
             image:
@@ -81,15 +86,7 @@ spec:
                 cpu: 100m
                 memory: 100Mi
               limits:
-                memory: 16Gi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+                memory: 16Gi      
     service:
       main:
         controller: ${APP}

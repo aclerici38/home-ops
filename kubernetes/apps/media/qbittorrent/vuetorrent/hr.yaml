@@ -27,8 +27,6 @@ spec:
         strategy: RollingUpdate
         pod:
           hostUsers: false
-          nodeSelector:
-            location: "apartment"
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
