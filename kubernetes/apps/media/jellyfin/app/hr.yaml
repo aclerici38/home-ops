@@ -48,8 +48,8 @@ spec:
                     path: /health
                     port: &port 8096
                   periodSeconds: 5
-                  failureThreshold: 15
-                  initialDelaySeconds: 4
+                  failureThreshold: 20
+                  initialDelaySeconds: 10
               readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
