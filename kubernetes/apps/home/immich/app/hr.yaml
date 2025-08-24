@@ -26,27 +26,15 @@ spec:
   values:
     controllers:
       server:
-        replicas: 2
         strategy: RollingUpdate
-        rollingUpdate:
-          maxUnavailable: 1
-          maxSurge: 0
-        pod:
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchLabels:
-                      app.kubernetes.io/controller: server
-                      app.kubernetes.io/instance: immich
-                  topologyKey: kubernetes.io/hostname
         containers:
-          main:
+          main: &container
             image:
               repository: ghcr.io/immich-app/immich-server
               tag: v1.139.2@sha256:ccfca8a87a65914ab23164efa1f6392940629a2a54ed71bce87049713d926426
-            env:
+            env: &env
               IMMICH_LOG_LEVEL: log
+              IMMICH_WORKERS_INCLUDE: api
               REDIS_HOSTNAME: dragonfly-db.database.svc.cluster.local
               REDIS_DBINDEX: 2
               IMMICH_TELEMETRY_INCLUDE: all
@@ -81,8 +69,40 @@ spec:
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
-                cpu: 1
+                cpu: 100m
                 memory: 200Mi
+              limits:
+                memory: 1Gi
+      microservices:
+        replicas: 2
+        strategy: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 1
+          maxSurge: 0
+        pod:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/controller: microservices
+                      app.kubernetes.io/instance: immich
+                  topologyKey: kubernetes.io/hostname
+        containers:
+          main:
+            <<: *container
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            env:
+              <<: *env
+              IMMICH_WORKERS_INCLUDE: microservices
+            resources:
+              requests:
+                cpu: 100m
+                memory: 300Mi
               limits:
                 memory: 12Gi
                 cpu: 12
