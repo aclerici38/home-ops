@@ -169,7 +169,7 @@ spec:
         type: configMap
         name: ${APP}-config
         advancedMounts:
-          qbit:
+          ${APP}:
             coredns:
               - path: /etc/coredns/Corefile
                 subPath: Corefile
