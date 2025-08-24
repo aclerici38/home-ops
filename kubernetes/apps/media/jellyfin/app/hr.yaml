@@ -100,7 +100,9 @@ spec:
         globalMounts:
           - path: /config/metadata
       media:
-        existingClaim: media
+        type: nfs
+        server: ${MEDIA_NFS_LB_IP}
+        path: /
         globalMounts:
           - path: /allMedia
       tmpfs:
