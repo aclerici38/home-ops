@@ -65,7 +65,7 @@ spec:
         controller: ${APP}
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: "${NFS_PVC_LB_IP}"
+          lbipam.cilium.io/ips: "${NFS_SSD_PVC_LB_IP}"
         ports:
           nfs:
             port: 2049
