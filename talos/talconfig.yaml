@@ -90,7 +90,7 @@ nodes:
         routes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
-        mtu: 1500
+        mtu: 9000
       - deviceSelector:
           hardwareAddr: a0:36:9f:09:4c:8e
         ignore: true
@@ -154,7 +154,7 @@ nodes:
         routes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
-        mtu: 1500
+        mtu: 9000
       - deviceSelector:
           hardwareAddr: 58:47:ca:7c:77:1f
         ignore: true
@@ -209,7 +209,7 @@ nodes:
         routes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
-        mtu: 1500
+        mtu: 9000
       - interface: wg0
         mtu: 1420
         addresses:
