@@ -22,14 +22,15 @@ spec:
     remediation:
       retries: 1
   values:
-    nodeSelector:
-      location: house
     controller:
       name: csi-nfs-synology-controller
+      nodeSelector: &ns
+        location: house
       livenessProbe:
         healthPort: 29654
     node:
       name: csi-nfs-synology-node
+      nodeSelector: *ns
       livenessProbe:
         healthPort: 29655
     storageClass:
