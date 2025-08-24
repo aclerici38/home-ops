@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./ns.yaml
 
+  - ./csi-driver-nfs/ks.yaml
   - ./democratic-csi/ks.yaml
   - ./nfs-server-ssd/ks.yaml
   - ./scrutiny/ks.yaml
