@@ -49,7 +49,7 @@ spec:
         storage:
           volumeClaimTemplate:
             spec:
-              storageClassName: local-hostpath-madbum
+              storageClassName: ceph-filesystem
               resources:
                 requests:
                   storage: 5Gi
@@ -94,7 +94,7 @@ spec:
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: local-hostpath-madbum
+              storageClassName: ceph-filesystem
               resources:
                 requests:
                   storage: 50Gi
