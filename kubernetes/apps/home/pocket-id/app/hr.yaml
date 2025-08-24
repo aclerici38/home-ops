@@ -26,13 +26,6 @@ spec:
       main:
         pod:
           hostUsers: false
-          nodeSelector:
-            location: cloud
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "cloud"
-              effect: "NoSchedule"
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
