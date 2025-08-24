@@ -27,13 +27,6 @@ spec:
       ${APP}:
         strategy: RollingUpdate
         pod:
-          nodeSelector:
-            location: cloud
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "cloud"
-              effect: "NoSchedule"
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000

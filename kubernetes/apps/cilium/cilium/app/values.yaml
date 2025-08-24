@@ -37,15 +37,6 @@ hubble:
   ui:
     enabled: true
     rollOutPods: true
-    tolerations: &tol
-      - key: "location"
-        operator: "Equal"
-        value: "cloud"
-        effect: "NoSchedule"
-      - key: "location"
-        operator: "Equal"
-        value: "house"
-        effect: "NoSchedule"
   metrics:
     enabled:
       - "dns:query"
@@ -63,7 +54,6 @@ hubble:
   relay:
     enabled: true
     rollOutPods: true
-    tolerations: *tol
     prometheus:
       serviceMonitor:
         enabled: true
@@ -95,15 +85,6 @@ nodePort:
   enabled: true
 operator:
   replicas: 2
-  tolerations:
-    - key: "location"
-      operator: "Equal"
-      value: "cloud"
-      effect: "NoSchedule"
-    - key: "location"
-      operator: "Equal"
-      value: "house"
-      effect: "NoSchedule"
   rollOutPods: true
   prometheus:
     enabled: true

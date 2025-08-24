@@ -31,15 +31,6 @@ spec:
           # No ARM image
           nodeSelector:
             kubernetes.io/arch: amd64
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "cloud"
-              effect: "NoSchedule"
-            - key: "location"
-              operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000

@@ -22,15 +22,6 @@ spec:
     remediation:
       retries: 1
   values:
-    tolerations:
-      - key: "location"
-        operator: "Equal"
-        value: "cloud"
-        effect: "NoSchedule"
-      - key: "location"
-        operator: "Equal"
-        value: "house"
-        effect: "NoSchedule"
     image:
       repository: registry.k8s.io/external-dns/external-dns
       tag: v0.18.0

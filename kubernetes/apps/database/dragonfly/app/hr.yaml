@@ -31,15 +31,6 @@ spec:
             matchLabels:
               app.kubernetes.io/instance: ${APP}
           whenUnsatisfiable: DoNotSchedule
-      tolerations:
-        - key: "location"
-          operator: "Equal"
-          value: "cloud"
-          effect: "NoSchedule"
-        - key: "location"
-          operator: "Equal"
-          value: "house"
-          effect: "NoSchedule"
     # serviceMonitor:
     #   enabled: true
     grafanaDashboard:

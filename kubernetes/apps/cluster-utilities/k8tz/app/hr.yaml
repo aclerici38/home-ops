@@ -27,15 +27,6 @@ spec:
     replicaCount: 2
     timezone: America/Los_Angeles
     cronJobTimeZone: true
-    tolerations:
-      - key: "location"
-        operator: "Equal"
-        value: "cloud"
-        effect: "NoSchedule"
-      - key: "location"
-        operator: "Equal"
-        value: "house"
-        effect: "NoSchedule"
     webhook:
       ignoredNamespaces:
         - cilium

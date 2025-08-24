@@ -26,14 +26,5 @@ spec:
       config:
         core:
           labelSources: ["pci", "system", "usb"]
-      tolerations:
-        - key: "location"
-          operator: "Equal"
-          value: "house"
-          effect: "NoSchedule"
-        - key: "location"
-          operator: "Equal"
-          value: "cloud"
-          effect: "NoSchedule"
     prometheus:
       enable: true

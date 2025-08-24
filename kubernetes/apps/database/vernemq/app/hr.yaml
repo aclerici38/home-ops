@@ -72,15 +72,6 @@ spec:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
         capabilities: { drop: ["ALL"] }
-    tolerations:
-      - key: "location"
-        operator: "Equal"
-        value: "cloud"
-        effect: "NoSchedule"
-      - key: "location"
-        operator: "Equal"
-        value: "house"
-        effect: "NoSchedule"
     nodeSelector:
       # Don't run on arm nodes until arm64 release is published
       kubernetes.io/arch: amd64

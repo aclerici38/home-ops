@@ -26,15 +26,6 @@ spec:
       ${APP}:
         pod:
           hostUsers: false
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "cloud"
-              effect: "NoSchedule"
-            - key: "location"
-              operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000

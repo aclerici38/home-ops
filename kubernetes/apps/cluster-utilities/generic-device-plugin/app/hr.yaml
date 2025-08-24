@@ -28,15 +28,6 @@ spec:
         strategy: RollingUpdate
         pod:
           priorityClassName: system-node-critical
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "cloud"
-              effect: "NoSchedule"
-            - key: "location"
-              operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
         containers:
           main:
             image:

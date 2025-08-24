@@ -66,10 +66,6 @@ spec:
       tolerations:
         - key: "location"
           operator: "Equal"
-          value: "cloud"
-          effect: "NoSchedule"
-        - key: "location"
-          operator: "Equal"
           value: "house"
           effect: "NoSchedule"
     snapshot:

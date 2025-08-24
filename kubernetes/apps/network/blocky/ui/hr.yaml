@@ -27,15 +27,6 @@ spec:
         strategy: RollingUpdate
         pod:
           hostUsers: false
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
-            - key: "location"
-              operator: "Equal"
-              value: "cloud"
-              effect: "NoSchedule"
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000

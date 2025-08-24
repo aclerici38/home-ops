@@ -23,12 +23,3 @@ spec:
       cpu: 100m
     limits:
       memory: 1Gi
-  tolerations:
-    - key: "location"
-      operator: "Equal"
-      value: "cloud"
-      effect: "NoSchedule"
-    - key: "location"
-      operator: "Equal"
-      value: "house"
-      effect: "NoSchedule"

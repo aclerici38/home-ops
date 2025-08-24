@@ -29,11 +29,6 @@ spec:
           identifier: ${APP}
         pod:
           hostNetwork: true
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
         initContainers:
           cni-plugins:
             image:

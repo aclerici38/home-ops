@@ -3,15 +3,6 @@ image:
   repsotory: ghcr.io/xunholy/kustomize-mutating-webhook
   pullPolicy: IfNotPresent
 replicas: 2
-tolerations:
-  - key: "location"
-    operator: "Equal"
-    value: "cloud"
-    effect: "NoSchedule"
-  - key: "location"
-    operator: "Equal"
-    value: "house"
-    effect: "NoSchedule"
 annotations:
   secret.reloader.stakater.com/reload: &sname cluster-secrets
 certManager:

@@ -69,14 +69,3 @@ spec:
     tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
-      - key: node-role.kubernetes.io/control-plane
-        operator: Exists
-        effect: NoSchedule
-      - key: "location"
-        operator: "Equal"
-        value: "cloud"
-        effect: "NoSchedule"
-      - key: "location"
-        operator: "Equal"
-        value: "house"
-        effect: "NoSchedule"
