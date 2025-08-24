@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: nfs-server
+  name: nfs-server-ssd
 spec:
   interval: 1h
   maxHistory: 1
@@ -72,4 +72,4 @@ spec:
             protocol: TCP
     persistence:
       export:
-        existingClaim: nfs-pvc
+        existingClaim: nfs-ssd-pvc

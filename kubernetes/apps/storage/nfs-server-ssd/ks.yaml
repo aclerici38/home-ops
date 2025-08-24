@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app nfs-server
+  name: &app nfs-server-ssd
   namespace: &ns storage
 spec:
   targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/storage/nfs-server/app
+  path: ./kubernetes/apps/storage/nfs-server-ssd/app
   prune: true
   sourceRef:
     kind: GitRepository

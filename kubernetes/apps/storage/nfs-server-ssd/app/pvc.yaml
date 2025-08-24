@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: nfs-pvc
+  name: nfs-ssd-pvc
 spec:
   accessModes: ["ReadWriteOnce"]
   resources:
     requests:
-      storage: 50Gi
-  storageClassName: zfs-tank
+      storage: 500Gi
+  storageClassName: zfs-ssd
