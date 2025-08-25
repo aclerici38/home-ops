@@ -76,6 +76,17 @@ spec:
       microservices:
         replicas: 2
         strategy: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 1
+        pod:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/controller: microservices
+                      app.kubernetes.io/instance: immich
+                  topologyKey: kubernetes.io/hostname
         containers:
           main:
             <<: *container
