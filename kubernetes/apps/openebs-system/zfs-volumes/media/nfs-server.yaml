@@ -27,6 +27,7 @@ spec:
       media-nfs-server:
         strategy: RollingUpdate
         pod:
+          priorityClassName: system-node-critical
           securityContext:
             runAsUser: 0
             runAsGroup: 0
