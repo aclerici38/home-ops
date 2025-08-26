@@ -25,6 +25,14 @@ spec:
     controllers:
       ${APP}:
         pod:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/controller: ${APP}
+                      app.kubernetes.io/instance: ${APP}
+                  topologyKey: kubernetes.io/hostname
           hostUsers: false
           securityContext:
             runAsUser: 1000
@@ -32,7 +40,10 @@ spec:
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
         strategy: RollingUpdate
-        replicas: 3
+        replicas: 2
+        rollingUpdate:
+          surge: 1
+          unavailable: 1
         containers:
           main:
             image:
@@ -41,9 +52,9 @@ spec:
             resources:
               requests:
                 cpu: 10m
-                memory: 150Mi
+                memory: 10Mi
               limits:
-                memory: 2Gi
+                memory: 150Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
