@@ -84,7 +84,7 @@ nodes:
               - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: "98:b7:85:22:7e:27"
+          hardwareAddr: "98:b7:85:22:54:50"
         addresses:
           - "${BONDS_IP}/24"
         routes:
@@ -95,7 +95,7 @@ nodes:
           hardwareAddr: "a0:36:9f:09:4c:8f"
         ignore: true
       - deviceSelector:
-          hardwareAddr: a0:36:9f:09:4c:8e
+          hardwareAddr: 98:b7:85:22:54:51
         ignore: true
       - deviceSelector:
           hardwareAddr: a8:a1:59:dd:87:18
