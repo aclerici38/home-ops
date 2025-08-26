@@ -25,8 +25,19 @@ spec:
     controllers:
       apartment:
         strategy: RollingUpdate
-        replicas: 1
+        replicas: 2
+        rollingUpdate:
+          surge: 0
+          unavailable: 1
         pod:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/controller: apartment
+                      app.kubernetes.io/instance: blocky
+                  topologyKey: kubernetes.io/hostname
           nodeSelector:
             location: apartment
         containers: &container
