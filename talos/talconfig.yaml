@@ -84,7 +84,7 @@ nodes:
               - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: "a0:36:9f:09:4c:8f"
+          hardwareAddr: "98:b7:85:22:7e:27"
         addresses:
           - "${BONDS_IP}/24"
         routes:
@@ -92,11 +92,14 @@ nodes:
             gateway: "192.168.9.1"
         mtu: 9000
       - deviceSelector:
+          hardwareAddr: "a0:36:9f:09:4c:8f"
+        ignore: true
+      - deviceSelector:
           hardwareAddr: a0:36:9f:09:4c:8e
         ignore: true
       - deviceSelector:
           hardwareAddr: a8:a1:59:dd:87:18
-        ignore: true
+        dhcp: true
       - interface: wg0
         mtu: 1420
         addresses:
