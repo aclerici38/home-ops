@@ -84,8 +84,8 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /export
-      # files:
-      #   existingClaim: files
+      files:
+        existingClaim: files
       immich:
         existingClaim: immich
         globalMounts:
