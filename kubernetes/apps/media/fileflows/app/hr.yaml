@@ -172,6 +172,6 @@ spec:
       media-nfs:
         type: nfs
         server: ${NFS_LB_IP}
-        path: /export/media
+        path: /media
         globalMounts:
           - path: /allMedia

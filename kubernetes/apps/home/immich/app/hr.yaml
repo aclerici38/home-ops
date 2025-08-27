@@ -208,7 +208,7 @@ spec:
       media:
         type: nfs
         server: ${NFS_LB_IP}
-        path: /export/immich
+        path: /immich
         advancedMounts:
           microservices:
             main: &mounts
