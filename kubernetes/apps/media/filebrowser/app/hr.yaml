@@ -100,8 +100,8 @@ spec:
           - path: /mnt/media
       files:
         type: nfs
-        server: ${FILES_NFS_LB_IP}
-        path: /
+        server: ${NFS_LB_IP}
+        path: /files
         globalMounts:
           - path: /mnt/documents
             subPath: documents

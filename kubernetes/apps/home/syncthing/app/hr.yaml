@@ -109,7 +109,7 @@ spec:
           - path: /var/syncthing
       files:
         type: nfs
-        server: ${FILES_NFS_LB_IP}
-        path: /
+        server: ${NFS_LB_IP}
+        path: /files
         globalMounts:
           - path: /var/mnt/files
