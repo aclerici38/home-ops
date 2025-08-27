@@ -81,7 +81,7 @@ spec:
       fake-export:
         type: emptyDir
         globalMounts:
-          - /export
+          - path: /export
       # files:
       #   existingClaim: files
       immich:

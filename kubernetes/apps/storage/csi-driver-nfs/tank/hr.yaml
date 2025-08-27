@@ -22,7 +22,7 @@ spec:
     remediation:
       retries: 1
   dependsOn:
-    - name: nfs-server-tank
+    - name: nfs-server
   values:
     controller:
       name: csi-nfs-tank-controller
