@@ -169,20 +169,9 @@ spec:
             subPath: templates
           - path: /app/Server/wwwroot/i18n
             subPath: i18n
-      media:
-        existingClaim: media
-        advancedMounts:
-          server:
-            main:
-              - path: /allMedia
-          node-bonds:
-            main:
-              - path: /allMedia
       media-nfs:
         type: nfs
         server: ${NFS_LB_IP}
-        path: /
-        advancedMounts:
-          node-cain:
-            main:
-              - path: /allMedia
+        path: /media
+        globalMounts:
+          - path: /allMedia

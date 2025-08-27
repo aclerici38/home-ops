@@ -102,7 +102,7 @@ spec:
       media:
         type: nfs
         server: ${NFS_LB_IP}
-        path: /
+        path: /media
         globalMounts:
           - path: /allMedia
       tmpfs:
