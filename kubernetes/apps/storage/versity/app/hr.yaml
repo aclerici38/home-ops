@@ -26,6 +26,7 @@ spec:
       ${APP}:
         strategy: RollingUpdate
         pod:
+          priorityClassName: system-node-critical
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
