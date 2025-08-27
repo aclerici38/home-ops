@@ -86,6 +86,8 @@ spec:
           - path: /export
       files:
         existingClaim: files
+        globalMounts:
+          - path: /export/files
       immich:
         existingClaim: immich
         globalMounts:
