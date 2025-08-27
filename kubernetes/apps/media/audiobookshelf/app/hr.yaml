@@ -83,6 +83,8 @@ spec:
       config:
         existingClaim: audiobookshelf
       media:
-        existingClaim: media
+        type: nfs
+        server: ${NFS_LB_IP}
+        path: /media
         globalMounts:
           - path: /allMedia
