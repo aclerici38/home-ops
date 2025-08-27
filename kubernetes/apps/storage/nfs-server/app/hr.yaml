@@ -49,7 +49,7 @@ spec:
                     command:
                       - sh
                       - -c
-                      - "showmount -e localhost | grep -q /files"
+                      - "showmount -e localhost | grep -q /media"
               liveness: *probes
             resources:
               requests:
