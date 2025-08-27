@@ -31,7 +31,7 @@ spec:
             runAsUser: 0
             runAsGroup: 0
             runAsNonRoot: false
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: { type: Unconfined }
         containers:
           main:
             image:
