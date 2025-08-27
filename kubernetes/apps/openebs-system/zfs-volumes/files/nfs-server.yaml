@@ -36,8 +36,9 @@ spec:
         containers:
           main:
             image:
-              repository: quay.io/aminvakil/alpine-nfs-server
-              tag: latest@sha256:640999d23e9b731b61e203de4ca9cfe9f6bd39979472397f5201e7e9728fc525
+              repository: docker.io/ant385525/alpine-nfs
+              tag: latest
+              pullPolicy: Always
             env:
               SHARED_DIRECTORY: /files
               SYNC: true
