@@ -41,7 +41,7 @@ spec:
               pullPolicy: Always
             env:
               SHARED_DIRECTORY: /files
-              SYNC: true
+              EXPORTS_MOUNTED: true
             probes:
               readiness: &probes
                 enabled: true
@@ -74,5 +74,11 @@ spec:
             port: 2049
             protocol: TCP
     persistence:
+      exports:
+        type: configMap
+        name: nfs-exports
+        globalMounts:
+          - path: /etc/exports
+            subPath: files-exports
       files:
         existingClaim: files
