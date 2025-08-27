@@ -3,38 +3,21 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app nfs-server-ssd
+  name: &app nfs-server
   namespace: &ns storage
 spec:
   targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/storage/nfs-server/ssd
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  wait: true
-  interval: 30m
-  timeout: 3m
-  postBuild:
-    substitute:
-      APP: *app
----
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app nfs-server-tank
-  namespace: &ns storage
-spec:
-  targetNamespace: *ns
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/storage/nfs-server/tank
+  dependsOn:
+    - name: immich-zfs-volume
+      namespace: openebs-system
+    - name: files-zfs-volume
+      namespace: openebs-system
+    - name: media-zfs-volume
+      namespace: openebs-system
+  path: ./kubernetes/apps/storage/nfs-server/app
   prune: true
   sourceRef:
     kind: GitRepository

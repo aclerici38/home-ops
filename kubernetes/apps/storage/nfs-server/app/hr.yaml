@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: nfs-server-tank
+  name: nfs-server
 spec:
   interval: 1h
   maxHistory: 1
@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      files-nfs-server:
         strategy: RollingUpdate
         pod:
           priorityClassName: system-node-critical
@@ -35,11 +35,11 @@ spec:
         containers:
           main:
             image:
-              repository: quay.io/aminvakil/alpine-nfs-server
-              tag: latest@sha256:640999d23e9b731b61e203de4ca9cfe9f6bd39979472397f5201e7e9728fc525
+              repository: docker.io/ant385525/alpine-nfs
+              tag: latest
+              pullPolicy: Always
             env:
-              SHARED_DIRECTORY: /export
-              SYNC: true
+              EXPORTS_MOUNTED: true
             probes:
               readiness: &probes
                 enabled: true
@@ -49,7 +49,7 @@ spec:
                     command:
                       - sh
                       - -c
-                      - "showmount -e localhost | grep -q $(SHARED_DIRECTORY)"
+                      - "showmount -e localhost | grep -q /files"
               liveness: *probes
             resources:
               requests:
@@ -63,14 +63,28 @@ spec:
               privileged: true
     service:
       main:
-        controller: ${APP}
+        controller: files-nfs-server
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: "${NFS_TANK_PVC_LB_IP}"
+          lbipam.cilium.io/ips: ${NFS_LB_IP}
         ports:
           nfs:
             port: 2049
             protocol: TCP
     persistence:
-      export:
+      exports:
+        type: configMap
+        name: nfs-exports
+        globalMounts:
+          - path: /etc/exports
+            subPath: exports
+      # files:
+      #   existingClaim: files
+      immich:
+        existingClaim: immich
+      media:
+        existingClaim: media
+      ssd:
+        existingClaim: nfs-ssd-pvc
+      tank:
         existingClaim: nfs-tank-pvc

@@ -9,3 +9,14 @@ spec:
     requests:
       storage: 500Gi
   storageClassName: zfs-ssd
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-tank-pvc
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 2Ti
+  storageClassName: zfs-tank

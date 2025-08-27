@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: nfs-exports
-  namespace: home
-data:
-  files-exports: |
-    /files *(rw,sync,no_subtree_check,sec=sys,all_squash,anonuid=1000,anongid=1000)
