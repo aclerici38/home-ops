@@ -67,6 +67,7 @@ spec:
       main:
         controller: ${APP}
         type: LoadBalancer
+        externalTrafficPolicy: Local
         annotations:
           lbipam.cilium.io/ips: ${NFS_LB_IP}
         ports:
