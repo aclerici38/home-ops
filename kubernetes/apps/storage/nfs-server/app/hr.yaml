@@ -78,6 +78,10 @@ spec:
         globalMounts:
           - path: /etc/exports
             subPath: exports
+      fake-export:
+        type: emptyDir
+        globalMounts:
+          - /export
       # files:
       #   existingClaim: files
       immich:
