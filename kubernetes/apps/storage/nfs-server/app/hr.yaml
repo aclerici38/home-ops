@@ -30,6 +30,8 @@ spec:
           securityContext:
             runAsUser: 0
             runAsGroup: 0
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
             runAsNonRoot: false
             seccompProfile: { type: RuntimeDefault }
         containers:
