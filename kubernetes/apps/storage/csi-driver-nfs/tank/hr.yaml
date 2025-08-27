@@ -32,7 +32,7 @@ spec:
       create: true
       name: nfs-tank
       parameters:
-        server: "${NFS_TANK_PVC_LB_IP}"
+        server: "${NFS_LB_IP}"
         share: "/"
       mountOptions:
         - nfsvers=4.2

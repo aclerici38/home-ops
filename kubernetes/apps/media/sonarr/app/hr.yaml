@@ -86,7 +86,7 @@ spec:
                 cpu: 100m
                 memory: 100Mi
               limits:
-                memory: 16Gi      
+                memory: 16Gi
     service:
       main:
         controller: ${APP}
@@ -117,7 +117,7 @@ spec:
             subPath: config
       media:
         type: nfs
-        server: ${MEDIA_NFS_LB_IP}
+        server: ${NFS_LB_IP}
         path: /
         globalMounts:
           - path: /allMedia

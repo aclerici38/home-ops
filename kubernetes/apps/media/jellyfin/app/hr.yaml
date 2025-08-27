@@ -101,7 +101,7 @@ spec:
           - path: /config/metadata
       media:
         type: nfs
-        server: ${MEDIA_NFS_LB_IP}
+        server: ${NFS_LB_IP}
         path: /
         globalMounts:
           - path: /allMedia

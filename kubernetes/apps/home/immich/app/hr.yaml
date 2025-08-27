@@ -207,7 +207,7 @@ spec:
     persistence:
       media:
         type: nfs
-        server: ${IMMICH_NFS_LB_IP}
+        server: ${NFS_LB_IP}
         path: /
         advancedMounts:
           microservices:

@@ -104,7 +104,7 @@ spec:
             subPath: logs
       ingest:
         type: nfs
-        server: ${MEDIA_NFS_LB_IP}
+        server: ${NFS_LB_IP}
         path: /
         globalMounts:
           - path: *ingest
