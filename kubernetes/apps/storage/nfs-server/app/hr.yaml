@@ -74,12 +74,12 @@ spec:
             port: 2049
             protocol: TCP
     persistence:
-      exports:
-        type: configMap
-        name: nfs-exports
-        globalMounts:
-          - path: /etc/exports
-            subPath: exports
+      # exports:
+      #   type: configMap
+      #   name: nfs-exports
+      #   globalMounts:
+      #     - path: /etc/exports
+      #       subPath: exports
       fake-export:
         type: emptyDir
         globalMounts:
