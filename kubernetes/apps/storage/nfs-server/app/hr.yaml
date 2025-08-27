@@ -37,11 +37,11 @@ spec:
         containers:
           main:
             image:
-              repository: quay.io/aminvakil/alpine-nfs-server
+              repository: docker.io/ant385525/alpine-nfs
               tag: latest
               pullPolicy: Always
             env:
-              SHARED_DIRECTORY: /export
+              EXPORTS_MOUNTED: true
             probes:
               readiness: &probes
                 enabled: true
@@ -74,12 +74,12 @@ spec:
             port: 2049
             protocol: TCP
     persistence:
-      # exports:
-      #   type: configMap
-      #   name: nfs-exports
-      #   globalMounts:
-      #     - path: /etc/exports
-      #       subPath: exports
+      exports:
+        type: configMap
+        name: nfs-exports
+        globalMounts:
+          - path: /etc/exports
+            subPath: exports
       fake-export:
         type: emptyDir
         globalMounts:
