@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      files-nfs-server:
+      ${APP}:
         strategy: RollingUpdate
         pod:
           priorityClassName: system-node-critical
@@ -65,7 +65,7 @@ spec:
               privileged: true
     service:
       main:
-        controller: files-nfs-server
+        controller: ${APP}
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: ${NFS_LB_IP}
