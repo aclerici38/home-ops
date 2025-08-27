@@ -105,7 +105,7 @@ spec:
       ingest:
         type: nfs
         server: ${NFS_LB_IP}
-        path: /media
+        path: /export/media
         globalMounts:
           - path: *ingest
             subPath: books/calibre/ingest

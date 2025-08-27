@@ -82,9 +82,17 @@ spec:
       #   existingClaim: files
       immich:
         existingClaim: immich
+        globalMounts:
+          - path: /export/immich
       media:
         existingClaim: media
+        globalMounts:
+          - path: /export/media
       ssd:
         existingClaim: nfs-ssd-pvc
+        globalMounts:
+          - path: /export/ssd
       tank:
         existingClaim: nfs-tank-pvc
+        globalMounts:
+          - path: /export/tank

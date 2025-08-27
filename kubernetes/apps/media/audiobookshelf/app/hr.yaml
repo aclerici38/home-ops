@@ -85,6 +85,6 @@ spec:
       media:
         type: nfs
         server: ${NFS_LB_IP}
-        path: /media
+        path: /export/media
         globalMounts:
           - path: /allMedia

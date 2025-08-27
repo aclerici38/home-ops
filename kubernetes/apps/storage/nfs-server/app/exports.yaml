@@ -5,7 +5,8 @@ metadata:
   namespace: home
 data:
   exports: |
-    /immich *(rw,sync,no_subtree_check,sec=sys)
-    /media *(rw,sync,no_subtree_check,sec=sys,all_squash,anonuid=1000,anongid=1000)
-    /ssd *(rw,sync,no_subtree_check,sec=sys)
-    /tank *(rw,sync,no_subtree_check,sec=sys)
+    /export *(rw,fsid=0,crossmnt,no_subtree_check,sec=sys)
+    /export/immich *(rw,sync,no_subtree_check,sec=sys)
+    /export/media *(rw,sync,no_subtree_check,sec=sys,all_squash,anonuid=1000,anongid=1000)
+    /export/ssd *(rw,sync,no_subtree_check,sec=sys)
+    /export/tank *(rw,sync,no_subtree_check,sec=sys)
