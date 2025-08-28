@@ -101,7 +101,6 @@ spec:
       files:
         type: nfs
         server: ${NFS_LB_IP}
-        path: /files
+        path: /files/documents
         globalMounts:
           - path: /mnt/documents
-            subPath: documents
