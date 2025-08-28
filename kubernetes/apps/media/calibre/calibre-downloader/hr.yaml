@@ -20,8 +20,6 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
-  dependsOn:
-    - name: media-nfs-server
   values:
     controllers:
       ${APP}:
