@@ -5,8 +5,3 @@ metadata:
 data:
   exports: |
     /export *(rw,fsid=0,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check)
-    /export/files *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check)
-    /export/immich *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check)
-    /export/media *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check)
-    /export/ssd *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check)
-    /export/tank *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check)
