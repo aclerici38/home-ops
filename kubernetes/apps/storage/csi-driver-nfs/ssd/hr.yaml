@@ -39,7 +39,8 @@ spec:
       name: nfs-ssd
       parameters:
         server: "${NFS_LB_IP}"
-        share: "/ssd"
+        share: "/"
+        subDir: /ssd
       mountOptions:
         - nfsvers=4.2
         - nconnect=16

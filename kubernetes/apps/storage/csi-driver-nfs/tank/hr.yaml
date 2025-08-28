@@ -35,7 +35,8 @@ spec:
       name: nfs-tank
       parameters:
         server: "${NFS_LB_IP}"
-        share: "/tank"
+        share: "/"
+        subDir: /tank
       mountOptions:
         - nfsvers=4.2
         - nconnect=16
