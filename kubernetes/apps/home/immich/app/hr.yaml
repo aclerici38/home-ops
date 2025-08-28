@@ -22,7 +22,7 @@ spec:
     remediation:
       retries: 1
   dependsOn:
-    - name: immich-nfs-server
+    - name: nfs-server
   values:
     controllers:
       server:
@@ -205,21 +205,33 @@ spec:
             timeouts:
               request: 0s
     persistence:
-      media:
+      upload:
         type: nfs
         server: ${NFS_LB_IP}
-        path: /immich
+        path: /immich/upload
         advancedMounts:
-          microservices:
-            main: &mounts
+          microservices: &mounts
+            main:
               - path: /data/upload
-                subPath: upload
+          server: *mounts
+      profile:
+        type: nfs
+        server: ${NFS_LB_IP}
+        path: /immich/profile
+        advancedMounts:
+          microservices: &mounts
+            main:
               - path: /data/profile
-                subPath: profile
+          server: *mounts
+      library:
+        type: nfs
+        server: ${NFS_LB_IP}
+        path: /immich/library
+        advancedMounts:
+          microservices: &mounts
+            main:
               - path: /data/library
-                subPath: library
-          server:
-            main: *mounts
+          server: *mounts
       thumbnails:
         existingClaim: immich-thumbs
         advancedMounts:
