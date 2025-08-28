@@ -37,7 +37,7 @@ spec:
         containers:
           main:
             image:
-              repository: docker.io/ant385525/alpine-nfs
+              repository: quay.io/aminvakil/alpine-nfs-server
               tag: latest
               pullPolicy: Always
             env:
