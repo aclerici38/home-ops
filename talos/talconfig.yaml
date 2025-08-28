@@ -83,8 +83,13 @@ nodes:
               - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
               - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
     networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "98:b7:85:22:54:50"
+      - interface: bond0
+        bond:
+          mode: 802.3ad
+          lacpRate: fast
+          xmitHashPolicy: layer3+4
+          deviceSelectors:
+            - hardwareAddr: 98:b7:85:22:54*
         addresses:
           - "${BONDS_IP}/24"
         routes:
@@ -93,9 +98,6 @@ nodes:
         mtu: 9000
       - deviceSelector:
           hardwareAddr: "a0:36:9f:09:4c:8f"
-        ignore: true
-      - deviceSelector:
-          hardwareAddr: 98:b7:85:22:54:51
         ignore: true
       - deviceSelector:
           hardwareAddr: a8:a1:59:dd:87:18
@@ -150,23 +152,19 @@ nodes:
       - "@./patches/wireguard/madbum.yaml"
       - "@./patches/wireguard/house-opnsense.yaml"
     networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "58:47:ca:7c:77:20"
+      - interface: bond0
+        bond:
+          mode: 802.3ad
+          lacpRate: fast
+          xmitHashPolicy: layer3+4
+          deviceSelectors:
+            - hardwareAddr: 58:47:ca:7c:77*
         addresses:
           - "${CAIN_IP}/24"
         routes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
         mtu: 9000
-      - deviceSelector:
-          hardwareAddr: 58:47:ca:7c:77:1f
-        ignore: true
-      - deviceSelector:
-          hardwareAddr: 58:47:ca:7c:77:1e
-        ignore: true
-      - deviceSelector:
-          hardwareAddr: 58:47:ca:7c:77:1d
-        ignore: true
       - interface: wg0
         mtu: 1420
         addresses:

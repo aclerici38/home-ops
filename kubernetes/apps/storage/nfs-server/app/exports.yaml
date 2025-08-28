@@ -2,12 +2,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: nfs-exports
-  namespace: home
 data:
   exports: |
-    /export *(rw,fsid=0,all_squash,anonuid=1000,anongid=1000,insecure)
-    /export/files *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure)
-    /export/immich *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure)
-    /export/media *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure)
-    /export/ssd *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure)
-    /export/tank *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure)
+    /export *(rw,fsid=0,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check)
+    /export/files *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check)
+    /export/immich *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check)
+    /export/media *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check)
+    /export/ssd *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check)
+    /export/tank *(rw,sync,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check)

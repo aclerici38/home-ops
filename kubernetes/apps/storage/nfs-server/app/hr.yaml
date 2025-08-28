@@ -64,17 +64,17 @@ spec:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
               privileged: true
-    # service:
-    #   main:
-    #     controller: ${APP}
-    #     type: LoadBalancer
-    #     externalTrafficPolicy: Local
-    #     annotations:
-    #       lbipam.cilium.io/ips: ${NFS_LB_IP}
-    #     ports:
-    #       nfs:
-    #         port: 2049
-    #         protocol: TCP
+    service:
+      main:
+        controller: ${APP}
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        annotations:
+          lbipam.cilium.io/ips: ${NFS_LB_IP}
+        ports:
+          nfs:
+            port: 2049
+            protocol: TCP
     persistence:
       exports:
         type: configMap
