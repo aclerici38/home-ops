@@ -112,10 +112,15 @@ spec:
             subPath: cache
           - path: /tmp
             subPath: tmp
-      media:
-        existingClaim: media
+      ingest:
+        type: nfs
+        server: ${NFS_LB_IP}
+        path: /media/books/calibre/ingest
         globalMounts:
           - path: /cwa-book-ingest
-            subPath: books/calibre/ingest
+      library:
+        type: nfs
+        server: ${NFS_LB_IP}
+        path: /media/books/calibre/library
+        globalMounts:
           - path: /calibre-library
-            subPath: books/calibre/library
