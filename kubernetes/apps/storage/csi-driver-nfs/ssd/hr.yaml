@@ -24,6 +24,8 @@ spec:
   dependsOn:
     - name: nfs-server
   values:
+    feature:
+      enableFSGroupPolicy: false
     controller:
       name: csi-nfs-ssd-controller
       livenessProbe:
