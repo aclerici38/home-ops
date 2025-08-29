@@ -66,6 +66,7 @@ spec:
     service:
       main:
         controller: ${APP}
+        externalTrafficPolicy: Local
         ports:
           http:
             port: *port
