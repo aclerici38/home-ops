@@ -34,13 +34,3 @@ spec:
           regex: (pod)
     prometheusRules:
       enabled: true
-    # Don't care abt cloud node
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: location
-                  operator: NotIn
-                  values:
-                    - cloud

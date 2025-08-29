@@ -1,9 +1,0 @@
----
-apiVersion: v1alpha1
-kind: RawVolumeConfig
-name: topolvm
-provisioning:
-  diskSelector:
-    match: system_disk
-  maxSize: 1.5TB
-  grow: false
