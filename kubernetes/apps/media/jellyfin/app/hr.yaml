@@ -68,7 +68,7 @@ spec:
         controller: ${APP}
         ports:
           http:
-            port: *port
+            port: &port 8096
     serviceMonitor:
       main:
         serviceName: ${APP}
