@@ -88,7 +88,7 @@ spec:
         existingClaim: firefox
       data:
         type: nfs
-        server: ${NFS_LB_IP}
+        server: ${NFS_IP}
         path: /media
         globalMounts:
           - path: /allMedia

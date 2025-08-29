@@ -114,13 +114,13 @@ spec:
             subPath: tmp
       ingest:
         type: nfs
-        server: ${NFS_LB_IP}
+        server: ${NFS_IP}
         path: /media/books/calibre/ingest
         globalMounts:
           - path: /cwa-book-ingest
       library:
         type: nfs
-        server: ${NFS_LB_IP}
+        server: ${NFS_IP}
         path: /media/books/calibre/library
         globalMounts:
           - path: /calibre-library

@@ -94,13 +94,13 @@ spec:
             subPath: config.yaml
       media:
         type: nfs
-        server: ${NFS_LB_IP}
+        server: ${NFS_IP}
         path: /media
         globalMounts:
           - path: /mnt/media
       files:
         type: nfs
-        server: ${NFS_LB_IP}
+        server: ${NFS_IP}
         path: /files/documents
         globalMounts:
           - path: /mnt/documents

@@ -208,7 +208,7 @@ spec:
     persistence:
       upload:
         type: nfs
-        server: ${NFS_LB_IP}
+        server: ${NFS_IP}
         path: /immich/upload
         advancedMounts:
           microservices: &mounts
@@ -217,7 +217,7 @@ spec:
           server: *mounts
       profile:
         type: nfs
-        server: ${NFS_LB_IP}
+        server: ${NFS_IP}
         path: /immich/profile
         advancedMounts:
           microservices: &mounts
@@ -226,7 +226,7 @@ spec:
           server: *mounts
       library:
         type: nfs
-        server: ${NFS_LB_IP}
+        server: ${NFS_IP}
         path: /immich/library
         advancedMounts:
           microservices: &mounts

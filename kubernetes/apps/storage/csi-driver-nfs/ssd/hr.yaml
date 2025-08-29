@@ -38,7 +38,7 @@ spec:
       create: true
       name: nfs-ssd
       parameters:
-        server: "${NFS_LB_IP}"
+        server: "${NFS_IP}"
         share: "/"
         subDir: /ssd
       mountOptions:

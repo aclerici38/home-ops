@@ -63,7 +63,7 @@ spec:
             subPath: config.yml
       time-machine:
         type: nfs
-        server: ${NFS_LB_IP}
+        server: ${NFS_IP}
         path: /files
         globalMounts:
           - path: /samba/time-machine

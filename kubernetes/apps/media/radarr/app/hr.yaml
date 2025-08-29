@@ -117,7 +117,7 @@ spec:
             subPath: config
       media:
         type: nfs
-        server: ${NFS_LB_IP}
+        server: ${NFS_IP}
         path: /media
         globalMounts:
           - path: /allMedia
