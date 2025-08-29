@@ -33,13 +33,14 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
             runAsNonRoot: false
-            seccompProfile: { type: Unconfined }
+            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
+              # Only latest tag is published and overwritten each update so don't pin digest
+              # e.g. node boots after update, latest@sha no longer exists, new update not merged: no nfs
               repository: quay.io/aminvakil/alpine-nfs-server
               tag: latest
-              pullPolicy: Always
             env:
               EXPORTS_MOUNTED: true
             probes:
