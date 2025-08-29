@@ -28,13 +28,6 @@ sysctlfix:
   enabled: false
 hubble:
   enabled: true
-  affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: node-role.kubernetes.io/control-plane
-              operator: Exists
   ui:
     enabled: true
     rollOutPods: true
