@@ -88,6 +88,8 @@ spec:
           - backendRefs:
             - identifier: main
               port: *port
+            timeouts:
+              request: 0s
         parentRefs:
           - name: external
             namespace: network
