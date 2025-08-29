@@ -40,11 +40,11 @@ spec:
             image:
               # Only latest tag is published and overwritten each update so don't pin digest
               # e.g. node boots after update, latest@sha no longer exists, new update not merged: no nfs
-              repository: docker.io/ant385525/alpine-nfs
+              repository: quay.io/aminvakil/alpine-nfs-server
               tag: latest
             env:
               EXPORTS_MOUNTED: true
-              NFS_THREADS: 128
+              RPCNFSDCOUNT: 128
             probes:
               readiness: &probes
                 enabled: true
