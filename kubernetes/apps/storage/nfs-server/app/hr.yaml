@@ -33,7 +33,7 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
             runAsNonRoot: false
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: { type: Unconfined }
         containers:
           main:
             image:
