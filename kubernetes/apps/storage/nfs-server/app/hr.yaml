@@ -44,7 +44,7 @@ spec:
               tag: latest
             env:
               EXPORTS_MOUNTED: true
-              RPCNFSDCOUNT: 128
+              RPCNFSDCOUNT: "128"
             probes:
               readiness: &probes
                 enabled: true
