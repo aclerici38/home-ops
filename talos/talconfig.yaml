@@ -64,13 +64,6 @@ nodes:
             - siderolabs/nfsd
             - siderolabs/mei
     controlPlane: true
-    patches:
-      - |-
-        machine:
-          udev:
-            rules:
-              - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
-              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
     networkInterfaces:
       - interface: bond0
         bond:
@@ -153,6 +146,13 @@ nodes:
           grow: false
     extraManifests:
       - ./volumes/cain-raw-volumes.yaml
+    patches:
+      - |-
+        machine:
+          udev:
+            rules:
+              - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
+              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
   - hostname: "timmy"
     ipAddress: "${TIMMY_IP}"
     installDiskSelector:
