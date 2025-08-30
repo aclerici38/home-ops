@@ -10,7 +10,10 @@ caching:
   cacheTimeNegative: -1
 
 log:
-  level: info
+  level: debug
+
+ede:
+  enable: true
 
 minTlsServeVersion: 1.3
 ports:
@@ -42,6 +45,8 @@ clientLookup:
       - 127.0.0.1
 
 upstreams:
+  init:
+    strategy: fast
   groups:
     default:
       - ${DNSCRYPT_CLUSTER_IP}:53
