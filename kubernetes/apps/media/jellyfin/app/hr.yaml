@@ -39,18 +39,18 @@ spec:
             image:
               repository: ghcr.io/jellyfin/jellyfin
               tag: 10.11.0-rc5
-            # probes:
-            #   liveness: &probes
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       httpGet:
-            #         path: /health
-            #         port: &port 8096
-            #       periodSeconds: 5
-            #       failureThreshold: 20
-            #       initialDelaySeconds: 10
-            #   readiness: *probes
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: &port 8096
+                  periodSeconds: 5
+                  failureThreshold: 20
+                  initialDelaySeconds: 10
+              readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -60,7 +60,7 @@ spec:
                 cpu: 100m
                 memory: 500Mi
               limits:
-                gpu.intel.com/i915: 1
+                # gpu.intel.com/i915: 1
                 cpu: "16"
                 memory: 16Gi
     service:
