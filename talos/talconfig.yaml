@@ -14,15 +14,10 @@ clusterSvcNets:
 additionalApiServerCertSans: &sans
   - "10.38.55.200"
   - "${BONDS_IP}"
-  - "${POSEY_IP}"
   - "${TIMMY_IP}"
+  - "${CAIN_IP}"
   - "127.0.0.1"
   - "172.17.0.1"
-  - "${CLOUD_IP}"
-  - "${BONDS_WG_IP}"
-  - "${POSEY_WG_IP}"
-  - "${TIMMY_WG_IP}"
-  - "posey"
   - "bonds"
   - "timmy"
 additionalMachineCertSans: *sans
@@ -172,8 +167,12 @@ nodes:
     controlPlane: true
     talosImageURL: ghcr.io/aclerici38/installer
     networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "d8:3a:dd:d2:76:d2"
+      - interface: bond0
+        bond:
+          mode: active-backup
+          xmitHashPolicy: layer3+4
+          deviceSelectors:
+            - hardwareAddr: "d8:3a:dd:d2:76:d2"
         addresses:
           - "${TIMMY_IP}/24"
         routes:
