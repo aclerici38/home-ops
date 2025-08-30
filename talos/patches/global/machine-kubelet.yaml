@@ -4,7 +4,6 @@ machine:
       max-pods: 500
     nodeIP:
       validSubnets:
-        - "10.40.40.0/24"
         - "10.0.30.0/24"
         - "192.168.9.0/24"
     extraConfig:

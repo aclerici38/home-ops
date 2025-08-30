@@ -12,6 +12,10 @@ cluster:
   coreDNS:
     disabled: true
   etcd:
+    advertisedSubnets:
+      - "192.168.9.0/24"
+    listenSubnets:
+      - "192.168.9.0/24"
     extraArgs:
       listen-metrics-urls: http://0.0.0.0:2381
   proxy:

@@ -38,7 +38,7 @@ spec:
             sectionName: https
     cephClusterSpec:
       mon:
-        count: 2
+        count: 3
       cephConfig:
         global:
           bdev_enable_discard: "true" # quote
