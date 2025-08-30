@@ -70,8 +70,6 @@ nodes:
             - siderolabs/mei
     controlPlane: true
     patches:
-      - "@./patches/wireguard/posey.yaml"
-      - "@./patches/wireguard/house-opnsense.yaml"
       - |-
         machine:
           udev:
@@ -98,13 +96,6 @@ nodes:
       - deviceSelector:
           hardwareAddr: a8:a1:59:dd:87:18
         dhcp: true
-      - interface: wg0
-        mtu: 1420
-        addresses:
-          - ${BONDS_WG_IP}/24
-        wireguard:
-          privateKey: ${BONDS_WG_PRIVATE_KEY}
-          listenPort: ${BONDS_WG_PORT}
     extraManifests:
       - ./volumes/bonds-raw-volumes.yaml
   - hostname: "cain"
@@ -143,9 +134,6 @@ nodes:
             - siderolabs/mei
             - siderolabs/intel-ucode
     controlPlane: true
-    patches:
-      - "@./patches/wireguard/posey.yaml"
-      - "@./patches/wireguard/house-opnsense.yaml"
     networkInterfaces:
       - interface: bond0
         bond:
@@ -160,13 +148,6 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
         mtu: 9000
-      - interface: wg0
-        mtu: 1420
-        addresses:
-          - ${CAIN_WG_IP}/24
-        wireguard:
-          privateKey: ${CAIN_WG_PRIVATE_KEY}
-          listenPort: ${CAIN_WG_PORT}
     # TODO: Update with raw volumes once supported
     userVolumes:
       - name: EPHEMERAL
@@ -190,9 +171,6 @@ nodes:
       location: "apartment"
     controlPlane: true
     talosImageURL: ghcr.io/aclerici38/installer
-    patches:
-      - "@./patches/wireguard/posey.yaml"
-      - "@./patches/wireguard/house-opnsense.yaml"
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "d8:3a:dd:d2:76:d2"
@@ -202,13 +180,6 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
         mtu: 9000
-      - interface: wg0
-        mtu: 1420
-        addresses:
-          - ${TIMMY_WG_IP}/24
-        wireguard:
-          privateKey: ${TIMMY_WG_PRIVATE_KEY}
-          listenPort: ${TIMMY_WG_PORT}
   - hostname: "posey"
     ipAddress: "${POSEY_IP}"
     installDiskSelector:
@@ -241,10 +212,6 @@ nodes:
     nodeTaints:
       location: house:NoSchedule
     patches:
-      - "@./patches/wireguard/bonds.yaml"
-      - "@./patches/wireguard/timmy.yaml"
-      - "@./patches/wireguard/cain.yaml"
-      - "@./patches/wireguard/apartment-opnsense.yaml"
       - |-
         machine:
           udev:
@@ -265,13 +232,6 @@ nodes:
       - deviceSelector:
           hardwareAddr: a8:5e:45:9c:d0:99
         ignore: true
-      - interface: wg0
-        mtu: 1420
-        addresses:
-          - ${POSEY_WG_IP}/24
-        wireguard:
-          privateKey: ${POSEY_WG_PRIVATE_KEY}
-          listenPort: ${POSEY_WG_PORT}
     volumes:
       - name: EPHEMERAL
         provisioning:
