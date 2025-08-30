@@ -43,7 +43,7 @@ spec:
             runAsUser: 1000
             runAsGroup: 1000
             seccompProfile: { type: RuntimeDefault }
-        containers: &container
+        containers:
           main:
             image:
               repository: ghcr.io/0xerr0r/blocky
@@ -100,7 +100,7 @@ spec:
                 drop:
                   - ALL
     service:
-      apartment: &svc
+      apartment:
         controller: ${APP}
         type: LoadBalancer
         annotations:
