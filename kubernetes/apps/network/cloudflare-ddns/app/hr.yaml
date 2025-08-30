@@ -23,13 +23,17 @@ spec:
       retries: 1
   values:
     controllers:
-      apartment:
+      ${APP}:
         strategy: RollingUpdate
         pod:
-          nodeSelector:
-            location: apartment
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile: { type: RuntimeDefault }
         containers:
-          main: &container
+          main:
             image:
               repository: ghcr.io/larivierec/cloudflare-ddns
               tag: v1.0.14@sha256:89cc7f9aee188745e15b1a5c157df39abba47d47447f51da5be241acf3010ccc
@@ -71,53 +75,20 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-      house:
-        strategy: RollingUpdate
-        pod:
-          nodeSelector:
-            location: &location house
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: *location
-              effect: "NoSchedule"
-        containers:
-          main:
-            <<: *container
-            args:
-              - --zone-name
-              - ${SECRET_DOMAIN}
-              - --record-name
-              - house.${SECRET_DOMAIN}
-              - --provider
-              - random
-    defaultPodOptions:
-      hostUsers: false
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        seccompProfile: { type: RuntimeDefault }
     service:
-      apartment:
-        controller: apartment
-        ports: &ports
+      main:
+        controller: ${APP}
+        ports:
           http:
-            port: &port 9000
+            port: 9000
           health:
             port: *healthPort
-      house:
-        controller: house
-        ports: *ports
     serviceMonitor:
       apartment:
-        serviceName: apartment
-        endpoints: &endp
+        serviceName: main
+        endpoints:
           - port: health
             scheme: http
             path: /metrics
             interval: 30s
             scrapeTimeout: 30s
-      house:
-        serviceName: house
-        endpoints: *endp

@@ -74,12 +74,6 @@ spec:
             securityContext: *sec
       collector:
         type: daemonset
-        pod:
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
         containers:
           main:
             image:

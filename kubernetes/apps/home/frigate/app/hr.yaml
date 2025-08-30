@@ -25,13 +25,6 @@ spec:
     controllers:
       ${APP}:
         pod:
-          nodeSelector:
-            kubernetes.io/hostname: "posey"
-          tolerations:
-            - key: "location"
-              operator: "Equal"
-              value: "house"
-              effect: "NoSchedule"
           securityContext:
             runAsNonRoot: false
             runAsUser: 0

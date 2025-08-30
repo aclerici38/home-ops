@@ -33,11 +33,6 @@ spec:
       pullPolicy: IfNotPresent
     lvmd:
       managed: true
-      tolerations: &tol
-        - key: "location"
-          operator: "Equal"
-          value: "house"
-          effect: "NoSchedule"
       env:
         - name: LVM_SYSTEM_DIR
           value: /tmp
@@ -55,7 +50,6 @@ spec:
           enabled: true
     node:
       lvmdEmbedded: false
-      tolerations: *tol
       prometheus:
         podMonitor:
           enabled: true
@@ -63,11 +57,6 @@ spec:
       prometheus:
         podMonitor:
           enabled: true
-      tolerations:
-        - key: "location"
-          operator: "Equal"
-          value: "house"
-          effect: "NoSchedule"
     snapshot:
       enabled: true
     cert-manager:
