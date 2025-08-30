@@ -76,7 +76,7 @@ spec:
                     name: ${APP}-db-app
                     key: dbname
             probes:
-              readiness:
+              readiness: &probes
                 enabled: true
                 custom: true
                 spec:
