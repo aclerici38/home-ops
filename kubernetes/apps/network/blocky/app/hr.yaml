@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      apartment:
+      ${APP}:
         strategy: RollingUpdate
         replicas: 2
         rollingUpdate:
@@ -35,11 +35,14 @@ spec:
               requiredDuringSchedulingIgnoredDuringExecution:
                 - labelSelector:
                     matchLabels:
-                      app.kubernetes.io/controller: apartment
-                      app.kubernetes.io/instance: blocky
+                      app.kubernetes.io/instance: ${APP}
                   topologyKey: kubernetes.io/hostname
-          nodeSelector:
-            location: apartment
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile: { type: RuntimeDefault }
         containers: &container
           main:
             image:
@@ -73,7 +76,7 @@ spec:
                     name: ${APP}-db-app
                     key: dbname
             probes:
-              readiness: &probes
+              readiness:
                 enabled: true
                 custom: true
                 spec:
@@ -85,7 +88,7 @@ spec:
             resources:
               requests:
                 cpu: 10m
-                memory: 0
+                memory: 50Mi
               limits:
                 memory: 512Mi
             securityContext:
@@ -96,34 +99,12 @@ spec:
                   - NET_BIND_SERVICE
                 drop:
                   - ALL
-      house:
-        strategy: RollingUpdate
-        pod:
-          nodeSelector:
-            location: house
-        containers: *container
-      k8s:
-        strategy: RollingUpdate
-        replicas: 2
-        containers: *container
-    defaultPodOptions:
-      hostUsers: false
-      tolerations:
-        - key: "location"
-          operator: "Equal"
-          value: "house"
-          effect: "NoSchedule"
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        seccompProfile: { type: RuntimeDefault }
     service:
       apartment: &svc
-        controller: apartment
+        controller: ${APP}
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: "${BLOCKY_APT_LB_IP}"
+          lbipam.cilium.io/ips: "${BLOCKY_LB_IP}"
         ports: &p
           dns-tcp:
             port: 53
@@ -132,11 +113,6 @@ spec:
             protocol: UDP
           dns-tls:
             port: 853
-      house:
-        <<: *svc
-        controller: house
-        annotations:
-          lbipam.cilium.io/ips: "${BLOCKY_HOUSE_LB_IP}"
       k8s:
         controller: k8s
         clusterIP: "${BLOCKY_CLUSTER_IP}"
