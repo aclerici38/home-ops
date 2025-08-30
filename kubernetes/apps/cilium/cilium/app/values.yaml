@@ -21,12 +21,6 @@ cgroup:
   automount:
     enabled: false
   hostRoot: /sys/fs/cgroup
-encryption:
-  enabled: true
-  type: wireguard
-  nodeEncryption: true
-  wireguard:
-    persistentKeepalive: 25s
 debug:
   enabled: false
 endpointRoutes:
