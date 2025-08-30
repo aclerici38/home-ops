@@ -114,7 +114,7 @@ spec:
           dns-tls:
             port: 853
       k8s:
-        controller: k8s
+        controller: ${APP}
         clusterIP: "${BLOCKY_CLUSTER_IP}"
         ports: *p
     persistence:
