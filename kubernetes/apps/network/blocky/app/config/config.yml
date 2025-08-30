@@ -36,7 +36,10 @@ conditional:
 
 # Lookup goes to k8s-gateway, which conditionally sends to correct dhcp server
 clientLookup:
-  upstream: ${K8S_GATEWAY_CLUSTER_IP}
+  upstream: 127.0.0.1
+  clients:
+    localhost:
+      - 127.0.0.1
 
 upstreams:
   groups:
