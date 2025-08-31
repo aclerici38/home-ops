@@ -206,49 +206,31 @@ spec:
             timeouts:
               request: 0s
     persistence:
-      upload:
+      data:
         type: nfs
         server: ${NFS_IP}
-        path: /immich/upload
+        path: /immich
         advancedMounts:
-          microservices: &mounts
+          microservices: &dmount
             main:
-              - path: /data/upload
-          server: *mounts
-      profile:
-        type: nfs
-        server: ${NFS_IP}
-        path: /immich/profile
-        advancedMounts:
-          microservices: &mounts
-            main:
-              - path: /data/profile
-          server: *mounts
-      library:
-        type: nfs
-        server: ${NFS_IP}
-        path: /immich/library
-        advancedMounts:
-          microservices: &mounts
-            main:
-              - path: /data/library
-          server: *mounts
+              - path: /data
+          server: *dmount
       thumbnails:
         existingClaim: immich-thumbs
         advancedMounts:
           microservices:
-            main: &mounts
+            main: &tmount
               - path: /data/thumbs
           server:
-            main: *mounts
+            main: *tmount
       encoded-video:
         existingClaim: immich-encoded-video
         advancedMounts:
           microservices:
-            main: &mounts
+            main: &emount
               - path: /data/encoded-video
           server:
-            main: *mounts
+            main: *emount
       config:
         type: configMap
         name: immich-config
@@ -265,6 +247,7 @@ spec:
           machine-learning:
             main:
               - path: /cache
+                subPath: cache
               - path: /.config/matplotlib
                 subPath: matplotlib-config
               - path: /.cache/matplotlib
