@@ -83,6 +83,7 @@ queryLog:
   # optional: Which fields should be logged. You can choose one or more from: clientIP, clientName, responseReason, responseAnswer, question, duration. If not defined, it logs all fields
   fields:
     - clientIP
+    - clientName
     - duration
     - question
     - responseReason
