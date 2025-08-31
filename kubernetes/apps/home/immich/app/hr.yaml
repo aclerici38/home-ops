@@ -75,7 +75,7 @@ spec:
               limits:
                 memory: 1Gi
       microservices:
-        replicas: 2
+        # replicas: 2
         strategy: RollingUpdate
         rollingUpdate:
           surge: 0
