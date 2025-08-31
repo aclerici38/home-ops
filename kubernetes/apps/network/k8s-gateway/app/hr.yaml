@@ -42,18 +42,6 @@ spec:
       - name: prometheus
         parameters: 0.0.0.0:9153
       - name: forward
-        parameters: house.lan 10.10.10.2
-      - name: forward
-        parameters: 0.10.in-addr.arpa 10.10.10.2
-      - name: forward
-        parameters: samthony.lan 192.168.9.1
-      - name: forward
-        parameters: 168.192.in-addr.arpa 192.168.9.1
-      - name: forward
-        parameters: cluster.local ${COREDNS_CLUSTER_IP}
-      - name: forward
-        parameters: 16.172.in-addr.arpa. ${COREDNS_CLUSTER_IP}
-      - name: forward
         parameters: . ${DNSCRYPT_CLUSTER_IP}
     service:
       type: ClusterIP
