@@ -7,7 +7,7 @@ spec:
   storageClassName: nfs-ssd
   resources:
     requests:
-      storage: 15Gi
+      storage: 50Gi
   accessModes:
     - ReadWriteMany
 ---
