@@ -40,7 +40,7 @@ spec:
       parameters:
         server: "${NFS_IP}"
         share: "/"
-        subDir: /ssd
+        subDir: /ssd/$${pvc.metadata.namespace}/$${pv.metadata.name}
       mountOptions:
         - nfsvers=4.2
         - nconnect=16
