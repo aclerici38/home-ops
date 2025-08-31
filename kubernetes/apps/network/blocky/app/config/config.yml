@@ -36,6 +36,9 @@ conditional:
     # Apartment
     samthony.lan: 192.168.9.1:53
     168.192.in-addr.arpa: 192.168.9.1:53
+    # kube
+    cluster.local: ${COREDNS_CLUSTER_IP}
+    16.172.in-addr.arpa: ${COREDNS_CLUSTER_IP}
 
 # Lookup goes to k8s-gateway, which conditionally sends to correct dhcp server
 clientLookup:
