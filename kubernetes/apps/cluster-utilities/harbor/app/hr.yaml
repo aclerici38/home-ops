@@ -70,7 +70,9 @@ spec:
           existingClaim: harbor-registry
         jobservice:
           jobLog:
-            storageClass: "-"
+            storageClass: ceph-filesystem
+            accessMode: ReadWriteMany
+            size: 10Gi
         database:
           storageClass: "-"
         redis:
