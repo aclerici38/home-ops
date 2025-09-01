@@ -47,19 +47,20 @@ spec:
       optional: false
   values:
     expose:
-      type: clusterIP
-      tls:
-        enabled: false
-    externalURL: https://harbor.${SECRET_DOMAIN}
-    route:
-      parentRefs:
-        - name: internal
-          namespace: network
-          sectionName: https
-          group: gateway.networking.k8s.io
-          kind: Gateway
-      hosts:
-        - harbor.${SECRET_DOMAIN}
+      type: ingress
+    #   type: clusterIP
+    #   tls:
+    #     enabled: false
+    # externalURL: https://harbor.${SECRET_DOMAIN}
+    # route:
+    #   parentRefs:
+    #     - name: internal
+    #       namespace: network
+    #       sectionName: https
+    #       group: gateway.networking.k8s.io
+    #       kind: Gateway
+    #   hosts:
+    #     - harbor.${SECRET_DOMAIN}
     ipFamily:
       ipv6:
         enabled: false
