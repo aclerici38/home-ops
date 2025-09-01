@@ -6,6 +6,6 @@ spec:
   storageClassName: ceph-filesystem
   resources:
     requests:
-      storage: 20Gi
+      storage: 50Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany

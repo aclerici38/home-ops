@@ -47,8 +47,15 @@ spec:
       optional: false
   values:
     expose:
-      type: ingress
+      type: clusterIP
     externalURL: https://harbor.${SECRET_DOMAIN}
+    route:
+      parentRefs:
+        - name: internal
+          namespace: network
+          sectionName: https
+          group: gateway.networking.k8s.io
+          kind: Gateway
     ipFamily:
       ipv6:
         enabled: false
@@ -59,14 +66,11 @@ spec:
           existingClaim: harbor-registry
         jobservice:
           jobLog:
-            storageClass: ceph-filesystem
-            size: 1Gi
+            storageClass: "-"
         database:
-          storageClass: ceph-filesystem
-          size: 1Gi
+          storageClass: "-"
         redis:
-          storageClass: ceph-filesystem
-          size: 1Gi
+          storageClass: "-"
     redis:
       type: external
       external:
@@ -84,6 +88,15 @@ spec:
     # The secret key used for encryption. Must be a string of 16 chars.
     existingSecretSecretKey: "${APP}-secret"
     enableMigrateHelmHook: true
+    portal:
+      nodeSelector: &ns
+        kubernetes.io/arch: amd64
+    core:
+      nodeSelector: *ns
+    jobservice:
+      nodeSelector: *ns
+    registrty:
+      nodeSelector: *ns
     cache:
       enabled: true
     notary:
