@@ -48,6 +48,8 @@ spec:
   values:
     expose:
       type: clusterIP
+      tls:
+        enabled: false
     externalURL: https://harbor.${SECRET_DOMAIN}
     route:
       parentRefs:
@@ -56,6 +58,8 @@ spec:
           sectionName: https
           group: gateway.networking.k8s.io
           kind: Gateway
+      hosts:
+        - harbor.${SECRET_DOMAIN}
     ipFamily:
       ipv6:
         enabled: false
