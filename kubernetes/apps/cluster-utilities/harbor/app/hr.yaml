@@ -48,10 +48,6 @@ spec:
   values:
     expose:
       type: ingress
-    #   type: clusterIP
-    #   tls:
-    #     enabled: false
-    # externalURL: https://harbor.${SECRET_DOMAIN}
     # route:
     #   parentRefs:
     #     - name: internal
@@ -61,6 +57,7 @@ spec:
     #       kind: Gateway
     #   hosts:
     #     - harbor.${SECRET_DOMAIN}
+    externalURL: https://harbor.${SECRET_DOMAIN}
     ipFamily:
       ipv6:
         enabled: false
