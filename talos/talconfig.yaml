@@ -4,7 +4,7 @@ talosVersion: ${TALOS_VERSION}
 kubernetesVersion: ${KUBE_VERSION}
 
 clusterName: dormammu
-endpoint: https://${BONDS_IP}:6443
+endpoint: https://192.168.9.200:6443
 
 clusterPodNets:
   - "172.16.0.0/16"
@@ -13,6 +13,7 @@ clusterSvcNets:
 
 additionalApiServerCertSans: &sans
   - "10.38.55.200"
+  - "192.168.9.200"
   - "${BONDS_IP}"
   - "${TIMMY_IP}"
   - "${CAIN_IP}"
