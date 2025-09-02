@@ -49,15 +49,15 @@ spec:
               - -c
               - |
                 gunicorn -t 300 -b 0.0.0.0:8084 app:app
-            # probes:
-            #   liveness: &probes
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       httpGet:
-            #         path: /request/api/status
-            #         port: *port
-            #   readiness: *probes
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /request/api/status
+                    port: *port
+              readiness: *probes
             resources:
               requests:
                 cpu: 10m
@@ -65,7 +65,7 @@ spec:
               limits:
                 memory: 500Mi
             securityContext:
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
