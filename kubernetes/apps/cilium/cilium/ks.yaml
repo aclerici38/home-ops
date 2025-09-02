@@ -53,7 +53,6 @@ metadata:
   name: &app cilium-networking
   namespace: &ns cilium
 spec:
-  targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

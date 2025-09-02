@@ -2,6 +2,7 @@ apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPClusterConfig
 metadata:
   name: cilium-bgp
+  namespace: cilium
 spec:
   bgpInstances:
   - name: "apartment-instance"
@@ -22,6 +23,7 @@ apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPPeerConfig
 metadata:
   name: cilium-peer
+  namespace: cilium
 spec:
   ebgpMultihop: 255
   families:
@@ -35,6 +37,7 @@ apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPAdvertisement
 metadata:
   name: lb-advertisement
+  namespace: cilium
   labels:
     advertise: bgp
 spec:
