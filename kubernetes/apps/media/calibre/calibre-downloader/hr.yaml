@@ -35,29 +35,29 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/aclerici38/calibre-web-automated-book-downloader
-              tag: 20250506@sha256:7e0196799041c5bfc66efd92c674b2f731fbc49d8d911a97267876ae892a4468
+              repository: ghcr.io/calibrain/calibre-web-automated-book-downloader
+              tag: v0.2.0@sha256:99e8d42199dd69cfb36498e4ca99c13c93ab513980ee33c1b9837aa1ab163fb9
             env:
               FLASK_PORT: &port 8084
               INGEST_DIR: &ingest /cwa-book-ingest
               BOOK_LANGUAGE: en
               DEFAULT_SLEEP: 15
-              USE_CF_BYPASS: false
+              # USE_CF_BYPASS: false
               USE_BOOK_TITLE: true
             command:
               - /bin/sh
               - -c
               - |
                 gunicorn -t 300 -b 0.0.0.0:8084 app:app
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /request/api/status
-                    port: *port
-              readiness: *probes
+            # probes:
+            #   liveness: &probes
+            #     enabled: true
+            #     custom: true
+            #     spec:
+            #       httpGet:
+            #         path: /request/api/status
+            #         port: *port
+            #   readiness: *probes
             resources:
               requests:
                 cpu: 10m
