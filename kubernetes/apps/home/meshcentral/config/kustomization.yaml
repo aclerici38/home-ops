@@ -5,6 +5,6 @@ kind: Kustomization
 configMapGenerator:
   - name: meshcentral-config
     files:
-      - ./config.yaml
+      - ./config.json
 generatorOptions:
   disableNameSuffixHash: true
