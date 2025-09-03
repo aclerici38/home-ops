@@ -40,19 +40,19 @@ spec:
             env:
               NODE_ENV: production
               HOSTNAME: &host meshcentral.${SECRET_DOMAIN}
-            probes:
-              readiness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    port: &port 8080
-                    path: /health
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              liveness: *probes
+            # probes:
+            #   readiness: &probes
+            #     enabled: true
+            #     custom: true
+            #     spec:
+            #       httpGet:
+            #         port: &port 8080
+            #         path: /health
+            #       initialDelaySeconds: 0
+            #       periodSeconds: 10
+            #       timeoutSeconds: 1
+            #       failureThreshold: 3
+            #   liveness: *probes
             resources:
               requests:
                 cpu: 100m
