@@ -1,0 +1,101 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: meshcentral
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      ${APP}:
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          main:
+            image:
+              repository: ghcr.io/ylianst/meshcentral
+              tag: 1.1.49@sha256:b51543f25bc1f8656b235c3ca8df68c7c8eb7dd190bb9cb9ab34ea2798af7cf4
+            env:
+              NODE_ENV: production
+              HOSTNAME: &host meshcentral.${SECRET_DOMAIN}
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 8080
+                    path: /health
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              liveness: *probes
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities: { drop: ["ALL"] }
+    service:
+      main:
+        controller: ${APP}
+        ports:
+          http:
+            port: *port
+    route:
+      main:
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: main
+              port: *port
+    persistence:
+      config:
+        type: configMap
+        name: ${APP}-config
+        advancedMounts:
+          meshcentral:
+            app:
+              - path: /opt/meshcentral/meshcentral-data/config.json
+                subPath: config.json
+      data:
+        existingClaim: "${APP}"
+        globalMounts:
+          - path: /opt/meshcentral/meshcentral-data
+            subPath: data
+          - path: /opt/meshcentral/meshcentral-files
+            subPath: userfiles
+

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Ylianst/MeshCentral/refs/heads/master/meshcentral-config-schema.json",
+  "settings": {
+    "postgres": {
+      "host": "${host}",
+      "user": "${user}",
+      "password": "${password}",
+      "database": "${dbname}"
+    },
+    "port": 8080,
+    "redirPort": 0,
+    "aliasPort": 443,
+    "TlsOffload": "172.16.0.0/16",
+    "lockAgentDownload": true,
+    "compression": true,
+    "wsCompression": true,
+    "agentWsCompression": true,
+    "WANonly": true,
+    "webPush": {
+      "email": "bot@${SECRET_DOMAIN}"
+    },
+    "trustedProxy": "172.16.0.0/16",
+    "prometheus": true,
+    "autoBackup": false
+  },
+  "domains": {
+    "": {
+      "showPasswordLogin": false,
+      "smtp": {
+        "host": "smtp-relay.cluster-utilities.svc.cluster.local",
+        "port": 25,
+        "from": "bot@${SECRET_DOMAIN}",
+        "tls": false
+      },
+      "authStrategies": {
+        "oidc": {
+          "newAccounts": true,
+          "client": {
+            "client_id": "${CLIENT_ID}",
+            "client_secret": "${CLIENT_SECRET}",
+            "redirect_uri": "https://meshcentral.${SECRET_DOMAIN}/auth-oidc-callback"
+          },
+          "issuer": "https://id.${SECRET_DOMAIN}"
+        }
+      }
+    }
+  }
+}
