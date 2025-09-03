@@ -12,7 +12,6 @@ clusterSvcNets:
   - "172.17.0.0/16"
 
 additionalApiServerCertSans: &sans
-  - "10.38.55.200"
   - "192.168.9.200"
   - "${BONDS_IP}"
   - "${TIMMY_IP}"
@@ -75,6 +74,8 @@ nodes:
             - hardwareAddr: 98:b7:85:22:54*
         addresses:
           - "${BONDS_IP}/24"
+        vip: &vip
+          ip: 192.168.9.200
         routes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
@@ -133,6 +134,7 @@ nodes:
             - hardwareAddr: 58:47:ca:7c:77*
         addresses:
           - "${CAIN_IP}/24"
+        vip: *vip
         routes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
@@ -176,6 +178,7 @@ nodes:
             - hardwareAddr: "d8:3a:dd:d2:76:d2"
         addresses:
           - "${TIMMY_IP}/24"
+        vip: *vip
         routes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
