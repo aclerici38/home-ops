@@ -7,9 +7,11 @@
       "password": "${PG_PASS}",
       "database": "${PG_DB}"
     },
+    "cert": "meshcentral.${SECRET_DOMAIN}",
     "port": 8080,
     "redirPort": 0,
     "aliasPort": 443,
+    "exactPorts": true,
     "TlsOffload": true,
     "lockAgentDownload": true,
     "compression": true,
@@ -25,6 +27,8 @@
   },
   "domains": {
     "": {
+      "dns": "meshcentral.${SECRET_DOMAIN}",
+      "certUrl": "https://meshcentral.${SECRET_DOMAIN}",
       "showPasswordLogin": false,
       "smtp": {
         "host": "smtp-relay.cluster-utilities.svc.cluster.local",

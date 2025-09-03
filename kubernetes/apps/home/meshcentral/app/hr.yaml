@@ -37,9 +37,6 @@ spec:
             image:
               repository: ghcr.io/ylianst/meshcentral
               tag: 1.1.49@sha256:b51543f25bc1f8656b235c3ca8df68c7c8eb7dd190bb9cb9ab34ea2798af7cf4
-            env:
-              NODE_ENV: production
-              HOSTNAME: &host meshcentral.${SECRET_DOMAIN}
             # probes:
             #   readiness: &probes
             #     enabled: true
@@ -98,4 +95,9 @@ spec:
             subPath: data
           - path: /opt/meshcentral/meshcentral-files
             subPath: userfiles
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /opt/meshcentral/meshcentral-backups
+            subPath: backups
 
