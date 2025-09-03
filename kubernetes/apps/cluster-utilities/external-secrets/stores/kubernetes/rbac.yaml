@@ -5,6 +5,12 @@ metadata:
   name: k8s-network-sa
   namespace: network
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: k8s-home-sa
+  namespace: home
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -14,6 +20,20 @@ rules:
   - apiGroups: [""]
     resources: ["secrets"]
     resourceNames: ["blocky-db-app"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["authorization.k8s.io"]
+    resources: ["selfsubjectrulesreviews"]
+    verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: read-meshcentral-db-secret
+  namespace: home
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["meshcentral-db-app"]
     verbs: ["get", "list", "watch"]
   - apiGroups: ["authorization.k8s.io"]
     resources: ["selfsubjectrulesreviews"]
@@ -31,4 +51,18 @@ subjects:
 roleRef:
   kind: Role
   name: read-blocky-db-secret
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: bind-read-meshcentral-db-secret
+  namespace: home
+subjects:
+  - kind: ServiceAccount
+    name: k8s-home-sa
+    namespace: home
+roleRef:
+  kind: Role
+  name: read-meshcentral-db-secret
   apiGroup: rbac.authorization.k8s.io

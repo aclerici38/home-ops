@@ -2,10 +2,10 @@
   "$schema": "https://raw.githubusercontent.com/Ylianst/MeshCentral/refs/heads/master/meshcentral-config-schema.json",
   "settings": {
     "postgres": {
-      "host": "${host}",
-      "user": "${user}",
-      "password": "${password}",
-      "database": "${dbname}"
+      "host": "${PG_HOST}",
+      "user": "${PG_USER}",
+      "password": "${PG_PASS}",
+      "database": "${PG_DB}"
     },
     "port": 8080,
     "redirPort": 0,
