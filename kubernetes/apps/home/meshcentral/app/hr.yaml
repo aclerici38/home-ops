@@ -83,11 +83,9 @@ spec:
       config:
         type: configMap
         name: ${APP}-config
-        advancedMounts:
-          meshcentral:
-            app:
-              - path: /opt/meshcentral/meshcentral-data/config.json
-                subPath: config.json
+        globalMounts:
+          - path: /opt/meshcentral/meshcentral-data/config.json
+            subPath: config.json
       data:
         existingClaim: "${APP}"
         globalMounts:
