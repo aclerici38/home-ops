@@ -30,14 +30,12 @@ nodes:
   - hostname: "bonds"
     ipAddress: "${BONDS_IP}"
     installDiskSelector:
-      wwid: eui.000000000000000100a07523458d4f6c
+      wwid: eui.00253841414031f0
     machineSpec:
       secureboot: false
       arch: amd64
       mode: metal
       useUKI: true
-    nodeLabels:
-      location: "apartment"
     kernelModules:
       - name: zfs
       - name: dm_thin_pool
@@ -86,8 +84,20 @@ nodes:
       - deviceSelector:
           hardwareAddr: a8:a1:59:dd:87:18
         dhcp: true
-    extraManifests:
-      - ./volumes/bonds-raw-volumes.yaml
+    volumes:
+      - name: EPHEMERAL
+        provisioning:
+          diskSelector:
+            match: system_disk
+          maxSize: 400GB
+          grow: false
+    userVolumes:
+      - name: local-path
+        provisioning:
+          diskSelector:
+            match: system_disk
+          minSize: 500GB
+          grow: true
   - hostname: "cain"
     ipAddress: "${CAIN_IP}"
     installDiskSelector:
@@ -97,8 +107,6 @@ nodes:
       arch: amd64
       mode: metal
       useUKI: true
-    nodeLabels:
-      location: "apartment"
     kernelModules:
       - name: dm_thin_pool
       - name: dm_mod
@@ -139,16 +147,20 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
         mtu: 9000
-    # TODO: Update with raw volumes once supported
-    userVolumes:
+    volumes:
       - name: EPHEMERAL
         provisioning:
           diskSelector:
             match: system_disk
-          maxSize: 200GB
+          maxSize: 400GB
           grow: false
-    extraManifests:
-      - ./volumes/cain-raw-volumes.yaml
+    userVolumes:
+      - name: local-path
+        provisioning:
+          diskSelector:
+            match: system_disk
+          minSize: 500GB
+          grow: true
     patches:
       - |-
         machine:
@@ -165,8 +177,6 @@ nodes:
       mode: metal
       useUKI: true
       arch: arm64
-    nodeLabels:
-      location: "apartment"
     controlPlane: true
     talosImageURL: ghcr.io/aclerici38/installer
     networkInterfaces:
@@ -183,67 +193,6 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
         mtu: 9000
-  - hostname: "posey"
-    ipAddress: "${POSEY_IP}"
-    installDiskSelector:
-      model: "KINGSTON SNV2S1000G"
-    machineSpec:
-      secureboot: false
-      mode: metal
-      useUKI: true
-      arch: amd64
-    nodeLabels:
-      location: "house"
-      nvidia.com/gpu.present: "true"
-      nvidia.com/gpu.model: "p400"
-    kernelModules:
-      - name: nvidia
-      - name: nvidia_uvm
-      - name: nvidia_drm
-      - name: nvidia_modeset
-      - name: dm_thin_pool
-      - name: dm_mod
-    schematic:
-      customization:
-        extraKernelArgs: *amdArgs
-        systemExtensions:
-          officialExtensions:
-            - siderolabs/nvidia-container-toolkit-production
-            - siderolabs/nonfree-kmod-nvidia-production
-            - siderolabs/amd-ucode
-    controlPlane: false
-    nodeTaints:
-      location: house:NoSchedule
-    patches:
-      - |-
-        machine:
-          udev:
-            rules:
-              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
-    networkInterfaces:
-      - deviceSelector:
-          hardwareAddr: "c4:62:37:01:8c:ce"
-        addresses:
-          - "${POSEY_IP}/24"
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "10.0.30.1"
-        mtu: 1500
-      - deviceSelector:
-          hardwareAddr: "c4:62:37:01:8c:cf"
-        ignore: true
-      - deviceSelector:
-          hardwareAddr: a8:5e:45:9c:d0:99
-        ignore: true
-    volumes:
-      - name: EPHEMERAL
-        provisioning:
-          diskSelector:
-            match: system_disk
-          maxSize: 200GB
-          grow: false
-    extraManifests:
-      - ./volumes/posey-raw-volumes.yaml
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
