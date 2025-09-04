@@ -47,6 +47,8 @@ spec:
         name: openebs-hostpath
         isDefaultClass: false
         basePath: *hostPath
+        nodeAffinityLabels:
+          - "storage.openebs.io/hostpath"
 
     # https://github.com/openebs/zfs-localpv/blob/HEAD/deploy/helm/charts/values.yaml
     zfs-localpv:

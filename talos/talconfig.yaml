@@ -41,6 +41,8 @@ nodes:
       - name: dm_thin_pool
       - name: dm_mod
       - name: nbd
+    nodeLabels:
+      storage.openebs.io/hostpath: "true"
     schematic:
       customization:
         extraKernelArgs: &amdArgs
@@ -111,6 +113,8 @@ nodes:
       - name: dm_thin_pool
       - name: dm_mod
       - name: nbd
+    nodeLabels:
+      storage.openebs.io/hostpath: "true"
     schematic:
       customization:
         extraKernelArgs:
