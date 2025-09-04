@@ -63,7 +63,7 @@ spec:
       replicas: 1
       persistence:
         enabled: true
-        storageClass: topolvm
+        storageClass: openebs-hostpath
         size: 300Gi
     gateway:
       replicas: 0
