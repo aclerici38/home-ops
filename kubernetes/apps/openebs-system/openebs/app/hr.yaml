@@ -37,7 +37,16 @@ spec:
 
     # https://github.com/openebs/dynamic-localpv-provisioner/blob/HEAD/deploy/helm/charts/values.yaml
     localpv-provisioner:
-      enabled: false
+      enabled: true
+      global:
+        imageRegistry: quay.io
+      localpv:
+        basePath: &hostPath /var/mnt/local-path
+      hostpathClass:
+        enabled: true
+        name: openebs-hostpath
+        isDefaultClass: false
+        basePath: *hostPath
 
     # https://github.com/openebs/zfs-localpv/blob/HEAD/deploy/helm/charts/values.yaml
     zfs-localpv:
