@@ -12,7 +12,7 @@ bpf:
     enabled: true
 bpfClockProbe: true
 policyEnforcementMode: never
-enableIPv4BIGTCP: true
+enableIPv4BIGTCP: false
 localRedirectPolicy: true
 bandwidthManager:
   enabled: true
@@ -75,8 +75,6 @@ loadBalancer:
   acceleration: best-effort
   algorithm: maglev
   mode: "dsr"
-pmtuDiscovery:
-  enabled: true
 nodePort:
   enabled: true
 operator:
