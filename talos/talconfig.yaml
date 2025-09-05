@@ -177,8 +177,6 @@ nodes:
       mode: metal
       useUKI: true
       arch: arm64
-    nodeTaints:
-      rpi: true:NoSchedule
     controlPlane: true
     talosImageURL: ghcr.io/aclerici38/installer
     networkInterfaces:

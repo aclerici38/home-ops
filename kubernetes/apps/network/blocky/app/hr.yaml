@@ -30,11 +30,6 @@ spec:
           surge: 1
           unavailable: 1
         pod:
-          tolerations:
-            - key: "rpi"
-              operator: "Equal"
-              value: "true"
-              effect: "NoSchedule"
           affinity:
             podAntiAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:

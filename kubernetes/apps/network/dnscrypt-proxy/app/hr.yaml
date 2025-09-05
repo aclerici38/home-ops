@@ -25,11 +25,6 @@ spec:
     controllers:
       ${APP}:
         pod:
-          tolerations:
-            - key: "rpi"
-              operator: "Equal"
-              value: "true"
-              effect: "NoSchedule"
           affinity:
             podAntiAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:

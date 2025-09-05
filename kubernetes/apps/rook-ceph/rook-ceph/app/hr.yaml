@@ -39,8 +39,3 @@ spec:
         memory: 128Mi # unchangable
         cpu: 100m # unchangable
       limits: {}
-    tolerations:
-      - key: "rpi"
-        operator: "Equal"
-        value: "true"
-        effect: "NoSchedule"

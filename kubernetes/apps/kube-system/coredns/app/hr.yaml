@@ -69,7 +69,3 @@ spec:
     tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
-      - key: "rpi"
-        operator: "Equal"
-        value: "true"
-        effect: "NoSchedule"
