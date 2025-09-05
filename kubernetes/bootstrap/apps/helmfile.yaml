@@ -41,7 +41,7 @@ releases:
           create: true
         service:
           name: kube-dns
-          clusterIP: ${COREDNS_CLUSTER_IP}
+          clusterIP: 172.17.0.10
         tolerations:
           - key: CriticalAddonsOnly
             operator: Exists
@@ -87,7 +87,7 @@ releases:
       - events: ["postsync"]
         showlogs: true
         command: "kubectl"
-        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cluster-utilities/external-secrets/stores/clustersecretstore.yaml"]
+        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cluster-utilities/external-secrets/stores/1password/store.yaml"]
 
   - name: flux-operator
     namespace: flux-system
