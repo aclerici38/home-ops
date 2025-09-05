@@ -38,8 +38,6 @@ nodes:
       useUKI: true
     kernelModules:
       - name: zfs
-      - name: dm_thin_pool
-      - name: dm_mod
       - name: nbd
     nodeLabels:
       storage.openebs.io/hostpath: "true"
@@ -110,8 +108,6 @@ nodes:
       mode: metal
       useUKI: true
     kernelModules:
-      - name: dm_thin_pool
-      - name: dm_mod
       - name: nbd
     nodeLabels:
       storage.openebs.io/hostpath: "true"
