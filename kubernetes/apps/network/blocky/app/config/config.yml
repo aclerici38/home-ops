@@ -45,8 +45,6 @@ clientLookup:
       - 127.0.0.1
 
 upstreams:
-  init:
-    strategy: fast
   groups:
     default:
       - ${DNSCRYPT_CLUSTER_IP}:53
