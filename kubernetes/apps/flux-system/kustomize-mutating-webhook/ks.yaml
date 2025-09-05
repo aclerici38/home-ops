@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/flux/kustomize-mutating-webhook/app
+  path: ./kubernetes/apps/flux-system/kustomize-mutating-webhook/app
   dependsOn:
     - name: flux-settings
     - name: flux-repos
