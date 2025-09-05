@@ -106,19 +106,13 @@ spec:
             priorityClassName: system-cluster-critical
             placement:
               all:
-                tolerations:
+                tolerations: &tol
                   - key: "rpi"
                     operator: "Equal"
                     value: "true"
                     effect: "NoSchedule"
-                topologySpreadConstraints:
-                  - maxSkew: 1
-                    topologyKey: kubernetes.io/hostname
-                    whenUnsatisfiable: DoNotSchedule
-                    labelSelector:
-                      matchLabels:
-                        app.kubernetes.io/name: ceph-mds
-                        app.kubernetes.io/part-of: *cephFileSystemName
+              mon:
+                tolerations: *tol
             resources:
               requests:
                 cpu: 100m
