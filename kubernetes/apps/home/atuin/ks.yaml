@@ -29,17 +29,17 @@ spec:
   postBuild:
     substitute:
       APP: *app
-  patches:
-    - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
-          name: patch
-        spec:
-          bootstrap:
-            recovery:
-              recoveryTarget:
-                targetTime: "2025-09-04T03:50:00-07:00"
-                exclusive: true
-      target:
-        kind: Cluster
+  # patches:
+  #   - patch: |-
+  #       apiVersion: postgresql.cnpg.io/v1
+  #       kind: Cluster
+  #       metadata:
+  #         name: patch
+  #       spec:
+  #         bootstrap:
+  #           recovery:
+  #             recoveryTarget:
+  #               targetTime: "2025-09-04T03:50:00-07:00"
+  #               exclusive: true
+  #     target:
+  #       kind: Cluster

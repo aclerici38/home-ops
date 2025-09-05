@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-utilities/harbor/app
   components:
-    - ../../../../components/cnpg/overlay/restore
+    - ../../../../components/cnpg/overlay/init
     - ../../../../components/external-secret
   prune: true
   sourceRef:
@@ -25,17 +25,17 @@ spec:
   postBuild:
     substitute:
       APP: *app
-  patches:
-    - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
-          name: patch
-        spec:
-          bootstrap:
-            recovery:
-              recoveryTarget:
-                targetTime: "2025-09-04T03:50:00-07:00"
-                exclusive: true
-      target:
-        kind: Cluster
+  # patches:
+  #   - patch: |-
+  #       apiVersion: postgresql.cnpg.io/v1
+  #       kind: Cluster
+  #       metadata:
+  #         name: patch
+  #       spec:
+  #         bootstrap:
+  #           recovery:
+  #             recoveryTarget:
+  #               targetTime: "2025-09-04T03:50:00-07:00"
+  #               exclusive: true
+  #     target:
+  #       kind: Cluster
