@@ -39,6 +39,11 @@ spec:
               tag: 1.1.4@sha256:007439c7962edefc1150d025e1d7148ac606f16783cda7dd7047e00aee813d0b
             env:
               BLOCKY_API_URL: http://blocky-http:4000
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: blocky-db-app
+                    key: uri
             probes:
               liveness:
                 enabled: true
