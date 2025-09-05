@@ -10,9 +10,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: cilium
-      namespace: cilium
   path: ./kubernetes/apps/network/envoy/app
   prune: true
   sourceRef:
