@@ -105,14 +105,20 @@ spec:
             activeStandby: true
             priorityClassName: system-cluster-critical
             placement:
-              topologySpreadConstraints:
-                - maxSkew: 1
-                  topologyKey: kubernetes.io/hostname
-                  whenUnsatisfiable: DoNotSchedule
-                  labelSelector:
-                    matchLabels:
-                      app.kubernetes.io/name: ceph-mds
-                      app.kubernetes.io/part-of: *cephFileSystemName
+              all:
+                tolerations:
+                  - key: "rpi"
+                    operator: "Equal"
+                    value: "true"
+                    effect: "NoSchedule"
+                topologySpreadConstraints:
+                  - maxSkew: 1
+                    topologyKey: kubernetes.io/hostname
+                    whenUnsatisfiable: DoNotSchedule
+                    labelSelector:
+                      matchLabels:
+                        app.kubernetes.io/name: ceph-mds
+                        app.kubernetes.io/part-of: *cephFileSystemName
             resources:
               requests:
                 cpu: 100m
