@@ -38,6 +38,9 @@ spec:
     service:
       name: kube-dns
       clusterIP: ${COREDNS_CLUSTER_IP}
+    resources:
+      limits:
+        memory: 512Mi
     servers:
       - zones:
           - zone: .
