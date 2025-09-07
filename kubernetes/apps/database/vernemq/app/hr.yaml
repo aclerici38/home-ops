@@ -30,7 +30,7 @@ spec:
         annotations:
           secret.reloader.stakater.com/reload: mqtt-secret
         pod:
-          hostUsers: false
+          # hostUsers: false
           securityContext:
             runAsUser: 10000
             seccompProfile: { type: RuntimeDefault }
