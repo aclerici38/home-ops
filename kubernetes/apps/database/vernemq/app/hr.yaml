@@ -80,7 +80,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: mqtt-secret
-                    key: mqtt-pass
+                    key: MQTT_PASS
             probes:
               liveness: &probes
                 enabled: true
