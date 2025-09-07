@@ -32,8 +32,8 @@ spec:
         pod:
           hostUsers: false
           securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
+            runAsUser: 10000
+            runAsGroup: 10000
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
           nodeSelector:
