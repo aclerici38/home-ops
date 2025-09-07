@@ -33,8 +33,6 @@ spec:
           hostUsers: false
           securityContext:
             runAsUser: 10000
-            runAsGroup: 10000
-            runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
           nodeSelector:
             # No ARM image yet
