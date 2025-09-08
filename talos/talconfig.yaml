@@ -79,11 +79,13 @@ nodes:
             gateway: "192.168.9.1"
         mtu: 1500
       - deviceSelector:
-          hardwareAddr: "a0:36:9f:09:4c:8f"
-        ignore: true
-      - deviceSelector:
-          hardwareAddr: a8:a1:59:dd:87:18
+          # Onboard 1 gbit
+          hardwareAddr: "18:c0:4d:89:83:7d"
         dhcp: true
+      - deviceSelector:
+          # Onboard 2.5 gbit
+          hardwareAddr: 18:c0:4d:89:83:7e
+        ignore: true
     volumes:
       - name: EPHEMERAL
         provisioning:

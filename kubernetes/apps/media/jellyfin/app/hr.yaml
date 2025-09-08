@@ -25,6 +25,8 @@ spec:
     controllers:
       ${APP}:
         pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000

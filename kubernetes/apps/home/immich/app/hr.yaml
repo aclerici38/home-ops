@@ -75,7 +75,7 @@ spec:
               limits:
                 memory: 1Gi
       microservices:
-        # replicas: 2
+        replicas: 2
         strategy: RollingUpdate
         rollingUpdate:
           surge: 0
@@ -112,6 +112,9 @@ spec:
                 gpu.intel.com/i915: 1
       machine-learning:
         strategy: RollingUpdate
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
         containers:
           main:
             image:
