@@ -8,7 +8,6 @@ machine:
         [plugins."io.containerd.cri.v1.runtime"]
           device_ownership_from_security_context = true
     - op: overwrite
-    - op: overwrite
       path: /etc/nfsmount.conf
       permissions: 0o644
       content: |
