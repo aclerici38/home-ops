@@ -61,6 +61,7 @@ nodes:
             - siderolabs/amd-ucode
             - siderolabs/nfsd
             - siderolabs/mei
+            - siderolabs/nfsrahead
     controlPlane: true
     networkInterfaces:
       - interface: bond0
@@ -133,6 +134,7 @@ nodes:
             - siderolabs/i915
             - siderolabs/mei
             - siderolabs/intel-ucode
+            - siderolabs/nfsrahead
     controlPlane: true
     networkInterfaces:
       - interface: bond0
