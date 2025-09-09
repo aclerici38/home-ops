@@ -72,5 +72,16 @@
       },
       separateMinorPatch: false
     },
+    {
+      description: "1Pass group",
+      groupName: "1Pass",
+      matchPackagePatterns: ["1password"],
+      matchDatasources: ["docker", "github-releases", "helm"],
+      matchUpdateTypes: ["minor", "patch"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+      separateMinorPatch: false
+    },
   ]
 }
