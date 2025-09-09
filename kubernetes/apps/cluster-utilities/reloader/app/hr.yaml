@@ -24,6 +24,7 @@ spec:
   values:
     reloader:
       autoReloadAll: true
+      ignoreNamespaces: "cilium,rook-ceph,kube-system"
       readOnlyRootFileSystem: true
       podMonitor:
         enabled: true
