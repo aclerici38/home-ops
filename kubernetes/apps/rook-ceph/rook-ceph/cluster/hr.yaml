@@ -44,8 +44,6 @@ spec:
               operator: "Equal"
               value: "true"
               effect: "NoSchedule"
-        mon:
-          tolerations: *tol
       mon:
         count: 3
       cephConfig:
