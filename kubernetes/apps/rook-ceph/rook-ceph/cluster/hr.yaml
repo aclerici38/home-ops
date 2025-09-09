@@ -37,6 +37,13 @@ spec:
             namespace: network
             sectionName: https
     cephClusterSpec:
+      placement:
+        all:
+          tolerations:
+            - key: "rpi"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
       mon:
         count: 3
       cephConfig:

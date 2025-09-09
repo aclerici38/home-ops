@@ -79,14 +79,6 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
         mtu: 1500
-      - deviceSelector:
-          # Onboard 1 gbit
-          hardwareAddr: "18:c0:4d:89:83:7d"
-        dhcp: true
-      - deviceSelector:
-          # Onboard 2.5 gbit
-          hardwareAddr: 18:c0:4d:89:83:7e
-        ignore: true
     volumes:
       - name: EPHEMERAL
         provisioning:
@@ -183,6 +175,8 @@ nodes:
       arch: arm64
     controlPlane: true
     talosImageURL: ghcr.io/aclerici38/installer
+    nodeTaints:
+      rpi: true:NoSchedule
     networkInterfaces:
       - interface: bond0
         bond:
