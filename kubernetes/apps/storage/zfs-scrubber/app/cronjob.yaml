@@ -12,6 +12,8 @@ spec:
       backoffLimit: 0
       template:
         spec:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
           containers:
             - name: zfs-scrubber
               image: ghcr.io/heavybullets8/zfs-scrubber:1.0.9@sha256:2e63ef0fb0f6a34aff2f48faeffd848e6c693a062bb0436f266d02dee717e114
