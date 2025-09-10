@@ -55,7 +55,7 @@ machineLearning:
 oauth:
   enabled: true
   issuerUrl: https://id.${SECRET_DOMAIN}/
-  autoLaunch: false
+  autoLaunch: true
   autoRegister: true
   buttonText: Login with Pocket ID
   clientId: ${CLIENT_ID}
@@ -75,7 +75,7 @@ storageTemplate:
   template: "{{album}}/{{y}}/{{MM}}/{{filename}}"
 
 passwordLogin:
-  enabled: true
+  enabled: false
 
 backup:
   database:
