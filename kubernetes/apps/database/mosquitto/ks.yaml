@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app vernemq
+  name: &app mosquitto
   namespace: &ns database
 spec:
   commonMetadata:
@@ -13,7 +13,7 @@ spec:
     - name: external-secrets-stores
       namespace: cluster-utilities
   interval: 1h
-  path: ./kubernetes/apps/database/vernemq/app
+  path: ./kubernetes/apps/database/mosquitto/app
   prune: true
   retryInterval: 2m
   sourceRef:
