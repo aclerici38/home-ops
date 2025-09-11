@@ -45,6 +45,13 @@ spec:
                 cpu: 10m
               limits:
                 memory: 100Mi
+            probes: &probes
+              liveness:
+                enabled: true
+                type: TCP
+              readiness:
+                enabled: true
+                type: TCP
     service:
       app:
         ports:
