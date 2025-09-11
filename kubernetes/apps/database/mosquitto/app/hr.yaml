@@ -56,7 +56,7 @@ spec:
             persistence_location /config
     persistence:
       config:
-        existingClaim: "${APP}-cache"
+        existingClaim: "${APP}"
       config-file:
         type: configMap
         name: mosquitto
