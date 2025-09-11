@@ -55,12 +55,11 @@ spec:
         data:
           mosquitto.conf: |-
             allow_anonymous true
-            autosave_interval 60
+            autosave_interval 10
             connection_messages false
             listener 1883
             per_listener_settings false
             persistence true
-            persistence_location /config
     persistence:
       data:
         existingClaim: "${APP}"
