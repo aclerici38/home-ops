@@ -70,7 +70,7 @@ nodes:
           lacpRate: fast
           xmitHashPolicy: layer3+4
           deviceSelectors:
-            - hardwareAddr: 98:b7:85:22:54*
+            - hardwareAddr: 1a:4b:24:aa:f3:*
         addresses:
           - "${BONDS_IP}/24"
         vip: &vip
