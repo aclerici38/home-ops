@@ -24,6 +24,13 @@ spec:
   values:
     controllers:
       ${APP}:
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
         containers:
           main:
             image:
@@ -55,8 +62,10 @@ spec:
             persistence true
             persistence_location /config
     persistence:
-      config:
+      data:
         existingClaim: "${APP}"
+        globalMounts:
+          - path: /mosquitto/data
       config-file:
         type: configMap
         name: mosquitto
