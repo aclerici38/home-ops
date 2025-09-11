@@ -53,7 +53,7 @@ spec:
                 enabled: true
                 type: TCP
     service:
-      app:
+      main:
         ports:
           mqtt:
             port: 1883
@@ -64,19 +64,16 @@ spec:
             allow_anonymous true
             autosave_interval 10
             connection_messages false
-            listener 1883
+            listener 1883 0.0.0.0
             per_listener_settings false
             persistence true
+            persistence_location /data
     persistence:
       data:
         existingClaim: "${APP}"
-        globalMounts:
-          - path: /mosquitto/data
-      config-file:
+      config:
         type: configMap
         name: mosquitto
-        advancedMounts:
-          mosquitto:
-            app:
-              - path: /mosquitto/config/mosquitto.conf
-                subPath: mosquitto.conf
+        globalMounts:
+          - path: /mosquitto/config/mosquitto.conf
+            subPath: mosquitto.conf
