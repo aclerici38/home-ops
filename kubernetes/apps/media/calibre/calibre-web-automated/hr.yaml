@@ -26,9 +26,10 @@ spec:
       ${APP}:
         pod:
           securityContext:
-            runAsUser: 0
-            runAsGroup: 0
-            runAsNonRoot: false
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
         containers:
           main:
@@ -37,7 +38,7 @@ spec:
               tag: V3.1.4@sha256:577e846f104fd21453ef306eefb4a95dd95b3b9ddd2463a150944494284da0fd
             env:
               CACHE_DIR: /cache
-              # Skips privileged actions that shouldn't exist anyways
+              # Skips/soft fail on privileged actions that shouldn't exist anyways
               NETWORK_SHARE_MODE: true
               S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
               S6_READ_ONLY_ROOT: 1
@@ -48,18 +49,11 @@ spec:
               limits:
                 memory: 600Mi
             securityContext:
-              allowPrivilegeEscalation: true
+              allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
-                add:
-                  # S6
-                  - CHOWN
-                  - SETUID
-                  - SETGID
-                  - FOWNER
-                  - DAC_OVERRIDE
             probes:
               liveness: &probes
                 enabled: true
