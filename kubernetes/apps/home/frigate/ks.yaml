@@ -33,21 +33,3 @@ spec:
       APP: *app
       VOLSYNC_CAPACITY: 25Gi
       CLIENT_ID: "217756b8-feda-4f0d-abb4-3ebd151f662d"
-  patches:
-    - patch: |-
-        - op: add
-          path: /spec/data/-
-          value:
-            secretKey: FRIGATE_MQTT_USER
-            remoteRef:
-              key: "mqtt"
-              property: "MQTT_USER"
-        - op: add
-          path: /spec/data/-
-          value:
-            secretKey: FRIGATE_MQTT_PASS
-            remoteRef:
-              key: "mqtt"
-              property: "MQTT_PASS"
-      target:
-        kind: ExternalSecret
