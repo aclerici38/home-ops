@@ -30,7 +30,7 @@ spec:
             runAsGroup: 0
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-            runAsNonRoot: true
+            runAsNonRoot: false
             seccompProfile: { type: RuntimeDefault }
         containers:
           main:
