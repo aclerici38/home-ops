@@ -18,6 +18,7 @@
       "matchPackageNames": [
         "**/searxng",
         "**/code-server",
+        "**/calibre-web-automated-book-downloader",
         "**/grafana",
         "**/radarr",
         "**/sonarr",
@@ -43,7 +44,6 @@
       "rebaseWhen": "behind-base-branch",
       "matchDatasources": ["docker", "helm"],
       "matchPackageNames": [
-        "**/calibre-web-automated-book-downloader",
         "**/firefox",
       ],
       "matchUpdateTypes": ["major", "minor", "patch", "digest"],
