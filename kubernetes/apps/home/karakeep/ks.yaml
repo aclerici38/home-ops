@@ -26,3 +26,5 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 25Gi
+      VOLSYNC_STORAGECLASS: ceph-filesystem
+      VOLSYNC_ACCESSMODES: ReadWriteMany

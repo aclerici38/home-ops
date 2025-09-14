@@ -38,6 +38,8 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 10Gi
+      VOLSYNC_STORAGECLASS: ceph-filesystem
+      VOLSYNC_ACCESSMODES: ReadWriteMany
   # patches:
   #   - patch: |-
   #       apiVersion: postgresql.cnpg.io/v1
