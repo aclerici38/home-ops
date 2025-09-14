@@ -127,6 +127,12 @@ spec:
         existingClaim: frigate-media
         globalMounts:
           - path: /media/frigate
+      exports:
+        type: nfs
+        server: ${NFS_IP}
+        path: /files/frigate
+        globalMounts:
+          - path: /mrdia/frigate/exports
       tmpfs:
         type: emptyDir
         globalMounts:
