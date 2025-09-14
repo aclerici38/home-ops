@@ -39,6 +39,7 @@ spec:
       APP: *app
       VOLSYNC_CAPACITY: 10Gi
       VOLSYNC_STORAGECLASS: ceph-filesystem
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-filesystem
       VOLSYNC_ACCESSMODES: ReadWriteMany
   # patches:
   #   - patch: |-
