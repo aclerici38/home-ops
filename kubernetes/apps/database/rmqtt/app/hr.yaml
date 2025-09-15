@@ -53,11 +53,13 @@ spec:
               - --id=$(POD_ID)
               - --plugins-default-startups=rmqtt-cluster-raft
               - --node-grpc-addrs
-              - 0@rmqtt-1.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:5363
+              - 1@rmqtt-1.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:5363
               - 1@rmqtt-2.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:5363
+              - 3@rmqtt-3.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:5363
               - --raft-peer-addrs
               - 1@rmqtt-1.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:6003
               - 2@rmqtt-2.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:6003
+              - 3@rmqtt-3.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:6003
             env:
               POD_ID:
                 valueFrom:
