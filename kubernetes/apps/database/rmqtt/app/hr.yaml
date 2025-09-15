@@ -90,6 +90,14 @@ spec:
             port: 5363
           raft:
             port: 6003
+          mqtt:
+            port: 1883
+          mqtt-tls:
+            port: 8883
+          mqtt-internal:
+            port: 11883
+          http:
+            port: 6060
       mqtt:
         controller: ${APP}
         type: LoadBalancer
@@ -100,21 +108,16 @@ spec:
             port: 1883
           mqtt-tls:
             port: 8883
-          mqtt-ws:
-            port: 11883
-      http:
-        controller: ${APP}
-        ports:
           http:
             port: 6060
     serviceMonitor:
       ${APP}:
-        serviceName: ${APP}-http
+        serviceName: ${APP}-mqtt
         endpoints:
           - port: http
             scheme: http
             path: /api/v1/metrics/prometheus
-            interval: 2m
+            interval: 1m
             scrapeTimeout: 10s
     persistence:
       tmpfs:
