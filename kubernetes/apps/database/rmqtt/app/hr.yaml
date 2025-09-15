@@ -120,7 +120,22 @@ spec:
             interval: 1m
             scrapeTimeout: 10s
     persistence:
+      plugins:
+        type: configMap
+        name: ${APP}
+        globalMounts:
+          - path: /app/rmqtt/rmqtt-plugins/rmqtt-acl.toml
+            subPath: rmqtt-acl.toml
       tmpfs:
         type: emptyDir
         globalMounts:
           - path: /var/log/rmqtt
+    configMaps:
+      config:
+        data:
+          rmqtt-acl.toml: |
+            disconnect_if_pub_rejected = true
+            rules = [
+              ["deny",  "all", "publish", ["$SYS/#"]],
+              ["allow", "all"]
+            ]
