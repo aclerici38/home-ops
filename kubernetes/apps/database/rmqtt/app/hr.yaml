@@ -122,7 +122,7 @@ spec:
           rmqtt-acl.toml: |
             disconnect_if_pub_rejected = true
             rules = [
-              ["deny",  "all", "publish", ["$SYS/#"]],
+              ["deny",  "all", ["$SYS/#"]],
               ["allow", "all"]
             ]
     persistence:
