@@ -38,6 +38,7 @@ spec:
           #     operator: "Equal"
           #     value: "true"
           #     effect: "NoSchedule"
+          hostUsers: false
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
@@ -78,6 +79,7 @@ spec:
                   httpGet:
                     port: &httpPort 6060
                     path: /api/v1/health/check
+                    initialDelaySeconds: 10
               readiness: *probes
             resources:
               requests:
@@ -121,7 +123,6 @@ spec:
       config:
         data:
           rmqtt-acl.toml: |
-            disconnect_if_pub_rejected = true
             rules = [
               ["allow", "all"]
             ]
