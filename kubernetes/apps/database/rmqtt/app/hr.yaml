@@ -38,7 +38,6 @@ spec:
           #     operator: "Equal"
           #     value: "true"
           #     effect: "NoSchedule"
-          hostUsers: false
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
@@ -87,7 +86,7 @@ spec:
                   httpGet:
                     port: *httpPort
                     path: *pPath
-                  initialDelaySeconds: 10
+                  initialDelaySeconds: 5
             resources:
               requests:
                 cpu: 12m
