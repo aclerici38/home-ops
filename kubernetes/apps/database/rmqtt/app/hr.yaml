@@ -78,9 +78,16 @@ spec:
                 spec:
                   httpGet:
                     port: &httpPort 6060
-                    path: /api/v1/health/check
-                    initialDelaySeconds: 10
+                    path: &pPath /api/v1/health/check
               readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: *httpPort
+                    path: *pPath
+                  initialDelaySeconds: 10
             resources:
               requests:
                 cpu: 12m
