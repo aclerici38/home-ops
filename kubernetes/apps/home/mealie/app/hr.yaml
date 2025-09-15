@@ -120,10 +120,13 @@ spec:
             - identifier: main
               port: *port
     persistence:
-      config:
+      data:
         existingClaim: ${APP}
         globalMounts:
           - path: /app/data
+            subPath: data
+          - path: /nltk_data
+            subPath: nltk
       # Needed for recipe parser
       tmpfs:
         type: emptyDir
@@ -132,5 +135,3 @@ spec:
             subPath: tmp
           - path: /nonexistent
             subPath: nonexistent
-          - path: /nltk_data
-            subPath: nltk_data
