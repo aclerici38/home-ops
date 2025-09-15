@@ -28,6 +28,7 @@ spec:
         strategy: RollingUpdate
         replicas: 3
         statefulset:
+          startOrdinal: 1
           podManagementPolicy: OrderedReady
           serviceName: rmqtt-headless
         pod:
@@ -116,15 +117,3 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /var/log/rmqtt
-  postRenderers:
-    - kustomize:
-        patches:
-          - target:
-              group: apps
-              version: v1
-              kind: StatefulSet
-            patch: |
-              - op: add
-                path: /spec/ordinals
-                value:
-                  start: 1
