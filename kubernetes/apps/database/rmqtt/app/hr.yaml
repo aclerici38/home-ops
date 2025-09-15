@@ -26,11 +26,16 @@ spec:
       ${APP}:
         type: statefulset
         strategy: RollingUpdate
-        replicas: 2
+        replicas: 3
         statefulset:
           podManagementPolicy: OrderedReady
           serviceName: rmqtt-headless
         pod:
+          tolerations:
+            - key: "rpi"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
