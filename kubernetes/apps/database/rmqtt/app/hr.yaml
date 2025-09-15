@@ -45,7 +45,7 @@ spec:
               tag: 0.16.0@sha256:f8b97ce591166fca8cc019d27a7b2fc35888a07138e7efd601c5fececc4cf756
             args:
               - --id=$(POD_ID)
-              - --plugins-$(POD_NAMESPACE)-startups=rmqtt-cluster-raft
+              - --plugins-default-startups=rmqtt-cluster-raft
               - --node-grpc-addrs
               - 0@rmqtt-1.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:5363
               - 1@rmqtt-2.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:5363
