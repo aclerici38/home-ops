@@ -29,7 +29,7 @@ spec:
         replicas: 3
         statefulset:
           startOrdinal: 1
-          podManagementPolicy: OrderedReady
+          podManagementPolicy: Parallel
           serviceName: rmqtt-headless
         pod:
           # rmqtt publishes a separate tag for arm images :(
