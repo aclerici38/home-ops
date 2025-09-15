@@ -91,6 +91,9 @@ spec:
             port: 6003
       mqtt:
         controller: ${APP}
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: "10.38.55.6"
         ports:
           mqtt:
             port: 1883
