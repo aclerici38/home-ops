@@ -108,10 +108,14 @@ spec:
           http:
             port: 6060
     serviceMonitor:
-      main:
+      ${APP}:
         serviceName: ${APP}-http
         endpoints:
           - port: http
+            scheme: http
+            path: /api/v1/metrics/prometheus
+            interval: 2m
+            scrapeTimeout: 10s
     persistence:
       tmpfs:
         type: emptyDir
