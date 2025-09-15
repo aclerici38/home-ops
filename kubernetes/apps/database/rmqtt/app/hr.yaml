@@ -104,7 +104,7 @@ spec:
       tmpfs:
         type: emptyDir
         globalMounts:
-          - path: /var/log/mqtt
+          - path: /var/log/rmqtt
   postRenderers:
     - kustomize:
         patches:
