@@ -70,6 +70,15 @@ spec:
                 valueFrom:
                   fieldRef:
                     fieldPath: metadata.namespace
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &httpPort 6060
+                    path: /api/v1/health/check
+              readiness: *probes
             resources:
               requests:
                 cpu: 12m
@@ -90,14 +99,6 @@ spec:
             port: 5363
           raft:
             port: 6003
-          mqtt:
-            port: 1883
-          mqtt-tls:
-            port: 8883
-          mqtt-internal:
-            port: 11883
-          http:
-            port: 6060
       mqtt:
         controller: ${APP}
         type: LoadBalancer
@@ -106,10 +107,8 @@ spec:
         ports:
           mqtt:
             port: 1883
-          mqtt-tls:
-            port: 8883
           http:
-            port: 6060
+            port: *httpPort
     serviceMonitor:
       ${APP}:
         serviceName: ${APP}-mqtt
@@ -117,8 +116,15 @@ spec:
           - port: http
             scheme: http
             path: /api/v1/metrics/prometheus
-            interval: 1m
-            scrapeTimeout: 10s
+    configMaps:
+      config:
+        data:
+          rmqtt-acl.toml: |
+            disconnect_if_pub_rejected = true
+            rules = [
+              ["deny",  "all", "publish", ["$SYS/#"]],
+              ["allow", "all"]
+            ]
     persistence:
       plugins:
         type: configMap
@@ -130,12 +136,3 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /var/log/rmqtt
-    configMaps:
-      config:
-        data:
-          rmqtt-acl.toml: |
-            disconnect_if_pub_rejected = true
-            rules = [
-              ["deny",  "all", "publish", ["$SYS/#"]],
-              ["allow", "all"]
-            ]
