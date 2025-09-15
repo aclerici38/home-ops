@@ -29,7 +29,7 @@ spec:
         replicas: 3
         statefulset:
           startOrdinal: 1
-          podManagementPolicy: Parallel
+          podManagementPolicy: OrderedReady
           serviceName: rmqtt-headless
         pod:
           # rmqtt publishes a separate tag for arm images :(
@@ -94,6 +94,7 @@ spec:
       headless:
         controller: ${APP}
         clusterIP: None
+        publishNotReadyAddresses: true
         ports:
           grpc:
             port: 5363
