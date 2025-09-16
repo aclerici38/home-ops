@@ -118,7 +118,6 @@ spec:
         ports:
           mqtt:
             port: 1883
-            targetPort: 11883
           http:
             port: *httpPort
     serviceMonitor:
@@ -131,10 +130,10 @@ spec:
     configMaps:
       config:
         data:
-          # rmqtt-acl.toml: |
-          #   rules = [
-          #     ["allow", "all"]
-          #   ]
+          rmqtt-acl.toml: |
+            rules = [
+              ["allow", "all"]
+            ]
           rmqtt-retainer.toml: |
             storage.type = "redis"
             storage.redis.url = "redis://dragonfly-db.database.svc.cluster.local:6379/5"
@@ -145,8 +144,8 @@ spec:
         type: configMap
         name: ${APP}
         globalMounts:
-        #   - path: /app/rmqtt/rmqtt-plugins/rmqtt-acl.toml
-        #     subPath: rmqtt-acl.toml
+          - path: /app/rmqtt/rmqtt-plugins/rmqtt-acl.toml
+            subPath: rmqtt-acl.toml
           - path: /app/rmqtt/rmqtt-plugins/rmqtt-retainer.toml
             subPath: rmqtt-retainer.toml
       tmpfs:
