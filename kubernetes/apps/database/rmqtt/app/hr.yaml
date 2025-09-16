@@ -132,6 +132,11 @@ spec:
             rules = [
               ["allow", "all"]
             ]
+          rmqtt-retainer.toml: |
+            storage.type = "redis"
+            storage.redis.url = "redis://dragonfly-db.database.svc.cluster.local:6379/5"
+            storage.redis.prefix = "retain"
+            retained_message_ttl = "0m"
     persistence:
       plugins:
         type: configMap
@@ -139,6 +144,8 @@ spec:
         globalMounts:
           - path: /app/rmqtt/rmqtt-plugins/rmqtt-acl.toml
             subPath: rmqtt-acl.toml
+          - path: /app/rmqtt/rmqtt-plugins/rmqtt-retainer.toml
+            subPath: rmqtt-retainer.toml
       tmpfs:
         type: emptyDir
         globalMounts:
