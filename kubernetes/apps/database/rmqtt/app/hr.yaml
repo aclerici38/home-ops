@@ -132,7 +132,7 @@ spec:
             retained_message_ttl = "0m"
           rmqtt.toml: |
             log.to = "console"
-            log.level = "debug"
+            log.level = "info"
             plugins.dir = "rmqtt-plugins/"
     persistence:
       plugins:
