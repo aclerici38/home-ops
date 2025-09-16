@@ -134,7 +134,6 @@ spec:
             log.to = "console"
             log.level = "debug"
             plugins.dir = "rmqtt-plugins/"
-            listener.tcp.internal.enable = false
     persistence:
       plugins:
         type: configMap
