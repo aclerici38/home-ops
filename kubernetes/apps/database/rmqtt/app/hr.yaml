@@ -32,12 +32,11 @@ spec:
           podManagementPolicy: Parallel
           serviceName: rmqtt-headless
         pod:
-          # rmqtt publishes a separate tag for arm images :(
-          # tolerations:
-          #   - key: "rpi"
-          #     operator: "Equal"
-          #     value: "true"
-          #     effect: "NoSchedule"
+          tolerations:
+            - key: "rpi"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
@@ -79,16 +78,8 @@ spec:
                 spec:
                   httpGet:
                     port: &httpPort 6060
-                    path: &pPath /api/v1/health/check
+                    path: /api/v1/health/check
               readiness: *probes
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    port: *httpPort
-                    path: *pPath
-                  initialDelaySeconds: 5
             resources:
               requests:
                 cpu: 12m
