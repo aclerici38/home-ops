@@ -32,11 +32,11 @@ spec:
           podManagementPolicy: Parallel
           serviceName: rmqtt-headless
         pod:
-          tolerations:
-            - key: "rpi"
-              operator: "Equal"
-              value: "true"
-              effect: "NoSchedule"
+          # tolerations:
+          #   - key: "rpi"
+          #     operator: "Equal"
+          #     value: "true"
+          #     effect: "NoSchedule"
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
@@ -130,16 +130,19 @@ spec:
             storage.redis.url = "redis://dragonfly-db.database.svc.cluster.local:6379/5"
             storage.redis.prefix = "retain"
             retained_message_ttl = "0m"
+          rmqtt.toml: |
+            log.to = "console"
+            log.level = "debug"
+            plugins.dir = "rmqtt-plugins/"
+            listener.tcp.internal.enable = false
     persistence:
       plugins:
         type: configMap
         name: ${APP}
         globalMounts:
+          - path: /app/rmqtt/rmqtt.toml
+            subPath: rmqtt.toml
           - path: /app/rmqtt/rmqtt-plugins/rmqtt-acl.toml
             subPath: rmqtt-acl.toml
           - path: /app/rmqtt/rmqtt-plugins/rmqtt-retainer.toml
             subPath: rmqtt-retainer.toml
-      tmpfs:
-        type: emptyDir
-        globalMounts:
-          - path: /var/log/rmqtt
