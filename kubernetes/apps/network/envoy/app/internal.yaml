@@ -9,10 +9,6 @@ spec:
   infrastructure:
     annotations:
       lbipam.cilium.io/ips: ${ENVOY_INTERNAL_LB_IP}
-    parametersRef:
-      group: gateway.envoyproxy.io
-      kind: EnvoyProxy
-      name: envoy-internal-config
   listeners:
     - name: http
       protocol: HTTP
@@ -32,21 +28,3 @@ spec:
         certificateRefs:
           - kind: Secret
             name: ${SECRET_DOMAIN/./-}-tls
-    - name: syncthing-quic
-      protocol: UDP
-      port: 22000
-      allowedRoutes:
-        namespaces:
-          from: Selector
-          selector:
-            matchLabels:
-              kubernetes.io/metadata.name: home
-    - name: syncthing-tcp
-      protocol: TCP
-      port: 22000
-      allowedRoutes:
-        namespaces:
-          from: Selector
-          selector:
-            matchLabels:
-              kubernetes.io/metadata.name: home
