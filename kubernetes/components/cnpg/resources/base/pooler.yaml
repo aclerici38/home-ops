@@ -9,6 +9,7 @@ spec:
   type: rw
   template:
     spec:
+      containers: [] # this is needed for some reason to make schema happy
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
