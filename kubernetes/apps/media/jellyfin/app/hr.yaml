@@ -126,22 +126,37 @@ spec:
     persistence:
       config:
         existingClaim: ${APP}
+        advancedMounts:
+          ${APP}:
+            main:
+              - path: /config
+          meilisearch:
+            main:
+              - path: /meili_data
+                subPath: meilisearch
       cache:
         existingClaim: jellyfin-cache
-        globalMounts:
-          - path: /config/metadata
+        advancedMounts:
+          ${APP}:
+            main:
+              - path: /config/metadata
       media:
         type: nfs
         server: ${NFS_IP}
         path: /media
-        globalMounts:
-          - path: /allMedia
+        advancedMounts:
+          ${APP}:
+            main:
+              - path: /allMedia
       tmpfs:
         type: emptyDir
+        advancedMounts:
+          ${APP}:
+            main:
+              - path: /cache
+                subPath: cache
+              - path: /config/log
+                subPath: log
         globalMounts:
-          - path: /cache
-            subPath: cache
-          - path: /config/log
-            subPath: log
           - path: /tmp
             subPath: tmp
