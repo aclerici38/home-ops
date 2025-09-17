@@ -1,0 +1,41 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: ${APP}-pooler-rw
+spec:
+  cluster:
+    name: ${APP}-db
+  instances: ${CNPG_POOLER_REPLICAS:=2}
+  type: rw
+  template:
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: cnpg.io/cluster
+                    operator: In
+                    values:
+                      - ${APP}-db
+                  - key: cnpg.io/podRole
+                    operator: In
+                    values:
+                      - pooler
+        topologyKey: kubernetes.io/hostname
+  pgbouncer:
+    poolMode: transaction
+    parameters:
+      default_pool_size: "30"
+      min_pool_size: "5"
+      reserve_pool_size: "10"
+      reserve_pool_timeout: "5"
+      max_client_conn: "500"
+      listen_backlog: "1024"
+      query_wait_timeout: "120"
+      idle_transaction_timeout: "60"
+      server_idle_timeout: "180"
+      max_prepared_statements: "200"
+  monitoring:
+    enablePodMonitor: true
+
