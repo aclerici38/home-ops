@@ -24,14 +24,9 @@ spec:
   values:
     controllers:
       ${APP}:
+        forceRename: ${APP}
         pod:
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: RuntimeDefault }
             supplementalGroups:
               - 44
         containers:
@@ -51,7 +46,7 @@ spec:
                   failureThreshold: 20
                   initialDelaySeconds: 10
               readiness: *probes
-            securityContext:
+            securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
@@ -89,6 +84,15 @@ spec:
                     port: &mPort 7700
                     path: /health
               readiness: *probes
+    defaultPodOptionsStrategy: merge
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
     service:
       main:
         controller: ${APP}
