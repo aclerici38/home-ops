@@ -63,28 +63,53 @@ spec:
                 gpu.intel.com/i915: 1
                 cpu: "16"
                 memory: 16Gi
+      meilisearch:
+        containers:
+          main:
+            image:
+              repository: docker.io/getmeili/meilisearch
+              tag: v1.21.0@sha256:38e0ae3cfd2f319461f321c79a1d9320143a2258ee0e2f567bc9441d79dcff5f
+            args:
+              - /bin/meilisearch
+              - --experimental-dumpless-upgrade
+            env:
+              MEILI_NO_ANALYTICS: true
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 4Gi
+            securityContext: *sec
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &mPort 7700
+                    path: /health
+              readiness: *probes
     service:
       main:
         controller: ${APP}
         ports:
           http:
-            port: &port 8096
-    serviceMonitor:
-      main:
-        serviceName: ${APP}
-        endpoints:
-          - port: http
+            port: *port
+      meilisearch:
+        controller: meilisearch
+        ports:
+          http:
+            port: *mPort
+    # serviceMonitor:
+    #   main:
+    #     serviceName: ${APP}-main
+    #     endpoints:
+    #       - port: http
     route:
       main:
         hostnames:
           - ${APP}.${SECRET_DOMAIN}
         rules:
-          # Block metrics path
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /metrics
-            backendRefs: []
           - backendRefs:
             - identifier: main
               port: *port
