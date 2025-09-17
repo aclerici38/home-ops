@@ -25,7 +25,7 @@ spec:
                       - pooler
               topologyKey: kubernetes.io/hostname
   pgbouncer:
-    poolMode: transaction
+    poolMode: "${CNPG_POOLMODE:=transaction}"
     parameters:
       default_pool_size: "30"
       min_pool_size: "5"
