@@ -48,6 +48,8 @@ spec:
   values:
     expose:
       type: route
+      tls:
+        enabled: false
       route:
         parentRefs:
           - name: internal
