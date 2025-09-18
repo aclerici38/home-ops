@@ -47,16 +47,16 @@ spec:
       optional: false
   values:
     expose:
-      type: gateway-apis
-    route:
-      parentRefs:
-        - name: internal
-          namespace: network
-          sectionName: https
-          group: gateway.networking.k8s.io
-          kind: Gateway
-      hosts:
-        - harbor.${SECRET_DOMAIN}
+      type: route
+      route:
+        parentRefs:
+          - name: internal
+            namespace: network
+            sectionName: https
+            group: gateway.networking.k8s.io
+            kind: Gateway
+        hosts:
+          - harbor.${SECRET_DOMAIN}
     externalURL: https://harbor.${SECRET_DOMAIN}
     ipFamily:
       ipv6:
