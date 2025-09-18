@@ -47,7 +47,7 @@ spec:
       optional: false
   values:
     expose:
-      type: route
+      type: gateway-apis
     route:
       parentRefs:
         - name: internal
@@ -99,7 +99,7 @@ spec:
       nodeSelector: *ns
     jobservice:
       nodeSelector: *ns
-    registrty:
+    registry:
       nodeSelector: *ns
     cache:
       enabled: true
