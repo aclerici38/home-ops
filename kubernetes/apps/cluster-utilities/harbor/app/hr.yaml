@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: harbor
-      version: 1.17.2
+      version: 1.18.0
       sourceRef:
         kind: HelmRepository
         name: harbor
@@ -47,16 +47,16 @@ spec:
       optional: false
   values:
     expose:
-      type: ingress
-    # route:
-    #   parentRefs:
-    #     - name: internal
-    #       namespace: network
-    #       sectionName: https
-    #       group: gateway.networking.k8s.io
-    #       kind: Gateway
-    #   hosts:
-    #     - harbor.${SECRET_DOMAIN}
+      type: route
+    route:
+      parentRefs:
+        - name: internal
+          namespace: network
+          sectionName: https
+          group: gateway.networking.k8s.io
+          kind: Gateway
+      hosts:
+        - harbor.${SECRET_DOMAIN}
     externalURL: https://harbor.${SECRET_DOMAIN}
     ipFamily:
       ipv6:
