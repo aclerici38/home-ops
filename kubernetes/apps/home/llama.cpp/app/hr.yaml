@@ -24,7 +24,6 @@ spec:
   values:
     controllers:
       ${APP}:
-        strategy: RollingUpdate
         pod:
           nodeSelector:
             kubernetes.io/hostname: bonds
