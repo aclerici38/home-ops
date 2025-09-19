@@ -98,6 +98,8 @@ spec:
           - backendRefs:
             - identifier: main
               port: *port
+            timeouts:
+              request: 0s
     persistence:
       models:
         existingClaim: llama-model-cache
