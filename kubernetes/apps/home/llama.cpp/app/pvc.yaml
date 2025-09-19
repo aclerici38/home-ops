@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: model-cache
+  name: llama-model-cache
 spec:
-  storageClassName: ceph-filesystem
+  storageClassName: nfs-ssd
   resources:
     requests:
       storage: 100Gi
