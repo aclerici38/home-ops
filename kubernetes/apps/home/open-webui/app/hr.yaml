@@ -49,10 +49,13 @@ spec:
 
               ENABLE_OLLAMA_API: false
 
+              ENABLE_OPENAI_API: true
+              OPENAI_API_BASE_URL: http://llama-cpp:8080/v1
+
               ENABLE_RAG_WEB_SEARCH: true
               RAG_WEB_SEARCH_ENGINE: searxng
               VECTOR_DB: pgvector
-              RAG_EMBEDDING_ENGINE: ollama
+              RAG_EMBEDDING_ENGINE: openai
 
               ENABLE_OAUTH_SIGNUP: true
               OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
