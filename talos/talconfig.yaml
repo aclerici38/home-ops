@@ -54,6 +54,8 @@ nodes:
           - security=none
           - enforcing=0
           - -selinux
+          - zfs.zfs_arc_max=42949672960 # 25Gi
+          - zfs.zfs_arc_shrinker_limit=0
         systemExtensions:
           officialExtensions:
             - siderolabs/i915
