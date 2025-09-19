@@ -18,7 +18,7 @@ spec:
     namespace: flux-system
   wait: true
   interval: 30m
-  timeout: 10m
+  timeout: 5m
   postBuild:
     substitute:
       APP: *app
