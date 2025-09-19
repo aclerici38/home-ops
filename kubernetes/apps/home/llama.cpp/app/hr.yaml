@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: llama-cpp
+  name: llama.cpp
 spec:
   interval: 1h
   maxHistory: 1
@@ -80,13 +80,14 @@ spec:
     service:
       main:
         controller: ${APP}
+        forceRename: llama-cpp
         ports:
           http:
             port: *port
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - llama.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: network
