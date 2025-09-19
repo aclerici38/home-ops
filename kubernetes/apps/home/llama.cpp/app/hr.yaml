@@ -1,0 +1,99 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: llama.cpp
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      ${APP}:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: bonds
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          main:
+            image:
+              repository: ghcr.io/ggml-org/llama.cpp
+              tag: server-intel-b6517@sha256:2150cd3cdc5150d0020247d0222610dfd16135180a7887f7cdaef9226eaa109a
+            args:
+              - -m
+              - hf://Qwen/Qwen2.5-Coder-7B-Instruct-GGUF/Qwen2.5-Coder-7B-Instruct-Q4_K_M.gguf
+              - -n
+              - '512'
+              - -c
+              - '4096'
+            securityContext:
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities: { drop: ["ALL"] }
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec: &spec
+                  httpGet:
+                    path: &path /health
+                    port: &port 8080
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: *port
+                    path: *path
+                  periodSeconds: 10
+                  failureThreshold: 12
+            resources:
+              requests:
+                cpu: 200m
+                memory: 6Gi
+              limits:
+                gpu.intel.com/i915: 1
+                memory: 16Gi
+    service:
+      main:
+        controller: ${APP}
+        ports:
+          http:
+            port: *port
+    route:
+      main:
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: main
+              port: *http
+    persistence:
+      models:
+        existingClaim: model-cache
