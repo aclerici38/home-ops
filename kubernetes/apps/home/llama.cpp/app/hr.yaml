@@ -93,7 +93,7 @@ spec:
         rules:
           - backendRefs:
             - identifier: main
-              port: *http
+              port: *port
     persistence:
       models:
         existingClaim: model-cache
