@@ -42,7 +42,7 @@ spec:
               tag: server-intel-b6517@sha256:2150cd3cdc5150d0020247d0222610dfd16135180a7887f7cdaef9226eaa109a
             args:
               - -hf
-              - Qwen/Qwen2.5-Coder-7B-Instruct-GGUF:Q5_K_M
+              - bartowski/DeepSeek-R1-Distill-Qwen-14B-GGUF
               - -n
               - '512'
               - -c
@@ -54,24 +54,6 @@ spec:
               allowPrivilegeEscalation: false
               seccompProfile: { type: RuntimeDefault }
               capabilities: { drop: ["ALL"] }
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec: &spec
-                  httpGet:
-                    path: &path /health
-                    port: &port 8080
-              readiness: *probes
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    port: *port
-                    path: *path
-                  periodSeconds: 10
-                  failureThreshold: 60
             resources:
               requests:
                 cpu: 200m
