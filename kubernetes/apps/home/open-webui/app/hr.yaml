@@ -43,6 +43,7 @@ spec:
               ENABLE_LOGIN_FORM: false
               DEFAULT_USER_ROLE: user
               ENABLE_AUTOCOMPLETE_GENERATION: false # annoying
+              ENABLE_FOLLOW_UP_GENERATION: false # annoying
               WEBUI_URL: &host https://ai.${SECRET_DOMAIN}
               CORS_ALLOW_ORIGIN: *host
               SEARXNG_QUERY_URL: http://searxng.home.svc.cluster.local:8080/search?q=<query>
