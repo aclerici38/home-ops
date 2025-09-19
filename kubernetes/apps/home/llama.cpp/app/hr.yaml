@@ -71,7 +71,7 @@ spec:
                     port: *port
                     path: *path
                   periodSeconds: 10
-                  failureThreshold: 12
+                  failureThreshold: 60
             resources:
               requests:
                 cpu: 200m
