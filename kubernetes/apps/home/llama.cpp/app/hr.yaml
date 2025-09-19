@@ -42,7 +42,7 @@ spec:
               tag: server-intel-b6517@sha256:2150cd3cdc5150d0020247d0222610dfd16135180a7887f7cdaef9226eaa109a
             args:
               - -hf
-              - Qwen/Qwen2.5-Coder-7B-Instruct-GGUF:Q4_K_M
+              - Qwen/Qwen2.5-Coder-7B-Instruct-GGUF:Q5_K_M
               - -n
               - '512'
               - -c
@@ -98,8 +98,6 @@ spec:
           - backendRefs:
             - identifier: main
               port: *port
-            timeouts:
-              request: 0s
     persistence:
       models:
         existingClaim: llama-model-cache
