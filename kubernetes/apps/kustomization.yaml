@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./cert-manager/ks.yaml
   - ./external-secrets/ks.yaml
+  - ./onepassword-connect/ks.yaml
 
   - ./cilium
   - ./cluster-utilities

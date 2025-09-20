@@ -2,7 +2,12 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: cluster-utilities
+  name: external-secrets
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: onepassword-connect
 ---
 apiVersion: v1
 kind: Namespace
@@ -29,7 +34,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: onepassword-connect-secret
-  namespace: cluster-utilities
+  namespace: onepassword-connect
 stringData:
   1password-credentials.json: {{ ENV.ONEPASSWORD_CREDENTIALS_B64 }}
   token: {{ ENV.ONEPASSWORD_CONNECT_TOKEN }}
