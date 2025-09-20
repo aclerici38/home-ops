@@ -33,3 +33,10 @@ spec:
       VOLSYNC_STORAGECLASS: ceph-filesystem
       VOLSYNC_SNAPSHOTCLASS: csi-ceph-filesystem
       VOLSYNC_ACCESSMODES: ReadWriteMany
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
