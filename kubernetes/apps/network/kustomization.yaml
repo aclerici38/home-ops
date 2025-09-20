@@ -5,7 +5,6 @@ kind: Kustomization
 resources:
   - ./ns.yaml
 
-  - ./blocky/ks.yaml
   - ./cloudflare-ddns/ks.yaml
   - ./dnscrypt-proxy/ks.yaml
   - ./echo-server/ks.yaml
