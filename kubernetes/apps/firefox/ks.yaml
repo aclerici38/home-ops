@@ -4,19 +4,19 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app firefox
-  namespace: &ns media
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/media/firefox/app
+  path: ./kubernetes/apps/firefox/app
   components:
+    - ../../../components/namespace/privileged
     - ../../../components/volsync/versity
   prune: true
   dependsOn:
     - name: volsync
-      namespace: flux-system
     - name: versity
   sourceRef:
     kind: GitRepository
@@ -28,4 +28,11 @@ spec:
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
 
