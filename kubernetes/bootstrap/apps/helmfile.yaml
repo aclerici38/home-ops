@@ -52,7 +52,7 @@ releases:
       - cilium/cilium
 
   - name: cert-manager
-    namespace: cluster-utilities
+    namespace: cert-manager
     atomic: true
     chart: oci://ghcr.io/home-operations/charts-mirror/cert-manager
     version: v1.17.1

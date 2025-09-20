@@ -13,7 +13,7 @@ spec:
     - name: external-secrets-stores
       namespace: cluster-utilities
     - name: cert-manager
-      namespace: cluster-utilities
+      namespace: cert-manager
   sourceRef:
     kind: GitRepository
     name: flux-system
