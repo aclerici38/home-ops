@@ -4,7 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app cert-manager
-  namespace: *app
+  namespace: flux-system
 spec:
   targetNamespace: *app
   commonMetadata:
