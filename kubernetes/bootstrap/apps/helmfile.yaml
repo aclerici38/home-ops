@@ -63,23 +63,23 @@ releases:
       - kube-system/coredns
 
   - name: onepassword-connect
-    namespace: cluster-utilities
+    namespace: onepassword-connect
     atomic: true
     chart: oci://ghcr.io/bjw-s/helm/app-template
     version: 3.7.3
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/cluster-utilities/onepassword-connect/app/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/onepassword-connect/app/values.yaml
     needs:
       - cilium/cilium
       - kube-system/coredns
 
   - name: external-secrets
-    namespace: cluster-utilities
+    namespace: external-secrets
     atomic: true
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
     version: 0.19.2
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/cluster-utilities/external-secrets/app/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/external-secrets/app/values.yaml
     needs:
       - kube-system/coredns
       - onepassword-connect
@@ -87,7 +87,7 @@ releases:
       - events: ["postsync"]
         showlogs: true
         command: "kubectl"
-        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cluster-utilities/external-secrets/stores/1password/store.yaml"]
+        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/external-secrets/stores/1password/store.yaml"]
 
   - name: flux-operator
     namespace: flux-system
@@ -108,7 +108,7 @@ releases:
       - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux/instance/values.yaml
     needs:
       - flux-system/flux-operator
-      - cluster-utilities/external-secrets
+      - external-secrets/external-secrets
 
   - name: kustomize-mutating-webhook
     namespace: flux-system
@@ -119,8 +119,8 @@ releases:
       - /Users/anthony/home-ops/kubernetes/apps/flux-system/kustomize-mutating-webhook/app/values.yaml
     needs:
       - flux-system/flux-instance
-      - cluster-utilities/cert-manager
-      - cluster-utilities/external-secrets
+      - cert-manager/cert-manager
+      - external-secrets/external-secrets
     hooks:
       - events: ["presync"]
         showlogs: true

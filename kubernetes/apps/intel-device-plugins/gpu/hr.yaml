@@ -23,7 +23,6 @@ spec:
       retries: 1
   dependsOn:
     - name: intel-device-plugins-operator
-      namespace: cluster-utilities
   values:
     name: intel-device-plugin-gpu
     sharedDevNum: 99
