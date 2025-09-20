@@ -96,6 +96,7 @@ spec:
     service:
       main:
         controller: ${APP}
+        forceRename: ${APP}
         ports:
           http:
             port: *port
