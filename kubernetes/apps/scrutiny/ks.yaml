@@ -4,6 +4,7 @@ kind: Kustomization
 metadata:
   name: &app scrutiny
   namespace: flux-system
+spec:
   targetNamespace: *app
   commonMetadata:
     labels:
