@@ -16,7 +16,7 @@ spec:
     - name: versity
   path: ./kubernetes/apps/media/jellyfin/app
   components:
-    - ../../../../components/volsync/versity
+    - ../../../components/volsync/versity
   prune: true
   sourceRef:
     kind: GitRepository

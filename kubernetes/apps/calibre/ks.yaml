@@ -4,19 +4,19 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app calibre-web-automated
-  namespace: &ns media
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: calibre
   dependsOn:
     - name: volsync
-      namespace: flux-system
     - name: versity
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/media/calibre/calibre-web-automated
+  path: ./kubernetes/apps/calibre/calibre-web-automated
   components:
-    - ../../../../components/volsync/versity
+    - ../../../components/namespace/privileged
+    - ../../../components/volsync/versity
   prune: true
   sourceRef:
     kind: GitRepository
@@ -28,22 +28,30 @@ spec:
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app calibre-downloader
-  namespace: &ns media
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: calibre
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/media/calibre/calibre-downloader
+  path: ./kubernetes/apps/calibre/calibre-downloader
   components:
-    - ../../../../components/envoy/oauth
-    - ../../../../components/external-secret/common
+    - ../../../components/namespace/privileged
+    - ../../../components/envoy/oauth
+    - ../../../components/external-secret/common
   prune: true
   sourceRef:
     kind: GitRepository
@@ -56,6 +64,13 @@ spec:
     substitute:
       APP: *app
       CLIENT_ID: 022da642-3926-4abb-9b95-73ae841c6f8b
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
   patches:
     - patch: |-
         apiVersion: gateway.envoyproxy.io/v1alpha1

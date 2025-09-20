@@ -12,8 +12,8 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media/filebrowser/app
   components:
-    - ../../../../components/volsync/versity
-    - ../../../../components/external-secret/common
+    - ../../../components/volsync/versity
+    - ../../../components/external-secret/common
   prune: true
   dependsOn:
     - name: volsync

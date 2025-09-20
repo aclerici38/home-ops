@@ -17,8 +17,8 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media/jellyseer/app
   components:
-    - ../../../../components/cnpg/overlay/restore
-    - ../../../../components/volsync/versity
+    - ../../../components/cnpg/overlay/restore
+    - ../../../components/volsync/versity
   prune: true
   sourceRef:
     kind: GitRepository

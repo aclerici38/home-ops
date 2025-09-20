@@ -16,9 +16,9 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media/fileflows/app
   components:
-    - ../../../../components/volsync/versity
-    - ../../../../components/cnpg/overlay/restore
-    - ../../../../components/external-secret/common
+    - ../../../components/volsync/versity
+    - ../../../components/cnpg/overlay/restore
+    - ../../../components/external-secret/common
   prune: true
   sourceRef:
     kind: GitRepository

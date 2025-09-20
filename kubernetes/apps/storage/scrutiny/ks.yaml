@@ -14,7 +14,7 @@ spec:
     - name: volsync
   path: ./kubernetes/apps/storage/scrutiny/app
   components:
-    - ../../../../components/volsync/versity
+    - ../../../components/volsync/versity
   prune: true
   sourceRef:
     kind: GitRepository
