@@ -10,16 +10,3 @@ spec:
   resources:
     requests:
       storage: "966367641600"
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: immich
-  namespace: storage
-spec:
-  storageClassName: zfs-tank
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 43.6Ti
