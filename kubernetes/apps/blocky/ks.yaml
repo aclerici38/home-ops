@@ -4,39 +4,46 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app blocky
-  namespace: &ns network
+  namespace: flux-system
 spec:
-  path: "./kubernetes/apps/network/blocky/app/"
+  path: ./kubernetes/apps/blocky/app/
   components:
-    - ../../../../components/cnpg/overlay/no-backup
+    - ../../../components/namespace/common
+    - ../../../components/cnpg/overlay/no-backup
   prune: true
   wait: true
   dependsOn:
     - name: cloudnative-pg
     - name: dragonfly-cluster
-      namespace: database
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
   interval: 30m
   timeout: 3m
-  targetNamespace: *ns
+  targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app blocky-ui
-  namespace: &ns network
+  namespace: flux-system
 spec:
-  path: "./kubernetes/apps/network/blocky/ui"
+  path: "./kubernetes/apps/blocky/ui"
   prune: true
   wait: true
   dependsOn:
@@ -47,10 +54,17 @@ spec:
     namespace: flux-system
   interval: 30m
   timeout: 3m
-  targetNamespace: *ns
+  targetNamespace: blocky
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
