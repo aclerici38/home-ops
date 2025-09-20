@@ -5,7 +5,6 @@ kind: Kustomization
 resources:
   - ./ns.yaml
 
-  - ./it-tools/ks.yaml
   - ./karakeep/ks.yaml
   - ./llama.cpp/ks.yaml
   - ./mealie/ks.yaml
