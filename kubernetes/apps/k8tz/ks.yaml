@@ -3,15 +3,17 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app k8tz
-  namespace: &ns cluster-utilities
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: cert-manager
-  path: ./kubernetes/apps/cluster-utilities/k8tz/app
+  path: ./kubernetes/apps/k8tz/app
+  components:
+    - ../../../components/namespace/common
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -23,4 +25,8 @@ spec:
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
 
