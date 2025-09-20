@@ -2,18 +2,22 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app convertx
+  name: &app home-assistant
   namespace: flux-system
 spec:
   targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/convertx/app
+  dependsOn:
+    - name: volsync
+    - name: multus
+      namespace: multus
+    - name: versity
+  path: ./kubernetes/apps/home-assistant/app
   components:
     - ../../../components/namespace/common
-    - ../../../components/external-secret/common
-    - ../../../components/envoy/oauth
+    - ../../../components/volsync/versity
   prune: true
   sourceRef:
     kind: GitRepository
@@ -25,16 +29,5 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      CLIENT_ID: a1443db8-e846-4e19-88c8-7eeed29c537d
       VOLSYNC_CAPACITY: 25Gi
-  patches:
-  - patch: |-
-      apiVersion: gateway.envoyproxy.io/v1alpha1
-      kind: SecurityPolicy
-      metadata:
-        name: patch
-      spec:
-        oidc:
-          redirectURL: "https://convert.${SECRET_DOMAIN}/oauth2/callback"
-    target:
-      kind: SecurityPolicy
+      VOLSYNC_ACCESSMODES: ReadWriteMany
