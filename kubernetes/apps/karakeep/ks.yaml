@@ -13,8 +13,8 @@ spec:
   path: ./kubernetes/apps/karakeep/app
   components:
     - ../../../components/namespace/privileged
-    - ../../../../components/volsync/versity
-    - ../../../../components/external-secret/common
+    - ../../../components/volsync/versity
+    - ../../../components/external-secret/common
   prune: true
   sourceRef:
     kind: GitRepository
