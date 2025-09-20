@@ -4,13 +4,13 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app coredns
-  namespace: &ns kube-system
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: kube-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/kube-system/coredns/app
+  path: ./kubernetes/apps/coredns/app
   prune: false
   sourceRef:
     kind: GitRepository
@@ -27,3 +27,10 @@ spec:
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
