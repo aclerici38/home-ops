@@ -31,3 +31,10 @@ spec:
       APP: *app
       VOLSYNC_CAPACITY: 25Gi
       VOLSYNC_ACCESSMODES: ReadWriteMany
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
