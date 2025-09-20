@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/cluster-utilities/cert-manager/app
+  path: ./kubernetes/apps/cert-manager/app
   components:
     - ../../../../components/namespace/common
   prune: true
