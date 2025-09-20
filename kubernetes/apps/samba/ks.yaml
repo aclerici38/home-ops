@@ -4,15 +4,16 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app samba
-  namespace: &ns home
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/home/samba/app
+  path: ./kubernetes/apps/samba/app
   components:
-    - ../../../../components/external-secret/common
+    - ../../../components/namespace/common
+    - ../../../components/external-secret/common
   dependsOn:
     - name: external-secrets-stores
   prune: true
@@ -26,3 +27,10 @@ spec:
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
