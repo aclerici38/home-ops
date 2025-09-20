@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-settings
+  namespace: flux-system
+data:
+  TZ: "America/Los_Angeles"
+
+  # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
+  TALOS_VERSION: "v1.11.1"
+
+  # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+  KUBE_VERSION: "v1.34.1"
+
+  COREDNS_CLUSTER_IP: "172.17.0.10"
+  BLOCKY_CLUSTER_IP: "172.17.0.11"
+  DNSCRYPT_CLUSTER_IP: "172.17.0.12"
+  K8S_GATEWAY_CLUSTER_IP: "172.17.0.13"
+
+  NFS_IP: "192.168.9.25"
+  BLOCKY_LB_IP: "10.38.55.25"
+  D3SAVANT_LB_IP: "10.38.55.38"
+  ENVOY_INTERNAL_LB_IP: "10.38.55.80"
+  ENVOY_EXTERNAL_LB_IP: "10.38.55.81"
