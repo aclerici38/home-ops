@@ -45,7 +45,7 @@ webhook:
       - key: kubernetes.io/metadata.name
         operator: NotIn
         values:
-          - "fake-namespace"
+          - "flux-system"
 podDisruptionBudget:
   enabled: false
 securityContext:
