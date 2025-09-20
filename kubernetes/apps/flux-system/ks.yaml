@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/flux-system/flux/operator
+  path: ./kubernetes/apps/flux-system/operator
   components:
     - ../../../components/namespace/common
   prune: false # never should be deleted
@@ -38,7 +38,7 @@ spec:
   dependsOn:
     - name: flux-operator
     - name: external-secrets-stores
-  path: ./kubernetes/apps/flux-system/flux/instance
+  path: ./kubernetes/apps/flux-system/instance
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
