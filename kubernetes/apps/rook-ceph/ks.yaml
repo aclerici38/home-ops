@@ -4,14 +4,14 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app rook-ceph
-  namespace: &ns rook-ceph
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/rook-ceph/rook-ceph/app
-  prune: true
+  path: ./kubernetes/apps/rook-ceph/app
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -22,22 +22,26 @@ spec:
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app rook-ceph-cluster
-  namespace: &ns rook-ceph
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: rook-ceph
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: rook-ceph
-  path: ./kubernetes/apps/rook-ceph/rook-ceph/cluster
-  prune: true
+  path: ./kubernetes/apps/rook-ceph/cluster
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -48,3 +52,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
