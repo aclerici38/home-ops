@@ -9,11 +9,9 @@ spec:
   targetNamespace: *ns
   dependsOn:
     - name: external-secrets-stores
-      namespace: external-secrets
     - name: cloudnative-pg
       namespace: database
     - name: external-secrets-stores
-      namespace: external-secrets
     - name: volsync
       namespace: storage
     - name: versity

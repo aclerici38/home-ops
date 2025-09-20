@@ -13,7 +13,6 @@ spec:
     - name: dragonfly-cluster
       namespace: database
     - name: external-secrets-stores
-      namespace: external-secrets
   path: ./kubernetes/apps/home/nitter/app
   components:
     - ../../../../components/external-secret
@@ -43,7 +42,6 @@ spec:
   path: ./kubernetes/apps/home/nitter/config
   dependsOn:
     - name: external-secrets-stores
-      namespace: external-secrets
   prune: true
   sourceRef:
     kind: GitRepository

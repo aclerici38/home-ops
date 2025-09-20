@@ -15,7 +15,6 @@ spec:
     - ../../../../components/external-secret
   dependsOn:
     - name: external-secrets-stores
-      namespace: external-secrets
   prune: true
   sourceRef:
     kind: GitRepository

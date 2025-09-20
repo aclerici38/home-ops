@@ -16,7 +16,6 @@ spec:
     - name: versity
       namespace: storage
     - name: external-secrets-stores
-      namespace: external-secrets
     - name: cloudnative-pg
       namespace: database
   path: ./kubernetes/apps/home/meshcentral/app
@@ -66,7 +65,6 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets-stores
-      namespace: external-secrets
     - name: cloudnative-pg
       namespace: database
   path: ./kubernetes/apps/home/meshcentral/config
