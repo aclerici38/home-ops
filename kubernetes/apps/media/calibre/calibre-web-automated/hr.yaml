@@ -81,7 +81,7 @@ spec:
           - calibre.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
-            namespace: network
+            namespace: envoy
             sectionName: https
         rules:
           - backendRefs:
@@ -92,7 +92,7 @@ spec:
           - kobo.${SECRET_DOMAIN}
         parentRefs:
           - name: external
-            namespace: network
+            namespace: envoy
             sectionName: https
         rules:
           - matches:

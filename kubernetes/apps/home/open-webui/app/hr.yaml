@@ -104,7 +104,7 @@ spec:
           - ai.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
-            namespace: network
+            namespace: envoy
             sectionName: https
         rules:
           - backendRefs:

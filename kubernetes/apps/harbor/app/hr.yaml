@@ -53,7 +53,7 @@ spec:
       route:
         parentRefs:
           - name: internal
-            namespace: network
+            namespace: envoy
             sectionName: https
             group: gateway.networking.k8s.io
             kind: Gateway

@@ -74,7 +74,7 @@ spec:
           - ${APP}.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
-            namespace: network
+            namespace: envoy
             sectionName: https
         rules:
           - backendRefs:
@@ -82,26 +82,6 @@ spec:
               port: *port
             timeouts:
               request: 0s
-      tcp:
-        kind: TCPRoute
-        parentRefs:
-          - name: internal
-            namespace: network
-            sectionName: syncthing-tcp
-        rules:
-          - backendRefs:
-            - identifier: main
-              port: 22000
-      quic:
-        kind: UDPRoute
-        parentRefs:
-          - name: internal
-            namespace: network
-            sectionName: syncthing-quic
-        rules:
-          - backendRefs:
-            - identifier: main
-              port: 22000
     persistence:
       config:
         existingClaim: ${APP}

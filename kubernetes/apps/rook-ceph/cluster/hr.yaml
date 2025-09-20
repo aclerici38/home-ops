@@ -34,7 +34,7 @@ spec:
           pathType: PathPrefix
         parentRefs:
           - name: internal
-            namespace: network
+            namespace: envoy
             sectionName: https
     cephClusterSpec:
       placement:

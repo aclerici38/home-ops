@@ -10,6 +10,9 @@ resources:
   - ./coredns/ks.yaml
   - ./dnscrypt-proxy/ks.yaml
   - ./dragonfly/ks.yaml
+  - ./echo-server/ks.yaml
+  - ./envoy/ks.yaml
+  - ./external-dns/ks.yaml
   - ./external-secrets/ks.yaml
   - ./flux-system/ks.yaml
   - ./frigate/ks.yaml
@@ -19,8 +22,10 @@ resources:
   - ./k8s-gateway/ks.yaml
   - ./k8tz/ks.yaml
   - ./metrics-server/ks.yaml
+  - ./multus/ks.yaml
   - ./node-feature-discovery/ks.yaml
   - ./onepassword-connect/ks.yaml
+  - ./openspeedtest/ks.yaml
   - ./reloader/ks.yaml
   - ./rmqtt/ks.yaml
   - ./rook-ceph/ks.yaml
@@ -31,7 +36,6 @@ resources:
   - ./d3savant
   - ./home
   - ./media
-  - ./network
   - ./observability
   - ./openebs-system
   - ./storage

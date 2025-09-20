@@ -71,7 +71,7 @@ spec:
           - hass.${SECRET_DOMAIN}
         parentRefs:
           - name: external
-            namespace: network
+            namespace: envoy
             sectionName: https
         rules:
           # Block webhook path

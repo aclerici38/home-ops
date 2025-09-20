@@ -8,7 +8,7 @@ spec:
   parentRefs:
     - name: external
       kind: Gateway
-      namespace: network
+      namespace: envoy
       sectionName: https
   hostnames:
     - flux-webhook.${SECRET_DOMAIN}
