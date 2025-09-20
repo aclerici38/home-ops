@@ -15,7 +15,7 @@ spec:
     - name: external-secrets-stores
   components:
     - ../../../components/namespace/common
-    - ../../../../components/external-secret
+    - ../../../components/external-secret
   sourceRef:
     kind: GitRepository
     name: flux-system
