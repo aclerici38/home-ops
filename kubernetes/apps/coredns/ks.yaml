@@ -19,7 +19,6 @@ spec:
   wait: false
   dependsOn:
     - name: dnscrypt-proxy
-      namespace: network
     - name: blocky
   interval: 30m
   timeout: 3m

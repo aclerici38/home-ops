@@ -9,7 +9,6 @@ spec:
   maxHistory: 1
   dependsOn:
     - name: dnscrypt-proxy
-      namespace: network
     - name: blocky
   chartRef:
     kind: OCIRepository
