@@ -25,7 +25,6 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: immich
-  namespace: storage
 spec:
   storageClassName: zfs-tank
   accessModes:
@@ -38,7 +37,6 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: media
-  namespace: storage
 spec:
   storageClassName: zfs-tank
   accessModes:
@@ -51,7 +49,6 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: files
-  namespace: storage
 spec:
   storageClassName: zfs-tank
   accessModes:

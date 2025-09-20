@@ -30,9 +30,8 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app ssd-zfs-scrubber
-  namespace: &ns storage
-spec:
-  targetNamespace: *ns
+  namespace: flux-system
+  targetNamespace: kube-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

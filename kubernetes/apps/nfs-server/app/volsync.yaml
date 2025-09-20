@@ -4,7 +4,6 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: "immich-volsync-storj-secret"
-  namespace: storage
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
@@ -26,7 +25,6 @@ apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
   name: "immich"
-  namespace: storage
 spec:
   sourcePVC: "immich"
   trigger:
@@ -54,7 +52,6 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: "files-volsync-storj-secret"
-  namespace: storage
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
@@ -76,7 +73,6 @@ apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
   name: "files"
-  namespace: storage
 spec:
   sourcePVC: "files"
   trigger:
