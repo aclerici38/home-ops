@@ -23,7 +23,7 @@ spec:
       retries: 1
   dependsOn:
     - name: nfs-server
-      namespace: storage
+      namespace: nfs-server
   values:
     controllers:
       server:
