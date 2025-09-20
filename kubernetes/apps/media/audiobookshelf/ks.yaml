@@ -13,9 +13,6 @@ spec:
     - name: volsync
       namespace: storage
     - name: versity
-      namespace: storage
-    - name: media-zfs-volume
-      namespace: openebs-system
   path: ./kubernetes/apps/media/audiobookshelf/app
   components:
     - ../../../../components/volsync/versity

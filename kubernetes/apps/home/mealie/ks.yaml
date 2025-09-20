@@ -11,11 +11,9 @@ spec:
     - name: external-secrets-stores
     - name: cloudnative-pg
     - name: versity
-      namespace: storage
     - name: volsync
       namespace: storage
     - name: versity
-      namespace: storage
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

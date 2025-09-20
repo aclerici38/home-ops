@@ -27,9 +27,6 @@ spec:
       namespace: storage
     - name: external-secrets-stores
     - name: versity
-      namespace: storage
-    - name: media-zfs-volume
-      namespace: openebs-system
   postBuild:
     substitute:
       APP: *app

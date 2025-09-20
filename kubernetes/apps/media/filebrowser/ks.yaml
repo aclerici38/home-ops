@@ -19,9 +19,6 @@ spec:
     - name: volsync
       namespace: storage
     - name: versity
-      namespace: storage
-    - name: media-zfs-volume
-      namespace: openebs-system
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -10,9 +10,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: files-zfs-volume
-      namespace: openebs-system
   path: ./kubernetes/apps/home/syncthing/app
   components:
     - ../../../../components/volsync/versity

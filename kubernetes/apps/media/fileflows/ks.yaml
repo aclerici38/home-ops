@@ -11,9 +11,6 @@ spec:
     - name: volsync
       namespace: storage
     - name: versity
-      namespace: storage
-    - name: media-zfs-volume
-      namespace: openebs-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

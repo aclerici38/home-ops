@@ -15,9 +15,6 @@ spec:
       namespace: database
     - name: external-secrets-stores
     - name: versity
-      namespace: storage
-    - name: immich-zfs-volume
-      namespace: openebs-system
   path: ./kubernetes/apps/home/immich/app
   components:
     - ../../../../components/cnpg/overlay/restore

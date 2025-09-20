@@ -14,9 +14,6 @@ spec:
     - name: volsync
       namespace: storage
     - name: versity
-      namespace: storage
-    - name: media-zfs-volume
-      namespace: openebs-system
   path: ./kubernetes/apps/media/jellyfin/app
   components:
     - ../../../../components/volsync/versity
