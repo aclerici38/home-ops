@@ -4,13 +4,15 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app csi-driver-nfs-ssd
-  namespace: &ns storage
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: csi-driver-nfs
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/storage/csi-driver-nfs/ssd
+  path: ./kubernetes/apps/csi-driver-nfs/ssd
+  components:
+    - ../../../components/namespace/privileged
   prune: true
   sourceRef:
     kind: GitRepository
@@ -22,19 +24,28 @@ spec:
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app csi-driver-nfs-tank
-  namespace: &ns storage
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: csi-driver-nfs
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/storage/csi-driver-nfs/tank
+  path: ./kubernetes/apps/csi-driver-nfs/tank
+  components:
+    - ../../../components/namespace/privileged
   prune: true
   sourceRef:
     kind: GitRepository
@@ -46,3 +57,10 @@ spec:
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
