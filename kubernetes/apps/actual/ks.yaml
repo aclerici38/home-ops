@@ -4,9 +4,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app actual
-  namespace: &ns home
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -16,10 +16,11 @@ spec:
     - name: versity
       namespace: storage
     - name: external-secrets-stores
-  path: ./kubernetes/apps/home/actual/app
+  path: ./kubernetes/apps/actual/app
   components:
-    - ../../../../components/volsync/versity
-    - ../../../../components/external-secret
+    - ../../../components/namespace/common
+    - ../../../components/volsync/versity
+    - ../../../components/external-secret
   prune: true
   sourceRef:
     kind: GitRepository
@@ -31,3 +32,10 @@ spec:
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
