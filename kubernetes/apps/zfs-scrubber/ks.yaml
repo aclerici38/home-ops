@@ -31,6 +31,7 @@ kind: Kustomization
 metadata:
   name: &app ssd-zfs-scrubber
   namespace: flux-system
+spec:
   targetNamespace: kube-system
   commonMetadata:
     labels:
