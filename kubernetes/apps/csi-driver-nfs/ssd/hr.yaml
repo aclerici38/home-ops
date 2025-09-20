@@ -23,6 +23,7 @@ spec:
       retries: 1
   dependsOn:
     - name: nfs-server
+      namespace: nfs-server
   values:
     feature:
       enableFSGroupPolicy: false
