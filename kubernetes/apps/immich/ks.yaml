@@ -99,7 +99,8 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets-stores
-  path: ./kubernetes/apps/home/immich-frame/app
+    - name: immich
+  path: ./kubernetes/apps/immich/frame
   components:
     - ../../../components/namespace/common
     - ../../../components/external-secret/common
