@@ -6,7 +6,7 @@ metadata:
   name: &app llama.cpp
   namespace: flux-system
 spec:
-  targetNamespace: *app
+  targetNamespace: llama
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
