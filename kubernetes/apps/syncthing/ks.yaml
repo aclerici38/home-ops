@@ -4,15 +4,16 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app syncthing
-  namespace: &ns home
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/home/syncthing/app
   components:
-    - ../../../../components/volsync/versity
+    - ../../../components/namespace/common
+    - ../../../components/volsync/versity
   prune: true
   sourceRef:
     kind: GitRepository
@@ -24,3 +25,10 @@ spec:
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
