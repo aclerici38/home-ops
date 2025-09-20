@@ -26,6 +26,10 @@ spec:
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
   # patches:
   #   - patch: |-
   #       apiVersion: postgresql.cnpg.io/v1
