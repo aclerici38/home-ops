@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/database/rmqtt/app
+  path: ./kubernetes/apps/rmqtt/app
   components:
     - ../../../components/namespace/common
   prune: true
