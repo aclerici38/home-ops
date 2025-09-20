@@ -24,7 +24,7 @@ spec:
   wait: true
   dependsOn:
     - name: volsync
-      namespace: storage
+      namespace: flux-system
     - name: external-secrets-stores
     - name: versity
   postBuild:

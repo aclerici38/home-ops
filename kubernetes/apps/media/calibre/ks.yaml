@@ -9,7 +9,7 @@ spec:
   targetNamespace: *ns
   dependsOn:
     - name: volsync
-      namespace: storage
+      namespace: flux-system
     - name: versity
   commonMetadata:
     labels:

@@ -10,7 +10,7 @@ spec:
   dependsOn:
     - name: cloudnative-pg
     - name: volsync
-      namespace: storage
+      namespace: flux-system
     - name: versity
   commonMetadata:
     labels:

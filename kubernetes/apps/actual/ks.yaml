@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: volsync
-      namespace: storage
+      namespace: flux-system
     - name: versity
     - name: external-secrets-stores
   path: ./kubernetes/apps/actual/app

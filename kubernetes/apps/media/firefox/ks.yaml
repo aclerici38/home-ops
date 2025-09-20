@@ -16,7 +16,7 @@ spec:
   prune: true
   dependsOn:
     - name: volsync
-      namespace: storage
+      namespace: flux-system
     - name: versity
   sourceRef:
     kind: GitRepository

@@ -19,7 +19,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: volsync
-      namespace: storage
+      namespace: flux-system
   prune: true
   sourceRef:
     kind: GitRepository
