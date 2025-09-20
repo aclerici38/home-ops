@@ -9,7 +9,7 @@ spec:
   targetNamespace: *ns
   dependsOn:
     - name: external-secrets-stores
-      namespace: cluster-utilities
+      namespace: external-secrets
     - name: volsync
       namespace: storage
   commonMetadata:

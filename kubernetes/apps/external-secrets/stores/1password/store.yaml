@@ -7,7 +7,7 @@ metadata:
 spec:
   provider:
     onepassword:
-      connectHost: http://onepassword-connect.cluster-utilities.svc.cluster.local
+      connectHost: http://onepassword-connect
       vaults:
         Kubernetes: 1
       auth:
@@ -15,4 +15,4 @@ spec:
           connectTokenSecretRef:
             name: onepassword-connect-secret
             key: token
-            namespace: cluster-utilities
+            namespace: external-secrets

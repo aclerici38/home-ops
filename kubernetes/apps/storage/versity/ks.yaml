@@ -11,7 +11,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets-stores
-      namespace: cluster-utilities
+      namespace: external-secrets
     - name: volsync
     - name: backups-zfs-volume
       namespace: openebs-system

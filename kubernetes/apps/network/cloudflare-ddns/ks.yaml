@@ -11,7 +11,7 @@ spec:
   wait: true
   dependsOn:
     - name: external-secrets-stores
-      namespace: cluster-utilities
+      namespace: external-secrets
     - name: cert-manager
       namespace: cert-manager
   sourceRef:

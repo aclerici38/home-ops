@@ -15,7 +15,7 @@ spec:
     - ../../../../components/external-secret
   dependsOn:
     - name: external-secrets-stores
-      namespace: cluster-utilities
+      namespace: external-secrets
   prune: true
   sourceRef:
     kind: GitRepository
