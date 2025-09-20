@@ -28,7 +28,7 @@ spec:
           # hostUsers: false
           securityContext:
             runAsNonRoot: true
-            runAsUser: &uid 977 # upstream `searxng` user
+            runAsUser: &uid 977 # upstream searxng user
             runAsGroup: *uid
             fsGroup: *uid
             fsGroupChangePolicy: OnRootMismatch
