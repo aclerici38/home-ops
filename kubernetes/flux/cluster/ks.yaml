@@ -17,8 +17,3 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  postBuild:
-    substituteFrom:
-      - kind: Secret
-        name: cluster-secrets
-        optional: false
