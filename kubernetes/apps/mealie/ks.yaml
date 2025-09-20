@@ -4,24 +4,23 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app mealie
-  namespace: &ns home
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: *app
   dependsOn:
     - name: external-secrets-stores
     - name: cloudnative-pg
     - name: versity
     - name: volsync
-      namespace: flux-system
-    - name: versity
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/home/mealie/app
+  path: ./kubernetes/apps/mealie/app
   components:
-    - ../../../../components/cnpg/overlay/restore
-    - ../../../../components/external-secret/common
-    - ../../../../components/volsync/versity
+    - ../../../components/namespace/common
+    - ../../../components/cnpg/overlay/restore
+    - ../../../components/external-secret/common
+    - ../../../components/volsync/versity
   prune: true
   sourceRef:
     kind: GitRepository
@@ -37,6 +36,13 @@ spec:
       VOLSYNC_STORAGECLASS: ceph-filesystem
       VOLSYNC_SNAPSHOTCLASS: csi-ceph-filesystem
       VOLSYNC_ACCESSMODES: ReadWriteMany
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
   # patches:
   #   - patch: |-
   #       apiVersion: postgresql.cnpg.io/v1
