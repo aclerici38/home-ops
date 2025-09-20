@@ -4,13 +4,15 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app recyclarr
-  namespace: &ns media
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/media/recyclarr/app
+  path: ./kubernetes/apps/recyclarr/app
+  components:
+    - ../../../components/namespace/common
   dependsOn:
     - name: external-secrets-stores
     - name: sonarr
@@ -24,6 +26,8 @@ spec:
   interval: 30m
   timeout: 3m
   postBuild:
+    substitute:
+      APP: *app
     substituteFrom:
       - kind: Secret
         name: sonarr-secret
@@ -31,5 +35,3 @@ spec:
       - kind: Secret
         name: radarr-secret
         optional: false
-    substitute:
-      APP: *app
