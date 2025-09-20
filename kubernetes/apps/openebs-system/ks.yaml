@@ -42,6 +42,8 @@ spec:
     - name: openebs
       namespace: openebs-system
   path: ./kubernetes/apps/openebs-system/zfs-volumes
+  components:
+    - ../../../components/namespace/privileged
   prune: false
   sourceRef:
     kind: GitRepository

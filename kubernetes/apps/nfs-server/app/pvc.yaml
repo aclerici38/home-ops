@@ -24,18 +24,6 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: backups
-spec:
-  storageClassName: zfs-ssd
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: "966367641600"
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
   name: immich
   namespace: storage
 spec:
@@ -44,7 +32,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 43.6Ti
+      storage: "59992103190528"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -57,7 +45,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 43.6Ti
+      storage: "59992103190528"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -70,5 +58,5 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 43.6Ti
+      storage: "59992103190528"
 

@@ -11,13 +11,10 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: immich-zfs-volume
-      namespace: openebs-system
-    - name: files-zfs-volume
-      namespace: openebs-system
-    - name: media-zfs-volume
-      namespace: openebs-system
+    - name: zfs-volumes
   path: ./kubernetes/apps/nfs-server/app
+  components:
+    - ../../../components/namespace/privileged
   prune: true
   sourceRef:
     kind: GitRepository
