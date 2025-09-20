@@ -16,7 +16,7 @@ spec:
   path: ./kubernetes/apps/media/bitmagnet/app
   components:
     - ../../../../components/cnpg/overlay/no-backup
-    - ../../../../components/external-secret
+    - ../../../../components/external-secret/common
   prune: true
   sourceRef:
     kind: GitRepository

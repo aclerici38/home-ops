@@ -15,7 +15,7 @@ spec:
     - name: external-secrets-stores
   path: ./kubernetes/apps/home/nitter/app
   components:
-    - ../../../../components/external-secret
+    - ../../../../components/external-secret/common
   prune: true
   sourceRef:
     kind: GitRepository

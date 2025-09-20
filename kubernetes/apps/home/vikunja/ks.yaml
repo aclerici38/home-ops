@@ -20,7 +20,7 @@ spec:
   path: ./kubernetes/apps/home/vikunja/app
   components:
     - ../../../../components/cnpg/overlay/init
-    - ../../../../components/external-secret
+    - ../../../../components/external-secret/common
     - ../../../../components/volsync/versity
   prune: true
   sourceRef:

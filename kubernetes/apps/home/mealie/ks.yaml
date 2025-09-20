@@ -20,7 +20,7 @@ spec:
   path: ./kubernetes/apps/home/mealie/app
   components:
     - ../../../../components/cnpg/overlay/restore
-    - ../../../../components/external-secret
+    - ../../../../components/external-secret/common
     - ../../../../components/volsync/versity
   prune: true
   sourceRef:

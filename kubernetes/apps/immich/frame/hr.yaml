@@ -21,6 +21,8 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  dependsOn:
+    - name: immich
   values:
     controllers:
       ${APP}:

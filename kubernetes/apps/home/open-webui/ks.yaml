@@ -17,7 +17,7 @@ spec:
   path: ./kubernetes/apps/home/open-webui/app
   components:
     - ../../../../components/cnpg/overlay/init
-    - ../../../../components/external-secret
+    - ../../../../components/external-secret/common
   prune: true
   sourceRef:
     kind: GitRepository

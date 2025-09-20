@@ -16,7 +16,7 @@ spec:
   path: ./kubernetes/apps/versity/app
   components:
     - ../../../components/namespace/common
-    - ../../../components/external-secret
+    - ../../../components/external-secret/common
   prune: true
   sourceRef:
     kind: GitRepository
