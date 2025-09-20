@@ -1,28 +1,29 @@
+---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app versity
-  namespace: &ns storage
+  name: &app nfs-server
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: nfs-server
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets-stores
-    - name: volsync
-    - name: backups-zfs-volume
+    - name: immich-zfs-volume
       namespace: openebs-system
-  path: ./kubernetes/apps/storage/versity/app
-  components:
-    - ../../../../components/external-secret
+    - name: files-zfs-volume
+      namespace: openebs-system
+    - name: media-zfs-volume
+      namespace: openebs-system
+  path: ./kubernetes/apps/nfs-server/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  wait: false
+  wait: true
   interval: 30m
   timeout: 3m
   postBuild:

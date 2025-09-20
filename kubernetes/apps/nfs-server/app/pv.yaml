@@ -1,0 +1,128 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: backups-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: "966367641600"
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: backups
+    namespace: versity
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: ssd
+    volumeHandle: backups
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - bonds
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: zfs-ssd
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 43.6Ti
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: immich
+    namespace: storage
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: tank
+    volumeHandle: immich
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - bonds
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: zfs-tank
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: media-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 43.6Ti
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: media
+    namespace: storage
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: tank
+    volumeHandle: media
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - bonds
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: zfs-tank
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: files-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 43.6Ti
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: files
+    namespace: storage
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: tank
+    volumeHandle: files
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - bonds
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: zfs-tank
+  volumeMode: Filesystem
