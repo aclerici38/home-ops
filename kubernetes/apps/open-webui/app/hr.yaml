@@ -46,12 +46,12 @@ spec:
               ENABLE_FOLLOW_UP_GENERATION: false # annoying
               WEBUI_URL: &host https://ai.${SECRET_DOMAIN}
               CORS_ALLOW_ORIGIN: *host
-              SEARXNG_QUERY_URL: http://searxng.home.svc.cluster.local:8080/search?q=<query>
+              SEARXNG_QUERY_URL: http://searxng.searxng.svc.cluster.local:8080/search?q=<query>
 
               ENABLE_OLLAMA_API: false
 
               ENABLE_OPENAI_API: true
-              OPENAI_API_BASE_URL: http://llama-cpp:8080/v1
+              OPENAI_API_BASE_URL: http://llama-cpp.llama:8080/v1
 
               ENABLE_RAG_WEB_SEARCH: true
               RAG_WEB_SEARCH_ENGINE: searxng
