@@ -14,7 +14,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/media/bazarr/app
+  path: ./kubernetes/apps/bazarr/app
   components:
     - ../../../components/namespace/common
     - ../../../components/cnpg/overlay/restore
