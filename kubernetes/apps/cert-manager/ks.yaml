@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cert-manager/app
   components:
-    - ../../../components/namespace/common
+    - ../../components/namespace/common
   prune: true
   sourceRef:
     kind: GitRepository
