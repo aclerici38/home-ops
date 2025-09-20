@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app tank-zfs-scrubber
-  namespace: &ns storage
+  name: &app short-smart-tester
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: kube-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/storage/zfs-scrubber/app
+  path: ./kubernetes/apps/smart-tester/app
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -22,21 +22,22 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      POOL: tank
-      SCRUB_SCHEDULE: "0 3 1 * *"
+      TEST_TYPE: short
+      # days 8, 16, 22 of month to not conflict w/ scrub or long test
+      TEST_SCHEDULE: "0 0 8,16,22 * *"
 ---
 # yaml-language-server: $schema=https://kube-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ssd-zfs-scrubber
+  name: &app long-smart-tester
   namespace: &ns storage
 spec:
   targetNamespace: *ns
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/storage/zfs-scrubber/app
+  path: ./kubernetes/apps/smart-tester/app
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -48,5 +49,5 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      POOL: ssd
-      SCRUB_SCHEDULE: 0 0 1,15 * *
+      TEST_TYPE: long
+      TEST_SCHEDULE: "0 2 3 * *"

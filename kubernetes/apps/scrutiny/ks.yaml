@@ -3,17 +3,17 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app scrutiny
-  namespace: &ns storage
-spec:
-  targetNamespace: *ns
+  namespace: flux-system
+  targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: versity
     - name: volsync
-  path: ./kubernetes/apps/storage/scrutiny/app
+  path: ./kubernetes/apps/scrutiny/app
   components:
+    - ../../../components/namespace/privileged
     - ../../../components/volsync/versity
   prune: true
   sourceRef:
@@ -29,3 +29,10 @@ spec:
       VOLSYNC_STORAGECLASS: ceph-filesystem
       VOLSYNC_SNAPSHOTCLASS: csi-ceph-filesystem
       VOLSYNC_ACCESSMODES: ReadWriteMany
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
