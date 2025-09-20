@@ -4,21 +4,21 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app bazarr
-  namespace: &ns media
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: *app
   dependsOn:
     - name: cloudnative-pg
     - name: versity
     - name: volsync
-      namespace: flux-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media/bazarr/app
   components:
-    - ../../../../components/cnpg/overlay/restore
-    - ../../../../components/volsync/versity
+    - ../../../components/namespace/common
+    - ../../../components/cnpg/overlay/restore
+    - ../../../components/volsync/versity
   prune: true
   sourceRef:
     kind: GitRepository
@@ -31,6 +31,13 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 10Gi
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: cluster-settings
+        optional: false
   # patches:
   #   - patch: |-
   #       apiVersion: postgresql.cnpg.io/v1
