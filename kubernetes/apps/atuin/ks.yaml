@@ -4,18 +4,19 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app atuin
-  namespace: &ns home
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: atuin
   dependsOn:
     - name: cloudnative-pg
     - name: versity
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/home/atuin/app
+  path: ./kubernetes/apps/atuin/app
   components:
-    - ../../../../components/cnpg/overlay/restore
+    - ../../../components/namespace/common
+    - ../../../components/cnpg/overlay/restore
   prune: true
   sourceRef:
     kind: GitRepository
