@@ -15,7 +15,7 @@ spec:
     - name: versity
   path: ./kubernetes/apps/jellyfin/app
   components:
-    - ../../../components/external-secret/common
+    - ../../../components/namespace/common
     - ../../../components/volsync/versity
   prune: true
   sourceRef:
