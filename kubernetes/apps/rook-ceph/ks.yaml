@@ -41,6 +41,8 @@ spec:
   dependsOn:
     - name: rook-ceph
   path: ./kubernetes/apps/rook-ceph/cluster
+  components:
+    - ../../../components/namespace/privileged
   prune: false
   sourceRef:
     kind: GitRepository
