@@ -36,7 +36,7 @@ spec:
             env: &env
               IMMICH_LOG_LEVEL: log
               IMMICH_WORKERS_INCLUDE: api
-              REDIS_HOSTNAME: dragonfly-db.database.svc.cluster.local
+              REDIS_HOSTNAME: dragonfly-db.dragonfly.svc.cluster.local
               REDIS_DBINDEX: 2
               IMMICH_TELEMETRY_INCLUDE: all
               IMMICH_CONFIG_FILE: &config /config/immich-config.yaml

@@ -5,6 +5,8 @@ kind: Kustomization
 resources:
   - ./cert-manager/ks.yaml
   - ./cilium/ks.yaml
+  - ./cloudnative-pg/ks.yaml
+  - ./dragonfly/ks.yaml
   - ./external-secrets/ks.yaml
   - ./flux-system/ks.yaml
   - ./onepassword-connect/ks.yaml

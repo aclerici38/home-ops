@@ -3,20 +3,24 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app dragonfly-operator
-  namespace: &ns database
+  name: &app cloudnative-pg
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/database/dragonfly/app
-  prune: true
+  dependsOn:
+    - name: external-secrets-stores
+  path: ./kubernetes/apps/cloudnative-pg/app
+  components:
+    - ../../../components/namespace/common
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  wait: true
+  wait: false
+  prune: true
   interval: 30m
   timeout: 3m
   postBuild:
@@ -27,21 +31,26 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app dragonfly-cluster
-  namespace: &ns database
+  name: &app cloudnative-pg-plugins
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: cloudnative-pg
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/database/dragonfly/cluster
-  prune: true
   dependsOn:
-    - name: dragonfly-operator
+    - name: cloudnative-pg
+  path: ./kubernetes/apps/cloudnative-pg/plugins
+  components:
+    - ../../../components/namespace/common
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  wait: true
+  wait: false
+  prune: true
   interval: 30m
   timeout: 3m
+  postBuild:
+    substitute:
+      APP: *app

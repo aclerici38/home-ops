@@ -5,6 +5,6 @@ kind: Kustomization
 resources:
   - ./ns.yaml
 
-  - ./cloudnative-pg/ks.yaml
-  - ./dragonfly/ks.yaml
+  # - ./cloudnative-pg/ks.yaml
+  # - ./dragonfly/ks.yaml
   - ./rmqtt/ks.yaml

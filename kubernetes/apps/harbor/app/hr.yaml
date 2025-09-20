@@ -80,7 +80,7 @@ spec:
     redis:
       type: external
       external:
-        addr: dragonfly-db.database.svc:6379
+        addr: dragonfly-db.dragonfly.svc:6379
         coreDatabaseIndex: &idx "5"
         jobserviceDatabaseIndex: *idx
         registryDatabaseIndex: *idx
