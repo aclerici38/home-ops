@@ -71,7 +71,7 @@ spec:
                     key: uri
 
               # SMTP
-              SMTP_HOST: smtp-relay.cluster-utilities.svc.cluster.local
+              SMTP_HOST: smtp-relay.smtp-relay.svc.cluster.local
               SMTP_PORT: 25
               SMTP_AUTH_STRATEGY: None
               SMTP_FROM_EMAIL: bot@${SECRET_DOMAIN}

@@ -53,7 +53,7 @@ spec:
               VIKUNJA_DEFAULTSETTINGS_WEEK_START: 1
 
               # SMTP
-              VIKUNJA_MAILER_HOST: smtp-relay.cluster-utilities.svc.cluster.local
+              VIKUNJA_MAILER_HOST: smtp-relay.smtp-relay.svc.cluster.local
               VIKUNJA_MAILER_PORT: 25
               VIKUNJA_MAILER_FROMEMAIL: Vikunja <bot@${SECRET_DOMAIN}>
 
