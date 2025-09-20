@@ -29,6 +29,7 @@ resources:
   - ./flux-system/ks.yaml
   - ./frigate/ks.yaml
   - ./generic-device-plugin/ks.yaml
+  - ./grafana/ks.yaml
   - ./harbor/ks.yaml
   - ./home-assistant/ks.yaml
   - ./immich/ks.yaml
@@ -39,7 +40,9 @@ resources:
   - ./k8s-gateway/ks.yaml
   - ./k8tz/ks.yaml
   - ./karakeep/ks.yaml
+  - ./kube-prometheus-stack/ks.yaml
   - ./llama.cpp/ks.yaml
+  - ./loki/ks.yaml
   - ./mealie/ks.yaml
   - ./metrics-server/ks.yaml
   - ./multus/ks.yaml
@@ -51,6 +54,7 @@ resources:
   - ./openebs-system/ks.yaml
   - ./openspeedtest/ks.yaml
   - ./pocket-id/ks.yaml
+  - ./promtail/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
   - ./radarr/ks.yaml
@@ -61,6 +65,7 @@ resources:
   - ./rook-ceph/ks.yaml
   - ./samba/ks.yaml
   - ./searxng/ks.yaml
+  - ./smartctl-exporter/ks.yaml
   - ./smtp-relay/ks.yaml
   - ./snapshot-controller/ks.yaml
   - ./sonarr/ks.yaml
@@ -71,5 +76,4 @@ resources:
   - ./zigbee2mqtt/ks.yaml
 
   - ./d3savant
-  - ./observability
   - ./storage
