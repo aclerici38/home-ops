@@ -6,7 +6,7 @@ metadata:
   name: &app renamarr
   namespace: flux-system
 spec:
-  targetNamespace: renamarr
+  targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
