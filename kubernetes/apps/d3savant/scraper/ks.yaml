@@ -9,7 +9,6 @@ spec:
   targetNamespace: *ns
   dependsOn:
     - name: cloudnative-pg
-      namespace: database
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -22,4 +21,3 @@ spec:
   wait: true
   interval: 30m
   timeout: 3m
-  

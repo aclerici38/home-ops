@@ -13,7 +13,6 @@ spec:
   wait: true
   dependsOn:
     - name: cloudnative-pg
-      namespace: database
     - name: dragonfly-cluster
       namespace: database
   sourceRef:

@@ -17,7 +17,6 @@ spec:
       namespace: storage
     - name: external-secrets-stores
     - name: cloudnative-pg
-      namespace: database
   path: ./kubernetes/apps/home/meshcentral/app
   components:
     - ../../../../components/volsync/versity
@@ -66,7 +65,6 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: cloudnative-pg
-      namespace: database
   path: ./kubernetes/apps/home/meshcentral/config
   prune: true
   sourceRef:

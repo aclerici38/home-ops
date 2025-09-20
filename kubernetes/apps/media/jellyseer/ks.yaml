@@ -9,7 +9,6 @@ spec:
   targetNamespace: *ns
   dependsOn:
     - name: cloudnative-pg
-      namespace: database
     - name: volsync
       namespace: storage
     - name: versity

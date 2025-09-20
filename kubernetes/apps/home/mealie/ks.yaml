@@ -10,7 +10,6 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: cloudnative-pg
-      namespace: database
     - name: versity
       namespace: storage
     - name: volsync
