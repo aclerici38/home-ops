@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: zfs-volumes
+    - name: openebs-zfs-volumes
   path: ./kubernetes/apps/nfs-server/app
   components:
     - ../../../components/namespace/privileged

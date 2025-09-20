@@ -12,7 +12,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
     - name: volsync
-    - name: zfs-volumes
+    - name: openebs-zfs-volumes
   path: ./kubernetes/apps/versity/app
   components:
     - ../../../components/namespace/common
