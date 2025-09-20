@@ -3,16 +3,16 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app convertx
-  namespace: &ns home
+  namespace: flux-system
 spec:
-  targetNamespace: *ns
+  targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/home/convertx/app
+  path: ./kubernetes/apps/convertx/app
   components:
-    - ../../../../components/external-secret/common
-    - ../../../../components/envoy/oauth
+    - ../../../components/external-secret/common
+    - ../../../components/envoy/oauth
   prune: true
   sourceRef:
     kind: GitRepository
