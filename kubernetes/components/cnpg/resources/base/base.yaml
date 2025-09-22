@@ -13,7 +13,7 @@ spec:
   primaryUpdateStrategy: ${CNPG_UPDATE_STRAT:=unsupervised}
   primaryUpdateMethod: switchover
   enablePDB: true
-  imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql:17.6@sha256:96ae1e6dba6a14d798b0f9d400db8b7c0b42c2e9e45dc21b80ba5efced38aa34}
+  imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql:17.6@sha256:b9763f1137de625622dab2a4b94a456c5a6587d0444885b282d9c222370b3955}
   storage:
     size: ${CNPG_CAPACITY:=2Gi}
     storageClass: ${CNPG_STORAGECLASS:=openebs-hostpath}
