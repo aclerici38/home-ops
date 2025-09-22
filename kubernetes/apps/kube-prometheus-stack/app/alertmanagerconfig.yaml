@@ -48,4 +48,9 @@ spec:
             name: alertmanager-secret
             key: DISCORD_WEBHOOK_URL
           title: >-
-            [{{ .Status | toUpper }}] [{{ .CommonLabels.alertname }}]: {{ .CommonAnnotations.description }}
+            [{{ .Status | toUpper }}] [{{ .CommonLabels.alertname }}]: {{
+              with .CommonAnnotations.description -}}
+                {{ . }}
+              {{- else -}}
+                {{ (index .Alerts 0).Annotations.description }}
+              {{- end }}
