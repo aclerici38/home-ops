@@ -1,0 +1,110 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: home-assistant
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      ${APP}:
+        pod:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
+          hostname: home-assistant
+          # annotations:
+          #   k8s.v1.cni.cncf.io/networks: |
+          #     [
+          #       {
+          #         "name":"multus-apt-lan-net",
+          #         "namespace": "network",
+          #         "ips": ["192.168.1.25/24"],
+          #         "mac": "64:16:7F:E9:23:A5"
+          #       }
+          #     ]
+        containers:
+          main:
+            image:
+              repository: ghcr.io/home-operations/home-assistant
+              tag: 2025.9.4@sha256:55c7db16301626265c6c8132985137ca0798303773dafa244e562353baa93a6f
+            env:
+              VENV_FOLDER: /venv
+            resources:
+              requests:
+                cpu: 47m
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: [ALL]}
+    service:
+      main:
+        controller: ${APP}
+        ports:
+          http:
+            port: &port 8123
+    route:
+      main:
+        hostnames:
+          - hass.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: envoy
+            sectionName: https
+        rules:
+          # Block webhook path
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /api/webhook
+            backendRefs: []
+          - backendRefs:
+            - identifier: main
+              port: *port
+    persistence:
+      config:
+        existingClaim: ${APP}
+      hass-cache:
+        existingClaim: hass-cache
+        globalMounts:
+          - path: /venv
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          # Because of https://github.com/home-assistant/core/blob/0d66d298ec57b8e50379cc2ec31cbebf771705c3/homeassistant/util/package.py#L29
+          - path: /.dockerenv
+            subPath: dockerenv
+          - path: /config/logs
+            subPath: logs
+          - path: /config/tts
+            subPath: tts
+          - path: /tmp
+            subPath: tmp
+      dbus:
+        type: hostPath
+        hostPath: /run/dbus
+        globalMounts:
+          - path: /run/dbus
+            readOnly: true
