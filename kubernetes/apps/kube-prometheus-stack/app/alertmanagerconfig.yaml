@@ -43,7 +43,7 @@ spec:
     #         name: &secret alertmanager-secret
     #         key: ALERTMANAGER_HEARTBEAT_URL
     - name: discord
-      webhookConfigs:
-        - urlSecret:
+      discordConfigs:
+        - apiURL:
             name: alertmanager-secret
             key: DISCORD_WEBHOOK_URL
