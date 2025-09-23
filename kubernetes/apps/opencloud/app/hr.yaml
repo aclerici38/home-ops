@@ -1,0 +1,123 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: opencloud
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: opencloud
+    namespace: flux-system
+  install:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    crds: CreateReplace
+    timeout: 2m
+    remediation:
+      retries: 1
+  dependsOn:
+    - name: nats
+      namespace: nats
+    - name: versity
+      namespace: versity
+  values:
+    image:
+      registry: docker.io
+      repository: opencloudeu/opencloud-rolling
+      tag: 3.5.0@sha256:15963603ee31edf92317dea6ccd420afd9c40caf95d5ebc9901e42eb339789ef
+    opencloud:
+      replicas: 2
+      logLevel: info
+      insecure: false
+      existingSecret: opencloud-secret
+      excludeServices: ["idp"]
+      persistence:
+        config:
+          existingClaim: opencloud
+        data:
+          existingClaim: files
+      nats:
+        external:
+          enabled: true
+          endpoint: nats.nats:4222
+          tls:
+            enabled: false
+      smtp:
+        enabled: true
+        host: smtp-relay.smtp-relay
+        port: "25"
+        sender: bot@${SECRET_DOMAIN}
+        authentication: "none"
+        encryption: "none"
+      storage:
+        mode: s3
+        s3:
+          internal:
+            enabled: false
+        external:
+          enabled: true
+          endpoint: http://versity.versity:7070
+          existingSecret: opencloud-secret
+          bucket: files
+          createBucket: false
+    httpRoute:
+      enabled: true
+      gateway:
+        create: false
+        name: external
+        className: envoy
+        namespace: envoy
+        sectionName: https
+    global:
+      domain:
+        opencloud: files.${SECRET_DOMAIN}
+        collabora: collabora.${SECRET_DOMAIN}
+      tls:
+        enabled: false
+      oidc:
+        issuer: https://id.${SECRET_DOMAIN}
+        clientid: "web"
+    keycloak:
+      internal:
+        enabled: false
+    postgres:
+      enabled: false
+    tika:
+      image:
+        registry:
+          registry: docker.io
+          repository: apache/tika
+          tag: 3.2.3.0-full@sha256:21d8052de04e491ccf66e8680ade4da6f3d453a56d59f740b4167e54167219b7
+    webExtensions:
+      image:
+        registry: docker.io
+        repository: opencloudeu/web-extensions
+      extensions:
+        drawio:
+          tag: draw-io-0.3.1@sha256:ee9972ff267f08a5da6996ab1fe85ecbfffe43c0f87740ea3f7fb2b59ca15920
+        externalsites:
+          tag: external-sites-0.3.1@sha256:bd2d9cefbd8c335eabf6c5d77b8bbad8c164a079727cd2eb18f5caebc1be6c4b
+        importer:
+          tag: importer-0.3.0@sha256:8a6d5ae228442f6c76685686f7603b69fb1ee1dbd78e46929fe2f7879e34ad1f
+        jsonviewer:
+          tag: json-viewer-0.3.1@sha256:315e7c5ae0fc692a5986e22fe6d3d67ec2fee52750d38da7b28a6761eded0b38
+        progressbars:
+          tag: progress-bars-0.3.1@sha256:9ff67ad0af366f644420aee78d5062ab2fe1fdc231f746c6e9db7b64a3d196f3
+        unzip:
+          tag: unzip-0.4.1@sha256:38d929b2842933c9e4043abc8b80530612b5d1a28cdffad1bf06bc7c0ceed30a
+    collabora:
+      enabled: true
+      image:
+        registry: docker.io
+        repository: collabora/code
+        tag: 25.04.5.2.1@sha256:74031c1ecf6823dc9abd1a97142fef01797bdd7dc93aef0b8b09145ed2273cc3
+      ssl:
+        enabled: false
+      existingSecret: opencloud-secret
+
