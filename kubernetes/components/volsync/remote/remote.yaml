@@ -4,6 +4,8 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: "${APP}-volsync-storj-secret"
+  labels:
+    dormammu.io/component: volsync
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
@@ -25,6 +27,8 @@ apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
   name: "${APP}-r2"
+  labels:
+    dormammu.io/component: volsync
 spec:
   sourcePVC: "${APP}"
   trigger:
@@ -52,6 +56,7 @@ metadata:
   name: "${APP}-dst"
   labels:
     kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+    dormammu.io/component: volsync
 spec:
   trigger:
     manual: restore-once

@@ -58,4 +58,4 @@ spec:
                 property: ROOT_SECRET_ACCESS_KEY
       target:
         kind: ExternalSecret
-        labelSelector: kustomize.toolkit.fluxcd.io/name=opencloud
+        labelSelector: "dormammu.io/component=external-secret"
