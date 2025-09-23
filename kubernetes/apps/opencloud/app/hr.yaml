@@ -36,7 +36,9 @@ spec:
       logLevel: info
       insecure: false
       existingSecret: opencloud-secret
-      excludeServices: ["idp"]
+      excludeServices:
+        - idp
+        - idm
       persistence:
         config:
           existingClaim: opencloud
