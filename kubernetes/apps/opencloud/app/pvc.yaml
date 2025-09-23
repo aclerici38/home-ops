@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: hass-cache
+  name: opencloud-cache
 spec:
-  accessModes: ["ReadWriteOnce"]
+  accessModes: ["ReadWriteMany"]
   resources:
     requests:
-      storage: 10Gi
+      storage: 25Gi
   storageClassName: ceph-filesystem
