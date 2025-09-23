@@ -62,12 +62,12 @@ spec:
         s3:
           internal:
             enabled: false
-        external:
-          enabled: true
-          endpoint: http://versity.versity:7070
-          existingSecret: opencloud-secret
-          bucket: files
-          createBucket: false
+          external:
+            enabled: true
+            endpoint: http://versity.versity:7070
+            existingSecret: opencloud-secret
+            bucket: files
+            createBucket: false
     httpRoute:
       enabled: true
       gateway:
@@ -99,6 +99,20 @@ spec:
       image:
         registry: docker.io
         repository: opencloudeu/web-extensions
+      # The paths here seem broken for now
+      # extensions:
+      #   drawio:
+      #     tag: draw-io-1.0.0@sha256:27cb9b952f0d6f511ab88259e9271a4087328f151950b5a73ceaf89e50fb6e89
+      #   externalsites:
+      #     tag: external-sites-1.2.0@sha256:e2a18530f9f994beae5d3b7e1934dfb9ea51760e9b624e16541feda816062b9b
+      #   importer:
+      #     tag: importer-1.0.0@sha256:6e8b2df6c5a44b7e446f0f518a35d851705022ef0b0e92910a86e0319d7d0666
+      #   jsonviewer:
+      #     tag: json-viewer-1.0.1@sha256:9ca19defb6cd37dbd2f52ff52504153f4ba6e270d62c59de972b1ef5a445215a
+      #   progressbars:
+      #     tag: progress-bars-1.0.0@sha256:82f888a34440c4ed93a98ecb9eb2f7dcd1cf58ddbbb75ccd2c9aea28023920d8
+      #   unzip:
+      #     tag: unzip-1.0.3@sha256:3cd4ffdc93ff893f7f1c75c2e63c059a6da62720a394bd9ba33719236e6579b8
     onlyoffice:
       enabled: false
     collabora:
