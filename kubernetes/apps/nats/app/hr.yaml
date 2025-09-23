@@ -41,6 +41,9 @@ spec:
         fileStore:
           pvc:
             storageClassName: openebs-hostpath
+        memoryStore:
+          enabled: true
+          maxSize: 1Gi
       monitor:
         enabled: true
     promExporter:
