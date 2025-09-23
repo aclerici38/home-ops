@@ -58,4 +58,4 @@ spec:
                 property: ROOT_SECRET_ACCESS_KEY
       target:
         kind: ExternalSecret
-        name: opencloud-secret
+        labelSelector: kustomize.toolkit.fluxcd.io/name=opencloud
