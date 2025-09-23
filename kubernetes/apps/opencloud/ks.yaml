@@ -11,6 +11,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: volsync
+    - name: multus
     - name: versity
   path: ./kubernetes/apps/opencloud/app
   components:
@@ -57,4 +58,4 @@ spec:
                 property: ROOT_SECRET_ACCESS_KEY
       target:
         kind: ExternalSecret
-        labelSelector: dormammu.io/component=external-secret
+        labelSelector: kustomize.toolkit.fluxcd.io/name=opencloud
