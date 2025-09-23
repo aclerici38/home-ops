@@ -87,9 +87,9 @@ spec:
         existingClaim: ${APP}
         globalMounts:
           - path: /var/syncthing
-      files:
-        type: nfs
-        server: ${NFS_IP}
-        path: /files
-        globalMounts:
-          - path: /var/mnt/files
+      # files:
+      #   type: nfs
+      #   server: ${NFS_IP}
+      #   path: /files
+      #   globalMounts:
+      #     - path: /var/mnt/files

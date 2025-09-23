@@ -88,7 +88,14 @@ spec:
             timeouts:
               request: 0s
     persistence:
-      data:
+      backups:
         existingClaim: backups
         globalMounts:
-          - path: /data
+          - path: /data/cnpg
+            subPath: cnpg
+          - path: /data/volsync
+            subPath: volsync
+      files:
+        existingClaim: files
+        globalMounts:
+          - path: /data/files

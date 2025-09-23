@@ -10,3 +10,15 @@ spec:
   resources:
     requests:
       storage: "966367641600"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: files
+spec:
+  storageClassName: zfs-tank
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: "59992103190528"

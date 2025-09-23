@@ -98,15 +98,3 @@ spec:
         path: /media
         globalMounts:
           - path: /mnt/media
-      files:
-        type: nfs
-        server: ${NFS_IP}
-        path: /files/documents
-        globalMounts:
-          - path: /mnt/documents
-      frigate:
-        type: nfs
-        server: ${NFS_IP}
-        path: /files/frigate
-        globalMounts:
-          - path: /mnt/frigate

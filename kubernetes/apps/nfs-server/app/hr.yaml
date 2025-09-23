@@ -77,10 +77,6 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /export
-      files:
-        existingClaim: files
-        globalMounts:
-          - path: /export/files
       immich:
         existingClaim: immich
         globalMounts:
