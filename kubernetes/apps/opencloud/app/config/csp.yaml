@@ -37,6 +37,7 @@ directives:
   script-src:
     - '''self'''
     - '''unsafe-inline'''
+    - 'https://id.${SECRET_DOMAIN}/'
   style-src:
     - '''self'''
     - '''unsafe-inline'''

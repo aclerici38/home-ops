@@ -79,6 +79,7 @@ spec:
               PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM: groups
               PROXY_USER_OIDC_CLAIM: sub
               PROXY_USER_CS3_CLAIM: username
+              PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml
 
               SETTINGS_SETUP_DEFAULT_ASSIGNMENTS: false
 
@@ -146,7 +147,7 @@ spec:
         type: configMap
         name: ${APP}-config
         globalMounts:
-          - path: /etc/opencloud/csp.yaml
+          - path: *cspPath
             subPath: csp.yaml
       data:
         existingClaim: ${APP}
