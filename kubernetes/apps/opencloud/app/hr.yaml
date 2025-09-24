@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -9,7 +9,7 @@ spec:
   maxHistory: 1
   chartRef:
     kind: OCIRepository
-    name: opencloud
+    name: app-template
     namespace: flux-system
   install:
     crds: CreateReplace
@@ -21,120 +21,130 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
-  dependsOn:
-    - name: nats
-      namespace: nats
-    - name: versity
-      namespace: versity
   values:
-    image:
-      registry: docker.io
-      repository: opencloudeu/opencloud-rolling
-      tag: 3.5.0@sha256:15963603ee31edf92317dea6ccd420afd9c40caf95d5ebc9901e42eb339789ef
-    opencloud:
-      replicas: 1
-      logLevel: warn
-      insecure: false
-      existingSecret: opencloud-secret
-      excludeServices:
-        - idp
-      env:
-        - name: OC_MACHINE_AUTH_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: opencloud-secret
-              key: MACHINE_AUTH_API_KEY
-        - name: OC_JWT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: opencloud-secret
-              key: JWT_SECRET
-      persistence:
-        config:
-          enabled: false
-        # Mainly apache tika info
-        data:
-          existingClaim: opencloud
-      nats:
-        external:
-          enabled: true
-          endpoint: nats://nats.nats:4222
-          tls:
-            enabled: false
-      smtp:
-        enabled: true
-        host: smtp-relay.smtp-relay
-        port: "25"
-        sender: bot@${SECRET_DOMAIN}
-        authentication: "none"
-        encryption: "none"
-      storage:
-        mode: s3
-        s3:
-          internal:
-            enabled: false
-          external:
-            enabled: true
-            endpoint: http://versity.versity:7070
-            existingSecret: opencloud-secret
-            bucket: files
-            createBucket: false
-    httpRoute:
-      enabled: true
-      gateway:
-        create: false
-        name: external
-        className: envoy
-        namespace: envoy
-        sectionName: https
-    global:
-      domain:
-        opencloud: files.${SECRET_DOMAIN}
-        collabora: collabora.${SECRET_DOMAIN}
-        wopi: wopi.${SECRET_DOMAIN}
-      tls:
-        enabled: false
-      oidc:
-        issuer: https://id.${SECRET_DOMAIN}
-        clientid: "web"
-        accountUrl: id.${SECRET_DOMAIN}/settings/apps
-    keycloak:
-      internal:
-        enabled: false
-    postgres:
-      enabled: false
-    tika:
-      image:
-        registry: docker.io
-        repository: apache/tika
-        tag: 3.2.3.0-full@sha256:21d8052de04e491ccf66e8680ade4da6f3d453a56d59f740b4167e54167219b7
-    webExtensions:
-      image:
-        registry: docker.io
-        repository: opencloudeu/web-extensions
-      # The paths here seem broken for now
-      # extensions:
-      #   drawio:
-      #     tag: draw-io-1.0.0@sha256:27cb9b952f0d6f511ab88259e9271a4087328f151950b5a73ceaf89e50fb6e89
-      #   externalsites:
-      #     tag: external-sites-1.2.0@sha256:e2a18530f9f994beae5d3b7e1934dfb9ea51760e9b624e16541feda816062b9b
-      #   importer:
-      #     tag: importer-1.0.0@sha256:6e8b2df6c5a44b7e446f0f518a35d851705022ef0b0e92910a86e0319d7d0666
-      #   jsonviewer:
-      #     tag: json-viewer-1.0.1@sha256:9ca19defb6cd37dbd2f52ff52504153f4ba6e270d62c59de972b1ef5a445215a
-      #   progressbars:
-      #     tag: progress-bars-1.0.0@sha256:82f888a34440c4ed93a98ecb9eb2f7dcd1cf58ddbbb75ccd2c9aea28023920d8
-      #   unzip:
-      #     tag: unzip-1.0.3@sha256:3cd4ffdc93ff893f7f1c75c2e63c059a6da62720a394bd9ba33719236e6579b8
-    onlyoffice:
-      enabled: false
-    collabora:
-      enabled: true
-      image:
-        registry: docker.io
-        repository: collabora/code
-        tag: 25.04.5.2.1@sha256:74031c1ecf6823dc9abd1a97142fef01797bdd7dc93aef0b8b09145ed2273cc3
-      ssl:
-        enabled: false
-      existingSecret: opencloud-secret
+    controllers:
+      ${APP}:
+        forceRename: ${APP}
+        strategy: RollingUpdate
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          main:
+            image:
+              repository: docker.io/opencloudeu/opencloud-rolling
+              tag: 3.5.0@sha256:15963603ee31edf92317dea6ccd420afd9c40caf95d5ebc9901e42eb339789ef
+            command:
+              - "/bin/sh"
+              - "-c"
+              - "opencloud init || true; opencloud server"
+            env:
+              OC_ENABLE_OCM: false
+              OC_INSECURE: false
+              OC_LOG_LEVEL: warn
+              OC_URL: &url https://files.${SECRET_DOMAIN}
+              OC_CORS_ALLOW_ORIGINS: *url
+              OC_CACHE_STORE: nats-js-kv
+              OC_JWT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-secret
+                    key: JWT_SECRET
+              OC_MACHINE_AUTH_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-secret
+                    key: MACHINE_AUTH_API_KEY
+              OC_SERVICE_ACCOUNT_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-secret
+                    key: SERVICE_ACCOUNT_ID
+              OC_SERVICE_ACCOUNT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-secret
+                    key: SERVICE_ACCOUNT_SECRET
+              PROXY_TLS: false
 
+              OC_OIDC_ISSUER: id.${SECRET_DOMAIN}
+              OC_EXCLUDE_RUN_SERVICES: idp
+              PROXY_AUTOPROVISION_ACCOUNTS: true
+
+              OC_EVENTS_ENDPOINT: &nats nats.nats:4222
+              OC_CACHE_STORE_NODES: *nats
+              OC_EVENTS_CLUSTER: opencloud-cluster
+
+              MICRO_REGISTRY_ADDRESS: *nats
+
+              NOTIFICATIONS_SMTP_HOST: smtp-relay.smtp-relay
+              NOTIFICATIONS_SMTP_PORT: 25
+              NOTIFICATIONS_SMTP_SENDER: bot@${SECRET_DOMAIN}
+              NOTIFICATIONS_SMTP_INSECURE: true
+
+              STORAGE_USERS_DRIVER: decomposeds3
+              STORAGE_USERS_DECOMPOSEDS3_ENDPOINT: http://versity.versity:7070
+              STORAGE_USERS_DECOMPOSEDS3_BUCKET: files
+              STORAGE_USERS_DECOMPOSEDS3_ACCESS_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-secret
+                    key: S3_ACCESS_KEY
+              STORAGE_USERS_DECOMPOSEDS3_SECRET_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-secret
+                    key: S3_SECRET_KEY
+
+              IDM_ADMIN_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-secret
+                    key: ADMIN_PASS
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 200m
+                memory: 512Mi
+              limits:
+                memory: 2Gi
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 9200
+                    path: /health
+              readiness: *probes
+    service:
+      main:
+        controller: ${APP}
+        ports:
+          http:
+            port: *port
+    route:
+      main:
+        hostnames:
+          - ${APP}.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: envoy
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: main
+              port: *port
+    persistence:
+      data:
+        existingClaim: ${APP}
+        globalMounts:
+          - path: /var/lib/opencloud
