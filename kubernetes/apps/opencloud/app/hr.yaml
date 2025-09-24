@@ -68,8 +68,8 @@ spec:
           existingClaim: opencloud-cache
       nats:
         external:
-          enabled: false
-          endpoint: nats://nats.nats:4222
+          enabled: true
+          endpoint: nats.nats:4222
           tls:
             enabled: false
       smtp:
