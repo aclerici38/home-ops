@@ -48,7 +48,7 @@ spec:
               repository: ghcr.io/lldap/lldap
               tag: v0.6.2-alpine-rootless@sha256:35df821899ec54c11eaab395e9c68e191e2582592cba343b0a904f6821aadcd2
             env:
-              LLDAP_HTTP_PORT: &port 80
+              LLDAP_HTTP_PORT: &port 8080
               LLDAP_HTTP_URL: https://lldap.${SECRET_DOMAIN}
               LLDAP_LDAP_PORT: &ldapPort 389
               LLDAP_LDAP_BASE_DN: dc=home,dc=arpa
