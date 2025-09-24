@@ -49,7 +49,7 @@ spec:
               OC_LOG_LEVEL: warn
               OC_URL: &url https://files.${SECRET_DOMAIN}
               OC_CORS_ALLOW_ORIGINS: *url
-              OC_CACHE_STORE: nats-js-kv
+              # OC_CACHE_STORE: nats-js-kv
               OC_JWT_SECRET:
                 valueFrom:
                   secretKeyRef:
@@ -76,11 +76,11 @@ spec:
               OC_EXCLUDE_RUN_SERVICES: idp
               PROXY_AUTOPROVISION_ACCOUNTS: true
 
-              OC_EVENTS_ENDPOINT: &nats nats.nats:4222
-              OC_CACHE_STORE_NODES: *nats
-              OC_EVENTS_CLUSTER: opencloud-cluster
+              # OC_EVENTS_ENDPOINT: &nats nats.nats:4222
+              # OC_CACHE_STORE_NODES: *nats
+              # OC_EVENTS_CLUSTER: opencloud-cluster
 
-              MICRO_REGISTRY_ADDRESS: *nats
+              # MICRO_REGISTRY_ADDRESS: *nats
 
               NOTIFICATIONS_SMTP_HOST: smtp-relay.smtp-relay
               NOTIFICATIONS_SMTP_PORT: 25
