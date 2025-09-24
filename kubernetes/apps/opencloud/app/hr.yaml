@@ -62,10 +62,10 @@ spec:
               key: SERVICE_ACCOUNT_SECRET
       persistence:
         config:
-          enabled: false
+          existingClaim: opencloud
         # Mainly apache tika info
         data:
-          existingClaim: opencloud
+          existingClaim: opencloud-cache
       nats:
         external:
           enabled: false
