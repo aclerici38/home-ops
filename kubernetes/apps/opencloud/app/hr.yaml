@@ -131,7 +131,7 @@ spec:
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - files.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: envoy
