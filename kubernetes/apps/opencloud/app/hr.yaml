@@ -40,6 +40,12 @@ spec:
         - idp
         - ocm
       env:
+        - name: PROXY_ROLE_ASSIGNMENT_DRIVER
+          value: oidc
+        - name: PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM
+          value: groups
+        - name: OC_ADMIN_USER_ID
+          value: ""
         - name: OC_MACHINE_AUTH_API_KEY
           valueFrom:
             secretKeyRef:
@@ -96,7 +102,6 @@ spec:
       domain:
         opencloud: files.${SECRET_DOMAIN}
         collabora: collabora.${SECRET_DOMAIN}
-        wopi: wopi.${SECRET_DOMAIN}
         keycloak: id.${SECRET_DOMAIN}
       tls:
         enabled: false
