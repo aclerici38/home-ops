@@ -32,19 +32,18 @@ spec:
       repository: opencloudeu/opencloud-rolling
       tag: 3.5.0@sha256:15963603ee31edf92317dea6ccd420afd9c40caf95d5ebc9901e42eb339789ef
     opencloud:
-      # replicas: 2
       replicas: 1
-      logLevel: info
+      logLevel: warn
       insecure: false
       existingSecret: opencloud-secret
       excludeServices:
         - idp
-        # - idm
       persistence:
         config:
-          existingClaim: opencloud
+          enabled: false
+        # Mainly apache tika info
         data:
-          existingClaim: opencloud-cache
+          existingClaim: opencloud
       nats:
         external:
           enabled: true
