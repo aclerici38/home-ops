@@ -49,7 +49,6 @@ spec:
               OC_INSECURE: false
               OC_LOG_LEVEL: warn
               OC_URL: &url https://files.${SECRET_DOMAIN}
-              OC_CORS_ALLOW_ORIGINS: *url
               OC_OIDC_ISSUER: id.${SECRET_DOMAIN}
               OC_EXCLUDE_RUN_SERVICES: idp,ocm
               OC_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD: true
