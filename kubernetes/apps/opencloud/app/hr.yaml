@@ -38,6 +38,17 @@ spec:
       existingSecret: opencloud-secret
       excludeServices:
         - idp
+      env:
+        - name: OCIS_MACHINE_AUTH_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: opencloud-secret
+              key: MACHINE_AUTH_API_KEY
+        - name: COLLABORATION_TOKEN_MANAGER_JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: opencloud-secret
+              key: COLLABORATION_JWT_SECRET
       persistence:
         config:
           enabled: false
@@ -47,7 +58,7 @@ spec:
       nats:
         external:
           enabled: true
-          endpoint: nats.nats:4222
+          endpoint: nats://nats.nats:4222
           tls:
             enabled: false
       smtp:
@@ -85,6 +96,7 @@ spec:
       oidc:
         issuer: https://id.${SECRET_DOMAIN}
         clientid: "web"
+        accountUrl: id.${SECRET_DOMAIN}/settings/apps
     keycloak:
       internal:
         enabled: false
