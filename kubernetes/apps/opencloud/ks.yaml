@@ -48,11 +48,11 @@ spec:
           name: patch
         spec:
           data:
-            - secretKey: S3_ACCESS_KEY
+            - secretKey: accessKey
               remoteRef:
                 key: versity
                 property: ROOT_ACCESS_KEY_ID
-            - secretKey: S3_SECRET_KEY
+            - secretKey: secretKey
               remoteRef:
                 key: versity
                 property: ROOT_SECRET_ACCESS_KEY
