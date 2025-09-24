@@ -66,12 +66,6 @@ spec:
         # Mainly apache tika info
         data:
           existingClaim: opencloud-cache
-      nats:
-        external:
-          enabled: true
-          endpoint: nats.nats:4222
-          tls:
-            enabled: false
       smtp:
         enabled: true
         host: smtp-relay.smtp-relay
@@ -103,6 +97,7 @@ spec:
         opencloud: files.${SECRET_DOMAIN}
         collabora: collabora.${SECRET_DOMAIN}
         wopi: wopi.${SECRET_DOMAIN}
+        keycloak: id.${SECRET_DOMAIN}
       tls:
         enabled: false
       oidc:
