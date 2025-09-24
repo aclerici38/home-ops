@@ -49,7 +49,7 @@ spec:
               OC_INSECURE: false
               OC_LOG_LEVEL: warn
               OC_URL: &url https://files.${SECRET_DOMAIN}
-              OC_OIDC_ISSUER: id.${SECRET_DOMAIN}
+              OC_OIDC_ISSUER: https://id.${SECRET_DOMAIN}
               OC_EXCLUDE_RUN_SERVICES: idp,ocm
               OC_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD: true
               OC_JWT_SECRET:
@@ -77,8 +77,6 @@ spec:
               PROXY_AUTOPROVISION_ACCOUNTS: true
               PROXY_ROLE_ASSIGNMENT_DRIVER: oidc
               PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM: groups
-              PROXY_USER_OIDC_CLAIM: sub
-              PROXY_USER_CS3_CLAIM: username
               PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml
 
               SETTINGS_SETUP_DEFAULT_ASSIGNMENTS: false
@@ -149,6 +147,8 @@ spec:
         globalMounts:
           - path: *cspPath
             subPath: csp.yaml
+          - path: /etc/opencloud/proxy.yaml
+            subPath: proxy.yaml
       data:
         existingClaim: ${APP}
         globalMounts:
