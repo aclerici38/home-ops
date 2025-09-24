@@ -10,7 +10,7 @@ spec:
   timeout: 7m
   path: ./kubernetes/apps/
   prune: false
-  wait: true
+  wait: false
   dependsOn:
     - name: flux-settings
     - name: flux-repos
