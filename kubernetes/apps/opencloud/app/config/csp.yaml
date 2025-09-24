@@ -1,0 +1,45 @@
+directives:
+  child-src:
+    - '''self'''
+  connect-src:
+    - '''self'''
+    - 'blob:'
+    - 'https://companion.${SECRET_DOMAIN}/'
+    - 'wss://companion.${SECRET_DOMAIN}/'
+    - 'https://raw.githubusercontent.com/opencloud-eu/awesome-apps/'
+    - 'https://id.${SECRET_DOMAIN}/'
+  default-src:
+    - '''none'''
+  font-src:
+    - '''self'''
+  frame-ancestors:
+    - '''self'''
+  frame-src:
+    - '''self'''
+    - 'blob:'
+    - 'https://embed.diagrams.net/'
+    # In contrary to bash and docker the default is given after the | character
+    - 'https://collabora.${SECRET_DOMAIN}/'
+    # This is needed for the external-sites web extension when embedding sites
+    - 'https://docs.opencloud.eu'
+  img-src:
+    - '''self'''
+    - 'data:'
+    - 'blob:'
+    - 'https://raw.githubusercontent.com/opencloud-eu/awesome-apps/'
+    # In contrary to bash and docker the default is given after the | character
+    - 'https://collabora.${SECRET_DOMAIN}/'
+  manifest-src:
+    - '''self'''
+  media-src:
+    - '''self'''
+  object-src:
+    - '''self'''
+    - 'blob:'
+  script-src:
+    - '''self'''
+    - '''unsafe-inline'''
+    - 'https://id.${SECRET_DOMAIN}/'
+  style-src:
+    - '''self'''
+    - '''unsafe-inline'''

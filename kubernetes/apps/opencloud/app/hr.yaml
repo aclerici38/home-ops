@@ -141,6 +141,12 @@ spec:
             - identifier: main
               port: *port
     persistence:
+      config:
+        type: configMap
+        name: ${APP}-config
+        globalMounts:
+          - path: /etc/opencloud/csp.yaml
+            subPath: csp.yaml
       data:
         existingClaim: ${APP}
         globalMounts:
