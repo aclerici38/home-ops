@@ -65,8 +65,8 @@ spec:
               PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml
 
               # For collaboration to connect
-              NATS_NATS_HOST: ${APP}
-              GATEWAY_GRPC_ADDR: ${APP}:9142
+              NATS_NATS_HOST: 0.0.0.0
+              GATEWAY_GRPC_ADDR: 0.0.0.0:9142
 
               SETTINGS_SETUP_DEFAULT_ASSIGNMENTS: false
 
