@@ -77,6 +77,9 @@ spec:
               PROXY_AUTOPROVISION_ACCOUNTS: true
               PROXY_ROLE_ASSIGNMENT_DRIVER: oidc
               PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM: groups
+              PROXY_USER_OIDC_CLAIM: sub
+              PROXY_AUTOPROVISION_CLAIM_USERNAME: sub
+              PROXY_USER_CS3_CLAIM: username
               WEB_OIDC_SCOPE: "openid profile email groups"
               PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml
 
