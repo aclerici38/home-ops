@@ -94,6 +94,7 @@ spec:
               STORAGE_USERS_DRIVER: decomposeds3
               STORAGE_USERS_DECOMPOSEDS3_ENDPOINT: http://versity.versity:7070
               STORAGE_USERS_DECOMPOSEDS3_BUCKET: files
+              STORAGE_USERS_DECOMPOSEDS3_REGION: us-west-1
               STORAGE_USERS_DECOMPOSEDS3_ACCESS_KEY:
                 valueFrom:
                   secretKeyRef:
