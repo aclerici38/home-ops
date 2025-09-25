@@ -64,11 +64,13 @@ spec:
               WEB_OIDC_SCOPE: "openid profile email groups"
               PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml
 
+              # For collaboration to connect
+              NATS_NATS_HOST: ${APP}
+              GATEWAY_GRPC_ADDR: ${APP}:9142
+
               SETTINGS_SETUP_DEFAULT_ASSIGNMENTS: false
 
               GRAPH_ASSIGN_DEFAULT_USER_ROLE: false
-
-              GATEWAY_GRPC_ADDR: 0.0.0.0:9142
 
               WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.${SECRET_DOMAIN}/settings/apps
 
