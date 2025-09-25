@@ -55,9 +55,9 @@ spec:
         - name: PROXY_USER_CS3_CLAIM
           value: username
         - name: SETTINGS_SETUP_DEFAULT_ASSIGNMENTS
-          value: false
+          value: "false"
         - name: GRAPH_ASSIGN_DEFAULT_USER_ROLE
-          value: false
+          value: "false"
         - name: OC_MACHINE_AUTH_API_KEY
           valueFrom:
             secretKeyRef:
