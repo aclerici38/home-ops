@@ -49,29 +49,10 @@ spec:
               OC_INSECURE: false
               OC_LOG_LEVEL: warn
               OC_URL: &url https://files.${SECRET_DOMAIN}
+              OC_CORS_ALLOW_ORIGINS: *url
               OC_OIDC_ISSUER: https://id.${SECRET_DOMAIN}
               OC_EXCLUDE_RUN_SERVICES: idp,ocm
               OC_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD: true
-              OC_JWT_SECRET:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-secret
-                    key: JWT_SECRET
-              OC_MACHINE_AUTH_API_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-secret
-                    key: MACHINE_AUTH_API_KEY
-              OC_SERVICE_ACCOUNT_ID:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-secret
-                    key: SERVICE_ACCOUNT_ID
-              OC_SERVICE_ACCOUNT_SECRET:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-secret
-                    key: SERVICE_ACCOUNT_SECRET
 
               PROXY_TLS: false
               PROXY_AUTOPROVISION_ACCOUNTS: true
@@ -158,3 +139,6 @@ spec:
         existingClaim: ${APP}
         globalMounts:
           - path: /var/lib/opencloud
+            subPath: data
+          - path: /etc/opencloud
+            subPath: config
