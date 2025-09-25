@@ -68,6 +68,8 @@ spec:
 
               GRAPH_ASSIGN_DEFAULT_USER_ROLE: false
 
+              GATEWAY_GRPC_ADDR: 0.0.0.0:9142
+
               WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.${SECRET_DOMAIN}/settings/apps
 
               NOTIFICATIONS_SMTP_HOST: smtp-relay.smtp-relay
@@ -78,7 +80,7 @@ spec:
               STORAGE_USERS_DRIVER: decomposeds3
               STORAGE_USERS_DECOMPOSEDS3_ENDPOINT: http://versity.versity:7070
               STORAGE_USERS_DECOMPOSEDS3_BUCKET: files
-              STORAGE_USERS_DECOMPOSEDS3_REGION: us-west-1
+              STORAGE_USERS_DECOMPOSEDS3_REGION: us-east-1
               STORAGE_USERS_DECOMPOSEDS3_ACCESS_KEY:
                 valueFrom:
                   secretKeyRef:
