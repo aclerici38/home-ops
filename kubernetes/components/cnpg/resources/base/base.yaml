@@ -4,8 +4,6 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: ${APP}-db
-  annotations:
-    k8tz.io/inject: false
 spec:
   affinity:
     podAntiAffinityType: ${CNPG_AFFINITY_TYPE:=required}
@@ -48,4 +46,3 @@ spec:
       autovacuum_vacuum_cost_limit: "${CNPG_AUTOVACUUM_COST_LIMIT:='2000'}"
       autovacuum_max_workers: "${CNPG_AUTOVACUUM_MAX_WORKERS:='3'}"
       autovacuum_naptime: "${CNPG_AUTOVACUUM_NAPTIME:=20s}"
-
