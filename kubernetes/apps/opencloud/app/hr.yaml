@@ -26,14 +26,6 @@ spec:
       ${APP}:
         forceRename: ${APP}
         strategy: RollingUpdate
-        pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
@@ -93,6 +85,9 @@ spec:
                   secretKeyRef:
                     name: ${APP}-secret
                     key: secretKey
+
+              SEARCH_EXTRACTOR_TYPE: tika
+              SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://opencloud-tika:9998
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -112,12 +107,42 @@ spec:
                     port: &port 9200
                     path: /health
               readiness: *probes
+      tika:
+        strategy: RollingUpdate
+        containers:
+          main:
+            image:
+              repository: docker.io/apache/tika
+              tag: 3.2.3.0-full@sha256:21d8052de04e491ccf66e8680ade4da6f3d453a56d59f740b4167e54167219b7
+            env:
+              JAVA_OPTS: "-Xmx3g"
+            resources:
+              requests:
+                cpu: 200m
+                memory: 500Mi
+              limits:
+                memory: 5Gi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
     service:
-      main:
+      opencloud:
+        forceRename: ${APP}
         controller: ${APP}
         ports:
           http:
             port: *port
+      tika:
+        controller: tika
+        ports:
+          http:
+            port: 9998
+
     route:
       main:
         hostnames:
