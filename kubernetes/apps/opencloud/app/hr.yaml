@@ -88,7 +88,7 @@ spec:
 
               SEARCH_EXTRACTOR_TYPE: tika
               SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://opencloud-tika:9998
-            securityContext:
+            securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
@@ -116,6 +116,7 @@ spec:
               tag: 3.2.3.0-full@sha256:21d8052de04e491ccf66e8680ade4da6f3d453a56d59f740b4167e54167219b7
             env:
               JAVA_OPTS: "-Xmx3g"
+            securityContext: *sec
             resources:
               requests:
                 cpu: 200m
@@ -153,7 +154,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-            - identifier: main
+            - identifier: ${APP}
               port: *port
     persistence:
       config:
