@@ -160,15 +160,25 @@ spec:
       config:
         type: configMap
         name: ${APP}-config
-        globalMounts:
-          - path: *cspPath
-            subPath: csp.yaml
-          - path: /etc/opencloud/proxy.yaml
-            subPath: proxy.yaml
+        advancedMounts:
+          opencloud:
+            main:
+              - path: *cspPath
+                subPath: csp.yaml
+              - path: /etc/opencloud/proxy.yaml
+                subPath: proxy.yaml
       data:
         existingClaim: ${APP}
-        globalMounts:
-          - path: /var/lib/opencloud
-            subPath: data
-          - path: /etc/opencloud
-            subPath: config
+        advancedMounts:
+          opencloud:
+            main:
+              - path: /var/lib/opencloud
+                subPath: data
+              - path: /etc/opencloud
+                subPath: config
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          tika:
+            main:
+              - path: /tmp
