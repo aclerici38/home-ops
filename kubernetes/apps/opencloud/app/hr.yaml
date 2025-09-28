@@ -169,6 +169,7 @@ spec:
                     key: COLLABORA_ADMIN_PASS
             securityContext:
               <<: *sec
+              readOnlyRootFilesystem: false
               capabilities:
                 add:
                   - MKNOD
