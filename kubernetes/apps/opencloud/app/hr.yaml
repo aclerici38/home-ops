@@ -28,7 +28,7 @@ spec:
         strategy: RollingUpdate
         containers:
           main:
-            image:
+            image: &img
               repository: docker.io/opencloudeu/opencloud-rolling
               tag: 3.5.0@sha256:15963603ee31edf92317dea6ccd420afd9c40caf95d5ebc9901e42eb339789ef
             command:
@@ -40,11 +40,13 @@ spec:
               OC_ENABLE_OCM: false
               OC_INSECURE: false
               OC_LOG_LEVEL: warn
-              OC_URL: &url https://files.${SECRET_DOMAIN}
+              OC_URL: &url https://cloud.${SECRET_DOMAIN}
               OC_CORS_ALLOW_ORIGINS: *url
               OC_OIDC_ISSUER: https://id.${SECRET_DOMAIN}
               OC_EXCLUDE_RUN_SERVICES: idp,ocm
               OC_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD: true
+
+              FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR: eu.opencloud.api.collaboration.CollaboraOnline
 
               PROXY_TLS: false
               PROXY_AUTOPROVISION_ACCOUNTS: true
@@ -60,9 +62,13 @@ spec:
               NATS_NATS_HOST: 0.0.0.0
               GATEWAY_GRPC_ADDR: 0.0.0.0:9142
 
+              MICRO_REGISTRY_ADDRESS: 127.0.0.1:9233
+              MICRO_REGISTRY: "nats-js-kv"
+
               SETTINGS_SETUP_DEFAULT_ASSIGNMENTS: false
 
               GRAPH_ASSIGN_DEFAULT_USER_ROLE: false
+              GRAPH_USERNAME_MATCH: "none"
 
               WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.${SECRET_DOMAIN}/settings/apps
 
@@ -107,6 +113,69 @@ spec:
                     port: &port 9200
                     path: /health
               readiness: *probes
+      collaboration:
+        strategy: RollingUpdate
+        containers:
+          main:
+            image: *img
+            command:
+              - "/bin/sh"
+              - "-c"
+              - "opencloud collaboration server"
+            env:
+              COLLABORATION_WOPI_SRC: http://opencloud-collaboration:9300
+              COLLABORATION_APP_NAME: CollaboraOnline
+              COLLABORATION_APP_PRODUCT: Collabora
+              COLLABORATION_APP_ADDR: https://collabora.${SECRET_DOMAIN}
+              COLLABORATION_APP_ICON: https://collabora.#{SECRET_DOMAIN}/favicon.ico
+              COLLABORATION_GRPC_ADDR: 0.0.0.0:9301
+              COLLABORATION_HTTP_ADDR: 0.0.0.0:9300
+              MICRO_REGISTRY_ADDRESS: opencloud:9233
+              MICRO_REGISTRY: "nats-js-kv"
+              OC_URL: *url
+            securityContext: *sec
+      collabora:
+        strategy: RollingUpdate
+        containers:
+          main:
+            image:
+              repository: docker.io/collabora/code
+              tag: 25.04.5.2.1@sha256:74031c1ecf6823dc9abd1a97142fef01797bdd7dc93aef0b8b09145ed2273cc3
+            env:
+              aliasgroup1: https://wopi.${SECREP_DOMAIN}
+              DONT_GEN_SSL_CERT: "YES"
+              extra_params: |-
+                --o:ssl.enable=true \
+                --o:ssl.ssl_verification=true \
+                --o:ssl.termination=false \
+                --o:welcome.enable=false \
+                --o:net.frame_ancestors=cloud.${SECRET_DOMAIN}
+              username:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP}-secret
+                    key: COLLABORA_ADMIN_USER
+              password:
+                valueFrom:
+                  secretKeyRef:
+                    name: ${APP_SECRET}
+                    key: COLLABORA_ADMIN_PASS
+            securityContext:
+              <<: *sec
+              capabilities:
+                add:
+                  - MKNOD
+                drop:
+                  - ALL
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 9980
+                    path: /hosting/discovery
+              readiness: *probes
       tika:
         strategy: RollingUpdate
         containers:
@@ -143,11 +212,22 @@ spec:
         ports:
           http:
             port: 9998
-
+      collaboration:
+        controller: collaboration
+        ports:
+          http:
+            port: 9300
+          grpc:
+            port: 9301
+      collabora:
+        controller: collabora
+        ports:
+          http:
+            port: 9980
     route:
       main:
         hostnames:
-          - files.${SECRET_DOMAIN}
+          - cloud.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: envoy
@@ -156,6 +236,28 @@ spec:
           - backendRefs:
             - identifier: ${APP}
               port: *port
+      collaboration:
+        hostnames:
+          - wopi.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: envoy
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: collaboration
+              port: 9300
+      collabora:
+        hostnames:
+          - collabora.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: envoy
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: collabora
+              port: 9980
     persistence:
       config:
         type: configMap
@@ -174,6 +276,10 @@ spec:
             main:
               - path: /var/lib/opencloud
                 subPath: data
+              - path: /etc/opencloud
+                subPath: config
+          collaboration:
+            main:
               - path: /etc/opencloud
                 subPath: config
       tmpfs:
