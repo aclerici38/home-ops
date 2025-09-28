@@ -158,7 +158,7 @@ spec:
               password:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP_SECRET}
+                    name: ${APP}-secret
                     key: COLLABORA_ADMIN_PASS
             securityContext:
               <<: *sec
