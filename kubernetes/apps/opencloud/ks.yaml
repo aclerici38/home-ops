@@ -11,8 +11,6 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: volsync
-    - name: multus
-    - name: versity
   path: ./kubernetes/apps/opencloud/app
   components:
     - ../../../components/namespace/common

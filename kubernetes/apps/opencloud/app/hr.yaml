@@ -85,22 +85,7 @@ spec:
 
               STORAGE_USERS_DRIVER: posix
               STORAGE_USERS_ID_CACHE_STORE: nats-js-kv
-              STORAGE_USERS_POSIX_WATCH_FS: true
-              STORAGE_USERS_POSIX_WATCH_TYPE: "inotifywait"
               STORAGE_USERS_POSIX_ROOT: &path /data
-              STORAGE_USERS_DECOMPOSEDS3_ENDPOINT: http://versity.versity:7070
-              STORAGE_USERS_DECOMPOSEDS3_BUCKET: files
-              STORAGE_USERS_DECOMPOSEDS3_REGION: us-east-1
-              STORAGE_USERS_DECOMPOSEDS3_ACCESS_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-secret
-                    key: accessKey
-              STORAGE_USERS_DECOMPOSEDS3_SECRET_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: ${APP}-secret
-                    key: secretKey
 
               SEARCH_EXTRACTOR_TYPE: tika
               SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://opencloud-tika:9998
