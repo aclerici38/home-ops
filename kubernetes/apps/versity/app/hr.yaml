@@ -91,11 +91,4 @@ spec:
       backups:
         existingClaim: backups
         globalMounts:
-          - path: /data/cnpg
-            subPath: cnpg
-          - path: /data/volsync
-            subPath: volsync
-      files:
-        existingClaim: files
-        globalMounts:
-          - path: /data/files
+          - path: /data

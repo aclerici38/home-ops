@@ -2,11 +2,11 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: backups
+  name: files
 spec:
-  storageClassName: zfs-ssd
+  storageClassName: zfs-tank
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: "966367641600"
+      storage: "59992103190528"

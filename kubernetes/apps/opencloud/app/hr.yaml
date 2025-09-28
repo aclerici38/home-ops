@@ -41,7 +41,6 @@ spec:
               OC_INSECURE: false
               OC_LOG_LEVEL: warn
               OC_URL: &url https://cloud.${SECRET_DOMAIN}
-              OC_CORS_ALLOW_ORIGINS: *url
               OC_OIDC_ISSUER: https://id.${SECRET_DOMAIN}
               OC_EXCLUDE_RUN_SERVICES: idp,ocm
               OC_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD: true
@@ -83,7 +82,11 @@ spec:
               NOTIFICATIONS_SMTP_SENDER: bot@${SECRET_DOMAIN}
               NOTIFICATIONS_SMTP_INSECURE: true
 
-              STORAGE_USERS_DRIVER: decomposeds3
+              STORAGE_USERS_DRIVER: posix
+              STORAGE_USERS_ID_CACHE_STORE: nats-js-kv
+              STORAGE_USERS_POSIX_WATCH_FS: true
+              STORAGE_USERS_POSIX_WATCH_TYPE: "inotifywait"
+              STORAGE_USERS_POSIX_ROOT: &path /data
               STORAGE_USERS_DECOMPOSEDS3_ENDPOINT: http://versity.versity:7070
               STORAGE_USERS_DECOMPOSEDS3_BUCKET: files
               STORAGE_USERS_DECOMPOSEDS3_REGION: us-east-1
@@ -177,6 +180,7 @@ spec:
               readOnlyRootFilesystem: false
               capabilities:
                 add:
+                  # https://sdk.collaboraonline.com/docs/installation/CODE_Docker_image.html#running-with-minimal-capabilities
                   - SYS_CHROOT
                   - SYS_ADMIN
                 drop:
@@ -301,6 +305,12 @@ spec:
             main:
               - path: /etc/opencloud
                 subPath: config
+      files:
+        existingClaim: files
+        advancedMounts:
+          opencloud:
+            main:
+              - path: *path
       tmpfs:
         type: emptyDir
         advancedMounts:

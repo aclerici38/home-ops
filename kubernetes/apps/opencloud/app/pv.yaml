@@ -2,23 +2,23 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: backups-pv
+  name: files-pv
 spec:
   accessModes:
     - ReadWriteMany
   capacity:
-    storage: "966367641600"
+    storage: "59992103190528"
   claimRef:
     apiVersion: v1
     kind: PersistentVolumeClaim
-    name: backups
+    name: files
     namespace: versity
   csi:
     driver: zfs.csi.openebs.io
     fsType: zfs
     volumeAttributes:
-      openebs.io/poolname: ssd
-    volumeHandle: backups
+      openebs.io/poolname: tank
+    volumeHandle: files
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -28,5 +28,5 @@ spec:
               values:
                 - bonds
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: zfs-ssd
+  storageClassName: zfs-tank
   volumeMode: Filesystem

@@ -29,7 +29,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_CAPACITY: 25Gi
+      VOLSYNC_CAPACITY: 100Gi
       VOLSYNC_STORAGECLASS: ceph-filesystem
       VOLSYNC_SNAPSHOTCLASS: csi-ceph-filesystem
       VOLSYNC_ACCESSMODES: ReadWriteMany
