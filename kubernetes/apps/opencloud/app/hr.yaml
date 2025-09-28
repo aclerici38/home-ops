@@ -43,7 +43,7 @@ spec:
               OC_URL: &url https://cloud.${SECRET_DOMAIN}
               OC_CORS_ALLOW_ORIGINS: *url
               OC_OIDC_ISSUER: https://id.${SECRET_DOMAIN}
-              OC_EXCLUDE_RUN_SERVICES: idp,ocm,nats
+              OC_EXCLUDE_RUN_SERVICES: idp,ocm
               OC_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD: true
 
               FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR: eu.opencloud.api.collaboration.CollaboraOnline
@@ -61,11 +61,11 @@ spec:
               # For collaboration to connect
               GATEWAY_GRPC_ADDR: 0.0.0.0:9142
 
-              MICRO_REGISTRY_ADDRESS: &nats nats.nats:9233
+              MICRO_REGISTRY_ADDRESS: 127.0.0.1:9233
               MICRO_REGISTRY: nats-js-kv
-              OC_CACHE_STORE_NODES: *nats
-              OC_PERSISTENT_STORE_NODES: *nats
-              OC_EVENTS_ENDPOINT: *nats
+              OC_CACHE_STORE_NODES: 127.0.0.1:9233
+              OC_PERSISTENT_STORE_NODES: 127.0.0.1:9233
+              OC_EVENTS_ENDPOINT: 127.0.0.1:9233
 
               SETTINGS_SETUP_DEFAULT_ASSIGNMENTS: false
 
@@ -132,8 +132,8 @@ spec:
               COLLABORATION_APP_ICON: https://collabora.#{SECRET_DOMAIN}/favicon.ico
               COLLABORATION_GRPC_ADDR: 0.0.0.0:9301
               COLLABORATION_HTTP_ADDR: 0.0.0.0:9300
-              MICRO_REGISTRY_ADDRESS: *nats
-              OC_PERSISTENT_STORE_NODES: *nats
+              MICRO_REGISTRY_ADDRESS: opencloud:9233
+              OC_PERSISTENT_STORE_NODES: opencloud:9233
               MICRO_REGISTRY: nats-js-kv
               OC_URL: *url
             securityContext: *sec
@@ -214,6 +214,8 @@ spec:
         ports:
           http:
             port: *port
+          nats:
+            port: 9233
       tika:
         controller: tika
         ports:
@@ -301,5 +303,3 @@ spec:
                 subPath: tmp
               - path: /opt/cool/child-roots/
                 subPath: cool
-              - path: /etc
-                subPath: etc
