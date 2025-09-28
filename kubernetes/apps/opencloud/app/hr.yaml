@@ -141,6 +141,15 @@ spec:
             securityContext: *sec
       collabora:
         strategy: RollingUpdate
+        pod:
+          # hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            # upstream "cool" group
+            runAsUser: 1001
+            runAsGroup: 1001
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
         containers:
           main:
             image:
@@ -170,8 +179,7 @@ spec:
                     name: ${APP}-secret
                     key: COLLABORA_ADMIN_PASS
             securityContext:
-              # <<: *sec
-              readOnlyRootFilesystem: false
+              <<: *sec
               capabilities:
                 add:
                   - MKNOD
@@ -300,9 +308,9 @@ spec:
           tika:
             main:
               - path: /tmp
-          collabora:
-            main:
-              - path: /tmp
-                subPath: tmp
-              - path: /opt/cool/child-roots/
-                subPath: cool
+          # collabora:
+          #   main:
+          #     - path: /tmp
+          #       subPath: tmp
+          #     - path: /opt/cool/child-roots/
+          #       subPath: cool
