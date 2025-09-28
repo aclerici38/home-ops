@@ -29,7 +29,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_CAPACITY: 100Gi
+      VOLSYNC_CAPACITY: 10Gi
       VOLSYNC_STORAGECLASS: ceph-filesystem
       VOLSYNC_SNAPSHOTCLASS: csi-ceph-filesystem
       VOLSYNC_ACCESSMODES: ReadWriteMany
@@ -40,22 +40,3 @@ spec:
       - kind: ConfigMap
         name: cluster-settings
         optional: false
-  patches:
-    - patch: |-
-        apiVersion: external-secrets.io/v1
-        kind: ExternalSecret
-        metadata:
-          name: patch
-        spec:
-          data:
-            - secretKey: accessKey
-              remoteRef:
-                key: versity
-                property: ROOT_ACCESS_KEY_ID
-            - secretKey: secretKey
-              remoteRef:
-                key: versity
-                property: ROOT_SECRET_ACCESS_KEY
-      target:
-        kind: ExternalSecret
-        labelSelector: "dormammu.io/component=external-secret"
