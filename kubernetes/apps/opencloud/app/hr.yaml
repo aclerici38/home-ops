@@ -288,3 +288,9 @@ spec:
           tika:
             main:
               - path: /tmp
+          collabora:
+            main:
+              - path: /tmp
+                subPath: tmp
+              - path: /opt/cool/child-roots/
+                subPath: cool
