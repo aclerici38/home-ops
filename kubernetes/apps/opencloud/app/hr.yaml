@@ -144,6 +144,7 @@ spec:
       collabora:
         strategy: RollingUpdate
         pod:
+          hostUsers: false
           securityContext:
             seccompProfile:
               type: Unconfined
