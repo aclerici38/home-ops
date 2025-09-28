@@ -126,6 +126,7 @@ spec:
               - "opencloud collaboration server"
             env:
               COLLABORATION_WOPI_SRC: http://opencloud-collaboration:9300
+              COLLABORATION_APP_PROOF_DISABLE: true
               COLLABORATION_APP_NAME: CollaboraOnline
               COLLABORATION_APP_PRODUCT: Collabora
               COLLABORATION_APP_ADDR: https://collabora.${SECRET_DOMAIN}
@@ -152,9 +153,9 @@ spec:
               aliasgroup1: https://wopi.${SECREP_DOMAIN}
               DONT_GEN_SSL_CERT: "YES"
               extra_params: |-
-                --o:ssl.enable=true \
-                --o:ssl.ssl_verification=true \
-                --o:ssl.termination=true \
+                --o:ssl.enable=false \
+                --o:ssl.ssl_verification=false \
+                --o:ssl.termination=false \
                 --o:welcome.enable=false \
                 --o:net.frame_ancestors=cloud.${SECRET_DOMAIN}
               username:
