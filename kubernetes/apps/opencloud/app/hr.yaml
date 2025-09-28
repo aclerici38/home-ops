@@ -144,10 +144,10 @@ spec:
         pod:
           # hostUsers: false
           securityContext:
-            runAsNonRoot: true
+            runAsNonRoot: false
             # upstream "cool" group
-            runAsUser: 1001
-            runAsGroup: 1001
+            runAsUser: 0
+            runAsGroup: 0
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
         containers:
@@ -179,7 +179,7 @@ spec:
                     name: ${APP}-secret
                     key: COLLABORA_ADMIN_PASS
             securityContext:
-              <<: *sec
+              # <<: *sec
               capabilities:
                 add:
                   - MKNOD
