@@ -187,7 +187,7 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    port: &port 9980
+                    port: 9980
                     path: /hosting/discovery
               readiness: *probes
       tika:
