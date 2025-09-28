@@ -154,7 +154,7 @@ spec:
               extra_params: |-
                 --o:ssl.enable=true \
                 --o:ssl.ssl_verification=true \
-                --o:ssl.termination=false \
+                --o:ssl.termination=true \
                 --o:welcome.enable=false \
                 --o:net.frame_ancestors=cloud.${SECRET_DOMAIN}
               username:
@@ -192,7 +192,7 @@ spec:
               tag: 3.2.3.0-full@sha256:21d8052de04e491ccf66e8680ade4da6f3d453a56d59f740b4167e54167219b7
             env:
               JAVA_OPTS: "-Xmx3g"
-            securityContext: *sec
+            # securityContext: *sec
             resources:
               requests:
                 cpu: 200m
