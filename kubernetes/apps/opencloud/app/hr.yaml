@@ -141,6 +141,10 @@ spec:
             image:
               repository: docker.io/collabora/code
               tag: 25.04.5.2.1@sha256:74031c1ecf6823dc9abd1a97142fef01797bdd7dc93aef0b8b09145ed2273cc3
+            command:
+              - /bin/bash
+              - -c
+              - coolconfig generate-proof-key && /start-collabora-online.sh
             env:
               aliasgroup1: https://wopi.${SECREP_DOMAIN}
               DONT_GEN_SSL_CERT: "YES"
