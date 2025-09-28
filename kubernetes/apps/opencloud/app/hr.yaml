@@ -118,7 +118,7 @@ spec:
                     port: &port 9200
                     path: /health
               readiness: *probes
-      collaboration:
+      wopi:
         strategy: RollingUpdate
         containers:
           main:
@@ -143,13 +143,17 @@ spec:
             securityContext: *sec
       collabora:
         strategy: RollingUpdate
+        pod:
+          securityContext:
+            seccompProfile:
+              type: Unconfined
         containers:
           main:
             image:
               repository: docker.io/collabora/code
               tag: 25.04.5.2.1@sha256:74031c1ecf6823dc9abd1a97142fef01797bdd7dc93aef0b8b09145ed2273cc3
             env:
-              aliasgroup1: http://opencloud-collaboration:9300,https://wopi.${SECREP_DOMAIN}
+              aliasgroup1: http://opencloud-wopi:9300,https://wopi.${SECREP_DOMAIN}
               DONT_GEN_SSL_CERT: "YES"
               extra_params: |-
                 --o:ssl.enable=false \
@@ -170,7 +174,8 @@ spec:
               readOnlyRootFilesystem: false
               capabilities:
                 add:
-                  - MKNOD
+                  - SYS_CHROOT
+                  - SYS_ADMIN
                 drop:
                   - ALL
             probes:
@@ -198,6 +203,7 @@ spec:
                 memory: 500Mi
               limits:
                 memory: 5Gi
+    defaultPodOptionsStrategy: merge
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -220,8 +226,8 @@ spec:
         ports:
           http:
             port: 9998
-      collaboration:
-        controller: collaboration
+      wopi:
+        controller: wopi
         ports:
           http:
             port: 9300
@@ -244,7 +250,7 @@ spec:
           - backendRefs:
             - identifier: ${APP}
               port: *port
-      collaboration:
+      wopi:
         hostnames:
           - wopi.${SECRET_DOMAIN}
         parentRefs:
@@ -253,7 +259,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-            - identifier: collaboration
+            - identifier: wopi
               port: 9300
       collabora:
         hostnames:
@@ -286,7 +292,7 @@ spec:
                 subPath: data
               - path: /etc/opencloud
                 subPath: config
-          collaboration:
+          wopi:
             main:
               - path: /etc/opencloud
                 subPath: config
