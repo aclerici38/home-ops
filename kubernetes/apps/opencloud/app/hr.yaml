@@ -148,7 +148,7 @@ spec:
             runAsUser: 1001
             runAsGroup: 1001
             seccompProfile:
-              type: Unconfined
+              type: Unconfined # This seems necessary
         containers:
           main:
             image:
@@ -175,7 +175,6 @@ spec:
                     key: COLLABORA_ADMIN_PASS
             securityContext:
               <<: *sec
-              readOnlyRootFilesystem: false
               capabilities:
                 add:
                   - MKNOD
