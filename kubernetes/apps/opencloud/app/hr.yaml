@@ -124,7 +124,6 @@ spec:
               - "opencloud collaboration server"
             env:
               COLLABORATION_WOPI_SRC: http://opencloud-wopi:9300
-              COLLABORATION_APP_PROOF_DISABLE: true
               COLLABORATION_APP_NAME: CollaboraOnline
               COLLABORATION_APP_PRODUCT: Collabora
               COLLABORATION_APP_INSECURE: true
@@ -144,6 +143,7 @@ spec:
         pod:
           hostUsers: false
           securityContext:
+            # Upstream 'cool' group
             runAsUser: 1001
             runAsGroup: 1001
             seccompProfile:
