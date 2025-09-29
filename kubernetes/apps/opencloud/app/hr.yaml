@@ -144,6 +144,8 @@ spec:
         pod:
           hostUsers: false
           securityContext:
+            runAsUser: 1001
+            runAsGroup: 1001
             seccompProfile:
               type: Unconfined
         containers:
