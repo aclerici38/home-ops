@@ -20,3 +20,6 @@ spec:
     alpnProtocols:
       - h2
       - http/1.1
+  timeout:
+    http:
+      requestReceivedTimeout: 0s

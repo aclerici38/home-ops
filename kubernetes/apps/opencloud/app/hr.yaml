@@ -256,8 +256,6 @@ spec:
           - backendRefs:
             - identifier: ${APP}
               port: *port
-            timeouts:
-              request: 0s
       wopi:
         hostnames:
           - wopi.${SECRET_DOMAIN}
@@ -269,8 +267,6 @@ spec:
           - backendRefs:
             - identifier: wopi
               port: 9300
-            timeouts:
-              request: 0s
       collabora:
         hostnames:
           - collabora.${SECRET_DOMAIN}
@@ -282,8 +278,6 @@ spec:
           - backendRefs:
             - identifier: collabora
               port: 9980
-            timeouts:
-              request: 0s
     persistence:
       config:
         type: configMap

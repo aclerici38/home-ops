@@ -126,8 +126,6 @@ spec:
           - backendRefs:
               - identifier: server
                 port: *port
-            timeouts:
-              request: 0s
     defaultPodOptions:
       securityContext:
         runAsUser: 1000
