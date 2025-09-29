@@ -70,17 +70,10 @@ spec:
         ports:
           http:
             port: *port
-          metrics:
-            port: *mPort
-    serviceMonitor:
-      ${APP}:
-        serviceName: ${APP}
-        endpoints:
-          - port: metrics
     route:
       main:
         hostnames:
-          - qui.${SECRET_DOMAIN}
+          - qbit.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy
