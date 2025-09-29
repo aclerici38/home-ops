@@ -8,7 +8,10 @@ spec:
   clientIPDetection:
     xForwardedFor:
       numTrustedHops: 1
-  # http3: {}
+  path:
+    disableMergeSlashes: true
+    escapedSlashesAction: KeepUnchanged
+  http3: {}
   targetSelectors:
     - group: gateway.networking.k8s.io
       kind: Gateway
