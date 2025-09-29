@@ -42,7 +42,8 @@ spec:
               OC_LOG_LEVEL: warn
               OC_URL: &url https://cloud.${SECRET_DOMAIN}
               OC_OIDC_ISSUER: https://id.${SECRET_DOMAIN}
-              OC_EXCLUDE_RUN_SERVICES: idp,ocm
+              OC_EXCLUDE_RUN_SERVICES: idp
+              OC_ADD_RUN_SERVICES: notifications
               OC_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD: true
               OC_OIDC_CLIENT_ID: opencloud-web
 
@@ -128,7 +129,7 @@ spec:
               COLLABORATION_APP_INSECURE: true
               COLLABORATION_CS3API_DATAGATEWAY_INSECURE: true
               COLLABORATION_APP_ADDR: https://collabora.${SECRET_DOMAIN}
-              COLLABORATION_APP_ICON: https://collabora.#{SECRET_DOMAIN}/favicon.ico
+              COLLABORATION_APP_ICON: https://collabora.${SECRET_DOMAIN}/favicon.ico
               COLLABORATION_GRPC_ADDR: 0.0.0.0:9301
               COLLABORATION_HTTP_ADDR: 0.0.0.0:9300
               MICRO_REGISTRY_ADDRESS: opencloud:9233
@@ -157,7 +158,7 @@ spec:
                 --o:ssl.enable=false \
                 --o:ssl.termination=true \
                 --o:welcome.enable=false \
-                --o:net.content_security_policy="frame-ancestors https://cloud.${SECRET_DOMAIN};"
+                --o:net.frame_ancestors=cloud.${SECRET_DOMAIN}
               username:
                 valueFrom:
                   secretKeyRef:
