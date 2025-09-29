@@ -158,7 +158,7 @@ spec:
               - "-c"
               - "coolconfig generate-proof-key && /start-collabora-online.sh"
             env:
-              aliasgroup1: http://opencloud-wopi:9300,https://wopi\.${SECRET_DOMAIN}:443
+              aliasgroup1: http://opencloud-wopi:9300,https://wopi.${SECRET_DOMAIN}:443
               DONT_GEN_SSL_CERT: "YES"
               extra_params: |
                 --o:ssl.enable=false \
