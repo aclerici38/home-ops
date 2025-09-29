@@ -130,6 +130,7 @@ spec:
               COLLABORATION_CS3API_DATAGATEWAY_INSECURE: true
               COLLABORATION_APP_ADDR: https://collabora.${SECRET_DOMAIN}
               COLLABORATION_APP_ICON: https://collabora.${SECRET_DOMAIN}/favicon.ico
+              COLLABORATION_APP_PROOF_DISABLE: true
               COLLABORATION_GRPC_ADDR: 0.0.0.0:9301
               COLLABORATION_HTTP_ADDR: 0.0.0.0:9300
               MICRO_REGISTRY_ADDRESS: opencloud:9233
@@ -153,10 +154,6 @@ spec:
             image:
               repository: docker.io/collabora/code
               tag: 25.04.5.3.1@sha256:d655791f533f28bc32431a2fcf33a36cadd05ef6745a2b597a4e6534021bdc88
-            command:
-              - "/bin/bash"
-              - "-c"
-              - "coolconfig generate-proof-key && /start-collabora-online.sh"
             env:
               aliasgroup1: http://opencloud-wopi:9300,https://wopi.${SECRET_DOMAIN}:443
               DONT_GEN_SSL_CERT: "YES"
