@@ -39,7 +39,7 @@ metadata:
   name: &app envoy-config
   namespace: flux-system
 spec:
-  targetNamespace: *app
+  targetNamespace: envoy
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
