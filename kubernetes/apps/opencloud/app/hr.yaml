@@ -154,7 +154,7 @@ spec:
             command:
               - "/bin/bash"
               - "-c"
-              - "coolconfig generate proof-key && /start-collabora-online.sh"
+              - "coolconfig generate-proof-key && /start-collabora-online.sh"
             env:
               aliasgroup1: http://opencloud-wopi:9300
               DONT_GEN_SSL_CERT: "YES"
