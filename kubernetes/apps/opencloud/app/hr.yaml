@@ -153,8 +153,7 @@ spec:
             env:
               aliasgroup1: https://wopi.${SECRET_DOMAIN}:443
               DONT_GEN_SSL_CERT: "YES"
-              extra_params: |-
-                --o:server_name=collabora.${SECRET_DOMAIN}
+              extra_params: |
                 --o:ssl.enable=false \
                 --o:ssl.termination=true \
                 --o:welcome.enable=false \
