@@ -9,12 +9,23 @@ spec:
   targetRef:
     group: gateway.networking.k8s.io
     kind: Gateway
-    name: external
   jsonPatches:
-    - type: type.googleapis.com/envoy.config.listener.v3.Listener
-      name: envoy/external/https
+    # Don't normalize paths. Causing collabora issues
+    - type: "type.googleapis.com/envoy.config.listener.v3.Listener"
+      name: tcp-443
       operation:
-        # don't escape slashes
         op: add
-        path: /default_filter_chain/filters/0/typed_config/http_protocol_options/path_with_escaped_slashes_action
-        value: KEEP_UNCHANGED
+        path: "/filter_chains/0/filters/0/typed_config/path_with_escaped_slashes_action"
+        value: "KEEP_UNCHANGED"
+    - type: "type.googleapis.com/envoy.config.listener.v3.Listener"
+      name: tcp-443
+      operation:
+        op: add
+        path: "/filter_chains/0/filters/0/typed_config/normalize_path"
+        value: false
+    - type: "type.googleapis.com/envoy.config.listener.v3.Listener"
+      name: tcp-443
+      operation:
+        op: add
+        path: "/filter_chains/0/filters/0/typed_config/merge_slashes"
+        value: false

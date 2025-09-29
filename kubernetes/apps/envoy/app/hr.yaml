@@ -24,3 +24,10 @@ spec:
   values:
     deployment:
       replicas: 2
+    config:
+      envoyGateway:
+        extensionApis:
+          enableEnvoyPatchPolicy: true
+        runtimeFlags:
+          enabled:
+            - XDSNameSchemeV2
