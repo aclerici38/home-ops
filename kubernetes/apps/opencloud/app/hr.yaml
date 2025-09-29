@@ -277,6 +277,14 @@ spec:
           - backendRefs:
             - identifier: collabora
               port: 9980
+            filters:
+              - type: RequestHeaderModifier
+                requestHeaderModifier:
+                  add:
+                    - name: X-Forwarded-Proto
+                      value: https
+                    - name: X-Forwarded-Host
+                      value: collabora.${SECRET_DOMAIN}
     persistence:
       config:
         type: configMap
