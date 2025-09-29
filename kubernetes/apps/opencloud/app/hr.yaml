@@ -184,7 +184,6 @@ spec:
                   # https://sdk.collaboraonline.com/docs/installation/CODE_Docker_image.html#running-with-minimal-capabilities
                   - SYS_CHROOT
                   - SYS_ADMIN
-                  - MKNOD
                 drop:
                   - ALL
             probes:
