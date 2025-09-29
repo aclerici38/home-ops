@@ -65,11 +65,11 @@ spec:
               NATS_NATS_PORT: 9233
 
               OC_CACHE_STORE: nats-js-kv
-              MICRO_REGISTRY_ADDRESS: opencloud:9233
+              MICRO_REGISTRY_ADDRESS: 127.0.0.1:9233
               MICRO_REGISTRY: nats-js-kv
-              OC_CACHE_STORE_NODES: opencloud:9233
-              OC_PERSISTENT_STORE_NODES: opencloud:9233
-              OC_EVENTS_ENDPOINT: opencloud:9233
+              OC_CACHE_STORE_NODES: 127.0.0.1:9233
+              OC_PERSISTENT_STORE_NODES: 127.0.0.1:9233
+              OC_EVENTS_ENDPOINT: 127.0.0.1:9233
 
               SETTINGS_SETUP_DEFAULT_ASSIGNMENTS: false
 
