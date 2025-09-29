@@ -59,6 +59,7 @@ spec:
               WEB_OIDC_SCOPE: "openid profile email groups"
               PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml\
               PROXY_OIDC_REWRITE_WELLKNOWN: true # mobile apps try to re-register via internal idp
+              PROXY_HTTP_ADDR: 0.0.0.0:9200
 
               # For collaboration to connect
               GATEWAY_GRPC_ADDR: 0.0.0.0:9142
@@ -90,6 +91,7 @@ spec:
 
               SEARCH_EXTRACTOR_TYPE: tika
               SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://opencloud-tika:9998
+              FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -123,6 +125,8 @@ spec:
               COLLABORATION_APP_PROOF_DISABLE: true
               COLLABORATION_APP_NAME: CollaboraOnline
               COLLABORATION_APP_PRODUCT: Collabora
+              COLLABORATION_APP_INSECURE: true
+              COLLABORATION_CS3API_DATAGATEWAY_INSECURE: true
               COLLABORATION_APP_ADDR: https://collabora.${SECRET_DOMAIN}
               COLLABORATION_APP_ICON: https://collabora.#{SECRET_DOMAIN}/favicon.ico
               COLLABORATION_GRPC_ADDR: 0.0.0.0:9301
@@ -149,7 +153,9 @@ spec:
               aliasgroup1: http://opencloud-wopi:9300,https://wopi.${SECREP_DOMAIN}
               DONT_GEN_SSL_CERT: "YES"
               extra_params: |-
-                --o:ssl.enable=false \
+                --o:ssl.enable=true \
+                --o:ssl.ssl_verification=true \
+                --o:ssl.termination=true \
                 --o:welcome.enable=false \
                 --o:net.frame_ancestors=cloud.${SECRET_DOMAIN}
               username:
