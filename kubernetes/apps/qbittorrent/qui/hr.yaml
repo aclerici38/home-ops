@@ -39,7 +39,7 @@ spec:
               tag: v1.1.0@sha256:5a04dda191387e545ee589bcedd0b04581bfc5321ed5fde3dc842aeaab0263af
             command: ["/bin/sh", "-c"]
             args:
-              - echo "$password" | qui create-user --username "$username" --config-dir /data && exec qui serve
+              - echo "$password" | qui create-user --username "$username" && exec qui serve
             env:
               QUI__METRICS_ENABLED: true
               QUI__METRICS_PORT: &mPort 9074
