@@ -157,7 +157,7 @@ spec:
                 --o:ssl.enable=false \
                 --o:ssl.termination=true \
                 --o:welcome.enable=false \
-                --o:net.frame_ancestors=cloud.${SECRET_DOMAIN}
+                --o:net.content_security_policy="frame-ancestors cloud.${SECRET_DOMAIN};"
               username:
                 valueFrom:
                   secretKeyRef:
