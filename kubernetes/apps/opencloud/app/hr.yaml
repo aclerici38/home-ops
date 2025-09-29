@@ -217,6 +217,8 @@ spec:
             port: *port
           nats:
             port: 9233
+          grpc:
+            port: 9142
       tika:
         controller: tika
         ports:
