@@ -287,14 +287,14 @@ spec:
               port: 9980
             timeouts:
               request: 0s
-            filters:
-              - type: RequestHeaderModifier
-                requestHeaderModifier:
-                  add:
-                    - name: X-Forwarded-Proto
-                      value: https
-                    - name: X-Forwarded-Host
-                      value: collabora.${SECRET_DOMAIN}
+            # filters:
+            #   - type: RequestHeaderModifier
+            #     requestHeaderModifier:
+            #       add:
+            #         - name: X-Forwarded-Proto
+            #           value: https
+            #         - name: X-Forwarded-Host
+            #           value: collabora.${SECRET_DOMAIN}
     persistence:
       config:
         type: configMap
