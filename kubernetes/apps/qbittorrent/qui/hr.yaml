@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: vuetorrent
+  name: qui
 spec:
   interval: 1h
   maxHistory: 1
@@ -26,7 +26,6 @@ spec:
       ${APP}:
         strategy: RollingUpdate
         pod:
-          hostUsers: false
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -36,8 +35,8 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/vuetorrent/vuetorrent-backend
-              tag: 2.7.0@sha256:488aca90aa2508a433987c11a286ff2ee911a72ed5601b2ca6f40038564efe17
+              repository: ghcr.io/autobrr/qui
+              tag: v1.1.0@sha256:5a04dda191387e545ee589bcedd0b04581bfc5321ed5fde3dc842aeaab0263af
             resources:
               requests:
                 cpu: 10m
@@ -45,19 +44,20 @@ spec:
               limits:
                 memory: 200Mi
             probes:
-              liveness: &probes
+              liveness:
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /backend/ping
-                    port: &port 8080
-              readiness: *probes
-            env:
-              # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
-              RELEASE_TYPE: v2.30.1
-              PORT: *port
-              QBIT_BASE: http://qbittorrent:8080
+                    path: /healthz/liveness
+                    port: &port 7476
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz/readiness
+                    port: *port
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -83,5 +83,5 @@ spec:
             - identifier: main
               port: *port
     persistence:
-      vuetorrent:
-        type: emptyDir
+      config:
+        existingClaim: ${APP}

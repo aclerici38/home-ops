@@ -42,7 +42,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app vuetorrent
+  name: &app qui
   namespace: flux-system
 spec:
   targetNamespace: qbittorrent
@@ -51,7 +51,10 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 3m
-  path: ./kubernetes/apps/qbittorrent/vuetorrent
+  path: ./kubernetes/apps/qbittorrent/qui
+  components:
+    - ../../../components/volsync/versity
+    - ../../../components/namespace/common
   dependsOn:
     - name: qbittorrent
   prune: true
@@ -63,6 +66,8 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      VOLSYNC_STORAGECLASS: ceph-filesystem
+      VOLSYNC_SNAPSHOTCLASS: csi-ceph-filesystem
     substituteFrom:
       - kind: Secret
         name: cluster-secrets
