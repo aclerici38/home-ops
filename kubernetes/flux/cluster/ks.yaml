@@ -17,3 +17,21 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  patches:
+    - patch: |
+        apiVersion: kustomize.toolkit.fluxcd.io/v1
+        kind: Kustomization
+        metadata:
+          name: subFrom patch
+        spec:
+          postBuild:
+            substituteFrom:
+              - kind: Secret
+                name: cluster-secrets
+                optional: false
+              - kind: ConfigMap
+                name: cluster-settings
+                optional: false
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
