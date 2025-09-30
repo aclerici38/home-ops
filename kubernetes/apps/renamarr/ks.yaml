@@ -30,10 +30,10 @@ spec:
   postBuild:
     substituteFrom:
       - kind: Secret
-        name: sonarr-secret
+        name: sonarr
         optional: false
       - kind: Secret
-        name: radarr-secret
+        name: radarr
         optional: false
     substitute:
       APP: *app
