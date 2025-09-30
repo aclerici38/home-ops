@@ -12,7 +12,7 @@ spec:
   destinationCIDRs:
     - "0.0.0.0/0"
     - "::/0"
-  egressGateways:
+  egressGateway:
     interface: wg0
     nodeSelector:
       matchLabels:
