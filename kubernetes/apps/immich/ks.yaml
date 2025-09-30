@@ -34,7 +34,7 @@ spec:
       CNPG_CAPACITY: 20Gi
       CNPG_POOLMODE: session
   patches:
-    - patch: |-
+    - patch: |
         apiVersion: postgresql.cnpg.io/v1
         kind: Cluster
         metadata:
@@ -45,6 +45,20 @@ spec:
               - "vchord.so"
       target:
         kind: Cluster
+    - patch: |
+        apiVersion: external-secrets.io/v1
+        kind: ClusterExternalSecret
+        metadata:
+          name: patch
+        spec:
+          namespaceSelectors:
+            - matchLabels:
+                kubernetes.io/metadata.name: immich
+            - matchLabels:
+                kubernetes.io/metadata.name: flux-system
+      target:
+        kind: ClusterExternalSecret
+        labelSelector: dormammu.io/component=external-secret
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1

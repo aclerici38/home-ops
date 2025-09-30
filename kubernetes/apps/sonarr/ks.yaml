@@ -29,4 +29,19 @@ spec:
   postBuild:
     substitute:
       APP: *app
+  patches:
+    - patch: |
+        apiVersion: external-secrets.io/v1
+        kind: ClusterExternalSecret
+        metadata:
+          name: patch
+        spec:
+          namespaceSelectors:
+            - matchLabels:
+                kubernetes.io/metadata.name: sonarr
+            - matchLabels:
+                kubernetes.io/metadata.name: flux-system
+      target:
+        kind: ClusterExternalSecret
+        labelSelector: dormammu.io/component=external-secret
 
