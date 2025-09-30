@@ -46,7 +46,7 @@ spec:
               tag: 2.4.0@sha256:0a3345cc4177ddb9330f2d410f9fc543b1008d9c8b3fa977f975fe3a72914873
             env:
               <<: *env
-              JOB_SERVER_URL: http://streamystats-backend:3005
+              JOB_SERVER_URL: http://streamystats-job-server:3005
             probes:
               liveness: &probes
                 enabled: true
@@ -63,14 +63,16 @@ spec:
                 memory: 112Mi
               limits:
                 memory: 1Gi
-      backend:
+      job-server:
         initContainers: *init
         containers:
           main:
             image:
               repository: docker.io/fredrikburmester/streamystats-v2-job-server
               tag: 2.4.0@sha256:7aec5b4cb9ad555df227ff7df57bb965b830cc2aa82bd3f9deaebd57ea2b94ee
-            env: *env
+            env:
+              <<: *env
+              HOST: 0.0.0.0
             probes:
               liveness: &probes
                 enabled: true
@@ -102,8 +104,8 @@ spec:
         ports:
           http:
             port: *fPort
-      backend:
-        controller: backend
+      job-server:
+        controller: job-server
         ports:
           http:
             port: *bPort
