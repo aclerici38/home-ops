@@ -89,10 +89,10 @@ spec:
         cacheLayerDatabaseIndex: *idx
     database:
       type: external
-    existingSecretAdminPassword: ${APP}-secret
+    existingSecretAdminPassword: ${APP}
     existingSecretAdminPasswordKey: password
     # The secret key used for encryption. Must be a string of 16 chars.
-    existingSecretSecretKey: "${APP}-secret"
+    existingSecretSecretKey: "${APP}"
     enableMigrateHelmHook: true
     portal:
       nodeSelector: &ns

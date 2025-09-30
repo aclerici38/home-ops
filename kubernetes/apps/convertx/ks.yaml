@@ -25,7 +25,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      CLIENT_ID: a1443db8-e846-4e19-88c8-7eeed29c537d
       VOLSYNC_CAPACITY: 25Gi
   patches:
   - patch: |-

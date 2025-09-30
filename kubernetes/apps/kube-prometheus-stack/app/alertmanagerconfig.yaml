@@ -40,13 +40,13 @@ spec:
     # - name: heartbeat
     #   webhookConfigs:
     #     - urlSecret:
-    #         name: &secret alertmanager-secret
+    #         name: &secret alertmanager
     #         key: ALERTMANAGER_HEARTBEAT_URL
     - name: discord
       discordConfigs:
         - sendResolved: false
           apiURL:
-            name: alertmanager-secret
+            name: alertmanager
             key: DISCORD_WEBHOOK_URL
           title: >-
             [{{ .Status | toUpper }}] [{{ .CommonLabels.alertname }}]: {{

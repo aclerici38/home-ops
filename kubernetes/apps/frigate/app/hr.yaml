@@ -43,7 +43,7 @@ spec:
               S6_READ_ONLY_ROOT: 1
             envFrom:
               - secretRef:
-                  name: frigate-secret
+                  name: frigate
             securityContext:
               allowPrivilegeEscalation: false
               # Frigate does in-place nginx config editing, so no true readonly root fs

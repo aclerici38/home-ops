@@ -11,7 +11,7 @@ controllers:
         OP_SESSION:
           valueFrom:
             secretKeyRef:
-              name: onepassword-connect-secret
+              name: onepassword-connect
               key: 1password-credentials.json
       securityContext:
         allowPrivilegeEscalation: false

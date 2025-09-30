@@ -79,7 +79,7 @@ spec:
               SMTP_FROM_EMAIL: bot@${SECRET_DOMAIN}
             envFrom:
               - secretRef:
-                  name: mealie-secret
+                  name: mealie
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true

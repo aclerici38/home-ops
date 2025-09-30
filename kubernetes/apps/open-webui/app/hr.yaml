@@ -69,7 +69,7 @@ spec:
                     key: uri
             envFrom:
               - secretRef:
-                  name: open-webui-secret
+                  name: open-webui
             probes:
               liveness: &probes
                 enabled: true

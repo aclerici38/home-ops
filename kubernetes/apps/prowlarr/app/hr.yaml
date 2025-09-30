@@ -69,7 +69,7 @@ spec:
                     key: dbname
             envFrom:
               - secretRef:
-                  name: ${APP}-secret
+                  name: ${APP}
             probes:
               liveness: &probes
                 enabled: true

@@ -56,7 +56,6 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      CLIENT_ID: 022da642-3926-4abb-9b95-73ae841c6f8b
   patches:
     - patch: |-
         apiVersion: gateway.envoyproxy.io/v1alpha1

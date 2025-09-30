@@ -46,7 +46,7 @@ spec:
               ACTUAL_OPENID_ENFORCE: true
             envFrom:
               - secretRef:
-                  name: actual-secret
+                  name: actual
             probes:
               readiness: &probes
                 enabled: true

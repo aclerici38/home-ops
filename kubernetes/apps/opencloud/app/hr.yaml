@@ -166,12 +166,12 @@ spec:
               username:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-secret
+                    name: ${APP}
                     key: COLLABORA_ADMIN_USER
               password:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-secret
+                    name: ${APP}
                     key: COLLABORA_ADMIN_PASS
             securityContext:
               <<: *sec

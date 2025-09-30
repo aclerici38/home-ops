@@ -17,7 +17,7 @@ spec:
             - name: PG_USER
               valueFrom:
                 secretKeyRef:
-                  name: jensen-d3savant-secret
+                  name: jensen-d3savant
                   key: username
             - name: PG_NAME
               value: app
@@ -26,5 +26,5 @@ spec:
             - name: PG_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: jensen-d3savant-secret
+                  name: jensen-d3savant
                   key: password

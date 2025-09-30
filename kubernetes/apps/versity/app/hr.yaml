@@ -47,7 +47,7 @@ spec:
               # VGW_DEBUG: true
             envFrom:
               - secretRef:
-                  name: versity-secret
+                  name: versity
             probes:
               liveness: &probes
                 enabled: true

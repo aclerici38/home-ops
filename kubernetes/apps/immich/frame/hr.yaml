@@ -57,7 +57,7 @@ spec:
               ImageLocationFormat: City,State
             envFrom:
               - secretRef:
-                  name: ${APP}-secret
+                  name: ${APP}
             resources:
               requests:
                 cpu: 10m

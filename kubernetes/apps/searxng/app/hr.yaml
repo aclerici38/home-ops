@@ -52,7 +52,7 @@ spec:
               UWSGI_WORKERS: 1
             envFrom:
               - secretRef:
-                  name: searxng-secret
+                  name: searxng
             probes:
               liveness: &probes
                 enabled: true

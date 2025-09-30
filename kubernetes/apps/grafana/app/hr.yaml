@@ -25,7 +25,7 @@ spec:
     deploymentStrategy:
       type: Recreate
     admin:
-      existingSecret: grafana-secret
+      existingSecret: grafana
     env:
       GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
       GF_EXPLORE_ENABLED: true
@@ -51,15 +51,15 @@ spec:
           key: dbname
       BLOCKY_DB_USER:
         secretKeyRef:
-          name: blocky-db-secret
+          name: blocky-db
           key: user
       BLOCKY_DB_PASS:
         secretKeyRef:
-          name: blocky-db-secret
+          name: blocky-db
           key: password
       BLOCKY_DB_NAME:
         secretKeyRef:
-          name: blocky-db-secret
+          name: blocky-db
           key: dbname
     grafana.ini:
       analytics:

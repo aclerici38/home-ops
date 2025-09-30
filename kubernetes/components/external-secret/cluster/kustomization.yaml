@@ -4,3 +4,23 @@ apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 resources:
   - ./clusterexternalsecret.yaml
+replacements:
+  - source:
+      kind: HelmRelease
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: ClusterExternalSecret
+        fieldPaths:
+          - metadata.name
+          - spec.externalSecretName
+          - spec.externalSecretSpec.target.name
+          - spec.externalSecretSpec.dataFrom.[0].extract.key
+  - source:
+      kind: HelmRelease
+      fieldPath: metadata.namespace
+    targets:
+      - select:
+          kind: ClusterExternalSecret
+        fieldPaths:
+          - spec.namespaceSelectors.[0].matchLabels.kubernetes\.io/metadata\.name

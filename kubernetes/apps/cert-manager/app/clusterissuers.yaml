@@ -13,7 +13,7 @@ spec:
       - dns01:
           cloudflare:
             apiTokenSecretRef:
-              name: cloudflare-secret
+              name: cloudflare
               key: CLOUDFLARE_API_TOKEN
         selector:
           dnsZones:
@@ -33,7 +33,7 @@ spec:
       - dns01:
           cloudflare:
             apiTokenSecretRef:
-              name: cloudflare-secret
+              name: cloudflare
               key: CLOUDFLARE_API_TOKEN
         selector:
           dnsZones:

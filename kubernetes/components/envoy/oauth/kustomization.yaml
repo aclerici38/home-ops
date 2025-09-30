@@ -13,3 +13,6 @@ replacements:
           kind: SecurityPolicy
         fieldPaths:
           - metadata.name
+          - spec.targetRefs.[kind=HTTPRoute].name
+          - spec.oidc.clientSecret.name
+          - spec.oidc.clientIDRef.name

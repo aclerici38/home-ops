@@ -3,7 +3,7 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: "immich-volsync-storj-secret"
+  name: "immich-volsync-storj"
 spec:
   secretStoreRef:
     kind: ClusterSecretStore
@@ -33,7 +33,7 @@ spec:
     copyMethod: Snapshot
     pruneIntervalDays: 14
     volumeSnapshotClassName: openebs-zfs
-    repository: "immich-volsync-storj-secret"
+    repository: "immich-volsync-storj"
     cacheAccessModes: ["ReadWriteOnce"]
     cacheStorageClassName: zfs-ssd
     cacheCapacity: 500Gi
