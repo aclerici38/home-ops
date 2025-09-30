@@ -16,8 +16,7 @@ spec:
   path: ./kubernetes/apps/streamystats/app
   components:
     - ../../../components/namespace/common
-    - ../../../components/cnpg/overlay/no-backup
-    - ../../../components/external-secret/common
+    - ../../../components/cnpg/overlay/init
   prune: true
   sourceRef:
     kind: GitRepository
