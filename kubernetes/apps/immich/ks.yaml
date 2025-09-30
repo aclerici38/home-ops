@@ -33,13 +33,6 @@ spec:
       CNPG_IMAGE: ghcr.io/tensorchord/cloudnative-vectorchord:17.5-0.4.3@sha256:acebb38ca309938bc05ce268b019c98aa718cb554dd54e4443654d9d00a0d498
       CNPG_CAPACITY: 20Gi
       CNPG_POOLMODE: session
-    substituteFrom:
-      - kind: Secret
-        name: cluster-secrets
-        optional: false
-      - kind: ConfigMap
-        name: cluster-settings
-        optional: false
   patches:
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1
@@ -59,6 +52,8 @@ kind: Kustomization
 metadata:
   name: &app immich-config
   namespace: flux-system
+  labels:
+    kustomize.dormammu/subfrom: exists
 spec:
   targetNamespace: immich
   commonMetadata:
@@ -79,12 +74,6 @@ spec:
     substituteFrom:
       - kind: Secret
         name: immich-secret
-      - kind: Secret
-        name: cluster-secrets
-        optional: false
-      - kind: ConfigMap
-        name: cluster-settings
-        optional: false
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -115,10 +104,3 @@ spec:
   postBuild:
     substitute:
       APP: *app
-    substituteFrom:
-      - kind: Secret
-        name: cluster-secrets
-        optional: false
-      - kind: ConfigMap
-        name: cluster-settings
-        optional: false

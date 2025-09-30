@@ -27,13 +27,6 @@ spec:
       APP: *app
       CLIENT_ID: a1443db8-e846-4e19-88c8-7eeed29c537d
       VOLSYNC_CAPACITY: 25Gi
-    substituteFrom:
-      - kind: Secret
-        name: cluster-secrets
-        optional: false
-      - kind: ConfigMap
-        name: cluster-settings
-        optional: false
   patches:
   - patch: |-
       apiVersion: gateway.envoyproxy.io/v1alpha1

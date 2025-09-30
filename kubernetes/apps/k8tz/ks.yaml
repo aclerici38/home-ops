@@ -25,8 +25,3 @@ spec:
   postBuild:
     substitute:
       APP: *app
-    substituteFrom:
-      - kind: ConfigMap
-        name: cluster-settings
-        optional: false
-

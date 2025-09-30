@@ -30,10 +30,3 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 10Gi
-    substituteFrom:
-      - kind: Secret
-        name: cluster-secrets
-        optional: false
-      - kind: ConfigMap
-        name: cluster-settings
-        optional: false

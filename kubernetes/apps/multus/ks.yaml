@@ -49,11 +49,3 @@ spec:
   wait: true
   dependsOn:
     - name: multus
-  postBuild:
-    substituteFrom:
-      - kind: Secret
-        name: cluster-secrets
-        optional: false
-      - kind: ConfigMap
-        name: cluster-settings
-        optional: false
