@@ -10,11 +10,9 @@ replacements:
       fieldPath: metadata.name
     targets:
       - select:
-          group: external-secrets.io
           kind: ExternalSecret
+          labelSelector: dormammu.io/component=external-secret
         fieldPaths:
           - metadata.name
           - spec.target.name
           - spec.dataFrom.[0].extract.key
-        options:
-          create: true
