@@ -18,8 +18,8 @@ replacements:
           - spec.externalSecretSpec.target.name
           - spec.externalSecretSpec.dataFrom.0.extract.key
   - source:
-      kind: HelmRelease
-      fieldPath: metadata.namespace
+      kind: Namespace
+      fieldPath: metadata.name
     targets:
       - select:
           kind: ClusterExternalSecret
