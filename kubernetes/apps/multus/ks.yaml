@@ -49,3 +49,6 @@ spec:
   wait: true
   dependsOn:
     - name: multus
+  postBuild:
+    substitute:
+      APP: *app
