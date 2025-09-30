@@ -9,6 +9,9 @@
       fieldPaths:
         - metadata.name
         - spec.dataSourceRef.name
+      options:
+        delimiter: "-"
+        index: 0
     - select:
         kind: ExternalSecret
         labelSelector: dormammu.io/component=volsync
