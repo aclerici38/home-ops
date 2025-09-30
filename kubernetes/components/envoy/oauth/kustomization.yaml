@@ -10,6 +10,7 @@ replacements:
       fieldPath: metadata.name
     targets:
       - select:
+          group: gateway.envoyproxy.io
           kind: SecurityPolicy
         fieldPaths:
           - metadata.name

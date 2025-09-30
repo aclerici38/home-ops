@@ -10,6 +10,7 @@ replacements:
       fieldPath: metadata.name
     targets:
       - select:
+          group: external-secrets.io
           kind: ClusterExternalSecret
         fieldPaths:
           - metadata.name
