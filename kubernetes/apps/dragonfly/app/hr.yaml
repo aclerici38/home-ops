@@ -22,14 +22,6 @@ spec:
       retries: 1
   values:
     replicaCount: 2
-    manager:
-      topologySpreadConstraints:
-        - maxSkew: 1 # Skew of 1 allows for rolling updates
-          topologyKey: kubernetes.io/hostname
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/instance: ${APP}
-          whenUnsatisfiable: DoNotSchedule
     serviceMonitor:
       enabled: true
     grafanaDashboard:
