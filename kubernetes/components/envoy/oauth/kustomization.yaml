@@ -6,7 +6,7 @@ resources:
   - ./oauth.yaml
 replacements:
   - source:
-      kind: Kustomization
+      kind: HelmRelease
       fieldPath: metadata.name
     targets:
       - select:
