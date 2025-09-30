@@ -28,6 +28,11 @@ spec:
         strategy: RollingUpdate
         pod:
           priorityClassName: system-node-critical
+          tolerations:
+            - key: "rpi"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
         containers:
           main:
             image:
