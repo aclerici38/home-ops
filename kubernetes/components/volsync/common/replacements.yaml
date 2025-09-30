@@ -12,6 +12,7 @@
       options:
         delimiter: "-"
         index: 0
+
     - select:
         kind: ExternalSecret
         labelSelector: dormammu.io/component=volsync
@@ -20,13 +21,16 @@
       options:
         delimiter: "-"
         index: 0
+
     - select:
         kind: ExternalSecret
         labelSelector: dormammu.io/component=volsync
       fieldPaths:
-        - spec.target.template.data.APP
+        - spec.target.template.data.RESTIC_REPOSITORY
       options:
-        create: true
+        delimiter: "/"
+        index: 2
+
     - select:
         kind: ReplicationSource
         labelSelector: dormammu.io/component=volsync
@@ -37,6 +41,7 @@
       options:
         delimiter: "-"
         index: 0
+
     - select:
         kind: ReplicationDestination
         labelSelector: dormammu.io/component=volsync
