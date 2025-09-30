@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: "${APP}"
+  name: placeholder
   labels:
     dormammu.io/component: volsync
 spec:
@@ -10,7 +10,7 @@ spec:
   dataSourceRef:
     kind: ReplicationDestination
     apiGroup: volsync.backube
-    name: "${APP}-dst"
+    name: placeholder
   resources:
     requests:
       storage: "${VOLSYNC_CAPACITY:-5Gi}"

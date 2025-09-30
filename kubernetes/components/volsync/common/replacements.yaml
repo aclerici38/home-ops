@@ -1,0 +1,45 @@
+---
+- source:
+    kind: HelmRelease
+    fieldPath: metadata.name
+  targets:
+    - select:
+        kind: PersistentVolumeClaim
+        labelSelector: dormammu.io/component=volsync
+      fieldPaths:
+        - metadata.name
+        - spec.dataSourceRef.name
+    - select:
+        kind: ExternalSecret
+        labelSelector: dormammu.io/component=volsync
+      fieldPaths:
+        - metadata.name
+      options:
+        delimiter: "-"
+        index: 0
+    - select:
+        kind: ExternalSecret
+        labelSelector: dormammu.io/component=volsync
+      fieldPaths:
+        - spec.target.template.data.APP
+      options:
+        create: true
+    - select:
+        kind: ReplicationSource
+        labelSelector: dormammu.io/component=volsync
+      fieldPaths:
+        - metadata.name
+        - spec.sourcePVC
+        - spec.restic.repository
+      options:
+        delimiter: "-"
+        index: 0
+    - select:
+        kind: ReplicationDestination
+        labelSelector: dormammu.io/component=volsync
+      fieldPaths:
+        - metadata.name
+        - spec.restic.repository
+      options:
+        delimiter: "-"
+        index: 0
