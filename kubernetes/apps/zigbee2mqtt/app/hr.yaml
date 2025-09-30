@@ -24,6 +24,12 @@ spec:
   values:
     controllers:
       apt:
+        pod:
+          tolerations:
+            - key: "rpi"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
         containers:
           main: &container
             image:

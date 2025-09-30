@@ -5,6 +5,9 @@ machine:
         mtu: 1420
         addresses:
           - ${PROTON_WG_ADDRESS}/32
+        routes:
+          - network: 0.0.0.0/0
+            metric: 100
         wireguard:
           privateKey: ${PROTON_WG_PRIVKEY}
           peers:

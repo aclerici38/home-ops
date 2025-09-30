@@ -96,8 +96,8 @@ nodes:
             match: system_disk
           minSize: 500GB
           grow: true
-    patches:
-      - "@./patches/wireguard/proton.yaml"
+    # patches:
+    #   - "@./patches/wireguard/proton.yaml"
   - hostname: "cain"
     ipAddress: "${CAIN_IP}"
     installDiskSelector:
@@ -163,14 +163,6 @@ nodes:
             match: system_disk
           minSize: 500GB
           grow: true
-    patches:
-      - "@./patches/wireguard/proton.yaml"
-      - |-
-        machine:
-          udev:
-            rules:
-              - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
-              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
   - hostname: "timmy"
     ipAddress: "${TIMMY_IP}"
     installDiskSelector:
@@ -198,6 +190,13 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
         mtu: 1500
+    patches:
+      - |-
+        machine:
+          udev:
+            rules:
+              - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
+              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
