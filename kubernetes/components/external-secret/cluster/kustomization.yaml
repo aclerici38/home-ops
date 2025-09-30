@@ -10,7 +10,7 @@ replacements:
       fieldPath: metadata.name
     targets:
       - select:
-          kind: ExternalSecret
+          kind: ClusterExternalSecret
           labelSelector: dormammu.io/component=external-secret
         fieldPaths:
           - metadata.name
