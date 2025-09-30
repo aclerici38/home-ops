@@ -1,0 +1,16 @@
+machine:
+  network:
+    interfaces:
+      - interface: wg0
+        mtu: 1420
+        addresses:
+          - ${PROTON_WG_ADDRESS}/32
+        wireguard:
+          privateKey: ${PROTON_WG_PRIVKEY}
+          peers:
+            - publicKey: ${PROTON_WG_PUBKEY}
+              endpoint: ${PROTON_WG_ENDPOINT}:${PROTON_WG_PORT}
+              persistentKeepaliveInterval: 25s
+              allowedIPs:
+                - "0.0.0.0/0"
+                - "::/0"

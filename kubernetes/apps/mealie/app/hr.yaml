@@ -26,6 +26,8 @@ spec:
       ${APP}:
         strategy: RollingUpdate
         pod:
+          labels:
+            egress-via: protonvpn
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000

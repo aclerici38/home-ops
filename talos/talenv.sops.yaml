@@ -1,5 +1,9 @@
-CLOUD_IP: ENC[AES256_GCM,data:CPaMncFA4+m/nrPX,iv:2o+uoe53xU47naTelvW3WbqGADQ+ig1Feyr8hcNKmHY=,tag:HgCZRK4Bdic0x/V4jAp1iA==,type:str]
 SECRET_DOMAIN: ENC[AES256_GCM,data:3pk5PZCjw90JfIRV,iv:DWFKUfRqYFHQVyAg35JdvPIUNeyGFLrc7K7qj6PY5vw=,tag:yVUu9RH5e6RJaNzKc0BVrw==,type:str]
+PROTON_WG_ENDPOINT: ENC[AES256_GCM,data:YVF0WtOcH7TS2gwRgw==,iv:1QmszzRnke37Me3TjVUCHr2Kt7h5Bknmzn2WdJEgqZY=,tag:ICB/nLZ8jg3pszNU5a4rOA==,type:str]
+PROTON_WG_PUBKEY: ENC[AES256_GCM,data:Iodh/C59qJ1Y0Lu0W/4Syzb3Mn2eHm6vKVgL4SQu34w5T4KM6QAZwwNp/wM=,iv:UK+mad5VWA52FoanwEKPV+hK66Td2WHkeVWfNu3GCGE=,tag:AujeLGy706Q+T3pf3KkNgA==,type:str]
+PROTON_WG_PRIVKEY: ENC[AES256_GCM,data:i4NJYj+H0+JEZGerCY/z4gcs1orz618XQhb5JXMrnIKD3om1ox9Nsv4rOw0=,iv:bv1jN0V4of83znW6vo40NylIosOmZOFQ4RFl6Qttnco=,tag:tD00rhzZCViF+mvcPXoyoQ==,type:str]
+PROTON_WG_ADDRESS: ENC[AES256_GCM,data:m52jDLoyzuY=,iv:F16ljazJ1qY5NTH1CgW5X3OxkljfFGY0Qh3VJX9HXeg=,tag:lTc7PJpmC38BChkGMM7pXw==,type:str]
+PROTON_WG_PORT: ENC[AES256_GCM,data:2OEX/tA=,iv:zEUip10PSVb3DvwVWMHd+XaQESvtXJ2exDSzfawZ3Bg=,tag:1IbKEgfkEjDdXipCNZZWYA==,type:int]
 sops:
     age:
         - recipient: age13azafagpe0l7unvutqcm699w4jukxsdvn8a9mc3njd0lcx7pkfxqpnz643
@@ -11,8 +15,8 @@ sops:
             NXgvbnA1d3ZTWm01dnBYMW44VjdrdlkKWnQsp+n5MtbVVv9XqoRCIEp2iwfLKGYr
             FD2mng3/KmO+WbzYm4D+zU/q9Csrj2JwhKp9xfdWOuwjYmT2a1BZyw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-08-30T04:25:27Z"
-    mac: ENC[AES256_GCM,data:2Klg22iEiQKH9G9b3j49PvxUycUAq/bgbOtnHzau3W/4UYh4mbdHdRSfcswSgNxz91y+mChHMU0YmLvEURa7fYv2oGC34TDDB2O4sQUXgP0+PV5KHn0qBMzmY9mhMY2qtoriOVz6abJoVXsDcDys3E2BDI2TONtSctdk5eQ4LHQ=,iv:uiEWglJkkZCCghCTmiikU/PdAPcNTY+g+sx2iCEGixc=,tag:NiEf58jNqOWhS/VRsIGYqg==,type:str]
+    lastmodified: "2025-09-30T04:04:47Z"
+    mac: ENC[AES256_GCM,data:JiudPS8lfZ0eLZwT4RCPLPLqC+hf93lcNTcuXIX1GBviHPzDBRTKjl4lDl9tnG6rY0ZGnR5slkwpciPNJT10aa3qR9yAG2cdFGAiudYlzG2d9sA96hx/q0G0OM0g3HbYok92IpRALQY0JGvDciN1UJG2kcC1JCMQcC4Fs6mJ6iQ=,iv:huRKNIiFsp43gUZ5V84UKS2LQWuLuhJzPW5na7qDjmU=,tag:XJc0zYni7W0F3oEsnf+bjw==,type:str]
     unencrypted_suffix: _unencrypted
     mac_only_encrypted: true
-    version: 3.10.2
+    version: 3.11.0
