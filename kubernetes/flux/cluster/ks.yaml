@@ -19,19 +19,24 @@ spec:
     name: flux-system
   patches:
     - patch: |
-        apiVersion: kustomize.toolkit.fluxcd.io/v1
-        kind: Kustomization
-        metadata:
-          name: subFrom patch
-        spec:
-          postBuild:
-            substituteFrom:
-              - kind: Secret
-                name: cluster-secrets
-                optional: false
-              - kind: ConfigMap
-                name: cluster-settings
-                optional: false
+        - op: add
+          path: /spec/postBuild
+          value: {}
+        - op: add
+          path: /spec/postBuild/substituteFrom
+          value: []
+        - op: add
+          path: /spec/postBuild/substituteFrom/-
+          value:
+            kind: Secret
+            name: cluster-secrets
+            optional: false
+        - op: add
+          path: /spec/postBuild/substituteFrom/-
+          value:
+            kind: ConfigMap
+            name: cluster-settings
+            optional: false
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
