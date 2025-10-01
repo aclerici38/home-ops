@@ -5,6 +5,8 @@ kind: Kustomization
 metadata:
   name: &app cert-manager
   namespace: flux-system
+  labels:
+    components.dormammu/external-secret: cluster
 spec:
   targetNamespace: *app
   commonMetadata:
@@ -19,3 +21,14 @@ spec:
   wait: true
   interval: 30m
   timeout: 3m
+  patches:
+    - patch: |
+        apiVersion: external-secrets.io/v1
+        kind: ClusterExternalSecret
+        metadata:
+          name: ns-patch
+          namespaceSelectors:
+            - matchLabels:
+                kubernetes.io/metadata.name: cert-manager
+            - matchLabels:
+                kubernetes.io/metadata.name: external-dns
