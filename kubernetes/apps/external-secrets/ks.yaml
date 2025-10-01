@@ -33,7 +33,6 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets
-    - name: onepassword-connect
   path: ./kubernetes/apps/external-secrets/stores
   prune: true
   sourceRef:
