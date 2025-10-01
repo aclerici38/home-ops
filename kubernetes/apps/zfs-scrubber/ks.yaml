@@ -23,6 +23,7 @@ spec:
     substitute:
       POOL: tank
       SCRUB_SCHEDULE: "0 3 1 * *"
+  dependsOn: []
 ---
 # yaml-language-server: $schema=https://kube-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -48,3 +49,4 @@ spec:
     substitute:
       POOL: ssd
       SCRUB_SCHEDULE: 0 0 1,15 * *
+  dependsOn: []

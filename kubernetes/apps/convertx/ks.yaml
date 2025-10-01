@@ -25,13 +25,14 @@ spec:
     substitute:
       VOLSYNC_CAPACITY: 25Gi
   patches:
-  - patch: |-
-      apiVersion: gateway.envoyproxy.io/v1alpha1
-      kind: SecurityPolicy
-      metadata:
-        name: patch
-      spec:
-        oidc:
-          redirectURL: "https://convert.${SECRET_DOMAIN}/oauth2/callback"
-    target:
-      kind: SecurityPolicy
+    - patch: |-
+        apiVersion: gateway.envoyproxy.io/v1alpha1
+        kind: SecurityPolicy
+        metadata:
+          name: patch
+        spec:
+          oidc:
+            redirectURL: "https://convert.${SECRET_DOMAIN}/oauth2/callback"
+      target:
+        kind: SecurityPolicy
+  dependsOn: []
