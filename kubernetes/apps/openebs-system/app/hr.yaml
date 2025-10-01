@@ -15,13 +15,11 @@ spec:
     mode: enabled
   install:
     disableHooks: true
-    crds: CreateReplace
     timeout: 2m
     remediation:
       retries: 1
   upgrade:
     disableHooks: true
-    crds: CreateReplace
     timeout: 2m
     remediation:
       retries: 1

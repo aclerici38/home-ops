@@ -37,6 +37,7 @@ spec:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
         labelSelector: "!kustomize.dormammu/subfrom"
+    # SubFrom does exist in the ks, this patch is chosen via labelSelector
     - patch: |
         - op: add
           path: /spec/postBuild/substituteFrom/-
@@ -54,3 +55,40 @@ spec:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
         labelSelector: "kustomize.dormammu/subfrom=exists"
+    # Add HelmRelease defaults to all Kustomizations
+    - patch: |-
+        apiVersion: kustomize.toolkit.fluxcd.io/v1
+        kind: Kustomization
+        metadata:
+          name: not-used
+        spec:
+          patches:
+            - patch: |-
+                apiVersion: helm.toolkit.fluxcd.io/v2
+                kind: HelmRelease
+                metadata:
+                  name: not-used
+                spec:
+                  maxHistory: 1
+                  driftDetection:
+                    mode: warn
+                  install:
+                    crds: CreateReplace
+                    remediation:
+                      retries: 1
+                      remediateLastFailure: true
+                    strategy:
+                      name: RetryOnFailure
+                  upgrade:
+                    crds: CreateReplace
+                    strategy:
+                      name: RetryOnFailure
+                    remediation:
+                      retries: 1
+                      remediateLastFailure: true
+              target:
+                group: helm.toolkit.fluxcd.io
+                kind: HelmRelease
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
