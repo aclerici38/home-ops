@@ -2,20 +2,20 @@
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: SecurityPolicy
 metadata:
-  name: placeholder
+  name: __placeholder__
 spec:
   targetRefs:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
-      name: placeholder
+      name: __placeholder__
   oidc:
     provider:
       issuer: "https://id.${SECRET_DOMAIN}"
     clientIDRef:
       kind: Secret
-      name: placeholder
+      name: __placeholder__
     clientSecret:
-      name: placeholder
+      name: __placeholder__
     refreshToken: true
     cookieDomain: ${SECRET_DOMAIN}
     logoutPath: "${LOGOUT_PATH:-/logout}"

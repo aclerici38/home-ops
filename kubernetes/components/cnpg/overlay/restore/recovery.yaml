@@ -8,11 +8,11 @@ metadata:
 spec:
   bootstrap:
     recovery:
-      source: placeholder-db
+      source: __placeholder__-db
   externalClusters:
-    - name: placeholder-db
+    - name: __placeholder__-db
       plugin:
         name: barman-cloud.cloudnative-pg.io
         parameters:
-          barmanObjectName: placeholder-store
-          serverName: placeholder-db
+          barmanObjectName: __placeholder__-store
+          serverName: __placeholder__-db

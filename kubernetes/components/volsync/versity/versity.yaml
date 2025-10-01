@@ -3,7 +3,7 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: placeholder-volsync-versity-secret
+  name: __placeholder__-volsync-versity-secret
   labels:
     dormammu.io/component: volsync
 spec:
@@ -14,7 +14,7 @@ spec:
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: "{{ .RESTIC_REPOSITORY }}/{{ .BUCKET }}/placeholder"
+        RESTIC_REPOSITORY: "{{ .RESTIC_REPOSITORY }}/{{ .BUCKET }}/__placeholder__"
         RESTIC_PASSWORD: "{{ .RESTIC_PASSWORD }}"
         AWS_ACCESS_KEY_ID: "{{ .AWS_ACCESS_KEY_ID }}"
         AWS_SECRET_ACCESS_KEY: "{{ .AWS_SECRET_ACCESS_KEY }}"
@@ -45,11 +45,11 @@ spec:
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: placeholder
+  name: __placeholder__
   labels:
     dormammu.io/component: volsync
 spec:
-  sourcePVC: placeholder
+  sourcePVC: __placeholder__
   trigger:
     schedule: "${VOLSYNC_SCHEDULE:-0 3 * * *}"
   restic:
@@ -57,7 +57,7 @@ spec:
     pruneIntervalDays: 14
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-ceph-blockpool}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-ceph-block}"
-    repository: placeholder-volsync-versity-secret
+    repository: __placeholder__-volsync-versity-secret
     cacheAccessModes: ["ReadWriteOnce"]
     storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-block}"
     accessModes: ["ReadWriteOnce"]
@@ -73,7 +73,7 @@ spec:
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
 metadata:
-  name: placeholder-dst
+  name: __placeholder__-dst
   labels:
     kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
     dormammu.io/component: volsync
@@ -81,7 +81,7 @@ spec:
   trigger:
     manual: restore-once
   restic:
-    repository: placeholder-volsync-versity-secret
+    repository: __placeholder__-volsync-versity-secret
     copyMethod: Snapshot
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-csi-ceph-blockpool}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-ceph-block}"
