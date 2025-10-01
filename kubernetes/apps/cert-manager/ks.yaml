@@ -27,6 +27,7 @@ spec:
         kind: ClusterExternalSecret
         metadata:
           name: ns-patch
+        spec:
           namespaceSelectors:
             - matchLabels:
                 kubernetes.io/metadata.name: cert-manager
