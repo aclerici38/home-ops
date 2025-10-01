@@ -2,7 +2,7 @@
 apiVersion: barmancloud.cnpg.io/v1
 kind: ObjectStore
 metadata:
-  name: __placeholder__
+  name: ${APP}
 spec:
   retentionPolicy: 10d
   configuration:

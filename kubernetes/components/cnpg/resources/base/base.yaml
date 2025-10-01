@@ -3,7 +3,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: __placeholder__-db
+  name: ${APP}-db
 spec:
   affinity:
     podAntiAffinityType: ${CNPG_AFFINITY_TYPE:=required}

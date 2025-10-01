@@ -3,7 +3,7 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: __placeholder__-volsync-storj-secret
+  name: ${APP}-volsync-storj-secret
   labels:
     dormammu.io/component: volsync
 spec:
@@ -14,7 +14,7 @@ spec:
     template:
       engineVersion: v2
       data:
-        RESTIC_REPOSITORY: "{{ .RESTIC_REPOSITORY }}/{{ .BUCKET }}/__placeholder__"
+        RESTIC_REPOSITORY: "{{ .RESTIC_REPOSITORY }}/{{ .BUCKET }}/${APP}"
         RESTIC_PASSWORD: "{{ .RESTIC_PASSWORD }}"
         AWS_ACCESS_KEY_ID: "{{ .AWS_ACCESS_KEY_ID }}"
         AWS_SECRET_ACCESS_KEY: "{{ .AWS_SECRET_ACCESS_KEY }}"
@@ -26,17 +26,17 @@ spec:
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:
-  name: __placeholder__-r2
+  name: ${APP}-r2
   labels:
     dormammu.io/component: volsync
 spec:
-  sourcePVC: __placeholder__
+  sourcePVC: ${APP}
   trigger:
     schedule: "${VOLSYNC_SCHEDULE:-30 0 * * 1}"
   restic:
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     pruneIntervalDays: 14
-    repository: __placeholder__-volsync-r2-secret
+    repository: ${APP}-volsync-r2-secret
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-openebs-hostpath}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-openebs-hostpath}"
     cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"]
@@ -53,7 +53,7 @@ spec:
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
 metadata:
-  name: __placeholder__-dst
+  name: ${APP}-dst
   labels:
     kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
     dormammu.io/component: volsync
@@ -61,7 +61,7 @@ spec:
   trigger:
     manual: restore-once
   restic:
-    repository: __placeholder__-volsync-r2-secret
+    repository: ${APP}-volsync-r2-secret
     copyMethod: Snapshot
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-openebs-hostpath}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:-openebs-hostpath}"

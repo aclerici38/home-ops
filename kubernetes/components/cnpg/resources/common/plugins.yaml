@@ -10,5 +10,5 @@ spec:
       enabled: true
       isWALArchiver: true
       parameters:
-        barmanObjectName: __placeholder__
-        serverName: __placeholder__-db
+        barmanObjectName: ${APP}
+        serverName: ${APP}-db
