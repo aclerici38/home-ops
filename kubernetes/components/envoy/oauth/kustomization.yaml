@@ -6,8 +6,8 @@ resources:
   - ./oauth.yaml
 replacements:
   - source:
-      kind: SecurityPolicy
-      fieldPath: metadata.labels.app\.kubernetes\.io/name
+      kind: HelmRelease
+      fieldPath: metadata.name
     targets:
       - select:
           group: gateway.envoyproxy.io
