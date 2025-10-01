@@ -16,7 +16,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/grafana/app
   components:
-    - ../../../components/namespace/privileged
+    - ../../../components/namespace
     - ../../../components/cnpg/overlay/no-backup
     - ../../../components/external-secret/common
   prune: true

@@ -16,7 +16,7 @@ spec:
     - name: versity
   path: ./kubernetes/apps/immich/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
     - ../../../components/cnpg/overlay/restore
     - ../../../components/external-secret/cluster
   prune: true
@@ -74,7 +74,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/immich/config
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
   prune: true
   sourceRef:
     kind: GitRepository
@@ -104,7 +104,7 @@ spec:
     - name: immich
   path: ./kubernetes/apps/immich/frame
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
     - ../../../components/external-secret/common
   prune: true
   sourceRef:

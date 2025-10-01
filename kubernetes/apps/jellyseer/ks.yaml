@@ -16,7 +16,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/jellyseer/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
     - ../../../components/cnpg/overlay/restore
     - ../../../components/volsync/versity
   prune: true

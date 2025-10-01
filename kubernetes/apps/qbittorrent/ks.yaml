@@ -14,7 +14,7 @@ spec:
   timeout: 3m
   path: ./kubernetes/apps/qbittorrent/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
     - ../../../components/external-secret/common
     - ../../../components/volsync/versity
   prune: true

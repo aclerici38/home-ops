@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/loki/app
   components:
-    - ../../../components/namespace/privileged
+    - ../../../components/namespace
   prune: true
   sourceRef:
     kind: GitRepository

@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/envoy/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
   prune: true
   sourceRef:
     kind: GitRepository
@@ -37,7 +37,7 @@ spec:
     - name: envoy
   path: ./kubernetes/apps/envoy/config
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
   prune: true
   sourceRef:
     kind: GitRepository

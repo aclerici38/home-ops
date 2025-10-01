@@ -14,7 +14,7 @@ spec:
     - name: versity
   path: ./kubernetes/apps/audiobookshelf/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
     - ../../../components/volsync/versity
   prune: true
   sourceRef:

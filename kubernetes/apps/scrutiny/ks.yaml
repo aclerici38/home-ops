@@ -14,7 +14,7 @@ spec:
     - name: volsync
   path: ./kubernetes/apps/scrutiny/app
   components:
-    - ../../../components/namespace/privileged
+    - ../../../components/namespace
     - ../../../components/volsync/versity
   prune: true
   sourceRef:

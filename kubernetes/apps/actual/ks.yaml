@@ -17,7 +17,7 @@ spec:
     - name: external-secrets-stores
   path: ./kubernetes/apps/actual/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
     - ../../../components/volsync/versity
     - ../../../components/external-secret/common
   prune: true

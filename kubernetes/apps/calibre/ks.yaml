@@ -15,7 +15,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/calibre/calibre-web-automated
   components:
-    - ../../../components/namespace/privileged
+    - ../../../components/namespace
     - ../../../components/volsync/versity
   prune: true
   sourceRef:
@@ -39,7 +39,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/calibre/calibre-downloader
   components:
-    - ../../../components/namespace/privileged
+    - ../../../components/namespace
     - ../../../components/envoy/oauth
     - ../../../components/external-secret/common
   prune: true

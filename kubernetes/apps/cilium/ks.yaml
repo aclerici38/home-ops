@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cilium/app
   components:
-    - ../../../components/namespace/privileged
+    - ../../../components/namespace
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository

@@ -14,7 +14,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/renamarr/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
   dependsOn:
     - name: external-secrets-stores
     - name: sonarr

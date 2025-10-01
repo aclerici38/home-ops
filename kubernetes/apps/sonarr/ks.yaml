@@ -15,7 +15,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/sonarr/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
     - ../../../components/cnpg/overlay/restore
     - ../../../components/external-secret/cluster
   prune: true

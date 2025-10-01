@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/snapshot-controller/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
   sourceRef:
     kind: GitRepository
     name: flux-system

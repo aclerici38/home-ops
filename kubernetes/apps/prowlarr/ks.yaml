@@ -14,7 +14,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/prowlarr/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
     - ../../../components/cnpg/overlay/restore
     - ../../../components/external-secret/common
   prune: true

@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/firefox/app
   components:
-    - ../../../components/namespace/privileged
+    - ../../../components/namespace
     - ../../../components/volsync/versity
   prune: true
   dependsOn:

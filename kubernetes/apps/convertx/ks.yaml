@@ -11,7 +11,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/convertx/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
     - ../../../components/external-secret/common
     - ../../../components/envoy/oauth
   prune: true

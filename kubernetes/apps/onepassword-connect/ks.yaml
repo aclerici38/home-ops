@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/onepassword-connect/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
     - ../../../components/external-secret/common
   sourceRef:
     kind: GitRepository

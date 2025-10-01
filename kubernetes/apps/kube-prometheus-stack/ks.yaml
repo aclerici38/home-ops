@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/kube-prometheus-stack/app
   components:
-    - ../../../components/namespace/privileged
+    - ../../../components/namespace
   sourceRef:
     kind: GitRepository
     name: flux-system

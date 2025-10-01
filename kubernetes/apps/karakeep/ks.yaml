@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/karakeep/app
   components:
-    - ../../../components/namespace/privileged
+    - ../../../components/namespace
     - ../../../components/volsync/versity
     - ../../../components/external-secret/common
   prune: true

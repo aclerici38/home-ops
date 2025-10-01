@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/csi-driver-nfs/ssd
   components:
-    - ../../../components/namespace/privileged
+    - ../../../components/namespace
   prune: true
   sourceRef:
     kind: GitRepository
@@ -35,7 +35,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/csi-driver-nfs/tank
   components:
-    - ../../../components/namespace/privileged
+    - ../../../components/namespace
   prune: true
   sourceRef:
     kind: GitRepository

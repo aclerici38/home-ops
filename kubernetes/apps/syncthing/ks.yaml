@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/syncthing/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
     - ../../../components/volsync/versity
   prune: true
   sourceRef:

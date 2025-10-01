@@ -14,7 +14,7 @@ spec:
     - name: external-secrets-stores
   path: ./kubernetes/apps/cloudnative-pg/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -39,7 +39,7 @@ spec:
     - name: cloudnative-pg
   path: ./kubernetes/apps/cloudnative-pg/plugins
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
   sourceRef:
     kind: GitRepository
     name: flux-system

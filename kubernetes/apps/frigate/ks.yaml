@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/frigate/app
   components:
-    - ../../../components/namespace/privileged
+    - ../../../components/namespace
     - ../../../components/external-secret/common
     - ../../../components/volsync/versity
     - ../../../components/envoy/oauth

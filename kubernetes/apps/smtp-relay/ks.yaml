@@ -14,7 +14,7 @@ spec:
   dependsOn:
     - name: external-secrets-stores
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
     - ../../../components/external-secret/common
   sourceRef:
     kind: GitRepository

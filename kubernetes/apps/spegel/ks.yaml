@@ -13,7 +13,7 @@ spec:
     - name: cert-manager
   path: ./kubernetes/apps/spegel/app
   components:
-    - ../../../components/namespace/privileged
+    - ../../../components/namespace
   sourceRef:
     kind: GitRepository
     name: flux-system

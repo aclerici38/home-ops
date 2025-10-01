@@ -15,7 +15,7 @@ spec:
     - name: versity
   path: ./kubernetes/apps/home-assistant/app
   components:
-    - ../../../components/namespace/common
+    - ../../../components/namespace
     - ../../../components/volsync/versity
   prune: true
   sourceRef:
