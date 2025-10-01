@@ -16,7 +16,7 @@ spec:
     size: ${CNPG_CAPACITY:=2Gi}
     storageClass: ${CNPG_STORAGECLASS:=openebs-hostpath}
   superuserSecret:
-    name: cloudnative-pg-secret
+    name: cloudnative-pg
   enableSuperuserAccess: true
   monitoring:
     enablePodMonitor: true
