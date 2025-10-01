@@ -81,8 +81,9 @@ spec:
                       name: RetryOnFailure
                   upgrade:
                     crds: CreateReplace
+                    cleanupOnFail: true
                     strategy:
-                      name: RetryOnFailure
+                      name: RemediateOnFailure
                     remediation:
                       retries: 1
                       remediateLastFailure: true
