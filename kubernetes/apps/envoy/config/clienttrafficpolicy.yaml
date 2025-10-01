@@ -11,6 +11,9 @@ spec:
   path:
     disableMergeSlashes: true
     escapedSlashesAction: KeepUnchanged
+  connection:
+    bufferLimit: 64Mi
+    maxAcceptPerSocketEvent: 0
   http3: {}
   targetSelectors:
     - group: gateway.networking.k8s.io

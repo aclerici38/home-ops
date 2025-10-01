@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-helm/crds/generated/gateway.envoyproxy.io_clienttrafficpolicies.yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-helm/crds/generated/gateway.envoyproxy.io_backendtrafficpolicies.yaml
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: BackendTrafficPolicy
 metadata:
@@ -8,9 +8,19 @@ spec:
   targetSelectors:
     - group: gateway.networking.k8s.io
       kind: Gateway
+  connection:
+    bufferLimit: 64Mi
   compression:
     - type: Brotli
+      brotli:
+        quality: 11
+        windowBits: 22
+        inputBlocks: 24
     - type: Gzip
+      gzip:
+        compressionLevel: BEST_COMPRESSION
+        memoryLevel: 9
+        windowBits: 15
   timeout:
     http:
       requestTimeout: 0s
