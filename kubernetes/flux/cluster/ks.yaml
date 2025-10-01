@@ -70,8 +70,7 @@ spec:
     - patch: |
         - op: add
           path: /spec/dependsOn/-
-          value:
-            name: external-secrets
+          value: external-secrets
         - op: add
           path: /spec/dependsOn/-
           value: external-secrets-stores
