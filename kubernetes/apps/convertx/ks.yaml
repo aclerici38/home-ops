@@ -13,7 +13,7 @@ spec:
   components:
     - ../../../components/namespace
     - ../../../components/external-secret/helm/common
-    - ../../../components/envoy/helm/oauth
+    - ../../../components/envoy/oauth/helm
   prune: true
   sourceRef:
     kind: GitRepository

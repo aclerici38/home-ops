@@ -15,7 +15,7 @@ spec:
     - ../../../components/namespace
     - ../../../components/external-secret/helm/common
     - ../../../components/volsync/helm/versity
-    - ../../../components/envoy/helm/oauth
+    - ../../../components/envoy/oauth/helm
   dependsOn:
     - name: external-secrets-stores
     - name: volsync

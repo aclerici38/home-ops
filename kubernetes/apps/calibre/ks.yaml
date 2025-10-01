@@ -40,7 +40,7 @@ spec:
   path: ./kubernetes/apps/calibre/calibre-downloader
   components:
     - ../../../components/namespace
-    - ../../../components/envoy/helm/oauth
+    - ../../../components/envoy/oauth/helm
     - ../../../components/external-secret/helm/common
   prune: true
   sourceRef:
