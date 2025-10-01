@@ -5,6 +5,8 @@ kind: Kustomization
 metadata:
   name: &app calibre-web-automated
   namespace: flux-system
+  labels:
+    components.dormammu/volsync: versity
 spec:
   targetNamespace: calibre
   dependsOn:
@@ -14,9 +16,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/calibre/calibre-web-automated
-  components:
-    - ../../../components/namespace
-    - ../../../components/volsync/helm/versity
   prune: true
   sourceRef:
     kind: GitRepository
@@ -32,16 +31,15 @@ kind: Kustomization
 metadata:
   name: &app calibre-downloader
   namespace: flux-system
+  labels:
+    components.dormammu/external-secret: normal
+    components.dormammu/oauth: true
 spec:
   targetNamespace: calibre
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/calibre/calibre-downloader
-  components:
-    - ../../../components/namespace
-    - ../../../components/envoy/oauth/helm
-    - ../../../components/external-secret/helm/common
   prune: true
   sourceRef:
     kind: GitRepository

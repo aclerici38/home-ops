@@ -11,8 +11,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/intel-device-plugins/operator
-  components:
-    - ../../../components/namespace
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -34,8 +32,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/intel-device-plugins/gpu
-  components:
-    - ../../../components/namespace
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -14,8 +14,6 @@ spec:
     - name: external-secrets-stores
     - name: cert-manager
   path: ./kubernetes/apps/external-dns/cloudflare
-  components:
-    - ../../../components/namespace
   prune: true
   sourceRef:
     kind: GitRepository

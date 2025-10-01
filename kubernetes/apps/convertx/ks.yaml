@@ -4,16 +4,15 @@ kind: Kustomization
 metadata:
   name: &app convertx
   namespace: flux-system
+  labels:
+    components.dormammu/external-secret: normal
+    components.dormammu/oauth: true
 spec:
   targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/convertx/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/external-secret/helm/common
-    - ../../../components/envoy/oauth/helm
   prune: true
   sourceRef:
     kind: GitRepository

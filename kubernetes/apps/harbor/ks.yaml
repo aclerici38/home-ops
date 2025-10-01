@@ -5,16 +5,15 @@ kind: Kustomization
 metadata:
   name: &app harbor
   namespace: flux-system
+  labels:
+    components.dormammu/external-secret: normal
+    components.dormammu/cnpg: restore
 spec:
   targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/harbor/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/cnpg/helm/restore
-    - ../../../components/external-secret/helm/common
   prune: true
   sourceRef:
     kind: GitRepository

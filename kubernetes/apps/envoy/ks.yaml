@@ -11,8 +11,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/envoy/app
-  components:
-    - ../../../components/namespace
   prune: true
   sourceRef:
     kind: GitRepository
@@ -36,8 +34,6 @@ spec:
   dependsOn:
     - name: envoy
   path: ./kubernetes/apps/envoy/config
-  components:
-    - ../../../components/namespace
   prune: true
   sourceRef:
     kind: GitRepository

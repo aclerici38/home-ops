@@ -55,41 +55,122 @@ spec:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
         labelSelector: "kustomize.dormammu/subfrom=exists"
-    # Add HelmRelease defaults to all Kustomizations
-    - patch: |-
-        apiVersion: kustomize.toolkit.fluxcd.io/v1
-        kind: Kustomization
-        metadata:
-          name: not-used
-        spec:
-          patches:
-            - patch: |-
-                apiVersion: helm.toolkit.fluxcd.io/v2
-                kind: HelmRelease
-                metadata:
-                  name: not-used
-                spec:
-                  maxHistory: 1
-                  driftDetection:
-                    mode: warn
-                  install:
-                    crds: CreateReplace
-                    remediation:
-                      retries: 1
-                      remediateLastFailure: true
-                    strategy:
-                      name: RetryOnFailure
-                  upgrade:
-                    crds: CreateReplace
-                    cleanupOnFail: true
-                    strategy:
-                      name: RemediateOnFailure
-                    remediation:
-                      retries: 1
-                      remediateLastFailure: true
-              target:
-                group: helm.toolkit.fluxcd.io
-                kind: HelmRelease
+
+    # Components via labels (fun)
+    - patch: |
+        - op: add
+          path: /spec/components
+          value: []
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
+
+    # Add namespace component by default
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../components/namespace
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "!components.dormammu/noTargetNs"
+
+    # Add hr defaults patch component by default
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../components/flux/helm
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "!components.dormammu/nohelm"
+
+    # Add cnpg restore helm component if labelled
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../components/cnpg/helm/restore
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/cnpg=restore,!components.dormammu/nohelm"
+
+    # Add cnpg init helm component if labelled
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../components/cnpg/helm/init
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/cnpg=init,!components.dormammu/nohelm"
+
+    # Add cnpg helm component if labelled
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../components/cnpg/helm/no-backup
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/cnpg=no-backup,!components.dormammu/nohelm"
+
+    # Add cnpg raw manifests component if labelled
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../components/cnpg/raw/restore
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/cnpg=restore,components.dormammu/nohelm"
+
+    # Add envoy oauth component if labelled
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../components/envoy/oauth/helm
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/oauth,!components.dormammu/nohelm"
+
+    # Add ESO component if labelled
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../components/external-secret/helm/normal
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/external-secret=normal,!components.dormammu/nohelm"
+
+    # Add ESO cluster secret component if labelled
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../components/external-secret/helm/cluster
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/external-secret=cluster,!components.dormammu/nohelm"
+
+    # Add volsync versity component if labelled
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../components/volsync/helm/versity
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/volsync=versity,!components.dormammu/nohelm"
+
+    # Add volsync remote component if labelled
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../components/volsync/helm/remote
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/volsync=remote,!components.dormammu/nohelm"

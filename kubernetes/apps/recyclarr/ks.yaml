@@ -13,8 +13,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/recyclarr/app
-  components:
-    - ../../../components/namespace
   dependsOn:
     - name: external-secrets-stores
     - name: sonarr

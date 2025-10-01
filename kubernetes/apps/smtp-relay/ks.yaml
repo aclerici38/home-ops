@@ -5,6 +5,8 @@ kind: Kustomization
 metadata:
   name: &app smtp-relay
   namespace: flux-system
+  labels:
+    components.dormammu/external-secret: normal
 spec:
   targetNamespace: *app
   commonMetadata:
@@ -13,9 +15,6 @@ spec:
   path: ./kubernetes/apps/smtp-relay/app
   dependsOn:
     - name: external-secrets-stores
-  components:
-    - ../../../components/namespace
-    - ../../../components/external-secret/helm/common
   sourceRef:
     kind: GitRepository
     name: flux-system

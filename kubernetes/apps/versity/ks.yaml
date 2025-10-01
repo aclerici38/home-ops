@@ -4,6 +4,8 @@ kind: Kustomization
 metadata:
   name: &app versity
   namespace: flux-system
+  labels:
+    components.dormammu/external-secret: normal
 spec:
   targetNamespace: *app
   commonMetadata:
@@ -14,9 +16,6 @@ spec:
     - name: volsync
     - name: openebs-zfs-volumes
   path: ./kubernetes/apps/versity/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/external-secret/helm/common
   prune: true
   sourceRef:
     kind: GitRepository

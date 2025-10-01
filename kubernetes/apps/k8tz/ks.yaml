@@ -12,8 +12,6 @@ spec:
   dependsOn:
     - name: cert-manager
   path: ./kubernetes/apps/k8tz/app
-  components:
-    - ../../../components/namespace
   sourceRef:
     kind: GitRepository
     name: flux-system

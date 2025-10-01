@@ -5,6 +5,9 @@ kind: Kustomization
 metadata:
   name: &app pocket-id
   namespace: flux-system
+  labels:
+    components.dormammu/external-secret: normal
+    components.dormammu/cnpg: restore
 spec:
   targetNamespace: *app
   dependsOn:
@@ -14,10 +17,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/pocket-id/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/cnpg/helm/restore
-    - ../../../components/external-secret/helm/common
   prune: true
   sourceRef:
     kind: GitRepository

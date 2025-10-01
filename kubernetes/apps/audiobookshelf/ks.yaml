@@ -4,6 +4,8 @@ kind: Kustomization
 metadata:
   name: &app audiobookshelf
   namespace: flux-system
+  labels:
+    components.dormammu/volsync: versity
 spec:
   targetNamespace: *app
   commonMetadata:
@@ -13,9 +15,6 @@ spec:
     - name: volsync
     - name: versity
   path: ./kubernetes/apps/audiobookshelf/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/volsync/helm/versity
   prune: true
   sourceRef:
     kind: GitRepository

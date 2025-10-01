@@ -13,8 +13,6 @@ spec:
   dependsOn:
     - name: snapshot-controller
   path: ./kubernetes/apps/volsync/app
-  components:
-    - ../../../components/namespace
   prune: true
   sourceRef:
     kind: GitRepository

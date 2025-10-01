@@ -4,6 +4,9 @@ kind: Kustomization
 metadata:
   name: &app opencloud
   namespace: flux-system
+  labels:
+    components.dormammu/volsync: versity
+    components.dormammu/external-secret: normal
 spec:
   targetNamespace: *app
   commonMetadata:
@@ -12,10 +15,6 @@ spec:
   dependsOn:
     - name: volsync
   path: ./kubernetes/apps/opencloud/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/volsync/helm/versity
-    - ../../../components/external-secret/helm/common
   prune: true
   sourceRef:
     kind: GitRepository

@@ -5,6 +5,9 @@ kind: Kustomization
 metadata:
   name: &app zigbee2mqtt
   namespace: flux-system
+  labels:
+    components.dormammu/volsync: versity
+    components.dormammu/external-secret: normal
 spec:
   targetNamespace: *app
   dependsOn:
@@ -15,10 +18,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/zigbee2mqtt/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/volsync/helm/versity
-    - ../../../components/external-secret/helm/common
   prune: true
   sourceRef:
     kind: GitRepository

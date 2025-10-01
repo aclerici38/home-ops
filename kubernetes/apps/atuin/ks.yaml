@@ -5,6 +5,8 @@ kind: Kustomization
 metadata:
   name: &app atuin
   namespace: flux-system
+  labels:
+    components.dormammu/cnpg: restore
 spec:
   targetNamespace: atuin
   dependsOn:
@@ -14,9 +16,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/atuin/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/cnpg/helm/restore
   prune: true
   sourceRef:
     kind: GitRepository

@@ -4,6 +4,8 @@ kind: Kustomization
 metadata:
   name: &app scrutiny
   namespace: flux-system
+  labels:
+    components.dormammu/volsync: versity
 spec:
   targetNamespace: *app
   commonMetadata:
@@ -13,9 +15,6 @@ spec:
     - name: versity
     - name: volsync
   path: ./kubernetes/apps/scrutiny/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/volsync/helm/versity
   prune: true
   sourceRef:
     kind: GitRepository

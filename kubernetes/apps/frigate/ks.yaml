@@ -5,17 +5,16 @@ kind: Kustomization
 metadata:
   name: &app frigate
   namespace: flux-system
+  labels:
+    components.dormammu/volsync: versity
+    components.dormammu/external-secret: normal
+    components.dormammu/oauth: true
 spec:
   targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/frigate/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/external-secret/helm/common
-    - ../../../components/volsync/helm/versity
-    - ../../../components/envoy/oauth/helm
   dependsOn:
     - name: external-secrets-stores
     - name: volsync

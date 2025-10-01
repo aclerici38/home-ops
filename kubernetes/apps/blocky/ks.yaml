@@ -5,11 +5,10 @@ kind: Kustomization
 metadata:
   name: &app blocky
   namespace: flux-system
+  labels:
+    components.dormammu/cnpg: no-backup
 spec:
   path: ./kubernetes/apps/blocky/app/
-  components:
-    - ../../../components/namespace
-    - ../../../components/cnpg/helm/no-backup
   prune: true
   wait: true
   dependsOn:

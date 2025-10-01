@@ -5,15 +5,14 @@ kind: Kustomization
 metadata:
   name: &app samba
   namespace: flux-system
+  labels:
+    components.dormammu/external-secret: normal
 spec:
   targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/samba/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/external-secret/helm/common
   dependsOn:
     - name: external-secrets-stores
   prune: true

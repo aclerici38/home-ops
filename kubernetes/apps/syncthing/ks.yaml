@@ -5,15 +5,14 @@ kind: Kustomization
 metadata:
   name: &app syncthing
   namespace: flux-system
+  labels:
+    components.dormammu/volsync: versity
 spec:
   targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/syncthing/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/volsync/helm/versity
   prune: true
   sourceRef:
     kind: GitRepository

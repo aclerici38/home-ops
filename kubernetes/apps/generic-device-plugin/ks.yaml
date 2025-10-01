@@ -11,8 +11,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: "./kubernetes/apps/generic-device-plugin/app"
-  components:
-    - ../../../components/namespace
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -5,6 +5,9 @@ kind: Kustomization
 metadata:
   name: &app sonarr
   namespace: flux-system
+  labels:
+    components.dormammu/cnpg: restore
+    components.dormammu/external-secret: normal
 spec:
   targetNamespace: *app
   dependsOn:
@@ -14,10 +17,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/sonarr/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/cnpg/helm/restore
-    - ../../../components/external-secret/helm/cluster
   prune: true
   sourceRef:
     kind: GitRepository
@@ -26,19 +25,3 @@ spec:
   wait: true
   interval: 30m
   timeout: 3m
-  patches:
-    - patch: |
-        apiVersion: external-secrets.io/v1
-        kind: ClusterExternalSecret
-        metadata:
-          name: patch
-        spec:
-          namespaceSelectors:
-            - matchLabels:
-                kubernetes.io/metadata.name: sonarr
-            - matchLabels:
-                kubernetes.io/metadata.name: flux-system
-      target:
-        kind: ClusterExternalSecret
-        labelSelector: dormammu.io/component=external-secret
-

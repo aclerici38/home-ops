@@ -11,8 +11,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/openebs-system/app
-  components:
-    - ../../../components/namespace
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -36,8 +34,6 @@ spec:
   dependsOn:
     - name: openebs
   path: ./kubernetes/apps/openebs-system/zfs-volumes
-  components:
-    - ../../../components/namespace
   prune: false
   sourceRef:
     kind: GitRepository

@@ -13,8 +13,6 @@ spec:
   interval: 30m
   timeout: 3m
   path: "./kubernetes/apps/multus/app"
-  components:
-    - ../../../components/namespace
   prune: true
   sourceRef:
     kind: GitRepository
@@ -36,8 +34,6 @@ spec:
   interval: 30m
   timeout: 3m
   path: "./kubernetes/apps/multus/networks"
-  components:
-    - ../../../components/namespace
   prune: true
   sourceRef:
     kind: GitRepository

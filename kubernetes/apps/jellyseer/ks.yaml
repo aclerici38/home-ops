@@ -5,6 +5,9 @@ kind: Kustomization
 metadata:
   name: &app jellyseer
   namespace: flux-system
+  labels:
+    components.dormammu/volsync: versity
+    components.dormammu/cnpg: restore
 spec:
   targetNamespace: *app
   dependsOn:
@@ -15,10 +18,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/jellyseer/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/cnpg/helm/restore
-    - ../../../components/volsync/helm/versity
   prune: true
   sourceRef:
     kind: GitRepository

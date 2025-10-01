@@ -5,6 +5,10 @@ kind: Kustomization
 metadata:
   name: &app mealie
   namespace: flux-system
+  labels:
+    components.dormammu/volsync: versity
+    components.dormammu/external-secret: normal
+    components.dormammu/cnpg: restore
 spec:
   targetNamespace: *app
   dependsOn:
@@ -16,11 +20,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/mealie/app
-  components:
-    - ../../../components/namespace
-    - ../../../components/cnpg/helm/restore
-    - ../../../components/external-secret/helm/common
-    - ../../../components/volsync/helm/versity
   prune: true
   sourceRef:
     kind: GitRepository
