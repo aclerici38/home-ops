@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      openspeedtest:
         strategy: RollingUpdate
         pod:
           hostUsers: false
@@ -62,14 +62,14 @@ spec:
                 memory: 256Mi
     service:
       main:
-        controller: ${APP}
+        controller: openspeedtest
         ports:
           http:
             port: &port 3000
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - openspeedtest.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy

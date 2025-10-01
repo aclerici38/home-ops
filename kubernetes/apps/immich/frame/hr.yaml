@@ -25,7 +25,7 @@ spec:
     - name: immich
   values:
     controllers:
-      ${APP}:
+      immich-frame:
         strategy: RollingUpdate
         pod:
           hostUsers: false
@@ -57,7 +57,7 @@ spec:
               ImageLocationFormat: City,State
             envFrom:
               - secretRef:
-                  name: ${APP}
+                  name: immich-frame
             resources:
               requests:
                 cpu: 10m
@@ -72,14 +72,14 @@ spec:
                   - ALL
     service:
       main:
-        controller: ${APP}
+        controller: immich-frame
         ports:
           http:
             port: &port 8080
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - immich-frame.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy

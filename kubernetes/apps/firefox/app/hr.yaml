@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      firefox:
         pod:
           securityContext:
             runAsUser: 0
@@ -67,14 +67,14 @@ spec:
                 type: HTTP
     service:
       main:
-        controller: ${APP}
+        controller: firefox
         ports:
           http:
             port: &port 3000
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - firefox.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy

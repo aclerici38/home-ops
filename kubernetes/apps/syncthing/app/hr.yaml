@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      syncthing:
         pod:
           securityContext:
             runAsNonRoot: true
@@ -59,7 +59,7 @@ spec:
               readiness: *probes
     service:
       main:
-        controller: ${APP}
+        controller: syncthing
         ports:
           http:
             port: *port
@@ -71,7 +71,7 @@ spec:
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - syncthing.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy
@@ -82,7 +82,7 @@ spec:
               port: *port
     persistence:
       config:
-        existingClaim: ${APP}
+        existingClaim: syncthing
         globalMounts:
           - path: /var/syncthing
       # files:

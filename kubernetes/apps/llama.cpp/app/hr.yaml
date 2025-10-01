@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      llama.cpp:
         pod:
           nodeSelector:
             kubernetes.io/hostname: bonds
@@ -62,7 +62,7 @@ spec:
                 memory: 16Gi
     service:
       main:
-        controller: ${APP}
+        controller: llama.cpp
         forceRename: llama-cpp
         ports:
           http:

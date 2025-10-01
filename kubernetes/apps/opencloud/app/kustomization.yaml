@@ -8,7 +8,7 @@ resources:
   - ./volsync.yaml
   - ./hr.yaml
 configMapGenerator:
-  - name: ${APP}-config
+  - name: opencloud-config
     files:
       - ./config/csp.yaml
       - ./config/proxy.yaml

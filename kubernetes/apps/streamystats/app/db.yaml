@@ -3,12 +3,12 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
-  name: ${APP}-db
+  name: streamystats-db
 spec:
   name: app
   owner: app
   cluster:
-    name: ${APP}-db
+    name: streamystats-db
   extensions:
     - ensure: present
       name: vector

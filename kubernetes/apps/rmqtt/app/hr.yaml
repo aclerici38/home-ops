@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      rmqtt:
         type: statefulset
         strategy: RollingUpdate
         replicas: 3
@@ -93,7 +93,7 @@ spec:
               capabilities: { drop: ["ALL"] }
     service:
       headless:
-        controller: ${APP}
+        controller: rmqtt
         clusterIP: None
         publishNotReadyAddresses: true
         ports:
@@ -102,7 +102,7 @@ spec:
           raft:
             port: 6003
       mqtt:
-        controller: ${APP}
+        controller: rmqtt
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: "10.38.55.6"
@@ -112,8 +112,8 @@ spec:
           http:
             port: *httpPort
     serviceMonitor:
-      ${APP}:
-        serviceName: ${APP}-mqtt
+      rmqtt:
+        serviceName: rmqtt-mqtt
         endpoints:
           - port: http
             scheme: http
@@ -137,7 +137,7 @@ spec:
     persistence:
       plugins:
         type: configMap
-        name: ${APP}
+        name: rmqtt
         globalMounts:
           - path: /app/rmqtt/rmqtt.toml
             subPath: rmqtt.toml

@@ -23,9 +23,6 @@ spec:
   wait: true
   interval: 30m
   timeout: 3m
-  postBuild:
-    substitute:
-      APP: *app
   # patches:
   #   - patch: |-
   #       apiVersion: postgresql.cnpg.io/v1

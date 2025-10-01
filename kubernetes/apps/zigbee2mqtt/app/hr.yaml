@@ -146,14 +146,14 @@ spec:
                 port: *port
     persistence:
       apt-data:
-        existingClaim: ${APP}
+        existingClaim: zigbee2mqtt
         advancedMounts:
           apt:
             main:
               - path: /data
                 subPath: apt
       house-data:
-        existingClaim: ${APP}
+        existingClaim: zigbee2mqtt
         advancedMounts:
           house:
             main:

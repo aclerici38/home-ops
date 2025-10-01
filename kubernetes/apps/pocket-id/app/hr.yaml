@@ -35,7 +35,7 @@ spec:
             seccompProfile: { type: RuntimeDefault }
         strategy: RollingUpdate
         containers:
-          ${APP}:
+          pocket-id:
             image:
               repository: ghcr.io/pocket-id/pocket-id
               tag: v1.11.2-distroless@sha256:0888ccc34d313cacef57d5e6004130cb1c63990d327cbad33621a7c5b665cdf4
@@ -57,11 +57,11 @@ spec:
               DB_CONNECTION_STRING:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: pocket-id-db-app
                     key: uri
             envFrom:
               - secretRef:
-                  name: ${APP}
+                  name: pocket-id
             probes:
               liveness: &probes
                 enabled: true

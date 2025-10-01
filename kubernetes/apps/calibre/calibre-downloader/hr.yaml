@@ -22,7 +22,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      calibre-downloader:
         strategy: RollingUpdate
         pod:
           securityContext:
@@ -74,7 +74,7 @@ spec:
               allowPrivilegeEscalation: false
     service:
       main:
-        controller: ${APP}
+        controller: calibre-downloader
         ports:
           http:
             port: *port

@@ -23,8 +23,8 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
-        forceRename: ${APP}
+      opencloud:
+        forceRename: opencloud
         strategy: RollingUpdate
         containers:
           main:
@@ -166,12 +166,12 @@ spec:
               username:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}
+                    name: opencloud
                     key: COLLABORA_ADMIN_USER
               password:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}
+                    name: opencloud
                     key: COLLABORA_ADMIN_PASS
             securityContext:
               <<: *sec
@@ -218,8 +218,8 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       opencloud:
-        forceRename: ${APP}
-        controller: ${APP}
+        forceRename: opencloud
+        controller: opencloud
         ports:
           http:
             port: *port
@@ -254,7 +254,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-            - identifier: ${APP}
+            - identifier: opencloud
               port: *port
       wopi:
         hostnames:
@@ -281,7 +281,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: ${APP}-config
+        name: opencloud-config
         advancedMounts:
           opencloud:
             main:
@@ -290,7 +290,7 @@ spec:
               - path: /etc/opencloud/proxy.yaml
                 subPath: proxy.yaml
       data:
-        existingClaim: ${APP}
+        existingClaim: opencloud
         advancedMounts:
           opencloud:
             main:

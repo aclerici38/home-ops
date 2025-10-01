@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      renamarr:
         type: cronjob
         cronjob:
           schedule: 0 3 * * *

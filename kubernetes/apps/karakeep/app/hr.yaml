@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      karakeep:
         containers:
           main:
             image:
@@ -143,7 +143,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       main:
-        controller: ${APP}
+        controller: karakeep
         ports:
           http:
             port: *port
@@ -160,7 +160,7 @@ spec:
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - karakeep.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: envoy
@@ -171,12 +171,12 @@ spec:
               port: *port
     persistence:
       data:
-        existingClaim: ${APP}
+        existingClaim: karakeep
         advancedMounts:
-          ${APP}:
+          karakeep:
             main:
               - path: /data
-                subPath: ${APP}
+                subPath: karakeep
           meilisearch:
             meilisearch:
               - path: /meili_data
@@ -186,6 +186,6 @@ spec:
       run:
         type: emptyDir
         advancedMounts:
-          ${APP}:
+          karakeep:
             main:
               - path: /run

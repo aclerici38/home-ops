@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      scrutiny:
         containers:
           main:
             image:
@@ -113,7 +113,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       main:
-        controller: ${APP}
+        controller: scrutiny
         ports:
           http:
             port: *port
@@ -125,7 +125,7 @@ spec:
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - scrutiny.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy
@@ -136,9 +136,9 @@ spec:
               port: *port
     persistence:
       config:
-        existingClaim: ${APP}
+        existingClaim: scrutiny
         advancedMounts:
-          ${APP}:
+          scrutiny:
             main:
               - path: /opt/scrutiny/config
                 subPath: scrutiny

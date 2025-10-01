@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      blocky:
         strategy: RollingUpdate
         replicas: 2
         rollingUpdate:
@@ -35,7 +35,7 @@ spec:
               requiredDuringSchedulingIgnoredDuringExecution:
                 - labelSelector:
                     matchLabels:
-                      app.kubernetes.io/instance: ${APP}
+                      app.kubernetes.io/instance: blocky
                   topologyKey: kubernetes.io/hostname
           hostUsers: false
           securityContext:
@@ -53,27 +53,27 @@ spec:
               PGHOST:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: blocky-db-app
                     key: host
               PGPORT:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: blocky-db-app
                     key: port
               PGUSER:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: blocky-db-app
                     key: username
               PGPASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: blocky-db-app
                     key: password
               PGDATABASE:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: blocky-db-app
                     key: dbname
             probes:
               readiness: &probes
@@ -101,7 +101,7 @@ spec:
                   - ALL
     service:
       apartment:
-        controller: ${APP}
+        controller: blocky
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: "${BLOCKY_LB_IP}"
@@ -114,7 +114,7 @@ spec:
           dns-tls:
             port: 853
       k8s:
-        controller: ${APP}
+        controller: blocky
         clusterIP: "${BLOCKY_CLUSTER_IP}"
         ports: *p
     persistence:

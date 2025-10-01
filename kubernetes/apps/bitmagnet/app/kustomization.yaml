@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - ./hr.yaml
 configMapGenerator:
-  - name: ${APP}-config
+  - name: bitmagnet-config
     files:
       - ./config/Corefile
 generatorOptions:

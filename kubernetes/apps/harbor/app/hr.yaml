@@ -26,22 +26,22 @@ spec:
       retries: 1
   valuesFrom:
     - kind: Secret
-      name: ${APP}-db-app
+      name: harbor-db-app
       valuesKey: username
       targetPath: database.external.username
       optional: false
     - kind: Secret
-      name: ${APP}-db-app
+      name: harbor-db-app
       valuesKey: password
       targetPath: database.external.password
       optional: false
     - kind: Secret
-      name: ${APP}-db-app
+      name: harbor-db-app
       valuesKey: host
       targetPath: database.external.host
       optional: false
     - kind: Secret
-      name: ${APP}-db-app
+      name: harbor-db-app
       valuesKey: dbname
       targetPath: database.external.coreDatabase
       optional: false
@@ -89,10 +89,10 @@ spec:
         cacheLayerDatabaseIndex: *idx
     database:
       type: external
-    existingSecretAdminPassword: ${APP}
+    existingSecretAdminPassword: harbor
     existingSecretAdminPasswordKey: password
     # The secret key used for encryption. Must be a string of 16 chars.
-    existingSecretSecretKey: "${APP}"
+    existingSecretSecretKey: "harbor"
     enableMigrateHelmHook: true
     portal:
       nodeSelector: &ns

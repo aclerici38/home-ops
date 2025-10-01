@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      versity:
         strategy: RollingUpdate
         pod:
           priorityClassName: system-node-critical
@@ -69,14 +69,14 @@ spec:
                 memory: 512Mi
     service:
       main:
-        controller: ${APP}
+        controller: versity
         ports:
           http:
             port: *port
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - versity.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy

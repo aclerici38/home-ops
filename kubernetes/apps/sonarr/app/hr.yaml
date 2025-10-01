@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      sonarr:
         pod:
           securityContext:
             runAsNonRoot: true
@@ -48,26 +48,26 @@ spec:
               SONARR__POSTGRES__HOST:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: sonarr-db-app
                     key: host
               SONARR__POSTGRES__USER:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: sonarr-db-app
                     key: username
               SONARR__POSTGRES__PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: sonarr-db-app
                     key: password
               SONARR__POSTGRES__MAINDB:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: sonarr-db-app
                     key: dbname
             envFrom:
               - secretRef:
-                  name: ${APP}
+                  name: sonarr
             probes:
               liveness: &probes
                 enabled: true
@@ -89,14 +89,14 @@ spec:
                 memory: 16Gi
     service:
       main:
-        controller: ${APP}
+        controller: sonarr
         ports:
           http:
             port: *port
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - sonarr.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy

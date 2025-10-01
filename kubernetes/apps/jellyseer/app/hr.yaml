@@ -43,22 +43,22 @@ spec:
               DB_HOST:
                   valueFrom:
                     secretKeyRef:
-                      name: ${APP}-db-app
+                      name: jellyseer-db-app
                       key: host
               DB_USER:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: jellyseer-db-app
                     key: username
               DB_PASS:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: jellyseer-db-app
                     key: password
               DB_NAME:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: jellyseer-db-app
                     key: dbname
             resources:
               requests:
@@ -90,7 +90,7 @@ spec:
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - jellyseer.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: envoy

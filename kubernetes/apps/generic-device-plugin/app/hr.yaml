@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      generic-device-plugin:
         type: daemonset
         strategy: RollingUpdate
         pod:

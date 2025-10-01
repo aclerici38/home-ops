@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      bitmagnet:
         strategy: RollingUpdate
         pod:
           securityContext:
@@ -95,22 +95,22 @@ spec:
               POSTGRES_HOST:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: bitmagnet-db-app
                     key: host
               POSTGRES_USER:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: bitmagnet-db-app
                     key: username
               POSTGRES_PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: bitmagnet-db-app
                     key: password
               POSTGRES_NAME:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: bitmagnet-db-app
                     key: dbname
             envFrom:
               - secretRef:
@@ -142,7 +142,7 @@ spec:
               readiness: *probes
     service:
       main:
-        controller: ${APP}
+        controller: bitmagnet
         ports:
           http:
             port: *port
@@ -155,7 +155,7 @@ spec:
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - bitmagnet.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy
@@ -167,9 +167,9 @@ spec:
     persistence:
       corefile:
         type: configMap
-        name: ${APP}-config
+        name: bitmagnet-config
         advancedMounts:
-          ${APP}:
+          bitmagnet:
             coredns:
               - path: /etc/coredns/Corefile
                 subPath: Corefile
@@ -177,6 +177,6 @@ spec:
       tmp:
         type: emptyDir
         advancedMounts:
-          ${APP}:
+          bitmagnet:
             gluetun:
               - path: /tmp/gluetun

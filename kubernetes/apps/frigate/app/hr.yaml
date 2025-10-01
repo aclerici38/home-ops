@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      frigate:
         pod:
           securityContext:
             runAsNonRoot: false
@@ -92,7 +92,7 @@ spec:
                 memory: 16Gi
     service:
       main:
-        controller: ${APP}
+        controller: frigate
         type: ClusterIP
         ports:
           http-auth:
@@ -111,7 +111,7 @@ spec:
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - frigate.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: envoy
@@ -122,7 +122,7 @@ spec:
               port: *http
     persistence:
       config:
-        existingClaim: ${APP}
+        existingClaim: frigate
       media:
         existingClaim: frigate-media
         globalMounts:

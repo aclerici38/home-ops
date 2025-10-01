@@ -44,7 +44,7 @@ spec:
               DB_URL:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: immich-db-app
                     key: uri
             probes:
               liveness: &probes
@@ -197,7 +197,7 @@ spec:
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - immich.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: envoy

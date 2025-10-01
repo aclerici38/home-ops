@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      echo-server:
         strategy: RollingUpdate
         pod:
           hostUsers: false
@@ -67,7 +67,7 @@ spec:
           http:
             port: *port
     serviceMonitor:
-      ${APP}:
+      echo-server:
         serviceName: echo-server
         endpoints:
           - port: http
@@ -78,7 +78,7 @@ spec:
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - echo-server.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: envoy

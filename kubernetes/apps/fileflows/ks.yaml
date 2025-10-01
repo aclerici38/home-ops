@@ -29,7 +29,6 @@ spec:
   timeout: 3m
   postBuild:
     substitute:
-      APP: *app
       VOLSYNC_CAPACITY: 10Gi
   # patches:
     # Fileflows doesn't allow db config via envs, set a static password to prevent rolling it on db restores

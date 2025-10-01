@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      calibre-web-automated:
         pod:
           securityContext:
             runAsUser: 0
@@ -71,7 +71,7 @@ spec:
               readiness: *probes
     service:
       main:
-        controller: ${APP}
+        controller: calibre-web-automated
         ports:
           http:
             port: *port
@@ -104,7 +104,7 @@ spec:
                 port: *port
     persistence:
       config:
-        existingClaim: ${APP}
+        existingClaim: calibre-web-automated
         globalMounts:
           - path: /config
       tmpfs:

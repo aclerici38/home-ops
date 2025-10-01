@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      omnitools:
         strategy: RollingUpdate
         pod:
           hostUsers: false
@@ -61,14 +61,14 @@ spec:
                 type: HTTP
     service:
       main:
-        controller: ${APP}
+        controller: omnitools
         ports:
           http:
             port: &port 80
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - omnitools.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy

@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      bazarr:
         pod:
           securityContext:
             runAsNonRoot: true
@@ -48,22 +48,22 @@ spec:
               POSTGRES_HOST:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: bazarr-db-app
                     key: host
               POSTGRES_USERNAME:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: bazarr-db-app
                     key: username
               POSTGRES_PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: bazarr-db-app
                     key: password
               POSTGRES_DATABASE:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: bazarr-db-app
                     key: dbname
             probes:
               liveness: &probes
@@ -90,14 +90,14 @@ spec:
                 memory: 4Gi
     service:
       main:
-        controller: ${APP}
+        controller: bazarr
         ports:
           http:
-            port: &port 6767
+            port: *port
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - bazarr.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy
@@ -108,7 +108,7 @@ spec:
               port: *port
     persistence:
       config:
-        existingClaim: ${APP}
+        existingClaim: bazarr
         globalMounts:
           - path: /config
       media:

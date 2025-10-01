@@ -28,7 +28,6 @@ spec:
   timeout: 3m
   postBuild:
     substitute:
-      APP: *app
       CNPG_CAPACITY: 500Gi
   patches:
     - patch: |-

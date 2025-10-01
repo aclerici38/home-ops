@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      atuin:
         strategy: RollingUpdate
         pod:
           hostUsers: false
@@ -51,7 +51,7 @@ spec:
               ATUIN_DB_URI:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: atuin-db-app
                     key: uri
             probes:
               liveness:
@@ -76,14 +76,14 @@ spec:
               capabilities: { drop: ["ALL"] }
     service:
       main:
-        controller: ${APP}
+        controller: atuin
         ports:
           http:
             port: *port
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - atuin.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy

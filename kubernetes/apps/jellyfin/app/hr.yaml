@@ -23,8 +23,8 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
-        forceRename: ${APP}
+      jellyfin:
+        forceRename: jellyfin
         pod:
           securityContext:
             supplementalGroups:
@@ -95,8 +95,8 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       main:
-        controller: ${APP}
-        forceRename: ${APP}
+        controller: jellyfin
+        forceRename: jellyfin
         ports:
           http:
             port: *port
@@ -107,13 +107,13 @@ spec:
             port: *mPort
     # serviceMonitor:
     #   main:
-    #     serviceName: ${APP}-main
+    #     serviceName: jellyfin-main
     #     endpoints:
     #       - port: http
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - jellyfin.${SECRET_DOMAIN}
         rules:
           - backendRefs:
             - identifier: main
@@ -126,9 +126,9 @@ spec:
             sectionName: https
     persistence:
       config:
-        existingClaim: ${APP}
+        existingClaim: jellyfin
         advancedMounts:
-          ${APP}:
+          jellyfin:
             main:
               - path: /config
           meilisearch:
@@ -138,7 +138,7 @@ spec:
       cache:
         existingClaim: jellyfin-cache
         advancedMounts:
-          ${APP}:
+          jellyfin:
             main:
               - path: /config/metadata
       media:
@@ -146,13 +146,13 @@ spec:
         server: ${NFS_IP}
         path: /media
         advancedMounts:
-          ${APP}:
+          jellyfin:
             main:
               - path: /allMedia
       tmpfs:
         type: emptyDir
         advancedMounts:
-          ${APP}:
+          jellyfin:
             main:
               - path: /cache
                 subPath: cache

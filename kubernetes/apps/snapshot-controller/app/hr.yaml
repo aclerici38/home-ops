@@ -9,7 +9,7 @@ spec:
   maxHistory: 1
   chartRef:
     kind: OCIRepository
-    name: ${APP}
+    name: snapshot-controller
     namespace: flux-system
   install:
     crds: CreateReplace

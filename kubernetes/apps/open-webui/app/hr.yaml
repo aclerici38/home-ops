@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      open-webui:
         strategy: RollingUpdate
         pod:
           hostUsers: false
@@ -65,7 +65,7 @@ spec:
               DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: open-webui-db-app
                     key: uri
             envFrom:
               - secretRef:
@@ -94,7 +94,7 @@ spec:
                 memory: 4Gi
     service:
       main:
-        controller: ${APP}
+        controller: open-webui
         ports:
           http:
             port: *port
@@ -112,7 +112,7 @@ spec:
               port: *port
     persistence:
       config:
-        existingClaim: ${APP}
+        existingClaim: open-webui
         globalMounts:
           - path: /app/backend/data
       tmp:

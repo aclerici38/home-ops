@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      samba:
         strategy: RollingUpdate
         pod:
           securityContext:
@@ -37,7 +37,7 @@ spec:
               tag: 4.21.4@sha256:75f5037770eab774b82f298268305af8a18a01a1daad679f8d2d17c54059c847
             envFrom:
               - secretRef:
-                  name: ${APP}
+                  name: samba
             resources:
               requests:
                 cpu: 500m
@@ -46,7 +46,7 @@ spec:
                 memory: 1Gi
     service:
       main:
-        controller: ${APP}
+        controller: samba
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: "${SAMBA_LB_IP}"
@@ -57,7 +57,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: ${APP}-config
+        name: samba-config
         globalMounts:
           - path: /data/config.yml
             subPath: config.yml

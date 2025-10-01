@@ -92,7 +92,7 @@ spec:
                 memory: 1024Mi
               limits:
                 memory: 6000Mi
-            securityContext: &secOps
+            securityContext:
               runAsUser: 1000
               runAsGroup: 1000
               runAsNonRoot: true
@@ -124,7 +124,7 @@ spec:
               - path: /config
       corefile:
         type: configMap
-        name: ${APP}-config
+        name: qbittorrent-config
         advancedMounts:
           qbit:
             coredns:

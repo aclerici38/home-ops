@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      searxng:
         pod:
           # hostUsers: false
           securityContext:
@@ -80,7 +80,7 @@ spec:
                   - ALL
     service:
       main:
-        controller: ${APP}
+        controller: searxng
         ports:
           http:
             port: *port

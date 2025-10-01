@@ -30,5 +30,4 @@ spec:
   timeout: 3m
   postBuild:
     substitute:
-      APP: *app
       VOLSYNC_CAPACITY: 25Gi

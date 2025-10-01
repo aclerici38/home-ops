@@ -117,7 +117,7 @@ spec:
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - fileflows.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy
@@ -137,7 +137,7 @@ spec:
         supplementalGroups: [44]
     persistence:
       config:
-        existingClaim: ${APP}
+        existingClaim: fileflows
         advancedMounts:
           server:
             main:

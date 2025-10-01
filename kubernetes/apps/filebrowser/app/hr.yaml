@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      filebrowser:
         pod:
           securityContext:
             runAsNonRoot: true
@@ -39,7 +39,7 @@ spec:
               tag: 0.8.7-beta@sha256:3c78dbf6bb937d4f8564f2ae67795ba342a44e53bdc318630b688a8dab9488f9
             envFrom:
               - secretRef:
-                  name: ${APP}
+                  name: filebrowser
             probes:
               liveness: &probes
                 enabled: true
@@ -61,14 +61,14 @@ spec:
                 memory: 1Gi
     service:
       main:
-        controller: ${APP}
+        controller: filebrowser
         ports:
           http:
             port: *port
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - filebrowser.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy

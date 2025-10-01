@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      convertx:
         strategy: RollingUpdate
         pod:
           hostUsers: false
@@ -64,7 +64,7 @@ spec:
                   - ALL
     service:
       main:
-        controller: ${APP}
+        controller: convertx
         ports:
           http:
             port: &port 3000

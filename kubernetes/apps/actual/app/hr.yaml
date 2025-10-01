@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      actual:
         pod:
           securityContext:
             runAsUser: 1000
@@ -73,14 +73,14 @@ spec:
               capabilities: { drop: ["ALL"] }
     service:
       main:
-        controller: ${APP}
+        controller: actual
         ports:
           http:
             port: *port
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - actual.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy
@@ -91,5 +91,5 @@ spec:
               port: *port
     persistence:
       data:
-        existingClaim: ${APP}
+        existingClaim: actual
 

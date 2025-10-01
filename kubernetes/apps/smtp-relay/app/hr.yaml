@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      smtp-relay:
         replicas: 2
         strategy: RollingUpdate
         pod:
@@ -66,7 +66,7 @@ spec:
               capabilities: { drop: ["ALL"] }
     service:
       main:
-        controller: ${APP}
+        controller: smtp-relay
         ports:
           http:
             port: *metricsPort
@@ -74,7 +74,7 @@ spec:
             port: *smtpPort
     serviceMonitor:
       app:
-        serviceName: ${APP}
+        serviceName: smtp-relay
         endpoints:
           - port: http
     persistence:

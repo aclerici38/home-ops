@@ -34,7 +34,7 @@ spec:
               DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: streamystats-db-app
                     key: uri
             securityContext: &sec
               allowPrivilegeEscalation: false
@@ -114,7 +114,7 @@ spec:
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - streamystats.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy

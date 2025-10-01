@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      home-assistant:
         pod:
           securityContext:
             runAsUser: 1000
@@ -61,7 +61,7 @@ spec:
               capabilities: {drop: [ALL]}
     service:
       main:
-        controller: ${APP}
+        controller: home-assistant
         ports:
           http:
             port: &port 8123
@@ -85,7 +85,7 @@ spec:
               port: *port
     persistence:
       config:
-        existingClaim: ${APP}
+        existingClaim: home-assistant
       hass-cache:
         existingClaim: hass-cache
         globalMounts:

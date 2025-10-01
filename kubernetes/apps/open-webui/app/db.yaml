@@ -2,12 +2,12 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
-  name: ${APP}
+  name: open-webui
 spec:
   name: app
   owner: app
   cluster:
-    name: ${APP}-db
+    name: open-webui-db
   extensions:
     - ensure: present
       name: vector

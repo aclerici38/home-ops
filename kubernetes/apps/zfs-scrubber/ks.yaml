@@ -21,7 +21,6 @@ spec:
   timeout: 3m
   postBuild:
     substitute:
-      APP: *app
       POOL: tank
       SCRUB_SCHEDULE: "0 3 1 * *"
 ---
@@ -47,6 +46,5 @@ spec:
   timeout: 3m
   postBuild:
     substitute:
-      APP: *app
       POOL: ssd
       SCRUB_SCHEDULE: 0 0 1,15 * *

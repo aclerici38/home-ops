@@ -9,7 +9,7 @@ spec:
   maxHistory: 1
   chartRef:
     kind: OCIRepository
-    name: ${APP}
+    name: k8tz
     namespace: flux-system
   install:
     crds: CreateReplace
@@ -22,7 +22,7 @@ spec:
     remediation:
       retries: 1
   values:
-    namespace: ${APP}
+    namespace: k8tz
     createNamespace: false
     replicaCount: 2
     timezone: ${TZ}

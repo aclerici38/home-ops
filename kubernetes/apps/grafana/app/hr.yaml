@@ -9,7 +9,7 @@ spec:
   maxHistory: 1
   chartRef:
     kind: OCIRepository
-    name: ${APP}
+    name: grafana
     namespace: flux-system
   install:
     crds: CreateReplace
@@ -35,19 +35,19 @@ spec:
     envValueFrom:
       PG_HOST:
         secretKeyRef:
-          name: ${APP}-db-app
+          name: grafana-db-app
           key: host
       PG_USER:
         secretKeyRef:
-          name: ${APP}-db-app
+          name: grafana-db-app
           key: user
       PG_PASS:
         secretKeyRef:
-          name: ${APP}-db-app
+          name: grafana-db-app
           key: password
       PG_DB:
         secretKeyRef:
-          name: ${APP}-db-app
+          name: grafana-db-app
           key: dbname
       BLOCKY_DB_USER:
         secretKeyRef:

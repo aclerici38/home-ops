@@ -23,15 +23,15 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      dnscrypt-proxy:
         pod:
           affinity:
             podAntiAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
                 - labelSelector:
                     matchLabels:
-                      app.kubernetes.io/controller: ${APP}
-                      app.kubernetes.io/instance: ${APP}
+                      app.kubernetes.io/controller: dnscrypt-proxy
+                      app.kubernetes.io/instance: dnscrypt-proxy
                   topologyKey: kubernetes.io/hostname
           hostUsers: false
           securityContext:
@@ -77,7 +77,7 @@ spec:
               liveness: *probes
     service:
       main:
-        controller: ${APP}
+        controller: dnscrypt-proxy
         ports:
           dns-tcp:
             targetPort: &targetPort 5053

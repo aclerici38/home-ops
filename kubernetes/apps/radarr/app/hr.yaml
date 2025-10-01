@@ -48,26 +48,26 @@ spec:
               RADARR__POSTGRES__HOST:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: radarr-db-app
                     key: host
               RADARR__POSTGRES__USER:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: radarr-db-app
                     key: username
               RADARR__POSTGRES__PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: radarr-db-app
                     key: password
               RADARR__POSTGRES__MAINDB:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: radarr-db-app
                     key: dbname
             envFrom:
               - secretRef:
-                  name: ${APP}
+                  name: radarr
             probes:
               liveness: &probes
                 enabled: true
@@ -89,14 +89,14 @@ spec:
                 memory: 4Gi
     service:
       main:
-        controller: ${APP}
+        controller: radarr
         ports:
           http:
             port: *port
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - radarr.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy

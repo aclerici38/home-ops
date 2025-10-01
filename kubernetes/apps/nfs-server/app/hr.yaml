@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      nfs-server:
         strategy: RollingUpdate
         pod:
           priorityClassName: system-node-critical

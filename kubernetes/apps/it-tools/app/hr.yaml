@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      it-tools:
         pod:
           hostUsers: false
           securityContext:
@@ -55,14 +55,14 @@ spec:
                 type: HTTP
     service:
       main:
-        controller: ${APP}
+        controller: it-tools
         ports:
           http:
             port: &port 8080
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - it-tools.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy

@@ -8,7 +8,7 @@ spec:
   maxHistory: 1
   chartRef:
     kind: OCIRepository
-    name: ${APP}
+    name: rook-ceph-cluster
     namespace: flux-system
   install:
     crds: CreateReplace
@@ -39,7 +39,7 @@ spec:
     cephClusterSpec:
       placement:
         all:
-          tolerations: &tol
+          tolerations:
             - key: "rpi"
               operator: "Equal"
               value: "true"
@@ -92,7 +92,7 @@ spec:
             devices:
               - name: "/dev/disk/by-id/nvme-eui.000000000000000100a075254e4190df"
     cephFileSystems:
-      - name: &cephFileSystemName ceph-filesystem
+      - name: ceph-filesystem
         spec:
           metadataPool:
             failureDomain: host

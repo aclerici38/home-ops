@@ -23,7 +23,7 @@ spec:
       retries: 1
   values:
     controllers:
-      ${APP}:
+      mealie:
         strategy: RollingUpdate
         pod:
           labels:
@@ -69,7 +69,7 @@ spec:
               POSTGRES_URL_OVERRIDE:
                 valueFrom:
                   secretKeyRef:
-                    name: ${APP}-db-app
+                    name: mealie-db-app
                     key: uri
 
               # SMTP
@@ -105,14 +105,14 @@ spec:
               readiness: *probes
     service:
       main:
-        controller: ${APP}
+        controller: mealie
         ports:
           http:
             port: *port
     route:
       main:
         hostnames:
-          - ${APP}.${SECRET_DOMAIN}
+          - mealie.${SECRET_DOMAIN}
         parentRefs:
           - name: external
             namespace: envoy
@@ -123,7 +123,7 @@ spec:
               port: *port
     persistence:
       data:
-        existingClaim: ${APP}
+        existingClaim: mealie
         globalMounts:
           - path: /app/data
             subPath: data

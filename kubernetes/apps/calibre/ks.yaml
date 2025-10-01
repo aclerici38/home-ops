@@ -25,9 +25,6 @@ spec:
   wait: true
   interval: 30m
   timeout: 3m
-  postBuild:
-    substitute:
-      APP: *app
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -53,9 +50,6 @@ spec:
   wait: true
   interval: 30m
   timeout: 3m
-  postBuild:
-    substitute:
-      APP: *app
   patches:
     - patch: |-
         apiVersion: gateway.envoyproxy.io/v1alpha1
