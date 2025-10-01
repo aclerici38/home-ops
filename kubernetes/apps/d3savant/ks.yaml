@@ -17,7 +17,7 @@ spec:
   path: ./kubernetes/apps/d3savant/backend
   components:
     - ../../../components/namespace
-    - ../../../components/cnpg/raw/init
+    - ../../../components/cnpg/raw/restore
   prune: true
   sourceRef:
     kind: GitRepository
