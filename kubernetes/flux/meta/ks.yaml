@@ -14,6 +14,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  dependsOn: []
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -30,3 +31,4 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  dependsOn: []
