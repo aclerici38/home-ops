@@ -16,7 +16,7 @@ spec:
   path: ./kubernetes/apps/streamystats/app
   components:
     - ../../../components/namespace
-    - ../../../components/cnpg/overlay/init
+    - ../../../components/cnpg/helm/init
   prune: true
   sourceRef:
     kind: GitRepository

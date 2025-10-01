@@ -14,8 +14,8 @@ spec:
   path: ./kubernetes/apps/opencloud/app
   components:
     - ../../../components/namespace
-    - ../../../components/volsync/versity
-    - ../../../components/external-secret/common
+    - ../../../components/volsync/helm/versity
+    - ../../../components/external-secret/helm/common
   prune: true
   sourceRef:
     kind: GitRepository

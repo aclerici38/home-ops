@@ -15,8 +15,8 @@ spec:
   path: ./kubernetes/apps/qbittorrent/app
   components:
     - ../../../components/namespace
-    - ../../../components/external-secret/common
-    - ../../../components/volsync/versity
+    - ../../../components/external-secret/helm/common
+    - ../../../components/volsync/helm/versity
   prune: true
   sourceRef:
     kind: GitRepository

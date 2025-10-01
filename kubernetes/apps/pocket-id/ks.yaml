@@ -16,8 +16,8 @@ spec:
   path: ./kubernetes/apps/pocket-id/app
   components:
     - ../../../components/namespace
-    - ../../../components/cnpg/overlay/restore
-    - ../../../components/external-secret/common
+    - ../../../components/cnpg/helm/restore
+    - ../../../components/external-secret/helm/common
   prune: true
   sourceRef:
     kind: GitRepository

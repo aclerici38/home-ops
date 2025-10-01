@@ -3,17 +3,16 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 resources:
-  - ./clusterexternalsecret.yaml
+  - ../../resources/external-secret.yaml
 replacements:
   - source:
       kind: HelmRelease
       fieldPath: metadata.name
     targets:
       - select:
-          kind: ClusterExternalSecret
+          kind: ExternalSecret
           labelSelector: dormammu.io/component=external-secret
         fieldPaths:
           - metadata.name
-          - spec.externalSecretName
-          - spec.externalSecretSpec.target.name
-          - spec.externalSecretSpec.dataFrom.0.extract.key
+          - spec.target.name
+          - spec.dataFrom.0.extract.key

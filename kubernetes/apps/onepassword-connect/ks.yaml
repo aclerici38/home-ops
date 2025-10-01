@@ -13,7 +13,7 @@ spec:
   path: ./kubernetes/apps/onepassword-connect/app
   components:
     - ../../../components/namespace
-    - ../../../components/external-secret/common
+    - ../../../components/external-secret/helm/common
   sourceRef:
     kind: GitRepository
     name: flux-system

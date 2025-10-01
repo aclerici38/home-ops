@@ -17,7 +17,7 @@ spec:
   path: ./kubernetes/apps/d3savant/postgres
   components:
     - ../../../components/namespace
-    - ../../../components/cnpg/overlay/restore
+    - ../../../components/cnpg/raw/restore
   prune: true
   sourceRef:
     kind: GitRepository

@@ -16,9 +16,9 @@ spec:
   path: ./kubernetes/apps/fileflows/app
   components:
     - ../../../components/namespace
-    - ../../../components/volsync/versity
-    - ../../../components/cnpg/overlay/restore
-    - ../../../components/external-secret/common
+    - ../../../components/volsync/helm/versity
+    - ../../../components/cnpg/helm/restore
+    - ../../../components/external-secret/helm/common
   prune: true
   sourceRef:
     kind: GitRepository

@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+resources:
+  - ../../resources/base
+components:
+  - ../../resources/common
+patches:
+  - path: ../../resources/common/recovery.yaml
+    target:
+      kind: Cluster
+replacements:
+  - path: ../../resources/base/replacements.yaml
+  - path: ../../resources/common/replacements.yaml
+  - source:
+      kind: HelmRelease
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: Cluster
+        fieldPaths:
+          - spec.bootstrap.recovery.source
+          - spec.externalClusters.0.name
+          - spec.externalClusters.0.plugin.parameters.barmanObjectName
+          - spec.externalClusters.0.plugin.parameters.serverName
+        options:
+          delimiter: "-"
+          index: 0

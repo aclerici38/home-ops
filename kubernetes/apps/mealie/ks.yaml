@@ -18,9 +18,9 @@ spec:
   path: ./kubernetes/apps/mealie/app
   components:
     - ../../../components/namespace
-    - ../../../components/cnpg/overlay/restore
-    - ../../../components/external-secret/common
-    - ../../../components/volsync/versity
+    - ../../../components/cnpg/helm/restore
+    - ../../../components/external-secret/helm/common
+    - ../../../components/volsync/helm/versity
   prune: true
   sourceRef:
     kind: GitRepository

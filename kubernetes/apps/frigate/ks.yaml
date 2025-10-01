@@ -13,9 +13,9 @@ spec:
   path: ./kubernetes/apps/frigate/app
   components:
     - ../../../components/namespace
-    - ../../../components/external-secret/common
-    - ../../../components/volsync/versity
-    - ../../../components/envoy/oauth
+    - ../../../components/external-secret/helm/common
+    - ../../../components/volsync/helm/versity
+    - ../../../components/envoy/helm/oauth
   dependsOn:
     - name: external-secrets-stores
     - name: volsync

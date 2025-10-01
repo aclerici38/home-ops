@@ -17,8 +17,8 @@ spec:
   path: ./kubernetes/apps/grafana/app
   components:
     - ../../../components/namespace
-    - ../../../components/cnpg/overlay/no-backup
-    - ../../../components/external-secret/common
+    - ../../../components/cnpg/helm/no-backup
+    - ../../../components/external-secret/helm/common
   prune: true
   sourceRef:
     kind: GitRepository

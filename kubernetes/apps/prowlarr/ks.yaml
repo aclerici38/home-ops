@@ -15,8 +15,8 @@ spec:
   path: ./kubernetes/apps/prowlarr/app
   components:
     - ../../../components/namespace
-    - ../../../components/cnpg/overlay/restore
-    - ../../../components/external-secret/common
+    - ../../../components/cnpg/helm/restore
+    - ../../../components/external-secret/helm/common
   prune: true
   sourceRef:
     kind: GitRepository

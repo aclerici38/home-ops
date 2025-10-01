@@ -16,7 +16,7 @@ spec:
   path: ./kubernetes/apps/home-assistant/app
   components:
     - ../../../components/namespace
-    - ../../../components/volsync/versity
+    - ../../../components/volsync/helm/versity
   prune: true
   sourceRef:
     kind: GitRepository

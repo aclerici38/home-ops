@@ -17,8 +17,8 @@ spec:
   path: ./kubernetes/apps/jellyseer/app
   components:
     - ../../../components/namespace
-    - ../../../components/cnpg/overlay/restore
-    - ../../../components/volsync/versity
+    - ../../../components/cnpg/helm/restore
+    - ../../../components/volsync/helm/versity
   prune: true
   sourceRef:
     kind: GitRepository

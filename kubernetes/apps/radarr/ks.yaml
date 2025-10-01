@@ -16,8 +16,8 @@ spec:
   path: ./kubernetes/apps/radarr/app
   components:
     - ../../../components/namespace
-    - ../../../components/cnpg/overlay/restore
-    - ../../../components/external-secret/cluster
+    - ../../../components/cnpg/helm/restore
+    - ../../../components/external-secret/helm/cluster
   prune: true
   sourceRef:
     kind: GitRepository

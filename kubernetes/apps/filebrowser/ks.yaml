@@ -13,8 +13,8 @@ spec:
   path: ./kubernetes/apps/filebrowser/app
   components:
     - ../../../components/namespace
-    - ../../../components/volsync/versity
-    - ../../../components/external-secret/common
+    - ../../../components/volsync/helm/versity
+    - ../../../components/external-secret/helm/common
   prune: true
   dependsOn:
     - name: volsync

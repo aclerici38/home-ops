@@ -12,8 +12,8 @@ spec:
   path: ./kubernetes/apps/convertx/app
   components:
     - ../../../components/namespace
-    - ../../../components/external-secret/common
-    - ../../../components/envoy/oauth
+    - ../../../components/external-secret/helm/common
+    - ../../../components/envoy/helm/oauth
   prune: true
   sourceRef:
     kind: GitRepository

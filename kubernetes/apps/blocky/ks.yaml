@@ -9,7 +9,7 @@ spec:
   path: ./kubernetes/apps/blocky/app/
   components:
     - ../../../components/namespace
-    - ../../../components/cnpg/overlay/no-backup
+    - ../../../components/cnpg/helm/no-backup
   prune: true
   wait: true
   dependsOn:
