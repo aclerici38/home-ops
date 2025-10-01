@@ -9,11 +9,11 @@ metadata:
 spec:
   bootstrap:
     recovery:
-      source: &db ${APP}-db
+      source: placeholder-db
   externalClusters:
-    - name: *db
+    - name: placeholder-db
       plugin:
         name: barman-cloud.cloudnative-pg.io
         parameters:
-          barmanObjectName: ${APP}-store
-          serverName: *db
+          barmanObjectName: placeholder-store
+          serverName: placeholder-db

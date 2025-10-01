@@ -3,13 +3,13 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
 metadata:
-  name: ${APP}
+  name: placeholder
 spec:
   schedule: ${CNPG_CRON:="0 0 4 * * *"}
   immediate: true
   backupOwnerReference: self
   cluster:
-    name: ${APP}-db
+    name: placeholder-db
   method: plugin
   pluginConfiguration:
     name: barman-cloud.cloudnative-pg.io

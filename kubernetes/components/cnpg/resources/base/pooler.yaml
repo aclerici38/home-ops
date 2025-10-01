@@ -1,10 +1,10 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Pooler
 metadata:
-  name: ${APP}-pooler-rw
+  name: placeholder-pooler-rw
 spec:
   cluster:
-    name: ${APP}-db
+    name: placeholder-db
   instances: ${CNPG_POOLER_REPLICAS:=2}
   type: rw
   template:
@@ -18,7 +18,7 @@ spec:
                   - key: cnpg.io/cluster
                     operator: In
                     values:
-                      - ${APP}-db
+                      - placeholder-db
                   - key: cnpg.io/podRole
                     operator: In
                     values:

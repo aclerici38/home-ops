@@ -1,0 +1,28 @@
+---
+- source:
+    kind: HelmRelease
+    fieldPath: metadata.name
+  targets:
+    - select:
+        kind: ObjectStore
+      fieldPaths:
+        - metadata.name
+
+    - select:
+        kind: Cluster
+      fieldPaths:
+        - spec.plugins.[name=barman-cloud.cloudnative-pg.io].parameters.barmanObjectName
+        - spec.plugins.[name=barman-cloud.cloudnative-pg.io].parameters.serverName
+      options:
+        delimiter: "-"
+        index: 0
+
+    - select:
+        kind: ScheduledBackup
+      fieldPaths:
+        - metadata.name
+        - spec.cluster.name
+      options:
+        delimiter: "-"
+        index: 0
+

@@ -1,0 +1,41 @@
+---
+- source:
+    kind: HelmRelease
+    fieldPath: metadata.name
+  targets:
+    - select:
+        kind: ExternalSecret
+      fieldPaths:
+        - metadata.name
+        - spec.target.template.data.host
+        - spec.target.template.data.pgpass
+        - spec.target.template.data.jdbc-uri
+      options:
+        delimiter: "-"
+        index: 0
+
+    - select:
+        kind: ExternalSecret
+      fieldPaths:
+        - spec.target.template.data.uri
+      options:
+        delimiter: "@"
+        index: 1
+
+    - select:
+        kind: Cluster
+      fieldPaths:
+        - metadata.name
+      options:
+        delimiter: "-"
+        index: 0
+
+    - select:
+        kind: Pooler
+      fieldPaths:
+        - metadata.name
+        - spec.cluster.name
+        - spec.template.spec.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution.0.labelSelector.matchExpressions.[key=cnpg.io/cluster].values.0
+      options:
+        delimiter: "-"
+        index: 0
