@@ -32,3 +32,5 @@ spec:
                 kubernetes.io/metadata.name: cert-manager
             - matchLabels:
                 kubernetes.io/metadata.name: external-dns
+      target:
+        kind: ClusterExternalSecret
