@@ -70,10 +70,12 @@ spec:
     - patch: |
         - op: add
           path: /spec/dependsOn/-
-          value: external-secrets
+          value:
+            name: external-secrets
         - op: add
           path: /spec/dependsOn/-
-          value: external-secrets-stores
+          value:
+            name: external-secrets-stores
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -82,7 +84,8 @@ spec:
     - patch: |
         - op: add
           path: /spec/dependsOn/-
-          value: versity
+          value:
+            name: versity
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -91,7 +94,8 @@ spec:
     - patch: |
         - op: add
           path: /spec/dependsOn/-
-          value: volsync
+          value:
+            name: volsync
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -100,7 +104,8 @@ spec:
     - patch: |
         - op: add
           path: /spec/dependsOn/-
-          value: cloudnative-pg
+          value:
+            name: cloudnative-pg
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -109,7 +114,8 @@ spec:
     - patch: |
         - op: add
           path: /spec/dependsOn/-
-          value: envoy
+          value:
+            name: envoy
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
