@@ -20,15 +20,19 @@ spec:
   patches:
     # Default: postBuild.subFrom does not exist
     - patch: |
-        - op: add
-          path: /spec/postBuild/substituteFrom
-          value:
-            - kind: Secret
-              name: cluster-secrets
-              optional: false
-            - kind: ConfigMap
-              name: cluster-settings
-              optional: false
+        apiVersion: kustomize.toolkit.fluxcd.io/v1
+        kind: Kustomization
+        metadata:
+          name: patch
+        spec:
+          postBuild:
+            substituteFrom:
+              - kind: ConfigMap
+                name: cluster-settings
+                optional: false
+              - kind: Secret
+                name: cluster-secrets
+                optional: false
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
