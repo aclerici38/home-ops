@@ -13,9 +13,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: cloudnative-pg
     - name: dragonfly-cluster
-    - name: external-secrets-stores
     - name: versity
   path: ./kubernetes/apps/immich/app
   prune: true
@@ -54,6 +52,11 @@ metadata:
     kustomize.dormammu/subfrom: exists
 spec:
   targetNamespace: immich
+  dependsOn:
+    - name: cloudnative-pg
+    - name: dragonfly-cluster
+    - name: external-secrets-stores
+    - name: versity
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

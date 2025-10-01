@@ -64,13 +64,6 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-    - patch: |
-        - op: add
-          path: /spec/dependsOn
-          value: []
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
 
     # Add dependsOn to ks based on whether it has the component or not
     # ESO: volsync, cnpg, ESO, oauth

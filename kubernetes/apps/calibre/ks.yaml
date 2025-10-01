@@ -9,9 +9,7 @@ metadata:
     components.dormammu/volsync: versity
 spec:
   targetNamespace: calibre
-  dependsOn:
-    - name: volsync
-    - name: versity
+  dependsOn: []
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -36,6 +34,7 @@ metadata:
     components.dormammu/oauth: true
 spec:
   targetNamespace: calibre
+  dependsOn: []
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
