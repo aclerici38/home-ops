@@ -67,7 +67,7 @@ spec:
 
     # Add dependsOn to ks based on whether it has the component or not
     # ESO: volsync, cnpg, ESO, oauth
-    - patch: |
+    - patch: &eso |
         - op: add
           path: /spec/dependsOn/-
           value:
@@ -79,9 +79,24 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/cnpg,components.dormammu/oauth,components.dormammu/external-secret,components.dormammu/volsync"
+        labelSelector: "components.dormammu/cnpg"
+    - patch: *eso
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/oauth"
+    - patch: *eso
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/external-secret"
+    - patch: *eso
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/volsync"
     # Versity: cnpg, volsync
-    - patch: |
+    - patch: &versity |
         - op: add
           path: /spec/dependsOn/-
           value:
@@ -89,7 +104,12 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/volsync,components.dormammu/cnpg"
+        labelSelector: "components.dormammu/volsync"
+    - patch: *versity
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/cnpg"
     # Volsync: volsync
     - patch: |
         - op: add
