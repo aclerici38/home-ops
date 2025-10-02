@@ -14,5 +14,4 @@ replacements:
           labelSelector: dormammu.io/component=external-secret
         fieldPaths:
           - metadata.name
-          - spec.target.name
           - spec.dataFrom.0.extract.key
