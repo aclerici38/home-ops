@@ -9,7 +9,9 @@ spec:
   maxHistory: 1
   dependsOn:
     - name: dnscrypt-proxy
+      namespace: dnscrypt-proxy
     - name: blocky
+      namespace: blocky
   chartRef:
     kind: OCIRepository
     name: coredns
