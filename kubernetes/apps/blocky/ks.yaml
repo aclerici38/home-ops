@@ -12,7 +12,6 @@ spec:
   prune: true
   wait: true
   dependsOn:
-    - name: cloudnative-pg
     - name: dragonfly-cluster
   sourceRef:
     kind: GitRepository

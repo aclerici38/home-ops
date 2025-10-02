@@ -13,11 +13,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: volsync
-      namespace: flux-system
-    - name: versity
-    - name: external-secrets-stores
+  dependsOn: []
   path: ./kubernetes/apps/actual/app
   prune: true
   sourceRef:

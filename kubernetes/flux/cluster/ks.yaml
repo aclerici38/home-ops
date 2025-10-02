@@ -104,7 +104,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/volsync"
+        labelSelector: "components.dormammu/volsync=versity"
     - patch: *versity
       target:
         group: kustomize.toolkit.fluxcd.io

@@ -10,10 +10,7 @@ metadata:
     components.dormammu/volsync: versity
 spec:
   targetNamespace: *app
-  dependsOn:
-    - name: cloudnative-pg
-    - name: versity
-    - name: volsync
+  dependsOn: []
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

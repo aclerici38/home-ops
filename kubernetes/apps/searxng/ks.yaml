@@ -10,7 +10,6 @@ metadata:
 spec:
   targetNamespace: *app
   dependsOn:
-    - name: external-secrets-stores
     - name: dragonfly-cluster
   commonMetadata:
     labels:

@@ -12,7 +12,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets-stores
     - name: volsync
     - name: openebs-zfs-volumes
   path: ./kubernetes/apps/versity/app

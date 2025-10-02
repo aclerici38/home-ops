@@ -11,11 +11,7 @@ metadata:
     components.dormammu/cnpg: restore
 spec:
   targetNamespace: *app
-  dependsOn:
-    - name: external-secrets-stores
-    - name: cloudnative-pg
-    - name: versity
-    - name: volsync
+  dependsOn: []
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

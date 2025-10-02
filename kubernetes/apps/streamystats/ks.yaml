@@ -9,9 +9,7 @@ metadata:
     components.dormammu/cnpg: init
 spec:
   targetNamespace: *app
-  dependsOn:
-    - name: cloudnative-pg
-    - name: external-secrets-stores
+  dependsOn: []
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

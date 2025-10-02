@@ -88,7 +88,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: external-secrets-stores
     - name: immich
   path: ./kubernetes/apps/immich/frame
   prune: true

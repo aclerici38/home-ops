@@ -10,10 +10,7 @@ metadata:
     components.dormammu/external-secret: normal
 spec:
   targetNamespace: *app
-  dependsOn:
-    - name: external-secrets-stores
-    - name: volsync
-      namespace: flux-system
+  dependsOn: []
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

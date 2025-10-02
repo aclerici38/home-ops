@@ -13,8 +13,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/smtp-relay/app
-  dependsOn:
-    - name: external-secrets-stores
+  dependsOn: []
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -9,9 +9,7 @@ metadata:
     components.dormammu/cnpg: restore
 spec:
   targetNamespace: atuin
-  dependsOn:
-    - name: cloudnative-pg
-    - name: versity
+  dependsOn: []
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

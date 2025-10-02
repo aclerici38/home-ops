@@ -11,9 +11,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: volsync
-    - name: versity
+  dependsOn: []
   path: ./kubernetes/apps/audiobookshelf/app
   prune: true
   sourceRef:

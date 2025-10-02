@@ -12,8 +12,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: external-secrets-stores
+  dependsOn: []
   path: ./kubernetes/apps/cloudnative-pg/app
   sourceRef:
     kind: GitRepository

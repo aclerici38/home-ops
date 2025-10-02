@@ -13,8 +13,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/samba/app
-  dependsOn:
-    - name: external-secrets-stores
+  dependsOn: []
   prune: true
   sourceRef:
     kind: GitRepository

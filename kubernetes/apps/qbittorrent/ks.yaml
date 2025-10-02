@@ -22,10 +22,7 @@ spec:
     name: flux-system
     namespace: flux-system
   wait: true
-  dependsOn:
-    - name: volsync
-    - name: external-secrets-stores
-    - name: versity
+  dependsOn: []
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
