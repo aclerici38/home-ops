@@ -1,25 +1,38 @@
-apiVersion: v1
-kind: ConfigMap
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/external-secrets.io/clusterexternalsecret_v1.json
+apiVersion: external-secrets.io/v1
+kind: ClusterExternalSecret
 metadata:
   name: cluster-settings
   namespace: flux-system
-data:
-  TZ: "America/Los_Angeles"
+spec:
+  namespaceSelectors:
+    - {} # all ns
+  refreshTime: "1h"
+  externalSecretSpec:
+    secretStoreRef:
+      kind: ClusterSecretStore
+      name: onepassword-connect
+    target:
+      template:
+        data:
+          TZ: "America/Los_Angeles"
+          # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
+          TALOS_VERSION: "v1.11.2"
+          # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+          KUBE_VERSION: "v1.34.1"
 
-  # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-  TALOS_VERSION: "v1.11.2"
+          COREDNS_CLUSTER_IP: "172.17.0.10"
+          BLOCKY_CLUSTER_IP: "172.17.0.11"
+          DNSCRYPT_CLUSTER_IP: "172.17.0.12"
+          K8S_GATEWAY_CLUSTER_IP: "172.17.0.13"
 
-  # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-  KUBE_VERSION: "v1.34.1"
-
-  COREDNS_CLUSTER_IP: "172.17.0.10"
-  BLOCKY_CLUSTER_IP: "172.17.0.11"
-  DNSCRYPT_CLUSTER_IP: "172.17.0.12"
-  K8S_GATEWAY_CLUSTER_IP: "172.17.0.13"
-
-  NFS_IP: "192.168.9.25"
-  SAMBA_LB_IP: "10.38.55.11"
-  BLOCKY_LB_IP: "10.38.55.25"
-  D3SAVANT_LB_IP: "10.38.55.38"
-  ENVOY_INTERNAL_LB_IP: "10.38.55.80"
-  ENVOY_EXTERNAL_LB_IP: "10.38.55.81"
+          NFS_IP: "192.168.9.25"
+          SAMBA_LB_IP: "10.38.55.11"
+          BLOCKY_LB_IP: "10.38.55.25"
+          D3SAVANT_LB_IP: "10.38.55.38"
+          ENVOY_INTERNAL_LB_IP: "10.38.55.80"
+          ENVOY_EXTERNAL_LB_IP: "10.38.55.81"
+    dataFrom:
+      - extract:
+          key: cluster-secrets

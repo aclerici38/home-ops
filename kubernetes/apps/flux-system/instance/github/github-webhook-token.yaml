@@ -8,12 +8,6 @@ spec:
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword-connect
-  target:
-    name: github-webhook-token
-    template:
-      engineVersion: v2
-      data:
-        token: "{{ .FLUX_GITHUB_DEPLOY_KEY }}"
   dataFrom:
     - extract:
         key: flux
