@@ -15,6 +15,7 @@ spec:
       name: onepassword-connect
     target:
       template:
+        mergePolicy: Merge
         data:
           TZ: "America/Los_Angeles"
           # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
