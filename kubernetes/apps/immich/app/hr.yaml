@@ -23,13 +23,13 @@ spec:
       server:
         strategy: RollingUpdate
         containers:
-          main: &container
+          main:
             image:
               repository: ghcr.io/immich-app/immich-server
               tag: v2.0.0@sha256:d81f4af6a622d0955e5b8e3927da32b3ec882466a7ee8a26906d9cccad4364ca
-            env: &env
+            env:
               IMMICH_LOG_LEVEL: log
-              IMMICH_WORKERS_INCLUDE: api
+              # IMMICH_WORKERS_INCLUDE: api
               REDIS_HOSTNAME: dragonfly-db.dragonfly.svc.cluster.local
               REDIS_DBINDEX: 2
               IMMICH_TELEMETRY_INCLUDE: all
@@ -62,40 +62,6 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-            resources:
-              requests:
-                cpu: 100m
-                memory: 200Mi
-              limits:
-                memory: 1Gi
-      microservices:
-        replicas: 2
-        strategy: RollingUpdate
-        rollingUpdate:
-          surge: 0
-          unavailable: 1
-        pod:
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchLabels:
-                      app.kubernetes.io/controller: microservices
-                      app.kubernetes.io/instance: immich
-                  topologyKey: kubernetes.io/hostname
-        containers:
-          main:
-            <<: *container
-            probes:
-              liveness:
-                enabled: true
-                type: TCP
-              readiness:
-                enabled: true
-                type: TCP
-            env:
-              <<: *env
-              IMMICH_WORKERS_INCLUDE: microservices
             resources:
               requests:
                 cpu: 100m
@@ -149,6 +115,14 @@ spec:
                   failureThreshold: 60
             securityContext: *contSec
     defaultPodOptions:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/controller: microservices
+                  app.kubernetes.io/instance: immich
+              topologyKey: kubernetes.io/hostname
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -166,11 +140,6 @@ spec:
             port: *port
           metrics-api:
             port: 8081
-      microservices:
-        controller: microservices
-        ports:
-          metrics-ms:
-            port: 8082
       ml:
         controller: machine-learning
         ports:
@@ -181,11 +150,6 @@ spec:
         serviceName: server
         endpoints:
           - port: metrics-api
-            scheme: http
-      microservices:
-        serviceName: microservices
-        endpoints:
-          - port: metrics-ms
             scheme: http
     route:
       main:
@@ -205,36 +169,29 @@ spec:
         server: ${NFS_IP}
         path: /immich
         advancedMounts:
-          microservices: &dmount
+          server:
             main:
               - path: /data
-          server: *dmount
       thumbnails:
         existingClaim: immich-thumbs
         advancedMounts:
-          microservices:
-            main: &tmount
-              - path: /data/thumbs
           server:
-            main: *tmount
+            main:
+              - path: /data/thumbs
       encoded-video:
         existingClaim: immich-encoded-video
         advancedMounts:
-          microservices:
-            main: &emount
-              - path: /data/encoded-video
           server:
-            main: *emount
+            main:
+              - path: /data/encoded-video
       config:
         type: configMap
         name: immich-config
         advancedMounts:
           server:
-            main: &mounts
+            main:
               - path: *config
                 subPath: config.yaml
-          microservices:
-            main: *mounts
       cache:
         existingClaim: immich-ml-cache
         advancedMounts:
