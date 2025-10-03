@@ -23,7 +23,6 @@ spec:
     controllers:
       opencloud:
         forceRename: opencloud
-        strategy: RollingUpdate
         containers:
           main:
             image: &img
