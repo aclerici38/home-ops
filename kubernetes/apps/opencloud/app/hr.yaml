@@ -47,7 +47,7 @@ spec:
               FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR: eu.opencloud.api.collaboration.CollaboraOnline
 
               PROXY_TLS: false
-              # PROXY_AUTOPROVISION_ACCOUNTS: true
+              PROXY_AUTOPROVISION_ACCOUNTS: true
               # PROXY_ROLE_ASSIGNMENT_DRIVER: oidc
               PROXY_ROLE_ASSIGNMENT_DRIVER: default # clients don't request proper claims to use oidc for group mapping yet
               # PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM: groups
@@ -84,6 +84,7 @@ spec:
               STORAGE_USERS_DRIVER: posix
               STORAGE_USERS_ID_CACHE_STORE: nats-js-kv
               STORAGE_USERS_POSIX_ROOT: &path /data
+              THUMBNAILS_FILESYSTEMSTORAGE_ROOT: /data/thumbs
 
               SEARCH_EXTRACTOR_TYPE: tika
               SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://opencloud-tika:9998
