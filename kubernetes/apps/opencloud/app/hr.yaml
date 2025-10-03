@@ -278,22 +278,11 @@ spec:
         name: opencloud-config
         advancedMounts:
           opencloud:
-            main: &paths
+            main:
               - path: *cspPath
                 subPath: csp.yaml
               - path: /etc/opencloud/proxy.yaml
                 subPath: proxy.yaml
-          wopi:
-            main: *paths
-      config:
-        type: emptyDir
-        advancedMounts:
-          opencloud:
-            main:
-              - path: /etc/opencloud
-          wopi:
-            main:
-              - path: /etc/opencloud
       data:
         existingClaim: opencloud
         advancedMounts:
@@ -301,12 +290,12 @@ spec:
             main:
               - path: /var/lib/opencloud
                 subPath: data
-              # - path: /etc/opencloud
-              #   subPath: config
-          # wopi:
-          #   main:
-          #     - path: /etc/opencloud
-          #       subPath: config
+              - path: /etc/opencloud
+                subPath: config
+          wopi:
+            main:
+              - path: /etc/opencloud
+                subPath: config
       files:
         existingClaim: files
         advancedMounts:
