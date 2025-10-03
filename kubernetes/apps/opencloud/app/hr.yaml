@@ -33,7 +33,7 @@ spec:
               - "-c"
               - "opencloud init || true; opencloud server"
             env:
-              OC_ADMIN_USER_ID: "" # admin from pocket id
+              OC_ADMIN_USER_ID: anthony
               OC_ENABLE_OCM: false
               OC_INSECURE: false
               OC_LOG_LEVEL: info
@@ -52,11 +52,9 @@ spec:
               # PROXY_ROLE_ASSIGNMENT_DRIVER: oidc
               PROXY_ROLE_ASSIGNMENT_DRIVER: default # clients don't request proper claims to use oidc for group mapping yet
               # PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM: groups
-              PROXY_USER_OIDC_CLAIM: preferred_username
-              # PROXY_AUTOPROVISION_CLAIM_USERNAME: sub
-              PROXY_USER_CS3_CLAIM: username
+              PROXY_USER_OIDC_CLAIM: sub
               WEB_OIDC_SCOPE: "openid profile email groups"
-              PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml\
+              PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml
               PROXY_OIDC_REWRITE_WELLKNOWN: true # mobile apps try to re-register via internal idp
               PROXY_HTTP_ADDR: 0.0.0.0:9200
 
