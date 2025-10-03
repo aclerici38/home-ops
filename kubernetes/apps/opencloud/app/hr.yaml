@@ -53,8 +53,6 @@ spec:
               PROXY_ROLE_ASSIGNMENT_DRIVER: default # clients don't request proper claims to use oidc for group mapping yet
               PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM: groups
               PROXY_USER_OIDC_CLAIM: sub
-              PROXY_AUTOPROVISION_CLAIM_USERNAME: preferred_username
-              PROXY_USER_CS3_CLAIM: preferred_username
               WEB_OIDC_SCOPE: "openid profile email groups"
               PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml\
               PROXY_OIDC_REWRITE_WELLKNOWN: true # mobile apps try to re-register via internal idp
