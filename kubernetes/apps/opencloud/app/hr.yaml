@@ -51,12 +51,11 @@ spec:
               PROXY_AUTOPROVISION_ACCOUNTS: true
               # PROXY_ROLE_ASSIGNMENT_DRIVER: oidc
               PROXY_ROLE_ASSIGNMENT_DRIVER: default # clients don't request proper claims to use oidc for group mapping yet
-              PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM: groups
+              # PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM: groups
               WEB_OIDC_SCOPE: "openid profile email groups"
               PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml
               PROXY_OIDC_REWRITE_WELLKNOWN: true # mobile apps try to re-register via internal idp
               PROXY_HTTP_ADDR: 0.0.0.0:9200
-              PROXY_USER_OIDC_CLAIM: sub
               PROXY_USER_CS3_CLAIM: preferred_username
 
               # For collaboration to connect
@@ -71,8 +70,6 @@ spec:
               OC_PERSISTENT_STORE_NODES: 127.0.0.1:9233
               OC_EVENTS_ENDPOINT: 127.0.0.1:9233
 
-              SETTINGS_SETUP_DEFAULT_ASSIGNMENTS: false
-
               WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.${SECRET_DOMAIN}/settings/apps
 
               NOTIFICATIONS_SMTP_HOST: smtp-relay.smtp-relay
@@ -83,6 +80,7 @@ spec:
               STORAGE_USERS_DRIVER: posix
               STORAGE_USERS_ID_CACHE_STORE: nats-js-kv
               STORAGE_USERS_POSIX_ROOT: &path /data
+              STORAGE_SYSTEM_DATA_SERVER_URL: 0.0.0.0:9216/data
 
               SEARCH_EXTRACTOR_TYPE: tika
               SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://opencloud-tika:9998
