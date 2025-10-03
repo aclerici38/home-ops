@@ -34,9 +34,7 @@ spec:
               - "-c"
               - "opencloud init || true; opencloud server"
             env:
-              OC_ENABLE_OCM: false
-              OC_INSECURE: true
-              OC_LOG_LEVEL: warn
+              OC_LOG_LEVEL: info
               OC_URL: &url https://cloud.${SECRET_DOMAIN}
               OC_OIDC_ISSUER: https://id.${SECRET_DOMAIN}
               OC_EXCLUDE_RUN_SERVICES: idp
@@ -49,14 +47,17 @@ spec:
 
               PROXY_TLS: false
               PROXY_AUTOPROVISION_ACCOUNTS: true
-              # PROXY_ROLE_ASSIGNMENT_DRIVER: oidc
-              PROXY_ROLE_ASSIGNMENT_DRIVER: default # clients don't request proper claims to use oidc for group mapping yet
+              PROXY_ROLE_ASSIGNMENT_DRIVER: oidc
+              # PROXY_ROLE_ASSIGNMENT_DRIVER: default # clients don't request proper claims to use oidc for group mapping yet
               # PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM: groups
               WEB_OIDC_SCOPE: "openid profile email groups"
               PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml
               PROXY_OIDC_REWRITE_WELLKNOWN: true # mobile apps try to re-register via internal idp
               PROXY_HTTP_ADDR: 0.0.0.0:9200
               PROXY_USER_CS3_CLAIM: preferred_username
+
+              GRAPH_USERNAME_MATCH: "none"
+              GRAPH_ASSIGN_DEFAULT_USER_ROLE: false
 
               # For collaboration to connect
               GATEWAY_GRPC_ADDR: 0.0.0.0:9142
@@ -69,6 +70,10 @@ spec:
               OC_CACHE_STORE_NODES: 127.0.0.1:9233
               OC_PERSISTENT_STORE_NODES: 127.0.0.1:9233
               OC_EVENTS_ENDPOINT: 127.0.0.1:9233
+              OC_ADMIN_USER_ID:
+                secretKeyRef:
+                  name: opencloud-secret
+                  key: OC_ADMIN_USER_ID
 
               WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.${SECRET_DOMAIN}/settings/apps
 
@@ -84,8 +89,6 @@ spec:
               SEARCH_EXTRACTOR_TYPE: tika
               SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://opencloud-tika:9998
               FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
-            envFrom:
-              - secret: opencloud
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
