@@ -33,34 +33,32 @@ spec:
               - "-c"
               - "opencloud init || true; opencloud server"
             env:
-              OC_LOG_LEVEL: info
-              OC_INSECURE: true
+              OC_ADMIN_USER_ID: "" # admin from pocket id
+              OC_ENABLE_OCM: false
+              OC_INSECURE: false
+              OC_LOG_LEVEL: warn
               OC_URL: &url https://cloud.${SECRET_DOMAIN}
               OC_OIDC_ISSUER: https://id.${SECRET_DOMAIN}
               OC_EXCLUDE_RUN_SERVICES: idp,ocm
-              OC_ENABLE_OCM: false
               OC_ADD_RUN_SERVICES: notifications
               OC_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD: true
               OC_OIDC_CLIENT_ID: opencloud-web
-              OC_ADMIN_USER_ID: ""
 
               FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR: eu.opencloud.api.collaboration.CollaboraOnline
+              GRAPH_AVAILABLE_ROLES: "b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5,a8d5fe5e-96e3-418d-825b-534dbdf22b99,fb6c3e19-e378-47e5-b277-9732f9de6e21,58c63c02-1d89-4572-916a-870abc5a1b7d,2d00ce52-1fc2-4dbc-8b95-a73b73395f5a,1c996275-f1c9-4e71-abdf-a42f6495e960,312c0871-5ef7-4b3a-85b6-0e4074c64049,aa97fe03-7980-45ac-9e50-b325749fd7e6"
 
               PROXY_TLS: false
               PROXY_AUTOPROVISION_ACCOUNTS: true
               # PROXY_ROLE_ASSIGNMENT_DRIVER: oidc
               PROXY_ROLE_ASSIGNMENT_DRIVER: default # clients don't request proper claims to use oidc for group mapping yet
               # PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM: groups
+              PROXY_USER_OIDC_CLAIM: sub
+              # PROXY_AUTOPROVISION_CLAIM_USERNAME: sub
+              PROXY_USER_CS3_CLAIM: username
               WEB_OIDC_SCOPE: "openid profile email groups"
-              PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml
+              PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml\
               PROXY_OIDC_REWRITE_WELLKNOWN: true # mobile apps try to re-register via internal idp
               PROXY_HTTP_ADDR: 0.0.0.0:9200
-              PROXY_USER_OIDC_CLAIM: sub
-              PROXY_USER_CS3_CLAIM: username
-
-              GRAPH_USERNAME_MATCH: "none"
-              GRAPH_ASSIGN_DEFAULT_USER_ROLE: false
-              SETTINGS_SETUP_DEFAULT_ASSIGNMENTS: false
 
               # For collaboration to connect
               GATEWAY_GRPC_ADDR: 0.0.0.0:9142
@@ -73,6 +71,11 @@ spec:
               OC_CACHE_STORE_NODES: 127.0.0.1:9233
               OC_PERSISTENT_STORE_NODES: 127.0.0.1:9233
               OC_EVENTS_ENDPOINT: 127.0.0.1:9233
+
+              SETTINGS_SETUP_DEFAULT_ASSIGNMENTS: false
+
+              GRAPH_ASSIGN_DEFAULT_USER_ROLE: false
+              GRAPH_USERNAME_MATCH: "none"
 
               WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.${SECRET_DOMAIN}/settings/apps
 
@@ -89,8 +92,6 @@ spec:
               SEARCH_EXTRACTOR_TYPE: tika
               SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://opencloud-tika:9998
               FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
-            envFrom:
-              - secret: opencloud
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -135,8 +136,6 @@ spec:
               OC_CACHE_STORE: nats-js-kv
               MICRO_REGISTRY: nats-js-kv
               OC_URL: *url
-            envFrom:
-              - secret: opencloud
             securityContext: *sec
       collabora:
         strategy: RollingUpdate
@@ -278,7 +277,7 @@ spec:
             - identifier: collabora
               port: 9980
     persistence:
-      config-files:
+      config:
         type: configMap
         name: opencloud-config
         advancedMounts:
