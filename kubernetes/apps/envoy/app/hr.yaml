@@ -20,6 +20,8 @@ spec:
     remediation:
       retries: 1
   values:
+    global:
+      imageRegistry: mirror.gcr.io
     deployment:
       replicas: 2
     config:
