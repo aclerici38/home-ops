@@ -284,8 +284,8 @@ spec:
             main:
               - path: *cspPath
                 subPath: csp.yaml
-              - path: /etc/opencloud/proxy.yaml
-                subPath: proxy.yaml
+              # - path: /etc/opencloud/proxy.yaml
+              #   subPath: proxy.yaml
       data:
         existingClaim: opencloud
         advancedMounts:
