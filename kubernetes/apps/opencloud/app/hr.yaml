@@ -34,7 +34,6 @@ spec:
               - "-c"
               - "opencloud init || true; opencloud server"
             env:
-              OC_ADMIN_USER_ID: "" # admin from pocket id
               OC_ENABLE_OCM: false
               OC_INSECURE: false
               OC_LOG_LEVEL: warn
@@ -92,6 +91,8 @@ spec:
               SEARCH_EXTRACTOR_TYPE: tika
               SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://opencloud-tika:9998
               FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
+            envFrom:
+              - secret: opencloud-secret
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
