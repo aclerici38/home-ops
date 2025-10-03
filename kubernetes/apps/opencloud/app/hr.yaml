@@ -33,7 +33,8 @@ spec:
               - "-c"
               - "opencloud init || true; opencloud server"
             env:
-              OC_LOG_LEVEL: info
+              OC_LOG_LEVEL: warn
+              OC_INSECURE: true
               OC_URL: &url https://cloud.${SECRET_DOMAIN}
               OC_OIDC_ISSUER: https://id.${SECRET_DOMAIN}
               OC_EXCLUDE_RUN_SERVICES: idp
@@ -69,10 +70,6 @@ spec:
               OC_CACHE_STORE_NODES: 127.0.0.1:9233
               OC_PERSISTENT_STORE_NODES: 127.0.0.1:9233
               OC_EVENTS_ENDPOINT: 127.0.0.1:9233
-              OC_ADMIN_USER_ID:
-                secretKeyRef:
-                  name: opencloud
-                  key: OC_ADMIN_USER_ID
 
               WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.${SECRET_DOMAIN}/settings/apps
 
@@ -88,6 +85,8 @@ spec:
               SEARCH_EXTRACTOR_TYPE: tika
               SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://opencloud-tika:9998
               FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
+            envFrom:
+              - secret: opencloud
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -132,6 +131,8 @@ spec:
               OC_CACHE_STORE: nats-js-kv
               MICRO_REGISTRY: nats-js-kv
               OC_URL: *url
+            envFrom:
+              - secret: opencloud
             securityContext: *sec
       collabora:
         strategy: RollingUpdate
@@ -273,16 +274,27 @@ spec:
             - identifier: collabora
               port: 9980
     persistence:
-      config:
+      config-files:
         type: configMap
         name: opencloud-config
         advancedMounts:
           opencloud:
-            main:
+            main: &paths
               - path: *cspPath
                 subPath: csp.yaml
               - path: /etc/opencloud/proxy.yaml
                 subPath: proxy.yaml
+          wopi:
+            main: *paths
+      config:
+        type: emptyDir
+        advancedMounts:
+          opencloud:
+            main:
+              - path: /etc/opencloud
+          wopi:
+            main:
+              - path: /etc/opencloud
       data:
         existingClaim: opencloud
         advancedMounts:
@@ -290,12 +302,12 @@ spec:
             main:
               - path: /var/lib/opencloud
                 subPath: data
-              - path: /etc/opencloud
-                subPath: config
-          wopi:
-            main:
-              - path: /etc/opencloud
-                subPath: config
+              # - path: /etc/opencloud
+              #   subPath: config
+          # wopi:
+          #   main:
+          #     - path: /etc/opencloud
+          #       subPath: config
       files:
         existingClaim: files
         advancedMounts:
