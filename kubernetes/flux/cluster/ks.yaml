@@ -221,6 +221,14 @@ spec:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
         labelSelector: "components.dormammu/external-secret=cluster,!components.dormammu/nohelm"
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../components/external-secret/postBuild/cluster
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/external-secret=cluster,components.dormammu/nohelm"
 
     # Add volsync versity component if labelled
     - patch: |
