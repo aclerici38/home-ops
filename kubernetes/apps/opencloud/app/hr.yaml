@@ -56,7 +56,6 @@ spec:
               PROXY_OIDC_REWRITE_WELLKNOWN: true # mobile apps try to re-register via internal idp
               PROXY_HTTP_ADDR: 0.0.0.0:9200
               PROXY_USER_OIDC_CLAIM: sub
-              PROXY_AUTOPROVISION_CLAIM_USERNAME: sub
               PROXY_USER_CS3_CLAIM: username
 
               GRAPH_USERNAME_MATCH: "none"
