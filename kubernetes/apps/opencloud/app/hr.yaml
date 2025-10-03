@@ -42,6 +42,7 @@ spec:
               OC_ADD_RUN_SERVICES: notifications
               OC_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD: true
               OC_OIDC_CLIENT_ID: opencloud-web
+              OC_ADMIN_USER_ID: ""
 
               FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR: eu.opencloud.api.collaboration.CollaboraOnline
 
@@ -56,7 +57,7 @@ spec:
               PROXY_HTTP_ADDR: 0.0.0.0:9200
               PROXY_USER_OIDC_CLAIM: sub
               PROXY_AUTOPROVISION_CLAIM_USERNAME: sub
-              PROXY_USER_CS3_CLAIM: preferred_username
+              PROXY_USER_CS3_CLAIM: username
 
               GRAPH_USERNAME_MATCH: "none"
               GRAPH_ASSIGN_DEFAULT_USER_ROLE: false
