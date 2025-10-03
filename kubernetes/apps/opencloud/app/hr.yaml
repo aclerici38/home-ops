@@ -35,7 +35,7 @@ spec:
               - "opencloud init || true; opencloud server"
             env:
               OC_ENABLE_OCM: false
-              OC_INSECURE: false
+              OC_INSECURE: true
               OC_LOG_LEVEL: warn
               OC_URL: &url https://cloud.${SECRET_DOMAIN}
               OC_OIDC_ISSUER: https://id.${SECRET_DOMAIN}
@@ -54,7 +54,7 @@ spec:
               PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM: groups
               PROXY_USER_OIDC_CLAIM: sub
               WEB_OIDC_SCOPE: "openid profile email groups"
-              PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml\
+              PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml
               PROXY_OIDC_REWRITE_WELLKNOWN: true # mobile apps try to re-register via internal idp
               PROXY_HTTP_ADDR: 0.0.0.0:9200
 
@@ -71,9 +71,6 @@ spec:
               OC_EVENTS_ENDPOINT: 127.0.0.1:9233
 
               SETTINGS_SETUP_DEFAULT_ASSIGNMENTS: false
-
-              GRAPH_ASSIGN_DEFAULT_USER_ROLE: false
-              GRAPH_USERNAME_MATCH: "none"
 
               WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.${SECRET_DOMAIN}/settings/apps
 
