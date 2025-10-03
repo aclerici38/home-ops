@@ -20,7 +20,7 @@ spec:
     remediation:
       retries: 1
   values:
-    namespaceOverride: "{{ .Release.Namespace }}"
+    namespaceOverride: cloudnative-pg
     image:
       registry: ghcr.io
       repository: cloudnative-pg/plugin-barman-cloud
