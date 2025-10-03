@@ -72,7 +72,7 @@ spec:
               OC_EVENTS_ENDPOINT: 127.0.0.1:9233
               OC_ADMIN_USER_ID:
                 secretKeyRef:
-                  name: opencloud-secret
+                  name: opencloud
                   key: OC_ADMIN_USER_ID
 
               WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.${SECRET_DOMAIN}/settings/apps
