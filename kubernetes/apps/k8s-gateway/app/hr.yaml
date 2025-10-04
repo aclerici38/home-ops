@@ -40,7 +40,7 @@ spec:
       - name: prometheus
         parameters: 0.0.0.0:9153
       - name: forward
-        parameters: . ${DNSCRYPT_CLUSTER_IP}
+        parameters: . /etc/resolv.conf
     service:
       type: ClusterIP
       clusterIP: ${K8S_GATEWAY_CLUSTER_IP}
