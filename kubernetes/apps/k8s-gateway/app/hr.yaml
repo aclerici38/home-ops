@@ -39,6 +39,8 @@ spec:
       - name: ready
       - name: prometheus
         parameters: 0.0.0.0:9153
+      - name: forward
+        parameters: . 1.1.1.1
     service:
       type: ClusterIP
       clusterIP: ${K8S_GATEWAY_CLUSTER_IP}
