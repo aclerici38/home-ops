@@ -37,7 +37,6 @@ conditional:
     cluster.local: ${COREDNS_CLUSTER_IP}
     16.172.in-addr.arpa: ${COREDNS_CLUSTER_IP}
 
-# Lookup goes to k8s-gateway, which conditionally sends to correct dhcp server
 clientLookup:
   upstream: 127.0.0.1
   clients:
@@ -47,7 +46,10 @@ clientLookup:
 upstreams:
   groups:
     default:
-      - ${DNSCRYPT_CLUSTER_IP}:53
+      - https://cloudflare-dns.com/dns-query
+      - https://dns.google/dns-query
+      - https://dns.quad9.net/dns-query
+      - https://dns.pub/dns-query
 
 blocking:
   denylists:
