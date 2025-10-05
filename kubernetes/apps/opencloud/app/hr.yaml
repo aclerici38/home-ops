@@ -327,3 +327,12 @@ spec:
                 subPath: cache
               - path: /opt/cool/child-roots
                 subPath: roots
+      # Web extensions
+      unzip:
+        type: image
+        image: docker.io/opencloudeu/web-extensions:unzip-1.0.3@sha256:3cd4ffdc93ff893f7f1c75c2e63c059a6da62720a394bd9ba33719236e6579b8
+        advancedMounts:
+          opencloud:
+            main:
+              - path: /var/lib/opencloud/web/assets/apps/unzip
+                subPath: usr/share/nginx/html/unzip
