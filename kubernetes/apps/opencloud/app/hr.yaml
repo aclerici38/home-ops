@@ -57,6 +57,8 @@ spec:
               PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml
               PROXY_OIDC_REWRITE_WELLKNOWN: true # mobile apps try to re-register via internal idp
               PROXY_HTTP_ADDR: 0.0.0.0:9200
+              # metrics
+              PROXY_DEBUG_ADDR: 0.0.0.0:9205
 
               # For collaboration to connect
               GATEWAY_GRPC_ADDR: 0.0.0.0:9142
@@ -223,6 +225,8 @@ spec:
             port: 9233
           grpc:
             port: 9142
+          debug:
+            port: 9205
       tika:
         controller: tika
         ports:
@@ -240,6 +244,11 @@ spec:
         ports:
           http:
             port: 9980
+    serviceMonitor:
+      opencloud:
+        serviceName: opencloud
+        endpoints:
+          - port: debug
     route:
       main:
         hostnames:
