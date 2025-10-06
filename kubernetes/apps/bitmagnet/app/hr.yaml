@@ -24,6 +24,10 @@ spec:
       bitmagnet:
         strategy: RollingUpdate
         pod:
+          dnsPolicy: None
+          dnsConfig:
+            nameservers:
+              - 127.0.0.1
           securityContext:
             fsGroup: 1000
             seccompProfile: { type: RuntimeDefault }
@@ -36,6 +40,12 @@ spec:
             args:
               - -p
               - '53'
+              - -u
+              - '[/cluster.local/]udp://172.17.0.10:53'
+              - -u
+              - '[/in-addr.arpa/]udp://172.17.0.10:53'
+              - -u
+              - '[/ip6.arpa/]udp://172.17.0.10:53'
               - -u
               - https://1.1.1.1/dns-query
               - -b
