@@ -27,7 +27,7 @@ spec:
           securityContext:
             fsGroup: 1000
             seccompProfile: { type: RuntimeDefault }
-        containers:
+        initContainers:
           # DNS jank: qbit pod -> kubedns -> blocky -> this DOH sidecar
           doh:
             image:
@@ -79,8 +79,8 @@ spec:
                   - CHOWN
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
+        containers:
           main:
-            dependsOn: gluetun
             image:
               repository: ghcr.io/bitmagnet-io/bitmagnet
               tag: v0.10.0@sha256:cf2c16fac5b51f1c18e630b4710175d35d7e44b83012cfd05a2b43712feec05e
