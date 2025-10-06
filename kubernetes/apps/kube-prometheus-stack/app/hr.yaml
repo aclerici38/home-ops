@@ -125,6 +125,32 @@ spec:
       enabled: false
       forceDeployDashboards: true
     additionalPrometheusRulesMap:
+      cnpg:
+        groups:
+          - name: cnpg-barman-cloud
+            rules:
+            - alert: CNPGBackupFailedRecently
+              expr: |
+                barman_cloud_cloudnative_pg_io_last_failed_backup_timestamp
+                  > ignoring(instance,pod)
+                barman_cloud_cloudnative_pg_io_last_available_backup_timestamp
+              for: 2m
+              labels:
+                severity: critical
+              annotations:
+                summary: "CNPG backup failed ({{ $labels.namespace }}/{{ $labels.pod }})"
+                description: "Most recent backup failure is newer than the most recent success."
+            - alert: CNPGWalArchivingFailing
+              expr: |
+                cnpg_pg_stat_archiver_last_failed_time
+                  > ignoring(instance,pod)
+                cnpg_pg_stat_archiver_last_archived_time
+              for: 5m
+              labels:
+                severity: critical
+              annotations:
+                summary: "CNPG WAL archiving failing ({{ $labels.namespace }}/{{ $labels.pod }})"
+                description: "Latest WAL archiving failure is newer than the last successful archival."
       dockerhub-rules:
         groups:
           - name: dockerhub
