@@ -27,12 +27,11 @@ spec:
           dnsPolicy: None
           dnsConfig:
             nameservers:
-              - 127.0.0.1
+              - 127.0.0.1 # dnsproxy sidecar
           securityContext:
             fsGroup: 1000
             seccompProfile: { type: RuntimeDefault }
         initContainers:
-          # DNS jank: qbit pod -> kubedns -> blocky -> this DOH sidecar
           doh:
             image:
               repository: docker.io/adguard/dnsproxy
