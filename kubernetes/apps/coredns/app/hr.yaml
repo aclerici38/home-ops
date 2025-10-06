@@ -69,10 +69,12 @@ spec:
           - name: rewrite
             parameters: edns0 subnet set 32 128
           - name: forward
-            parameters: . ${BLOCKY_CLUSTER_IP}
+            configBlock: |-
+              . ${BLOCKY_CLUSTER_IP} {
+                except cluster.local 16.172.in-addr.arpa
+              }
           - name: loop
           - name: reload
-          - name: loadbalance
     tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
