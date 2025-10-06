@@ -77,14 +77,16 @@ blocking:
 redis:
   address: dragonfly-db.dragonfly.svc.cluster.local:6379
   database: 4
-  connectionCooldown: 5s
+  connectionAttempts: 10
+  connectionCooldown: 60s
 
 
 queryLog:
   type: postgresql
   logRetentionDays: 30
   creationAttempts: 5
-  creationCooldown: 10s
+  creationCooldown: 60s
+  flushInterval: 1s
   # optional: Which fields should be logged. You can choose one or more from: clientIP, clientName, responseReason, responseAnswer, question, duration. If not defined, it logs all fields
   fields:
     - clientIP
