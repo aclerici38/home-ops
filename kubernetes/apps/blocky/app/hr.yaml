@@ -79,9 +79,7 @@ spec:
                     name: blocky-db-app
                     key: dbname
             probes:
-              # I think when ECS is enabled blocky is somehow not PID 1
-              # which causes kube exec probes to freak out and blocky to OOM
-              startup:
+              readiness: &probes
                 enabled: true
                 custom: true
                 spec:
@@ -89,13 +87,7 @@ spec:
                     command:
                       - /app/blocky
                       - healthcheck
-              readiness:
-                enabled: true
-                type: TCP
-                port: 53
-              liveness:
-                enabled: true
-                type: TCP
+              liveness: *probes
             resources:
               requests:
                 cpu: 50m
