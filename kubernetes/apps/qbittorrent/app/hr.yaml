@@ -123,14 +123,6 @@ spec:
         ports:
           http:
             port: *port
-      dns:
-        controller: qbit
-        ports:
-          dns-tcp:
-            port: 53
-          dns-udp:
-            port: 53
-            protocol: UDP
     persistence:
       config:
         existingClaim: qbittorrent

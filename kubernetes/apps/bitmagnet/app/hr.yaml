@@ -165,14 +165,6 @@ spec:
           bittorrent-udp:
             protocol: UDP
             port: *torrentPort
-      dns:
-        controller: bitmagnet
-        ports:
-          dns-tcp:
-            port: 53
-          dns-udp:
-            port: 53
-            protocol: UDP
     route:
       main:
         hostnames:
