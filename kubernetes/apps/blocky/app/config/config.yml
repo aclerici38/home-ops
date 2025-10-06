@@ -43,6 +43,11 @@ clientLookup:
     localhost:
       - 127.0.0.1
 
+# To resolve devices behind coredns
+ecs:
+  useAsClient: true
+  forward: false
+
 bootstrapDns:
   - https://1.1.1.1/dns-query
 

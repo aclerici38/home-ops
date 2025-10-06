@@ -18,7 +18,6 @@ spec:
     namespace: flux-system
   wait: false
   dependsOn:
-    - name: dnscrypt-proxy
     - name: blocky
   interval: 30m
   timeout: 3m
