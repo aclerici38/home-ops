@@ -100,12 +100,11 @@ spec:
                 drop:
                   - ALL
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
                 type: HTTP
-              readiness:
-                enabled: true
-                type: HTTP
+                port: *port
+              readiness: *probes
     service:
       qbit:
         forceRename: qbittorrent
