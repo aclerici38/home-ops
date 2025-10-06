@@ -25,6 +25,12 @@ spec:
       retries: 1
   values:
     fullnameOverride: coredns
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        memory: 512Mi
     image:
       repository: mirror.gcr.io/coredns/coredns
     replicaCount: 3
