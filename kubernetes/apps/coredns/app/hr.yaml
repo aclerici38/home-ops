@@ -70,6 +70,7 @@ spec:
             parameters: edns0 subnet set 32 128
           - name: forward
             parameters: . ${BLOCKY_CLUSTER_IP}
+          - name: loop
           - name: reload
           - name: loadbalance
     tolerations:
