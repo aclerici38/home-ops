@@ -28,7 +28,19 @@ spec:
             fsGroup: 1000
             seccompProfile: { type: RuntimeDefault }
         initContainers:
+          # DNS jank: qbit pod -> kubedns -> blocky -> this DOH sidecar
+          doh:
+            image:
+              repository: docker.io/adguard/dnsproxy
+              tag: v0.76.2@sha256:59ed70638b5aed9583a711a5b1741a4498e502e68a809588756bf65d3a6f2efd
+            args:
+              - -u https://1.1.1.1/dns-query
+              - -b https://1.1.1.1/dns-query
+              - --tls-verification
+              - --http3
+            restartPolicy: Always
           gluetun:
+            dependsOn: doh
             lifecycle:
               postStart:
                 exec:
@@ -130,6 +142,7 @@ spec:
               readiness: *probes
     service:
       main:
+        forceRename: bitmagnet
         controller: bitmagnet
         ports:
           http:
@@ -140,6 +153,12 @@ spec:
           bittorrent-udp:
             protocol: UDP
             port: *torrentPort
+      dns:
+        controller: bitmagnet
+        ports:
+          dns:
+            port: 53
+            protocol: UDP
     route:
       main:
         hostnames:

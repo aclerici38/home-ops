@@ -60,6 +60,10 @@ upstreams:
       - https://freedns.controld.com/p0
       - https://private.canadianshield.cira.ca/dns-query
       - https://dns.nextdns.io
+    bitmagnet:
+      - udp:bitmagnet-dns.bitmagnet.svc.cluster.local
+    qbittorrent:
+      - udp:qbittorrent-dns.qbittorrent.svc.cluster.local
 
 blocking:
   blackLists:
