@@ -24,9 +24,6 @@ spec:
       blocky:
         strategy: RollingUpdate
         replicas: 2
-        rollingUpdate:
-          surge: 1
-          unavailable: 1
         pod:
           affinity:
             podAntiAffinity:
@@ -123,9 +120,3 @@ spec:
           - path: /app/config.yml
             subPath: config.yml
             readOnly: true
-      allow:
-        type: configMap
-        name: blocky-allowlist
-        globalMounts:
-          - path: /allow.txt
-            subPath: allow.txt

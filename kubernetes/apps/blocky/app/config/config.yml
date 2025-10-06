@@ -60,18 +60,17 @@ upstreams:
       - https://dns.pub/dns-query
 
 blocking:
-  denylists:
+  blackLists:
     ads:
       - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/multi.txt
-  allowlists:
+  whiteLists:
     ads:
-      - /allow.txt
+      - |
+        epi-graphql.conde.digital
   clientGroupsBlock:
-    10.0.0.0/16:
+    10.0.0.0/8:
       - ads
-    192.168.1.0/24:
-      - ads
-    10.8.0.0/24:
+    192.168.0.0/16:
       - ads
 
 redis:
