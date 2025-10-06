@@ -24,7 +24,15 @@ spec:
       blocky:
         strategy: RollingUpdate
         replicas: 2
+        rollingUpdate:
+          surge: 1
+          unavailable: 1
         pod:
+          tolerations:
+            - key: "rpi"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
           affinity:
             podAntiAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
@@ -82,8 +90,8 @@ spec:
               liveness: *probes
             resources:
               requests:
-                cpu: 10m
-                memory: 50Mi
+                cpu: 50m
+                memory: 100Mi
               limits:
                 memory: 1Gi # mem leak somewhere?
             securityContext:
