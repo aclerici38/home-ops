@@ -139,7 +139,7 @@ spec:
               - path: /config/metadata
       media:
         type: nfs
-        server: ${NFS_IP}
+        server: 192.168.9.25
         path: /media
         advancedMounts:
           jellyfin:
