@@ -111,7 +111,15 @@ spec:
       k8s:
         controller: blocky
         clusterIP: "${BLOCKY_CLUSTER_IP}"
-        ports: *p
+        ports:
+          <<: *p
+          http:
+            port: 4000
+    serviceMonitor:
+      blocky:
+        serviceName: blocky-k8s
+        endpoints:
+          - port: http
     persistence:
       config:
         type: configMap
