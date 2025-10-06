@@ -85,7 +85,7 @@ spec:
                 cpu: 10m
                 memory: 50Mi
               limits:
-                memory: 512Mi
+                memory: 1Gi # mem leak somewhere?
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
