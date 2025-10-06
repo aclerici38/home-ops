@@ -15,8 +15,7 @@ instance:
     path: kubernetes/flux
   distribution:
     registry: "ghcr.io/fluxcd"
-    # renovate: datasource=docker depName=ghcr.io/controlplaneio-fluxcd/flux-operator-manifests
-    artifact: oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests:v0.30.0
+    artifact: oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests:v0.31.0
     version: 2.x
   kustomize:
     patches:
