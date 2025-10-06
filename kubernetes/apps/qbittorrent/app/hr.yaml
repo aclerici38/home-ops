@@ -30,6 +30,8 @@ spec:
               repository: docker.io/adguard/dnsproxy
               tag: v0.76.2@sha256:59ed70638b5aed9583a711a5b1741a4498e502e68a809588756bf65d3a6f2efd
             args:
+              - -p
+              - '53'
               - -u
               - https://1.1.1.1/dns-query
               - -b
