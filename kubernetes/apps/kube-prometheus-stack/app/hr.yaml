@@ -131,9 +131,9 @@ spec:
             rules:
             - alert: CNPGBackupFailedRecently
               expr: |
-                barman_cloud_cloudnative_pg_io_last_failed_backup_timestamp
-                  > ignoring(instance,pod)
-                barman_cloud_cloudnative_pg_io_last_available_backup_timestamp
+                max by (namespace, job) (barman_cloud_cloudnative_pg_io_last_failed_backup_timestamp)
+                  >
+                max by (namespace, job) (barman_cloud_cloudnative_pg_io_last_available_backup_timestamp)
               for: 2m
               labels:
                 severity: critical
@@ -142,9 +142,9 @@ spec:
                 description: "Most recent backup failure is newer than the most recent success."
             - alert: CNPGWalArchivingFailing
               expr: |
-                cnpg_pg_stat_archiver_last_failed_time
-                  > ignoring(instance,pod)
-                cnpg_pg_stat_archiver_last_archived_time
+                max by (namespace, job) (cnpg_pg_stat_archiver_last_failed_time)
+                  >
+                max by (namespace, job) (cnpg_pg_stat_archiver_last_archived_time)
               for: 5m
               labels:
                 severity: critical
