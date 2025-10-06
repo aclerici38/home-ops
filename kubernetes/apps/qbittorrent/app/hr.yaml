@@ -23,15 +23,17 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
-        initContainers:
+        containers:
           # DNS jank: qbit pod -> kubedns -> blocky -> this DOH sidecar
           doh:
             image:
               repository: docker.io/adguard/dnsproxy
               tag: v0.76.2@sha256:59ed70638b5aed9583a711a5b1741a4498e502e68a809588756bf65d3a6f2efd
             args:
-              - -u https://1.1.1.1/dns-query
-              - -b https://1.1.1.1/dns-query
+              - -u
+              - https://1.1.1.1/dns-query
+              - -b
+              - https://1.1.1.1/dns-query
               - --tls-verification
               - --http3
             restartPolicy: Always
@@ -77,8 +79,8 @@ spec:
                   - CHOWN
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
-        containers:
           main:
+            dependsOn: gluetun
             image:
               repository: ghcr.io/home-operations/qbittorrent
               tag: 5.1.2@sha256:31ac39705e31f7cdcc04dc46c1c0b0cdf8dc6f9865d4894efc097a33adc41524

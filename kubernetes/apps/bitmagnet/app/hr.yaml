@@ -27,15 +27,17 @@ spec:
           securityContext:
             fsGroup: 1000
             seccompProfile: { type: RuntimeDefault }
-        initContainers:
+        containers:
           # DNS jank: qbit pod -> kubedns -> blocky -> this DOH sidecar
           doh:
             image:
               repository: docker.io/adguard/dnsproxy
               tag: v0.76.2@sha256:59ed70638b5aed9583a711a5b1741a4498e502e68a809588756bf65d3a6f2efd
             args:
-              - -u https://1.1.1.1/dns-query
-              - -b https://1.1.1.1/dns-query
+              - -u
+              - https://1.1.1.1/dns-query
+              - -b
+              - https://1.1.1.1/dns-query
               - --tls-verification
               - --http3
             restartPolicy: Always
@@ -78,8 +80,8 @@ spec:
                   - CHOWN
               readOnlyRootFilesystem: false
               allowPrivilegeEscalation: false
-        containers:
           main:
+            dependsOn: gluetun
             image:
               repository: ghcr.io/bitmagnet-io/bitmagnet
               tag: v0.10.0@sha256:cf2c16fac5b51f1c18e630b4710175d35d7e44b83012cfd05a2b43712feec05e
