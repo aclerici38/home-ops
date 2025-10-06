@@ -100,7 +100,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/cnpg"
+        labelSelector: "components.dormammu/cnpg,components.dormammu/cnpg!=no-backup"
     # Volsync: volsync
     - patch: |
         - op: add
