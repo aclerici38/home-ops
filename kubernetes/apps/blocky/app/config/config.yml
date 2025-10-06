@@ -61,9 +61,9 @@ upstreams:
       - https://private.canadianshield.cira.ca/dns-query
       - https://dns.nextdns.io
     bitmagnet:
-      - udp:bitmagnet-dns.bitmagnet.svc.cluster.local
+      - bitmagnet-dns.bitmagnet.svc.cluster.local:53
     qbittorrent:
-      - udp:qbittorrent-dns.qbittorrent.svc.cluster.local
+      - qbittorrent-dns.qbittorrent.svc.cluster.local:53
 
 blocking:
   blackLists:

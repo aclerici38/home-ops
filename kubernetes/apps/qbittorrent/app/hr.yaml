@@ -115,7 +115,9 @@ spec:
       dns:
         controller: qbit
         ports:
-          dns:
+          dns-tcp:
+            port: 53
+          dns-udp:
             port: 53
             protocol: UDP
     persistence:
