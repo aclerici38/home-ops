@@ -14,7 +14,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/d3savant/d3savant/backend/app
+  path: ./kubernetes/apps/d3savant/backend/app
   prune: true
   sourceRef:
     kind: GitRepository
