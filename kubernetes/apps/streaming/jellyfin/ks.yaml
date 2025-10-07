@@ -15,7 +15,7 @@ spec:
   dependsOn:
     - name: volsync
     - name: versity
-  path: ./kubernetes/apps/jellyfin/app
+  path: ./kubernetes/apps/streaming/jellyfin/app
   prune: true
   sourceRef:
     kind: GitRepository

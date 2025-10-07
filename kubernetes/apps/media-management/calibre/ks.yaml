@@ -13,7 +13,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/calibre/calibre-web-automated
+  path: ./kubernetes/apps/media-management/calibre/calibre-web-automated
   prune: true
   sourceRef:
     kind: GitRepository
@@ -38,7 +38,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/calibre/calibre-downloader
+  path: ./kubernetes/apps/media-management/calibre/calibre-downloader
   prune: true
   sourceRef:
     kind: GitRepository

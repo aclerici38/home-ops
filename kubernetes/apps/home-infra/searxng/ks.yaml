@@ -14,7 +14,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/searxng/app
+  path: ./kubernetes/apps/home-infra/searxng/app
   prune: true
   sourceRef:
     kind: GitRepository

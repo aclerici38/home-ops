@@ -12,7 +12,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/firefox/app
+  path: ./kubernetes/apps/tools/firefox/app
   prune: true
   dependsOn:
     - name: volsync

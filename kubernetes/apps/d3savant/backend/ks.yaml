@@ -1,0 +1,54 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app d3savant-backend
+  namespace: flux-system
+  labels:
+    components.dormammu/nohelm: true
+    components.dormammu/cnpg: restore
+spec:
+  targetNamespace: d3savant
+  dependsOn: []
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/apps/d3savant/d3savant/backend/app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  wait: true
+  interval: 30m
+  timeout: 3m
+  postBuild:
+    substitute:
+      APP: d3savant
+      CNPG_CAPACITY: 500Gi
+  patches:
+    - patch: |-
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Cluster
+        metadata:
+          name: patch
+        spec:
+          # bootstrap:
+          #   initdb:
+          #     database: app
+          #     owner: jensen
+          #     secret:
+          #       name: jensen-d3savant-secret
+          managed:
+            roles:
+              - name: anthony
+                ensure: present
+                login: true
+                superuser: false
+                inRoles:
+                  - jensen
+                passwordSecret:
+                  name: anthony-d3savant-secret
+      target:
+        kind: Cluster

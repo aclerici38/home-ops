@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/openspeedtest/app
+  path: ./kubernetes/apps/tools/openspeedtest/app
   sourceRef:
     kind: GitRepository
     name: flux-system

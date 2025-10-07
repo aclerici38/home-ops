@@ -13,7 +13,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/atuin/app
+  path: ./kubernetes/apps/tools/atuin/app
   prune: true
   sourceRef:
     kind: GitRepository

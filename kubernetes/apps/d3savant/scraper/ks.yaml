@@ -12,7 +12,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/d3savant/scraper/app
+  path: ./kubernetes/apps/d3savant/d3savant/scraper/app
   prune: true
   sourceRef:
     kind: GitRepository

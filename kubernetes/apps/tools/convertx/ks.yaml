@@ -12,7 +12,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/convertx/app
+  path: ./kubernetes/apps/tools/convertx/app
   prune: true
   sourceRef:
     kind: GitRepository

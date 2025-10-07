@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./actual/ks.yaml
+  - ./frigate/ks.yaml
+  - ./home-assistant/ks.yaml
+  - ./immich/ks.yaml
+  - ./karakeep/ks.yaml
+  - ./mealie/ks.yaml
+  - ./opencloud/ks.yaml
+  - ./pocket-id/ks.yaml
+  - ./searxng/ks.yaml
+  - ./zigbee2mqtt/ks.yaml

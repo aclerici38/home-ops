@@ -15,7 +15,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 3m
-  path: ./kubernetes/apps/qbittorrent/app
+  path: ./kubernetes/apps/media-management/qbittorrent/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -37,7 +37,7 @@ spec:
       app.kubernetes.io/name: *app
   interval: 30m
   timeout: 3m
-  path: ./kubernetes/apps/qbittorrent/vuetorrent
+  path: ./kubernetes/apps/media-management/qbittorrent/vuetorrent
   dependsOn:
     - name: qbittorrent
   prune: true

@@ -12,7 +12,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/recyclarr/app
+  path: ./kubernetes/apps/media-management/recyclarr/app
   dependsOn:
     - name: external-secrets-stores
     - name: sonarr

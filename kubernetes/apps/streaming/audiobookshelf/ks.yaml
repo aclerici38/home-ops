@@ -12,7 +12,7 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn: []
-  path: ./kubernetes/apps/audiobookshelf/app
+  path: ./kubernetes/apps/streaming/audiobookshelf/app
   prune: true
   sourceRef:
     kind: GitRepository
