@@ -11,7 +11,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/openebs/openebs-system/app
+  path: ./kubernetes/apps/openebs-system/openebs/app
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -34,7 +34,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: openebs
-  path: ./kubernetes/apps/openebs/openebs-system/zfs-volumes
+  path: ./kubernetes/apps/openebs-system/openebs/zfs-volumes
   prune: false
   sourceRef:
     kind: GitRepository
