@@ -107,7 +107,7 @@ spec:
         controller: blocky
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: "${BLOCKY_LB_IP}"
+          lbipam.cilium.io/ips: "${BLOCKY_LB_IP:-1.1.1.1}"
         ports: &p
           dns-tcp:
             port: 53
@@ -118,7 +118,7 @@ spec:
             port: 853
       k8s:
         controller: blocky
-        clusterIP: "${BLOCKY_CLUSTER_IP}"
+        clusterIP: "${BLOCKY_CLUSTER_IP:-1.1.1.1}"
         ports:
           <<: *p
           http:
