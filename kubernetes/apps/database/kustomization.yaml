@@ -3,6 +3,23 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - ./ns.yaml
+
   - ./cloudnative-pg/ks.yaml
   - ./dragonfly/ks.yaml
   - ./rmqtt/ks.yaml
+
+replacements:
+  - source:
+      kind: Namespace
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+        fieldPaths:
+          - metadata.namespace
+          - spec.targetNamespace
+          - spec.postBuild.substitute.NS
+        options:
+          create: true

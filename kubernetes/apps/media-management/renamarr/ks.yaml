@@ -4,11 +4,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app renamarr
-  namespace: flux-system
   labels:
     kustomize.dormammu/subfrom: exists
 spec:
-  targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

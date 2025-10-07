@@ -3,6 +3,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - ./ns.yaml
+
   - ./atuin/ks.yaml
   - ./convertx/ks.yaml
   - ./echo-server/ks.yaml
@@ -14,3 +16,18 @@ resources:
   - ./omnitools/ks.yaml
   - ./open-webui/ks.yaml
   - ./openspeedtest/ks.yaml
+
+replacements:
+  - source:
+      kind: Namespace
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+        fieldPaths:
+          - metadata.namespace
+          - spec.targetNamespace
+          - spec.postBuild.substitute.NS
+        options:
+          create: true

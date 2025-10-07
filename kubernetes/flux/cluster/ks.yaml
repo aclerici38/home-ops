@@ -132,16 +132,6 @@ spec:
         kind: Kustomization
         labelSelector: "components.dormammu/oauth"
 
-    # Add namespace component by default
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/namespace
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "!components.dormammu/noTargetNs"
-
     # Add hr defaults patch component by default
     - patch: |
         - op: add

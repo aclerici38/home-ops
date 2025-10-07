@@ -4,9 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app dragonfly-operator
-  namespace: flux-system
 spec:
-  targetNamespace: dragonfly
   dependsOn: []
   commonMetadata:
     labels:
@@ -26,9 +24,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app dragonfly-cluster
-  namespace: flux-system
 spec:
-  targetNamespace: dragonfly
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app

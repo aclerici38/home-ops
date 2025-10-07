@@ -3,12 +3,10 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app immich
-  namespace: flux-system
   labels:
     components.dormammu/cnpg: restore
     components.dormammu/external-secret: normal
 spec:
-  targetNamespace: *app
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -47,11 +45,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app immich-config
-  namespace: flux-system
   labels:
     kustomize.dormammu/subfrom: exists
 spec:
-  targetNamespace: immich
   dependsOn:
     - name: cloudnative-pg
     - name: dragonfly-cluster
@@ -79,11 +75,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app immich-frame
-  namespace: flux-system
   labels:
     components.dormammu/external-secret: normal
 spec:
-  targetNamespace: immich
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
