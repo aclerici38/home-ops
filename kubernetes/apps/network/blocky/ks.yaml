@@ -31,7 +31,7 @@ metadata:
   name: &app blocky-ui
   namespace: flux-system
 spec:
-  path: "./kubernetes/apps/blocky/ui"
+  path: ./kubernetes/apps/network/blocky/ui
   prune: true
   wait: true
   dependsOn:
