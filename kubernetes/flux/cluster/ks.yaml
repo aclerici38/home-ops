@@ -12,7 +12,6 @@ spec:
   prune: false
   wait: false
   dependsOn:
-    - name: flux-settings
     - name: flux-repos
   sourceRef:
     kind: GitRepository
