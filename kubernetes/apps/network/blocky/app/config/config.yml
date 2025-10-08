@@ -76,7 +76,7 @@ blocking:
       - ads
 
 redis:
-  address: dragonfly-db.dragonfly.svc.cluster.local:6379
+  address: dragonfly-db.database.svc.cluster.local:6379
   database: 4
   connectionAttempts: 10
   connectionCooldown: 60s
