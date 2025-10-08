@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: &app streamystats
   labels:
-    components.dormammu/cnpg: init
+    components.dormammu/cnpg: restore
 spec:
   dependsOn: []
   commonMetadata:
