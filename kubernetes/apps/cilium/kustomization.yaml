@@ -17,7 +17,6 @@ replacements:
           group: kustomize.toolkit.fluxcd.io
         fieldPaths:
           - metadata.namespace
-          - spec.targetNamespace
           - spec.postBuild.substitute.NS
         options:
           create: true
