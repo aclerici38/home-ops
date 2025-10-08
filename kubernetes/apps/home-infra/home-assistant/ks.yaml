@@ -10,9 +10,8 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   dependsOn:
-    - name: volsync
     - name: multus
-    - name: versity
+      namespace: network
   path: ./kubernetes/apps/home-infra/home-assistant/app
   prune: true
   sourceRef:

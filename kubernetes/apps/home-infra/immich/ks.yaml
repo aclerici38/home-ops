@@ -49,10 +49,7 @@ metadata:
     kustomize.dormammu/subfrom: exists
 spec:
   dependsOn:
-    - name: cloudnative-pg
-    - name: dragonfly-cluster
     - name: external-secrets-stores
-    - name: versity
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -65,6 +62,7 @@ spec:
   wait: true
   interval: 30m
   timeout: 3m
+  retryInterval: 10s
   postBuild:
     substituteFrom:
       - kind: Secret
