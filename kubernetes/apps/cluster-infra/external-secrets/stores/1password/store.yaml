@@ -7,7 +7,7 @@ metadata:
 spec:
   provider:
     onepassword:
-      connectHost: http://onepassword-connect.onepassword-connect
+      connectHost: http://onepassword-connect
       vaults:
         Kubernetes: 1
       auth:
@@ -15,4 +15,3 @@ spec:
           connectTokenSecretRef:
             name: onepassword-connect
             key: token
-            namespace: onepassword-connect
