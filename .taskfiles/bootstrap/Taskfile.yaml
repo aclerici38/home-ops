@@ -29,7 +29,6 @@ tasks:
       VAULT: Kubernetes
     preconditions:
       - op user get --me
-      - talosctl config info
       - test -f {{.KUBE_BOOTSTRAP_DIR}}/.secrets.env
       - test -f {{.KUBE_BOOTSTRAP_DIR}}/apps/helmfile.yaml
       - test -f {{.KUBE_BOOTSTRAP_DIR}}/apps/resources.yaml.j2
