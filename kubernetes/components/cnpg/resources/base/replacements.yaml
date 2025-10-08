@@ -8,21 +8,13 @@
         labelSelector: dormammu.io/component=cnpg
       fieldPaths:
         - metadata.name
+        - spec.target.template.data.uri
         - spec.target.template.data.host
         - spec.target.template.data.pgpass
         - spec.target.template.data.jdbc-uri
       options:
         delimiter: "-"
         index: 0
-
-    - select:
-        kind: ExternalSecret
-        labelSelector: dormammu.io/component=cnpg
-      fieldPaths:
-        - spec.target.template.data.uri
-      options:
-        delimiter: "@"
-        index: 1
 
     - select:
         kind: Cluster
