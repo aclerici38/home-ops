@@ -9,9 +9,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: multus
-      namespace: network
+  dependsOn: []
   path: ./kubernetes/apps/home-infra/home-assistant/app
   prune: true
   sourceRef:
