@@ -50,6 +50,7 @@ metadata:
 spec:
   dependsOn:
     - name: external-secrets-stores
+      namespace: cluster-infra
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
