@@ -33,7 +33,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "!kustomize.dormammu/subfrom"
+        labelSelector: "!kustomize.dormammu/subfrom,kustomize.dormammu/cluster-settings!=false"
     # SubFrom does exist in the ks, this patch is chosen via labelSelector
     - patch: |
         - op: add
@@ -45,7 +45,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "kustomize.dormammu/subfrom=exists"
+        labelSelector: "kustomize.dormammu/subfrom=exists,!kustomize.dormammu/cluster-settings!=false"
 
     # Components via labels (fun)
     - patch: |
