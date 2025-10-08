@@ -1,14 +1,17 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app d3savant-scraper
+  name: &app nfs-server
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/d3savant/scraper/app
+  dependsOn:
+    - name: openebs-zfs-volumes
+      namespace: openebs-system
+  path: ./kubernetes/apps/storage/nfs-server/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -17,4 +20,3 @@ spec:
   wait: true
   interval: 30m
   timeout: 3m
-  dependsOn: []

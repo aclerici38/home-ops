@@ -1,0 +1,144 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: frigate
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      frigate:
+        pod:
+          securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 0
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: Unconfined }
+        containers:
+          main:
+            image:
+              repository: ghcr.io/blakeblackshear/frigate
+              tag: 0.16.1@sha256:cb6624b9075f76ece626139eedca7e728cab1456a5f8c351afbf877320826bc1
+            env:
+              YOLO_MODELS: yolov7x-320
+              HF_HOME: /tmp
+              S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
+              S6_READ_ONLY_ROOT: 1
+            envFrom:
+              - secretRef:
+                  name: frigate
+            securityContext:
+              allowPrivilegeEscalation: false
+              # Frigate does in-place nginx config editing, so no true readonly root fs
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+                add:
+                  # S6
+                  - CHOWN
+                  - SETUID
+                  - SETGID
+                  - FOWNER
+                  - DAC_OVERRIDE
+                  - PERFMON
+            probes:
+              # liveness: &probes
+              #   enabled: true
+              #   custom: true
+              #   spec:
+              #     httpGet:
+              #       path: &path /api/version
+              #       port: &http 5000
+              #     initialDelaySeconds: 5
+              #     periodSeconds: 15
+              #     timeoutSeconds: 1
+              #     failureThreshold: 3
+              # readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/version
+                    port: &http 5000
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 60
+            resources:
+              requests:
+                cpu: 2000m
+                memory: 2Gi
+              limits:
+                gpu.intel.com/i915: 1
+                memory: 16Gi
+    service:
+      main:
+        controller: frigate
+        type: ClusterIP
+        ports:
+          http-auth:
+            port: &http-auth 8971
+            targetPort: *http-auth
+          http:
+            primary: true
+            port: *http
+            targetPort: *http
+          rtsp:
+            port: &rtsp 8554
+            targetPort: *rtsp
+          webrtc:
+            port: &webrtc 8555
+            targetPort: *webrtc
+    route:
+      main:
+        hostnames:
+          - frigate.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: envoy-system
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: main
+              port: *http
+    persistence:
+      config:
+        existingClaim: frigate
+      media:
+        existingClaim: frigate-media
+        globalMounts:
+          - path: /media/frigate
+      # exports:
+      #   type: nfs
+      #   server: 192.168.9.25
+      #   path: /files/frigate
+      #   globalMounts:
+      #     - path: /media/frigate/exports
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /run
+            subPath: run
+          - path: /tmp
+            subPath: tmp
+          - path: /dev/shm
+            subPath: shm
+          - path: /etc/letsencrypt
+            subPath: letsencrypt

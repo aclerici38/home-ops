@@ -1,0 +1,141 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: rmqtt
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      rmqtt:
+        type: statefulset
+        strategy: RollingUpdate
+        replicas: 3
+        statefulset:
+          startOrdinal: 1
+          podManagementPolicy: Parallel
+          serviceName: rmqtt-headless
+        pod:
+          # tolerations:
+          #   - key: "rpi"
+          #     operator: "Equal"
+          #     value: "true"
+          #     effect: "NoSchedule"
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          main:
+            image:
+              repository: docker.io/rmqtt/rmqtt
+              tag: 0.16.0@sha256:f8b97ce591166fca8cc019d27a7b2fc35888a07138e7efd601c5fececc4cf756
+            args:
+              - --id=$(POD_ID)
+              - --plugins-default-startups
+              - rmqtt-cluster-raft
+              - rmqtt-retainer
+              - --node-grpc-addrs
+              - 1@rmqtt-1.rmqtt-headless.${NS}.svc.cluster.local:5363
+              - 2@rmqtt-2.rmqtt-headless.${NS}.svc.cluster.local:5363
+              - 3@rmqtt-3.rmqtt-headless.${NS}.svc.cluster.local:5363
+              - --raft-peer-addrs
+              - 1@rmqtt-1.rmqtt-headless.${NS}.svc.cluster.local:6003
+              - 2@rmqtt-2.rmqtt-headless.${NS}.svc.cluster.local:6003
+              - 3@rmqtt-3.rmqtt-headless.${NS}.svc.cluster.local:6003
+            env:
+              POD_ID:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.labels['apps.kubernetes.io/pod-index']
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &httpPort 6060
+                    path: /api/v1/health/check
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 12m
+                memory: 128M
+              limits:
+                memory: 512M
+            securityContext:
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities: { drop: ["ALL"] }
+    service:
+      headless:
+        controller: rmqtt
+        clusterIP: None
+        publishNotReadyAddresses: true
+        ports:
+          grpc:
+            port: 5363
+          raft:
+            port: 6003
+      mqtt:
+        controller: rmqtt
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: "10.38.55.6"
+        ports:
+          mqtt:
+            port: 1883
+          http:
+            port: *httpPort
+    serviceMonitor:
+      rmqtt:
+        serviceName: rmqtt-mqtt
+        endpoints:
+          - port: http
+            scheme: http
+            path: /api/v1/metrics/prometheus
+    configMaps:
+      config:
+        data:
+          rmqtt-acl.toml: |
+            rules = [
+              ["allow", "all"]
+            ]
+          rmqtt-retainer.toml: |
+            storage.type = "redis"
+            storage.redis.url = "redis://dragonfly-db.dragonfly.svc.cluster.local:6379/5"
+            storage.redis.prefix = "retain"
+            retained_message_ttl = "0m"
+          rmqtt.toml: |
+            log.to = "console"
+            log.level = "info"
+            plugins.dir = "rmqtt-plugins/"
+    persistence:
+      plugins:
+        type: configMap
+        name: rmqtt
+        globalMounts:
+          - path: /app/rmqtt/rmqtt.toml
+            subPath: rmqtt.toml
+          - path: /app/rmqtt/rmqtt-plugins/rmqtt-acl.toml
+            subPath: rmqtt-acl.toml
+          - path: /app/rmqtt/rmqtt-plugins/rmqtt-retainer.toml
+            subPath: rmqtt-retainer.toml

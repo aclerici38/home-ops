@@ -1,0 +1,86 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openspeedtest
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      openspeedtest:
+        strategy: RollingUpdate
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 101
+            runAsGroup: 101
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          main:
+            image:
+              repository: docker.io/openspeedtest/latest
+              tag: v2.0.6@sha256:a6a7e3b3e9e93cfe7b9b2eb49c60b2a93644149a0a600845d4df57148b193ff6
+            command: ["nginx"]
+            args:
+              - -g
+              - daemon off;
+              - -c
+              - /etc/nginx/nginx.conf
+            env:
+              DOMAIN_NAME: ${SECRET_DOMAIN}
+            probes:
+              liveness: &probes
+                enabled: true
+                type: HTTP
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 25m
+                memory: 25Mi
+              limits:
+                memory: 256Mi
+    service:
+      main:
+        controller: openspeedtest
+        ports:
+          http:
+            port: &port 3000
+    route:
+      main:
+        hostnames:
+          - openspeedtest.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: envoy-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: main
+                port: *port
+    persistence:
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
+          - path: /var/cache/nginx
+            subPath: nginx

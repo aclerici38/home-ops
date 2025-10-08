@@ -3,12 +3,16 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app d3savant-scraper
+  name: &app sonarr
+  labels:
+    components.dormammu/cnpg: restore
+    components.dormammu/external-secret: normal
 spec:
+  dependsOn: []
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/d3savant/scraper/app
+  path: ./kubernetes/apps/media-management/sonarr/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -17,4 +21,3 @@ spec:
   wait: true
   interval: 30m
   timeout: 3m
-  dependsOn: []

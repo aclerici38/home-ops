@@ -1,0 +1,208 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 5m
+  upgrade:
+    timeout: 5m
+  dependsOn:
+    - name: nfs-server
+      namespace: storage
+  values:
+    controllers:
+      server:
+        replicas: 2
+        strategy: RollingUpdate
+        containers:
+          main:
+            image:
+              repository: ghcr.io/immich-app/immich-server
+              tag: v2.0.1@sha256:8286638680f0a38a7cb380be64ed77d1d1cfe6d0e0b843f64bff92b24289078d
+            env:
+              IMMICH_LOG_LEVEL: log
+              # IMMICH_WORKERS_INCLUDE: api
+              REDIS_HOSTNAME: dragonfly-db.dragonfly.svc.cluster.local
+              REDIS_DBINDEX: 2
+              IMMICH_TELEMETRY_INCLUDE: all
+              IMMICH_CONFIG_FILE: &config /config/immich-config.yaml
+              IMMICH_IGNORE_MOUNT_CHECK_ERRORS: true
+              DB_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: immich-db-app
+                    key: uri
+            probes:
+              liveness: &probes
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/server/ping
+                    port: &port 2283
+              readiness: *probes
+              startup:
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/server/ping
+                    port: *port
+                  periodSeconds: 5
+                  failureThreshold: 18
+                  initialDelaySeconds: 2
+                  timeoutSeconds: 1
+            securityContext: &contSec
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 300Mi
+              limits:
+                memory: 12Gi
+                cpu: 12
+                gpu.intel.com/i915: 1
+      machine-learning:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
+        containers:
+          main:
+            image:
+              repository: ghcr.io/immich-app/immich-machine-learning
+              tag: v2.0.1-openvino@sha256:1a5a49530275ee49553b8135646631c64b62e7d22614004db8f765013761b0ba
+            env:
+              HF_HOME: /cache/hf
+              MACHINE_LEARNING_MODEL_TTL: 0
+              MACHINE_LEARNING_CACHE_FOLDER: /cache
+              MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: ViT-SO400M-16-SigLIP2-384__webli
+            resources:
+              requests:
+                cpu: 500m
+                memory: 5Gi
+              limits:
+                memory: 16Gi
+                gpu.intel.com/i915: 1
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: &mlPort 3003
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  failureThreshold: 10
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: *mlPort
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  failureThreshold: 60
+            securityContext: *contSec
+    defaultPodOptions:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/controller: microservices
+                  app.kubernetes.io/instance: immich
+              topologyKey: kubernetes.io/hostname
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+        supplementalGroups:
+          - 44
+    service:
+      server:
+        controller: server
+        ports:
+          http:
+            port: *port
+          metrics-api:
+            port: 8081
+      ml:
+        controller: machine-learning
+        ports:
+          http:
+            port: *mlPort
+    serviceMonitor:
+      server:
+        serviceName: server
+        endpoints:
+          - port: metrics-api
+            scheme: http
+    route:
+      main:
+        hostnames:
+          - immich.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: envoy-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: server
+                port: *port
+    persistence:
+      data:
+        type: nfs
+        server: 192.168.9.25
+        path: /immich
+        advancedMounts:
+          server:
+            main:
+              - path: /data
+      thumbnails:
+        existingClaim: immich-thumbs
+        advancedMounts:
+          server:
+            main:
+              - path: /data/thumbs
+      encoded-video:
+        existingClaim: immich-encoded-video
+        advancedMounts:
+          server:
+            main:
+              - path: /data/encoded-video
+      config:
+        type: configMap
+        name: immich-config
+        advancedMounts:
+          server:
+            main:
+              - path: *config
+                subPath: config.yaml
+      cache:
+        existingClaim: immich-ml-cache
+        advancedMounts:
+          machine-learning:
+            main:
+              - path: /cache
+                subPath: cache
+              - path: /.config/matplotlib
+                subPath: matplotlib-config
+              - path: /.cache/matplotlib
+                subPath: matplotlib-cache
+      tmp:
+        type: emptyDir

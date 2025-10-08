@@ -1,0 +1,45 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app blocky
+  labels:
+    components.dormammu/cnpg: no-backup
+spec:
+  path: ./kubernetes/apps/network/blocky/app/
+  prune: true
+  wait: true
+  dependsOn:
+    - name: dragonfly-cluster
+      namespace: database
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  interval: 30m
+  timeout: 3m
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app blocky-ui
+spec:
+  path: ./kubernetes/apps/network/blocky/ui
+  prune: true
+  wait: true
+  dependsOn:
+    - name: blocky
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  interval: 30m
+  timeout: 3m
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app

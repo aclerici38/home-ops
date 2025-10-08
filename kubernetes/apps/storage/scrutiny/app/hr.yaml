@@ -1,0 +1,161 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: scrutiny
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      scrutiny:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/analogj/scrutiny
+              tag: v0.8.1-web@sha256:dbb6b56e5d3dfa9256fea8ef9b9fd8fb302c555ddd0554b8ad958ec050a14994
+            env:
+              SCRUTINY_WEB_INFLUXDB_HOST: scrutiny-influxdb
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/health
+                    port: &port 8080
+              readiness: *probes
+            securityContext: &sec
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 20Mi
+              limits:
+                memory: 128Mi
+      influxdb:
+        containers:
+          main:
+            image:
+              repository: docker.io/library/influxdb
+              tag: 2.7.12-alpine@sha256:fa166d3bdf6beeecf57791b70e558f6ef54e1e6cea95fb7728b45314bc48543b
+            probes:
+              liveness: &dbProbes
+                enabled: false
+                custom: true
+                spec:
+                  httpGet:
+                    port: &dbPort 8086
+                    path: /health
+              readiness: *dbProbes
+            resources:
+              requests:
+                cpu: 100m
+                memory: 20Mi
+              limits:
+                memory: 512Mi
+            securityContext: *sec
+      collector:
+        type: daemonset
+        containers:
+          main:
+            image:
+              repository: ghcr.io/analogj/scrutiny
+              tag: v0.8.1-collector@sha256:5f6536d68be2d7424627647cdd658e6b4c1f69751a21622fb97b999a3155ba86
+            env:
+              COLLECTOR_RUN_STARTUP: true
+              COLLECTOR_API_ENDPOINT: "http://scrutiny-main:8080"
+              COLLECTOR_CRON_SCHEDULE: "0 * * * *"
+              COLLECTOR_HOST_ID:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+            resources:
+              requests:
+                cpu: 100m
+                memory: 10Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              privileged: true
+              runAsNonRoot: false
+              runAsUser: 0
+              runAsGroup: 0
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop: ["ALL"]
+                # smartctl
+                add: ["SYS_RAWIO"]
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      main:
+        controller: scrutiny
+        ports:
+          http:
+            port: *port
+      influxdb:
+        controller: influxdb
+        ports:
+          http:
+            port: *dbPort
+    route:
+      main:
+        hostnames:
+          - scrutiny.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: envoy-system
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: main
+              port: *port
+    persistence:
+      config:
+        existingClaim: scrutiny
+        advancedMounts:
+          scrutiny:
+            main:
+              - path: /opt/scrutiny/config
+                subPath: scrutiny
+          influxdb:
+            main:
+              - path: /var/lib/influxdb2
+                subPath: influxdb
+      udev:
+        type: hostPath
+        hostPath: /run/udev
+        advancedMounts:
+          collector:
+            main:
+              - path: /run/udev
+                readOnly: true
+      dev:
+        type: hostPath
+        hostPath: /dev
+        advancedMounts:
+          collector:
+            main:
+              - path: /dev

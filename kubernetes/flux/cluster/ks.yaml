@@ -63,10 +63,12 @@ spec:
           path: /spec/dependsOn/-
           value:
             name: external-secrets
+            namespace: cluster-infra
         - op: add
           path: /spec/dependsOn/-
           value:
             name: external-secrets-stores
+            namespace: cluster-infra
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -92,6 +94,7 @@ spec:
           path: /spec/dependsOn/-
           value:
             name: versity
+            namespace: storage
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -107,6 +110,7 @@ spec:
           path: /spec/dependsOn/-
           value:
             name: volsync
+            namespace: storage
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -117,6 +121,7 @@ spec:
           path: /spec/dependsOn/-
           value:
             name: cloudnative-pg
+            namespace: database
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -127,26 +132,17 @@ spec:
           path: /spec/dependsOn/-
           value:
             name: envoy
+            namespace: envoy-system
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
         labelSelector: "components.dormammu/oauth"
 
-    # Add namespace component by default
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../components/namespace
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "!components.dormammu/noTargetNs"
-
     # Add hr defaults patch component by default
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../components/flux/helm
+          value: ../../../../components/flux/helm
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -156,7 +152,7 @@ spec:
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../components/cnpg/helm/restore
+          value: ../../../../components/cnpg/helm/restore
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -166,7 +162,7 @@ spec:
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../components/cnpg/helm/init
+          value: ../../../../components/cnpg/helm/init
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -176,7 +172,7 @@ spec:
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../components/cnpg/helm/no-backup
+          value: ../../../../components/cnpg/helm/no-backup
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -186,7 +182,7 @@ spec:
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../components/cnpg/raw/restore
+          value: ../../../../components/cnpg/raw/restore
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -196,7 +192,7 @@ spec:
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../components/envoy/oauth/helm
+          value: ../../../../components/envoy/oauth/helm
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -206,7 +202,7 @@ spec:
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../components/external-secret/helm/normal
+          value: ../../../../components/external-secret/helm/normal
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -216,7 +212,7 @@ spec:
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../components/external-secret/helm/cluster
+          value: ../../../../components/external-secret/helm/cluster
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -224,7 +220,7 @@ spec:
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../components/external-secret/postBuild/cluster
+          value: ../../../../components/external-secret/postBuild/cluster
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -234,7 +230,7 @@ spec:
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../components/volsync/helm/versity
+          value: ../../../../components/volsync/helm/versity
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -244,7 +240,7 @@ spec:
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../components/volsync/helm/remote
+          value: ../../../../components/volsync/helm/remote
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization

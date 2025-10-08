@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./ns.yaml
+
+  - ./bazarr/ks.yaml
+  - ./bitmagnet/ks.yaml
+  - ./calibre/ks.yaml
+  - ./fileflows/ks.yaml
+  - ./flaresolverr/ks.yaml
+  - ./jellyseer/ks.yaml
+  - ./prowlarr/ks.yaml
+  - ./qbittorrent/ks.yaml
+  - ./radarr/ks.yaml
+  - ./recyclarr/ks.yaml
+  - ./renamarr/ks.yaml
+  - ./sonarr/ks.yaml
+
+replacements:
+  - source:
+      kind: Namespace
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+        fieldPaths:
+          - metadata.namespace
+          - spec.targetNamespace
+          - spec.postBuild.substitute.NS
+        options:
+          create: true

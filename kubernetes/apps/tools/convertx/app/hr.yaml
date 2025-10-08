@@ -1,0 +1,88 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: convertx
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      convertx:
+        strategy: RollingUpdate
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          main:
+            image:
+              repository: ghcr.io/c4illin/convertx
+              tag: v0.14.1@sha256:346589f154332997329fdc888417d4b24c49cc9140eab80e637a68cfbdd8041b
+            env:
+              ACCOUNT_REGISTRATION: false
+              HTTP_ALLOWED: false
+              ALLOW_UNAUTHENTICATED: true
+              AUTO_DELETE_EVERY_N_HOURS: 1
+            probes:
+              liveness: &probes
+                enabled: true
+                type: HTTP
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 100m
+                memory: 115Mi
+              limits:
+                memory: 8Gi
+                gpu.intel.com/i915: 1
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      main:
+        controller: convertx
+        ports:
+          http:
+            port: &port 3000
+    route:
+      app:
+        hostnames:
+          - convert.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: envoy-system
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: main
+              port: *port
+    persistence:
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /app/data
+            subPath: data
+          - path: /nonexistent
+            subPath: nonexistent

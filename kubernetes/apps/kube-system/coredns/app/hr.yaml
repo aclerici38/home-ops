@@ -1,0 +1,83 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: coredns
+spec:
+  interval: 1h
+  maxHistory: 1
+  dependsOn:
+    - name: blocky
+      namespace: network
+  chartRef:
+    kind: OCIRepository
+    name: coredns
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    force: true
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    fullnameOverride: coredns
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: null
+        memory: 512Mi
+    image:
+      repository: mirror.gcr.io/coredns/coredns
+    replicaCount: 3
+    k8sAppLabelOverride: kube-dns
+    serviceAccount:
+      create: true
+    service:
+      name: kube-dns
+      clusterIP: ${COREDNS_CLUSTER_IP}
+    servers:
+      - zones:
+          - zone: .
+            scheme: dns://
+            use_tcp: true
+        port: 53
+        plugins:
+          - name: errors
+          - name: health
+            configBlock: |-
+              lameduck 5s
+          - name: ready
+          - name: log
+            configBlock: |-
+              class error
+          - name: prometheus
+            parameters: 0.0.0.0:9153
+          - name: kubernetes
+            parameters: cluster.local in-addr.arpa ip6.arpa
+            configBlock: |-
+              pods verified
+              fallthrough in-addr.arpa ip6.arpa
+          - name: autopath
+            parameters: "@kubernetes"
+          # Enable ECS so blocky gets the client's ip as source instead of coredns
+          - name: rewrite
+            parameters: edns0 subnet set 32 128
+          - name: forward
+            parameters: . ${BLOCKY_CLUSTER_IP}
+            configBlock: |-
+              except cluster.local 16.172.in-addr.arpa
+          - name: loop
+          - name: reload
+    tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - key: "rpi"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"

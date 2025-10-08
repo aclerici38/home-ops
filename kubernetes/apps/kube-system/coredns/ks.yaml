@@ -3,18 +3,20 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app d3savant-scraper
+  name: &app coredns
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/d3savant/scraper/app
-  prune: true
+  path: ./kubernetes/apps/kube-system/coredns/app
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  wait: true
+  wait: false
+  dependsOn:
+    - name: blocky
+      namespace: network
   interval: 30m
   timeout: 3m
-  dependsOn: []
