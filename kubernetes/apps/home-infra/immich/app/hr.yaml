@@ -121,7 +121,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                  app.kubernetes.io/controller: microservices
+                  app.kubernetes.io/controller: server
                   app.kubernetes.io/instance: immich
               topologyKey: kubernetes.io/hostname
       securityContext:
