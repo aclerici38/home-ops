@@ -12,7 +12,7 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     name: backups
-    namespace: versity
+    namespace: ${NS}
   csi:
     driver: zfs.csi.openebs.io
     fsType: zfs

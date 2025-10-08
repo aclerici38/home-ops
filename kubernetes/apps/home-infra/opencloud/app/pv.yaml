@@ -12,7 +12,7 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     name: files
-    namespace: opencloud
+    namespace: ${NS}
   csi:
     driver: zfs.csi.openebs.io
     fsType: zfs

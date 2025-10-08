@@ -12,7 +12,7 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     name: immich
-    namespace: nfs-server
+    namespace: ${NS}
   csi:
     driver: zfs.csi.openebs.io
     fsType: zfs
@@ -44,7 +44,7 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     name: media
-    namespace: nfs-server
+    namespace: ${NS}
   csi:
     driver: zfs.csi.openebs.io
     fsType: zfs
