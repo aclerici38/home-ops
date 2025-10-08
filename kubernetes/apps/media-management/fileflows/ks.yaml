@@ -9,9 +9,6 @@ metadata:
     components.dormammu/external-secret: normal
     components.dormammu/cnpg: restore
 spec:
-  dependsOn:
-    - name: volsync
-    - name: versity
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -43,3 +40,4 @@ spec:
     #             name: fileflows-secret
     #   target:
     #     kind: Cluster
+  dependsOn: []

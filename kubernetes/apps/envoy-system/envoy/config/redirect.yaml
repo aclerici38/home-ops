@@ -9,10 +9,10 @@ metadata:
 spec:
   parentRefs:
     - name: internal
-      namespace: envoy
+      namespace: envoy-system
       sectionName: http
     - name: external
-      namespace: envoy
+      namespace: envoy-system
       sectionName: http
   rules:
     - filters:

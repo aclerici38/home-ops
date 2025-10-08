@@ -32,7 +32,7 @@ spec:
           pathType: PathPrefix
         parentRefs:
           - name: internal
-            namespace: envoy
+            namespace: envoy-system
             sectionName: https
     cephClusterSpec:
       placement:

@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: dragonfly-cluster
-    - name: versity
+      namespace: database
   path: ./kubernetes/apps/home-infra/immich/app
   prune: true
   sourceRef:

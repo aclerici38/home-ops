@@ -8,10 +8,6 @@ metadata:
     components.dormammu/volsync: versity
     components.dormammu/cnpg: restore
 spec:
-  dependsOn:
-    - name: cloudnative-pg
-    - name: volsync
-    - name: versity
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -38,3 +34,5 @@ spec:
   #               exclusive: true
   #     target:
   #       kind: Cluster
+
+  dependsOn: []

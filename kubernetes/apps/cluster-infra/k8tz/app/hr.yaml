@@ -20,7 +20,7 @@ spec:
     remediation:
       retries: 1
   values:
-    namespace: k8tz
+    namespace: ${NS}
     createNamespace: false
     replicaCount: 2
     timezone: ${TZ}

@@ -90,7 +90,7 @@ spec:
           - id.${SECRET_DOMAIN}
         parentRefs:
           - name: external
-            namespace: envoy
+            namespace: envoy-system
             sectionName: https
         rules:
           - matches:

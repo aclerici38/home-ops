@@ -282,7 +282,7 @@ spec:
           - grafana.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
-            namespace: envoy
+            namespace: envoy-system
             sectionName: https
         matches:
           - path:

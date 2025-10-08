@@ -12,6 +12,7 @@ spec:
   wait: true
   dependsOn:
     - name: dragonfly-cluster
+      namespace: database
   sourceRef:
     kind: GitRepository
     name: flux-system

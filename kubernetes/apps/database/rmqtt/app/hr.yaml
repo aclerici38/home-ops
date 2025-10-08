@@ -53,22 +53,18 @@ spec:
               - rmqtt-cluster-raft
               - rmqtt-retainer
               - --node-grpc-addrs
-              - 1@rmqtt-1.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:5363
-              - 2@rmqtt-2.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:5363
-              - 3@rmqtt-3.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:5363
+              - 1@rmqtt-1.rmqtt-headless.${NS}.svc.cluster.local:5363
+              - 2@rmqtt-2.rmqtt-headless.${NS}.svc.cluster.local:5363
+              - 3@rmqtt-3.rmqtt-headless.${NS}.svc.cluster.local:5363
               - --raft-peer-addrs
-              - 1@rmqtt-1.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:6003
-              - 2@rmqtt-2.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:6003
-              - 3@rmqtt-3.rmqtt-headless.$(POD_NAMESPACE).svc.cluster.local:6003
+              - 1@rmqtt-1.rmqtt-headless.${NS}.svc.cluster.local:6003
+              - 2@rmqtt-2.rmqtt-headless.${NS}.svc.cluster.local:6003
+              - 3@rmqtt-3.rmqtt-headless.${NS}.svc.cluster.local:6003
             env:
               POD_ID:
                 valueFrom:
                   fieldRef:
                     fieldPath: metadata.labels['apps.kubernetes.io/pod-index']
-              POD_NAMESPACE:
-                valueFrom:
-                  fieldRef:
-                    fieldPath: metadata.namespace
             probes:
               liveness: &probes
                 enabled: true

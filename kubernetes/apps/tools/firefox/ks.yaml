@@ -12,9 +12,7 @@ spec:
       app.kubernetes.io/name: *app
   path: ./kubernetes/apps/tools/firefox/app
   prune: true
-  dependsOn:
-    - name: volsync
-    - name: versity
+  dependsOn: []
   sourceRef:
     kind: GitRepository
     name: flux-system

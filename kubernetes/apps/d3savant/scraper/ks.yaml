@@ -5,8 +5,6 @@ kind: Kustomization
 metadata:
   name: &app d3savant-scraper
 spec:
-  dependsOn:
-    - name: cloudnative-pg
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
@@ -19,3 +17,4 @@ spec:
   wait: true
   interval: 30m
   timeout: 3m
+  dependsOn: []

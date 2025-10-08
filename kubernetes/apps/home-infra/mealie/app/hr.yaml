@@ -113,7 +113,7 @@ spec:
           - mealie.${SECRET_DOMAIN}
         parentRefs:
           - name: external
-            namespace: envoy
+            namespace: envoy-system
             sectionName: https
         rules:
           - backendRefs:

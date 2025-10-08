@@ -69,7 +69,7 @@ spec:
           - omnitools.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
-            namespace: envoy
+            namespace: envoy-system
             sectionName: https
         rules:
           - backendRefs:

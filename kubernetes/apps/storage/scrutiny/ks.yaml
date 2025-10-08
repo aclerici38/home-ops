@@ -9,9 +9,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  dependsOn:
-    - name: versity
-    - name: volsync
   path: ./kubernetes/apps/storage/scrutiny/app
   prune: true
   sourceRef:
@@ -26,3 +23,4 @@ spec:
       VOLSYNC_STORAGECLASS: ceph-filesystem
       VOLSYNC_SNAPSHOTCLASS: csi-ceph-filesystem
       VOLSYNC_ACCESSMODES: ReadWriteMany
+  dependsOn: []

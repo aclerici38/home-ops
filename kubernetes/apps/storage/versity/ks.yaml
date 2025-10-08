@@ -12,6 +12,7 @@ spec:
   dependsOn:
     - name: volsync
     - name: openebs-zfs-volumes
+      namespace: openebs-system
   path: ./kubernetes/apps/storage/versity/app
   prune: true
   sourceRef:
