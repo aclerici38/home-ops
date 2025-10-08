@@ -86,7 +86,7 @@ tasks:
   flux-resume:
     desc: Suspend, resume, and reconcile a flux app [NS=APP] [APP=required]
     interactive: true
-    cmd: flux suspend hr {{.APP}} -n {{.NS}} && flux resume hr {{.APP}} -n {{.NS}} && flux reconcile ks {{.APP}}
+    cmd: flux suspend hr {{.APP}} -n {{.NS}} && flux resume hr {{.APP}} -n {{.NS}} && flux reconcile ks {{.APP}} -n {{.NS}}
     vars:
       NS: '{{.NS | default .APP}}'
     requires:

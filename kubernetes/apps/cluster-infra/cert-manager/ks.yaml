@@ -32,7 +32,7 @@ spec:
         spec:
           namespaceSelectors:
             - matchLabels:
-                kubernetes.io/metadata.name: cluster-tools
+                kubernetes.io/metadata.name: cluster-infra
             - matchLabels:
                 kubernetes.io/metadata.name: network
       target:
