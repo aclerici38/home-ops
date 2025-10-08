@@ -32,9 +32,9 @@ spec:
         spec:
           namespaceSelectors:
             - matchLabels:
-                kubernetes.io/metadata.name: cert-manager
+                kubernetes.io/metadata.name: cluster-tools
             - matchLabels:
-                kubernetes.io/metadata.name: external-dns
+                kubernetes.io/metadata.name: network
       target:
         kind: ClusterExternalSecret
   dependsOn: []
