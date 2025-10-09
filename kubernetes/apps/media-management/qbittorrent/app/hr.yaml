@@ -49,6 +49,7 @@ spec:
               - https://1.1.1.1/dns-query
               - --http3
               - --cache
+              - --ipv6-disabled
               - -v
             restartPolicy: Always
           gluetun:
