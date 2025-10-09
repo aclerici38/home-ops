@@ -44,7 +44,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "kustomize.dormammu/subfrom=exists,kustomize.dormammu/cluster-settings=true"
+        labelSelector: "kustomize.dormammu/subfrom=exists,kustomize.dormammu/cluster-settings!=false"
 
     # Components via labels (fun)
     - patch: |
