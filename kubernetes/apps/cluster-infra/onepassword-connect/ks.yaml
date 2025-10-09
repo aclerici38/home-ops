@@ -6,7 +6,7 @@ metadata:
   name: &app onepassword-connect
   labels:
     kustomize.dormammu/cluster-settings: "false"
-    kustomize.dormammu/app-vars: "false"
+    components.dormammu/app-vars: "false"
 spec:
   commonMetadata:
     labels:
