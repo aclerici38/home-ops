@@ -151,7 +151,7 @@ spec:
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../../components/helm/app-vars
+          value: ../../../../components/app-vars/helm
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
@@ -159,7 +159,7 @@ spec:
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../../components/postBuild/app-vars
+          value: ../../../../components/app-vars/postBuild
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
