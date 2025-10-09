@@ -28,17 +28,17 @@ spec:
       VOLSYNC_STORAGECLASS: ceph-filesystem
       VOLSYNC_SNAPSHOTCLASS: csi-ceph-filesystem
       VOLSYNC_ACCESSMODES: ReadWriteMany
-  patches:
-    - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
-          name: patch
-        spec:
-          bootstrap:
-            recovery:
-              recoveryTarget:
-                targetTLI: "5"
-                targetLSN: "2/60FFFFFF"
-      target:
-        kind: Cluster
+  # patches:
+  #   - patch: |-
+  #       apiVersion: postgresql.cnpg.io/v1
+  #       kind: Cluster
+  #       metadata:
+  #         name: patch
+  #       spec:
+  #         bootstrap:
+  #           recovery:
+  #             recoveryTarget:
+  #               targetTLI: "5"
+  #               targetLSN: "2/60FFFFFF"
+  #     target:
+  #       kind: Cluster
