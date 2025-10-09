@@ -38,6 +38,7 @@ spec:
           bootstrap:
             recovery:
               recoveryTarget:
-                targetTLI: "8"
+                targetTLI: "5"
+                targetLSN: "2/60FFFFFF"
       target:
         kind: Cluster

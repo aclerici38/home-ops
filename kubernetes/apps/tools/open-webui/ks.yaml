@@ -21,17 +21,17 @@ spec:
   wait: true
   interval: 30m
   timeout: 3m
-  patches:
-    - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
-          name: patch
-        spec:
-          bootstrap:
-            recovery:
-              recoveryTarget:
-                targetTLI  : "5"
-                targetLSN  : "0/4FFFFFFF"
-      target:
-        kind: Cluster
+  # patches:
+  #   - patch: |-
+  #       apiVersion: postgresql.cnpg.io/v1
+  #       kind: Cluster
+  #       metadata:
+  #         name: patch
+  #       spec:
+  #         bootstrap:
+  #           recovery:
+  #             recoveryTarget:
+  #               targetTLI  : "5"
+  #               targetLSN  : "0/4FFFFFFF"
+  #     target:
+  #       kind: Cluster
