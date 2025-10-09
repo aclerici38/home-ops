@@ -48,6 +48,7 @@ spec:
               - -b
               - https://1.1.1.1/dns-query
               - --http3
+              - --cache
               - -v
             restartPolicy: Always
           gluetun:
