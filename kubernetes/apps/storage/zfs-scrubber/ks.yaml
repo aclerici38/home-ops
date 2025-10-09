@@ -6,6 +6,7 @@ metadata:
   name: &app tank-zfs-scrubber
   labels:
     components.dormammu/helm: "false"
+    components.dormammu/app-vars: "false"
 spec:
   commonMetadata:
     labels:
@@ -32,6 +33,7 @@ metadata:
   name: &app ssd-zfs-scrubber
   labels:
     components.dormammu/helm: "false"
+    components.dormammu/app-vars: "false"
 spec:
   commonMetadata:
     labels:

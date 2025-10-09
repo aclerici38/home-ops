@@ -7,6 +7,7 @@ metadata:
   namespace: &ns app-vars
   labels:
     components.dormammu/helm: "false"
+    components.dormammu/app-vars: "false"
 spec:
   targetNamespace: *ns
   path: ./kubernetes/components/app-vars/resources/vars

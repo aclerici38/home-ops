@@ -26,6 +26,7 @@ metadata:
   name: &app openebs-zfs-volumes
   labels:
     components.dormammu/helm: "false"
+    components.dormammu/app-vars: "false"
 spec:
   commonMetadata:
     labels:
