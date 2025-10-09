@@ -32,7 +32,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "!kustomize.dormammu/subfrom,kustomize.dormammu/cluster-settings!=false"
+        labelSelector: "!kustomize.dormammu/subfrom,kustomize.dormammu/cluster-settings!=true"
     # SubFrom does exist in the ks, this patch is chosen via labelSelector
     - patch: |
         - op: add
@@ -44,7 +44,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "kustomize.dormammu/subfrom=exists,kustomize.dormammu/cluster-settings!=false"
+        labelSelector: "kustomize.dormammu/subfrom=exists,kustomize.dormammu/cluster-settings=true"
 
     # Components via labels (fun)
     - patch: |
@@ -145,7 +145,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/helm!=true"
+        labelSelector: "components.dormammu/helm!=false"
 
     # Add app-vars component by default
     - patch: |
@@ -155,7 +155,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "kustomize.dormammu/app-vars!=false,components.dormammu/helm!=true"
+        labelSelector: "kustomize.dormammu/app-vars!=false,components.dormammu/helm!=false"
     - patch: |
         - op: add
           path: /spec/components/-
@@ -163,7 +163,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "kustomize.dormammu/app-vars!=false,components.dormammu/helm=true"
+        labelSelector: "kustomize.dormammu/app-vars!=false,components.dormammu/helm=false"
 
     # Add cnpg restore helm component if labelled
     - patch: |
@@ -173,7 +173,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/cnpg=restore,components.dormammu/helm!=true"
+        labelSelector: "components.dormammu/cnpg=restore,components.dormammu/helm!=false"
 
     # Add cnpg init helm component if labelled
     - patch: |
@@ -183,7 +183,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/cnpg=init,components.dormammu/helm!=true"
+        labelSelector: "components.dormammu/cnpg=init,components.dormammu/helm!=false"
 
     # Add cnpg helm component if labelled
     - patch: |
@@ -193,7 +193,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/cnpg=no-backup,components.dormammu/helm!=true"
+        labelSelector: "components.dormammu/cnpg=no-backup,components.dormammu/helm!=false"
 
     # Add cnpg raw manifests component if labelled
     - patch: |
@@ -203,7 +203,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/cnpg=restore,components.dormammu/helm=true"
+        labelSelector: "components.dormammu/cnpg=restore,components.dormammu/helm=false"
 
     # Add envoy oauth component if labelled
     - patch: |
@@ -213,7 +213,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/oauth,components.dormammu/helm!=true"
+        labelSelector: "components.dormammu/oauth,components.dormammu/helm!=false"
 
     # Add ESO component if labelled
     - patch: |
@@ -223,7 +223,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/external-secret=normal,components.dormammu/helm!=true"
+        labelSelector: "components.dormammu/external-secret=normal,components.dormammu/helm!=false"
 
     # Add ESO cluster secret component if labelled
     - patch: |
@@ -233,7 +233,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/external-secret=cluster,components.dormammu/helm!=true"
+        labelSelector: "components.dormammu/external-secret=cluster,components.dormammu/helm!=false"
     - patch: |
         - op: add
           path: /spec/components/-
@@ -241,7 +241,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/external-secret=cluster,components.dormammu/helm=true"
+        labelSelector: "components.dormammu/external-secret=cluster,components.dormammu/helm=false"
 
     # Add volsync versity component if labelled
     - patch: |
@@ -251,7 +251,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/volsync=versity,components.dormammu/helm!=true"
+        labelSelector: "components.dormammu/volsync=versity,components.dormammu/helm!=false"
 
     # Add volsync remote component if labelled
     - patch: |
@@ -261,4 +261,4 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/volsync=remote,components.dormammu/helm!=true"
+        labelSelector: "components.dormammu/volsync=remote,components.dormammu/helm!=false"

@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: &app short-smart-tester
   labels:
-    components.dormammu/helm: false
+    components.dormammu/helm: "false"
 spec:
   commonMetadata:
     labels:
@@ -32,7 +32,7 @@ kind: Kustomization
 metadata:
   name: &app long-smart-tester
   labels:
-    components.dormammu/helm: false
+    components.dormammu/helm: "false"
 spec:
   commonMetadata:
     labels:

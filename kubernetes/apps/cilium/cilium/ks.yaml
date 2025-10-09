@@ -25,8 +25,8 @@ kind: Kustomization
 metadata:
   name: &app cilium-networking
   labels:
-    kustomize.dormammu/targetNS: false
-    components.dormammu/helm: false
+    kustomize.dormammu/targetNS: "false"
+    components.dormammu/helm: "false"
 spec:
   commonMetadata:
     labels:

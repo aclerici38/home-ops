@@ -6,7 +6,7 @@ metadata:
   name: &app cert-manager
   labels:
     components.dormammu/external-secret: cluster
-    components.dormammu/helm: false
+    components.dormammu/helm: "false"
 spec:
   commonMetadata:
     labels:

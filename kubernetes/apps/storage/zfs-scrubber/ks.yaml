@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: &app tank-zfs-scrubber
   labels:
-    components.dormammu/helm: false
+    components.dormammu/helm: "false"
 spec:
   commonMetadata:
     labels:
@@ -31,7 +31,7 @@ kind: Kustomization
 metadata:
   name: &app ssd-zfs-scrubber
   labels:
-    components.dormammu/helm: false
+    components.dormammu/helm: "false"
 spec:
   commonMetadata:
     labels:

@@ -47,7 +47,7 @@ metadata:
   name: &app immich-config
   labels:
     kustomize.dormammu/subfrom: exists
-    components.dormammu/helm: false
+    components.dormammu/helm: "false"
 spec:
   dependsOn:
     - name: external-secrets-stores

@@ -25,7 +25,7 @@ kind: Kustomization
 metadata:
   name: &app envoy-config
   labels:
-    components.dormammu/helm: false
+    components.dormammu/helm: "false"
 spec:
   commonMetadata:
     labels:
