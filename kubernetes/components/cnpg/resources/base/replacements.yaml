@@ -8,18 +8,10 @@
         labelSelector: dormammu.io/component=cnpg
       fieldPaths:
         - metadata.name
+        - spec.dataFrom.1.extract.key
       options:
         delimiter: "-"
         index: 0
-
-    - select:
-        kind: ExternalSecret
-        labelSelector: dormammu.io/component=cnpg
-      fieldPaths:
-        - spec.target.template.templateFrom.0.literal
-      options:
-        delimiter: ": "
-        index: 1
 
     - select:
         kind: Cluster

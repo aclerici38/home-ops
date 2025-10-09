@@ -147,6 +147,24 @@ spec:
         kind: Kustomization
         labelSelector: "!components.dormammu/nohelm"
 
+    # Add app-vars component by default
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../../components/helm/app-vars
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "kustomize.dormammu/app-vars!=false,!components.dormammu/nohelm"
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../../components/postBuild/app-vars
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "kustomize.dormammu/app-vars!=false,components.dormammu/nohelm"
+
     # Add cnpg restore helm component if labelled
     - patch: |
         - op: add

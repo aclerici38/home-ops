@@ -3,15 +3,14 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 resources:
-  - ../../resources/externalsecret.yaml
+  - ../resources/ks.yaml
 replacements:
   - source:
       kind: HelmRelease
       fieldPath: metadata.name
     targets:
       - select:
-          kind: ExternalSecret
-          labelSelector: dormammu.io/component=external-secret
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
         fieldPaths:
-          - metadata.name
-          - spec.dataFrom.0.extract.key
+          - spec.postBuild.substitute.APP
