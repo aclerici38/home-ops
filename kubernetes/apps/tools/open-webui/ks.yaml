@@ -32,5 +32,7 @@ spec:
             recovery:
               recoveryTarget:
                 backupID: "20251002T110002"
+                targetImmediate: true
+                targetTLI: "5"
       target:
         kind: Cluster
