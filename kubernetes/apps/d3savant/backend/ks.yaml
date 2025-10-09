@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: &app d3savant-backend
   labels:
-    components.dormammu/nohelm: true
+    components.dormammu/helm: false
     components.dormammu/cnpg: restore
 spec:
   dependsOn: []

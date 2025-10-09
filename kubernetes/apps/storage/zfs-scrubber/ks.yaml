@@ -4,6 +4,8 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app tank-zfs-scrubber
+  labels:
+    components.dormammu/helm: false
 spec:
   commonMetadata:
     labels:
@@ -28,6 +30,8 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app ssd-zfs-scrubber
+  labels:
+    components.dormammu/helm: false
 spec:
   commonMetadata:
     labels:
