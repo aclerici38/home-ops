@@ -155,7 +155,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "kustomize.dormammu/app-vars!=false,components.dormammu/helm!=false"
+        labelSelector: "components.dormammu/app-vars!=false,components.dormammu/helm!=false"
     - patch: |
         - op: add
           path: /spec/components/-
@@ -163,7 +163,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "kustomize.dormammu/app-vars!=false,components.dormammu/helm=false"
+        labelSelector: "components.dormammu/app-vars!=false,components.dormammu/helm=false"
 
     # Add cnpg restore helm component if labelled
     - patch: |
