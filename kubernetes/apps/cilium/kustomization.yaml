@@ -8,15 +8,4 @@ resources:
   - ./cilium/ks.yaml
 
 replacements:
-  - source:
-      kind: Namespace
-      fieldPath: metadata.name
-    targets:
-      - select:
-          kind: Kustomization
-          group: kustomize.toolkit.fluxcd.io
-        fieldPaths:
-          - metadata.namespace
-          - spec.postBuild.substitute.NS
-        options:
-          create: true
+  - path: ../../kustomize/replacements.yaml

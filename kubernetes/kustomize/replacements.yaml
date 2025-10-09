@@ -1,0 +1,20 @@
+- source:
+    kind: Namespace
+    fieldPath: metadata.name
+  targets:
+    - select:
+        kind: Kustomization
+        group: kustomize.toolkit.fluxcd.io
+      fieldPaths:
+        - metadata.namespace
+        - spec.postBuild.substitute.NS
+      options:
+        create: true
+    - select:
+        kind: Kustomization
+        group: kustomize.toolkit.fluxcd.io
+        labelSelector: "kustomize.dormammu/targetNS!=false"
+      fieldPaths:
+        - spec.targetNamespace
+      options:
+        create: true
