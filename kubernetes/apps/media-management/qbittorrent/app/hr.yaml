@@ -33,6 +33,8 @@ spec:
               repository: docker.io/adguard/dnsproxy
               tag: v0.77.0@sha256:5d401b28872f6713930ff84606393fa2b0c60303a79e2f07f1400421e3d6028c
             args:
+              - -l
+              - '127.0.0.2'
               - -p
               - '53'
               - -u
@@ -46,6 +48,7 @@ spec:
               - -b
               - https://1.1.1.1/dns-query
               - --http3
+              - -v
             restartPolicy: Always
           gluetun:
             dependsOn: doh
@@ -58,7 +61,8 @@ spec:
               repository: ghcr.io/qdm12/gluetun
               tag: v3.40.0@sha256:2b42bfa046757145a5155acece417b65b4443c8033fb88661a8e9dcf7fda5a00
             env:
-              DNS_KEEP_NAMESERVER: "on"
+              DOT: "off"
+              DNS_ADDRESS: '127.0.0.2'
               LOG_LEVEL: debug
               VPN_SERVICE_PROVIDER: custom
               VPN_TYPE: wireguard
