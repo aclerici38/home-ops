@@ -12,7 +12,10 @@ patches:
       - op: add
         path: /spec/provider/fake/data/-
         value:
-          key: ${APP}
-          valueMap:
-            APP: ${APP}
-            NS: ${NS}
+          key: ${APP}-APP
+          value: ${APP}
+      - op: add
+        path: /spec/provider/fake/data/-
+        value:
+          key: ${APP}-NS
+          value: ${NS}
