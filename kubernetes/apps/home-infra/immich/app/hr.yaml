@@ -23,6 +23,15 @@ spec:
       server:
         replicas: 2
         strategy: RollingUpdate
+        pod:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/controller: server
+                      app.kubernetes.io/instance: immich
+                  topologyKey: kubernetes.io/hostname
         containers:
           main:
             image:
@@ -116,14 +125,6 @@ spec:
                   failureThreshold: 60
             securityContext: *contSec
     defaultPodOptions:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  app.kubernetes.io/controller: server
-                  app.kubernetes.io/instance: immich
-              topologyKey: kubernetes.io/hostname
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
