@@ -8,7 +8,7 @@
         labelSelector: dormammu.io/component=cnpg
       fieldPaths:
         - metadata.name
-        - spec.dataFrom.1.extract.key
+        - spec.secretStoreRef.name
       options:
         delimiter: "-"
         index: 0
