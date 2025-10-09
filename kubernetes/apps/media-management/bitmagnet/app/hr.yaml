@@ -34,7 +34,7 @@ spec:
               tag: v0.77.0@sha256:5d401b28872f6713930ff84606393fa2b0c60303a79e2f07f1400421e3d6028c
             args:
               - -p
-              - '53'
+              - '53053'
               - -u
               - '[/cluster.local/]udp://172.17.0.10:53'
               - -u
@@ -59,7 +59,7 @@ spec:
               tag: v3.40.0@sha256:2b42bfa046757145a5155acece417b65b4443c8033fb88661a8e9dcf7fda5a00
             env:
               DOT: "off"
-              DNS_ADDRESS: 127.0.0.1
+              DNS_ADDRESS: 127.0.0.1:53053
               LOG_LEVEL: debug
               VPN_SERVICE_PROVIDER: custom
               VPN_TYPE: wireguard
