@@ -13,4 +13,8 @@ replacements:
           kind: Kustomization
           group: kustomize.toolkit.fluxcd.io
         fieldPaths:
+          - metadata.name
           - spec.postBuild.substitute.APP
+        options:
+          delimiter: "-"
+          index: 0
