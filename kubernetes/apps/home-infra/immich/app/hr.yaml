@@ -24,8 +24,8 @@ spec:
         replicas: 2
         strategy: RollingUpdate
         rollingUpdate:
-          maxSurge: 0
-          maxUnavailable: 1
+          surge: 0
+          unavailable: 1
         pod:
           affinity:
             podAntiAffinity:
