@@ -17,6 +17,20 @@ spec:
     kind: GitRepository
     name: flux-system
   patches:
+    # Make namespaces priv by default cuz why not
+    - patch: |
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          labels:
+            kustomize.toolkit.fluxcd.io/prune: disabled
+            pod-security.kubernetes.io/enforce: &ps privileged
+            pod-security.kubernetes.io/audit: *ps
+            pod-security.kubernetes.io/warn: *ps
+      target:
+        group: v1
+        kind: Namespace
+
     # Default: postBuild.subFrom does not exist
     - patch: |
         apiVersion: kustomize.toolkit.fluxcd.io/v1
