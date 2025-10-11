@@ -38,6 +38,7 @@ conditional:
     cluster.local: ${COREDNS_CLUSTER_IP}
     16.172.in-addr.arpa: ${COREDNS_CLUSTER_IP}
 
+# ClientLookup is set to blocky so it can conditionally forward it to coredns/apt/house DHCP
 clientLookup:
   upstream: 127.0.0.1
   clients:
@@ -81,18 +82,9 @@ redis:
   connectionAttempts: 10
   connectionCooldown: 60s
 
-
 queryLog:
   type: postgresql
   logRetentionDays: 30
   creationAttempts: 5
   creationCooldown: 60s
   flushInterval: 1s
-  # optional: Which fields should be logged. You can choose one or more from: clientIP, clientName, responseReason, responseAnswer, question, duration. If not defined, it logs all fields
-  fields:
-    - clientIP
-    - clientName
-    - duration
-    - question
-    - responseReason
-    - responseAnswer
