@@ -28,7 +28,7 @@ spec:
         metadata:
           name: patch
         spec:
-          namespaceSelectors: []
+          namespaceSelectors: [{}]
           externalSecretSpec:
             data:
               - secretKey: versity-access-key-id
