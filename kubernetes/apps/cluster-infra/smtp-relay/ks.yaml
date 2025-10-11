@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: &app smtp-relay
   labels:
-    components.dormammu/external-secret: normal
+    components.dormammu/external-secret: "true"
 spec:
   commonMetadata:
     labels:

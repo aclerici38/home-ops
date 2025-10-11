@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: &app open-webui
   labels:
-    components.dormammu/external-secret: normal
+    components.dormammu/external-secret: "true"
     components.dormammu/cnpg: restore
 spec:
   dependsOn: []

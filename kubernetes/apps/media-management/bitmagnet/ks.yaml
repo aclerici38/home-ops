@@ -6,7 +6,7 @@ metadata:
   name: &app bitmagnet
   labels:
     components.dormammu/cnpg: no-backup
-    components.dormammu/external-secret: normal
+    components.dormammu/external-secret: "true"
 spec:
   dependsOn: []
   commonMetadata:

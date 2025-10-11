@@ -6,7 +6,7 @@ metadata:
   name: &app frigate
   labels:
     components.dormammu/volsync: versity
-    components.dormammu/external-secret: normal
+    components.dormammu/external-secret: "true"
     components.dormammu/oauth: true
 spec:
   commonMetadata:
