@@ -21,6 +21,16 @@ spec:
   interval: 30m
   timeout: 3m
   patches:
+    # patch secret to all namespaces
+    - patch: |
+        apiVersion: external-secrets.io/v1
+        kind: ClusterExternalSecret
+        metadata:
+          name: ns-patch
+        spec:
+          namespaceSelectors: {}
+      target:
+        kind: ClusterExternalSecret
     - patch: |
         apiVersion: external-secrets.io/v1
         kind: ClusterExternalSecret
