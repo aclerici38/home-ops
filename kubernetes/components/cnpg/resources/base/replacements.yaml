@@ -4,11 +4,11 @@
     fieldPath: metadata.name
   targets:
     - select:
-        kind: ExternalSecret
+        kind: ClusterExternalSecret
         labelSelector: dormammu.io/component=cnpg
       fieldPaths:
         - metadata.name
-        - spec.secretStoreRef.name
+        - spec.externalSecretSpec.secretStoreRef.name
       options:
         delimiter: "-"
         index: 0

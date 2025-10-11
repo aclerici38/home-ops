@@ -22,6 +22,17 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  patches:
+    # Add cnpg db auth secret to grafana's ns
+    - patch: |
+        - op: add
+          path: /spec/namespaceSelectors/-
+          value:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      target:
+        kind: ClusterExternalSecret
+        labelSelector: dormammu.io/component=cnpg
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1

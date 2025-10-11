@@ -33,3 +33,4 @@ spec:
               kubernetes.io/metadata.name: network
       target:
         kind: ClusterExternalSecret
+        labelSelector: dormammu.io/component=external-secrets
