@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: &app cloudnative-pg
   labels:
-    components.dormammu/external-secret: cluster
+    components.dormammu/external-secret: "true"
 spec:
   commonMetadata:
     labels:

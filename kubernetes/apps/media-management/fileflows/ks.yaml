@@ -6,7 +6,7 @@ metadata:
   name: &app fileflows
   labels:
     components.dormammu/volsync: versity
-    components.dormammu/external-secret: normal
+    components.dormammu/external-secret: "true"
     components.dormammu/cnpg: restore
 spec:
   commonMetadata:

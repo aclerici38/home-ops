@@ -5,7 +5,7 @@ metadata:
   name: &app immich
   labels:
     components.dormammu/cnpg: restore
-    components.dormammu/external-secret: normal
+    components.dormammu/external-secret: "true"
 spec:
   commonMetadata:
     labels:
@@ -77,7 +77,7 @@ kind: Kustomization
 metadata:
   name: &app immich-frame
   labels:
-    components.dormammu/external-secret: normal
+    components.dormammu/external-secret: "true"
 spec:
   commonMetadata:
     labels:

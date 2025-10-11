@@ -4,7 +4,7 @@ kind: Kustomization
 metadata:
   name: &app versity
   labels:
-    components.dormammu/external-secret: normal
+    components.dormammu/external-secret: "true"
 spec:
   commonMetadata:
     labels:

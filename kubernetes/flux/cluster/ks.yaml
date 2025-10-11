@@ -234,29 +234,19 @@ spec:
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../../components/external-secret/helm/normal
+          value: ../../../../components/external-secret/helm
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/external-secret=normal,components.dormammu/helm!=false"
-
-    # Add ESO cluster secret component if labelled
+        labelSelector: "components.dormammu/external-secret,components.dormammu/helm!=false"
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../../components/external-secret/helm/cluster
+          value: ../../../../components/external-secret/postBuild
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/external-secret=cluster,components.dormammu/helm!=false"
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/external-secret/postBuild/cluster
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/external-secret=cluster,components.dormammu/helm=false"
+        labelSelector: "components.dormammu/external-secret,components.dormammu/helm=false"
 
     # Add volsync versity component if labelled
     - patch: |

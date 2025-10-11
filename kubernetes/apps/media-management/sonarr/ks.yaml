@@ -6,7 +6,7 @@ metadata:
   name: &app sonarr
   labels:
     components.dormammu/cnpg: restore
-    components.dormammu/external-secret: normal
+    components.dormammu/external-secret: "true"
 spec:
   dependsOn: []
   commonMetadata:
