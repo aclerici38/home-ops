@@ -26,17 +26,9 @@ spec:
         apiVersion: external-secrets.io/v1
         kind: ClusterExternalSecret
         metadata:
-          name: ns-patch
-        spec:
-          namespaceSelectors: {}
-      target:
-        kind: ClusterExternalSecret
-    - patch: |
-        apiVersion: external-secrets.io/v1
-        kind: ClusterExternalSecret
-        metadata:
           name: patch
         spec:
+          namespaceSelectors: {}
           externalSecretSpec:
             data:
               - secretKey: versity-access-key-id
