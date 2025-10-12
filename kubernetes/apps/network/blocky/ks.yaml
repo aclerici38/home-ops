@@ -35,7 +35,7 @@ spec:
         labelSelector: dormammu.io/component=cnpg
     - patch: |
         - op: add
-          path: /spec/conditions/namespaces/-
+          path: /spec/conditions/0/namespaces/-
           value:
             observability
       target:
