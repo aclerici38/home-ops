@@ -47,7 +47,7 @@ spec:
               EMAILS_VERIFIED: true
 
               EMAIL_LOGIN_NOTIFICATION_ENABLED: true
-              SMTP_HOST: smtp-relay.smtp-relay.svc.cluster.local
+              SMTP_HOST: smtp-relay.cluster-infra.svc.cluster.local
               SMTP_PORT: 25
               SMTP_FROM: bot@${SECRET_DOMAIN}
               SMTP_TLS: none
