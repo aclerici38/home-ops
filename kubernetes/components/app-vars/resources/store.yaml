@@ -1,10 +1,15 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/external-secrets.io/secretstore_v1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/external-secrets.io/clustersecretstore_v1.json
 apiVersion: external-secrets.io/v1
-kind: SecretStore
+kind: ClusterSecretStore
 metadata:
   name: ${APP}-vars
+  labels:
+    dormammu.io/component: app-vars
 spec:
+  conditions:
+    - namespaces:
+      - ${NS}
   provider:
     fake:
       data:

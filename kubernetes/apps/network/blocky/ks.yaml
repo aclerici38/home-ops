@@ -33,6 +33,14 @@ spec:
       target:
         kind: ClusterExternalSecret
         labelSelector: dormammu.io/component=cnpg
+    - patch: |
+        - op: add
+          path: /spec/conditions/namespaces/-
+          value:
+            observability
+      target:
+        kind: ClusterSecretStore
+        labelSelector: dormammu.io/component=app-vars
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1

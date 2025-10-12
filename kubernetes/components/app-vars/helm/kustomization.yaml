@@ -10,7 +10,7 @@ replacements:
       fieldPath: metadata.name
     targets:
       - select:
-          kind: SecretStore
+          kind: ClusterSecretStore
         fieldPaths:
           - metadata.name
           - spec.provider.fake.data.0.value
