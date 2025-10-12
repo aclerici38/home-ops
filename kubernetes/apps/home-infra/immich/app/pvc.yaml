@@ -22,15 +22,3 @@ spec:
       storage: 200Gi
   accessModes:
     - ReadWriteMany
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: immich-encoded-video
-spec:
-  storageClassName: nfs-tank
-  resources:
-    requests:
-      storage: 500Gi
-  accessModes:
-    - ReadWriteMany

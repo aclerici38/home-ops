@@ -183,12 +183,6 @@ spec:
           server:
             main:
               - path: /data/thumbs
-      encoded-video:
-        existingClaim: immich-encoded-video
-        advancedMounts:
-          server:
-            main:
-              - path: /data/encoded-video
       config:
         type: configMap
         name: immich-config
