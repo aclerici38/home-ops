@@ -5,7 +5,9 @@ trash:
   days: 30
 ffmpeg:
   targetVideoCodec: hevc
-  acceptedVideoCodecs": ["hevc"]
+  acceptedVideoCodecs":
+    - hevc
+    - h264
   preset: veryslow
   crf: 18
   bframes: -1
