@@ -199,6 +199,15 @@ spec:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
         labelSelector: "components.dormammu/cnpg=init,components.dormammu/helm!=false"
+    # Add cnpg init non-helm component if labelled
+    - patch: |
+        - op: add
+          path: /spec/components/-
+          value: ../../../../components/cnpg/postBuild/init
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "components.dormammu/cnpg=init,components.dormammu/helm=false"
 
     # Add cnpg helm component if labelled
     - patch: |
@@ -214,7 +223,7 @@ spec:
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../../components/cnpg/raw/restore
+          value: ../../../../components/cnpg/postBuild/restore
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
