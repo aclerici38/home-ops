@@ -37,7 +37,7 @@ spec:
               database: app
               owner: jensen
               secret:
-                name: jensen-d3savant-secret
+                name: jensen-d3savant
           managed:
             roles:
               - name: anthony
@@ -47,7 +47,7 @@ spec:
                 inRoles:
                   - jensen
                 passwordSecret:
-                  name: anthony-d3savant-secret
+                  name: anthony-d3savant
       target:
         kind: Cluster
     - patch: |-
@@ -56,9 +56,6 @@ spec:
         metadata:
           name: patch
         spec:
-          pgbouncer:
-            pg_hba:
-              - host app anthony 192.168.0.0/16 scram-sha-256
           serviceTemplate:
             metadata:
               annotations:
