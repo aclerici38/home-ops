@@ -48,5 +48,10 @@ spec:
                   - jensen
                 passwordSecret:
                   name: anthony-d3savant-secret
+          bootstrap:
+            recovery:
+              recoveryTarget:
+                targetTLI: "17"
+                targetLSN: "20/8DFFFFFF"
       target:
         kind: Cluster
