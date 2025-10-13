@@ -55,12 +55,13 @@ spec:
         kind: Pooler
         metadata:
           name: patch
-        serviceTemplate:
-          metadata:
-            annotations:
-              lbipam.cilium.io/ips: ${D3SAVANT_LB_IP}
-          spec:
-            type: LoadBalancer
-            externalTrafficPolicy: Local
+        spec:
+          serviceTemplate:
+            metadata:
+              annotations:
+                lbipam.cilium.io/ips: ${D3SAVANT_LB_IP}
+            spec:
+              type: LoadBalancer
+              externalTrafficPolicy: Local
       target:
         kind: Pooler
