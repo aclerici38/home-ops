@@ -50,3 +50,17 @@ spec:
                   name: anthony-d3savant-secret
       target:
         kind: Cluster
+    - patch: |-
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Pooler
+        metadata:
+          name: patch
+        serviceTemplate:
+          metadata:
+            annotations:
+              lbipam.cilium.io/ips: ${D3SAVANT_LB_IP}
+          spec:
+            type: LoadBalancer
+            externalTrafficPolicy: Local
+      target:
+        kind: Pooler
