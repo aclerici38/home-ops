@@ -56,6 +56,9 @@ spec:
         metadata:
           name: patch
         spec:
+          pgbouncer:
+            pg_hba:
+              - host app anthony 192.168.0.0/16 scram-sha-256
           serviceTemplate:
             metadata:
               annotations:
