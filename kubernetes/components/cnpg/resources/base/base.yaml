@@ -21,9 +21,6 @@ spec:
   monitoring:
     enablePodMonitor: true
   postgresql:
-    pg_hba:
-      # Catch-all rule to block non-pooler db access. Pooler is allowed via operator's default rules
-      - host all all all reject
     parameters:
       shared_buffers: "${CNPG_BUFFERS:=512MB}"
       work_mem: "${CNPG_WORK_MEM:=8MB}"
