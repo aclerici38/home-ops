@@ -8,7 +8,7 @@ sonarr:
         rename: true
         standard: default
         daily: default
-    base_url: http://sonarr.sonarr:8989
+    base_url: http://sonarr:8989
     api_key: ${SONARR__AUTH__APIKEY}
 
     # Custom Format Configuration
@@ -161,7 +161,7 @@ radarr:
         rename: true
         standard: jellyfin-tmdb
 
-    base_url: http://radarr.radarr:7878
+    base_url: http://radarr:7878
     api_key: ${RADARR__AUTH__APIKEY}
 
     # Custom Format Configuration
