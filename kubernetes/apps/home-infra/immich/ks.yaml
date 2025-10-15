@@ -46,6 +46,18 @@ spec:
                   - /usr/share/postgresql/18/
       target:
         kind: Cluster
+    - patch: |-
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Pooler
+        metadata:
+          name: patch
+        spec:
+          serviceTemplate:
+            spec:
+              type: LoadBalancer
+              externalTrafficPolicy: Local
+      target:
+        kind: Pooler
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
