@@ -24,29 +24,21 @@ spec:
   timeout: 3m
   postBuild:
     substitute:
-      CNPG_IMAGE: ghcr.io/tensorchord/vchord-postgres:pg17-v0.5.3
+      CNPG_IMAGE: ghcr.io/tensorchord/cloudnative-vectorchord:17.5-0.4.3@sha256:acebb38ca309938bc05ce268b019c98aa718cb554dd54e4443654d9d00a0d498
       CNPG_CAPACITY: 20Gi
       CNPG_POOLMODE: session
-  # patches:
-  #   - patch: |-
-  #       apiVersion: postgresql.cnpg.io/v1
-  #       kind: Cluster
-  #       metadata:
-  #         name: patch
-  #       spec:
-  #         postgresql:
-  #           shared_preload_libraries:
-  #             - "vchord.so"
-  #           extensions:
-  #             - name: vchord
-  #               image:
-  #                 reference: ghcr.io/tensorchord/vchord-scratch:pg18-v0.5.3@sha256:c310ede47f7f82bd257c3e53806d60680d5899c318ca946fb313efad9a90a78e
-  #               dynamic_library_path:
-  #                 - /usr/lib/postgresql/18/lib
-  #               extension_control_path:
-  #                 - /usr/share/postgresql/18/
-  #     target:
-  #       kind: Cluster
+  patches:
+    - patch: |
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Cluster
+        metadata:
+          name: patch
+        spec:
+          postgresql:
+            shared_preload_libraries:
+              - "vchord.so"
+      target:
+        kind: Cluster
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
