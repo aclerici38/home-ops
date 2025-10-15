@@ -26,24 +26,25 @@ spec:
     substitute:
       CNPG_CAPACITY: 20Gi
       CNPG_POOLMODE: session
-  patches:
-    - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
-          name: patch
-        spec:
-          postgresql:
-            extensions:
-              - name: vchord
-                image:
-                  reference: ghcr.io/tensorchord/vchord-scratch:pg18-v0.5.3@sha256:c310ede47f7f82bd257c3e53806d60680d5899c318ca946fb313efad9a90a78e
-                dynamic_library_path:
-                  - /usr/lib/postgresql/18/lib
-                extension_control_path:
-                  - /usr/share/postgresql/18/
-      target:
-        kind: Cluster
+      CNPG_IMAGE: ghcr.io/cloudnative-pg/postgresql:17-standard-trixie
+  # patches:
+  #   - patch: |-
+  #       apiVersion: postgresql.cnpg.io/v1
+  #       kind: Cluster
+  #       metadata:
+  #         name: patch
+  #       spec:
+  #         postgresql:
+  #           extensions:
+  #             - name: vchord
+  #               image:
+  #                 reference: ghcr.io/tensorchord/vchord-scratch:pg18-v0.5.3@sha256:c310ede47f7f82bd257c3e53806d60680d5899c318ca946fb313efad9a90a78e
+  #               dynamic_library_path:
+  #                 - /usr/lib/postgresql/18/lib
+  #               extension_control_path:
+  #                 - /usr/share/postgresql/18/
+  #     target:
+  #       kind: Cluster
     # - patch: |
     #     apiVersion: postgresql.cnpg.io/v1
     #     kind: Cluster
