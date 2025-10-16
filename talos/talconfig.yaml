@@ -180,7 +180,6 @@ nodes:
       useUKI: true
       arch: arm64
     controlPlane: true
-    talosImageURL: ghcr.io/aclerici38/installer
     nodeTaints:
       rpi: true:NoSchedule
     networkInterfaces:
@@ -197,6 +196,11 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
         mtu: 1500
+    patches:
+      - |-
+        machine:
+          install:
+            image: ghcr.io/talos-rpi5/installer:${TALOS_PI5_VERSION}
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
