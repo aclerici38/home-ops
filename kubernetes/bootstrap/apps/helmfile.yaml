@@ -7,14 +7,6 @@ helmDefaults:
   wait: true
   waitForJobs: true
 
-hooks:
-  - events: ["prepare"]
-    command: "sh"
-    showlogs: true
-    args:
-      - "-c"
-      - "kustomize build /Users/anthony/home-ops/kubernetes/resources/crds | kubectl apply --server-side --force-conflicts -f -"
-
 releases:
   - name: cilium
     namespace: cilium
@@ -42,17 +34,11 @@ releases:
         service:
           name: kube-dns
           clusterIP: 172.17.0.10
-        tolerations:
-          - key: CriticalAddonsOnly
-            operator: Exists
-          - key: node-role.kubernetes.io/control-plane
-            operator: Exists
-            effect: NoSchedule
     needs:
       - cilium/cilium
 
   - name: cert-manager
-    namespace: cert-manager
+    namespace: cluster-infra
     atomic: true
     chart: oci://ghcr.io/home-operations/charts-mirror/cert-manager
     version: v1.17.1
@@ -63,12 +49,12 @@ releases:
       - kube-system/coredns
 
   - name: onepassword-connect
-    namespace: onepassword-connect
+    namespace: cluster-infra
     atomic: true
-    chart: oci://ghcr.io/bjw-s/helm/app-template
-    version: 3.7.3
+    chart: oci://ghcr.io/bjw-s-labs/helm/app-template
+    version: 4.4.0
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/onepassword-connect/app/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/cluster-infra/onepassword-connect/app/values.yaml
     needs:
       - cilium/cilium
       - kube-system/coredns
@@ -87,7 +73,11 @@ releases:
       - events: ["postsync"]
         showlogs: true
         command: "kubectl"
-        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/external-secrets/stores/1password/store.yaml"]
+        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cluster-infra/external-secrets/stores/1password/store.yaml"]
+      - events: ["postsync"]
+        showlogs: true
+        command: "kubectl"
+        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cluster-infra/external-secrets/stores/1password/store.yaml"]
 
   - name: flux-operator
     namespace: flux-system
@@ -109,20 +99,3 @@ releases:
     needs:
       - flux-system/flux-operator
       - external-secrets/external-secrets
-
-  - name: kustomize-mutating-webhook
-    namespace: flux-system
-    atomic: true
-    chart: oci://ghcr.io/xunholy/charts/kustomize-mutating-webhook
-    version: 0.5.0
-    values:
-      - /Users/anthony/home-ops/kubernetes/apps/flux-system/kustomize-mutating-webhook/app/values.yaml
-    needs:
-      - flux-system/flux-instance
-      - cert-manager/cert-manager
-      - external-secrets/external-secrets
-    hooks:
-      - events: ["presync"]
-        showlogs: true
-        command: "kubectl"
-        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/flux/meta/settings/cluster-secrets.yaml"]
