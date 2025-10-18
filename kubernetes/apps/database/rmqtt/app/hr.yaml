@@ -46,7 +46,7 @@ spec:
           main:
             image:
               repository: docker.io/rmqtt/rmqtt
-              tag: 0.16.0@sha256:f8b97ce591166fca8cc019d27a7b2fc35888a07138e7efd601c5fececc4cf756
+              tag: 0.17.0@sha256:14eaa6538da528ffad791eca6a68f49a244661b6da301a42d9f845d21d5006cb
             args:
               - --id=$(POD_ID)
               - --plugins-default-startups
