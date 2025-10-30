@@ -5,7 +5,7 @@ metadata:
 spec:
   cluster:
     name: ${APP}-db
-  instances: ${CNPG_POOLER_REPLICAS:=2}
+  instances: ${CNPG_POOLER_REPLICAS:=1}
   type: rw
   pgbouncer:
     poolMode: "${CNPG_POOLMODE:=transaction}"
