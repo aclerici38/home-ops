@@ -10,20 +10,29 @@ spec:
   template:
     spec:
       containers: [] # this is needed for some reason to make schema happy
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: cnpg.io/cluster
-                    operator: In
-                    values:
-                      - ${APP}-db
-                  - key: cnpg.io/podRole
-                    operator: In
-                    values:
-                      - pooler
-              topologyKey: kubernetes.io/hostname
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              cnpg.io/cluster: ${APP}-db
+              cnpg.io/podRole: pooler
+      # For when i get a 3rd good node
+      # affinity:
+      #   podAntiAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       - labelSelector:
+      #           matchExpressions:
+      #             - key: cnpg.io/cluster
+      #               operator: In
+      #               values:
+      #                 - ${APP}-db
+      #             - key: cnpg.io/podRole
+      #               operator: In
+      #               values:
+      #                 - pooler
+      #         topologyKey: kubernetes.io/hostname
   pgbouncer:
     poolMode: "${CNPG_POOLMODE:=transaction}"
     parameters:
