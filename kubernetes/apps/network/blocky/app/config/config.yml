@@ -29,7 +29,7 @@ conditional:
     ${SECRET_DOMAIN}: ${K8S_GATEWAY_CLUSTER_IP}:53
     # DHCP servers
     # House
-    house.lan: 10.10.10.2:53
+    .internal: 10.10.10.2:53
     0.10.in-addr.arpa: 10.10.10.2:53
     # Apartment
     samthony.lan: 192.168.9.1:53
