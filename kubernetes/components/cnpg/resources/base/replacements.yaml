@@ -27,7 +27,7 @@
         - metadata.name
         - spec.cluster.name
         # - spec.template.spec.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution.0.labelSelector.matchExpressions.[key=cnpg.io/cluster].values.0
-        - spec.template.spec.topologySpreadConstraints.0.labelSelector.matchLabels.cnpg.io/cluster
+        - spec.template.spec.topologySpreadConstraints.0.labelSelector.matchLabels.cnpg\.io/cluster
       options:
         delimiter: "-"
         index: 0
