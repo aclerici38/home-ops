@@ -17,7 +17,8 @@
       "matchDatasources": ["docker"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
-      }
+      },
+      minimumGroupSize: 3,
     },
     {
       "description": ["Talos Group"],
@@ -37,7 +38,7 @@
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
-      separateMinorPatch: false
+      minimumGroupSize: 2,
     },
     {
       description: "External Secrets Group",
@@ -48,7 +49,6 @@
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
-      separateMinorPatch: false
     },
     {
       description: "Cilium group",
@@ -59,7 +59,6 @@
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
-      separateMinorPatch: false
     },
     {
       description: "Coredns group",
@@ -70,7 +69,6 @@
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
-      separateMinorPatch: false
     },
     {
       description: "1Pass group",
@@ -81,7 +79,7 @@
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
-      separateMinorPatch: false
+      minimumGroupSize: 2,
     },
     {
       description: "Rook-Ceph group",
@@ -92,7 +90,29 @@
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
-      separateMinorPatch: false
+      minimumGroupSize: 2,
+    },
+    {
+      description: "CNPG-Barman-Cloud group",
+      groupName: "CNPG-Barman-Cloud",
+      matchPackagePatterns: ["plugin-barman-cloud", "plugin-barman-cloud-sidecar"],
+      matchDatasources: ["docker", "github-releases", "helm"],
+      matchUpdateTypes: ["minor", "patch"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+      minimumGroupSize: 2,
+    },
+    {
+      description: "Streamystats group",
+      groupName: "Streamystats",
+      matchPackagePatterns: ["streamystats-v2-nextjs", "streamystats-v2-job-server", "streamystats-v2-migrate"],
+      matchDatasources: ["docker", "github-releases", "helm"],
+      matchUpdateTypes: ["minor", "patch"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+      minimumGroupSize: 3,
     },
   ]
 }
