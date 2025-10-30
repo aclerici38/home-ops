@@ -25,7 +25,6 @@
         "**/flaresolverr",
         "**/generic-device-plugin",
         "**/grafana",
-        "**/http-https-echo",
         "**/it-tools",
         "**/k8s-sidecar",
         "**/kube-prometheus-stack",
@@ -51,6 +50,7 @@
       "matchDatasources": ["docker", "helm"],
       "matchPackageNames": [
         "**/firefox",
+        "**/http-https-echo",
       ],
       "matchUpdateTypes": ["major", "minor", "patch", "digest"],
     }
