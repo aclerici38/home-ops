@@ -42,7 +42,7 @@ spec:
               tag: latest
             env:
               EXPORTS_MOUNTED: true
-              NFS_THREADS: 128
+              NFS_THREADS: 512
             probes:
               readiness: &probes
                 enabled: true
