@@ -146,19 +146,11 @@ spec:
             dispatcharr:
               - path: /usr/bin/chown
                 subPath: stub
-              - path: /usr/lib/postgresql/17/bin/postgres
-                subPath: stub
-              - path: /usr/lib/postgresql/17/bin/pg_isready
+              - path: app/docker/init/02-postgres.sh
                 subPath: stub
               - path: /usr/lib/postgresql/17/bin/pg_ctl
                 subPath: stub
-              - path: /usr/lib/postgresql/17/bin/pg_dump
-                subPath: stub
-              - path: /usr/lib/postgresql/17/bin/psql
-                subPath: stub
-              - path: /usr/lib/postgresql/17/bin/dropdb
-                subPath: stub
-              - path: /usr/lib/postgresql/17/bin/createdb
+              - path: /usr/lib/postgresql/17/bin/pg_isready
                 subPath: stub
     configMaps:
       config:
