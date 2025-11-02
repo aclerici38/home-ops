@@ -77,7 +77,7 @@ spec:
                 enabled: true
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
@@ -162,6 +162,10 @@ spec:
                 subPath: etc
               - path: /root
                 subPath: root
+              - path: /app/logo_cache
+                subPath: logos
+              - path: /app/media
+                subPath: media
       stub:
         type: configMap
         name: dispatcharr
