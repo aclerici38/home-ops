@@ -156,6 +156,10 @@ spec:
                 subPath: stub
               - path: /usr/lib/postgresql/17/bin/psql
                 subPath: stub
+              - path: /usr/lib/postgresql/17/bin/dropdb
+                subPath: stub
+              - path: /usr/lib/postgresql/17/bin/createdb
+                subPath: stub
     configMaps:
       config:
         data:
