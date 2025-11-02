@@ -57,10 +57,6 @@ spec:
                 enabled: true
               readiness:
                 enabled: true
-            securityContext: &sec
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 100m
@@ -82,15 +78,12 @@ spec:
                 cpu: 50m
               limits:
                 memory: 256Mi
-            securityContext: *sec
     defaultPodOptionsStrategy: merge
     defaultPodOptions:
+      hostUsers: false
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
+        runAsUser: 0
+        runAsGroup: 0
         seccompProfile: { type: RuntimeDefault }
     service:
       main:
@@ -111,5 +104,5 @@ spec:
             namespace: envoy-system
             sectionName: https
     persistence:
-      data:
+      t:
         type: emptyDir
