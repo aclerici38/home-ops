@@ -60,6 +60,9 @@ spec:
                 secretKeyRef:
                   name: dispatcharr-db-app
                   key: password
+            resources:
+              limits:
+                gpu.intel.com/i915: 1
             securityContext:
               runAsUser: 0
               runAsNonRoot: false
