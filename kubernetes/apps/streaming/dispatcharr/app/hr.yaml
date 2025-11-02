@@ -25,21 +25,15 @@ spec:
         forceRename: dispatcharr
         pod:
           securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
             supplementalGroups:
               - 44
-        initContainers:
-          priv-init:
+        containers:
+          dispatcharr:
             image: &img
               repository: ghcr.io/dispatcharr/dispatcharr
               tag: 0.11.1@sha256:894aa15b61a45d3238a66dc06411e684ced0d687453a5be21d10a81b12e476a3
-            command:
-              - bash
-              - -c
-              - |
-                . /app/docker/init/01-user-setup.sh
-                cp -a /etc/. /etc-main
-                touch /etc-main/profile.d/dispatcharr.sh
-                chown -R 1000:1000 /etc-main/profile.d/dispatcharr.sh /etc-main/environment /etc-main/nginx
             env: &env
               DISPATCHARR_LOG_LEVEL: debug
               REDIS_HOST: dragonfly-db.database.svc.cluster.local
@@ -60,16 +54,6 @@ spec:
                 secretKeyRef:
                   name: dispatcharr-db-app
                   key: password
-            resources:
-              limits:
-                gpu.intel.com/i915: 1
-            securityContext:
-              runAsUser: 0
-              runAsNonRoot: false
-        containers:
-          dispatcharr:
-            image: *img
-            env: *env
             probes:
               liveness:
                 enabled: true
@@ -95,6 +79,11 @@ spec:
                 gpu.intel.com/i915: 1
                 memory: 1Gi
       celery:
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsGroup: 1000
+            runAsUser: 1000
         containers:
           main:
             image: *img
@@ -116,10 +105,6 @@ spec:
     defaultPodOptionsStrategy: merge
     defaultPodOptions:
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     service:
