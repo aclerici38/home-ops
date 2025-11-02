@@ -35,7 +35,9 @@ spec:
             command:
               - bash
               - -c
-              - cp /etc /etc-main
+              - cp -r /etc /etc-main
+            securityContext:
+              runAsUser: 0
         containers:
           dispatcharr:
             image: *img
