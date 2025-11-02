@@ -104,5 +104,10 @@ spec:
             namespace: envoy-system
             sectionName: https
     persistence:
-      t:
+      tmpfs:
         type: emptyDir
+        globalMounts:
+          - path: /data
+            subPath: data
+          - path: /tmp
+            subPath: tmp
