@@ -39,7 +39,7 @@ spec:
                 . /app/docker/init/01-user-setup.sh
                 cp -a /etc/. /etc-main
                 touch /etc-main/profile.d/dispatcharr.sh
-                chown -R 1000:1000 /etc-main/profile.d/dispatcharr.sh /etc-main/environment
+                chown -R 1000:1000 /etc-main/profile.d/dispatcharr.sh /etc-main/environment /etc-main/nginx
             env: &env
               DISPATCHARR_LOG_LEVEL: debug
               REDIS_HOST: dragonfly-db.database.svc.cluster.local
@@ -162,3 +162,5 @@ spec:
                 subPath: etc
               - path: /root
                 subPath: root
+              - path: /data/db
+                subPath: db
