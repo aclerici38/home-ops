@@ -173,9 +173,12 @@ spec:
         advancedMounts:
           dispatcharr:
             dispatcharr:
-              - path: /app/docker/init/02-postgres.sh
+              - path: /usr/bin/chown
+                subPath: empty
+              - path: /usr/bin/su
                 subPath: empty
     configMaps:
       config:
         data:
-          empty: ""
+          empty: |
+            exit 0
