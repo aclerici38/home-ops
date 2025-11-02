@@ -37,6 +37,7 @@ spec:
               - -c
               - |
                 cp -a /etc/. /etc-main
+                touch /etc-main/profile.d/dispatcharr.sh
                 chown -R 1000:1000 /etc-main/profile.d/dispatcharr.sh /etc-main/environment
             securityContext:
               runAsUser: 0
