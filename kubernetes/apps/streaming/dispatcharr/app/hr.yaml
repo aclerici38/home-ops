@@ -35,9 +35,10 @@ spec:
             command:
               - bash
               - -c
-              - cp -r /etc /etc-main
+              - cp -a /etc/. /etc-main
             securityContext:
               runAsUser: 0
+              runAsNonRoot: false
         containers:
           dispatcharr:
             image: *img
@@ -45,15 +46,15 @@ spec:
               DISPATCHARR_LOG_LEVEL: debug
               REDIS_HOST: dragonfly-db.database.svc.cluster.local
               CELERY_BROKER_URL: redis://dragonfly-db.database.svc.cluster.local/6
-              POSTRGES_HOST:
+              POSTGRES_HOST:
                 secretKeyRef:
                   name: dispatcharr-db-app
                   key: host
-              POSTRGES_DB:
+              POSTGRES_DB:
                 secretKeyRef:
                   name: dispatcharr-db-app
                   key: dbname
-              POSTRGES_USER:
+              POSTGRES_USER:
                 secretKeyRef:
                   name: dispatcharr-db-app
                   key: user
@@ -97,7 +98,7 @@ spec:
             resources:
               requests:
                 cpu: 50m
-                requests: 2Gi
+                memory: 2Gi
               limits:
                 memory: 3Gi
             securityContext:
