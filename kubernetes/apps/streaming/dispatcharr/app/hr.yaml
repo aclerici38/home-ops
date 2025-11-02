@@ -12,11 +12,11 @@ spec:
     name: app-template
     namespace: flux-system
   install:
-    timeout: 5m
+    timeout: 2m
     remediation:
       retries: 1
   upgrade:
-    timeout: 5m
+    timeout: 2m
     remediation:
       retries: 1
   values:
@@ -137,5 +137,8 @@ spec:
         globalMounts:
           - path: /tmp
             subPath: tmp
-          - path: /data
-            subPath: data
+        advancedMounts:
+          dispatcharr:
+            dispatcharr:
+              - path: /data
+                subPath: data
