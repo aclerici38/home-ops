@@ -60,7 +60,7 @@ spec:
               readiness:
                 enabled: true
             securityContext:
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
               capabilities:
                 drop:
@@ -137,23 +137,3 @@ spec:
         globalMounts:
           - path: /tmp
             subPath: tmp
-      stub:
-        type: configMap
-        name: dispatcharr
-        defaultMode: 0755
-        advancedMounts:
-          dispatcharr:
-            dispatcharr:
-              - path: /usr/bin/chown
-                subPath: stub
-              - path: app/docker/init/02-postgres.sh
-                subPath: stub
-              - path: /usr/lib/postgresql/17/bin/pg_ctl
-                subPath: stub
-              - path: /usr/lib/postgresql/17/bin/pg_isready
-                subPath: stub
-    configMaps:
-      config:
-        data:
-          stub: |
-            exit 0
