@@ -126,14 +126,16 @@ spec:
             namespace: envoy-system
             sectionName: https
     persistence:
-      data:
-        existingClaim: dispatcharr
-        advancedMounts:
-          dispatcharr:
-            dispatcharr:
-              - path: /data
+      # data:
+      #   existingClaim: dispatcharr
+      #   advancedMounts:
+      #     dispatcharr:
+      #       dispatcharr:
+      #         - path: /data
       tmpfs:
         type: emptyDir
         globalMounts:
           - path: /tmp
             subPath: tmp
+          - path: /data
+            subPath: data
