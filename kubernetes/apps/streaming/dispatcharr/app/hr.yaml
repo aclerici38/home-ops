@@ -37,16 +37,10 @@ spec:
               - -c
               - |
                 groupadd -g 1000 dispatch
-                useradd -u 1000 -g 1000 -s /usr/sbin/nologin "$${POSTGRES_USER}"
+                useradd -u 1000 -g 1000 -s /usr/sbin/nologin $(POSTGRES_USER)
                 cp -a /etc/. /etc-main
                 touch /etc-main/profile.d/dispatcharr.sh
                 chown -R 1000:1000 /etc-main/profile.d/dispatcharr.sh /etc-main/environment
-            securityContext:
-              runAsUser: 0
-              runAsNonRoot: false
-        containers:
-          dispatcharr:
-            image: *img
             env: &env
               DISPATCHARR_LOG_LEVEL: debug
               REDIS_HOST: dragonfly-db.database.svc.cluster.local
@@ -67,6 +61,13 @@ spec:
                 secretKeyRef:
                   name: dispatcharr-db-app
                   key: password
+            securityContext:
+              runAsUser: 0
+              runAsNonRoot: false
+        containers:
+          dispatcharr:
+            image: *img
+            env: *env
             probes:
               liveness:
                 enabled: true
