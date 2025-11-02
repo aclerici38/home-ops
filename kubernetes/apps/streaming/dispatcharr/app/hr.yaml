@@ -25,6 +25,9 @@ spec:
         forceRename: dispatcharr
         pod:
           securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 0
             supplementalGroups:
               - 44
         containers:
@@ -77,6 +80,12 @@ spec:
                 gpu.intel.com/i915: 1
                 memory: 1Gi
       celery:
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
         containers:
           main:
             image: *img
@@ -97,10 +106,6 @@ spec:
     defaultPodOptionsStrategy: merge
     defaultPodOptions:
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     service:
