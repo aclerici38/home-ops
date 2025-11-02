@@ -115,6 +115,8 @@ spec:
         advancedMounts:
           dispatcharr:
             dispatcharr:
+              - path: /data/db
+                subPath: db
               - path: /data/plugins
                 subPath: plugins
               - path: /data/m3us
