@@ -162,5 +162,16 @@ spec:
                 subPath: etc
               - path: /root
                 subPath: root
-              - path: /data/db
-                subPath: db
+      stub:
+        type: configMap
+        name: dispatcharr
+        defaultMode: 0755
+        advancedMounts:
+          dispatcharr:
+            dispatcharr:
+              - path: /app/docker/init/02-postgres.sh
+                subPath: empty
+    configMaps:
+      config:
+        data:
+          empty: ""
