@@ -137,20 +137,6 @@ spec:
         globalMounts:
           - path: /tmp
             subPath: tmp
-        advancedMounts:
-          dispatcharr:
-            priv-init:
-              - path: /etc-main
-                subPath: etc
-            dispatcharr:
-              - path: /etc
-                subPath: etc
-              - path: /root
-                subPath: root
-              - path: /app/logo_cache
-                subPath: logos
-              - path: /app/media
-                subPath: media
       stub:
         type: configMap
         name: dispatcharr
@@ -159,8 +145,6 @@ spec:
           dispatcharr:
             dispatcharr:
               - path: /usr/bin/chown
-                subPath: empty
-              - path: /usr/bin/su
                 subPath: empty
     configMaps:
       config:
