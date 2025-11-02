@@ -35,7 +35,9 @@ spec:
             command:
               - bash
               - -c
-              - cp -a /etc/. /etc-main
+              - |
+                cp -a /etc/. /etc-main
+                chown -R 1000:1000 /etc-main/profile.d/dispatcharr.sh /etc-main/environment
             securityContext:
               runAsUser: 0
               runAsNonRoot: false
