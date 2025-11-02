@@ -27,11 +27,18 @@ spec:
           securityContext:
             supplementalGroups:
               - 44
-        containers:
-          dispatcharr:
+        initContainers:
+          etc-copy:
             image: &img
               repository: ghcr.io/dispatcharr/dispatcharr
               tag: 0.11.1@sha256:894aa15b61a45d3238a66dc06411e684ced0d687453a5be21d10a81b12e476a3
+            command:
+              - bash
+              - -c
+              - cp /etc /etc-main
+        containers:
+          dispatcharr:
+            image: *img
             env: &env
               DISPATCHARR_LOG_LEVEL: debug
               REDIS_HOST: dragonfly-db.database.svc.cluster.local
@@ -134,5 +141,11 @@ spec:
         globalMounts:
           - path: /tmp
             subPath: tmp
-          - path: /etc
-            subPath: etc
+        advancedMounts:
+          dispatcharr:
+            etc-copy:
+              - path: /etc-main
+                subPath: etc
+            dispatcharr:
+              - path: /etc
+                subPath: etc
