@@ -38,29 +38,13 @@ spec:
               DISPATCHARR_LOG_LEVEL: debug
               REDIS_HOST: dragonfly-db.database.svc.cluster.local
               CELERY_BROKER_URL: redis://dragonfly-db.database.svc.cluster.local/6
-              POSTGRES_HOST:
-                secretKeyRef:
-                  name: dispatcharr-db-app
-                  key: host
-              POSTGRES_DB:
-                secretKeyRef:
-                  name: dispatcharr-db-app
-                  key: dbname
-              POSTGRES_USER:
-                secretKeyRef:
-                  name: dispatcharr-db-app
-                  key: user
-              POSTGRES_PASSWORD:
-                secretKeyRef:
-                  name: dispatcharr-db-app
-                  key: password
             probes:
               liveness:
                 enabled: true
               readiness:
                 enabled: true
             securityContext:
-              allowPrivilegeEscalation: true
+              allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
               capabilities:
                 drop:
@@ -126,12 +110,28 @@ spec:
             namespace: envoy-system
             sectionName: https
     persistence:
-      # data:
-      #   existingClaim: dispatcharr
-      #   advancedMounts:
-      #     dispatcharr:
-      #       dispatcharr:
-      #         - path: /data
+      data:
+        existingClaim: dispatcharr
+        advancedMounts:
+          dispatcharr:
+            dispatcharr:
+              - path: /data/plugins
+                subPath: plugins
+              - path: /data/m3us
+                subPath: m3us
+              - path: /data/epgs
+                subPath: epgs
+              - path: /data/logos
+                subPath: logos
+      media:
+        existingClaim: dispatcharr-media
+        advancedMounts:
+          dispatcharr:
+            dispatcharr:
+              - path: /data/recordings
+                subPath: recordings
+              - path: /data/uploads
+                subPath: uploads
       tmpfs:
         type: emptyDir
         globalMounts:
