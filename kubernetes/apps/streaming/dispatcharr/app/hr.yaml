@@ -36,8 +36,8 @@ spec:
               - bash
               - -c
               - |
-                groupadd -g 1000 "${POSTGRES_USER}"
-                useradd -u 1000 -g 1000 -s /usr/sbin/nologin "${POSTGRES_USER}"
+                groupadd -g 1000 dispatch
+                useradd -u 1000 -g 1000 -s /usr/sbin/nologin "$${POSTGRES_USER}"
                 cp -a /etc/. /etc-main
                 touch /etc-main/profile.d/dispatcharr.sh
                 chown -R 1000:1000 /etc-main/profile.d/dispatcharr.sh /etc-main/environment
