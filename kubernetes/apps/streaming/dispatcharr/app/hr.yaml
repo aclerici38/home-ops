@@ -145,9 +145,15 @@ spec:
           dispatcharr:
             dispatcharr:
               - path: /usr/bin/chown
-                subPath: empty
+                subPath: stub
+              - path: /usr/lib/postgresql/17/bin/postgres
+                subPath: stub
+              - path: /usr/lib/postgresql/17/bin/pg_isready
+                subPath: stub
+              - path: /usr/lib/postgresql/17/bin/pg_ctl
+                subPath: stub
     configMaps:
       config:
         data:
-          empty: |
+          stub: |
             exit 0
