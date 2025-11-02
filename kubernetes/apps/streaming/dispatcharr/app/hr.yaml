@@ -28,7 +28,7 @@ spec:
             supplementalGroups:
               - 44
         initContainers:
-          etc-copy:
+          priv-init:
             image: &img
               repository: ghcr.io/dispatcharr/dispatcharr
               tag: 0.11.1@sha256:894aa15b61a45d3238a66dc06411e684ced0d687453a5be21d10a81b12e476a3
@@ -36,6 +36,7 @@ spec:
               - bash
               - -c
               - |
+                groupadd -g 1000 dispatch
                 cp -a /etc/. /etc-main
                 touch /etc-main/profile.d/dispatcharr.sh
                 chown -R 1000:1000 /etc-main/profile.d/dispatcharr.sh /etc-main/environment
@@ -149,7 +150,7 @@ spec:
             subPath: tmp
         advancedMounts:
           dispatcharr:
-            etc-copy:
+            priv-init:
               - path: /etc-main
                 subPath: etc
             dispatcharr:
