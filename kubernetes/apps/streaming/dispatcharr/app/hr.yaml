@@ -1,0 +1,115 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: dispatcharr
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      dispatcharr:
+        forceRename: dispatcharr
+        pod:
+          securityContext:
+            supplementalGroups:
+              - 44
+        containers:
+          dispatcharr:
+            image: &img
+              repository: ghcr.io/dispatcharr/dispatcharr
+              tag: 0.11.1@sha256:894aa15b61a45d3238a66dc06411e684ced0d687453a5be21d10a81b12e476a3
+            env: &env
+              DISPATCHARR_LOG_LEVEL: debug
+              REDIS_HOST: dragonfly-db.database.svc.cluster.local
+              CELERY_BROKER_URL: redis://dragonfly-db.database.svc.cluster.local/6
+              POSTRGES_HOST:
+                secretKeyRef:
+                  name: dispatcharr-db-app
+                  key: host
+              POSTRGES_DB:
+                secretKeyRef:
+                  name: dispatcharr-db-app
+                  key: dbname
+              POSTRGES_USER:
+                secretKeyRef:
+                  name: dispatcharr-db-app
+                  key: user
+              POSTGRES_PASSWORD:
+                secretKeyRef:
+                  name: dispatcharr-db-app
+                  key: password
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            securityContext: &sec
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 500Mi
+              limits:
+                gpu.intel.com/i915: 1
+                memory: 1Gi
+      celery:
+        containers:
+          main:
+            image: *img
+            command:
+              - bash
+              - -c
+              - cd /app && exec nice -n 5 celery -A dispatcharr worker -l info
+            env: *env
+            resources:
+              requests:
+                cpu: 50m
+              limits:
+                memory: 256Mi
+            securityContext: *sec
+    defaultPodOptionsStrategy: merge
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      main:
+        controller: dispatcharr
+        ports:
+          http:
+            port: &port 9191
+    route:
+      main:
+        hostnames:
+          - dispatcharr.${SECRET_DOMAIN}
+        rules:
+          - backendRefs:
+            - identifier: main
+              port: *port
+        parentRefs:
+          - name: internal
+            namespace: envoy-system
+            sectionName: https
+    persistence:
+      data:
+        type: emptyDir
