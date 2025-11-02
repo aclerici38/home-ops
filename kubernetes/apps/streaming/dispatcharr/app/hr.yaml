@@ -152,6 +152,10 @@ spec:
                 subPath: stub
               - path: /usr/lib/postgresql/17/bin/pg_ctl
                 subPath: stub
+              - path: /usr/lib/postgresql/17/bin/pg_dump
+                subPath: stub
+              - path: /usr/lib/postgresql/17/bin/psql
+                subPath: stub
     configMaps:
       config:
         data:
