@@ -22,9 +22,14 @@ spec:
   values:
     controllers:
       jellyfin:
-        forceRename: jellyfin
         pod:
           securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
             supplementalGroups:
               - 44
         containers:
@@ -56,41 +61,6 @@ spec:
                 gpu.intel.com/i915: 1
                 cpu: "16"
                 memory: 16Gi
-      meilisearch:
-        containers:
-          main:
-            image:
-              repository: docker.io/getmeili/meilisearch
-              tag: v1.24.0@sha256:d991eb07331e9d1f9cec7bc0f9523fd5d51aee3b223d997e0e66206361952056
-            args:
-              - /bin/meilisearch
-              - --experimental-dumpless-upgrade
-            env:
-              MEILI_NO_ANALYTICS: true
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 4Gi
-            securityContext: *sec
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    port: &mPort 7700
-                    path: /health
-              readiness: *probes
-    defaultPodOptionsStrategy: merge
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
     service:
       main:
         controller: jellyfin
@@ -98,11 +68,6 @@ spec:
         ports:
           http:
             port: *port
-      meilisearch:
-        controller: meilisearch
-        ports:
-          http:
-            port: *mPort
     # serviceMonitor:
     #   main:
     #     serviceName: jellyfin-main
@@ -127,10 +92,6 @@ spec:
           jellyfin:
             main:
               - path: /config
-          meilisearch:
-            main:
-              - path: /meili_data
-                subPath: meilisearch
       cache:
         existingClaim: jellyfin-cache
         advancedMounts:
