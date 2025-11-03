@@ -19,10 +19,6 @@ spec:
     controllers:
       qbit:
         pod:
-          dnsPolicy: None
-          dnsConfig:
-            nameservers:
-              - 127.0.0.1 # dnsproxy sidecar
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
