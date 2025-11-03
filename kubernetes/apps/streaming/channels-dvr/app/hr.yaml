@@ -64,7 +64,7 @@ spec:
     route:
       main:
         hostnames:
-          - channels-dvr.${SECRET_DOMAIN}
+          - tv.${SECRET_DOMAIN}
         rules:
           - backendRefs:
             - identifier: main
