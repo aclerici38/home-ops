@@ -31,71 +31,71 @@ spec:
             seccompProfile: { type: RuntimeDefault }
             supplementalGroups:
               - 44
-        initContainers:
-          doh:
-            image:
-              repository: docker.io/adguard/dnsproxy
-              tag: v0.77.0@sha256:5d401b28872f6713930ff84606393fa2b0c60303a79e2f07f1400421e3d6028c
-            args:
-              - -l
-              - '127.0.0.2'
-              - -p
-              - '53'
-              - -u
-              - '[/cluster.local/]udp://172.17.0.10:53'
-              - -u
-              - '[/in-addr.arpa/]udp://172.17.0.10:53'
-              - -u
-              - '[/ip6.arpa/]udp://172.17.0.10:53'
-              - -u
-              - https://1.1.1.1/dns-query
-              - -b
-              - https://1.1.1.1/dns-query
-              - --http3
-              - --cache
-              - --ipv6-disabled
-              - -v
-            restartPolicy: Always
-          gluetun:
-            dependsOn: doh
-            lifecycle:
-              postStart:
-                exec:
-                  # https://github.com/qdm12/gluetun-wiki/blob/main/setup/advanced/kubernetes.md#adding-ipv6-rule--file-exists
-                  command: ["/bin/sh", "-c", "(ip rule del table 51820; ip -6 rule del table 51820) || true"]
-            image:
-              repository: ghcr.io/qdm12/gluetun
-              tag: v3.40.0@sha256:2b42bfa046757145a5155acece417b65b4443c8033fb88661a8e9dcf7fda5a00
-            env:
-              DOT: "off"
-              DNS_ADDRESS: '127.0.0.2'
-              LOG_LEVEL: debug
-              VPN_SERVICE_PROVIDER: custom
-              VPN_TYPE: wireguard
-              VPN_INTERFACE: wg0
-              WIREGUARD_ENDPOINT_PORT: 51820
-              FIREWALL_INPUT_PORTS: &port 9191
-              FIREWALL_OUTBOUND_SUBNETS: 172.16.0.0/16,172.17.0.0/16
-            resources:
-              limits:
-                squat.ai/tun: 1
-            restartPolicy: Always
-            envFrom:
-              - secretRef:
-                  name: dispatcharr
-            securityContext:
-              runAsUser: 0
-              runAsGroup: 0
-              runAsNonRoot: false
-              seccompProfile: { type: RuntimeDefault }
-              capabilities:
-                drop:
-                  - ALL
-                add:
-                  - NET_ADMIN
-                  - CHOWN
-              readOnlyRootFilesystem: false
-              allowPrivilegeEscalation: false
+        # initContainers:
+        #   doh:
+        #     image:
+        #       repository: docker.io/adguard/dnsproxy
+        #       tag: v0.77.0@sha256:5d401b28872f6713930ff84606393fa2b0c60303a79e2f07f1400421e3d6028c
+        #     args:
+        #       - -l
+        #       - '127.0.0.2'
+        #       - -p
+        #       - '53'
+        #       - -u
+        #       - '[/cluster.local/]udp://172.17.0.10:53'
+        #       - -u
+        #       - '[/in-addr.arpa/]udp://172.17.0.10:53'
+        #       - -u
+        #       - '[/ip6.arpa/]udp://172.17.0.10:53'
+        #       - -u
+        #       - https://1.1.1.1/dns-query
+        #       - -b
+        #       - https://1.1.1.1/dns-query
+        #       - --http3
+        #       - --cache
+        #       - --ipv6-disabled
+        #       - -v
+        #     restartPolicy: Always
+        #   gluetun:
+        #     dependsOn: doh
+        #     lifecycle:
+        #       postStart:
+        #         exec:
+        #           # https://github.com/qdm12/gluetun-wiki/blob/main/setup/advanced/kubernetes.md#adding-ipv6-rule--file-exists
+        #           command: ["/bin/sh", "-c", "(ip rule del table 51820; ip -6 rule del table 51820) || true"]
+        #     image:
+        #       repository: ghcr.io/qdm12/gluetun
+        #       tag: v3.40.0@sha256:2b42bfa046757145a5155acece417b65b4443c8033fb88661a8e9dcf7fda5a00
+        #     env:
+        #       DOT: "off"
+        #       DNS_ADDRESS: '127.0.0.2'
+        #       LOG_LEVEL: debug
+        #       VPN_SERVICE_PROVIDER: custom
+        #       VPN_TYPE: wireguard
+        #       VPN_INTERFACE: wg0
+        #       WIREGUARD_ENDPOINT_PORT: 51820
+        #       FIREWALL_INPUT_PORTS: &port 9191
+        #       FIREWALL_OUTBOUND_SUBNETS: 172.16.0.0/16,172.17.0.0/16
+        #     resources:
+        #       limits:
+        #         squat.ai/tun: 1
+        #     restartPolicy: Always
+        #     envFrom:
+        #       - secretRef:
+        #           name: dispatcharr
+        #     securityContext:
+        #       runAsUser: 0
+        #       runAsGroup: 0
+        #       runAsNonRoot: false
+        #       seccompProfile: { type: RuntimeDefault }
+        #       capabilities:
+        #         drop:
+        #           - ALL
+        #         add:
+        #           - NET_ADMIN
+        #           - CHOWN
+        #       readOnlyRootFilesystem: false
+        #       allowPrivilegeEscalation: false
         containers:
           dispatcharr:
             image:
