@@ -22,19 +22,86 @@ spec:
   values:
     controllers:
       dispatcharr:
-        forceRename: dispatcharr
+        # TODO: once this is a better app run microservices, right now it spawns pg and celery in-container no matter what
         pod:
           securityContext:
             runAsNonRoot: false
             runAsUser: 0
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
             supplementalGroups:
               - 44
+        initContainers:
+          doh:
+            image:
+              repository: docker.io/adguard/dnsproxy
+              tag: v0.77.0@sha256:5d401b28872f6713930ff84606393fa2b0c60303a79e2f07f1400421e3d6028c
+            args:
+              - -l
+              - '127.0.0.2'
+              - -p
+              - '53'
+              - -u
+              - '[/cluster.local/]udp://172.17.0.10:53'
+              - -u
+              - '[/in-addr.arpa/]udp://172.17.0.10:53'
+              - -u
+              - '[/ip6.arpa/]udp://172.17.0.10:53'
+              - -u
+              - https://1.1.1.1/dns-query
+              - -b
+              - https://1.1.1.1/dns-query
+              - --http3
+              - --cache
+              - --ipv6-disabled
+              - -v
+            restartPolicy: Always
+          gluetun:
+            dependsOn: doh
+            lifecycle:
+              postStart:
+                exec:
+                  # https://github.com/qdm12/gluetun-wiki/blob/main/setup/advanced/kubernetes.md#adding-ipv6-rule--file-exists
+                  command: ["/bin/sh", "-c", "(ip rule del table 51820; ip -6 rule del table 51820) || true"]
+            image:
+              repository: ghcr.io/qdm12/gluetun
+              tag: v3.40.0@sha256:2b42bfa046757145a5155acece417b65b4443c8033fb88661a8e9dcf7fda5a00
+            env:
+              DOT: "off"
+              DNS_ADDRESS: '127.0.0.2'
+              LOG_LEVEL: debug
+              VPN_SERVICE_PROVIDER: custom
+              VPN_TYPE: wireguard
+              VPN_INTERFACE: wg0
+              WIREGUARD_ENDPOINT_PORT: 51820
+              FIREWALL_INPUT_PORTS: &port 9191
+              FIREWALL_OUTBOUND_SUBNETS: 172.16.0.0/16,172.17.0.0/16
+            resources:
+              limits:
+                squat.ai/tun: 1
+            restartPolicy: Always
+            envFrom:
+              - secretRef:
+                  name: dispatcharr
+            securityContext:
+              runAsUser: 0
+              runAsGroup: 0
+              runAsNonRoot: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities:
+                drop:
+                  - ALL
+                add:
+                  - NET_ADMIN
+                  - CHOWN
+              readOnlyRootFilesystem: false
+              allowPrivilegeEscalation: false
         containers:
           dispatcharr:
-            image: &img
+            image:
               repository: ghcr.io/dispatcharr/dispatcharr
               tag: 0.11.1@sha256:894aa15b61a45d3238a66dc06411e684ced0d687453a5be21d10a81b12e476a3
-            env: &env
+            env:
               DISPATCHARR_LOG_LEVEL: debug
               REDIS_HOST: dragonfly-db.database.svc.cluster.local
               CELERY_BROKER_URL: redis://dragonfly-db.database.svc.cluster.local/6
@@ -58,45 +125,16 @@ spec:
             resources:
               requests:
                 cpu: 100m
-                memory: 500Mi
-              limits:
-                gpu.intel.com/i915: 1
-                memory: 1Gi
-      celery:
-        pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsGroup: 1000
-            runAsUser: 1000
-        containers:
-          main:
-            image: *img
-            command:
-              - bash
-              - -c
-              - cd /app && exec nice -n 5 celery -A dispatcharr worker -l info
-            env: *env
-            resources:
-              requests:
-                cpu: 50m
                 memory: 2Gi
               limits:
-                memory: 3Gi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
-    defaultPodOptionsStrategy: merge
-    defaultPodOptions:
-      securityContext:
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+                gpu.intel.com/i915: 1
+                memory: 5Gi
     service:
       main:
         controller: dispatcharr
         ports:
           http:
-            port: &port 9191
+            port: *port
     route:
       main:
         hostnames:
