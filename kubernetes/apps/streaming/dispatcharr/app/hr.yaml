@@ -134,7 +134,7 @@ spec:
         controller: dispatcharr
         ports:
           http:
-            port: *port
+            port: &port 9191
     route:
       main:
         hostnames:
