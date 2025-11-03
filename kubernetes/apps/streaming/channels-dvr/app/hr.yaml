@@ -42,8 +42,7 @@ spec:
                 enabled: true
             securityContext:
               allowPrivilegeEscalation: false
-              # readOnlyRootFilesystem:
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
             resources:
               requests:
@@ -75,6 +74,8 @@ spec:
             namespace: envoy-system
             sectionName: https
     persistence:
+      channels-dvr:
+        existingClaim: channels-dvr
       recordings:
         type: nfs
         server: 192.168.9.25
