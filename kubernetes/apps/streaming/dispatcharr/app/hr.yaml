@@ -35,7 +35,8 @@ spec:
             env:
               DB_ENGINE: postgres
               DISPATCHARR_LOG_LEVEL: debug
-              REDIS_HOST: dragonfly-db.database.svc.cluster.local/6
+              REDIS_HOST: dragonfly-db.database.svc.cluster.local
+              REDIS_DB: 6
               CELERY_BROKER_URL: redis://dragonfly-db.database.svc.cluster.local/6
               POSTGRES_DB:
                 secretKeyRef:
