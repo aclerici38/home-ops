@@ -22,14 +22,9 @@ spec:
   values:
     controllers:
       dispatcharr:
-        # TODO: once this is a better app run microservices, right now it spawns pg and celery in-container no matter what
-        pod:
-          securityContext:
-            supplementalGroups:
-              - 44
         containers:
-          dispatcharr:
-            image: &img
+          dispatcharr: &container
+            image:
               repository: ghcr.io/aclerici38/dispatcharr
               tag: 0.11.2@sha256:cb331243b3771dc4f91f2e5825dbba0759928a556968c19ea99b205957ac8940
             env:
@@ -59,7 +54,7 @@ spec:
                 enabled: true
               readiness:
                 enabled: true
-            securityContext: &sec
+            securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities:
@@ -68,11 +63,27 @@ spec:
             resources:
               requests:
                 cpu: 100m
-                memory: 2Gi
+                memory: 100Mi
               limits:
                 gpu.intel.com/i915: 1
-                memory: 5Gi
-    defaultPodOptionsStrategy: merge
+                memory: 500Mi
+      celery:
+        containers:
+          celery:
+            <<: *container
+            command: ["celery", "-A", "dispatcharr", "worker", "-l", "info"]
+            probes:
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
+            resources:
+              requests:
+                cpu: 100m
+                memory: 1Gi
+              limits:
+                gpu.intel.com/i915: 1
+                memory: 2Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -81,6 +92,8 @@ spec:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
+        supplementalGroups:
+          - 44
     service:
       main:
         controller: dispatcharr
