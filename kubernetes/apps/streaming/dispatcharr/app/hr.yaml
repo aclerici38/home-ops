@@ -24,16 +24,17 @@ spec:
       dispatcharr:
         forceRename: dispatcharr
         containers:
-          dispatcharr: &container
-            image:
+          dispatcharr:
+            image: &img
               repository: ghcr.io/aclerici38/dispatcharr
               tag: 0.11.2@sha256:2d016f3df25fe831c11cd5610c282eea9fd84db827f2255bce8adc2cafbd117c
-            env:
+            env: &env
               DB_ENGINE: postgres
               DISPATCHARR_LOG_LEVEL: debug
-              REDIS_HOST: dragonfly-db.database.svc.cluster.local
-              REDIS_DB: 6
-              CELERY_BROKER_URL: redis://dragonfly-db.database.svc.cluster.local/6
+              # use valkey on localhost for now since stuff is hardcoded to localhost
+              # REDIS_HOST: dragonfly-db.database.svc.cluster.local
+              # REDIS_DB: 6
+              # CELERY_BROKER_URL: redis://dragonfly-db.database.svc.cluster.local/6
               POSTGRES_DB:
                 secretKeyRef:
                   name: &pgName dispatcharr-db-app
@@ -55,7 +56,7 @@ spec:
                 enabled: true
               readiness:
                 enabled: true
-            securityContext:
+            securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities:
@@ -68,16 +69,21 @@ spec:
               limits:
                 gpu.intel.com/i915: 1
                 memory: 500Mi
+          valkey:
+            image:
+              repository: docker.io/valkey/valkey
+              tag: 9.0.0-alpine@sha256:b4ee67d73e00393e712accc72cfd7003b87d0fcd63f0eba798b23251bfc9c394
+            securityContext: *sec
       celery:
         containers:
           celery:
-            <<: *container
+            image: *img
             command: ["celery", "-A", "dispatcharr", "worker", "-l", "info"]
-            probes:
-              liveness:
-                enabled: false
-              readiness:
-                enabled: false
+            env:
+              <<: *env
+              REDIS_HOST: dispatcharr-valkey
+              CELERY_BROKER_URL: redis://dispatcharr-valkey
+            securityContext: *sec
             resources:
               requests:
                 cpu: 100m
@@ -97,11 +103,17 @@ spec:
         supplementalGroups:
           - 44
     service:
-      main:
+      dispatcharr:
         controller: dispatcharr
+        forceRename: dispatcharr
         ports:
           http:
             port: &port 9191
+      valkey:
+        controller: dispatcharr
+        ports:
+          redis:
+            port: 6379
     route:
       main:
         hostnames:
