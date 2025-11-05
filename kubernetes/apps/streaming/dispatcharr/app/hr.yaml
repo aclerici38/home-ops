@@ -115,12 +115,12 @@ spec:
           redis:
             port: 6379
     route:
-      main:
+      dispatcharr:
         hostnames:
           - dispatcharr.${SECRET_DOMAIN}
         rules:
           - backendRefs:
-            - identifier: main
+            - identifier: dispatcharr
               port: *port
         parentRefs:
           - name: internal
@@ -141,3 +141,5 @@ spec:
             celery:
               - path: /app/media
                 subPath: media
+              - path: /data/plugins
+                subPath: plugins
