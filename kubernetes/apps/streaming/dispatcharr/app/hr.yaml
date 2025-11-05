@@ -22,6 +22,7 @@ spec:
   values:
     controllers:
       dispatcharr:
+        forceRename: dispatcharr
         containers:
           dispatcharr: &container
             image:
@@ -83,8 +84,9 @@ spec:
                 memory: 1Gi
               limits:
                 gpu.intel.com/i915: 1
-                memory: 2Gi
+                memory: 3Gi
     defaultPodOptions:
+      hostUsers: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -113,30 +115,6 @@ spec:
             namespace: envoy-system
             sectionName: https
     persistence:
-      data:
-        existingClaim: dispatcharr
-        advancedMounts:
-          dispatcharr:
-            dispatcharr:
-              - path: /data/db
-                subPath: db
-              - path: /data/plugins
-                subPath: plugins
-              - path: /data/m3us
-                subPath: m3us
-              - path: /data/epgs
-                subPath: epgs
-              - path: /data/logos
-                subPath: logos
-      media:
-        existingClaim: dispatcharr-media
-        advancedMounts:
-          dispatcharr:
-            dispatcharr:
-              - path: /data/recordings
-                subPath: recordings
-              - path: /data/uploads
-                subPath: uploads
       tmpfs:
         type: emptyDir
         globalMounts:
