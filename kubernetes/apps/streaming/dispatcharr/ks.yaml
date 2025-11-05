@@ -5,8 +5,6 @@ kind: Kustomization
 metadata:
   name: &app dispatcharr
   labels:
-    components.dormammu/volsync: versity
-    components.dormammu/external-secret: "true"
     components.dormammu/cnpg: init
 spec:
   commonMetadata:
