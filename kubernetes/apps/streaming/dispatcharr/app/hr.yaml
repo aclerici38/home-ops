@@ -25,103 +25,45 @@ spec:
         # TODO: once this is a better app run microservices, right now it spawns pg and celery in-container no matter what
         pod:
           securityContext:
-            runAsNonRoot: false
-            runAsUser: 0
-            fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: RuntimeDefault }
             supplementalGroups:
               - 44
-        # initContainers:
-        #   doh:
-        #     image:
-        #       repository: docker.io/adguard/dnsproxy
-        #       tag: v0.77.0@sha256:5d401b28872f6713930ff84606393fa2b0c60303a79e2f07f1400421e3d6028c
-        #     args:
-        #       - -l
-        #       - '127.0.0.2'
-        #       - -p
-        #       - '53'
-        #       - -u
-        #       - '[/cluster.local/]udp://172.17.0.10:53'
-        #       - -u
-        #       - '[/in-addr.arpa/]udp://172.17.0.10:53'
-        #       - -u
-        #       - '[/ip6.arpa/]udp://172.17.0.10:53'
-        #       - -u
-        #       - https://1.1.1.1/dns-query
-        #       - -b
-        #       - https://1.1.1.1/dns-query
-        #       - --http3
-        #       - --cache
-        #       - --ipv6-disabled
-        #       - -v
-        #     restartPolicy: Always
-        #   gluetun:
-        #     dependsOn: doh
-        #     lifecycle:
-        #       postStart:
-        #         exec:
-        #           # https://github.com/qdm12/gluetun-wiki/blob/main/setup/advanced/kubernetes.md#adding-ipv6-rule--file-exists
-        #           command: ["/bin/sh", "-c", "(ip rule del table 51820; ip -6 rule del table 51820) || true"]
-        #     image:
-        #       repository: ghcr.io/qdm12/gluetun
-        #       tag: v3.40.0@sha256:2b42bfa046757145a5155acece417b65b4443c8033fb88661a8e9dcf7fda5a00
-        #     env:
-        #       DOT: "off"
-        #       DNS_ADDRESS: '127.0.0.2'
-        #       LOG_LEVEL: debug
-        #       VPN_SERVICE_PROVIDER: custom
-        #       VPN_TYPE: wireguard
-        #       VPN_INTERFACE: wg0
-        #       WIREGUARD_ENDPOINT_PORT: 51820
-        #       FIREWALL_INPUT_PORTS: &port 9191
-        #       FIREWALL_OUTBOUND_SUBNETS: 172.16.0.0/16,172.17.0.0/16
-        #     resources:
-        #       limits:
-        #         squat.ai/tun: 1
-        #     restartPolicy: Always
-        #     envFrom:
-        #       - secretRef:
-        #           name: dispatcharr
-        #     securityContext:
-        #       runAsUser: 0
-        #       runAsGroup: 0
-        #       runAsNonRoot: false
-        #       seccompProfile: { type: RuntimeDefault }
-        #       capabilities:
-        #         drop:
-        #           - ALL
-        #         add:
-        #           - NET_ADMIN
-        #           - CHOWN
-        #       readOnlyRootFilesystem: false
-        #       allowPrivilegeEscalation: false
         containers:
           dispatcharr:
-            image:
-              repository: ghcr.io/dispatcharr/dispatcharr
-              tag: 0.11.2@sha256:e4d4a678ac2a788b8be1d2bfb6b40d43d7262468e61e084cd7166714aecbc6bb
+            image: &img
+              repository: ghcr.io/aclerici38/dispatcharr
+              tag: 0.11.2@sha256:cb331243b3771dc4f91f2e5825dbba0759928a556968c19ea99b205957ac8940
             env:
+              DB_ENGINE: postgres
               DISPATCHARR_LOG_LEVEL: debug
-              REDIS_HOST: dragonfly-db.database.svc.cluster.local
+              REDIS_HOST: dragonfly-db.database.svc.cluster.local/6
               CELERY_BROKER_URL: redis://dragonfly-db.database.svc.cluster.local/6
+              POSTGRES_DB:
+                secretKeyRef:
+                  name: &pgName dispatcharr-db-app
+                  key: dbname
+              POSTGRES_USER:
+                secretKeyRef:
+                  name: *pgName
+                  key: user
+              POSTGRES_PASSWORD:
+                secretKeyRef:
+                  name: *pgName
+                  key: password
+              POSTGRES_HOST:
+                secretKeyRef:
+                  name: *pgName
+                  key: host
             probes:
               liveness:
                 enabled: true
               readiness:
                 enabled: true
-            securityContext:
+            securityContext: &sec
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
-                add:
-                  - CHOWN
-                  - SETUID
-                  - SETGID
-                  - FOWNER
-                  - DAC_OVERRIDE
             resources:
               requests:
                 cpu: 100m
@@ -129,6 +71,15 @@ spec:
               limits:
                 gpu.intel.com/i915: 1
                 memory: 5Gi
+    defaultPodOptionsStrategy: merge
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
     service:
       main:
         controller: dispatcharr
