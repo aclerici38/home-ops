@@ -41,14 +41,14 @@ spec:
         spec:
           postBuild:
             substituteFrom:
-              $patch: merge
-              - kind: Secret
+              - $patch: merge
+                kind: Secret
                 name: cluster-settings
                 optional: false
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        # labelSelector: "!kustomize.dormammu/subfrom,kustomize.dormammu/cluster-settings!=true"
+        # labelSelector: "!kustomize.dormammu/subfrom,kustomize.dormammu/cluster-settings!=false"
     # SubFrom does exist in the ks, this patch is chosen via labelSelector
     # - patch: |
     #     - op: add
