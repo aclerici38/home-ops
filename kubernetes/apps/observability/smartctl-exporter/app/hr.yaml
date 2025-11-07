@@ -19,6 +19,11 @@ spec:
     remediation:
       retries: 1
   values:
+    tolerations:
+      - key: "rpi"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
     # build contains ARM image
     image:
       repository: ghcr.io/home-operations/smartctl-exporter

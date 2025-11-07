@@ -72,6 +72,12 @@ spec:
             securityContext: *sec
       collector:
         type: daemonset
+        pod:
+          tolerations:
+            - key: "rpi"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
         containers:
           main:
             image:
