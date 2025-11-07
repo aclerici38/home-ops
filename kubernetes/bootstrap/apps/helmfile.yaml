@@ -63,7 +63,7 @@ releases:
     namespace: external-secrets
     atomic: true
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
-    version: 0.20.4
+    version: 1.0.0
     values:
       - /Users/anthony/home-ops/kubernetes/apps/external-secrets/app/values.yaml
     needs:
