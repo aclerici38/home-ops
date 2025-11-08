@@ -3,11 +3,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &name rook-ceph
+  name: rook-ceph-ns
 spec:
   components:
     - ../../components/namespace
-  targetNamespace: *name
+  targetNamespace: &name rook-ceph
   path: ./kubernetes/apps/rook-ceph
   prune: true
   sourceRef:
