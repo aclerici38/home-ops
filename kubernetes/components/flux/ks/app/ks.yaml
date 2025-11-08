@@ -6,14 +6,3 @@ metadata:
   name: APP
   labels:
     dormammu.io/component: ks-app
-spec:
-  dependsOn: []
-  path: ./kubernetes/apps/NS/APP/PLACEHOLDER
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  wait: true
-  interval: 30m
-  timeout: 3m

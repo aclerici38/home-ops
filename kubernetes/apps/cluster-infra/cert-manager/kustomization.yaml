@@ -5,25 +5,37 @@ kind: Kustomization
 components:
   - ../../../components/flux/ks/app
   - ../../../components/external-secret/helm
-labels:
-  - pairs:
-      app.kubernetes.io/name: &app cert-manager
 replacements:
-  - sourceValue: *app
+  - sourceValue: cloudflare
+    targets:
+      - select:
+          kind: ClusterExternalSecret
+          labelSelector: dormammu.io/component=external-secret
+        fieldPaths:
+          - metadata.name
+          - spec.externalSecretSpec.dataFrom.0.extract.key
+  - sourceValue: &app cert-manager
     targets:
       - select:
           kind: Kustomization
           group: kustomize.toolkit.fluxcd.io
         fieldPaths:
           - metadata.name
-          - spec.commonMetadata.labels.app\.kubernetes\.io/name
+          - spec.postBuild.substitute.APP
         options:
           create: true
+          index: 0
+          delimiter: "-"
+  - sourceValue: cluster-infra/cert-manager
+    targets:
       - select:
           kind: Kustomization
           group: kustomize.toolkit.fluxcd.io
         fieldPaths:
           - spec.path
         options:
-          index: 4
+          index: 3
           delimiter: /
+labels:
+  - pairs:
+      app.kubernetes.io/name: *app

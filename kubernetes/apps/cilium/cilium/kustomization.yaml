@@ -13,6 +13,7 @@ replacements:
           group: kustomize.toolkit.fluxcd.io
         fieldPaths:
           - metadata.name
+          - spec.postBuild.substitute.APP
           # - spec.commonMetadata.labels.app\.kubernetes\.io/name
         options:
           create: true
