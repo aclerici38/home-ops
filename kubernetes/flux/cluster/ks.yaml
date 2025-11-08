@@ -47,7 +47,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "!kustomize.dormammu/subfrom,kustomize.dormammu/cluster-settings!=true"
+        labelSelector: "!kustomize.dormammu/subfrom,kustomize.dormammu/cluster-settings!=false"
     # SubFrom does exist in the ks, this patch is chosen via labelSelector
     - patch: |
         - op: add
@@ -162,23 +162,14 @@ spec:
         kind: Kustomization
         labelSelector: "components.dormammu/helm!=false"
 
-    # Add app-vars component by default
+    # Add namespace component by default
     - patch: |
         - op: add
           path: /spec/components/-
-          value: ../../../../components/app-vars/helm
+          value: ../../../../components/namespace
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        labelSelector: "components.dormammu/app-vars!=false,components.dormammu/helm!=false"
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/app-vars/postBuild
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/app-vars!=false,components.dormammu/helm=false"
 
     # Add cnpg restore helm component if labelled
     - patch: |
