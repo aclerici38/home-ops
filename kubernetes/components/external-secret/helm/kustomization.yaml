@@ -6,7 +6,8 @@ resources:
   - ../resources/clusterexternalsecret.yaml
 replacements:
   - source:
-      kind: HelmRelease
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
       fieldPath: metadata.name
     targets:
       - select:

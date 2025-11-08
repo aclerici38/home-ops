@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+components:
+  - ../../../components/flux/ks
+  - ../../../components/external-secret/helm
+labels:
+  - pairs:
+      app.kubernetes.io/name: &app cert-manager
+replacements:
+  - sourceValue: *app
+    targets:
+      - select:
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+          labelSelector: dormammu.io/component=ks
+        fieldPaths:
+          - metadata.name
+      - select:
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+          labelSelector: dormammu.io/component=ks
+        fieldPaths:
+          - spec.path
+        options:
+          index: 4
+          delimiter: /

@@ -13,6 +13,14 @@
     - select:
         kind: Kustomization
         group: kustomize.toolkit.fluxcd.io
+      fieldPaths:
+        - spec.path
+      options:
+        index: 3
+        delimiter: /
+    - select:
+        kind: Kustomization
+        group: kustomize.toolkit.fluxcd.io
         labelSelector: "kustomize.dormammu/targetNS!=false"
       fieldPaths:
         - spec.targetNamespace
