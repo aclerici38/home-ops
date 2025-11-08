@@ -3,6 +3,4 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 resources:
-  - ../../resources/base
-replacements:
-  - path: ../../resources/base/replacements.yaml
+  - ./clusterexternalsecret.yaml
