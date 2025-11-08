@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app intel-device-plugins-operator
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-infra/intel-device-plugins/operator
   sourceRef:
     kind: GitRepository
@@ -25,9 +22,6 @@ kind: Kustomization
 metadata:
   name: &app intel-device-plugins-gpu
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-infra/intel-device-plugins/gpu
   sourceRef:
     kind: GitRepository

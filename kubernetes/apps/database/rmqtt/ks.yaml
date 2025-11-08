@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app rmqtt
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/database/rmqtt/app
   prune: true
   sourceRef:

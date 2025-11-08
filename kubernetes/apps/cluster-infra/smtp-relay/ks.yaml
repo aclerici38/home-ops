@@ -7,9 +7,6 @@ metadata:
   labels:
     components.dormammu/external-secret: "true"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-infra/smtp-relay/app
   dependsOn: []
   sourceRef:

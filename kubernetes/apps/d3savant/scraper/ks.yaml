@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app d3savant-scraper
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/d3savant/scraper/app
   prune: true
   sourceRef:

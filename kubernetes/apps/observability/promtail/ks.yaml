@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app promtail
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/observability/promtail/app
   prune: true
   sourceRef:

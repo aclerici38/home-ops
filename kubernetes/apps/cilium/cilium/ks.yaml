@@ -3,12 +3,9 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app cilium
+  name: cilium
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cilium/cilium/app
   prune: false # never should be deleted
   sourceRef:
@@ -23,15 +20,12 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app cilium-networking
+  name: cilium-networking
   labels:
-    kustomize.dormammu/targetNS: "false"
+    kustomize.dormammu/targetcilium: "false"
     components.dormammu/helm: "false"
     components.dormammu/app-vars: "false"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   dependsOn:
     - name: cilium
   path: ./kubernetes/apps/cilium/cilium/networking

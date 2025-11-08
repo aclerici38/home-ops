@@ -2,14 +2,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app immich
+  name: immich
   labels:
     components.dormammu/cnpg: init
     components.dormammu/external-secret: "true"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   dependsOn:
     - name: dragonfly-cluster
       namespace: database
@@ -51,18 +48,13 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app immich-config
+  name: immich-config
   labels:
     kustomize.dormammu/subfrom: exists
-    components.dormammu/helm: "false"
-    components.dormammu/app-vars: "false"
 spec:
   dependsOn:
     - name: external-secrets-stores
       namespace: cluster-infra
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/home-infra/immich/config
   prune: true
   sourceRef:
@@ -82,13 +74,10 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app immich-frame
+  name: immich-frame
   labels:
     components.dormammu/external-secret: "true"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   dependsOn:
     - name: immich
   path: ./kubernetes/apps/home-infra/immich/frame

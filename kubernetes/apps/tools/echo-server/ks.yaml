@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app echo-server
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/tools/echo-server/app
   sourceRef:
     kind: GitRepository

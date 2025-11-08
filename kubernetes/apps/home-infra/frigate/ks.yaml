@@ -9,9 +9,6 @@ metadata:
     components.dormammu/external-secret: "true"
     components.dormammu/oauth: true
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/home-infra/frigate/app
   dependsOn: []
   prune: true

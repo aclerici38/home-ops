@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app it-tools
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/tools/it-tools/app
   prune: true
   sourceRef:

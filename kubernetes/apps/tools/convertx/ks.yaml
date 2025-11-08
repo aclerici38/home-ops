@@ -7,9 +7,6 @@ metadata:
     components.dormammu/external-secret: "true"
     components.dormammu/oauth: true
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/tools/convertx/app
   prune: true
   sourceRef:

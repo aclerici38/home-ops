@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app csi-driver-nfs
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/storage/csi-driver-nfs/app
   prune: true
   sourceRef:

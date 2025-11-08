@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app openspeedtest
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/tools/openspeedtest/app
   sourceRef:
     kind: GitRepository

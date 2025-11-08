@@ -9,9 +9,6 @@ metadata:
     components.dormammu/volsync: versity
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media-management/bazarr/app
   prune: true
   sourceRef:

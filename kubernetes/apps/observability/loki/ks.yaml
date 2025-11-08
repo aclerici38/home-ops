@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app loki
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/observability/loki/app
   prune: true
   sourceRef:

@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app metrics-server
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/kube-system/metrics-server/app
   sourceRef:
     kind: GitRepository

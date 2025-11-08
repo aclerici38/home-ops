@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app smartctl-exporter
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/observability/smartctl-exporter/app
   prune: true
   sourceRef:

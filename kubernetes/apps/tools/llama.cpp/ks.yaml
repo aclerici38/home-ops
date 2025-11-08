@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app llama.cpp
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/tools/llama.cpp/app
   prune: true
   sourceRef:

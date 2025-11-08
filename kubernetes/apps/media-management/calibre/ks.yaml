@@ -8,9 +8,6 @@ metadata:
     components.dormammu/volsync: versity
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media-management/calibre/calibre-web-automated
   prune: true
   sourceRef:
@@ -31,9 +28,6 @@ metadata:
     components.dormammu/oauth: true
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media-management/calibre/calibre-downloader
   prune: true
   sourceRef:

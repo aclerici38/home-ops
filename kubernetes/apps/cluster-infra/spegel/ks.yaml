@@ -4,9 +4,6 @@ kind: Kustomization
 metadata:
   name: &app spegel
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   dependsOn:
     - name: cert-manager
   path: ./kubernetes/apps/cluster-infra/spegel/app

@@ -7,9 +7,6 @@ metadata:
     components.dormammu/volsync: versity
     components.dormammu/external-secret: "true"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   dependsOn:
     - name: volsync
       namespace: storage

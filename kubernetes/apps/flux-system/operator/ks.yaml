@@ -6,9 +6,6 @@ metadata:
   name: &app flux-operator
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/flux-system/operator/app
   prune: false # never should be deleted
   sourceRef:

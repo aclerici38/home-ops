@@ -8,9 +8,6 @@ metadata:
     components.dormammu/volsync: versity
     components.dormammu/external-secret: "true"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   dependsOn: []
   path: ./kubernetes/apps/home-infra/actual/app
   prune: true

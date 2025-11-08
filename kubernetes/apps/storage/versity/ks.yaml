@@ -6,9 +6,6 @@ metadata:
   labels:
     components.dormammu/external-secret: "true"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   dependsOn:
     - name: volsync
     - name: openebs-zfs-volumes

@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app external-dns-cloudflare
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets-stores
       namespace: cluster-infra

@@ -9,9 +9,6 @@ metadata:
     components.dormammu/cnpg: restore
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/home-infra/pocket-id/app
   prune: true
   sourceRef:

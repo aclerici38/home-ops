@@ -6,9 +6,6 @@ metadata:
   name: &app node-feature-discovery
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-infra/node-feature-discovery/app
   sourceRef:
     kind: GitRepository
@@ -25,12 +22,7 @@ kind: Kustomization
 metadata:
   name: &app node-feature-discovery-rules
   labels:
-    components.dormammu/helm: "false"
-    components.dormammu/app-vars: "false"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-infra/node-feature-discovery/rules
   dependsOn:
     - name: node-feature-discovery

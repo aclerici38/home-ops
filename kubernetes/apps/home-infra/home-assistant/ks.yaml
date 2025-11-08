@@ -6,9 +6,6 @@ metadata:
   labels:
     components.dormammu/volsync: versity
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   dependsOn: []
   path: ./kubernetes/apps/home-infra/home-assistant/app
   prune: true

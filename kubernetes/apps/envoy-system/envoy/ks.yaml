@@ -6,9 +6,6 @@ metadata:
   name: &app envoy
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/envoy-system/envoy/app
   prune: true
   sourceRef:
@@ -25,12 +22,7 @@ kind: Kustomization
 metadata:
   name: &app envoy-config
   labels:
-    components.dormammu/helm: "false"
-    components.dormammu/app-vars: "false"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   dependsOn:
     - name: envoy
   path: ./kubernetes/apps/envoy-system/envoy/config

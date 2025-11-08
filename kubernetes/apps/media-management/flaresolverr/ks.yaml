@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app flaresolverr
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media-management/flaresolverr/app
   sourceRef:
     kind: GitRepository

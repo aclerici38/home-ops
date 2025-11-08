@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: &app omnitools
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/tools/omnitools/app
   prune: true
   sourceRef:

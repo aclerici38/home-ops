@@ -6,11 +6,7 @@ metadata:
   name: &app onepassword-connect
   labels:
     kustomize.dormammu/cluster-settings: "false"
-    components.dormammu/app-vars: "false"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-infra/onepassword-connect/app
   sourceRef:
     kind: GitRepository

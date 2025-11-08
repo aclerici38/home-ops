@@ -6,12 +6,8 @@ metadata:
   name: &app external-secrets
   labels:
     kustomize.dormammu/cluster-settings: "false"
-    components.dormammu/app-vars: "false"
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/cluster-infra/external-secrets/app
   prune: true
   sourceRef:
@@ -29,12 +25,8 @@ metadata:
   name: &app external-secrets-stores
   labels:
     kustomize.dormammu/cluster-settings: "false"
-    components.dormammu/app-vars: "false"
     kustomize.dormammu/targetNS: "false"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   dependsOn:
     - name: external-secrets
   path: ./kubernetes/apps/cluster-infra/external-secrets/stores

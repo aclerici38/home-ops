@@ -7,9 +7,6 @@ metadata:
   labels:
     kustomize.dormammu/subfrom: exists
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media-management/recyclarr/app
   dependsOn:
     - name: external-secrets-stores

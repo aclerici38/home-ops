@@ -9,9 +9,6 @@ metadata:
     components.dormammu/external-secret: "true"
     components.dormammu/cnpg: restore
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media-management/fileflows/app
   prune: true
   sourceRef:

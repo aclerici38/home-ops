@@ -9,9 +9,6 @@ metadata:
     components.dormammu/cnpg: no-backup
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/observability/grafana/app
   prune: true
   sourceRef:

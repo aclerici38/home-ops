@@ -5,12 +5,7 @@ kind: Kustomization
 metadata:
   name: &app short-smart-tester
   labels:
-    components.dormammu/helm: "false"
-    components.dormammu/app-vars: "false"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/storage/smart-tester/app
   sourceRef:
     kind: GitRepository
@@ -33,12 +28,7 @@ kind: Kustomization
 metadata:
   name: &app long-smart-tester
   labels:
-    components.dormammu/helm: "false"
-    components.dormammu/app-vars: "false"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/storage/smart-tester/app
   sourceRef:
     kind: GitRepository

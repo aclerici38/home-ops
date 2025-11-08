@@ -10,9 +10,6 @@ metadata:
     components.dormammu/cnpg: init
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/home-infra/donetick/app
   prune: true
   sourceRef:

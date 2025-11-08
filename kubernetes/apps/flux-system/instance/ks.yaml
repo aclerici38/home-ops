@@ -6,9 +6,6 @@ metadata:
   name: &app flux-instance
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/flux-system/instance/app
   prune: false # never should be deleted
   sourceRef:

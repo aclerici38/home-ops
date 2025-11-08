@@ -5,13 +5,9 @@ kind: Kustomization
 metadata:
   name: &app d3savant-backend
   labels:
-    components.dormammu/helm: "false"
     components.dormammu/cnpg: init
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/d3savant/backend/app
   prune: true
   sourceRef:

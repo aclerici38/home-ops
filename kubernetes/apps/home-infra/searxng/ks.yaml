@@ -10,9 +10,6 @@ spec:
   dependsOn:
     - name: dragonfly-cluster
       namespace: database
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/home-infra/searxng/app
   prune: true
   sourceRef:

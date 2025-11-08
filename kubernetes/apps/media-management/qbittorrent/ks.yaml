@@ -8,9 +8,6 @@ metadata:
     components.dormammu/volsync: versity
     components.dormammu/external-secret: "true"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   interval: 30m
   timeout: 3m
   path: ./kubernetes/apps/media-management/qbittorrent/app
@@ -28,9 +25,6 @@ kind: Kustomization
 metadata:
   name: &app vuetorrent
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   interval: 30m
   timeout: 3m
   path: ./kubernetes/apps/media-management/qbittorrent/vuetorrent

@@ -5,12 +5,7 @@ kind: Kustomization
 metadata:
   name: &app tank-zfs-scrubber
   labels:
-    components.dormammu/helm: "false"
-    components.dormammu/app-vars: "false"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/storage/zfs-scrubber/app
   sourceRef:
     kind: GitRepository
@@ -32,12 +27,7 @@ kind: Kustomization
 metadata:
   name: &app ssd-zfs-scrubber
   labels:
-    components.dormammu/helm: "false"
-    components.dormammu/app-vars: "false"
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/storage/zfs-scrubber/app
   sourceRef:
     kind: GitRepository

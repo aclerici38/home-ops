@@ -6,9 +6,6 @@ metadata:
   name: &app rook-ceph
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/rook-ceph/rook-ceph/app
   prune: false
   sourceRef:
@@ -25,9 +22,6 @@ kind: Kustomization
 metadata:
   name: &app rook-ceph-cluster
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   dependsOn:
     - name: rook-ceph
   path: ./kubernetes/apps/rook-ceph/rook-ceph/cluster

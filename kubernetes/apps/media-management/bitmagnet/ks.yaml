@@ -9,9 +9,6 @@ metadata:
     components.dormammu/external-secret: "true"
 spec:
   dependsOn: []
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *app
   path: ./kubernetes/apps/media-management/bitmagnet/app
   prune: true
   sourceRef:
