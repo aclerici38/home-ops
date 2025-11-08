@@ -55,7 +55,6 @@ metadata:
   labels:
     kustomize.dormammu/subfrom: exists
     components.dormammu/helm: "false"
-    components.dormammu/app-vars: "false"
 spec:
   dependsOn:
     - name: external-secrets-stores

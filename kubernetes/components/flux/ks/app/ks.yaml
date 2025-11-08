@@ -3,9 +3,9 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: patch
+  name: APP
   labels:
-    dormammu.io/component: ks
+    dormammu.io/component: ks-app
 spec:
   dependsOn: []
   path: ./kubernetes/apps/NS/APP/app

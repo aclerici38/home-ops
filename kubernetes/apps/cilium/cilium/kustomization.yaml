@@ -4,21 +4,20 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 components:
   - ../../../components/flux/ks/app
-  - ../../../components/external-secret/helm
-labels:
-  - pairs:
-      app.kubernetes.io/name: &app cert-manager
+  - ../../../components/flux/ks/app-resources
 replacements:
-  - sourceValue: *app
+  - sourceValue: &app cilium
     targets:
       - select:
           kind: Kustomization
           group: kustomize.toolkit.fluxcd.io
         fieldPaths:
           - metadata.name
-          - spec.commonMetadata.labels.app\.kubernetes\.io/name
+          # - spec.commonMetadata.labels.app\.kubernetes\.io/name
         options:
           create: true
+          index: 0
+          delimiter: "-"
       - select:
           kind: Kustomization
           group: kustomize.toolkit.fluxcd.io
@@ -27,3 +26,6 @@ replacements:
         options:
           index: 4
           delimiter: /
+labels:
+  - pairs:
+      app.kubernetes.io/name: *app

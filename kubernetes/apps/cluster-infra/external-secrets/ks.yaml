@@ -6,7 +6,6 @@ metadata:
   name: &app external-secrets
   labels:
     kustomize.dormammu/cluster-settings: "false"
-    components.dormammu/app-vars: "false"
 spec:
   dependsOn: []
   commonMetadata:
@@ -29,7 +28,6 @@ metadata:
   name: &app external-secrets-stores
   labels:
     kustomize.dormammu/cluster-settings: "false"
-    components.dormammu/app-vars: "false"
     kustomize.dormammu/targetNS: "false"
 spec:
   commonMetadata:

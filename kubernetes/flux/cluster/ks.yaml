@@ -47,30 +47,31 @@ spec:
         kind: Kustomization
         labelSelector: "kustomize.dormammu/subfrom=exists,kustomize.dormammu/cluster-settings!=false"
 
-    # Add namespace and vars to each namespace's ks
+    # Add namespace and to each ks
     - patch: |
         apiVersion: kustomize.toolkit.fluxcd.io/v1
         kind: Kustomization
         metadata:
           name: patch
         spec:
-          patches:
-            - patch: |-
-                apiVersion: kustomize.toolkit.fluxcd.io/v1
-                kind: Kustomization
-                metadata:
-                  name: patch
-                spec:
-                  targetNamespace: ${NS}
-                  postBuild:
-                    substitute:
-                      NS: ${NS}
-              target:
-                group: kustomize.toolkit.fluxcd.io
-                kind: Kustomization
+          postBuild:
+            substitute:
+              NS: ${NS}
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
+        labelSelector: "kustomize.dormammu/namespace!=true"
+    - patch: |
+        apiVersion: kustomize.toolkit.fluxcd.io/v1
+        kind: Kustomization
+        metadata:
+          name: patch
+        spec:
+          targetNamespace: ${NS}
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "kustomize.dormammu/namespace!=true,kustomize.dormammu/targetNS!=false"
 
     # Components via labels (fun)
     - patch: |
@@ -181,6 +182,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
+        labelSelector: "kustomize.dormammu/namespace=true"
 
     # Add cnpg restore helm component if labelled
     - patch: |
