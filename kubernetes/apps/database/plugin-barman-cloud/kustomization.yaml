@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+components:
+  - ../../../components/flux/ks/app
+replacements:
+  - sourceValue: &app plugin-barman-cloud
+    targets:
+      - select:
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+        fieldPaths:
+          - metadata.name
+          - spec.postBuild.substitute.APP
+          # - spec.commonMetadata.labels.app\.kubernetes\.io/name
+        options:
+          create: true
+          index: 0
+          delimiter: "-"
+  - sourceValue: database/plugin-barman-cloud
+    targets:
+      - select:
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+        fieldPaths:
+          - spec.path
+        options:
+          index: 3
+          delimiter: /
+labels:
+  - pairs:
+      app.kubernetes.io/name: *app

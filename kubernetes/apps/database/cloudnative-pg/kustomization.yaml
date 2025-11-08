@@ -1,0 +1,55 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+components:
+  - ../../../components/flux/ks/app
+  - ../../../../components/external-secret/helm
+patches:
+  - patch: |
+      apiVersion: external-secrets.io/v1
+      kind: ClusterExternalSecret
+      metadata:
+        name: patch
+      spec:
+        namespaceSelectors: [{}]
+        externalSecretSpec:
+          data:
+            - secretKey: versity-access-key-id
+              remoteRef:
+                key: versity
+                property: ROOT_ACCESS_KEY_ID
+            - secretKey: versity-secret-access-key
+              remoteRef:
+                key: versity
+                property: ROOT_SECRET_ACCESS_KEY
+    target:
+      kind: ClusterExternalSecret
+      labelSelector: dormammu.io/component=external-secret
+replacements:
+  - sourceValue: &app cloudnative-pg
+    targets:
+      - select:
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+        fieldPaths:
+          - metadata.name
+          - spec.postBuild.substitute.APP
+          # - spec.commonMetadata.labels.app\.kubernetes\.io/name
+        options:
+          create: true
+          index: 0
+          delimiter: "-"
+  - sourceValue: database/cloudnative-pg
+    targets:
+      - select:
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+        fieldPaths:
+          - spec.path
+        options:
+          index: 3
+          delimiter: /
+labels:
+  - pairs:
+      app.kubernetes.io/name: *app
