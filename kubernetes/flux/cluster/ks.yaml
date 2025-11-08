@@ -75,6 +75,34 @@ spec:
         kind: Kustomization
         labelSelector: "kustomize.dormammu/namespace!=true,kustomize.dormammu/targetNS!=false"
 
+    # Add helm defaults here
+    - patch: |-
+        apiVersion: helm.toolkit.fluxcd.io/v2
+        kind: HelmRelease
+        metadata:
+          name: defaults-patch
+        spec:
+          maxHistory: 1
+          driftDetection:
+            mode: warn
+          install:
+            crds: CreateReplace
+            remediation:
+              retries: 1
+              remediateLastFailure: true
+            strategy:
+              name: RetryOnFailure
+          upgrade:
+            crds: CreateReplace
+            cleanupOnFail: true
+            strategy:
+              name: RemediateOnFailure
+            remediation:
+              retries: 1
+              remediateLastFailure: true
+      target:
+        kind: HelmRelease
+
     # Components via labels (fun)
     - patch: |
         - op: add
@@ -165,16 +193,6 @@ spec:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
         labelSelector: "components.dormammu/oauth"
-
-    # Add hr defaults patch component by default
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/flux/helm
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/helm!=false"
 
     # Add namespace component by default
     - patch: |
