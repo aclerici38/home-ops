@@ -61,6 +61,26 @@ spec:
         kind: Kustomization
         labelSelector: "kustomize.dormammu/subfrom=exists,kustomize.dormammu/cluster-settings!=false"
 
+    # Add namespace and vars to each namespace's ks
+    - patch: |
+        patches:
+          - patch: |-
+              apiVersion: kustomize.toolkit.fluxcd.io/v1
+              kind: Kustomization
+              metadata:
+                name: patch
+              spec:
+                targetNamespace: ${NS}
+                postBuild:
+                  substitute:
+                    NS: ${NS}
+            target:
+              group: kustomize.toolkit.fluxcd.io
+              kind: Kustomization
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+
     # Components via labels (fun)
     - patch: |
         - op: add
