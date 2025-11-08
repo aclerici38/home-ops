@@ -2,10 +2,10 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: cluster-infra
 resources:
-  - ./ns.yaml
-
-  - ./cilium/ks.yaml
-
+  - .
+components:
+  - ../../components/namespace
 replacements:
-  - path: ../../kustomize/replacements.yaml
+  - path: ../../kustomize/replacements/ns.yaml
