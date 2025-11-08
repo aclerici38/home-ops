@@ -6,6 +6,8 @@ metadata:
   name: cluster-apps
   namespace: flux-system
 spec:
+  # Namespace ks' go into flux-system
+  targetNamespace: flux-system
   interval: 30m
   timeout: 7m
   path: ./kubernetes/apps/
