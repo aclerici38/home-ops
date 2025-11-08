@@ -1,7 +1,8 @@
 ---
 - source:
-    kind: HelmRelease
+    kind: Kustomization
     fieldPath: metadata.name
+    group: kustomize.toolkit.fluxcd.io
   targets:
     - select:
         kind: ClusterExternalSecret

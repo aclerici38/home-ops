@@ -14,8 +14,9 @@ replacements:
   - path: ../../resources/base/replacements.yaml
   - path: ../../resources/common/replacements.yaml
   - source:
-      kind: HelmRelease
+      kind: Kustomization
       fieldPath: metadata.name
+      group: kustomize.toolkit.fluxcd.io
     targets:
       - select:
           kind: Cluster

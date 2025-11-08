@@ -6,8 +6,9 @@ resources:
   - ../resources/oauth.yaml
 replacements:
   - source:
-      kind: HelmRelease
+      kind: Kustomization
       fieldPath: metadata.name
+      group: kustomize.toolkit.fluxcd.io
     targets:
       - select:
           group: gateway.envoyproxy.io

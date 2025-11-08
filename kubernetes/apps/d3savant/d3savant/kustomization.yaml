@@ -6,7 +6,7 @@ components:
   - ../../../components/flux/ks/app
   - ../../../components/cnpg/helm/init
 replacements:
-  - sourceValue: &app backend
+  - sourceValue: &app d3savant
     targets:
       - select:
           kind: Kustomization
@@ -19,7 +19,7 @@ replacements:
           create: true
           index: 0
           delimiter: "-"
-  - sourceValue: cluster-infra/backend
+  - sourceValue: cluster-infra/d3savant
     targets:
       - select:
           kind: Kustomization
