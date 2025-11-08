@@ -18,13 +18,15 @@ replacements:
           create: true
           index: 0
           delimiter: "-"
+  - sourceValue: cilium/cilium
+    targets:
       - select:
           kind: Kustomization
           group: kustomize.toolkit.fluxcd.io
         fieldPaths:
           - spec.path
         options:
-          index: 4
+          index: 3
           delimiter: /
 labels:
   - pairs:
