@@ -41,26 +41,25 @@ spec:
         spec:
           postBuild:
             substituteFrom:
-              - $patch: merge
-                kind: Secret
+              - kind: Secret
                 name: cluster-settings
                 optional: false
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-        # labelSelector: "!kustomize.dormammu/subfrom,kustomize.dormammu/cluster-settings!=false"
+        labelSelector: "!kustomize.dormammu/subfrom,kustomize.dormammu/cluster-settings!=false"
     # SubFrom does exist in the ks, this patch is chosen via labelSelector
-    # - patch: |
-    #     - op: add
-    #       path: /spec/postBuild/substituteFrom/-
-    #       value:
-    #         kind: Secret
-    #         name: cluster-settings
-    #         optional: false
-    #   target:
-    #     group: kustomize.toolkit.fluxcd.io
-    #     kind: Kustomization
-    #     labelSelector: "kustomize.dormammu/subfrom=exists,kustomize.dormammu/cluster-settings!=false"
+    - patch: |
+        - op: add
+          path: /spec/postBuild/substituteFrom/-
+          value:
+            kind: Secret
+            name: cluster-settings
+            optional: false
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "kustomize.dormammu/subfrom=exists,kustomize.dormammu/cluster-settings!=false"
 
     # Components via labels (fun)
     - patch: |
