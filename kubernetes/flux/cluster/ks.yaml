@@ -18,20 +18,6 @@ spec:
     kind: GitRepository
     name: flux-system
   patches:
-    # Make namespaces priv by default cuz why not
-    - patch: |
-        apiVersion: v1
-        kind: Namespace
-        metadata:
-          name: patch
-          labels:
-            kustomize.toolkit.fluxcd.io/prune: disabled
-            pod-security.kubernetes.io/enforce: privileged
-            pod-security.kubernetes.io/audit: privileged
-            pod-security.kubernetes.io/warn: privileged
-      target:
-        version: v1
-        kind: Namespace
 
     # Default: postBuild.subFrom does not exist
     - patch: |
@@ -61,6 +47,21 @@ spec:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
         labelSelector: "kustomize.dormammu/subfrom=exists,kustomize.dormammu/cluster-settings!=false"
+
+    # Add NS var to each app ks
+    - patch: |
+        apiVersion: kustomize.toolkit.fluxcd.io/v1
+        kind: Kustomization
+        metadata:
+          name: patch
+        spec:
+          postBuild:
+            substitute:
+              NS: ${NS}
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: "kustomize.dormammu/namespace!=true"
 
     # Components via labels (fun)
     - patch: |
@@ -162,15 +163,6 @@ spec:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
         labelSelector: "components.dormammu/helm!=false"
-
-    # Add namespace component by default
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/namespace
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
 
     # Add cnpg restore helm component if labelled
     - patch: |
