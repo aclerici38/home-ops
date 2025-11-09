@@ -9,8 +9,6 @@ metadata:
 spec:
   dependsOn: []
   path: ./kubernetes/apps/NS/APP/app
-  components:
-    - ../../../../components/external-secret
   prune: true
   sourceRef:
     kind: GitRepository

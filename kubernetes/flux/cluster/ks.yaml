@@ -75,7 +75,7 @@ spec:
         kind: Kustomization
         labelSelector: "kustomize.dormammu/subfrom=exists,kustomize.dormammu/cluster-settings!=false"
 
-    # Components via labels (fun)
+    # init components list
     - patch: |
         - op: add
           path: /spec/components
@@ -83,85 +83,3 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-
-    # Add dependsOn to ks based on whether it has the component or not
-    # ESO: volsync, cnpg, ESO, oauth
-    - patch: &eso |
-        - op: add
-          path: /spec/dependsOn/-
-          value:
-            name: external-secrets
-            namespace: cluster-infra
-        - op: add
-          path: /spec/dependsOn/-
-          value:
-            name: external-secrets-stores
-            namespace: cluster-infra
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/cnpg"
-    - patch: *eso
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/oauth"
-    - patch: *eso
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/external-secret"
-    - patch: *eso
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/volsync"
-    # Versity: cnpg, volsync
-    - patch: &versity |
-        - op: add
-          path: /spec/dependsOn/-
-          value:
-            name: versity
-            namespace: storage
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/volsync=versity"
-    - patch: *versity
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/cnpg,components.dormammu/cnpg!=no-backup"
-    # Volsync: volsync
-    - patch: |
-        - op: add
-          path: /spec/dependsOn/-
-          value:
-            name: volsync
-            namespace: storage
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/volsync"
-    # CNPG: cnpg
-    - patch: |
-        - op: add
-          path: /spec/dependsOn/-
-          value:
-            name: cloudnative-pg
-            namespace: database
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/cnpg"
-    # Envoy: oauth
-    - patch: |
-        - op: add
-          path: /spec/dependsOn/-
-          value:
-            name: envoy
-            namespace: envoy-system
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/oauth"

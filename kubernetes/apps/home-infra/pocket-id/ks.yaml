@@ -5,7 +5,6 @@ kind: Kustomization
 metadata:
   name: pocket-id
   labels:
-    components.dormammu/external-secret: "true"
     components.dormammu/cnpg: restore
 spec:
   dependsOn: []

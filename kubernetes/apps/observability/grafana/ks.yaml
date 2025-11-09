@@ -5,7 +5,6 @@ kind: Kustomization
 metadata:
   name: grafana
   labels:
-    components.dormammu/external-secret: "true"
     components.dormammu/cnpg: no-backup
 spec:
   dependsOn: []

@@ -5,7 +5,6 @@ metadata:
   name: immich
   labels:
     components.dormammu/cnpg: init
-    components.dormammu/external-secret: "true"
 spec:
   dependsOn:
     - name: dragonfly-cluster

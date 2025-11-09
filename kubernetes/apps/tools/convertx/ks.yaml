@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: convertx
   labels:
-    components.dormammu/external-secret: "true"
     components.dormammu/oauth: true
 spec:
   path: ./kubernetes/apps/NS/APP/app

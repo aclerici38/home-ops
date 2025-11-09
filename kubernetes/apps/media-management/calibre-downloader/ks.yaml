@@ -5,7 +5,6 @@ kind: Kustomization
 metadata:
   name: calibre-downloader
   labels:
-    components.dormammu/external-secret: "true"
     components.dormammu/oauth: true
 spec:
   dependsOn: []
