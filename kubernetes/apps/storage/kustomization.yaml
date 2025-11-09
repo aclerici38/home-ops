@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: storage
+resources:
+  - ./csi-driver-nfs
+  - ./nfs-server
+  - ./samba
+  - ./scrutiny
+  - ./smart-tester
+  - ./snapshot-controller
+  - ./versity
+  - ./volsync
+  - ./zfs-scrubber
+components:
+  - ../../components/namespace
+configMapGenerator:
+  - name: namespace-var
+    literals:
+      - NS=storage

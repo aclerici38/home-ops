@@ -3,13 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app bitmagnet
+  name: bitmagnet
   labels:
     components.dormammu/cnpg: no-backup
     components.dormammu/external-secret: "true"
 spec:
   dependsOn: []
-  path: ./kubernetes/apps/media-management/bitmagnet/app
+  path: ./kubernetes/apps/NS/APP/app
   prune: true
   sourceRef:
     kind: GitRepository

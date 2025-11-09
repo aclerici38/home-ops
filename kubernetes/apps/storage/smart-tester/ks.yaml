@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app short-smart-tester
+  name: short-smart-tester
   labels:
 spec:
   path: ./kubernetes/apps/storage/smart-tester/app
@@ -26,7 +26,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app long-smart-tester
+  name: long-smart-tester
   labels:
 spec:
   path: ./kubernetes/apps/storage/smart-tester/app

@@ -3,13 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app sonarr
+  name: sonarr
   labels:
     components.dormammu/cnpg: restore
     components.dormammu/external-secret: "true"
 spec:
   dependsOn: []
-  path: ./kubernetes/apps/media-management/sonarr/app
+  path: ./kubernetes/apps/NS/APP/app
   prune: true
   sourceRef:
     kind: GitRepository

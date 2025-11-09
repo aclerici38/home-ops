@@ -6,7 +6,6 @@ metadata:
   name: cluster-apps
   namespace: flux-system
 spec:
-  targetNamespace: flux-system
   interval: 30m
   timeout: 7m
   path: ./kubernetes/apps/
@@ -193,73 +192,3 @@ spec:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
         labelSelector: "components.dormammu/oauth"
-
-    # Add cnpg restore component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/cnpg/overlays/restore
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/cnpg=restore"
-
-    # Add cnpg init component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/cnpg/overlays/init
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/cnpg=init"
-
-    # Add cnpg component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/cnpg/overlays/no-backup
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/cnpg=no-backup"
-
-    # Add envoy oauth component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/envoy/oauth
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/oauth"
-
-    # Add ESO component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/external-secret
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/external-secret"
-
-    # Add volsync versity component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/volsync/overlays/versity
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/volsync=versity"
-
-    # Add volsync remote component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/volsync/overlays/remote
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/volsync=remote"

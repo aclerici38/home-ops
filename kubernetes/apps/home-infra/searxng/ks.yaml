@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app searxng
+  name: searxng
   labels:
     components.dormammu/external-secret: "true"
 spec:
   dependsOn:
     - name: dragonfly-cluster
       namespace: database
-  path: ./kubernetes/apps/home-infra/searxng/app
+  path: ./kubernetes/apps/NS/APP/app
   prune: true
   sourceRef:
     kind: GitRepository

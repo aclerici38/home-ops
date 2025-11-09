@@ -1,0 +1,25 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: home-infra
+resources:
+  - ./actual
+  - ./donetick
+  - ./frigate
+  - ./home-assistant
+  - ./immich
+  - ./immich-config
+  - ./immich-frame
+  - ./karakeep
+  - ./mealie
+  - ./opencloud
+  - ./pocket-id
+  - ./searxng
+  - ./zigbee2mqtt
+components:
+  - ../../components/namespace
+configMapGenerator:
+  - name: namespace-var
+    literals:
+      - NS=home-infra

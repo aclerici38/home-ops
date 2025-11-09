@@ -2,12 +2,12 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app audiobookshelf
+  name: audiobookshelf
   labels:
     components.dormammu/volsync: versity
 spec:
   dependsOn: []
-  path: ./kubernetes/apps/streaming/audiobookshelf/app
+  path: ./kubernetes/apps/NS/APP/app
   prune: true
   sourceRef:
     kind: GitRepository

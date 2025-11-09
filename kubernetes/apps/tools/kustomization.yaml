@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: tools
+resources:
+  - ./atuin
+  - ./convertx
+  - ./echo-server
+  - ./filebrowser
+  - ./firefox
+  - ./it-tools
+  - ./omnitools
+  - ./openspeedtest
+components:
+  - ../../components/namespace
+configMapGenerator:
+  - name: namespace-var
+    literals:
+      - NS=tools

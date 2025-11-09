@@ -3,29 +3,10 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app envoy
+  name: envoy
 spec:
   dependsOn: []
-  path: ./kubernetes/apps/envoy-system/envoy/app
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  wait: true
-  interval: 30m
-  timeout: 3m
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app envoy-config
-  labels:
-spec:
-  dependsOn:
-    - name: envoy
-  path: ./kubernetes/apps/envoy-system/envoy/config
+  path: ./kubernetes/apps/NS/APP/app
   prune: true
   sourceRef:
     kind: GitRepository

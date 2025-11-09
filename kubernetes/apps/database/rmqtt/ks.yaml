@@ -3,9 +3,9 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app rmqtt
+  name: rmqtt
 spec:
-  path: ./kubernetes/apps/database/rmqtt/app
+  path: ./kubernetes/apps/NS/APP/app
   prune: true
   sourceRef:
     kind: GitRepository

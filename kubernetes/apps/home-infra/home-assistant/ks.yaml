@@ -2,12 +2,12 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app home-assistant
+  name: home-assistant
   labels:
     components.dormammu/volsync: versity
 spec:
   dependsOn: []
-  path: ./kubernetes/apps/home-infra/home-assistant/app
+  path: ./kubernetes/apps/NS/APP/app
   prune: true
   sourceRef:
     kind: GitRepository

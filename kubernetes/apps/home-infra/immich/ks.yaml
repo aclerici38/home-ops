@@ -10,7 +10,7 @@ spec:
   dependsOn:
     - name: dragonfly-cluster
       namespace: database
-  path: ./kubernetes/apps/home-infra/immich/app
+  path: ./kubernetes/apps/NS/APP/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -43,49 +43,3 @@ spec:
                   - /usr/share/postgresql/18/
       target:
         kind: Cluster
----
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: immich-config
-  labels:
-    kustomize.dormammu/subfrom: exists
-spec:
-  dependsOn:
-    - name: external-secrets-stores
-      namespace: cluster-infra
-  path: ./kubernetes/apps/home-infra/immich/config
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  wait: true
-  interval: 30m
-  timeout: 3m
-  retryInterval: 10s
-  postBuild:
-    substituteFrom:
-      - kind: Secret
-        name: immich
----
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: immich-frame
-  labels:
-    components.dormammu/external-secret: "true"
-spec:
-  dependsOn:
-    - name: immich
-  path: ./kubernetes/apps/home-infra/immich/frame
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  wait: true
-  interval: 30m
-  timeout: 3m

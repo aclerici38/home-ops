@@ -3,11 +3,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app jellyfin
+  name: jellyfin
   labels:
     components.dormammu/volsync: versity
 spec:
-  path: ./kubernetes/apps/streaming/jellyfin/app
+  path: ./kubernetes/apps/NS/APP/app
   prune: true
   sourceRef:
     kind: GitRepository

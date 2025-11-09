@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app tank-zfs-scrubber
+  name: tank-zfs-scrubber
   labels:
 spec:
   path: ./kubernetes/apps/storage/zfs-scrubber/app
@@ -25,7 +25,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app ssd-zfs-scrubber
+  name: ssd-zfs-scrubber
   labels:
 spec:
   path: ./kubernetes/apps/storage/zfs-scrubber/app
