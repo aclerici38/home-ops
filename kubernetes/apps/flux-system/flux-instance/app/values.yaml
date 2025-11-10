@@ -96,7 +96,7 @@ instance:
         patch: |-
           - op: add
             path: /spec/template/spec/containers/0/args/-
-            value: --watch-configs-label- selector=owner!=helm
+            value: --watch-configs-label-selector=owner!=helm
         target:
           kind: Deployment
           name: (helm-controller|kustomize-controller)
