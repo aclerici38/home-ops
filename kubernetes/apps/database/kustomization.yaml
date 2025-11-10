@@ -2,12 +2,16 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: database
 resources:
-  - ./ns.yaml
-
-  - ./cloudnative-pg/ks.yaml
-  - ./dragonfly/ks.yaml
-  - ./rmqtt/ks.yaml
-
-replacements:
-  - path: ../../kustomize/replacements.yaml
+  - ./cloudnative-pg
+  - ./dragonfly-cluster
+  - ./dragonfly-operator
+  - ./plugin-barman-cloud
+  - ./rmqtt
+components:
+  - ../../components/namespace
+configMapGenerator:
+  - name: namespace-var
+    literals:
+      - NS=database

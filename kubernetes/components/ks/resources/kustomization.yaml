@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+resources:
+  - ../base/ks.yaml
+replacements:
+  - sourceValue: resources
+    targets:
+      - select:
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+        fieldPaths:
+          - spec.path
+        options:
+          delimiter: /
+          index: 5
+labels:
+  - pairs:
+      components.dormammu/ks: resources

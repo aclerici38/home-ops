@@ -2,20 +2,24 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: home-infra
 resources:
-  - ./ns.yaml
-
-  - ./actual/ks.yaml
-  - ./donetick/ks.yaml
-  - ./frigate/ks.yaml
-  - ./home-assistant/ks.yaml
-  - ./immich/ks.yaml
-  - ./karakeep/ks.yaml
-  - ./mealie/ks.yaml
-  - ./opencloud/ks.yaml
-  - ./pocket-id/ks.yaml
-  - ./searxng/ks.yaml
-  - ./zigbee2mqtt/ks.yaml
-
-replacements:
-  - path: ../../kustomize/replacements.yaml
+  - ./actual
+  - ./donetick
+  - ./frigate
+  - ./home-assistant
+  - ./immich
+  - ./immich-config
+  - ./immich-frame
+  - ./karakeep
+  - ./mealie
+  - ./opencloud
+  - ./pocket-id
+  - ./searxng
+  - ./zigbee2mqtt
+components:
+  - ../../components/namespace
+configMapGenerator:
+  - name: namespace-var
+    literals:
+      - NS=home-infra

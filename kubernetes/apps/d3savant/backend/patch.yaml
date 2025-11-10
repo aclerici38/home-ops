@@ -1,0 +1,50 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: patch
+spec:
+  postBuild:
+    substitute:
+      APP: d3savant
+      CNPG_CAPACITY: 500Gi
+  patches:
+    - patch: |-
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Cluster
+        metadata:
+          name: patch
+        spec:
+          bootstrap:
+            initdb:
+              database: app
+              owner: jensen
+              secret:
+                name: jensen-d3savant
+          managed:
+            roles:
+              - name: anthony
+                ensure: present
+                login: true
+                superuser: false
+                inRoles:
+                  - jensen
+                passwordSecret:
+                  name: anthony-d3savant
+      target:
+        kind: Cluster
+    - patch: |-
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Pooler
+        metadata:
+          name: patch
+        spec:
+          serviceTemplate:
+            metadata:
+              annotations:
+                lbipam.cilium.io/ips: ${D3SAVANT_LB_IP}
+            spec:
+              type: LoadBalancer
+              externalTrafficPolicy: Local
+      target:
+        kind: Pooler

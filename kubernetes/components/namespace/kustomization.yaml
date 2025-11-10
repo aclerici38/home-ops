@@ -4,3 +4,30 @@ apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 resources:
   - ./ns.yaml
+replacements:
+  - source:
+      kind: ConfigMap
+      name: namespace-var
+      fieldPath: data.NS
+    targets:
+      - select: &ks
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+        fieldPaths:
+          - spec.commonLabels.app\.kubernetes\.io/namespace
+          - spec.postBuild.substitute.NS
+        options:
+          create: true
+      - select: *ks
+        fieldPaths:
+          - spec.path
+        options:
+          index: 3
+          delimiter: /
+      - select:
+          <<: *ks
+          labelSelector: kustomize.dormammu/targetNS!=false
+        fieldPaths:
+          - spec.targetNamespace
+        options:
+          create: true

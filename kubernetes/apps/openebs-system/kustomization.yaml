@@ -2,10 +2,13 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: openebs-system
 resources:
-  - ./ns.yaml
-
-  - ./openebs/ks.yaml
-
-replacements:
-  - path: ../../kustomize/replacements.yaml
+  - ./openebs
+  - ./zfs-volumes
+components:
+  - ../../components/namespace
+configMapGenerator:
+  - name: namespace-var
+    literals:
+      - NS=openebs-system

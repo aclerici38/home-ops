@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+replacements:
+  - sourceValue: recyclarr
+    targets:
+      - select: &ks
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+        fieldPaths:
+          - metadata.name
+          - spec.commonLabels.app\.kubernetes\.io/name
+          - spec.postBuild.substitute.APP
+        options:
+          create: true
+      - select: *ks
+        fieldPaths:
+          - spec.path
+        options:
+          delimiter: /
+          index: 4
+patches:
+  - path: ./patch.yaml
+    target: *ks
+components:
+  - ../../../components/ks/app

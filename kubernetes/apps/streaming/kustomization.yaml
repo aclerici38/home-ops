@@ -2,12 +2,14 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: streaming
 resources:
-  - ./ns.yaml
-
-  - ./audiobookshelf/ks.yaml
-  - ./jellyfin/ks.yaml
-  - ./streamystats/ks.yaml
-
-replacements:
-  - path: ../../kustomize/replacements.yaml
+  - ./audiobookshelf
+  - ./jellyfin
+  - ./streamystats
+components:
+  - ../../components/namespace
+configMapGenerator:
+  - name: namespace-var
+    literals:
+      - NS=streaming

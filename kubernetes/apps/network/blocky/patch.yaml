@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: patch
+spec:
+  patches:
+    # Add cnpg db auth secret to grafana's ns
+    - patch: |
+        - op: add
+          path: /spec/namespaceSelectors/-
+          value:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      target:
+        kind: ClusterExternalSecret
+        labelSelector: dormammu.io/component=cnpg

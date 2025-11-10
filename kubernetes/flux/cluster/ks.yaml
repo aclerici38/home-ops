@@ -17,20 +17,34 @@ spec:
     kind: GitRepository
     name: flux-system
   patches:
-    # Make namespaces priv by default cuz why not
-    - patch: |
-        apiVersion: v1
-        kind: Namespace
+
+    # Add default values to helmRelease
+    - patch: |-
+        apiVersion: helm.toolkit.fluxcd.io/v2
+        kind: HelmRelease
         metadata:
-          name: patch
-          labels:
-            kustomize.toolkit.fluxcd.io/prune: disabled
-            pod-security.kubernetes.io/enforce: privileged
-            pod-security.kubernetes.io/audit: privileged
-            pod-security.kubernetes.io/warn: privileged
+          name: defaults-patch
+        spec:
+          maxHistory: 1
+          driftDetection:
+            mode: warn
+          install:
+            crds: CreateReplace
+            remediation:
+              retries: 1
+              remediateLastFailure: true
+            strategy:
+              name: RetryOnFailure
+          upgrade:
+            crds: CreateReplace
+            cleanupOnFail: true
+            strategy:
+              name: RemediateOnFailure
+            remediation:
+              retries: 1
+              remediateLastFailure: true
       target:
-        version: v1
-        kind: Namespace
+        kind: HelmRelease
 
     # Default: postBuild.subFrom does not exist
     - patch: |
@@ -61,7 +75,7 @@ spec:
         kind: Kustomization
         labelSelector: "kustomize.dormammu/subfrom=exists,kustomize.dormammu/cluster-settings!=false"
 
-    # Components via labels (fun)
+    # init components list
     - patch: |
         - op: add
           path: /spec/components
@@ -69,201 +83,3 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-
-    # Add dependsOn to ks based on whether it has the component or not
-    # ESO: volsync, cnpg, ESO, oauth
-    - patch: &eso |
-        - op: add
-          path: /spec/dependsOn/-
-          value:
-            name: external-secrets
-            namespace: cluster-infra
-        - op: add
-          path: /spec/dependsOn/-
-          value:
-            name: external-secrets-stores
-            namespace: cluster-infra
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/cnpg"
-    - patch: *eso
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/oauth"
-    - patch: *eso
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/external-secret"
-    - patch: *eso
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/volsync"
-    # Versity: cnpg, volsync
-    - patch: &versity |
-        - op: add
-          path: /spec/dependsOn/-
-          value:
-            name: versity
-            namespace: storage
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/volsync=versity"
-    - patch: *versity
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/cnpg,components.dormammu/cnpg!=no-backup"
-    # Volsync: volsync
-    - patch: |
-        - op: add
-          path: /spec/dependsOn/-
-          value:
-            name: volsync
-            namespace: storage
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/volsync"
-    # CNPG: cnpg
-    - patch: |
-        - op: add
-          path: /spec/dependsOn/-
-          value:
-            name: cloudnative-pg
-            namespace: database
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/cnpg"
-    # Envoy: oauth
-    - patch: |
-        - op: add
-          path: /spec/dependsOn/-
-          value:
-            name: envoy
-            namespace: envoy-system
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/oauth"
-
-    # Add hr defaults patch component by default
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/flux/helm
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/helm!=false"
-
-    # Add namespace component by default
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/namespace
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-
-    # Add cnpg restore helm component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/cnpg/helm/restore
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/cnpg=restore,components.dormammu/helm!=false"
-
-    # Add cnpg init helm component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/cnpg/helm/init
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/cnpg=init,components.dormammu/helm!=false"
-    # Add cnpg init non-helm component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/cnpg/postBuild/init
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/cnpg=init,components.dormammu/helm=false"
-
-    # Add cnpg helm component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/cnpg/helm/no-backup
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/cnpg=no-backup,components.dormammu/helm!=false"
-
-    # Add cnpg raw manifests component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/cnpg/postBuild/restore
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/cnpg=restore,components.dormammu/helm=false"
-
-    # Add envoy oauth component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/envoy/oauth/helm
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/oauth,components.dormammu/helm!=false"
-
-    # Add ESO component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/external-secret/helm
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/external-secret,components.dormammu/helm!=false"
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/external-secret/postBuild
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/external-secret,components.dormammu/helm=false"
-
-    # Add volsync versity component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/volsync/helm/versity
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/volsync=versity,components.dormammu/helm!=false"
-
-    # Add volsync remote component if labelled
-    - patch: |
-        - op: add
-          path: /spec/components/-
-          value: ../../../../components/volsync/helm/remote
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "components.dormammu/volsync=remote,components.dormammu/helm!=false"

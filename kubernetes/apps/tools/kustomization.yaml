@@ -2,19 +2,19 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: tools
 resources:
-  - ./ns.yaml
-
-  - ./atuin/ks.yaml
-  - ./convertx/ks.yaml
-  - ./echo-server/ks.yaml
-  - ./filebrowser/ks.yaml
-  - ./firefox/ks.yaml
-  - ./it-tools/ks.yaml
-  - ./llama.cpp/ks.yaml
-  - ./omnitools/ks.yaml
-  - ./open-webui/ks.yaml
-  - ./openspeedtest/ks.yaml
-
-replacements:
-  - path: ../../kustomize/replacements.yaml
+  - ./atuin
+  - ./convertx
+  - ./echo-server
+  - ./filebrowser
+  - ./firefox
+  - ./it-tools
+  - ./omnitools
+  - ./openspeedtest
+components:
+  - ../../components/namespace
+configMapGenerator:
+  - name: namespace-var
+    literals:
+      - NS=tools

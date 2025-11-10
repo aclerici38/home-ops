@@ -2,21 +2,25 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: media-management
 resources:
-  - ./ns.yaml
-
-  - ./bazarr/ks.yaml
-  - ./bitmagnet/ks.yaml
-  - ./calibre/ks.yaml
-  - ./fileflows/ks.yaml
-  - ./flaresolverr/ks.yaml
-  - ./jellyseer/ks.yaml
-  - ./prowlarr/ks.yaml
-  - ./qbittorrent/ks.yaml
-  - ./radarr/ks.yaml
-  - ./recyclarr/ks.yaml
-  - ./renamarr/ks.yaml
-  - ./sonarr/ks.yaml
-
-replacements:
-  - path: ../../kustomize/replacements.yaml
+  - ./bazarr
+  - ./bitmagnet
+  - ./calibre-downloader
+  - ./calibre-web-automated
+  - ./fileflows
+  - ./flaresolverr
+  - ./jellyseer
+  - ./prowlarr
+  - ./qbittorrent
+  - ./radarr
+  - ./recyclarr
+  - ./renamarr
+  - ./sonarr
+  - ./vuetorrent
+components:
+  - ../../components/namespace
+configMapGenerator:
+  - name: namespace-var
+    literals:
+      - NS=media-management
