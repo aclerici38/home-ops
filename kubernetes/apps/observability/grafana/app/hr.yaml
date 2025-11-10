@@ -49,15 +49,15 @@ spec:
           key: dbname
       BLOCKY_DB_USER:
         secretKeyRef:
-          name: blocky-db
+          name: blocky-db-app
           key: user
       BLOCKY_DB_PASS:
         secretKeyRef:
-          name: blocky-db
+          name: blocky-db-app
           key: password
       BLOCKY_DB_NAME:
         secretKeyRef:
-          name: blocky-db
+          name: blocky-db-app
           key: dbname
     grafana.ini:
       analytics:
