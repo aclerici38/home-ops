@@ -10,7 +10,7 @@ patches:
     target: &target
       group: kustomize.toolkit.fluxcd.io
       kind: Kustomization
-  - path: ../deps/eso.yaml
+  - path: ../../deps/eso.yaml
     target: *target
-  - path: ../deps/cnpg.yaml
+  - path: ../../deps/cnpg.yaml
     target: *target

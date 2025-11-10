@@ -2,9 +2,32 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources:
-  - ./ks.yaml
-components:
-  - ../../../components/kustomize/external-secret
 replacements:
-  - path: ../../../replacements/ks/app.yaml
+  - sourceValue: searxng
+    targets:
+      - select: &ks
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+        fieldPaths:
+          - metadata.name
+          - spec.commonLabels.app\.kubernetes\.io/name
+          - spec.postBuild.substitute.APP
+        options:
+          create: true
+      - select: *ks
+        fieldPaths:
+          - spec.path
+        options:
+          delimiter: /
+          index: 4
+patches:
+  - patch: |-
+      - op: add
+        path: /spec/dependsOn/-
+        value:
+          name: dragonfly-cluster
+          namespace: database
+    target: *ks
+components:
+  - ../../../components/ks/app
+  - ../../../components/kustomize/external-secret

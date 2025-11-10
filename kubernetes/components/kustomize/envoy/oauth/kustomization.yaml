@@ -10,9 +10,9 @@ patches:
     target: &target
       group: kustomize.toolkit.fluxcd.io
       kind: Kustomization
-  - path: ../deps/eso.yaml
+  - path: ../../deps/eso.yaml
     target: *target
-  - path: ../deps/eso-stores.yaml
+  - path: ../../deps/eso-stores.yaml
     target: *target
-  - path: ../deps/envoy.yaml
+  - path: ../../deps/envoy.yaml
     target: *target

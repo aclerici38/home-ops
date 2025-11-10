@@ -1,0 +1,28 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: patch
+spec:
+  patches:
+    # patch secret to all namespaces
+    - patch: |
+        apiVersion: external-secrets.io/v1
+        kind: ClusterExternalSecret
+        metadata:
+          name: patch
+        spec:
+          namespaceSelectors: [{}]
+          externalSecretSpec:
+            data:
+              - secretKey: versity-access-key-id
+                remoteRef:
+                  key: versity
+                  property: ROOT_ACCESS_KEY_ID
+              - secretKey: versity-secret-access-key
+                remoteRef:
+                  key: versity
+                  property: ROOT_SECRET_ACCESS_KEY
+      target:
+        kind: ClusterExternalSecret
+        labelSelector: dormammu.io/component=external-secret

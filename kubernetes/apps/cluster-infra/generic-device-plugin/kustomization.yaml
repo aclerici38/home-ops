@@ -2,7 +2,23 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources:
-  - ./ks.yaml
 replacements:
-  - path: ../../../replacements/ks/app.yaml
+  - sourceValue: generic-device-plugin
+    targets:
+      - select: &ks
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+        fieldPaths:
+          - metadata.name
+          - spec.commonLabels.app\.kubernetes\.io/name
+          - spec.postBuild.substitute.APP
+        options:
+          create: true
+      - select: *ks
+        fieldPaths:
+          - spec.path
+        options:
+          delimiter: /
+          index: 4
+components:
+  - ../../../components/ks/app

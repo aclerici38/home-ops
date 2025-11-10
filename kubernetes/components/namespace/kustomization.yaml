@@ -14,7 +14,7 @@ replacements:
           kind: Kustomization
           group: kustomize.toolkit.fluxcd.io
         fieldPaths:
-          - metadata.namespace
+          - spec.commonLabels.app\.kubernetes\.io/namespace
           - spec.postBuild.substitute.NS
         options:
           create: true
