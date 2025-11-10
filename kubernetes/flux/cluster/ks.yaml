@@ -74,12 +74,3 @@ spec:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
         labelSelector: "kustomize.dormammu/subfrom=exists,kustomize.dormammu/cluster-settings!=false"
-
-    # init components list
-    - patch: |
-        - op: add
-          path: /spec/components
-          value: []
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
