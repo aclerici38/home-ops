@@ -20,5 +20,11 @@ replacements:
         options:
           delimiter: /
           index: 4
+patches:
+  patch: |-
+      - op: add
+      path: /spec/dependsOn/-
+      value:
+        name: cert-manager
 components:
   - ../../../components/ks/app

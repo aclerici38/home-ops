@@ -20,6 +20,12 @@ replacements:
         options:
           delimiter: /
           index: 4
+patches:
+  - patch: |-
+      - op: add
+        path: /spec/dependsOn/-
+        value:
+          name: external-secrets
 labels:
   - pairs:
       kustomize.dormammu/cluster-settings: "false"
