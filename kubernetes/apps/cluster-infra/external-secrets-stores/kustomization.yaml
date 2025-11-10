@@ -26,6 +26,7 @@ patches:
         path: /spec/dependsOn/-
         value:
           name: external-secrets
+    target: *ks
 labels:
   - pairs:
       kustomize.dormammu/cluster-settings: "false"
