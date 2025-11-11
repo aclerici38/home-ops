@@ -78,7 +78,7 @@ spec:
 
               WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.${SECRET_DOMAIN}/settings/apps
               # prevent nested mounts
-              WEB_ASSET_APPS_PATH: &extPath /opt/extensions
+              WEB_ASSET_APPS_PATH: /opt/extensions/usr/share/nginx/html/apps
 
               NOTIFICATIONS_SMTP_HOST: smtp-relay.cluster-infra
               NOTIFICATIONS_SMTP_PORT: 25
@@ -336,5 +336,4 @@ spec:
         advancedMounts:
           opencloud:
             opencloud:
-              - path: *extPath
-                subPath: usr/share/nginx/html/apps
+              - path: /opt/extensions
