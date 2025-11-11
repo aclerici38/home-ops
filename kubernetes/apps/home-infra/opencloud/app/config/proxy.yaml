@@ -1,7 +1,7 @@
 role_assignment:
   driver: oidc
   oidc_role_mapper:
-    role_claim: roles
+    role_claim: oc_groups
     role_mapping:
       - role_name: admin
         claim_value: opencloud-admins
