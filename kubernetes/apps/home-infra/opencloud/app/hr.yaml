@@ -330,8 +330,6 @@ spec:
               - path: /opt/cool/child-roots
                 subPath: roots
       # Web extensions
-      opt:
-        type: emptyDir
       unzip:
         type: image
         image: docker.io/opencloudeu/web-extensions:unzip-1.0.4
