@@ -6,8 +6,9 @@ metadata:
   name: APP
 spec:
   dependsOn: []
-  components: []
-  patches: []
+  # Use compopnent for default patches instead of spec.patches to patch in SM patches w/o overwriting it
+  components:
+    - ../../../components/hr
   path: ./kubernetes/apps/NS/APP/app
   prune: true
   sourceRef:
