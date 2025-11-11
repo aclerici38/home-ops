@@ -77,8 +77,8 @@ spec:
               GRAPH_USERNAME_MATCH: "none"
 
               WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.${SECRET_DOMAIN}/settings/apps
-              # Mount extensions outside of opencloud's mount for imagevol subPaths to work
-              WEB_ASSET_APPS_PATH: /mnt/extensions
+              # prevent nested mounts
+              WEB_ASSET_APPS_PATH: &extPath /opt/extensions
 
               NOTIFICATIONS_SMTP_HOST: smtp-relay.cluster-infra
               NOTIFICATIONS_SMTP_PORT: 25
@@ -330,11 +330,13 @@ spec:
               - path: /opt/cool/child-roots
                 subPath: roots
       # Web extensions
+      opt:
+        type: emptyDir
       unzip:
         type: image
         image: docker.io/opencloudeu/web-extensions:unzip-1.0.4
         advancedMounts:
           opencloud:
             opencloud:
-              - path: /mnt/extensions
+              - path: *extPath
                 subPath: usr/share/nginx/html/apps
