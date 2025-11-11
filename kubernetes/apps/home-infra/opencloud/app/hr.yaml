@@ -328,12 +328,6 @@ spec:
               - path: /opt/cool/child-roots
                 subPath: roots
       # Web extensions
-      assets:
-        type: emptyDir
-        advancedMounts:
-          opencloud:
-            opencloud:
-              - path: /var/lib/opencloud/web/assets/apps
       unzip:
         type: image
         image: docker.io/opencloudeu/web-extensions:unzip-1.0.4
