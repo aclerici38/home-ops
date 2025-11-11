@@ -47,6 +47,10 @@ spec:
         secretKeyRef:
           name: grafana-db-app
           key: dbname
+      BLOCKY_DB_HOST:
+        secretKeyRef:
+          name: blocky-db-app
+          key: host
       BLOCKY_DB_USER:
         secretKeyRef:
           name: blocky-db-app
@@ -121,7 +125,7 @@ spec:
             uid: blocky-postgres
             type: postgres
             access: proxy
-            url: blocky-db-ro.network.svc.cluster.local:5432
+            url: $__env{BLOCKY_DB_HOST}
             user: $__env{BLOCKY_DB_USER}
             secureJsonData:
               password: $__env{BLOCKY_DB_PASS}
