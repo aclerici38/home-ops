@@ -24,7 +24,7 @@ spec:
       opencloud:
         forceRename: opencloud
         containers:
-          main:
+          opencloud:
             image: &img
               repository: docker.io/opencloudeu/opencloud-rolling
               tag: 3.7.0@sha256:7bd41ba329a29869227804875f62cb59f23ed9178ae3b6be36f3a7f0e514077e
@@ -52,7 +52,7 @@ spec:
               PROXY_ROLE_ASSIGNMENT_DRIVER: oidc
               PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM: oc_groups
               PROXY_USER_OIDC_CLAIM: sub
-              WEB_OIDC_SCOPE: "openid profile email groups"
+              WEB_OIDC_SCOPE: "openid profile email"
               PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml
               PROXY_OIDC_REWRITE_WELLKNOWN: true # mobile apps try to re-register via internal idp
               PROXY_HTTP_ADDR: 0.0.0.0:9200
@@ -113,7 +113,7 @@ spec:
       wopi:
         strategy: RollingUpdate
         containers:
-          main:
+          wopi:
             image: *img
             command:
               - "/bin/sh"
@@ -147,7 +147,7 @@ spec:
             seccompProfile:
               type: Unconfined # This seems necessary
         containers:
-          main:
+          collabora:
             image:
               repository: docker.io/collabora/code
               tag: 25.04.7.1.1@sha256:b70d5ffb3c88ec365c3685cbd4ce56cd0d29122a1290e98e7f0e9932c2cd8246
@@ -191,7 +191,7 @@ spec:
         pod:
           hostUsers: false
         containers:
-          main:
+          tika:
             image:
               repository: docker.io/apache/tika
               tag: 3.2.3.0-full@sha256:21d8052de04e491ccf66e8680ade4da6f3d453a56d59f740b4167e54167219b7
@@ -249,7 +249,8 @@ spec:
         endpoints:
           - port: debug
     route:
-      main:
+      opencloud:
+        forceRename: opencloud
         hostnames:
           - cloud.${SECRET_DOMAIN}
         parentRefs:
@@ -288,7 +289,7 @@ spec:
         name: opencloud-config
         advancedMounts:
           opencloud:
-            main:
+            opencloud:
               - path: *cspPath
                 subPath: csp.yaml
               - path: /etc/opencloud/proxy.yaml
@@ -297,29 +298,29 @@ spec:
         existingClaim: opencloud
         advancedMounts:
           opencloud:
-            main:
+            opencloud:
               - path: /var/lib/opencloud
                 subPath: data
               - path: /etc/opencloud
                 subPath: config
           wopi:
-            main:
+            wopi:
               - path: /etc/opencloud
                 subPath: config
       files:
         existingClaim: files
         advancedMounts:
           opencloud:
-            main:
+            opencloud:
               - path: *path
       tmpfs:
         type: emptyDir
         advancedMounts:
           tika:
-            main:
+            tika:
               - path: /tmp
           collabora:
-            main:
+            collabora:
               - path: /tmp
                 subPath: tmp
               - path: /opt/cool/cache
@@ -329,9 +330,9 @@ spec:
       # Web extensions
       unzip:
         type: image
-        image: docker.io/opencloudeu/web-extensions:unzip-1.0.3@sha256:3cd4ffdc93ff893f7f1c75c2e63c059a6da62720a394bd9ba33719236e6579b8
+        image: docker.io/opencloudeu/web-extensions:unzip-1.0.4
         advancedMounts:
           opencloud:
-            main:
+            opencloud:
               - path: /var/lib/opencloud/web/assets/apps/unzip
                 subPath: usr/share/nginx/html/apps/unzip
