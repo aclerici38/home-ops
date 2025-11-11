@@ -332,6 +332,7 @@ spec:
       # Web extensions
       unzip:
         type: image
+        # renovate: datasource=docker depname=docker.io/opencloudeu/web-extensions versioning=regex extractVersion=^.+-(?<version>\d+\.\d+\.\d+)$
         image: docker.io/opencloudeu/web-extensions:unzip-1.0.4
         advancedMounts:
           opencloud:
