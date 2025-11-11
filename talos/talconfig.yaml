@@ -172,6 +172,7 @@ nodes:
               - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
   - hostname: "timmy"
     ipAddress: "${TIMMY_IP}"
+    talosImageURL: ghcr.io/talos-rpi5/installer
     installDiskSelector:
       model: "SAMSUNG MZVL4256HBJD-00BH1"
     machineSpec:
@@ -196,11 +197,6 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.9.1"
         mtu: 1500
-    patches:
-      - |-
-        machine:
-          install:
-            image: ghcr.io/talos-rpi5/installer:${TALOS_PI5_VERSION}
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
