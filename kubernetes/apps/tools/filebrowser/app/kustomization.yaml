@@ -5,6 +5,8 @@ kind: Kustomization
 resources:
   - ./hr.yaml
   - ./pvc.yaml
+generatorOptions:
+  disableNameSuffixHash: true
 configMapGenerator:
   - name: filebrowser-config
     files:

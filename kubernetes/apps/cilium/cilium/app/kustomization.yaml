@@ -6,6 +6,8 @@ namespace: ${NS}
 resources:
   - ./hr.yaml
   - ./httproute.yaml
+generatorOptions:
+  disableNameSuffixHash: true
 configMapGenerator:
   - name: cilium-helm-values
     files:

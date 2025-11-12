@@ -9,6 +9,8 @@ resources:
   - ./k8s-gateway
 components:
   - ../../components/namespace
+generatorOptions:
+  disableNameSuffixHash: true
 configMapGenerator:
   - name: namespace-var
     literals:

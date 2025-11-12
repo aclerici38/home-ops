@@ -5,6 +5,8 @@ kind: Kustomization
 resources:
   - ./github
   - ./hr.yaml
+generatorOptions:
+  disableNameSuffixHash: true
 configMapGenerator:
   - name: flux-instance-helm-values
     files:

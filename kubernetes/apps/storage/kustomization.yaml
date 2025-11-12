@@ -14,6 +14,8 @@ resources:
   - ./zfs-scrubber
 components:
   - ../../components/namespace
+generatorOptions:
+  disableNameSuffixHash: true
 configMapGenerator:
   - name: namespace-var
     literals:
