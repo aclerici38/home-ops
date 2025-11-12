@@ -16,16 +16,3 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  patches:
-    # patch in default values
-    - patch: |
-        - op: add
-          path: /spec/postBuild/substituteFrom/-
-          value:
-            kind: Secret
-            name: cluster-settings
-            optional: false
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "kustomize.dormammu/cluster-settings!=false"
