@@ -14,13 +14,14 @@
       "versioning": "regex:^V(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
     },
     {
-      "description": "semver-coerced for select tags",
+      "description": "Docker tags with a specific prefix",
       "matchDatasources": ["docker"],
       "matchPackagePatterns": [
+        "opencloudeu/web-extensions",
         "envoyproxy/envoy",
-        "opencloudeu/web-extensions"
       ],
-      "versioning": "semver-coerced"
-    },
+      "versioning": "semver-coerced",
+      "allowedVersions": "/^(unzip|external-sites)-\\d+\\.\\d+\\.\\d+$/"
+    }
   ]
 }
