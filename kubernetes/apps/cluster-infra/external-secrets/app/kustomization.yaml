@@ -5,9 +5,9 @@ kind: Kustomization
 resources:
   - ./hr.yaml
   - ./cluster-settings.yaml
+generatorOptions:
+  disableNameSuffixHash: true
 configMapGenerator:
   - name: external-secrets-helm-values
     files:
       - ./values.yaml
-generatorOptions:
-  disableNameSuffixHash: true

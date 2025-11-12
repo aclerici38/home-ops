@@ -17,52 +17,7 @@ spec:
     kind: GitRepository
     name: flux-system
   patches:
-
-    # Add default values to helmRelease
-    - patch: |-
-        apiVersion: helm.toolkit.fluxcd.io/v2
-        kind: HelmRelease
-        metadata:
-          name: defaults-patch
-        spec:
-          maxHistory: 1
-          driftDetection:
-            mode: warn
-          install:
-            crds: CreateReplace
-            remediation:
-              retries: 1
-              remediateLastFailure: true
-            strategy:
-              name: RetryOnFailure
-          upgrade:
-            crds: CreateReplace
-            cleanupOnFail: true
-            strategy:
-              name: RemediateOnFailure
-            remediation:
-              retries: 1
-              remediateLastFailure: true
-      target:
-        kind: HelmRelease
-
-    # Default: postBuild.subFrom does not exist
-    - patch: |
-        apiVersion: kustomize.toolkit.fluxcd.io/v1
-        kind: Kustomization
-        metadata:
-          name: patch
-        spec:
-          postBuild:
-            substituteFrom:
-              - kind: Secret
-                name: cluster-settings
-                optional: false
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-        labelSelector: "!kustomize.dormammu/subfrom,kustomize.dormammu/cluster-settings!=false"
-    # SubFrom does exist in the ks, this patch is chosen via labelSelector
+    # patch in default values
     - patch: |
         - op: add
           path: /spec/postBuild/substituteFrom/-

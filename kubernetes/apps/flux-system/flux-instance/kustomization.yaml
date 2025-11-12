@@ -2,23 +2,11 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-replacements:
-  - sourceValue: flux-instance
-    targets:
-      - select: &ks
-          kind: Kustomization
-          group: kustomize.toolkit.fluxcd.io
-        fieldPaths:
-          - metadata.name
-          - spec.commonMetadata.labels.app\.kubernetes\.io/name
-          - spec.postBuild.substitute.APP
-        options:
-          create: true
-      - select: *ks
-        fieldPaths:
-          - spec.path
-        options:
-          delimiter: /
-          index: 4
+generatorOptions:
+  disableNameSuffixHash: true
+configMapGenerator:
+  - name: APP-app-vars
+    literals:
+      - APP=flux-instance
 components:
   - ../../../components/ks/app

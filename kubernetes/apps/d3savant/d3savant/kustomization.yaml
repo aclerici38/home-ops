@@ -7,7 +7,14 @@ generatorOptions:
 configMapGenerator:
   - name: APP-app-vars
     literals:
-      - APP=atuin
+      - APP=d3savant
+      - CNPG_CAPACITY=500Gi
+patches:
+  - path: ./patch.yaml
+    target:
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/app
-  - ../../../components/kustomize/cnpg/restore
+  - ../../../components/kustomize/cnpg/init
+

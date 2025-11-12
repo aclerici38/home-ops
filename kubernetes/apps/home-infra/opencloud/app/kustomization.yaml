@@ -7,10 +7,10 @@ resources:
   - ./pvc.yaml
   - ./volsync.yaml
   - ./hr.yaml
+generatorOptions:
+  disableNameSuffixHash: true
 configMapGenerator:
   - name: opencloud-config
     files:
       - ./config/csp.yaml
       - ./config/proxy.yaml
-generatorOptions:
-  disableNameSuffixHash: true

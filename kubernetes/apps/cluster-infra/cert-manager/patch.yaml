@@ -4,9 +4,6 @@ kind: Kustomization
 metadata:
   name: patch
 spec:
-  postBuild:
-    substitute:
-      APP: cloudflare
   patches:
     - patch: |
         - op: add
@@ -14,6 +11,9 @@ spec:
           value:
             matchLabels:
               kubernetes.io/metadata.name: network
+        - op: replace
+          path: /metadata/name
+          value: cloudflare
       target:
         kind: ClusterExternalSecret
         labelSelector: dormammu.io/component=external-secret

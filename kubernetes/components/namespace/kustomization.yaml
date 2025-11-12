@@ -10,12 +10,23 @@ replacements:
       name: namespace-var
       fieldPath: data.NS
     targets:
+      - select:
+          kind: ConfigMap
+          name: namespace-var
+        fieldPaths:
+          - metadata.namespace
+        options:
+          create: true
+      - select:
+          kind: Namespace
+        fieldPaths:
+          - metadata.name
       - select: &ks
           kind: Kustomization
           group: kustomize.toolkit.fluxcd.io
         fieldPaths:
           - spec.commonMetadata.labels.app\.kubernetes\.io/namespace
-          - spec.postBuild.substitute.NS
+          - metadata.namespace
         options:
           create: true
       - select: *ks
@@ -29,5 +40,13 @@ replacements:
           labelSelector: kustomize.dormammu/targetNS!=false
         fieldPaths:
           - spec.targetNamespace
+        options:
+          create: true
+      - select:
+          kind: ConfigMap
+          labelSelector: components.dormammu/ks
+        fieldPaths:
+          - data.NS
+          - metadata.namespace
         options:
           create: true

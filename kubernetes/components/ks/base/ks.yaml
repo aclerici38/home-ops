@@ -6,7 +6,7 @@ metadata:
   name: APP
 spec:
   dependsOn: []
-  # Use compopnent for default patches instead of spec.patches to patch in SM patches w/o overwriting it
+  # Use component for default patches instead of spec.patches to patch in SM patches w/o overwriting it
   components:
     - ../../../../components/hr
   path: ./kubernetes/apps/NS/APP/app
@@ -18,3 +18,8 @@ spec:
   wait: true
   interval: 30m
   timeout: 3m
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: APP-app-vars
+        optional: false

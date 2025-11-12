@@ -2,12 +2,12 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: d3savant
 resources:
-  - ./backend
-  # - ./scraper
+  - ./d3savant
 components:
   - ../../components/namespace
+generatorOptions:
+  disableNameSuffixHash: true
 configMapGenerator:
   - name: namespace-var
     literals:
