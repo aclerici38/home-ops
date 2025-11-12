@@ -26,6 +26,7 @@ replacements:
           group: kustomize.toolkit.fluxcd.io
         fieldPaths:
           - spec.commonMetadata.labels.app\.kubernetes\.io/namespace
+          - metadata.namespace
         options:
           create: true
       - select: *ks
