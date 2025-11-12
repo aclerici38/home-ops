@@ -11,6 +11,7 @@ spec:
   targetNamespace: *ns
   path: ./kubernetes/flux/meta/repositories
   prune: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -27,6 +28,7 @@ spec:
   timeout: 10m
   path: ./kubernetes/flux/meta/settings
   prune: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: flux-system
