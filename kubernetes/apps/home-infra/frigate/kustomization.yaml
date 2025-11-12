@@ -8,11 +8,7 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=frigate
-patches:
-  - path: ./patch.yaml
-    target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
+      - VOLSYNC_CAPACITY=25Gi
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret

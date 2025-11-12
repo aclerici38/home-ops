@@ -4,9 +4,6 @@ kind: Kustomization
 metadata:
   name: patch
 spec:
-  postBuild:
-    substitute:
-      CNPG_POOLMODE: session
   patches:
     # Add cnpg db auth secret to grafana's ns
     - patch: |

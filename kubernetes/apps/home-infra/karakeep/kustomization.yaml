@@ -8,11 +8,10 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=karakeep
-patches:
-  - path: ./patch.yaml
-    target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
+      - VOLSYNC_CAPACITY=25Gi
+      - VOLSYNC_STORAGECLASS=ceph-filesystem
+      - VOLSYNC_SNAPSHOTCLASS=csi-ceph-filesystem
+      - VOLSYNC_ACCESSMODES=ReadWriteMany
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret

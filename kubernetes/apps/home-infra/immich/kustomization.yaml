@@ -8,6 +8,8 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=immich
+      - CNPG_CAPACITY=20Gi
+      - CNPG_POOLMODE=session
 patches:
   - path: ./patch.yaml
     target:

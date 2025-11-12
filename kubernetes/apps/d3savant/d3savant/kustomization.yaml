@@ -8,6 +8,7 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=d3savant
+      - CNPG_CAPACITY=500Gi
 patches:
   - path: ./patch.yaml
     target:

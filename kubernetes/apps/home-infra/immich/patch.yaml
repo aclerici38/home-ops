@@ -4,10 +4,6 @@ kind: Kustomization
 metadata:
   name: immich
 spec:
-  postBuild:
-    substitute:
-      CNPG_CAPACITY: 20Gi
-      CNPG_POOLMODE: session
   patches:
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1

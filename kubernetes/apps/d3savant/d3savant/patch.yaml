@@ -4,10 +4,6 @@ kind: Kustomization
 metadata:
   name: patch
 spec:
-  postBuild:
-    substitute:
-      APP: d3savant
-      CNPG_CAPACITY: 500Gi
   patches:
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1

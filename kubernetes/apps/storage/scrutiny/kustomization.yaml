@@ -8,6 +8,9 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=scrutiny
+      - VOLSYNC_STORAGECLASS=ceph-filesystem
+      - VOLSYNC_SNAPSHOTCLASS=csi-ceph-filesystem
+      - VOLSYNC_ACCESSMODES=ReadWriteMany
 patches:
   - path: ./patch.yaml
     target:
