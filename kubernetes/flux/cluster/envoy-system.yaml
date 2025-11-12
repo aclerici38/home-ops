@@ -3,16 +3,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cluster-apps
+  name: &ns envoy-system
   namespace: flux-system
 spec:
+  targetNamespace: *ns
   interval: 30m
-  timeout: 7m
-  path: ./kubernetes/apps/
+  timeout: 5m
+  path: ./kubernetes/apps/envoy-system
   prune: false
-  wait: false
-  dependsOn:
-    - name: flux-repos
+  wait: true
   sourceRef:
     kind: GitRepository
     name: flux-system
