@@ -10,6 +10,8 @@ spec:
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/streaming
+  components:
+    - ../../components/namespace
   prune: false
   wait: true
   sourceRef:
