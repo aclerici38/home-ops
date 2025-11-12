@@ -11,6 +11,11 @@ replacements:
       fieldPath: data.NS
     targets:
       - select:
+          kind: ConfigMap
+          name: namespace-var
+        fieldPaths:
+          - metadata.namespace
+      - select:
           kind: Namespace
         fieldPaths:
           - metadata.name
@@ -39,5 +44,6 @@ replacements:
           labelSelector: components.dormammu/ks
         fieldPaths:
           - data.NS
+          - metadata.namespace
         options:
           create: true
