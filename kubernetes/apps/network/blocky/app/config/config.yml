@@ -53,6 +53,11 @@ ecs:
 bootstrapDns:
   - https://1.1.1.1/dns-query
 
+dnssec:
+  validate: true
+  cacheExpirationHours: 2
+  clockSkewToleranceSec: 300
+
 upstreams:
   groups:
     default:
@@ -87,4 +92,4 @@ queryLog:
   logRetentionDays: 30
   creationAttempts: 5
   creationCooldown: 60s
-  flushInterval: 1s
+  flushInterval: 5s
