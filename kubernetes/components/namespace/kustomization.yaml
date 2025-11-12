@@ -2,21 +2,15 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
-resources:
-  - ./ns.yaml
+patches:
+  - path: ./patch.yaml
+    target:
+      kind: Namespace
 replacements:
   - source:
-      kind: ConfigMap
-      name: namespace-var
-      fieldPath: data.NS
+      kind: Namespace
+      fieldPath: metadata.name
     targets:
-      - select:
-          kind: ConfigMap
-          name: namespace-var
-        fieldPaths:
-          - metadata.namespace
-        options:
-          create: true
       - select:
           kind: Namespace
         fieldPaths:
@@ -26,7 +20,6 @@ replacements:
           group: kustomize.toolkit.fluxcd.io
         fieldPaths:
           - spec.commonMetadata.labels.app\.kubernetes\.io/namespace
-          - metadata.namespace
         options:
           create: true
       - select: *ks
@@ -47,6 +40,5 @@ replacements:
           labelSelector: components.dormammu/ks
         fieldPaths:
           - data.NS
-          - metadata.namespace
         options:
           create: true
