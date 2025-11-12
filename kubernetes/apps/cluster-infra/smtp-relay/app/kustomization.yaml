@@ -10,5 +10,3 @@ configMapGenerator:
   - name: smtp-relay-config
     files:
       - ./config/maddy.conf
-generatorOptions:
-  disableNameSuffixHash: true
