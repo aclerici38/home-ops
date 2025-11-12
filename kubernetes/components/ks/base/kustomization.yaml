@@ -3,41 +3,38 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 resources:
-  - ./ns.yaml
+  - ./ks.yaml
+labels:
+  - pairs:
+      components.dormammu/ks: app
 replacements:
   - source:
       kind: ConfigMap
-      name: namespace-var
-      fieldPath: data.NS
+      name: APP-app-vars
+      fieldPath: data.APP
     targets:
-      - select:
-          kind: Namespace
-        fieldPaths:
-          - metadata.name
       - select: &ks
           kind: Kustomization
           group: kustomize.toolkit.fluxcd.io
         fieldPaths:
-          - spec.commonMetadata.labels.app\.kubernetes\.io/namespace
+          - metadata.name
+          - spec.commonMetadata.labels.app\.kubernetes\.io/name
+          - spec.postBuild.substituteFrom.0.name
         options:
           create: true
+          delimiter: '-'
+          index: 0
       - select: *ks
         fieldPaths:
           - spec.path
         options:
-          index: 3
           delimiter: /
-      - select:
-          <<: *ks
-          labelSelector: kustomize.dormammu/targetNS!=false
-        fieldPaths:
-          - spec.targetNamespace
-        options:
-          create: true
+          index: 4
       - select:
           kind: ConfigMap
-          labelSelector: components.dormammu/ks
+          name: APP-app-vars
         fieldPaths:
-          - data.NS
+          - metadata.name
         options:
-          create: true
+          delimiter: '-'
+          index: 0

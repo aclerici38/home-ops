@@ -18,3 +18,8 @@ spec:
   wait: true
   interval: 30m
   timeout: 3m
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: APP-app-vars
+        optional: false
