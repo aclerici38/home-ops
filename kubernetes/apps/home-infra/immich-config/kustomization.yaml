@@ -13,7 +13,7 @@ patches:
       - op: add
         path: /spec/dependsOn/-
         value:
-          name: external-secret-stores
+          name: external-secrets-stores
           namespace: cluster-infra
       - op: add
         path: /spec/postBuild/substituteFrom/-
