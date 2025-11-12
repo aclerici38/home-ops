@@ -9,7 +9,18 @@ configMapGenerator:
     literals:
       - APP=immich-config
 patches:
-  - path: ./patch.yaml
+  - patch: |-
+      - op: add
+        path: /spec/dependsOn/-
+        value:
+          name: external-secret-stores
+          namespace: cluster-infra
+      - op: add
+        path: /spec/postBuild/substituteFrom/-
+        value:
+          kind: Secret
+          name: immich
+          optional: false
     target:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io
