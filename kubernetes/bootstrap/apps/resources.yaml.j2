@@ -21,7 +21,7 @@ metadata:
   namespace: flux-system
 stringData:
   identity: |
-    {{ ENV.FLUX_GITHUB_DEPLOY_KEY | indent(4) }}
+    {{ ENV.token | indent(4) }}
   known_hosts: |
     {{ ENV.FLUX_GITHUB_PUBLIC_KEYS | indent(4) }}
 ---
