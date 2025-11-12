@@ -13,5 +13,14 @@
       "matchPackagePatterns": ["calibre-web-automated"],
       "versioning": "regex:^V(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
     },
+    {
+      "description": "semver-coerced for select tags",
+      "matchDatasources": ["docker"],
+      "matchPackagePatterns": [
+        "envoyproxy/envoy",
+        "opencloudeu/web-extensions"
+      ],
+      "versioning": "semver-coerced"
+    },
   ]
 }

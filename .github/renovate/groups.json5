@@ -11,6 +11,15 @@
       }
     },
     {
+      "description": ["Envoy Group"],
+      "groupName": "Envoy",
+      "matchPackagePatterns": ["envoy"],
+      "matchDatasources": ["docker", "helm"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
       "description": ["Flux Operator Group"],
       "groupName": "Flux Operator",
       "matchPackagePatterns": ["flux-operator", "flux-instance", "flux-operator-manifests"],
