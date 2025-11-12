@@ -55,13 +55,12 @@ bootstrapDns:
 
 dnssec:
   validate: true
-  cacheExpirationHours: 0
+  cacheExpirationHours: 4
 
 upstreams:
   groups:
     default:
       - https://sky.rethinkdns.com/dns-query
-      - https://dns.quad9.net/dns-query
       - https://freedns.controld.com/p0
       - https://private.canadianshield.cira.ca/dns-query
       - https://dns.nextdns.io
