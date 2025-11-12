@@ -10,8 +10,6 @@ spec:
   timeout: 10m
   targetNamespace: *ns
   path: ./kubernetes/flux/meta/repositories
-  components:
-    - ../../components/namespace
   prune: false
   sourceRef:
     kind: GitRepository
