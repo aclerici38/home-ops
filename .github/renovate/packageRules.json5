@@ -20,10 +20,10 @@
       "versioning": "regex:^distroless-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
     },
     {
-      "description": "Opencloud web extensions",
+      "description": "Opencloud unzip web extension",
       "matchDatasources": ["docker"],
       "matchPackagePatterns": ["opencloudeu/web-extensions"],
-      "versioning": "regex:^(?:unzip|external-sites)-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+      "versioning": "regex:^unzip-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
     }
   ]
 }
