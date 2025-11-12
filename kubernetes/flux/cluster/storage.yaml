@@ -12,6 +12,8 @@ spec:
   path: ./kubernetes/apps/storage
   components:
     - ../../components/namespace
+  dependsOn:
+    - name: flux-repos
   prune: false
   wait: true
   sourceRef:
