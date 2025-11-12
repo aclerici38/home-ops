@@ -54,8 +54,11 @@ bootstrapDns:
   - https://1.1.1.1/dns-query
 
 dnssec:
-  validate: true
+  # https://github.com/0xERR0R/blocky/issues/1926
+  validate: false
+  # validate: true
   cacheExpirationHours: 4
+  clockSkewToleranceSec: 300
 
 upstreams:
   groups:
@@ -64,6 +67,7 @@ upstreams:
       - https://freedns.controld.com/p0
       - https://private.canadianshield.cira.ca/dns-query
       - https://dns.nextdns.io
+      - https://dns.quad9.net/dns-query
 
 blocking:
   blackLists:
