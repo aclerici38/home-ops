@@ -63,8 +63,6 @@ spec:
             configBlock: |-
               pods verified
               fallthrough in-addr.arpa ip6.arpa
-          - name: autopath
-            parameters: "@kubernetes"
           # Enable ECS so blocky gets the client's ip as source instead of coredns
           - name: rewrite
             parameters: edns0 subnet set 32 128
