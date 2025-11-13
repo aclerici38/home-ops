@@ -10,17 +10,26 @@ spec:
       kind: Gateway
   connection:
     bufferLimit: 64Mi
-  compression:
+  tcpKeepalive: {}
+  compressor:
     - type: Brotli
       brotli:
-        quality: 11
-        windowBits: 22
-        inputBlocks: 24
+        quality: 9
+        window_bits: 20
+        input_block_bits: 24
+        chunk_size: 65536
     - type: Gzip
       gzip:
-        compressionLevel: BEST_COMPRESSION
-        memoryLevel: 9
-        windowBits: 15
+        compression_level: BEST_COMPRESSION
+        memory_level: 7
+        window_bits: 15
+        chunk_size: 65536
+    - type: zstd
+      zstd:
+        compression_level: 9
+        strategy: BTOPT
+        enable_checksum: true
+        chunk_size: 65536
   timeout:
     http:
       requestTimeout: 0s
