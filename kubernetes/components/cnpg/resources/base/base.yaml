@@ -5,8 +5,6 @@ kind: Cluster
 metadata:
   name: ${APP}-db
 spec:
-  affinity:
-    podAntiAffinityType: ${CNPG_AFFINITY_TYPE:=required}
   instances: ${CNPG_REPLICAS:=3}
   primaryUpdateStrategy: ${CNPG_UPDATE_STRAT:=unsupervised}
   primaryUpdateMethod: switchover
