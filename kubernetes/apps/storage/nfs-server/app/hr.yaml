@@ -41,9 +41,9 @@ spec:
               tag: latest
             env:
               EXPORTS_MOUNTED: true
-              NFS_THREADS: 512
+              NFS_THREADS: 128
             probes:
-              readiness: &probes
+              readiness:
                 enabled: true
                 custom: true
                 spec:
@@ -52,10 +52,12 @@ spec:
                       - sh
                       - -c
                       - "showmount -e localhost | grep -q /export"
-              liveness: *probes
+              liveness:
+                enabled: true
+                type: TCP
             resources:
               requests:
-                cpu: 10m
+                cpu: 20m
                 memory: 10Mi
               limits:
                 memory: 512Mi
