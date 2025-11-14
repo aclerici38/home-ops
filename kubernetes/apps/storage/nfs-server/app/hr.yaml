@@ -38,7 +38,7 @@ spec:
             image:
               # Only latest tag is published and overwritten each update so don't pin digest
               # e.g. node boots after update, latest@sha no longer exists, new update not merged: no nfs
-              repository: docker.io/ant385525/alpine-nfs
+              repository: docker.io/ant385525/alpine-nfs-server
               tag: latest
             env:
               EXPORTS_MOUNTED: true
