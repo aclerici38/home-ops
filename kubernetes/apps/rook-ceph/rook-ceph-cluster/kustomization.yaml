@@ -8,17 +8,6 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=rook-ceph-cluster
-patches:
-  - patch: |-
-      apiVersion: helm.toolkit.fluxcd.io/v2
-      kind: HelmRelease
-      metadata:
-        name: patch
-      spec:
-        maxHistory: 1
-        driftDetection:
-          mode: disabled
-    target:
-      kind: HelmRelease
+      - DRIFT_DETECTION=disabled
 components:
   - ../../../components/ks/app

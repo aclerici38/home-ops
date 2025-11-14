@@ -5,7 +5,7 @@ metadata:
 spec:
   maxHistory: 1
   driftDetection:
-    mode: enabled
+    mode: ${DRIFT_DETECTION:=enabled}
   install:
     crds: CreateReplace
     remediation:
