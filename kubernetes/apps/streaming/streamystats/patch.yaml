@@ -20,7 +20,7 @@ spec:
                   reference: ghcr.io/cloudnative-pg/pgvector-testing:0.8.1-18-trixie@sha256:ecd53e243a0d8298b4fcd79baa0aeb6b7f69b02d9f5fec94791840d1ded4c3dd
               - name: vchord
                 image:
-                  reference: ghcr.io/tensorchord/vchord-scratch:pg18-v0.5.3@sha256:c310ede47f7f82bd257c3e53806d60680d5899c318ca946fb313efad9a90a78e
+                  reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.0.0@sha256:a45360a7dc448a562069a566011d5ac58ed189357317386244e77facbc2de917
                 dynamic_library_path:
                   - /usr/lib/postgresql/18/lib
                 extension_control_path:
