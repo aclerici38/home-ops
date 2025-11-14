@@ -1,35 +1,44 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "packageRules": [
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  packageRules: [
     {
-      "description": ["Loose versioning for non-semver containers"],
-      "matchDatasources": ["docker"],
-      "matchPackagePatterns": ["searxng"],
-      "versioning": "loose"
+      description: ["Loose versioning for non-semver containers"],
+      matchDatasources: ["docker"],
+      matchPackagePatterns: ["searxng"],
+      versioning: "loose",
     },
     {
-      "description": ["Custom versioning for calibre-web-automated (V)"],
-      "matchDatasources": ["docker"],
-      "matchPackagePatterns": ["calibre-web-automated"],
-      "versioning": "regex:^V(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+      description: ["Custom versioning for calibre-web-automated (V)"],
+      matchDatasources: ["docker"],
+      matchPackagePatterns: ["calibre-web-automated"],
+      versioning: "regex:^V(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
     },
     {
-      "description": "Envoy distroless",
-      "matchDatasources": ["docker"],
-      "matchPackagePatterns": ["envoyproxy/envoy"],
-      "versioning": "regex:^distroless-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+      description: "Envoy distroless",
+      matchDatasources: ["docker"],
+      matchPackagePatterns: ["envoyproxy/envoy"],
+      versioning: "regex:^distroless-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
     },
     {
-      "description": "Opencloud unzip web extension",
-      "matchDatasources": ["docker"],
-      "matchPackagePatterns": ["opencloudeu/web-extensions"],
-      "versioning": "regex:^unzip-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+      description: "Opencloud unzip web extension",
+      matchDatasources: ["docker"],
+      matchPackagePatterns: ["opencloudeu/web-extensions"],
+      versioning: "regex:^unzip-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
     },
     {
-      "description": "Vectorchord imageVolume pg extension",
-      "matchDatasources": ["docker"],
-      "matchPackagePatterns": ["tensorchord/vchord-scratch"],
-      "versioning": "regex:^pg18-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+      description: "Vectorchord imageVolume pg extension",
+      matchDatasources: ["docker"],
+      matchPackagePatterns: ["tensorchord/vchord-scratch"],
+      versioning: "regex:^pg18-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
     },
-  ]
+    {
+      description: "Vectorchord imageVolume pg extension (immich versioned)",
+      matchDatasources: ["docker"],
+      matchPackagePatterns: ["tensorchord/vchord-scratch"],
+      matchFileNames: ["**/immich/**"],
+      versioning: "regex:^pg18-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
+      // https://github.com/immich-app/immich/blob/e94eb5012f021577589ddb9bad4a35266f3d86aa/server/src/constants.ts#L8
+      allowedVersions: ">=0.3 <0.6",
+    },
+  ],
 }
