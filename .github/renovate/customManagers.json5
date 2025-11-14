@@ -38,6 +38,15 @@
       "datasourceTemplate": "docker",
     },
     {
+      "customType": "regex",
+      "description": ["Process CNPG imageVolume extensions"],
+      "fileMatch": [".*"], // process regex from everywhere
+      "matchStrings": [
+        "reference:\\s+(?<depName>[^:@\\s]+):(?<currentValue>[^@\\s]+)(?:@(?<currentDigest>sha256:\\S+))?"
+      ],
+      "datasourceTemplate": "docker",
+    },
+    {
       customType: "regex",
       description: "Process OCI dependencies",
       managerFilePatterns: [
