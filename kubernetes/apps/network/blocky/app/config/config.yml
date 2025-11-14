@@ -54,7 +54,9 @@ bootstrapDns:
   - https://1.1.1.1/dns-query
 
 dnssec:
-  validate: false
+  validate: true
+  cacheExpirationHours: 4
+  clockSkewToleranceSec: 300
 
 upstreams:
   groups:
