@@ -22,7 +22,6 @@ spec:
   values:
     controllers:
       nfs-server:
-        strategy: RollingUpdate
         pod:
           priorityClassName: system-node-critical
           hostNetwork: true
