@@ -43,7 +43,7 @@ spec:
               EXPORTS_MOUNTED: true
               NFS_THREADS: 128
             probes:
-              readiness:
+              startup:
                 enabled: true
                 custom: true
                 spec:
@@ -52,10 +52,11 @@ spec:
                       - sh
                       - -c
                       - "showmount -e localhost | grep -q /export"
-              liveness:
+              readiness: &probes
                 enabled: true
                 type: TCP
                 port: 2049
+              liveness: *probes
             resources:
               requests:
                 cpu: 20m
