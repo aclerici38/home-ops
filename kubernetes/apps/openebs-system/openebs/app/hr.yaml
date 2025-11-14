@@ -11,8 +11,6 @@ spec:
     kind: OCIRepository
     name: openebs
     namespace: flux-system
-  driftDetection:
-    mode: enabled
   install:
     disableHooks: true
     timeout: 2m
