@@ -37,7 +37,7 @@ spec:
         secretKeyRef:
           name: blocky-db-app
           key: user
-    - targetPath: database
+    - targetPath: jsonData.database
       valueFrom:
         secretKeyRef:
           name: blocky-db-app
