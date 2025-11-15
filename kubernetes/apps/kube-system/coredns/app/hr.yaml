@@ -65,7 +65,11 @@ spec:
               fallthrough in-addr.arpa ip6.arpa
           # Enable ECS so blocky gets the client's ip as source instead of coredns
           - name: rewrite
-            parameters: edns0 subnet set 32 128
+            parameters: stop
+            configBlock: |-
+              edns0 subnet set 32 128
+              # Strip ip out of PTR lookups for blocky logging
+              name suffix 16.172.in-addr.arpa. 16.172.in-addr.arpa. answer value ([0-9-]+)\.([^.]+\.[^.]+\.svc\.cluster\.local\.) {2}
           - name: forward
             parameters: . ${BLOCKY_CLUSTER_IP}
             configBlock: |-
