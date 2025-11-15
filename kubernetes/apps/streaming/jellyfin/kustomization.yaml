@@ -8,6 +8,7 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=jellyfin
+      # TODO: remove this, config dir can be default size
       - VOLSYNC_CAPACITY=100Gi
       - VOLSYNC_STORAGECLASS=ceph-filesystem
       - VOLSYNC_SNAPSHOTCLASS=csi-ceph-filesystem

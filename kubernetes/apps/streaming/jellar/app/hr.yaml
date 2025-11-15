@@ -1,0 +1,122 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: jellarr
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      jellarr:
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          main:
+            image:
+              repository: ghcr.io/jellarr/jellarr
+              tag: v0.0.1@sha256:5efaf9d66057d9b7099daaf71b4dd18d843aaa294c0539f30972d88d825e987f
+            env:
+              JELLARR_API_KEY:
+                secretKeyRef:
+                  name: jellarr
+                  key: API_KEY
+            securityContext: &sec
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 10m
+                memory: 50Mi
+              limits:
+                memory: 124Mi
+    persistence:
+      config:
+        type: configMap
+        name: jellarr
+        globalMounts:
+          - path: /config/config.yml
+            subPath: config.yml
+    configMaps:
+      config:
+        data:
+          config.yml: |
+            version: 1
+            base_url: http://jellyfin:8096
+            system:
+              enableMetrics: true
+              pluginRepositories:
+                - name: Jellyfin Official
+                  url: https://repo.jellyfin.org/files/plugin/manifest.json
+                  enabled: true
+                - name: Intro Skipper
+                  url: https://intro-skipper.org/manifest.json
+                  enabled: true
+                - name: Streamyfin
+                  url: https://raw.githubusercontent.com/streamyfin/jellyfin-plugin-streamyfin/main/manifest.json
+                  enabled: true
+                - name: Xtream
+                  url: https://kevinjil.github.io/jellyfin.xtream/repository.json
+                  enabled: true
+              trickplayOptions:
+                enableHwAcceleration: true
+                enableHwEncoding: true
+            encoding:
+              enableHardwareEncoding: true
+              hardwareAccelerationType: "qsv"
+              hardwareDecodingCodecs:
+                - h264
+                - hevc
+                - mpeg2video
+                - vc1
+                - vp8
+                - vp9
+                - av1
+              enableDecodingColorDepth10Hevc: true
+              enableDecodingColorDepth10Vp9: true
+              enableDecodingColorDepth10HevcRext: true
+              enableDecodingColorDepth12HevcRext: true
+              allowHevcEncoding: true
+              allowAv1Encoding: true
+            library:
+              virtualFolders:
+                - name: Anime Shows
+                  collectionType: tvshows
+                  libraryOptions:
+                    pathInfos:
+                      - path: /allMedia/anime/shows
+                - name: Movies
+                  collectionType: movies
+                  libraryOptions:
+                    pathInfos:
+                      - path: /allMedia/movies
+                - name: TV Shows
+                  collectionType: tvshows
+                  libraryOptions:
+                    pathInfos:
+                      - path: /allMedia/tv
+                - name: Top Gear Extras
+                  collectionType: homevideos
+                  libraryOptions:
+                    pathInfos:
+                      - path: /allMedia/Top Gear Extras
