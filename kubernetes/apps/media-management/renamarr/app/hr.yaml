@@ -91,9 +91,31 @@ spec:
                   - ALL
     persistence:
       config:
+        type: configMap
+        name: renamarr
         globalMounts:
           - path: /config/config.yml
             subPath: config.yml
-            readOnly: true
-        name: renamarr-config
-        type: configMap
+    configMaps:
+      config:
+        data:
+          config.yml: |
+            sonarr:
+              - name: sonarr
+                url: http://sonarr:8989
+                api_key: ${SONARR__AUTH__APIKEY}
+                renamarr:
+                  enabled: true
+                  hourly_job: false
+                  analyze_files: true
+                series_scanner:
+                  enabled: true
+                  hourly_job: false
+            radarr:
+              - name: radarr
+                url: http://radarr:7878
+                api_key: ${RADARR__AUTH__APIKEY}
+                renamarr:
+                  enabled: true
+                  hourly_job: false
+                  analyze_files: true

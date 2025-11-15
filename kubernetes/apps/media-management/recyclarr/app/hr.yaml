@@ -47,16 +47,13 @@ spec:
               capabilities:
                 drop:
                   - ALL
-    service:
-      app:
-        controller: recyclarr
-        enabled: false
     persistence:
       config:
         type: emptyDir
       config-file:
+        type: configMap
+        name: recyclarr-config
         globalMounts:
           - path: /config/recyclarr.yml
             subPath: recyclarr.yml
-        name: recyclarr-config
-        type: configMap
+            
