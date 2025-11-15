@@ -58,12 +58,6 @@ spec:
               class error
           - name: prometheus
             parameters: 0.0.0.0:9153
-          - name: rewrite
-            parameters: stop
-            configBlock: |-
-              # Strip ip out of PTR lookups for blocky logging
-              name regex (.*)\.16\.172\.in-addr\.arpa\. {1}.16.172.in-addr.arpa.
-              answer value ([0-9-]+)\.([^.]+\.[^.]+\.svc\.cluster\.local\.) {2}
           - name: kubernetes
             parameters: cluster.local in-addr.arpa ip6.arpa
             configBlock: |-
@@ -71,7 +65,7 @@ spec:
               fallthrough in-addr.arpa ip6.arpa
           # Enable ECS so blocky gets the client's ip as source instead of coredns
           - name: rewrite
-            parameters: edns0 subnet set 32 128
+            parameters: edns0 subnet set 32 12z
           - name: forward
             parameters: . ${BLOCKY_CLUSTER_IP}
             configBlock: |-
