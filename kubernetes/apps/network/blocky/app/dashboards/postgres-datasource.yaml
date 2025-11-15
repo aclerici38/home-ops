@@ -15,7 +15,7 @@ spec:
     access: proxy
     name: blocky-postgres
     type: postgres
-    url: $${host}:$${PORT}
+    url: $${host}:$${port}
     user: $${user}
     jsonData:
       database: $${dbname}
