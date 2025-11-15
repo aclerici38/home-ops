@@ -62,8 +62,7 @@ spec:
             parameters: stop
             configBlock: |-
               # Strip ip out of PTR lookups for blocky logging
-              name suffix 16.172.in-addr.arpa. 16.172.in-addr.arpa.
-              answer name auto
+              name regex (.*)\.16\.172\.in-addr\.arpa\. {1}.16.172.in-addr.arpa.
               answer value ([0-9-]+)\.([^.]+\.[^.]+\.svc\.cluster\.local\.) {2}
           - name: kubernetes
             parameters: cluster.local in-addr.arpa ip6.arpa
