@@ -9,7 +9,11 @@ spec:
   primaryUpdateStrategy: ${CNPG_UPDATE_STRAT:=unsupervised}
   primaryUpdateMethod: switchover
   enablePDB: true
-  imageName: ${CNPG_IMAGE:=ghcr.io/cloudnative-pg/postgresql:18.0-minimal-trixie@sha256:45f22fa6ca68fe9353e0260a19756f42d9a52de8fdb034ff064b04e0edbb87c9}
+  imageCatalogRef:
+    kind: ClusterImageCatalog
+    # renovate: datasource=docker depName=cloudnative-pg/postgresql
+    major: 18
+    name: postgresql-minimal-trixie
   storage:
     size: ${CNPG_CAPACITY:=2Gi}
     storageClass: ${CNPG_STORAGECLASS:=openebs-hostpath}
