@@ -18,26 +18,6 @@
       "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
     },
     {
-      "description": ["app-template schemas"],
-      "customType": "regex",
-      "fileMatch": [".*"], // process regex from everywhere
-      "matchStrings": [
-        "\\# yaml\\-language\\-server\\: \\$schema\\=https\\:\\/\\/raw\\.githubusercontent\\.com\\/(?<packageName>[\\w\\-]+\\/[\\w\\-]+)\\/(?<currentValue>app\\-template\\-[\\d\\.]+)"
-      ],
-      "datasourceTemplate": "github-tags",
-      "versioningTemplate": "semver",
-      "extractVersionTemplate": "^app-template-(?<version>.*)$"
-    },
-    {
-      "customType": "regex",
-      "description": ["Process any imageName keys in YAML files (cloudnative-pg)"],
-      "fileMatch": [".*"], // process regex from everywhere
-      "matchStrings": [
-        "imageName:\\s+\\$\\{CNPG_IMAGE:=\\s*(?<depName>[^:@\\s}]+):(?<currentValue>[^@\\s}]+)(@(?<currentDigest>sha256:\\S+)?)}"
-      ],
-      "datasourceTemplate": "docker",
-    },
-    {
       "customType": "regex",
       "description": ["Process CNPG imageVolume extensions"],
       "fileMatch": [".*"], // process regex from everywhere
