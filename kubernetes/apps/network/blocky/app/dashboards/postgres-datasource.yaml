@@ -12,6 +12,7 @@ spec:
     matchLabels:
       grafana.internal/instance: grafana
   datasource:
+    access: proxy
     name: blocky-postgres
     type: postgres
     url: $${host}:$${PORT}
