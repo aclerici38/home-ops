@@ -10,6 +10,7 @@ spec:
   primaryUpdateMethod: switchover
   enablePDB: true
   imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
     kind: ClusterImageCatalog
     # renovate: datasource=docker depName=cloudnative-pg/postgresql
     major: 18
