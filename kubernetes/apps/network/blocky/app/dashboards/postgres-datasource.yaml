@@ -19,6 +19,8 @@ spec:
     user: $${user}
     jsonData:
       database: $${dbname}
+      sslmode: 'disable'
+      postgresVersion: 1800
     secureJsonData:
       password: $${password}
   valuesFrom:
