@@ -80,8 +80,34 @@ spec:
         type: emptyDir
       config:
         type: configMap
-        name: smtp-relay-config
+        name: smtp-relay
         globalMounts:
           - path: /data/maddy.conf
             subPath: maddy.conf
-            readOnly: true
+    configmaps:
+      config:
+        data: 
+          maddy.conf: |-
+            state_dir /cache/state
+            runtime_dir /cache/run
+            
+            openmetrics tcp://0.0.0.0:{env:SMTP_RELAY_METRICS_PORT} { }
+            
+            tls off
+            hostname {env:HOSTNAME}
+            
+            smtp tcp://0.0.0.0:{env:SMTP_RELAY_SMTP_PORT} {
+                default_source {
+                    deliver_to &remote_queue
+                }
+            }
+            
+            target.queue remote_queue {
+                target &remote_smtp
+            }
+            
+            target.smtp remote_smtp {
+                auth plain {env:MIGADU_USERNAME} {env:MIGADU_PASSWORD}
+                targets tls://{env:MIGADU_SERVER}:465
+                starttls no
+            }

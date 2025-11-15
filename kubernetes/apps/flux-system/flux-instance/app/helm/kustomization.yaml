@@ -2,11 +2,9 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources:
-  - ./hr.yaml
 generatorOptions:
   disableNameSuffixHash: true
 configMapGenerator:
-  - name: samba-config
+  - name: flux-instance-helm-values
     files:
-      - ./config/config.yml
+      - ./values.yaml

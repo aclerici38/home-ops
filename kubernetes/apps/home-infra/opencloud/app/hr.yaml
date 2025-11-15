@@ -288,7 +288,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: opencloud-config
+        name: opencloud
         advancedMounts:
           opencloud:
             opencloud:
@@ -337,3 +337,62 @@ spec:
           opencloud:
             opencloud:
               - path: /opt/extensions
+    configMaps: 
+      config:
+        data:
+          csp.yaml: |
+            directives:
+              child-src:
+                - '''self'''
+              connect-src:
+                - '''self'''
+                - 'blob:'
+                - 'https://wopi.${SECRET_DOMAIN}/'
+                - 'wss://wopi.${SECRET_DOMAIN}/'
+                - 'https://raw.githubusercontent.com/opencloud-eu/awesome-apps/'
+                - 'https://id.${SECRET_DOMAIN}/'
+              default-src:
+                - '''none'''
+              font-src:
+                - '''self'''
+              frame-ancestors:
+                - '''self'''
+              frame-src:
+                - '''self'''
+                - 'blob:'
+                - 'https://embed.diagrams.net/'
+                - 'https://collabora.${SECRET_DOMAIN}/'
+                # This is needed for the external-sites web extension when embedding sites
+                - 'https://docs.opencloud.eu'
+              img-src:
+                - '''self'''
+                - 'data:'
+                - 'blob:'
+                - 'https://raw.githubusercontent.com/opencloud-eu/awesome-apps/'
+                - 'https://collabora.${SECRET_DOMAIN}/'
+              manifest-src:
+                - '''self'''
+              media-src:
+                - '''self'''
+              object-src:
+                - '''self'''
+                - 'blob:'
+              script-src:
+                - '''self'''
+                - '''unsafe-inline'''
+                - 'https://id.${SECRET_DOMAIN}/'
+              style-src:
+                - '''self'''
+                - '''unsafe-inline'''
+          proxy.yaml: |
+            role_assignment:
+              driver: oidc
+              oidc_role_mapper:
+                role_claim: oc_groups
+                role_mapping:
+                  - role_name: admin
+                    claim_value: opencloud-admins
+                  - role_name: user
+                    claim_value: opencloud-users
+                  - role_name: guest
+                    claim_value: opencloud-guests

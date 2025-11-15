@@ -2,12 +2,9 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources:
-  - ./github
-  - ./hr.yaml
 generatorOptions:
   disableNameSuffixHash: true
 configMapGenerator:
-  - name: flux-instance-helm-values
+  - name: onepassword-connect-helm-values
     files:
       - ./values.yaml

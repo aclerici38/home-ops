@@ -55,7 +55,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: samba-config
+        name: samba
         globalMounts:
           - path: /data/config.yml
             subPath: config.yml
@@ -66,3 +66,40 @@ spec:
       #   globalMounts:
       #     - path: /samba/time-machine
       #       subPath: time-machine
+    configMaps:
+      config:
+        data:
+          config.yml: |
+            auth:
+              - user: time_machine_users
+                group: time_machine_users
+                uid: 1000
+                gid: 1000
+                password: $${SMB_PASS}
+            
+            global:
+              - "vfs objects = catia fruit streams_xattr"
+              - "fruit:aapl = yes"
+              - "fruit:time machine = yes"
+              - "fruit:metadata = stream"
+              - "fruit:locking = netatalk"
+              - "fruit:resource = file"
+              - "fruit:posix_rename = yes"
+              - "fruit:zero_file_id = yes"
+              - "fruit:wipe_intentionally_left_blank_rfork = yes"
+              - "aio read size = 1"
+              - "aio write size = 1"
+              - "spotlight = no"
+              - "server min protocol = SMB3"
+              - "server max protocol = SMB3"
+              # Allow use of LB IP
+              - "host msdfs = no"
+            
+            share:
+              - name: time_machine
+                path: /samba/time-machine
+                browsable: yes
+                readonly: no
+                guestok: no
+                validusers: time_machine_users
+                writelist: time_machine_users
