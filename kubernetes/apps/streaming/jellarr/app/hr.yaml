@@ -15,7 +15,12 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  rollback:
+    # force necessary for a job
+    force: true
   upgrade:
+    # force necessary for a job
+    force: true
     timeout: 2m
     remediation:
       retries: 1
