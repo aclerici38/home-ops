@@ -48,6 +48,7 @@ spec:
               IMMICH_TELEMETRY_INCLUDE: all
               IMMICH_CONFIG_FILE: &config /config/immich-config.yaml
               IMMICH_IGNORE_MOUNT_CHECK_ERRORS: true
+              IMMICH_PROCESS_INVALID_IMAGES: true
               DB_URL:
                 valueFrom:
                   secretKeyRef:
