@@ -5,30 +5,30 @@ metadata:
   name: patch
 spec:
   patches:
-    - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
-          name: patch
-        spec:
-          bootstrap:
-            initdb:
-              database: app
-              owner: jensen
-              secret:
-                name: jensen-d3savant
-          managed:
-            roles:
-              - name: anthony
-                ensure: present
-                login: true
-                superuser: false
-                inRoles:
-                  - jensen
-                passwordSecret:
-                  name: anthony-d3savant
-      target:
-        kind: Cluster
+    # - patch: |-
+    #     apiVersion: postgresql.cnpg.io/v1
+    #     kind: Cluster
+    #     metadata:
+    #       name: patch
+    #     spec:
+    #       bootstrap:
+    #         initdb:
+    #           database: app
+    #           owner: jensen
+    #           secret:
+    #             name: jensen-d3savant
+    #       managed:
+    #         roles:
+    #           - name: anthony
+    #             ensure: present
+    #             login: true
+    #             superuser: false
+    #             inRoles:
+    #               - jensen
+    #             passwordSecret:
+    #               name: anthony-d3savant
+    #   target:
+    #     kind: Cluster
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1
         kind: Pooler
