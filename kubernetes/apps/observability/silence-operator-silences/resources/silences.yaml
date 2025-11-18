@@ -55,3 +55,14 @@ spec:
     - name: alertname
       value: CephMonClockSkew
       matchType: "="
+---
+# yaml-language-server: $schema=https://kochhaus-schemas.pages.dev/observability.giantswarm.io/silence_v1alpha2.json
+apiVersion: observability.giantswarm.io/v1alpha2
+kind: Silence
+metadata:
+  name: ceph-health-warning
+spec:
+  matchers:
+    - name: alertname
+      value: CephHealthWarning
+      matchType: "="
