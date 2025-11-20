@@ -45,7 +45,7 @@ job:
   notifications:
     concurrency: 10
   ocr:
-    concurrency: 1
+    concurrency: 3
 
 machineLearning:
   urls: ["http://immich-ml:3003"]
@@ -59,7 +59,7 @@ machineLearning:
     maxDistance: 0.001
   ocr:
     enabled: true
-    modelName: PP-OCRv5_mobile
+    modelName: EN__PP-OCRv5_mobile
 
 oauth:
   enabled: true
