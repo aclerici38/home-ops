@@ -31,8 +31,7 @@ patches:
           extract:
           key: ${APP}-jwt-private-key
     target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
+      kind: ClusterExternalSecret
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret
