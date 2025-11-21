@@ -62,7 +62,7 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    port: *port
+                    port: &port 3000
                     path: /api/v1/health
               readiness: *probes
       sidekiq:
@@ -90,7 +90,7 @@ spec:
         controller: dawarich
         ports:
           http:
-            port: &port 3000
+            port: *port
     route:
       dawarich:
         hostnames:
