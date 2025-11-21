@@ -107,6 +107,7 @@ spec:
                 drop: [ALL]
                 add:
                   - CHOWN
+                  - SETUID
                   - SETGID
     defaultPodOptions:
       hostUsers: false
