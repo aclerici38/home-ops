@@ -33,10 +33,22 @@ spec:
             args: ["bin/rails server -p 3000 -b 0.0.0.0"]
             env:
               REDIS_URL: redis://dragonfly.database.svc.cluster.local/7
-              DATABASE_URL:
+              DATABASE_HOST:
                 secretKeyRef:
                   name: dawarich-db-app
-                  key: uri
+                  key: host
+              DATABASE_USERNAME: 
+                secretKeyRef:
+                  name: dawarich-db-app
+                  key: username
+              DATABASE_PASSWORD: 
+                secretKeyRef:
+                  name: dawarich-db-app
+                  key: username
+              DATABASE_NAME:
+                secretKeyRef:
+                  name: dawarich-db-app
+                  key: dbname
               SECRET_KEY_BASE:
                 secretKeyRef:
                   name: dawarich
