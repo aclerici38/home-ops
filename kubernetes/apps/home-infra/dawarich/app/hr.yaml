@@ -32,7 +32,9 @@ spec:
             command: ["web-entrypoint.sh"]
             args: ["bin/rails server -p 3000 -b 0.0.0.0"]
             env:
-              REDIS_URL: redis://dragonfly.database.svc.cluster.local/7
+              REDIS_URL: redis://dragonfly.database.svc.cluster.local
+              RAILS_JOB_QUEUE_DB: &rdb 7
+              RAILS_CACHE_DBL: *rdb
               DATABASE_HOST:
                 secretKeyRef:
                   name: dawarich-db-app
