@@ -30,12 +30,15 @@ spec:
       csi:
         volumeSnapshots:
           enabled: false # snapshot-controller manages those CRDs
+    sidecar:
+      image:
+        repository: ghcr.io/kiwigrid/k8s-sidecar
 
     # https://github.com/openebs/dynamic-localpv-provisioner/blob/HEAD/deploy/helm/charts/values.yaml
     localpv-provisioner:
       enabled: true
       global:
-        imageRegistry: quay.io
+        imageRegistry: ghcr.io
       localpv:
         basePath: &hostPath /var/mnt/local-path
       hostpathClass:
@@ -49,7 +52,7 @@ spec:
 
     # https://github.com/openebs/zfs-localpv/blob/HEAD/deploy/helm/charts/values.yaml
     zfs-localpv:
-      enabled: true
+      enabled: true        
       analytics:
         enabled: false
       zfs:
@@ -58,6 +61,9 @@ spec:
         encrKeysDir: /var/openebs/keys
         nodeSelector:
           kubernetes.io/hostname: bonds
+      zfsPlugin:
+        image:
+          registry: ghcr.io/
       crds:
         csi:
           volumeSnapshots:
