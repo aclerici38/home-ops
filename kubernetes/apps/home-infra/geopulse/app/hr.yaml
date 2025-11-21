@@ -103,7 +103,11 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false # entrypoint uses sed millions of times
-              capabilities: { drop: ["ALL"] }
+              capabilities:
+                drop: [ALL]
+                add:
+                  - CHOWN
+                  
     defaultPodOptions:
       hostUsers: false
     service:
