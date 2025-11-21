@@ -143,7 +143,7 @@ spec:
             geopulse-backend:
               - path: *jwtPub
                 subPath: jwt-public-key.pem
-              - path: jwtPriv
+              - path: *jwtPriv
                 subPath: jwt-private-key.pem
               - path: *aiKey
                 subPath: ai-encryption-key.txt
