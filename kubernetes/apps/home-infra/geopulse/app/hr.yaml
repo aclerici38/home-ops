@@ -23,6 +23,13 @@ spec:
     controllers:
       backend:
         strategy: RollingUpdate
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
         containers:
           geopulse-backend:
             image:
@@ -74,6 +81,13 @@ spec:
               readiness: *probes
       frontend:
         strategy: RollingUpdate
+        pod:
+          securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 0
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
         containers:
           geopulse-frontend:
             image:
@@ -92,13 +106,6 @@ spec:
               capabilities: { drop: ["ALL"] }
     defaultPodOptions:
       hostUsers: false
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
     service:
       backend:
         controller: backend
