@@ -32,6 +32,7 @@ spec:
             command: ["web-entrypoint.sh"]
             args: ["bin/rails server -p 3000 -b 0.0.0.0"]
             env:
+              RAILS_ENV: development
               REDIS_URL: redis://dragonfly-db.database.svc.cluster.local
               RAILS_JOB_QUEUE_DB: &rdb 7
               RAILS_CACHE_DBL: *rdb
