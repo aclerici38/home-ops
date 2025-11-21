@@ -52,7 +52,6 @@
       groupName: "Immich",
       matchPackagePatterns: ["immich"],
       matchDatasources: ["docker", "github-releases", "helm"],
-      matchUpdateTypes: ["minor", "patch"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -63,7 +62,6 @@
       groupName: "External Secrets",
       matchPackagePatterns: ["external-secrets"],
       matchDatasources: ["docker", "github-releases", "helm"],
-      matchUpdateTypes: ["minor", "patch"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -73,7 +71,6 @@
       groupName: "Cilium",
       matchPackagePatterns: ["cilium"],
       matchDatasources: ["docker", "github-releases", "helm"],
-      matchUpdateTypes: ["minor", "patch"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -83,7 +80,6 @@
       groupName: "Coredns",
       matchPackagePatterns: ["coredns"],
       matchDatasources: ["docker", "github-releases", "helm"],
-      matchUpdateTypes: ["minor", "patch"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -93,7 +89,6 @@
       groupName: "1Pass",
       matchPackagePatterns: ["1password"],
       matchDatasources: ["docker", "github-releases", "helm"],
-      matchUpdateTypes: ["minor", "patch"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -104,7 +99,6 @@
       groupName: "Rook-Ceph",
       matchPackagePatterns: ["rook"],
       matchDatasources: ["docker", "github-releases", "helm"],
-      matchUpdateTypes: ["minor", "patch"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -115,7 +109,6 @@
       groupName: "CNPG-Barman-Cloud",
       matchPackagePatterns: ["plugin-barman-cloud", "plugin-barman-cloud-sidecar"],
       matchDatasources: ["docker", "github-releases", "helm"],
-      matchUpdateTypes: ["minor", "patch"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -125,11 +118,20 @@
       groupName: "Streamystats",
       matchPackagePatterns: ["streamystats-v2-nextjs", "streamystats-v2-job-server", "streamystats-v2-migrate"],
       matchDatasources: ["docker", "github-releases", "helm"],
-      matchUpdateTypes: ["minor", "patch"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
       minimumGroupSize: 3,
+    },
+    {
+      description: "Geopulse group",
+      groupName: "Geopulse",
+      matchPackagePatterns: ["geopulse-backend", "geopulse-ui"],
+      matchDatasources: ["docker", "github-releases", "helm"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+      minimumGroupSize: 2,
     },
   ]
 }
