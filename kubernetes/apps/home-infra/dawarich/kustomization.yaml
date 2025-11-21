@@ -7,9 +7,18 @@ generatorOptions:
 configMapGenerator:
   - name: APP-app-vars
     literals:
-      - APP=donetick
+      - APP=dawarich
+      - VOLSYNC_STORAGECLASS=ceph-filesystem
+      - VOLSYNC_ACCESSMODES=ReadWriteMany
+      - VOLSYNC_SNAPSHOTCLASS=csi-ceph-filesystem
+      - VOLSYNC_CAPACITY=25Gi
+patches:
+  - path: ./patch.yaml
+    target:
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret
-  - ../../../components/kustomize/cnpg/restore
+  - ../../../components/kustomize/cnpg/init
   - ../../../components/kustomize/volsync/versity
