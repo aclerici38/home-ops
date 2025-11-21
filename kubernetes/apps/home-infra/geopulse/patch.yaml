@@ -25,16 +25,16 @@ spec:
           path: /spec/externalSecretSpec/dataFrom/-
           value:
             extract:
-            key: ${APP}-ai-encryption-key
+              key: ${APP}-ai-encryption-key
         - op: add
           path: /spec/externalSecretSpec/dataFrom/-
           value:
             extract:
-            key: ${APP}-jwt-public-key
+              key: ${APP}-jwt-public-key
         - op: add
           path: /spec/externalSecretSpec/dataFrom/-
           value:
             extract:
-            key: ${APP}-jwt-private-key
+              key: ${APP}-jwt-private-key
       target:
         kind: ClusterExternalSecret
