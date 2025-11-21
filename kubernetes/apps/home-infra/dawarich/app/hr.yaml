@@ -53,6 +53,8 @@ spec:
                   name: dawarich-db-app
                   key: dbname
               PROMETHEUS_EXPORTER_ENABLED: true
+              PROMETHEUS_EXPORTER_HOST: 0.0.0.0
+              PROMETHEUS_EXPORTER_PORT: &promPort 9394
               PROMETHEUS_EXPORTER_HOST_SIDEKIQ: dawarich
               RAILS_LOG_TO_STDOUT: true
               APPLICATION_HOSTS: dawarich.${SECRET_DOMAIN}
@@ -104,6 +106,8 @@ spec:
         ports:
           http:
             port: *port
+          metrics:
+            port: *promPort
     route:
       dawarich:
         hostnames:
