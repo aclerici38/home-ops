@@ -53,6 +53,7 @@ spec:
                   name: dawarich-db-app
                   key: dbname
               PROMETHEUS_EXPORTER_ENABLED: true
+              PROMETHEUS_EXPORTER_HOST_SIDEKIQ: dawarich
               RAILS_LOG_TO_STDOUT: true
               APPLICATION_HOSTS: dawarich.${SECRET_DOMAIN}
               REVERSE_GEOCODING_ENABLED: true
@@ -134,9 +135,7 @@ spec:
         advancedMounts:
           dawarich:
             dawarich:
-              - path: /var/app/tmp/imports/watched
-                subPath: watched
-              - path: /var/app/tmp/cache
-                subPath: cache
+              - path: /var/app/tmp
+                subPath: tmp
               - path: /var/app/db
                 subPath: db
