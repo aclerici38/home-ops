@@ -125,6 +125,10 @@ spec:
                 subPath: public
               - path: /var/app/storage
                 subPath: storage
+              # Ruby won't use a world-writable dir (emptydir) as tmp dir
+              - path: /tmp
+                subPath: tmp
+                
       tmpfs:
         type: emptyDir
         advancedMounts:
@@ -132,9 +136,5 @@ spec:
             dawarich:
               - path: /var/app/tmp/imports/watched
                 subPath: watched
-              - path: /var/app/tmp
-                subPath: vartmp
-              - path: /tmp
-                subPath: tmp
               - path: /var/app/db
                 subPath: db
