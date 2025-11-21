@@ -32,7 +32,7 @@ spec:
             command: ["web-entrypoint.sh"]
             args: ["bin/rails server -p 3000 -b 0.0.0.0"]
             env:
-              REDIS_URL: redis://dragonfly-cluster.database.svc.cluster.local
+              REDIS_URL: redis://dragonfly-db.database.svc.cluster.local
               RAILS_JOB_QUEUE_DB: &rdb 7
               RAILS_CACHE_DBL: *rdb
               DATABASE_HOST:
@@ -132,5 +132,7 @@ spec:
             dawarich:
               - path: /var/app/tmp/imports/watched
                 subPath: watched
+              - path: /var/app/tmp
+                subPath: tmp
               - path: /var/app/db
                 subPath: db
