@@ -8,6 +8,7 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=geopulse
+      - CNPG_POOLMODE=session
 patches:
   - path: ./patch.yaml
     target:
