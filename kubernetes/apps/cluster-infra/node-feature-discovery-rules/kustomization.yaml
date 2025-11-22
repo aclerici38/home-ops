@@ -5,7 +5,7 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 configMapGenerator:
-  - name: APP-app-vars
+  - name: APP-resources-vars
     literals:
       - APP=node-feature-discovery-rules
 components:
