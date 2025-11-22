@@ -39,7 +39,7 @@ replacements:
           index: 4
       - select:
           kind: ConfigMap
-          name: APP-app-vars
+          name: APP-resources-vars
         fieldPaths:
           - metadata.name
         options:
