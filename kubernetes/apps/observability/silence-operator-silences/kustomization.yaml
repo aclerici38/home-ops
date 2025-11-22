@@ -8,14 +8,5 @@ configMapGenerator:
   - name: APP-resources-vars
     literals:
       - APP=silence-operator-silences
-patches:
-  - patch: |-
-      - op: add
-        path: /spec/dependsOn/-
-        value:
-          name: silence-operator
-    target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/resources

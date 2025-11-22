@@ -27,6 +27,7 @@ replacements:
           - metadata.name
           - spec.commonMetadata.labels.app\.kubernetes\.io/name
           - spec.postBuild.substituteFrom.0.name
+          - spec.dependsOn.0.name
         options:
           create: true
           delimiter: '-'

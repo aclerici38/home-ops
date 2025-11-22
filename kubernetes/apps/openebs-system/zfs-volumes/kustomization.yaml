@@ -8,10 +8,5 @@ configMapGenerator:
   - name: APP-resources-vars
     literals:
       - APP=zfs-volumes
-patches:
-  - path: ./patch.yaml
-    target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/resources

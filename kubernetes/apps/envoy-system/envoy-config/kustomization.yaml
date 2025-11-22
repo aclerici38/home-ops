@@ -8,14 +8,5 @@ configMapGenerator:
   - name: APP-resources-vars
     literals:
       - APP=envoy-config
-patches:
-  - patch: |-
-      - op: add
-        path: /spec/dependsOn/-
-        value:
-          name: envoy
-    target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/resources

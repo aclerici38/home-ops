@@ -13,12 +13,3 @@ labels:
       kustomize.dormammu/targetNS: "false"
 components:
   - ../../../components/ks/resources
-patches:
-  - patch: |-
-      - op: add
-        path: /spec/dependsOn/-
-        value:
-          name: cilium
-    target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io

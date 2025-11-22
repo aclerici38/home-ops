@@ -8,15 +8,6 @@ configMapGenerator:
   - name: APP-resources-vars
     literals:
       - APP=external-secrets-stores
-patches:
-  - patch: |-
-      - op: add
-        path: /spec/dependsOn/-
-        value:
-          name: external-secrets
-    target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
 labels:
   - pairs:
       kustomize.dormammu/cluster-settings: "false"

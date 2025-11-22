@@ -11,7 +11,7 @@ configMapGenerator:
 patches:
   - patch: |-
       - op: add
-        path: /spec/dependsOn/-
+        path: /spec/dependsOn
         value:
           name: external-secrets-stores
           namespace: cluster-infra
