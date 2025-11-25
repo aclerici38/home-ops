@@ -21,19 +21,18 @@ spec:
       retries: 1
   values:
     controllers:
-      apt:
-        pod:
-          tolerations:
-            - key: "rpi"
-              operator: "Equal"
-              value: "true"
-              effect: "NoSchedule"
+      house:
         containers:
-          main: &container
+          zigbee2mqtt: &container
             image:
               repository: ghcr.io/koenkk/zigbee2mqtt
               tag: 2.6.3@sha256:3baac2a3b74a9945fbbcb665b3e6e0ace5df2d49b5502e3d26b66a5454316e81
             env: &env
+              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://house-zigbee2mqtt.${SECRET_DOMAIN}
+              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://slzb-06.house.internal:6638
+              ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack
+              ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: 20
+              ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: z2m-house
               ZIGBEE2MQTT_DATA: /data
               ZIGBEE2MQTT_CONFIG_ADVANCED_LAST_SEEN: ISO_8601
               ZIGBEE2MQTT_CONFIG_ADVANCED_LEGACY_API: false
@@ -47,14 +46,12 @@ spec:
               ZIGBEE2MQTT_CONFIG_DEVICE_OPTIONS_RETAIN: true
               ZIGBEE2MQTT_CONFIG_EXPERIMENTAL_NEW_API: true
               ZIGBEE2MQTT_CONFIG_FRONTEND_PORT: &port 8080
-              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://apt-zigbee2mqtt.${SECRET_DOMAIN}
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_DISCOVERY_TOPIC: homeassistant
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_EXPERIMENTAL_EVENT_ENTITIES: true
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_LEGACY_ENTITY_ATTRIBUTES: false
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_LEGACY_TRIGGERS: false
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_STATUS_TOPIC: homeassistant/status
               ZIGBEE2MQTT_CONFIG_MQTT_INCLUDE_DEVICE_INFORMATION: true
-              ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: z2m-apartment
               ZIGBEE2MQTT_CONFIG_MQTT_KEEPALIVE: 60
               ZIGBEE2MQTT_CONFIG_MQTT_REJECT_UNAUTHORIZED: true
               ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://rmqtt-mqtt.database.svc.cluster.local
@@ -62,8 +59,6 @@ spec:
               ZIGBEE2MQTT_CONFIG_PERMIT_JOIN: false
               ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE: 115200
               ZIGBEE2MQTT_CONFIG_SERIAL_DISABLE_LED: false
-              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_d4f0088f4c1fef119b9450d0639e525b-if00-port0
-              ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: ember
               ZIGBEE2MQTT_CONFIG_SERIAL_RTSCTS: false
             envFrom:
               - secretRef:
@@ -73,7 +68,6 @@ spec:
                 cpu: 5m
                 memory: 202Mi
               limits:
-                squat.ai/apt-zigbee: 1
                 memory: 512Mi
             securityContext:
               allowPrivilegeEscalation: false
@@ -86,21 +80,21 @@ spec:
                 readiness:
                   enabled: true
                   type: HTTP
-      house:
-        containers:
-          main:
-            <<: *container
-            env:
-              <<: *env
-              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://house-zigbee2mqtt.${SECRET_DOMAIN}
-              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://slzb-06.house.internal:6638
-              ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack
-              ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: 20
-              ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: z2m-house
-            resources:
-              <<: *res
-              limits:
-                memory: 512Mi
+      # house:
+      #   containers:
+      #     main:
+      #       <<: *container
+      #       env:
+      #         <<: *env
+      #         ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://house-zigbee2mqtt.${SECRET_DOMAIN}
+      #         ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://slzb-06.house.internal:6638
+      #         ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack
+      #         ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: 20
+      #         ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: z2m-house
+      #       resources:
+      #         <<: *res
+      #         limits:
+      #           memory: 512Mi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -111,45 +105,45 @@ spec:
         supplementalGroups:
           - 20
     service:
-      apt:
-        controller: apt
+      house:
+        controller: house
         ports: &ports
           http:
             primary: true
             port: *port
           metrics:
             port: 9000
-      house:
-        controller: house
+      apt:
+        controller: apt
         ports: *ports
     route:
-      apt: &route
+      house: &route
         hostnames:
-          - apt-z2m.${SECRET_DOMAIN}
+          - house-z2m.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy-system
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: apt
-                port: *port
-      house:
-        <<: *route
-        hostnames:
-          - house-z2m.${SECRET_DOMAIN}
-        rules:
-          - backendRefs:
               - identifier: house
                 port: *port
+      apt:
+        <<: *route
+        hostnames:
+          - apt-z2m.${SECRET_DOMAIN}
+        rules:
+          - backendRefs:
+              - identifier: apt
+                port: *port
     persistence:
-      apt-data:
-        existingClaim: zigbee2mqtt
-        advancedMounts:
-          apt:
-            main:
-              - path: /data
-                subPath: apt
+      # apt-data:
+      #   existingClaim: zigbee2mqtt
+      #   advancedMounts:
+      #     apt:
+      #       main:
+      #         - path: /data
+      #           subPath: apt
       house-data:
         existingClaim: zigbee2mqtt
         advancedMounts:
