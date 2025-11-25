@@ -34,7 +34,7 @@ spec:
           geopulse-backend:
             image:
               repository: ghcr.io/tess1o/geopulse-backend
-              tag: 1.7.0-native@sha256:32e942e1df3ef84fc4dce504133ac4d472e9248b0da64e629463bb9979a5dea1
+              tag: 1.7.0-native@sha256:e7e8189026c6ec025fdcf9cfb81f41b3ac81898ca0de20d1bfeff620d34a35dd
             env:
               GEOPULSE_AUTH_PASSWORD_REGISTRATION_ENABLED: false
               GEOPULSE_OIDC_ENABLED: true
@@ -92,7 +92,7 @@ spec:
           geopulse-frontend:
             image:
               repository: ghcr.io/tess1o/geopulse-ui
-              tag: 1.7.0@sha256:e51c54886820e171a79f9d47d7aa768067bd309256c9ef4c564e9fc9798894b3
+              tag: 1.7.0@sha256:64e5457cb1d37852a9c70986e1afdca52a71b3b41578b6b37d916f2c074e4707
             probes:
               liveness:
                 enabled: true
