@@ -15,7 +15,7 @@ spec:
           path: /metadata/name
           value: cloudflare
         - op: replace
-          path: /spec/externalSecretSpec/dataFrom/0/extract/name
+          path: /spec/externalSecretSpec/dataFrom/0/extract/key
           value: cloudflare
       target:
         kind: ClusterExternalSecret
