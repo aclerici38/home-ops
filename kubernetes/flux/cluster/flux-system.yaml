@@ -3,8 +3,8 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &ns flux-system
-  namespace: flux-system
+  name: flux-system-ns
+  namespace: &ns flux-system
 spec:
   targetNamespace: *ns
   interval: 30m
