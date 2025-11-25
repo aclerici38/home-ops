@@ -45,7 +45,7 @@ spec:
               value: "true"
               effect: "NoSchedule"
       mon:
-        count: 3
+        count: 2 # TODO: 3 mons ofc
       cephConfig:
         global:
           bdev_enable_discard: "true" # quote
