@@ -6,7 +6,7 @@ metadata:
   name: "lb-pool"
   namespace: ${NS}
 spec:
-  allowFirstLastIPs: 'No'
+  allowFirstLastIPs: "Yes"
   blocks:
     - cidr: 10.38.55.0/24
 ---

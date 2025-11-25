@@ -92,7 +92,7 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
     version: 0.33.0
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux/operator/helm/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux-operator/app/helm/values.yaml
     needs:
       - kube-system/coredns
 
@@ -102,7 +102,7 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
     version: 0.33.0
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux/instance/helm/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux-instance/app/helm/values.yaml
     needs:
       - flux-system/flux-operator
       - cluster-infra/external-secrets
