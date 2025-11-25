@@ -14,6 +14,9 @@ spec:
         - op: replace
           path: /metadata/name
           value: cloudflare
+        - op: replace
+          path: /spec/dataFrom/0/extract/name
+          value: cloudflare
       target:
         kind: ClusterExternalSecret
         labelSelector: dormammu.io/component=external-secret
