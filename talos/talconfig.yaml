@@ -80,8 +80,6 @@ nodes:
             - hardwareAddr: 1a:4b:24:aa:f3:*
         addresses:
           - "10.0.30.25/24"
-        vip: &vip
-          ip: 10.0.30.250
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.0.30.1"
@@ -146,7 +144,6 @@ nodes:
             - hardwareAddr: 58:47:ca:7c:77*
         addresses:
           - "10.0.30.18/24"
-        vip: *vip
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.0.30.1"
@@ -194,7 +191,6 @@ nodes:
             - hardwareAddr: "d8:3a:dd:d2:76:d2"
         addresses:
           - "10.0.30.55/24"
-        vip: *vip
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.0.30.1"
