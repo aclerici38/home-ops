@@ -198,10 +198,11 @@ spec:
             upstreams:
               groups:
                 default:
-                  - https://sky.rethinkdns.com/dns-query
+                  - https://dns.pub/dns-query
+                  - https://dns.quad9.net/dns-query
                   - https://freedns.controld.com/p0
-                  - https://private.canadianshield.cira.ca/dns-query
-                  - https://dns.nextdns.io
+                  - https://doh.opendns.com/dns-query
+                  - https://cloudflare-dns.com/dns-query
             
             blocking:
               blackLists:
