@@ -5,17 +5,12 @@ metadata:
   namespace: ${NS}
 spec:
   bgpInstances:
-  - name: "apartment-instance"
+  - name: "lab"
     localASN: 64513
     peers:
-    - name: "opnsense-apartment"
+    - name: "opnsense"
       peerASN: 64523
-      peerAddress: 192.168.9.1
-      peerConfigRef:
-        name: "cilium-peer"
-    - name: "opnsense-house"
-      peerASN: 64524
-      peerAddress: 10.10.10.2
+      peerAddress: 10.0.30.1
       peerConfigRef:
         name: "cilium-peer"
 ---
@@ -25,7 +20,6 @@ metadata:
   name: cilium-peer
   namespace: ${NS}
 spec:
-  ebgpMultihop: 255
   families:
     - afi: ipv4
       safi: unicast

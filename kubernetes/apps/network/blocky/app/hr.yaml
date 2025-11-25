@@ -171,9 +171,6 @@ spec:
                 # House
                 internal: 10.10.10.2:53
                 0.10.in-addr.arpa: 10.10.10.2:53
-                # Apartment
-                samthony.lan: 192.168.9.1:53
-                168.192.in-addr.arpa: 192.168.9.1:53
                 # kube
                 cluster.local: ${COREDNS_CLUSTER_IP}
                 16.172.in-addr.arpa: ${COREDNS_CLUSTER_IP}
@@ -217,9 +214,7 @@ spec:
               clientGroupsBlock:
                 10.0.0.0/8:
                   - ads
-                192.168.0.0/16:
-                  - ads
-            
+  
             redis:
               address: dragonfly-db.database.svc.cluster.local:6379
               database: 4

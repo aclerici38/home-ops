@@ -5,9 +5,4 @@ machine:
       advertiseKubernetesNetworks: false
     disableSearchDomain: true
     nameservers:
-      - 1.1.1.1
-      - 8.8.8.8
-    extraHostEntries:
-      - ip: 10.38.55.80
-        aliases:
-          - harbor.${SECRET_DOMAIN}
+      - 10.0.30.1

@@ -1,10 +1,12 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
-talosVersion: ${TALOS_VERSION}
-kubernetesVersion: ${KUBE_VERSION}
+# renovate: datasource=github-releases depName=siderolabs/talos
+talosVersion: v1.11.5
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+kubernetesVersion: v1.34.2
 
 clusterName: dormammu
-endpoint: https://192.168.9.200:6443
+endpoint: https://k8s.lab.internal:6443
 
 clusterPodNets:
   - "172.16.0.0/16"
@@ -12,14 +14,12 @@ clusterSvcNets:
   - "172.17.0.0/16"
 
 additionalApiServerCertSans: &sans
-  - "192.168.9.200"
-  - "${BONDS_IP}"
-  - "${TIMMY_IP}"
-  - "${CAIN_IP}"
+  - "k8s.lab.internal"
+  - "bonds.lab.internal"
+  - "cain.lab.internal"
+  - "timmy.lab.internal"
   - "127.0.0.1"
   - "172.17.0.1"
-  - "bonds"
-  - "timmy"
 additionalMachineCertSans: *sans
 
 # Disable built-in Flannel to use Cilium
@@ -28,7 +28,7 @@ cniConfig:
 
 nodes:
   - hostname: "bonds"
-    ipAddress: "${BONDS_IP}"
+    ipAddress: "bonds.lab.internal"
     installDiskSelector:
       wwid: eui.00253841414031f0
     machineSpec:
@@ -74,14 +74,10 @@ nodes:
           xmitHashPolicy: layer3+4
           deviceSelectors:
             - hardwareAddr: 1a:4b:24:aa:f3:*
-        addresses:
-          - "${BONDS_IP}/24"
+        dhcp: true
         vip: &vip
-          ip: 192.168.9.200
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "192.168.9.1"
-        mtu: 1500
+          ip: 10.0.30.250
+        mtu: 9000
     volumes:
       - name: EPHEMERAL
         provisioning:
@@ -96,10 +92,8 @@ nodes:
             match: system_disk
           minSize: 500GB
           grow: true
-    # patches:
-    #   - "@./patches/wireguard/proton.yaml"
   - hostname: "cain"
-    ipAddress: "${CAIN_IP}"
+    ipAddress: "cain.lab.internal"
     installDiskSelector:
       wwid: eui.6479a79d30000001
     machineSpec:
@@ -142,13 +136,9 @@ nodes:
           xmitHashPolicy: layer3+4
           deviceSelectors:
             - hardwareAddr: 58:47:ca:7c:77*
-        addresses:
-          - "${CAIN_IP}/24"
+        dhcp: true
         vip: *vip
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "192.168.9.1"
-        mtu: 1500
+        mtu: 9000
     volumes:
       - name: EPHEMERAL
         provisioning:
@@ -171,7 +161,7 @@ nodes:
               - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
               - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
   - hostname: "timmy"
-    ipAddress: "${TIMMY_IP}"
+    ipAddress: "timmy.lab.internal"
     talosImageURL: ghcr.io/talos-rpi5/installer
     installDiskSelector:
       model: "SAMSUNG MZVL4256HBJD-00BH1"
@@ -190,12 +180,8 @@ nodes:
           xmitHashPolicy: layer3+4
           deviceSelectors:
             - hardwareAddr: "d8:3a:dd:d2:76:d2"
-        addresses:
-          - "${TIMMY_IP}/24"
+        dhcp: true
         vip: *vip
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "192.168.9.1"
         mtu: 1500
 # Global patches
 patches:
