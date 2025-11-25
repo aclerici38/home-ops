@@ -17,7 +17,7 @@ metadata:
   name: "lab-pool"
   namespace: ${NS}
 spec:
-  allowFirstLastIPs: 'No'
+  allowFirstLastIPs: 'Yes'
   blocks:
-    - start: 10.0.10.0.30.200
+    - start: 10.0.30.200
       stop: 10.0.30.250
