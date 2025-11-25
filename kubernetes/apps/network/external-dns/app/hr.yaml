@@ -30,7 +30,7 @@ spec:
     extraArgs:
       - --cloudflare-dns-records-per-page=1000
       - --gateway-name=external
-      - --default-targets=apartment.${SECRET_DOMAIN}
+      - --default-targets=house.${SECRET_DOMAIN}
       - --force-default-targets
     policy: sync
     triggerLoopOnEvent: true
