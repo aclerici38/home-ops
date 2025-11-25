@@ -14,7 +14,16 @@ releases:
     atomic: true
     version: 1.18.4
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/cilium/cilium/app/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/cilium/cilium/app/helm/values.yaml
+    hooks:
+      - events: ["presync"]
+        showlogs: true
+        command: "kubectl"
+        args: ["apply", "--server-side", "-f", "https://github.com/prometheus-operator/prometheus-operator/releases/latest/download/stripped-down-crds.yaml"]
+      - events: ["postsync"]
+        showlogs: true
+        command: "kubectl"
+        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cilium/cilium-networking/resources"]
 
   - name: coredns
     namespace: kube-system
@@ -34,8 +43,6 @@ releases:
         service:
           name: kube-dns
           clusterIP: 172.17.0.10
-    needs:
-      - cilium/cilium
 
   - name: cert-manager
     namespace: cluster-infra
@@ -54,18 +61,18 @@ releases:
     chart: oci://ghcr.io/bjw-s-labs/helm/app-template
     version: 4.4.0
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/cluster-infra/onepassword-connect/app/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/cluster-infra/onepassword-connect/app/helm/values.yaml
     needs:
       - cilium/cilium
       - kube-system/coredns
 
   - name: external-secrets
-    namespace: external-secrets
+    namespace: cluster-infra
     atomic: true
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
     version: 1.1.0
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/external-secrets/app/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/external-secrets/app/helm/values.yaml
     needs:
       - kube-system/coredns
       - onepassword-connect
@@ -85,7 +92,7 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
     version: 0.33.0
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux/operator/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux/operator/helm/values.yaml
     needs:
       - kube-system/coredns
 
@@ -95,7 +102,7 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
     version: 0.33.0
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux/instance/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux/instance/helm/values.yaml
     needs:
       - flux-system/flux-operator
-      - external-secrets/external-secrets
+      - cluster-infra/external-secrets

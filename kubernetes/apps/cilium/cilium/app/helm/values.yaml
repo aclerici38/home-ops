@@ -46,7 +46,6 @@ hubble:
       - "http"
     serviceMonitor:
       enabled: true
-      trustCRDsExist: true
     dashboards:
       enabled: true
   relay:
@@ -55,7 +54,6 @@ hubble:
     prometheus:
       serviceMonitor:
         enabled: true
-        trustCRDsExist: true
 daemon:
   enableSourceIPVerification: false
 envoy:
@@ -80,20 +78,18 @@ loadBalancer:
 nodePort:
   enabled: true
 operator:
-  replicas: 2
+  replicas: 1
   rollOutPods: true
   prometheus:
     enabled: true
     serviceMonitor:
       enabled: true
-      trustCRDsExist: true
   dashboards:
     enabled: true
 prometheus:
   enabled: true
   serviceMonitor:
     enabled: true
-    trustCRDsExist: true
 rollOutCiliumPods: true
 routingMode: native
 bgpControlPlane:
