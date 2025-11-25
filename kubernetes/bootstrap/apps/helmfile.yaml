@@ -72,7 +72,7 @@ releases:
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
     version: 1.1.0
     values:
-      - /Users/anthony/home-ops/kubernetes/apps/external-secrets/app/helm/values.yaml
+      - /Users/anthony/home-ops/kubernetes/apps/cluster-infra/external-secrets/app/helm/values.yaml
     needs:
       - kube-system/coredns
       - onepassword-connect
@@ -80,11 +80,7 @@ releases:
       - events: ["postsync"]
         showlogs: true
         command: "kubectl"
-        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cluster-infra/external-secrets/stores/1password/store.yaml"]
-      - events: ["postsync"]
-        showlogs: true
-        command: "kubectl"
-        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cluster-infra/external-secrets/stores/1password/store.yaml"]
+        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cluster-infra/external-secrets-stores/resources/onepassword.yaml"]
 
   - name: flux-operator
     namespace: flux-system

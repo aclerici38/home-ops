@@ -6,7 +6,7 @@ talosVersion: v1.11.5
 kubernetesVersion: v1.34.2
 
 clusterName: dormammu
-endpoint: https://k8s.lab.internal:6443
+endpoint: https://10.0.30.25:6443
 
 clusterPodNets:
   - "172.16.0.0/16"
@@ -18,6 +18,10 @@ additionalApiServerCertSans: &sans
   - "bonds.lab.internal"
   - "cain.lab.internal"
   - "timmy.lab.internal"
+  - "10.0.30.250"
+  - "10.0.30.25"
+  - "10.0.30.18"
+  - "10.0.30.55"
   - "127.0.0.1"
   - "172.17.0.1"
 additionalMachineCertSans: *sans
@@ -28,7 +32,7 @@ cniConfig:
 
 nodes:
   - hostname: "bonds"
-    ipAddress: "bonds.lab.internal"
+    ipAddress: "10.0.30.25"
     installDiskSelector:
       wwid: eui.00253841414031f0
     machineSpec:
@@ -74,9 +78,13 @@ nodes:
           xmitHashPolicy: layer3+4
           deviceSelectors:
             - hardwareAddr: 1a:4b:24:aa:f3:*
-        dhcp: true
+        addresses:
+          - "10.0.30.25/24"
         vip: &vip
           ip: 10.0.30.250
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "10.0.30.1"
         mtu: 9000
     volumes:
       - name: EPHEMERAL
@@ -93,7 +101,7 @@ nodes:
           minSize: 500GB
           grow: true
   - hostname: "cain"
-    ipAddress: "cain.lab.internal"
+    ipAddress: "10.0.30.18"
     installDiskSelector:
       wwid: eui.6479a79d30000001
     machineSpec:
@@ -136,8 +144,12 @@ nodes:
           xmitHashPolicy: layer3+4
           deviceSelectors:
             - hardwareAddr: 58:47:ca:7c:77*
-        dhcp: true
+        addresses:
+          - "10.0.30.18/24"
         vip: *vip
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "10.0.30.1"
         mtu: 9000
     volumes:
       - name: EPHEMERAL
@@ -161,7 +173,7 @@ nodes:
               - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
               - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
   - hostname: "timmy"
-    ipAddress: "timmy.lab.internal"
+    ipAddress: "10.0.30.55"
     talosImageURL: ghcr.io/talos-rpi5/installer
     installDiskSelector:
       model: "SAMSUNG MZVL4256HBJD-00BH1"
@@ -180,8 +192,12 @@ nodes:
           xmitHashPolicy: layer3+4
           deviceSelectors:
             - hardwareAddr: "d8:3a:dd:d2:76:d2"
-        dhcp: true
+        addresses:
+          - "10.0.30.55/24"
         vip: *vip
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "10.0.30.1"
         mtu: 1500
 # Global patches
 patches:
