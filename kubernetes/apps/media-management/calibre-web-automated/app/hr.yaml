@@ -116,13 +116,13 @@ spec:
             subPath: run
       ingest:
         type: nfs
-        server: bonds.lab.internal
+        server: 10.0.30.25
         path: /media/books/calibre/ingest
         globalMounts:
           - path: /cwa-book-ingest
       library:
         type: nfs
-        server: bonds.lab.internal
+        server: 10.0.30.25
         path: /media/books/calibre/library
         globalMounts:
           - path: /calibre-library

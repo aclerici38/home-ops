@@ -30,7 +30,7 @@ spec:
     storageClasses:
       - name: nfs-tank
         parameters:
-          server: "${NFS_IP}"
+          server: "10.0.30.25"
           share: "/"
           subDir: /tank/$${pvc.metadata.namespace}/$${pv.metadata.name}
         mountOptions:
@@ -42,7 +42,7 @@ spec:
         volumeBindingMode: Immediate
       - name: nfs-ssd
         parameters:
-          server: "${NFS_IP}"
+          server: "10.0.30.25"
           share: "/"
           subDir: /ssd/$${pvc.metadata.namespace}/$${pv.metadata.name}
         mountOptions:

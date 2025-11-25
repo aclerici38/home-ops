@@ -113,7 +113,7 @@ spec:
             subPath: config
       media:
         type: nfs
-        server: bonds.lab.internal
+        server: 10.0.30.25
         path: /media
         globalMounts:
           - path: /allMedia
