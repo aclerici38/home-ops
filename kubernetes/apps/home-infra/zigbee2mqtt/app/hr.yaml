@@ -113,9 +113,9 @@ spec:
             port: *port
           metrics:
             port: 9000
-      apt:
-        controller: apt
-        ports: *ports
+      # apt:
+      #   controller: apt
+      #   ports: *ports
     route:
       house: &route
         hostnames:
@@ -128,14 +128,14 @@ spec:
           - backendRefs:
               - identifier: house
                 port: *port
-      apt:
-        <<: *route
-        hostnames:
-          - apt-z2m.${SECRET_DOMAIN}
-        rules:
-          - backendRefs:
-              - identifier: apt
-                port: *port
+      # apt:
+      #   <<: *route
+      #   hostnames:
+      #     - apt-z2m.${SECRET_DOMAIN}
+      #   rules:
+      #     - backendRefs:
+      #         - identifier: apt
+      #           port: *port
     persistence:
       # apt-data:
       #   existingClaim: zigbee2mqtt
