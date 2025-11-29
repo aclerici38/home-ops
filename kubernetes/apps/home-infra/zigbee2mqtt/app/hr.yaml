@@ -28,8 +28,8 @@ spec:
               repository: ghcr.io/koenkk/zigbee2mqtt
               tag: 2.6.3@sha256:3baac2a3b74a9945fbbcb665b3e6e0ace5df2d49b5502e3d26b66a5454316e81
             env: &env
-              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://house-zigbee2mqtt.${SECRET_DOMAIN}
-              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://slzb-06.house.internal:6638
+              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://house-z2m.${SECRET_DOMAIN}
+              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://slzb-06.lab.internal:6638
               ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack
               ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: 20
               ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: z2m-house
