@@ -17,7 +17,7 @@ spec:
                 ld_library_path:
                   - system
                 image:
-                  reference: ghcr.io/cloudnative-pg/postgis-extension-testing:3.6.1-18-trixie
+                  reference: ghcr.io/cloudnative-pg/postgis-extension:3.6.1-18-trixie
       target:
         kind: Cluster
     - patch: |-

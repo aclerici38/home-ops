@@ -17,7 +17,7 @@ spec:
             extensions:
               - name: pgvector
                 image:
-                  reference: ghcr.io/cloudnative-pg/pgvector-testing:0.8.1-18-trixie
+                  reference: ghcr.io/cloudnative-pg/pgvector:0.8.1-18-trixie
               - name: vchord
                 image:
                   reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.0.0
