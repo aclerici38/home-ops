@@ -60,9 +60,6 @@ spec:
               ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE: 115200
               ZIGBEE2MQTT_CONFIG_SERIAL_DISABLE_LED: false
               ZIGBEE2MQTT_CONFIG_SERIAL_RTSCTS: false
-            envFrom:
-              - secretRef:
-                  name: zigbee2mqtt
             resources: &res
               requests:
                 cpu: 5m
