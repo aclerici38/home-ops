@@ -22,19 +22,11 @@ ffmpeg:
   targetResolution: "1080"
 
 job:
-  backgroundTask:
-    concurrency: 10
   smartSearch:
     concurrency: 4
-  metadataExtraction:
-    concurrency: 10
   faceDetection:
     concurrency: 4
   search:
-    concurrency: 10
-  sidecar:
-    concurrency: 10
-  library:
     concurrency: 10
   migration:
     concurrency: 10
@@ -42,8 +34,6 @@ job:
     concurrency: 6
   videoConversion:
     concurrency: 3
-  notifications:
-    concurrency: 10
   ocr:
     concurrency: 3
 
