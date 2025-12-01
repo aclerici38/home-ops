@@ -30,6 +30,7 @@ spec:
     replicaCount: 2
     watchedResources:
       - HTTPRoute
+      - Service
     extraZonePlugins:
       - name: log
       - name: errors
