@@ -82,6 +82,10 @@ spec:
         existingClaim: immich
         globalMounts:
           - path: /export/immich
+      files:
+        existingClaim: files
+        globalMounts:
+          - path: /export/files
       media:
         existingClaim: media
         globalMounts:
