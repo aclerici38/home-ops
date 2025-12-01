@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: nfs-exports
 data:
-  exports: |
+  exports: |-
     /export *(rw,fsid=0,crossmnt,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check)
