@@ -59,6 +59,9 @@ machineLearning:
     maxDistance: 0.001
   ocr:
     enabled: true
+    maxResolution: 1280
+    minDetectionScore: 0.4
+    minRecognitionScore: 0.6
     modelName: EN__PP-OCRv5_mobile
 
 oauth:
