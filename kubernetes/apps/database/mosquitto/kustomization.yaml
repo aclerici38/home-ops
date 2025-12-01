@@ -7,6 +7,6 @@ generatorOptions:
 configMapGenerator:
   - name: APP-app-vars
     literals:
-      - APP=rmqtt
+      - APP=mosquitto
 components:
   - ../../../components/ks/app
