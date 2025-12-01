@@ -313,8 +313,10 @@ spec:
         type: nfs
         server: 10.0.30.25
         path: /files/opencloud
-        globalMounts:
-          - path: *path
+        advancedMounts:
+          opencloud:
+            opencloud:
+              - path: *path
       tmpfs:
         type: emptyDir
         advancedMounts:
