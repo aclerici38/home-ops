@@ -310,11 +310,11 @@ spec:
               - path: /etc/opencloud
                 subPath: config
       files:
-        existingClaim: files
-        advancedMounts:
-          opencloud:
-            opencloud:
-              - path: *path
+        type: nfs
+        server: 10.0.30.25
+        path: /files/opencloud
+        globalMounts:
+          - path: *path
       tmpfs:
         type: emptyDir
         advancedMounts:

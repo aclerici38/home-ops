@@ -59,13 +59,12 @@ spec:
         globalMounts:
           - path: /data/config.yml
             subPath: config.yml
-      # time-machine:
-      #   type: nfs
-      #   server: 10.0.30.25
-      #   path: /files
-      #   globalMounts:
-      #     - path: /samba/time-machine
-      #       subPath: time-machine
+      time-machine:
+        type: nfs
+        server: 10.0.30.25
+        path: /files/time-machine
+        globalMounts:
+          - path: /samba/time-machine
     configMaps:
       config:
         data:
