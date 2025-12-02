@@ -51,13 +51,15 @@ spec:
               KIOSK_SHOW_USER: true
               KIOSK_SHOW_OWNER: true
               KIOSK_SHOW_PERSON_NAME: true
-              KIOSK_SHOW_IMAGE_TIME: true
-              KIOSK_IMAGE_TIME_FORMAT: 12
               KIOSK_SHOW_IMAGE_DATE: true
+              KIOSK_SHOW_IMAGE_QR: true
               KIOSK_IMAGE_DATE_FORMAT: MM/DD/YYYY
               KIOSK_SHOW_IMAGE_DESCRIPTION: true
               KIOSK_SHOW_IMAGE_LOCATION: true
               KIOSK_BEHIND_PROXY: true
+              KIOSK_THEME: bubble
+              KIOSK_SHOW_VIDEOS: true
+              KIOSK_SHOW_MORE_INFO: true
             probes:
               readiness: &probes
                 enabled: true
