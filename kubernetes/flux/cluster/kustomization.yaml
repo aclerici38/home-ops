@@ -29,6 +29,10 @@ patches:
         dependsOn:
           - name: flux-repos
           - name: flux-settings
+        postBuild:
+          substituteFrom:
+            - kind: Secret
+              name: cluster-settings
     target:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io
