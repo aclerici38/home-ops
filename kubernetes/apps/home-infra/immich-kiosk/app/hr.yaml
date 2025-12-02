@@ -39,7 +39,7 @@ spec:
                   name: immich-kiosk
                   key: IMMICH_API_KEY
               KIOSK_IMMICH_URL: http://immich-server:2283
-              KIOSK_IMMICH_EXTERNAL_URL: https://${APP_URL}
+              KIOSK_IMMICH_EXTERNAL_URL: https://immich.${SECRET_DOMAIN}
               # TV pics
               KIOSK_ALBUMS: d64b33a8-d61d-4468-9403-f7a594ed6bd9
               KIOSK_SHOW_TIME: true
@@ -52,14 +52,13 @@ spec:
               KIOSK_SHOW_OWNER: true
               KIOSK_SHOW_PERSON_NAME: true
               KIOSK_SHOW_IMAGE_DATE: true
-              KIOSK_SHOW_IMAGE_QR: true
               KIOSK_IMAGE_DATE_FORMAT: MM/DD/YYYY
               KIOSK_SHOW_IMAGE_DESCRIPTION: true
               KIOSK_SHOW_IMAGE_LOCATION: true
               KIOSK_BEHIND_PROXY: true
-              KIOSK_THEME: bubble
               KIOSK_SHOW_VIDEOS: true
-              KIOSK_SHOW_MORE_INFO: true
+              KIOSK_TRANSITION: fade
+              KIOSK_FRAME_PADDING: 5
             probes:
               readiness: &probes
                 enabled: true
