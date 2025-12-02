@@ -36,7 +36,7 @@ spec:
                       app.kubernetes.io/instance: immich
                   topologyKey: kubernetes.io/hostname
         containers:
-          main:
+          immich-server:
             image:
               repository: ghcr.io/immich-app/immich-server
               tag: v2.3.1@sha256:f8d06a32b1b2a81053d78e40bf8e35236b9faefb5c3903ce9ca8712c9ed78445
@@ -88,7 +88,7 @@ spec:
           nodeSelector:
             kubernetes.io/hostname: "bonds"
         containers:
-          main:
+          immich-ml:
             image:
               repository: ghcr.io/immich-app/immich-machine-learning
               tag: v2.3.1-openvino@sha256:b717d8afc7d9d4d7e2abf29f0aa33aa2b42c8bdcd78b9c88cf267360a9a8d53c
@@ -157,7 +157,7 @@ spec:
           - port: metrics-api
             scheme: http
     route:
-      main:
+      immich:
         hostnames:
           - immich.${SECRET_DOMAIN}
         parentRefs:
@@ -175,27 +175,27 @@ spec:
         path: /immich
         advancedMounts:
           server:
-            main:
+            immich-server:
               - path: /data
       thumbnails:
         existingClaim: immich-thumbs
         advancedMounts:
           server:
-            main:
+            immich-server:
               - path: /data/thumbs
       config:
         type: configMap
         name: immich
         advancedMounts:
           server:
-            main:
+            immich-server:
               - path: *config
                 subPath: config.yaml
       cache:
         existingClaim: immich-ml-cache
         advancedMounts:
           machine-learning:
-            main:
+            immich-ml:
               - path: /cache
                 subPath: cache
               - path: /.config/matplotlib
