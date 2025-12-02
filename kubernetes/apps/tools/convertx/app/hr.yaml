@@ -33,7 +33,7 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
         containers:
-          main:
+          convertx:
             image:
               repository: ghcr.io/c4illin/convertx
               tag: v0.16.0@sha256:2397d94fa091e48f1fbfcb97dd28d6c36cf7bdac2a33fb5cd66813e6ab723849
@@ -45,7 +45,11 @@ spec:
             probes:
               liveness: &probes
                 enabled: true
-                type: HTTP
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 3000
+                    path: /healthcheck
               readiness: *probes
             resources:
               requests:
@@ -65,7 +69,7 @@ spec:
         controller: convertx
         ports:
           http:
-            port: &port 3000
+            port: *port
     route:
       app:
         hostnames:
