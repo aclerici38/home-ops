@@ -18,6 +18,7 @@ patches:
       kind: ClusterExternalSecret
       metadata:
         name: vikunja
+        namespace: ${NS}
       spec:
         externalSecretSpec:
           target:
