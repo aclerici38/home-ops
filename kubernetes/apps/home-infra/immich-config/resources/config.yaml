@@ -57,7 +57,7 @@ machineLearning:
 oauth:
   enabled: true
   issuerUrl: https://id.${SECRET_DOMAIN}/
-  autoLaunch: true
+  autoLaunch: false
   autoRegister: true
   buttonText: Login with Pocket ID
   clientId: ${CLIENT_ID}
