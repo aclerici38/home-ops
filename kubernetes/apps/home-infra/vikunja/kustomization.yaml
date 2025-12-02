@@ -17,8 +17,7 @@ patches:
       apiVersion: external-secrets.io/v1
       kind: ClusterExternalSecret
       metadata:
-        name: vikunja
-        namespace: ${NS}
+        name: patch
       spec:
         externalSecretSpec:
           target:
@@ -39,3 +38,6 @@ patches:
                           clientid: {{ .CLIENT_ID }}
                           clientsecret: {{ .CLIENT_SECRET }}
                           scope: openid profile email
+    target:
+      kind: ClusterExternalSecret
+      labelSelector: "dormammu.io/component=external-secret"
