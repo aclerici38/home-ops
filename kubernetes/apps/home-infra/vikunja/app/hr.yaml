@@ -35,11 +35,11 @@ spec:
           vikunja:
             image:
               repository: docker.io/vikunja/vikunja
-              tag: 1.0.0-rc3@sha256:e457d7c75d195935df0da68321f9dc3388db710c7543085d785ae523d415b0f2
+              tag: 0.24.6@sha256:ed1f3ed467fecec0b57e9de7bc6607f8bbcbb23ffced6a81f5dfefc794cdbe3b
             env:
               # Proper shell path for cli
               PATH: /app/vikunja:$${PATH}
-              VIKUNJA_SERVICE_PUBLICURL: &fqdn https://tasks.${SECRET_DOMAIN}
+              VIKUNJA_SERVICE_PUBLICURL: https://tasks.${SECRET_DOMAIN}
               VIKUNJA_SERVICE_TIMEZONE: "${TZ}"
               VIKUNJA_MAILER_ENABLED: true
               VIKUNJA_METRICS_ENABLED: true
@@ -47,8 +47,6 @@ spec:
               VIKUNJA_DEFAULTSETTINGS_EMAIL_REMINDERS_ENABLED: true
               VIKUNJA_DEFAULTSETTINGS_OVERDUE_TASKS_REMINDERS_TIME: '11:00'
               VIKUNJA_DEFAULTSETTINGS_WEEK_START: 1
-              VIKUNJA_CORS_ENABLE: true
-              VIKUNJA_CORS_ORIGINS: *fqdn
               VIKUNJA_FILES_BASEPATH: &path /mnt/files
               VIKUNJA_SERVICE_JWTSECRET:
                 secretKeyRef:
@@ -149,8 +147,7 @@ spec:
                 enabled: true
                 redirecturl: https://tasks.${SECRET_DOMAIN}/auth/openid
                 providers:
-                  pocket-id:
-                    name: Pocket ID
+                  - name: Pocket ID
                     authurl: https://id.${SECRET_DOMAIN}
                     clientid: ${VIKUNJA_CLIENT_ID}
                     clientsecret: ${VIKUNJA_CLIENT_SECRET}
