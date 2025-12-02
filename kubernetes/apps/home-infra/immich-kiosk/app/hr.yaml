@@ -18,6 +18,7 @@ spec:
   values:
     controllers:
       immich-kiosk:
+        strategy: RollingUpdate
         pod:
           hostUsers: false
           securityContext:
@@ -49,7 +50,6 @@ spec:
               KIOSK_DATE_FORMAT: MM/DD/YY
               KIOSK_SHOW_PROGRESS_BAR: true
               KIOSK_SHOW_USER: true
-              KIOSK_SHOW_OWNER: true
               KIOSK_SHOW_PERSON_NAME: true
               KIOSK_SHOW_IMAGE_DATE: true
               KIOSK_IMAGE_DATE_FORMAT: MM/DD/YYYY
@@ -58,6 +58,7 @@ spec:
               KIOSK_BEHIND_PROXY: true
               KIOSK_SHOW_VIDEOS: true
               KIOSK_TRANSITION: fade
+              KIOSK_THEME: solid
               KIOSK_FRAME_PADDING: 5
             probes:
               readiness: &probes
@@ -70,7 +71,7 @@ spec:
               liveness: *probes
             resources:
               requests:
-                cpu: 12m
+                cpu: 250m
                 memory: 128M
               limits:
                 memory: 512M
