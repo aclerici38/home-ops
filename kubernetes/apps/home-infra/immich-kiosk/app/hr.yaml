@@ -1,0 +1,97 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich-kiosk
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+  upgrade:
+    timeout: 2m
+  values:
+    controllers:
+      immich-kiosk:
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          main:
+            image:
+              repository: ghcr.io/damongolding/immich-kiosk
+              tag: 0.28.1@sha256:deca1492ed00617f194c600b3cf9eff459decda899587e22df776bffffbf397a
+            env:
+              LANG: en_US
+              KIOSK_IMMICH_API_KEY:
+                secretKeyRef:
+                  name: immich-kiosk
+                  key: IMMICH_API_KEY
+              KIOSK_IMMICH_URL: http://immich-server:2283
+              KIOSK_IMMICH_EXTERNAL_URL: https://${APP_URL}
+              KIOSK_SHOW_TIME: true
+              KIOSK_TIME_FORMAT: 12
+              KIOSK_SHOW_DATE: true
+              KIOSK_DATE_FORMAT: MM/DD/YY
+              KIOSK_SHOW_PROGRESS_BAR: true
+              KIOSK_SHOW_USER: true
+              KIOSK_LIVE_PHOTOS: true
+              KIOSK_SHOW_OWNER: true
+              KIOSK_SHOW_PERSON_NAME: true
+              KIOSK_SHOW_IMAGE_TIME: true
+              KIOSK_IMAGE_TIME_FORMAT: 12
+              KIOSK_SHOW_IMAGE_DATE: true
+              KIOSK_IMAGE_DATE_FORMAT: MM/DD/YYYY
+              KIOSK_SHOW_IMAGE_DESCRIPTION: true
+              KIOSK_SHOW_IMAGE_LOCATION: true
+              KIOSK_BEHIND_PROXY: true
+              KIOSK_ENABLE_URL_BUILDER: true
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 3000
+                    path: /health
+              liveness: *probes
+            resources:
+              requests:
+                cpu: 12m
+                memory: 128M
+              limits:
+                memory: 512M
+            securityContext:
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities: { drop: ["ALL"] }
+    service:
+      main:
+        controller: immich-kiosk
+        ports:
+          http:
+            port: *port
+    route:
+      main:
+        hostnames:
+          - ${APP_URL}
+        parentRefs:
+          - name: internal
+            namespace: envoy-system
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: main
+              port: *port
