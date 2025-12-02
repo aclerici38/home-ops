@@ -8,7 +8,7 @@ metadata:
 spec:
   namespaceSelectors:
     - {} # all ns
-  refreshTime: "1h"
+  refreshTime: "1m"
   externalSecretSpec:
     secretStoreRef:
       kind: ClusterSecretStore
@@ -35,3 +35,5 @@ spec:
     dataFrom:
       - extract:
           key: cluster-secrets
+      - extract:
+          key: oidc-credentials
