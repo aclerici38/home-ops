@@ -8,6 +8,7 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=vikunja
+      - CNPG_POOLMODE=session
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret
