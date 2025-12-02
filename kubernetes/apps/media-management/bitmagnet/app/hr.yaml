@@ -170,7 +170,7 @@ spec:
     route:
       main:
         hostnames:
-          - bitmagnet.${SECRET_DOMAIN}
+          - ${APP_URL}
         parentRefs:
           - name: internal
             namespace: envoy-system

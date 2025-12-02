@@ -26,6 +26,12 @@ replacements:
           index: 0
       - select: *ks
         fieldPaths:
+          - spec.postBuild.substitute.APP_URL
+        options:
+          delimiter: .
+          index: 0
+      - select: *ks
+        fieldPaths:
           - spec.path
         options:
           delimiter: /

@@ -11,7 +11,7 @@ spec:
       namespace: envoy-system
       sectionName: https
   hostnames:
-    - flux-webhook.${SECRET_DOMAIN}
+    - ${APP_URL}
   rules:
     - matches:
         - path:

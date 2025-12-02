@@ -67,7 +67,7 @@ spec:
     route:
       main:
         hostnames:
-          - openspeedtest.${SECRET_DOMAIN}
+          - ${APP_URL}
         parentRefs:
           - name: internal
             namespace: envoy-system

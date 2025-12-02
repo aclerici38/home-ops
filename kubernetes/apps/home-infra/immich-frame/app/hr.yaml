@@ -77,7 +77,7 @@ spec:
     route:
       main:
         hostnames:
-          - immich-frame.${SECRET_DOMAIN}
+          - ${APP_URL}
         parentRefs:
           - name: internal
             namespace: envoy-system

@@ -37,7 +37,7 @@ spec:
               repository: ghcr.io/mealie-recipes/mealie
               tag: v3.5.0@sha256:7f776bbb5457db7f58951c11e3aa881f0167675a78459d7a7f2cd5e42d181fa5
             env:
-              BASE_URL: https://mealie.${SECRET_DOMAIN}
+              BASE_URL: https://${APP_URL}
               DAILY_SCHEDULE_TIME: 05:00
               ALLOW_SIGNUP: "false"
               LOG_LEVEL: debug
@@ -108,7 +108,7 @@ spec:
     route:
       main:
         hostnames:
-          - mealie.${SECRET_DOMAIN}
+          - ${APP_URL}
         parentRefs:
           - name: external
             namespace: envoy-system

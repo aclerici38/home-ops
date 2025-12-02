@@ -73,7 +73,7 @@ spec:
     route:
       app:
         hostnames:
-          - convertx.${SECRET_DOMAIN}
+          - ${APP_URL}
         parentRefs:
           - name: internal
             namespace: envoy-system

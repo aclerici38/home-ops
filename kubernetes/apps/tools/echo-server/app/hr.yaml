@@ -72,7 +72,7 @@ spec:
     route:
       main:
         hostnames:
-          - echo-server.${SECRET_DOMAIN}
+          - ${APP_URL}
         parentRefs:
           - name: external
             namespace: envoy-system

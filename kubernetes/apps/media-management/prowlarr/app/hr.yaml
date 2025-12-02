@@ -96,7 +96,7 @@ spec:
     route:
       main:
         hostnames:
-          - prowlarr.${SECRET_DOMAIN}
+          - ${APP_URL}
         parentRefs:
           - name: internal
             namespace: envoy-system

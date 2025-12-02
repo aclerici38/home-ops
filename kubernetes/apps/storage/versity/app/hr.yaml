@@ -74,7 +74,7 @@ spec:
     route:
       main:
         hostnames:
-          - versity.${SECRET_DOMAIN}
+          - ${APP_URL}
         parentRefs:
           - name: internal
             namespace: envoy-system

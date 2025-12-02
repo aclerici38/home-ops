@@ -68,7 +68,7 @@ spec:
     route:
       main:
         hostnames:
-          - audiobookshelf.${SECRET_DOMAIN}
+          - ${APP_URL}
         parentRefs:
           - name: external
             namespace: envoy-system

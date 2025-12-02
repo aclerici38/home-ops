@@ -95,7 +95,7 @@ spec:
     route:
       main:
         hostnames:
-          - bazarr.${SECRET_DOMAIN}
+          - ${APP_URL}
         parentRefs:
           - name: internal
             namespace: envoy-system

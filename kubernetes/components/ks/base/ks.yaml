@@ -19,6 +19,8 @@ spec:
   interval: 30m
   timeout: 3m
   postBuild:
+    substitute:
+      APP_URL: APP.${SECRET_DOMAIN}
     substituteFrom:
       - kind: ConfigMap
         name: APP-app-vars

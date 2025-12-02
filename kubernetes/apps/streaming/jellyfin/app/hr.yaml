@@ -76,7 +76,7 @@ spec:
     route:
       main:
         hostnames:
-          - jellyfin.${SECRET_DOMAIN}
+          - ${APP_URL}
           - tv.${SECRET_DOMAIN}
         rules:
           - backendRefs:

@@ -68,7 +68,7 @@ spec:
     route:
       main:
         hostnames:
-          - filebrowser.${SECRET_DOMAIN}
+          - ${APP_URL}
         parentRefs:
           - name: internal
             namespace: envoy-system
@@ -102,7 +102,7 @@ spec:
           config.yaml: |
             server:
               port: 8080
-              externalUrl: https://filebrowser.${SECRET_DOMAIN}
+              externalUrl: https://${APP_URL}
               internalUrl: http://filebrowser.media.svc.cluster.local:8080
               cacheDir: /cache
               database: /home/filebrowser/database/filebrowser.db

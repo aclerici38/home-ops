@@ -76,7 +76,7 @@ spec:
     route:
       main:
         hostnames:
-          - atuin.${SECRET_DOMAIN}
+          - ${APP_URL}
         parentRefs:
           - name: internal
             namespace: envoy-system
