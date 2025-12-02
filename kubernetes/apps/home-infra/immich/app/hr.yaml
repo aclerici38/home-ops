@@ -42,7 +42,6 @@ spec:
               tag: v2.3.1@sha256:f8d06a32b1b2a81053d78e40bf8e35236b9faefb5c3903ce9ca8712c9ed78445
             env:
               IMMICH_LOG_LEVEL: log
-              # IMMICH_WORKERS_INCLUDE: api
               REDIS_HOSTNAME: dragonfly-db.database.svc.cluster.local
               REDIS_DBINDEX: 2
               IMMICH_TELEMETRY_INCLUDE: all
