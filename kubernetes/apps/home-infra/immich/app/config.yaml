@@ -88,7 +88,7 @@ spec:
           storageTemplate:
             enabled: true
             hashVerificationEnabled: true
-            template: "{{album}}/{{y}}/{{MM}}/{{filename}}"
+            template: template: {{ printf "%q" "{{album}}/{{y}}/{{MM}}/{{filename}}" }}
           
           passwordLogin:
             enabled: false
