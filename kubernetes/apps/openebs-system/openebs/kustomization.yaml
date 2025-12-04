@@ -6,6 +6,6 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=openebs
-      - RESOURCES=resources
+      - RESOURCES=zfs-volumes
 components:
   - ../../../components/ks/app-resources
