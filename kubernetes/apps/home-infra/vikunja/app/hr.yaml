@@ -121,8 +121,8 @@ spec:
                 port: *port
     persistence:
       config:
-        type: configMap
-        name: vikunja
+        type: secret
+        name: vikunja-config
         globalMounts:
           - path: /etc/vikunja/config.yml
             subPath: config.yml
@@ -136,19 +136,3 @@ spec:
         path: /files/vikunja
         globalMounts:
           - path: *path
-    configMaps:
-      config:
-        data:
-          config.yml: |
-            auth:
-              local:
-                enabled: false
-              openid:
-                enabled: true
-                redirecturl: https://tasks.${SECRET_DOMAIN}/auth/openid
-                providers:
-                  - name: Pocket ID
-                    authurl: https://id.${SECRET_DOMAIN}
-                    clientid: ${VIKUNJA_CLIENT_ID}
-                    clientsecret: ${VIKUNJA_CLIENT_SECRET}
-                    scope: openid profile email
