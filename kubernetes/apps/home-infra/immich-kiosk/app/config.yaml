@@ -1,0 +1,25 @@
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/external-secrets.io/externalsecret_v1.json
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: immich-kiosk-config
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    template:
+      data:
+        config.yaml: |
+          weather:
+            - name: {{ .HOME_CITY }}
+              lat: {{ .HOME_LAT }}
+              lon: {{ .HOME_LON }}
+              api: {{ .WEATHER_API_KEY }}
+              unit: imperial
+              lang: en
+              default: true
+  dataFrom:
+    - extract:
+        key: immich-kiosk

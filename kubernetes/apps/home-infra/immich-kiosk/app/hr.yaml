@@ -96,3 +96,10 @@ spec:
           - backendRefs:
             - identifier: main
               port: *port
+    persistence:
+      config:
+        type: secret
+        name: immich-kiosk-config
+        globalMounts:
+          - path: /config/config.yaml
+            subPath: config.yaml
