@@ -5,7 +5,7 @@ kind: Kustomization
 configMapGenerator:
   - name: APP-app-vars
     literals:
-      - APP=dragonfly-operator
+      - APP=dragonfly
       - RESOURCES=cluster
 components:
   - ../../../components/ks/app-resources
