@@ -5,6 +5,7 @@ kind: Kustomization
 configMapGenerator:
   - name: APP-app-vars
     literals:
-      - APP=node-feature-discovery-rules
+      - APP=dragonfly
+      - RESOURCES=cluster
 components:
-  - ../../../components/ks/resources
+  - ../../../components/ks/app-resources

@@ -6,11 +6,12 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=cloudnative-pg
+      - RESOURCES=catalogs
 patches:
   - path: ./patch.yaml
     target:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io
 components:
-  - ../../../components/ks/app
+  - ../../../components/ks/app-resources
   - ../../../components/kustomize/external-secret

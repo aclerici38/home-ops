@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+replacements:
+  - source:
+      kind: ConfigMap
+      name: APP-app-vars
+      fieldPath: data.APP
+    targets:
+      - select:
+          kind: ConfigMap
+          name: APP-app-vars
+        fieldPaths:
+          - metadata.name
+        options:
+          delimiter: '-'
+          index: 0
+configurations:
+  - ./kustomizeconfig.yaml
+labels:
+  - pairs:
+      kustomize.dormammu/app-vars: "true"
+      
