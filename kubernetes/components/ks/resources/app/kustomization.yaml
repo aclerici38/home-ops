@@ -20,3 +20,11 @@ replacements:
       - select: *ks
         fieldPaths:
           - metadata.name
+      - select: *ks
+        fieldPaths:
+          - spec.commonMetadata.labels.app\.kubernetes\.io/name
+          - spec.postBuild.substituteFrom.0.name
+        options:
+          delimiter: '-'
+          index: 0
+          create: true

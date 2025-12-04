@@ -8,14 +8,6 @@
         kind: Kustomization
         group: kustomize.toolkit.fluxcd.io
       fieldPaths:
-        - spec.commonMetadata.labels.app\.kubernetes\.io/name
-        - spec.postBuild.substituteFrom.0.name
-      options:
-        delimiter: '-'
-        index: 0
-        create: true
-    - select: *ks
-      fieldPaths:
         - spec.postBuild.substitute.APP_URL
       options:
         delimiter: .

@@ -12,14 +12,6 @@ patches:
       labelSelector: "components.dormammu/ks=app-resources"
 replacements:
   - path: ../common/replacements.yaml
-  - sourceValue: -RESOURCES
-    targets:
-      - select: *ks
-        fieldPaths:
-          - metadata.name
-        options:
-          delimiter: APP
-          index: 1
   - source:
       kind: ConfigMap
       name: APP-app-vars
@@ -37,3 +29,21 @@ replacements:
         options:
           delimiter: '-'
           index: 1
+  - source:
+      kind: ConfigMap
+      name: APP-app-vars
+      fieldPath: data.APP
+    targets:
+      - select: *ks
+        fieldPaths:
+          - spec.dependsOn.0.name
+        options:
+          create: true
+      - select: *ks
+        fieldPaths:
+          - spec.commonMetadata.labels.app\.kubernetes\.io/name
+          - spec.postBuild.substituteFrom.0.name
+        options:
+          delimiter: '-'
+          index: 0
+          create: true
