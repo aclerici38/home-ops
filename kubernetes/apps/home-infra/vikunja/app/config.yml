@@ -24,4 +24,7 @@ spec:
                   clientid: {{ .CLIENT_ID }}
                   clientsecret: {{ .CLIENT_SECRET }}
                   scope: openid profile email
+  dataFrom:
+    - extract:
+        key: vikunja
                     
