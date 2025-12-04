@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+resources:
+  - ./ks.yaml
+patches:
+  - path: ../common/ks.yaml
+    target: &ks
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
+      labelSelector: "components.dormammu/ks=app"
+replacements:
+  - path: ../common/replacements.yaml
+  - source:
+      kind: ConfigMap
+      name: APP-app-vars
+      fieldPath: data.APP
+    targets:
+      - select: *ks
+        fieldPaths:
+          - metadata.name

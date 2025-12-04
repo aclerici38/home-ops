@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+resources:
+  - ./ks.yaml
+patches:
+  - path: ../common/ks.yaml
+    target: &ks
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
+      labelSelector: "components.dormammu/ks=app-resources"
+replacements:
+  - path: ../common/replacements.yaml
+  - sourceValue: -RESOURCES
+    targets:
+      - select: *ks
+        fieldPaths:
+          - metadata.name
+        options:
+          delimiter: APP
+          index: 1
+  - source:
+      kind: ConfigMap
+      name: APP-app-vars
+      fieldPath: data.RESOURCES
+    targets:
+      - select: *ks
+        fieldPaths:
+          - spec.path
+        options:
+          delimiter: /
+          index: 5
+      - select: *ks
+        fieldPaths:
+          - metadata.name
+        options:
+          delimiter: '-'
+          index: 1

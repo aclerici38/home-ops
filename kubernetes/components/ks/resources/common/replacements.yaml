@@ -1,0 +1,29 @@
+---
+- source:
+    kind: ConfigMap
+    name: APP-app-vars
+    fieldPath: data.APP
+  targets:
+    - select: &ks
+        kind: Kustomization
+        group: kustomize.toolkit.fluxcd.io
+      fieldPaths:
+        - spec.commonMetadata.labels.app\.kubernetes\.io/name
+        - spec.postBuild.substituteFrom.0.name
+        - spec.postBuild.substitute.APP_URL
+      options:
+        delimiter: .
+        index: 0
+        create: true
+    - select: *ks
+      fieldPaths:
+        - spec.path
+      options:
+        delimiter: /
+        index: 4
+    - select: *ks
+      fieldPaths:
+        - metadata.name
+      options:
+        delimiter: '-'
+        index: 0
