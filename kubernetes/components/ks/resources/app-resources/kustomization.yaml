@@ -41,6 +41,7 @@ replacements:
           create: true
       - select: *ks
         fieldPaths:
+          - metadata.name
           - spec.commonMetadata.labels.app\.kubernetes\.io/name
           - spec.postBuild.substituteFrom.0.name
         options:
