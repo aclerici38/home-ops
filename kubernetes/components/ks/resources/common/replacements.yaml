@@ -10,7 +10,6 @@
       fieldPaths:
         - spec.commonMetadata.labels.app\.kubernetes\.io/name
         - spec.postBuild.substituteFrom.0.name
-        - spec.postBuild.substitute.APP_URL
       options:
         delimiter: '-'
         index: 0
