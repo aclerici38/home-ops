@@ -7,7 +7,17 @@ configMapGenerator:
     literals:
       - APP=external-dns
 patches:
-  - path: ./patch.yaml
+  - patch: |-
+      - op: add
+        path: /spec/dependsOn/-
+        value:
+          name: external-secrets-stores
+          namespace: cluster-infra
+      - op: add
+        path: /spec/dependsOn/-
+        value:
+          - name: cert-manager
+            namespace: cluster-infra
     target:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io
