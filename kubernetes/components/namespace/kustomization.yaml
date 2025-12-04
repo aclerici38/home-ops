@@ -37,7 +37,7 @@ replacements:
           create: true
       - select:
           kind: ConfigMap
-          labelSelector: components.dormammu/ks
+          labelSelector: kustomize.dormammu/app-vars
         fieldPaths:
           - data.NS
         options:

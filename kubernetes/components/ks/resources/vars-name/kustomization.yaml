@@ -18,3 +18,7 @@ replacements:
           index: 0
 configurations:
   - ./kustomizeconfig.yaml
+labels:
+  - pairs:
+      kustomize.dormammu/app-vars: "true"
+      
