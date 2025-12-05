@@ -50,7 +50,6 @@ spec:
               repository: ghcr.io/twin/gatus
               tag: v5.33.0@sha256:bf249f4d7cf69e825457ade2ebc3d11168d73527ef1657a653119a0d9da97a4a
             env:
-              GATUS_DELAY_START_SECONDS: 10
               GATUS_CONFIG_PATH: /config
               PG_URI:
                 secretKeyRef:
@@ -65,15 +64,6 @@ spec:
                   name: gatus
                   key: CLIENT_SECRET
             probes:
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    port: &port 8080
-                    path: /health
-                  initialDelaySeconds: 10
-                  successThreshold: 1
               readiness: &probes
                 enabled: true
                 custom: true
@@ -152,8 +142,11 @@ spec:
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml
-      tmpfs:
-        type: emptyDir
+      cache:
+        type: persistentVolumeClaim
+        storageClass: ceph-filesystem
+        size: 1Gi
+        accessMode: ReadWriteMany
         globalMounts:
           - path: /config
     configMaps:
