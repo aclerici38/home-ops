@@ -103,7 +103,7 @@ spec:
                 drop:
                   - ALL
     service:
-      apartment:
+      house:
         controller: blocky
         type: LoadBalancer
         annotations:
@@ -223,7 +223,7 @@ spec:
               connectionCooldown: 60s
             
             queryLog:
-              type: postgresql
+              type: timescale
               logRetentionDays: 90
               creationAttempts: 5
               creationCooldown: 60s
