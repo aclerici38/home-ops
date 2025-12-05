@@ -153,6 +153,7 @@ spec:
           config.yaml: |-
             connectivity:
               checker:
+                target: 172.17.0.10:53
                 interval: 1m
             
             endpoints:
