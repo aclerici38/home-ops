@@ -86,6 +86,9 @@ spec:
             - identifier: main
               port: *port
       kobo:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            conditions: ["[STATUS] == 404"]
         hostnames:
           - kobo.${SECRET_DOMAIN}
         parentRefs:

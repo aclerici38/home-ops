@@ -264,6 +264,9 @@ spec:
             - identifier: opencloud
               port: *port
       wopi:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            conditions: ["[STATUS] == 404"]
         hostnames:
           - wopi.${SECRET_DOMAIN}
         parentRefs:

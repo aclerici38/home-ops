@@ -73,6 +73,9 @@ spec:
             port: *port
     route:
       main:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            url: https://${APP_URL}/healthz
         hostnames:
           - ${APP_URL}
         parentRefs:
