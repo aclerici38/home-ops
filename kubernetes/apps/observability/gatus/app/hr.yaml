@@ -64,7 +64,7 @@ spec:
                 secretKeyRef:
                   name: gatus
                   key: CLIENT_SECRET
-            probesZ
+            probes:
               readiness: &probes
                 enabled: true
                 custom: true
