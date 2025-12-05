@@ -7,7 +7,7 @@ configMapGenerator:
     literals:
       - APP=blocky
 patches:
-  - patch: ./patch.yaml
+  - path: ./patch.yaml
     target:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io
