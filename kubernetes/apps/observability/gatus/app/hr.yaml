@@ -143,6 +143,10 @@ spec:
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /config
     configMaps:
       config:
         data:
