@@ -185,7 +185,7 @@ spec:
             
             security:
               oidc:
-                issuer-url: https://id/${SECRET_DOMAIN}
+                issuer-url: https://id.${SECRET_DOMAIN}
                 redirect-url: https://${APP_URL}/oidc/authorization-code/callback
                 client-id: $${CLIENT_ID}
                 client-secret: $${CLIENT_SECRET}
