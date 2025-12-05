@@ -150,7 +150,7 @@ spec:
     configMaps:
       config:
         data:
-          config.yaml: |
+          config.yaml: |-
             connectivity:
               checker:
                 target: 1.1.1.1:53
@@ -190,7 +190,7 @@ spec:
             security:
               oidc:
                 issuer-url: https://id.${SECRET_DOMAIN}
-                redirect-url: https://${APP_URL}/oidc/authorization-code/callback
+                redirect-url: https://${APP_URL}/authorization-code/callback
                 client-id: $${CLIENT_ID}
                 client-secret: $${CLIENT_SECRET}
                 scopes: [openid]
