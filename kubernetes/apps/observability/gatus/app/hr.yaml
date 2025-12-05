@@ -70,7 +70,7 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    port: *port
+                    port: &port 8080
                     path: /health
               liveness: *probes
             resources:
