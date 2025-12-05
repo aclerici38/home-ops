@@ -4,6 +4,12 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: external
+  metadata:
+    annotations:
+      gatus.home-operations.com/endpoint: |-
+        client:
+          dns-resolver: tcp://1.1.1.1:53
+        group: external
 spec:
   gatewayClassName: envoy
   infrastructure:

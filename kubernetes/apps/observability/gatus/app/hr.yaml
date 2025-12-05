@@ -1,0 +1,198 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gatus
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      gatus:
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile: { type: RuntimeDefault }
+        initContainers:
+          sidecar:
+            restartPolicy: Always
+            image:
+              repository: ghcr.io/home-operations/gatus-sidecar
+              tag: 0.0.12@sha256:83bf82d422e9b0529a8076cb584d557a12158d9d8a4c373b4d27afcb87a17569
+            args:
+              - --auto-httproute
+              - --enable-httproute
+              - --enable-service
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                cpu: 64Mi
+        containers:
+          gatus:
+            image:
+              repository: ghcr.io/twin/gatus
+              tag: v5.33.0@sha256:bf249f4d7cf69e825457ade2ebc3d11168d73527ef1657a653119a0d9da97a4a
+            env:
+              GATUS_DELAY_START_SECONDS: 5
+              GATUS_CONFIG_PATH: /config
+              PG_URI:
+                secretKeyRef:
+                  name: gatus-db-app
+                  key: uri
+              CLIENT_ID:
+                secretKeyRef:
+                  name: gatus
+                  key: CLIENT_ID
+              CLIENT_SECRET:
+                secretKeyRef:
+                  name: gatus
+                  key: CLIENT_SECRET
+            probes:
+              readiness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 8080
+                    path: /health
+              liveness: *probes
+            resources:
+              requests:
+                cpu: 50m
+                memory: 100Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      gatus:
+        controller: gatus
+        ports:
+          http:
+            port: *port
+    serviceMonitor:
+      gatus:
+        serviceName: gatus
+        endpoints:
+          - port: http
+    route:
+      gatus:
+        annotations:
+          gatus.home-operations.com/enabled: "false"
+        hostnames:
+          - ${APP_URL}
+        parentRefs:
+          - name: external
+            namespace: envoy-system
+    rbac:
+      roles:
+        gatus:
+          type: ClusterRole
+          rules:
+            - apiGroups:
+                - ""
+              resources:
+                - services
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - gateway.networking.k8s.io
+              resources:
+                - gateways
+                - httproutes
+              verbs:
+                - get
+                - watch
+                - list
+      bindings:
+        gatus:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: gatus
+          subjects:
+            - identifier: gatus
+    serviceAccount:
+      gatus: {} 
+    persistence:
+      config:
+        type: configMap
+        name: gatus
+        globalMounts:
+          - path: /config/config.yaml
+            subPath: config.yaml
+    configMaps:
+      config:
+        data:
+          config.yaml: |
+            connectivity:
+              checker:
+                target: 1.1.1.1:53
+                interval: 1m
+            
+            endpoints:
+              - name: Cloudflare
+                group: connectivity
+                url: icmp://1.1.1.1
+                interval: 1m
+                conditions:
+                  - "[CONNECTED] == true"
+                  
+              - name: Google-DNS
+                group: connectivity
+                url: icmp://google.com
+                interval: 1m
+                conditions:
+                  - "[CONNECTED] == true"
+            
+              - name: Google
+                group: connectivity
+                url: icmp://8.8.8.8
+                interval: 1m
+                conditions:
+                  - "[CONNECTED] == true"
+            
+              - name: Quad9
+                group: connectivity
+                url: icmp://9.9.9.9
+                interval: 1m
+                conditions:
+                  - "[CONNECTED] == true"
+            
+            metrics: true
+            
+            security:
+              oidc:
+                issuer-url: https://id/${SECRET_DOMAIN}
+                redirect-url: https://${APP_URL}/oidc/authorization-code/callback
+                client-id: $${CLIENT_ID}
+                client-secret: $${CLIENT_SECRET}
+                scopes: [openid]
+                
+            storage:
+              type: postgres
+              caching: true
+              path: $${PG_URI}
+    

@@ -4,6 +4,10 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: internal
+  metadata:
+    annotations:
+      gatus.home-operations.com/endpoint: |-
+        group: internal
 spec:
   gatewayClassName: envoy
   infrastructure:
