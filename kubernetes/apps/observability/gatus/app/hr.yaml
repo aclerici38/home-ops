@@ -83,8 +83,6 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities:
-                add:
-                  - NET_RAW
                 drop:
                   - ALL
     service:
@@ -155,35 +153,33 @@ spec:
           config.yaml: |-
             connectivity:
               checker:
-                target: 1.1.1.1:53
                 interval: 1m
             
             endpoints:
               - name: Cloudflare
                 group: connectivity
-                url: icmp://1.1.1.1
-                interval: 1m
-                conditions:
-                  - "[CONNECTED] == true"
-                  
-              - name: Google-DNS
-                group: connectivity
-                url: icmp://google.com
+                url: tcp://1.1.1.1:53
                 interval: 1m
                 conditions:
                   - "[CONNECTED] == true"
             
-              - name: Google
+              - name: Google-DNS
                 group: connectivity
-                url: icmp://8.8.8.8
+                url: tcp://8.8.8.8:53
                 interval: 1m
                 conditions:
                   - "[CONNECTED] == true"
             
               - name: Quad9
                 group: connectivity
-                url: icmp://9.9.9.9
+                url: tcp://9.9.9.9:53
                 interval: 1m
+                conditions:
+                  - "[CONNECTED] == true"
+                  
+              - name: Google-HTTPS
+                group: connectivity
+                url: tcp://google.com:443
                 conditions:
                   - "[CONNECTED] == true"
             
