@@ -78,19 +78,20 @@ spec:
                 password: $${SMB_PASS}
             
             global:
+              - "ea support = yes"
               - "vfs objects = catia fruit streams_xattr"
               - "fruit:aapl = yes"
-              - "fruit:time machine = yes"
               - "fruit:metadata = stream"
-              - "fruit:locking = netatalk"
-              - "fruit:resource = file"
+              - "fruit:model = MacSamba"
+              - "fruit:veto_appledouble = no"
+              - "fruit:nfs_aces = no"
               - "fruit:posix_rename = yes"
               - "fruit:zero_file_id = yes"
               - "fruit:wipe_intentionally_left_blank_rfork = yes"
-              - "aio read size = 1"
-              - "aio write size = 1"
+              - "fruit:delete_empty_adfiles = yes"
+              - "fruit:time machine = yes"
               - "spotlight = no"
-              - "server min protocol = SMB3"
+              - "server min protocol = SMB2"
               - "server max protocol = SMB3"
               # Allow use of LB IP
               - "host msdfs = no"
