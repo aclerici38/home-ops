@@ -23,9 +23,12 @@ spec:
   superuserSecret:
     name: cloudnative-pg
   enableSuperuserAccess: true
-  monitoring:
-    enablePodMonitor: true
   postgresql:
+    synchronous:
+      method: any
+      number: 1
+      dataDurability: preferred
+      failoverQuorum: true
     parameters:
       shared_buffers: "${CNPG_BUFFERS:=512MB}"
       work_mem: "${CNPG_WORK_MEM:=8MB}"
