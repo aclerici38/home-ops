@@ -28,6 +28,7 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
             runAsGroup: 1000
+            fsGroup: 1000
             seccompProfile: { type: RuntimeDefault }
         initContainers:
           sidecar:
@@ -44,6 +45,12 @@ spec:
                 cpu: 10m
               limits:
                 cpu: 64Mi
+            securityContext: &sec
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
         containers:
           gatus:
             image:
@@ -79,12 +86,7 @@ spec:
                 memory: 100Mi
               limits:
                 memory: 512Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
+            securityContext: *sec
     service:
       gatus:
         controller: gatus
