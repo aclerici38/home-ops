@@ -5,7 +5,7 @@ kind: Kustomization
 configMapGenerator:
   - name: APP-app-vars
     literals:
-      - APP=openebs
+      - APP=tuppr
       - RESOURCES=upgrades
 components:
   - ../../../components/ks/app-resources
