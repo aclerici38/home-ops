@@ -42,6 +42,8 @@ spec:
               - house.${SECRET_DOMAIN}
               - --provider
               - random
+              - --proxied
+              - "false"
             env:
               ACCOUNT_TOKEN:
                 secretKeyRef:
