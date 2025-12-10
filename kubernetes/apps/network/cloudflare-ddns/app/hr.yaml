@@ -38,10 +38,8 @@ spec:
             args:
               - --zone-name=${SECRET_DOMAIN}
               - --record-name=house.${SECRET_DOMAIN}
-              - --provider=random
               - --proxied=false
               - --create-missing=true
-              - --ticker=10s
             env:
               ACCOUNT_TOKEN:
                 secretKeyRef:
