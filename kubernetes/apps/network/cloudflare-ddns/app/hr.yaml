@@ -36,18 +36,12 @@ spec:
               repository: docker.io/ant385525/cloudflare-ddns
               tag: latest
             args:
-              - --zone-name
-              - ${SECRET_DOMAIN}
-              - --record-name
-              - house.${SECRET_DOMAIN}
-              - --provider
-              - random
-              - --proxied
-              - "false"
-              - --create-missing
-              - "true"
-              - --ticker
-              - 10s
+              - --zone-name=${SECRET_DOMAIN}
+              - --record-name=house.${SECRET_DOMAIN}
+              - --provider=random
+              - --proxied=false
+              - --create-missing=true
+              - --ticker=10s
             env:
               ACCOUNT_TOKEN:
                 secretKeyRef:
