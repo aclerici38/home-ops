@@ -8,3 +8,9 @@ machine:
     stableHostname: true
     apidCheckExtKeyUsage: true
     diskQuotaSupport: true
+    kubernetesTalosAPIAccess:
+      allowedKubernetesNamespaces:
+        - system-upgrade
+      allowedRoles:
+        - os:admin
+      enabled: true
