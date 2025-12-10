@@ -1,0 +1,102 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cloudflare-ddns
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      cloudflare-ddns:
+        strategy: RollingUpdate
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          cloudflare-ddns:
+            image:
+              repository: ghcr.io/larivierec/cloudflare-ddns
+              tag: v1.1.2@sha256:770dd8d8aa1093e5b50654cbd6f0a03f2d18e69aba9fa3c14c526c435e352433
+            args:
+              - --zone-name
+              - ${SECRET_DOMAIN}
+              - --record-name
+              - house.${SECRET_DOMAIN}
+              - --provider
+              - random
+            env:
+              ACCOUNT_TOKEN:
+                secretKeyRef:
+                  name: cloudflare
+                  key: CLOUDFLARE_API_TOKEN
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health/alive
+                    port: &healthPort 8080
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health/ready
+                    port: *healthPort
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                memory: 64Mi
+                cpu: 10m
+              limits:
+                memory: 128Mi
+    service:
+      cloudflare-ddns:
+        controller: cloudflare-ddns
+        ports:
+          http:
+            port: &port 9000
+          health:
+            port: *healthPort
+    serviceMonitor:
+      cloudflare-ddns:
+        serviceName: cloudflare-ddns
+        endpoints:
+          - port: health
+            scheme: http
+    route:
+      cloudflare-ddns:
+        hostnames:
+          - ddns.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: envoy-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: main
+                port: *port
