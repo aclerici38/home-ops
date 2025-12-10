@@ -33,8 +33,8 @@ spec:
         containers:
           cloudflare-ddns:
             image:
-              repository: ghcr.io/larivierec/cloudflare-ddns
-              tag: v1.1.2@sha256:770dd8d8aa1093e5b50654cbd6f0a03f2d18e69aba9fa3c14c526c435e352433
+              repository: docker.io/ant385525/cloudflare-ddns
+              tag: latest
             args:
               - --zone-name
               - ${SECRET_DOMAIN}
@@ -88,6 +88,7 @@ spec:
         endpoints:
           - port: health
             scheme: http
+    # Exposes some API endpoints to delete/update/init records
     route:
       cloudflare-ddns:
         hostnames:
