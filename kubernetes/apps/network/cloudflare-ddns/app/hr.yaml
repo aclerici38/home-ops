@@ -44,6 +44,8 @@ spec:
               - random
               - --proxied
               - "false"
+              - --ticker
+              - 10s
             env:
               ACCOUNT_TOKEN:
                 secretKeyRef:
