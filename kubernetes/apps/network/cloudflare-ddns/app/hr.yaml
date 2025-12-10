@@ -44,6 +44,8 @@ spec:
               - random
               - --proxied
               - "false"
+              - --create-missing
+              - "true"
               - --ticker
               - 10s
             env:
