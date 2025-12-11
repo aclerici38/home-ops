@@ -23,3 +23,7 @@ spec:
       name: documentdb_core
     - ensure: present
       name: documentdb
+  schemas:
+    - name: documentdb_api
+      ensure: present
+      owner: app
