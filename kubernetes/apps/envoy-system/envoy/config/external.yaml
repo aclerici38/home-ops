@@ -6,8 +6,6 @@ metadata:
   name: external
   annotations:
     gatus.home-operations.com/endpoint: |-
-      client:
-        dns-resolver: udp://1.1.1.1:53
       group: external
 spec:
   gatewayClassName: envoy
