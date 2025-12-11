@@ -19,6 +19,8 @@ spec:
               - name: app
                 inRoles:
                   - documentdb_admin_role
+                passwordSecret:
+                  name: app-db-user
           postgresUID: 999
           postgresGID: 999
           postgresql:
