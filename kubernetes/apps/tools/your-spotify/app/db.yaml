@@ -10,6 +10,8 @@ spec:
     name: your-spotify-db
   extensions:
     - ensure: present
-      name: documentdb
-    - ensure: present
       name: pg_cron
+    - ensure: present
+      name: documentdb_core
+    - ensure: present
+      name: documentdb
