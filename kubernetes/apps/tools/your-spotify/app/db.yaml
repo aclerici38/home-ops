@@ -27,3 +27,6 @@ spec:
     - name: documentdb_api
       ensure: present
       owner: app
+    - name: documentdb_core
+      ensure: present
+      owner: app
