@@ -24,6 +24,7 @@ spec:
               repository: ghcr.io/ferretdb/ferretdb
               tag: 2.7.0@sha256:5706414241eb84f0515512c37b46db0f1b1eac9e5ceb7e4c2523211c184b1985
             env:
+              FERRETDB_AUTH: false
               FERRETDB_POSTGRESQL_URL:
                 secretKeyRef:
                   name: your-spotify-db-app
