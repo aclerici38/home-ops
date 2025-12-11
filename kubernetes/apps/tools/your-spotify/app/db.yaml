@@ -33,3 +33,6 @@ spec:
     - name: documentdb_api_internal
       ensure: present
       owner: app
+    - name: documentdb_api_catalog
+      ensure: present
+      owner: app
