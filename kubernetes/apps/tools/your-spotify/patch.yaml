@@ -27,8 +27,8 @@ spec:
           postgresql:
             pg_hba:
               # docuentdb extension tries to connect to db via localhost
-              - local   app      app                             trust
-              - host    app      app      127.0.0.1/32           trust
+              - local   all      all                      trust
+              - host    all      all      127.0.0.1/32    trust
             shared_preload_libraries:
               - pg_cron
               - pg_documentdb_core
