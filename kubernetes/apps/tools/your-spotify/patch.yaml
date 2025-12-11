@@ -14,6 +14,11 @@ spec:
         metadata:
           name: patch
         spec:
+          managed:
+            roles:
+              - name: app
+                inRoles:
+                  - documentdb_admin_role
           postgresUID: 999
           postgresGID: 999
           postgresql:
