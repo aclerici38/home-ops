@@ -30,3 +30,6 @@ spec:
     - name: documentdb_core
       ensure: present
       owner: app
+    - name: documentdb_api_internal
+      ensure: present
+      owner: app
