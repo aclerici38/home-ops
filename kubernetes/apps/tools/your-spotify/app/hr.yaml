@@ -34,6 +34,16 @@ spec:
                 memory: 256Mi
               limits:
                 memory: 512Mi
+            probes:
+              liveness: &probe
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - /ferretdb
+                      - ping
+              readiness: *probe
         containers:
           your-spotify-api:
             image:
@@ -43,7 +53,7 @@ spec:
               API_ENDPOINT: &api https://spotify-api.${SECRET_DOMAIN}
               CLIENT_ENDPOINT: https://spotify.${SECRET_DOMAIN}
               # ferretdb sidecar
-              MONGO_ENDPOINT: mongodb://127.0.0.1:27017/app
+              MONGO_ENDPOINT: mongodb://127.0.0.1:27017/
               SPOTIFY_PUBLIC:
                 secretKeyRef:
                   name: your-spotify
