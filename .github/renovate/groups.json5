@@ -114,6 +114,15 @@
       },
     },
     {
+      description: "CNPG Postgres Containers group",
+      groupName: "CNPG-postgres-containers",
+      matchPackagePatterns: ["cloudnative-pg/postgresql"],
+      matchDatasources: ["docker", "github-releases", "helm"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+    },
+    {
       description: "Streamystats group",
       groupName: "Streamystats",
       matchPackagePatterns: ["streamystats-v2-nextjs", "streamystats-v2-job-server", "streamystats-v2-migrate"],

@@ -1,0 +1,136 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: your-spotify
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+  upgrade:
+    timeout: 2m
+  values:
+    controllers:
+      api:
+        initContainers:
+          ferretdb:
+            restartPolicy: Always
+            image:
+              repository: ghcr.io/ferretdb/ferretdb
+              tag: 2.7.0@sha256:5706414241eb84f0515512c37b46db0f1b1eac9e5ceb7e4c2523211c184b1985
+            env:
+              FERRETDB_POSTGRESQL_URL:
+                secretKeyRef:
+                  name: your-spotify-db-app
+                  key: uri
+            resources:
+              requests: 
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
+        containers:
+          your-spotify-api:
+            image:
+              repository: ghcr.io/yooooomi/your_spotify_server
+              tag: 1.15.0@sha256:3679ea122e2083703a3f8c1199acf4b1bb81c81da33334bdcaf478bfbbf36e9b
+            env:
+              API_ENDPOINT: &api https://spotify-api.${SECRET_DOMAIN}
+              CLIENT_ENDPOINT: https://spotify.${SECRET_DOMAIN}
+              # ferretdb sidecar
+              MONGO_ENDPOINT: mongodb://127.0.0.1:27017
+              SPOTIFY_PUBLIC:
+                secretKeyRef:
+                  name: your-spotify
+                  key: CLIENT_ID
+              SPOTIFY_SECRET:
+                secretKeyRef:
+                  name: your-spotify
+                  key: CLIENT_SECRET
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+              readiness:
+                enabled: true
+                type: HTTP
+            resources:
+              requests:
+                cpu: 10m
+                memory: 20Mi
+              limits:
+                memory: 512Mi
+            securityContext: &sec
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities: { drop: ["ALL"] }
+      frontend:
+        containers:
+          your-spotify-frontend:
+            image:
+              repository: ghcr.io/yooooomi/your_spotify_client
+              tag: 1.15.0@sha256:46a6fad7df40858b87bf5ac80efb8ff4d604aa63683245d21f6fdfcb0ea083e5
+            env:
+              API_ENDPOINT: *api
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+              readiness:
+                enabled: true
+                type: HTTP
+            resources:
+              requests:
+                cpu: 10m
+                memory: 20Mi
+              limits:
+                memory: 100Mi
+            securityContext: *sec
+    defaultPodOptions:
+      hostUsers: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      api:
+        controller: api
+        ports:
+          http:
+            port: &apiPort 8080
+      frontend:
+        controller: frontend
+        ports:
+          http:
+            port: &webPort 3000
+    route:
+      frontend:
+        hostnames:
+          - spotify.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: envoy-system
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: frontend
+              port: *webPort
+      backend:
+        hostnames:
+          - spotify-api.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: envoy-system
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: api
+              port: *apiPort

@@ -1,0 +1,15 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: your-spotify
+spec:
+  name: app
+  owner: app
+  cluster:
+    name: your-spotify-db
+  extensions:
+    - ensure: present
+      name: documentdb
+    - ensure: present
+      name: pg_cron
