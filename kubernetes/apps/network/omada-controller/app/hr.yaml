@@ -146,8 +146,9 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: omada-controller
-                port: *port
+            - group: gateway.envoyproxy.io
+              kind: Backend
+              name: omada-controller
     persistence:
       tmpfs:
         type: emptyDir
