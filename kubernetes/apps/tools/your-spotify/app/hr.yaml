@@ -78,7 +78,7 @@ spec:
                 memory: 512Mi
             securityContext: &sec
               allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
+              readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
       frontend:
         containers:
@@ -101,7 +101,9 @@ spec:
                 memory: 20Mi
               limits:
                 memory: 100Mi
-            securityContext: *sec
+            securityContext:
+              <<: *sec
+              readOnlyRootFilesystem: false
     defaultPodOptions:
       hostUsers: false
       securityContext:
@@ -144,13 +146,4 @@ spec:
         rules:
           - backendRefs:
             - identifier: api
-              port: *apiPort
-    persistence:
-      build:
-        type: image
-        image: *img
-        advancedMounts:
-          frontend:
-            your-spotify-frontend:
-              - path: /app/apps/client/build
-                subPath: app/apps/client/build     
+              port: *apiPort   
