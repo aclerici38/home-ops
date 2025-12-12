@@ -17,6 +17,7 @@ spec:
           managed:
             roles:
               - name: app
+                login: true
                 inRoles:
                   - documentdb_admin_role
           postgresUID: 999
