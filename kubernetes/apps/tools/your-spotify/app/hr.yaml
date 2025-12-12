@@ -89,8 +89,8 @@ spec:
             command:
               - cp
               - -a
-              - /build/apps/client/build/*
-              - /apps/client/build
+              - /build/app/apps/client/build/*
+              - /app/apps/client/build
             securityContext: *sec
         containers:
           your-spotify-frontend:
@@ -163,7 +163,7 @@ spec:
                 subPath: tmp
           frontend:
             your-spotify-frontend:
-              - path: /apps/client/build
+              - path: /app/apps/client/build
                 subPath: build
       build:
         type: image
