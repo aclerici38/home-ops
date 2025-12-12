@@ -58,13 +58,13 @@ spec:
           omada-controller:
             image:
               repository: docker.io/mbentley/omada-controller
-              tag: 5.15.20.20@sha256:0953e1e5104d9244634b497a501715c1175aed15ed8dabbb29a6eeff93193bb6
+              tag: 6.0.0.25@sha256:c9df80f9286188301f43977ef3fa8fb83791143539730690fcf3d352da090da7
             env:
               ROOTLESS: true
               SHOW_SERVER_LOGS: "true"
               MONGO_EXTERNAL: true
               EAP_MONGOD_URI: mongodb://127.0.0.1:27017/
-              MANAGE_HTTP_PORT: "8088" # Must be set on install
+              MANAGE_HTTP_PORT: "8080" # Must be set on install
               MANAGE_HTTPS_PORT: &port "443" # Must be set on install
               PORTAL_HTTP_PORT: "8888"
               PORTAL_HTTPS_PORT: "8843"
@@ -108,7 +108,7 @@ spec:
           lbipam.cilium.io/ips: 10.38.55.10
         ports:
           manage-http:
-            port: 8088
+            port: 8080
           manage-https:
             port: *port
           portal-http:
