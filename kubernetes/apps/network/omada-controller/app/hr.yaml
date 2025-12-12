@@ -149,6 +149,7 @@ spec:
             - group: gateway.envoyproxy.io
               kind: Backend
               name: omada-controller
+              port: *port
     persistence:
       tmpfs:
         type: emptyDir
