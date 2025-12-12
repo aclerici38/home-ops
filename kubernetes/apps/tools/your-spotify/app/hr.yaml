@@ -89,7 +89,7 @@ spec:
             command:
               - cp
               - -a
-              - /build/app/apps/client/build/*
+              - /build/app/apps/client/build/.
               - /app/apps/client/build
             securityContext: *sec
         containers:
