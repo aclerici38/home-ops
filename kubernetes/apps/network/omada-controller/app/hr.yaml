@@ -103,11 +103,6 @@ spec:
     service:
       omada-controller:
         controller: omada-controller
-        ports:
-          http:
-            port: *port
-      controller:
-        controller: omada-controller
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 10.38.55.10
