@@ -152,6 +152,5 @@ spec:
         advancedMounts:
           frontend:
             your-spotify-frontend:
-              - path: &path /app/apps/client/build
-                subPath: *path
-                
+              - path: /app/apps/client/build
+                subPath: app/apps/client/build     
