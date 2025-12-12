@@ -8,6 +8,7 @@ configMapGenerator:
       - APP=omada-controller
       - CNPG_MAJOR_VERSION=17 # documentdb only supports pg17 for now, no imageVolume extensions
       - CNPG_CATALOG_NAME=documentdb
+      - CNPG_POOLMODE=session
 patches:
   - path: ./patch.yaml
     target:
