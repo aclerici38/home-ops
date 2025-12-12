@@ -106,6 +106,7 @@ spec:
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 10.38.55.10
+          coredns.io/hostname: ${APP_URL}
         ports:
           manage-http:
             port: 8080
