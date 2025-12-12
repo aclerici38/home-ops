@@ -34,15 +34,15 @@ spec:
             parameters:
               cron.database_name: 'app'
               documentdb.bg_worker_database_name: 'app'
-              documentdb.enableBackgroundWorker = 'true'
-              documentdb.enableBackgroundWorkerJobs = 'true'
-              documentdb.enableCompact: "true"
-              documentdb.enableLetAndCollationForQueryMatch: "true"
-              documentdb.enableNowSystemVariable: "true"
-              documentdb.enableSortbyIdPushDownToPrimaryKey: "true"
-              documentdb.enableSchemaValidation: "true"
-              documentdb.enableBypassDocumentValidation: "true"
-              documentdb.enableUserCrud: "true"
-              documentdb.maxUserLimit: "100"
+              documentdb.enableBackgroundWorker: 'true'
+              documentdb.enableBackgroundWorkerJobs: 'true'
+              documentdb.enableCompact: 'true'
+              documentdb.enableLetAndCollationForQueryMatch: 'true'
+              documentdb.enableNowSystemVariable: 'true'
+              documentdb.enableSortbyIdPushDownToPrimaryKey: 'true'
+              documentdb.enableSchemaValidation: 'true'
+              documentdb.enableBypassDocumentValidation: 'true'
+              documentdb.enableUserCrud: 'true'
+              documentdb.maxUserLimit: '100'
       target:
         kind: Cluster
