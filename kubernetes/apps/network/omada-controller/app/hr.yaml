@@ -101,6 +101,13 @@ spec:
                   failureThreshold: 30
                   periodSeconds: 10
     service:
+      omada-ui:
+        controller: omada-controller
+        ports:
+          manage-http:
+            port: 8080
+          manage-https:
+            port: *port
       omada-controller:
         controller: omada-controller
         type: LoadBalancer
@@ -108,17 +115,6 @@ spec:
           lbipam.cilium.io/ips: 10.38.55.10
           coredns.io/hostname: ${APP_URL}
         ports:
-          manage-http:
-            port: 8080
-          manage-https:
-            port: *port
-          portal-http:
-            port: 8888
-          portal-https:
-            port: 8843
-          app-discovery:
-            port: 27001
-            protocol: UDP
           adopt-v1:
             port: 29812
           upgrade-v1:
@@ -130,13 +126,8 @@ spec:
           discovery:
             port: 29810
             protocol: UDP
-          manage-udp:
-            port: 19810
-            protocol: UDP
           transfer-v2:
             port: 29815
-          rtty:
-            port: 29816
     route:
       omada-controller:
         hostnames:
