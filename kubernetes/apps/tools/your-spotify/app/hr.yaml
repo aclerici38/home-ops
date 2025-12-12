@@ -51,8 +51,8 @@ spec:
               repository: ghcr.io/yooooomi/your_spotify_server
               tag: 1.15.0@sha256:3679ea122e2083703a3f8c1199acf4b1bb81c81da33334bdcaf478bfbbf36e9b
             env:
-              API_ENDPOINT: &api https://spotify-api.${SECRET_DOMAIN}
-              CLIENT_ENDPOINT: https://spotify.${SECRET_DOMAIN}
+              API_ENDPOINT: &api https://spotty-api.${SECRET_DOMAIN}
+              CLIENT_ENDPOINT: https://spotty.${SECRET_DOMAIN}
               # ferretdb sidecar
               MONGO_ENDPOINT: mongodb://127.0.0.1:27017/
               SPOTIFY_PUBLIC:
@@ -134,7 +134,7 @@ spec:
     route:
       frontend:
         hostnames:
-          - spotify.${SECRET_DOMAIN}
+          - spotty.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy-system
@@ -145,7 +145,7 @@ spec:
               port: *webPort
       backend:
         hostnames:
-          - spotify-api.${SECRET_DOMAIN}
+          - spotty-api.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy-system
