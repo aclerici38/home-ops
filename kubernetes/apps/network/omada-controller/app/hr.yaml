@@ -108,6 +108,9 @@ spec:
           lbipam.cilium.io/ips: 10.38.55.10
           coredns.io/hostname: ${APP_URL}
         ports:
+          app-discovery:
+            port: 27001
+            protocol: UDP
           discovery:
             port: 29810
             protocol: UDP
