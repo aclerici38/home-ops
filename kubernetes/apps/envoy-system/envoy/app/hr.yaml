@@ -28,6 +28,7 @@ spec:
       envoyGateway:
         extensionApis:
           enableEnvoyPatchPolicy: true
+          enableBackend: true
         runtimeFlags:
           enabled:
             - XDSNameSchemeV2

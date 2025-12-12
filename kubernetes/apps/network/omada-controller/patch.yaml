@@ -1,0 +1,49 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: patch
+spec:
+  patches:
+    # https://blog.ferretdb.io/run-ferretdb-postgres-documentdb-extension-cnpg-kubernetes/
+    # extensions initialized in the database CR
+    # TODO: use imagevolume extensions once documentdb supports pg18
+    - patch: |-
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Cluster
+        metadata:
+          name: patch
+        spec:
+          managed:
+            roles:
+              - name: app
+                login: true
+                inRoles:
+                  - documentdb_admin_role
+          postgresUID: 999
+          postgresGID: 999
+          postgresql:
+            pg_hba:
+              # docuentdb and pg_cron try to connect to db via localhost
+              - host app postgres localhost trust
+              - host app app localhost trust
+            shared_preload_libraries:
+              - pg_cron
+              - pg_documentdb_core
+              - pg_documentdb
+            parameters:
+              # https://github.com/FerretDB/FerretDB/issues/5284#issuecomment-3326399933
+              cron.database_name: 'app'
+              documentdb.bg_worker_database_name: 'app'
+              documentdb.enableBackgroundWorker: 'true'
+              documentdb.enableBackgroundWorkerJobs: 'true'
+              documentdb.enableCompact: 'true'
+              documentdb.enableLetAndCollationForQueryMatch: 'true'
+              documentdb.enableNowSystemVariable: 'true'
+              documentdb.enableSortbyIdPushDownToPrimaryKey: 'true'
+              documentdb.enableSchemaValidation: 'true'
+              documentdb.enableBypassDocumentValidation: 'true'
+              documentdb.enableUserCrud: 'true'
+              documentdb.maxUserLimit: '100'
+      target:
+        kind: Cluster
