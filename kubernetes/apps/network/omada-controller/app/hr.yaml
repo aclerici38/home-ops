@@ -65,6 +65,7 @@ spec:
               MONGO_EXTERNAL: true
               EAP_MONGOD_URI: mongodb://127.0.0.1:27017/app
               MANAGE_HTTP_PORT: "8080" # Must be set on install
+              # omada tries to redirect to this port for any traffic to it, set to 443 so already at https
               MANAGE_HTTPS_PORT: &port "443" # Must be set on install
               PORTAL_HTTP_PORT: "8888"
               PORTAL_HTTPS_PORT: "8843"
@@ -101,14 +102,16 @@ spec:
                   failureThreshold: 30
                   periodSeconds: 10
     service:
-      omada-ui:
+      ui:
+        forceRename: omada-ui
         controller: omada-controller
         ports:
           manage-http:
             port: 8080
           manage-https:
             port: *port
-      omada-controller:
+      controller:
+        forceRename: omada-controller
         controller: omada-controller
         type: LoadBalancer
         annotations:
