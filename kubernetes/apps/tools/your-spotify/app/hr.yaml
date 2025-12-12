@@ -113,7 +113,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       api:
-        controller: api
+        controller: backend
         ports:
           http:
             port: &apiPort 8080
@@ -143,7 +143,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-            - identifier: api
+            - identifier: backend
               port: *apiPort
     persistence:
       tmpfs:
