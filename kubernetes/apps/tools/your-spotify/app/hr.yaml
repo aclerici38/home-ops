@@ -162,6 +162,9 @@ spec:
               - path: /tmp
                 subPath: tmp
           frontend:
+            build-fix:
+              - path: /app/apps/client/build
+                subPath: build
             your-spotify-frontend:
               - path: /app/apps/client/build
                 subPath: build
@@ -170,5 +173,7 @@ spec:
         image: *img
         advancedMounts:
           frontend:
+            build-fix:
+              - path: /build
             your-spotify-frontend:
               - path: /build
