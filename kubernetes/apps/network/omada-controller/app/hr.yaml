@@ -118,19 +118,23 @@ spec:
           lbipam.cilium.io/ips: 10.38.55.10
           coredns.io/hostname: ${APP_URL}
         ports:
+          discovery:
+            port: 29810
+            protocol: UDP
+          manager-v1:
+            port: 29811
           adopt-v1:
             port: 29812
           upgrade-v1:
             port: 29813
-          manager-v1:
-            port: 29811
           manager-v2:
             port: 29814
-          discovery:
-            port: 29810
-            protocol: UDP
           transfer-v2:
             port: 29815
+          rtty:
+            port: 29816
+          device-data:
+            port: 29817
     route:
       omada-controller:
         hostnames:
