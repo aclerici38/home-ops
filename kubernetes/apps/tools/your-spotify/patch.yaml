@@ -24,7 +24,7 @@ spec:
           postgresGID: 999
           postgresql:
             pg_hba:
-              # docuentdb extension tries to connect to db via localhost
+              # docuentdb and pg_cron try to connect to db via localhost
               - host app postgres localhost trust
               - host app app localhost trust
             shared_preload_libraries:
@@ -32,6 +32,7 @@ spec:
               - pg_documentdb_core
               - pg_documentdb
             parameters:
+              # https://github.com/FerretDB/FerretDB/issues/5284#issuecomment-3326399933
               cron.database_name: 'app'
               documentdb.bg_worker_database_name: 'app'
               documentdb.enableBackgroundWorker: 'true'

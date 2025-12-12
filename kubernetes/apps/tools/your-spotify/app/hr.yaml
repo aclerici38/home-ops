@@ -16,7 +16,7 @@ spec:
     timeout: 2m
   values:
     controllers:
-      api:
+      backend:
         initContainers:
           ferretdb:
             restartPolicy: Always
@@ -46,7 +46,7 @@ spec:
                       - ping
               readiness: *probe
         containers:
-          your-spotify-api:
+          your-spotify-backend:
             image:
               repository: ghcr.io/yooooomi/your_spotify_server
               tag: 1.15.0@sha256:3679ea122e2083703a3f8c1199acf4b1bb81c81da33334bdcaf478bfbbf36e9b
@@ -145,3 +145,11 @@ spec:
           - backendRefs:
             - identifier: api
               port: *apiPort
+    persistence:
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          frontend:
+            your-spotify-frontend:
+              - path: /app/apps/client/build
+                
