@@ -63,7 +63,7 @@ spec:
               ROOTLESS: true
               SHOW_SERVER_LOGS: "true"
               MONGO_EXTERNAL: true
-              EAP_MONGOD_URI: mongodb://127.0.0.1:27017/
+              EAP_MONGOD_URI: mongodb://127.0.0.1:27017/app
               MANAGE_HTTP_PORT: "8080" # Must be set on install
               MANAGE_HTTPS_PORT: &port "443" # Must be set on install
               PORTAL_HTTP_PORT: "8888"
