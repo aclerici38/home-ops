@@ -102,6 +102,10 @@ spec:
         ports:
           manage-https:
             port: *port
+          # https://github.com/mbentley/docker-omada-controller/discussions/316
+          manage-https-8043:
+            port: 8043
+            targetPort: 443
           app-discovery:
             port: 27001
             protocol: UDP
