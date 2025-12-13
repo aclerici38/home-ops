@@ -23,7 +23,7 @@ releases:
       - events: ["postsync"]
         showlogs: true
         command: "kubectl"
-        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cilium/cilium-networking/resources"]
+        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cilium/cilium/networking/"]
 
   - name: coredns
     namespace: kube-system
@@ -80,7 +80,7 @@ releases:
       - events: ["postsync"]
         showlogs: true
         command: "kubectl"
-        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cluster-infra/external-secrets-stores/resources/onepassword.yaml"]
+        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cluster-infra/external-secrets/stores/onepassword.yaml"]
 
   - name: flux-operator
     namespace: flux-system
