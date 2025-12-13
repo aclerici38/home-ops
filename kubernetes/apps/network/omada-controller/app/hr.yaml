@@ -92,22 +92,16 @@ spec:
                   failureThreshold: 30
                   periodSeconds: 10
     service:
-      ui:
-        forceRename: omada-ui
-        controller: omada-controller
-        ports:
-          manage-http:
-            port: 8080
-          manage-https:
-            port: *port
       controller:
-        forceRename: omada-controller
         controller: omada-controller
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 10.38.55.10
+          # separate hostname pointing at LB IP
           coredns.io/hostname: ${APP_URL}
         ports:
+          manage-https:
+            port: *port
           app-discovery:
             port: 27001
             protocol: UDP
