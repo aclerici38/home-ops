@@ -16,16 +16,8 @@ spec:
     timeout: 2m
   values:
     controllers:
-      omada-controller:
-        pod:
-          hostUsers: false
-          securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            runAsNonRoot: true
-            fsGroupChangePolicy: Always
-            seccompProfile: { type: RuntimeDefault }
+      omada:
+        forceRename: omada-controller
         initContainers:
           ferretdb:
             restartPolicy: Always
@@ -55,7 +47,7 @@ spec:
                       - ping
               readiness: *probe
         containers:
-          omada-controller:
+          omada:
             image:
               repository: docker.io/mbentley/omada-controller
               tag: 6.0.0.25@sha256:f643ebfe2a9f8cb1068e8c9427f6a9b4f2c900b126cbe939ef866dd1091b3c21
@@ -91,9 +83,38 @@ spec:
                 spec:
                   failureThreshold: 30
                   periodSeconds: 10
+      exporter:
+        strategy: RollingUpdate
+        containers:
+          omada-exporter:
+            image:
+              repository: ghcr.io/charlie-haley/omada_exporter
+              tag: 0.13.1
+            env:
+              OMADA_HOST: https://omada-controller
+              OMADA_INSECURE: true
+              OMADA_SITE: Lab
+              OMADA_USER:
+                secretKeyRef:
+                  name: omada-controller
+                  key: username
+              OMADA_PASS:
+                secretKeyRef:
+                  name: omada-controller
+                  key: password
+    defaultPodOptions:
+      hostUsers: false
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        runAsNonRoot: true
+        fsGroupChangePolicy: Always
+        seccompProfile: { type: RuntimeDefault }
     service:
-      controller:
-        controller: omada-controller
+      omada:
+        controller: omada
+        forceRename: omada-controller
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 10.38.55.10
@@ -122,8 +143,19 @@ spec:
             port: 29816
           device-data:
             port: 29817
+      exporter:
+        controller: exporter
+        ports:
+          http:
+            port: 9202
+    serviceMonitor:
+      exporter:
+        serviceName: omada-exporter
+        endpoints:
+          - port: http
+            scheme: http
     route:
-      omada-controller:
+      omada:
         hostnames:
           - omada.${SECRET_DOMAIN}
         parentRefs:
@@ -134,7 +166,7 @@ spec:
           - backendRefs:
             - group: gateway.envoyproxy.io
               kind: Backend
-              name: omada-controller
+              name: omada
               port: *port
     persistence:
       tmpfs:
