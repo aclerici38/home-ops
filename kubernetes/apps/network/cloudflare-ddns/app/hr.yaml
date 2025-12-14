@@ -86,16 +86,3 @@ spec:
         endpoints:
           - port: health
             scheme: http
-    # Exposes some API endpoints to delete/update/init records
-    route:
-      cloudflare-ddns:
-        hostnames:
-          - ddns.${SECRET_DOMAIN}
-        parentRefs:
-          - name: internal
-            namespace: envoy-system
-            sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: cloudflare-ddns
-                port: *port
