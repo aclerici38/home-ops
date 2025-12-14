@@ -63,9 +63,9 @@ spec:
               maxDistance: 0.001
             ocr:
               enabled: true
-              maxResolution: 1280
-              minDetectionScore: 0.3
-              minRecognitionScore: 0.4
+              maxResolution: 4096
+              minDetectionScore: 0.05
+              minRecognitionScore: 0.1
               modelName: EN__PP-OCRv5_mobile
           
           oauth:
