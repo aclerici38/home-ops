@@ -6,5 +6,18 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=windows-11
+patches:
+  - patch: |-
+      - op: add
+        path: /spec/dependsOn/-
+        value:
+          name: kubevirt-resources
+      - op: add
+        path: /spec/dependsOn/-
+        value:
+          name: cdi-resources
+    target:
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/app
