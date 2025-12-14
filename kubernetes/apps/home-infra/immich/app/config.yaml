@@ -49,7 +49,7 @@ spec:
             videoConversion:
               concurrency: 3
             ocr:
-              concurrency: 3
+              concurrency: 1
           
           machineLearning:
             urls: ["http://immich-ml:3003"]
