@@ -113,7 +113,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       omada:
-        controller: omada
+        controller: omada-controller
         forceRename: omada-controller
         type: LoadBalancer
         annotations:
