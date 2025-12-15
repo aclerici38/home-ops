@@ -9,6 +9,7 @@ spec:
   type: LoadBalancer
   selector:
     vm.kubevirt.io/name: windows-11
+    lbipam.cilium.io/ips:: 10.38.55.8
   ports:
     - protocol: TCP
       port: 3389
