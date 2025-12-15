@@ -5,9 +5,9 @@ metadata:
   name: windows-11
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 100Gi
-  storageClassName: ceph-block
+  storageClassName: ceph-filesystem
   

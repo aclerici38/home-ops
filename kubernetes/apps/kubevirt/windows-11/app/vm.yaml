@@ -5,8 +5,10 @@ metadata:
   name: windows-11
 spec:
   running: true
+  runStrategy: Always
   template:
     spec:
+      evictionStrategy: LiveMigrate
       domain:
         clock:
           timer:
@@ -21,18 +23,18 @@ spec:
           timezone: ${TZ}
         cpu:
           sockets: 1
-          cores: 16
+          cores: 6
           threads: 1
-          model: host-passthrough
+          model: x86-64-v3
         ioThreadsPolicy: auto
         memory:
           guest: 12Gi
         resources:
           requests:
-            cpu: "1"
+            cpu: "6"
             memory: "1Gi"
           limits:
-            cpu: "16"
+            cpu: "6"
             memory: "13Gi"
         devices:
           disks:
