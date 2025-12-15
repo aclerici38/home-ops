@@ -18,17 +18,24 @@ spec:
             rtc:
               tickPolicy: catchup
           utc: {}
-        cpu:
-          cores: 16
-        memory:
+          timezone: ${TZ}
+          cpu:
+            sockets: 1
+            cores: 16
+            threads: 1
+            model: host-passthrough
+            dedicatedCpuPlacement: true
+            isolateEmulatorThread: true
+          ioThreadsPolicy: auto
+          memory:
             guest: 12Gi
-        resources:
-          requests:
-            cpu: "1"
-            memory: "1Gi"
-          limits:
-            cpu: "16"
-            memory: "13Gi"
+          resources:
+            requests:
+              cpu: "1"
+              memory: "1Gi"
+            limits:
+              cpu: "16"
+              memory: "13Gi"
         devices:
           disks:
             - name: pvcdisk
