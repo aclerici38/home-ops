@@ -5,6 +5,7 @@ kind: VirtualMachineInstance
 metadata:
   name: windows-11
 spec:
+  running: true
   domain:
     clock:
       timer:
@@ -60,7 +61,7 @@ spec:
         claimName: windows-11
     - name: winiso
       persistentVolumeClaim:
-        claimName: win11-iso
+        claimName: windows-11-iso
     - name: virtio
       containerDisk:
         image: quay.io/kubevirt/virtio-container-disk
