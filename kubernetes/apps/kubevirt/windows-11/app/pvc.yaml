@@ -10,16 +10,4 @@ spec:
     requests:
       storage: 100Gi
   storageClassName: ceph-block
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: windows-11-iso
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
-  storageClassName: nfs-ssd
   
