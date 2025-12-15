@@ -16,7 +16,7 @@ spec:
       - group: gateway.envoyproxy.io
         kind: Backend
         name: cdi-uploadproxy
-        namespace: network
+        namespace: kubevirt
         port: 443
       matches:
         - path:
