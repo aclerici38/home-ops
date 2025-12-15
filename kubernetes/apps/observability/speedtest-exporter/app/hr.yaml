@@ -1,0 +1,68 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: speedtest-exporter
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      speedtest-exporter:
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          speedtest-exporter:
+            image:
+              repository: ghcr.io/miguelndecarvalho/speedtest-exporter
+              tag: v3.5.4@sha256:f1064d49124c7fc45faabb87c6c876a2fd04e92b3dc14d4b871301217ba30fed
+            probes:
+              readiness: &probes
+                enabled: true
+                type: HTTP
+              liveness: *probes
+            resources:
+              requests:
+                cpu: 50m
+                memory: 100Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      speedtest-exporter:
+        controller: speedtest-exporter
+        ports:
+          http:
+            port: &port 9798
+    serviceMonitor:
+      speedtest-exporter:
+        serviceName: speedtest-exporter
+        endpoints:
+          - port: http
+            interval: 1h
+            scrapeTimeout: 2m
+    
