@@ -72,12 +72,6 @@ spec:
             namespace: envoy-system
             sectionName: https
         rules:
-          # Block webhook path
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /api/webhook
-            backendRefs: []
           - backendRefs:
             - identifier: main
               port: *port
