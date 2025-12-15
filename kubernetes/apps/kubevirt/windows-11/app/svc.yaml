@@ -5,7 +5,7 @@ metadata:
   name: win11-rdp
   annotations:
     coredns.io/hostname: windows.${SECRET_DOMAIN}
-    lbipam.cilium.io/ips:: 10.38.55.8
+    lbipam.cilium.io/ips: 10.38.55.8
 spec:
   type: LoadBalancer
   selector:
