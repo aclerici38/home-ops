@@ -72,9 +72,3 @@ spec:
         - name: pvcdisk
           persistentVolumeClaim:
             claimName: windows-11
-        - name: winiso
-          persistentVolumeClaim:
-            claimName: windows-11-iso
-        - name: virtio
-          containerDisk:
-            image: quay.io/kubevirt/virtio-container-disk:v1.7.0
