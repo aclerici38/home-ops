@@ -19,6 +19,9 @@ spec:
     remediation:
       retries: 1
   values:
+    hostUsers: false
+    crds:
+      immutable: false
     dashboard:
       enabled: true
     serviceMonitor:

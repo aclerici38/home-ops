@@ -32,6 +32,13 @@ spec:
     server:
       enable_gzip: "true"
       root_url: https://grafana.${SECRET_DOMAIN}
+  httpRoute:
+    spec:
+      hostnames:
+        - grafana.${SECRET_DOMAIN}
+      parentRefs:
+        - name: internal
+          namespace: envoy-system
   deployment:
     spec:
       template:
