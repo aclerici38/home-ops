@@ -18,13 +18,12 @@ spec:
               tickPolicy: delay
             rtc:
               tickPolicy: catchup
-          utc: {}
           timezone: ${TZ}
         cpu:
           sockets: 1
           cores: 6
           threads: 1
-          model: x86-64-v3
+          model: host-passthrough
         ioThreadsPolicy: auto
         memory:
           guest: 12Gi
