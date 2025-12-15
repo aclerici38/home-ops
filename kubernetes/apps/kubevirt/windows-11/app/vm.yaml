@@ -39,12 +39,6 @@ spec:
             - name: pvcdisk
               disk:
                 bus: virtio
-            - name: winiso
-              cdrom:
-                bus: sata
-            - name: virtio
-              cdrom:
-                bus: sata
           interfaces:
             - masquerade: {}
               model: virtio
