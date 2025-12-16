@@ -20,3 +20,14 @@ spec:
     cookieDomain: ${SECRET_DOMAIN}
     logoutPath: "${LOGOUT_PATH:-/logout}"
     scopes: ["openid", "profile", "email", "groups"]
+    forwardAccessToken: true
+  # Forward preferred_username to the backend thru header
+  jwt:
+    providers:
+      - name: pocketid
+        issuer: https://id.${SECRET_DOMAIN}
+        remoteJWKS:
+          uri: https://id.${SECRET_DOMAIN}/.well-known/jwks.json
+          claimToHeaders:
+            - header: X-Forwarded-User
+              claim: preferred_username
