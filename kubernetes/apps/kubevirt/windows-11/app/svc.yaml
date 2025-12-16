@@ -8,6 +8,7 @@ metadata:
     lbipam.cilium.io/ips: 10.38.55.8
 spec:
   type: LoadBalancer
+  externalTrafficPolicy: Local
   selector:
     vm.kubevirt.io/name: windows-11
   ports:
