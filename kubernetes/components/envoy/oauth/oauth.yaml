@@ -28,6 +28,6 @@ spec:
         issuer: https://id.${SECRET_DOMAIN}
         remoteJWKS:
           uri: https://id.${SECRET_DOMAIN}/.well-known/jwks.json
-          claimToHeaders:
-            - header: X-Forwarded-User
-              claim: preferred_username
+        claimToHeaders:
+          - header: X-Forwarded-User
+            claim: preferred_username
