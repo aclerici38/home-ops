@@ -27,7 +27,7 @@ spec:
           migrate:
             image:
               repository: docker.io/fredrikburmester/streamystats-v2-migrate
-              tag: v2.12.0@sha256:2746fe2a14b5944a7efdf73e41509222708d5adfaf03bf4f9f1924db69a09d28
+              tag: v2.13.0@sha256:91aabac45bbf263f7d6de3d12c9ebaed3a3282701e8bbb23b552109bd8e69519
             env: &env
               DATABASE_URL:
                 valueFrom:
@@ -42,7 +42,7 @@ spec:
           main:
             image:
               repository: docker.io/fredrikburmester/streamystats-v2-nextjs
-              tag: v2.12.0@sha256:e135673c1271c79878a2108705f27e7ea59f568e1624b9d93fbce33e8807f4e4
+              tag: v2.13.0@sha256:51448c5c074a4c1924c259b5690bdbe78a8ea80752632e08d92d9c7f99436a56
             env:
               <<: *env
               JOB_SERVER_URL: http://streamystats-job-server:3005
@@ -69,7 +69,7 @@ spec:
           main:
             image:
               repository: docker.io/fredrikburmester/streamystats-v2-job-server
-              tag: v2.12.0@sha256:255c8c6735fbeaffc81cd7cb7b4d968cc7629f2c59193ec7f7ddd9089e05e873
+              tag: v2.13.0@sha256:03a9ab6b5cfcd0af3b8c1760b627f9c5a512c5fdf0614c663008fb4ca7711c22
             env:
               <<: *env
               HOST: 0.0.0.0
