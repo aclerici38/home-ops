@@ -164,11 +164,10 @@ nodes:
           grow: true
     patches:
       - |-
-        machine:
-          udev:
-            rules:
-              - SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", ATTR{queue/scheduler}="none"
-              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", GROUP="20", MODE="0660", TAG+="uaccess"
+          machine:
+            udev:
+              rules:
+                - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
   - hostname: "timmy"
     ipAddress: "10.0.30.55"
     talosImageURL: ghcr.io/talos-rpi5/installer
