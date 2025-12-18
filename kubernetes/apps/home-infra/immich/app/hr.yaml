@@ -127,7 +127,7 @@ spec:
         controller: machine-learning
         ports:
           http:
-            port: *mlPort
+            port: 3003
     serviceMonitor:
       server:
         serviceName: server
