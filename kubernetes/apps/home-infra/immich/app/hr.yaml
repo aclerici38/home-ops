@@ -104,28 +104,6 @@ spec:
               limits:
                 memory: 16Gi
                 gpu.intel.com/i915: 1
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /ping
-                    port: &mlPort 3003
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  failureThreshold: 10
-              readiness: *probes
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /ping
-                    port: *mlPort
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  failureThreshold: 60
             securityContext: *contSec
     defaultPodOptions:
       securityContext:
