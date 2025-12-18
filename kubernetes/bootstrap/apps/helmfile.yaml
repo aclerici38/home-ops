@@ -12,7 +12,7 @@ releases:
     namespace: cilium
     chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     atomic: true
-    version: 1.18.4
+    version: 1.18.5
     values:
       - /Users/anthony/home-ops/kubernetes/apps/cilium/cilium/app/helm/values.yaml
     hooks:
@@ -86,7 +86,7 @@ releases:
     namespace: flux-system
     atomic: true
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    version: 0.36.0
+    version: 0.37.1
     values:
       - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux-operator/app/helm/values.yaml
     needs:
@@ -96,7 +96,7 @@ releases:
     namespace: flux-system
     atomic: true
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-    version: 0.36.0
+    version: 0.37.1
     values:
       - /Users/anthony/home-ops/kubernetes/apps/flux-system/flux-instance/app/helm/values.yaml
     needs:

@@ -3,6 +3,9 @@
 serviceMonitor:
   create: true
 installCRDs: true
+web:
+  networkPolicy:
+    create: false
 securityContext:
   runAsNonRoot: true
   readOnlyRootFilesystem: true
