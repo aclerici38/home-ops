@@ -46,6 +46,7 @@
       matchPackagePatterns: ["blakeblackshear/frigate"],
       ignoreUnstable: false,
       respectLatest: false,
+      versioning: "semver",
       matchFileNames: ["**/frigate/**"],
       allowedVersions: "/^\\d+\\.\\d+\\.\\d+(?:-(?:beta\\d*|rc\\d*))?$/i",
     },
