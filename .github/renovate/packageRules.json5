@@ -47,6 +47,7 @@
       ignoreUnstable: false,
       respectLatest: false,
       matchFileNames: ["**/frigate/**"],
+      allowedVersions: "/^\\d+\\.\\d+\\.\\d+(?:-(?:beta\\d*|rc\\d*))?$/i",
     },
   ],
 }
