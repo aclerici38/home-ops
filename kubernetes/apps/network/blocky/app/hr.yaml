@@ -205,10 +205,10 @@ spec:
                   - https://cloudflare-dns.com/dns-query
             
             blocking:
-              blackLists:
+              denyLists:
                 ads:
                   - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/multi.txt
-              whiteLists:
+              allowLists:
                 ads:
                   - |
                     epi-graphql.conde.digital
