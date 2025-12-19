@@ -7,6 +7,7 @@ configMapGenerator:
     literals:
       - APP=frigate
       - VOLSYNC_CAPACITY=25Gi
+      - VOLSYNC_ACCESSMODES=ReadWriteMany
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret
