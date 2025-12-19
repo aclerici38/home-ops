@@ -37,8 +37,15 @@
       matchPackagePatterns: ["tensorchord/vchord-scratch"],
       matchFileNames: ["**/immich/**"],
       versioning: "regex:^pg18-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
-      // https://github.com/immich-app/immich/blob/e94eb5012f021577589ddb9bad4a35266f3d86aa/server/src/constants.ts#L8
+      // https://github.com/immich-app/immich/blob/main/server/src/constants.ts
       allowedVersions: "/^pg18-v0\\.5\\.3$/",
+    },
+    {
+      description: "Frigate beta and RC",
+      matchDatasources: ["docker"],
+      matchPackagePatterns: ["blakeblackshear/frigate"],
+      matchFileNames: ["**/frigate/**"],
+      allowedVersions: "/^\\d+\\.\\d+\\.\\d+(?:-(?:beta\\d+|rc\\d+))?$/i",
     },
   ],
 }
