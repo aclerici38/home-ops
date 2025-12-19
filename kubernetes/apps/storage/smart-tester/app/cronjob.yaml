@@ -16,7 +16,7 @@ spec:
             kubernetes.io/hostname: "bonds"
           containers:
             - name: smart-tester
-              image: ghcr.io/aclerici38/smartmontools:7.5.0@sha256:401b9aca3d0b93e7507fde9d2f8ff52c43d75663d361a60d07d3a4f833b3e6e4
+              image: ghcr.io/aclerici38/smartmontools:7.5.0@sha256:d320b2dd97355abf45c162d4061c45a78a79aa115cd91f9ae3c81bd2653db20f
               command: ["sh", "-c"]
               args:
                 - |
