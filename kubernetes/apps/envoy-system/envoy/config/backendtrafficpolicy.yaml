@@ -12,24 +12,9 @@ spec:
     bufferLimit: 64Mi
   tcpKeepalive: {}
   compressor:
-    - type: Brotli
-      brotli:
-        quality: 9
-        window_bits: 20
-        input_block_bits: 24
-        chunk_size: 65536
-    - type: Gzip
-      gzip:
-        compression_level: BEST_COMPRESSION
-        memory_level: 7
-        window_bits: 15
-        chunk_size: 65536
     - type: Zstd
-      zstd:
-        compression_level: 9
-        strategy: BTOPT
-        enable_checksum: true
-        chunk_size: 65536
+    - type: Brotli
+    - type: Gzip
   timeout:
     http:
       requestTimeout: 0s
