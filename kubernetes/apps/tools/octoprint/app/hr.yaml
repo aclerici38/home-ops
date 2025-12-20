@@ -36,8 +36,8 @@ spec:
           octoprint:
             image:
               # Temp image
-              repository: docker.io/ant385525/octoprint
-              tag: latest
+              repository: ghcr.io/ant385525/octoprint
+              tag: 1.11.5@sha256:730b68380d00ce26da7da9fbecac577ce0ae6f2b98bb625336f355e7ae64c89a
             probes:
               liveness: &probes
                 enabled: true
@@ -76,5 +76,5 @@ spec:
       octoprint:
         existingClaim: octoprint
         globalMounts:
-          - path: /octoprint/octoprint
+          - path: /config
             subPath: data
