@@ -31,16 +31,22 @@ spec:
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
           hostname: home-assistant
-          # annotations:
-          #   k8s.v1.cni.cncf.io/networks: |
-          #     [
-          #       {
-          #         "name":"multus-apt-lan-net",
-          #         "namespace": "network",
-          #         "ips": ["192.168.1.25/24"],
-          #         "mac": "64:16:7F:E9:23:A5"
-          #       }
-          #     ]
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name":"house",
+                  "namespace": "network",
+                  "ips": ["10.0.20.25/24"],
+                  "mac": "64:16:7F:E9:23:A5"
+                },
+                {
+                  "name":"cottage",
+                  "namespace": "network",
+                  "ips": ["10.0.40.25/24"],
+                  "mac": "64:16:7F:41:52:65"
+                }
+              ]
         containers:
           main:
             image:

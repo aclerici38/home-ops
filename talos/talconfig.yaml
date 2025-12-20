@@ -84,6 +84,15 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "10.0.30.1"
         mtu: 9000
+      - interface: bond1
+        dhcp: false
+        bond:
+          mode: active-backup
+          deviceSelectors:
+            - hardwareAddr: 58:11:22:a2:e1:6c
+        vlans:
+          - vlanId: 20
+          - vlanId: 40
     volumes:
       - name: EPHEMERAL
         provisioning:
@@ -141,13 +150,23 @@ nodes:
           lacpRate: fast
           xmitHashPolicy: layer3+4
           deviceSelectors:
-            - hardwareAddr: 58:47:ca:7c:77*
+            - hardwareAddr: 58:47:ca:7c:77:1e
+            - hardwareAddr: 58:47:ca:7c:77:1d
         addresses:
           - "10.0.30.18/24"
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.0.30.1"
         mtu: 9000
+      - interface: bond1
+        dhcp: false
+        bond:
+          mode: active-backup
+          deviceSelectors:
+            - hardwareAddr: 58:47:ca:7c:77:1f
+        vlans:
+          - vlanId: 20
+          - vlanId: 40
     volumes:
       - name: EPHEMERAL
         provisioning:
