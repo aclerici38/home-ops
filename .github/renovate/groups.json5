@@ -143,10 +143,10 @@
       minimumGroupSize: 3,
     },
     {
-      description: "Geopulse group",
-      groupName: "Geopulse",
-      matchPackagePatterns: ["geopulse-backend", "geopulse-ui"],
-      matchDatasources: ["docker", "github-releases", "helm"],
+      description: "Your-Spotify group",
+      groupName: "Your-Spotify",
+      matchPackagePatterns: ["your_spotify_server", "your_spotify_client"],
+      matchDatasources: ["docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
