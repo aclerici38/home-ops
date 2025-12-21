@@ -63,12 +63,19 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: {drop: [ALL]}
     service:
-      music-assistant:
+      ui:
         controller: music-assistant
         ports:
           http:
-            # UI runs on 8095, discovery, etc runs via multus
             port: &port 8095
+      stream:
+        controller: music-assistant
+        annotations:
+          coredns.io/hostname: music-stream.${SECRET_DOMAIN}
+          lbipam.cilium.io/ips: 10.38.55.7
+        ports:
+          http:
+            port: 8097
     route:
       music-assistant:
         hostnames:
@@ -79,7 +86,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-            - identifier: music-assistant
+            - identifier: ui
               port: *port
     persistence:
       config:
