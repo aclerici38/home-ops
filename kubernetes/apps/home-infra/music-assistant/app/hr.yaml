@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/music-assistant/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -39,12 +39,6 @@ spec:
                   "namespace": "network",
                   "ips": ["10.0.20.24/24"],
                   "mac": "64:16:7F:AA:55:98"
-                },
-                {
-                  "name":"cottage",
-                  "namespace": "network",
-                  "ips": ["10.0.40.24/24"],
-                  "mac": "64:16:7F:E1:82:2C"
                 }
               ]
         containers:
@@ -68,15 +62,6 @@ spec:
         ports:
           http:
             port: &port 8095
-      stream:
-        controller: music-assistant
-        type: LoadBalancer
-        annotations:
-          coredns.io/hostname: music-stream.${SECRET_DOMAIN}
-          lbipam.cilium.io/ips: 10.38.55.7
-        ports:
-          http:
-            port: 8097
     route:
       music-assistant:
         hostnames:
