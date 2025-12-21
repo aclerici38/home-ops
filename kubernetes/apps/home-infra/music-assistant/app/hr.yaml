@@ -30,17 +30,6 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
-          hostname: music-assistant
-          annotations:
-            k8s.v1.cni.cncf.io/networks: |
-              [
-                {
-                  "name":"house",
-                  "namespace": "network",
-                  "ips": ["10.0.20.24/24"],
-                  "mac": "64:16:7F:AA:55:98"
-                }
-              ]
         containers:
           music-assistant:
             image:
