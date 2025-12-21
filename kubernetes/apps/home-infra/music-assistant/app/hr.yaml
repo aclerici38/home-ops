@@ -70,6 +70,7 @@ spec:
             port: &port 8095
       stream:
         controller: music-assistant
+        type: LoadBalancer
         annotations:
           coredns.io/hostname: music-stream.${SECRET_DOMAIN}
           lbipam.cilium.io/ips: 10.38.55.7
