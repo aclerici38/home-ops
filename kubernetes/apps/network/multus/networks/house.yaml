@@ -14,8 +14,14 @@ spec:
           "master": "bond1.20",
           "mode": "bridge",
           "ipam": {
-            "type": "static"
+            "type": "static",
+            "routes": [
+              { "dst": "0.0.0.0/0", "gw": "10.0.20.1" }
+            ]
           }
+        },
+        {
+          "type": "sbr"
         }
       ]
     }

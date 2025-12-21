@@ -30,6 +30,23 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
+          hostname: music-assistant
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name":"house",
+                  "namespace": "network",
+                  "ips": ["10.0.20.24/24"],
+                  "mac": "64:16:7F:AA:55:98"
+                },
+                {
+                  "name":"cottage",
+                  "namespace": "network",
+                  "ips": ["10.0.40.24/24"],
+                  "mac": "64:16:7F:E1:82:2C"
+                }
+              ]
         containers:
           music-assistant:
             image:
@@ -51,6 +68,15 @@ spec:
         ports:
           http:
             port: &port 8095
+      stream:
+        controller: music-assistant
+        type: LoadBalancer
+        annotations:
+          coredns.io/hostname: music-stream.${SECRET_DOMAIN}
+          lbipam.cilium.io/ips: 10.38.55.7
+        ports:
+          http:
+            port: 8097
     route:
       music-assistant:
         hostnames:
