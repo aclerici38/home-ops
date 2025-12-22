@@ -37,15 +37,8 @@ spec:
             namespace: envoy-system
             sectionName: https
     cephClusterSpec:
-      placement:
-        all:
-          tolerations:
-            - key: "rpi"
-              operator: "Equal"
-              value: "true"
-              effect: "NoSchedule"
       mon:
-        count: 2 # TODO: 3 mons ofc
+        count: 3
       cephConfig:
         global:
           bdev_enable_discard: "true" # quote
