@@ -161,6 +161,12 @@ spec:
           server:
             immich-server:
               - path: /data/thumbs
+      encoded-video:
+        existingClaim: immich-encoded-video
+        advancedMounts:
+          server:
+            immich-server:
+              - path: /data/encoded-video
       config:
         type: secret
         name: immich-config
