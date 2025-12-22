@@ -47,6 +47,7 @@ spec:
         isDefaultClass: false
         basePath: *hostPath
         nodeAffinityLabels:
+          - "storage.openebs.io/hostpath"
           - "kubernetes.io/hostname"
 
     # https://github.com/openebs/zfs-localpv/blob/HEAD/deploy/helm/charts/values.yaml

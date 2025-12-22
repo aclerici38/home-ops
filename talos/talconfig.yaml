@@ -43,6 +43,8 @@ nodes:
     kernelModules:
       - name: zfs
       - name: nbd
+    nodeLabels:
+      storage.openebs.io/hostpath: "true"
     schematic:
       customization:
         extraKernelArgs:
@@ -115,6 +117,8 @@ nodes:
       useUKI: true
     kernelModules:
       - name: nbd
+    nodeLabels:
+      storage.openebs.io/hostpath: "true"
     schematic:
       customization:
         extraKernelArgs:
@@ -192,6 +196,8 @@ nodes:
       arch: amd64
     kernelModules:
       - name: nbd
+    nodeLabels:
+      storage.openebs.io/hostpath: "true"
     schematic:
       customization:
         extraKernelArgs:
