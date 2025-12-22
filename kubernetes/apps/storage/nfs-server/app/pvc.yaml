@@ -28,7 +28,7 @@ metadata:
 spec:
   storageClassName: zfs-tank
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: "59992103190528"
@@ -40,7 +40,7 @@ metadata:
 spec:
   storageClassName: zfs-tank
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: "59992103190528"
@@ -52,7 +52,7 @@ metadata:
 spec:
   storageClassName: zfs-tank
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: "59992103190528"

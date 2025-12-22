@@ -4,10 +4,15 @@ kind: StorageClass
 metadata:
   name: zfs-ssd
 allowVolumeExpansion: true
+allowedTopologies:
+  - matchLabelExpressions:
+    - key: kubernetes.io/hostname
+      values:
+        - bonds
 parameters:
   poolname: "ssd"
   fstype: "zfs"
-  shared: "yes"
+  shared: "no"
 provisioner: zfs.csi.openebs.io
 ---
 apiVersion: storage.k8s.io/v1
@@ -15,9 +20,14 @@ kind: StorageClass
 metadata:
   name: zfs-tank
 allowVolumeExpansion: true
+allowedTopologies:
+  - matchLabelExpressions:
+    - key: kubernetes.io/hostname
+      values:
+        - bonds
 parameters:
   poolname: "tank"
   fstype: "zfs"
-  shared: "yes"
+  shared: "no"
 provisioner: zfs.csi.openebs.io
 
