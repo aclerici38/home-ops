@@ -17,11 +17,11 @@ additionalApiServerCertSans: &sans
   - "k8s.lab.internal"
   - "bonds.lab.internal"
   - "cain.lab.internal"
-  - "timmy.lab.internal"
+  - "posey.lab.internal"
   - "10.0.30.250"
   - "10.0.30.25"
   - "10.0.30.18"
-  - "10.0.30.55"
+  - "10.0.30.28"
   - "127.0.0.1"
   - "172.17.0.1"
 additionalMachineCertSans: *sans
@@ -43,9 +43,6 @@ nodes:
     kernelModules:
       - name: zfs
       - name: nbd
-    nodeLabels:
-      storage.openebs.io/hostpath: "true"
-      egress-node: "true"
     schematic:
       customization:
         extraKernelArgs:
@@ -118,9 +115,6 @@ nodes:
       useUKI: true
     kernelModules:
       - name: nbd
-    nodeLabels:
-      storage.openebs.io/hostpath: "true"
-      egress-node: "true"
     schematic:
       customization:
         extraKernelArgs:
@@ -187,32 +181,73 @@ nodes:
             udev:
               rules:
                 - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
-  - hostname: "timmy"
-    ipAddress: "10.0.30.55"
-    talosImageURL: ghcr.io/talos-rpi5/installer
+  - hostname: "posey"
+    ipAddress: "10.0.30.28"
     installDiskSelector:
-      model: "SAMSUNG MZVL4256HBJD-00BH1"
+      wwid: eui.00000000000000000026b7686e946425
     machineSpec:
       secureboot: false
       mode: metal
       useUKI: true
-      arch: arm64
+      arch: amd64
+    kernelModules:
+      - name: nbd
+    schematic:
+      customization:
+        extraKernelArgs:
+          - amd_pstate=active
+          - cpufreq.default_governor=performance
+          - apparmor=0
+          - iommu.passthrough=1
+          - init_on_alloc=0
+          - init_on_free=0
+          - mitigations=off
+          - security=none
+          - enforcing=0
+          - -selinux
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/amd-ucode
+            - siderolabs/nfsrahead
     controlPlane: true
-    nodeTaints:
-      rpi: true:NoSchedule
     networkInterfaces:
       - interface: bond0
         bond:
-          mode: active-backup
+          mode: 802.3ad
+          lacpRate: fast
           xmitHashPolicy: layer3+4
           deviceSelectors:
-            - hardwareAddr: "d8:3a:dd:d2:76:d2"
+            - hardwareAddr: c4:62:37:01:8c:ce
+            - hardwareAddr: c4:62:37:01:8c:cf
         addresses:
-          - "10.0.30.55/24"
+          - "10.0.30.28/24"
         routes:
           - network: "0.0.0.0/0"
             gateway: "10.0.30.1"
-        mtu: 1500
+        mtu: 9000
+      - interface: bond1
+        dhcp: false
+        bond:
+          mode: active-backup
+          deviceSelectors:
+            - hardwareAddr: a8:5e:45:9c:d0:99
+        vlans:
+          - vlanId: 20
+          - vlanId: 40
+    volumes:
+      - name: EPHEMERAL
+        provisioning:
+          diskSelector:
+            match: system_disk
+          maxSize: 400GB
+          grow: false
+    userVolumes:
+      - name: local-path
+        provisioning:
+          diskSelector:
+            match: system_disk
+          minSize: 500GB
+          grow: true
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
