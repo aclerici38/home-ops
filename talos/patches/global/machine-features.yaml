@@ -1,11 +1,11 @@
 machine:
   features:
     hostDNS:
-      enabled: false
+      enabled: true
       resolveMemberNames: true
       forwardKubeDNSToHost: false
     rbac: true
-    stableHostname: true
+    stableHostname: false
     apidCheckExtKeyUsage: true
     diskQuotaSupport: true
     kubernetesTalosAPIAccess:
