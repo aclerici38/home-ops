@@ -36,8 +36,8 @@ spec:
           octoprint:
             image:
               # Temp image
-              repository: ghcr.io/aclerici38/octoprint
-              tag: 1.11.5@sha256:8202a7a18c7fd110ac009744b2d81eda366f52ecf17e89d982eb84b0a64fb2a8
+              repository: ghcr.io/home-operations/octoprint
+              tag: 1.11.5@sha256:f334f1b6d33cf17879daa11de73d8defa5b4760d6a27b957f7c222640e76dc33
             probes:
               liveness: &probes
                 enabled: true
