@@ -8,17 +8,10 @@ configMapGenerator:
       - APP=immich
       - CNPG_CAPACITY=20Gi
       - CNPG_POOLMODE=session
+    files:
+      - APP_DEPS=./deps.yaml
 patches:
   - path: ./patch.yaml
-    target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
-  - patch: |-
-      - op: add
-        path: /spec/dependsOn/-
-        value:
-          name: dragonfly-cluster
-          namespace: database
     target:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io

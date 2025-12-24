@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: APP
 spec:
-  dependsOn: []
+  dependsOn: ${APP_DEPS:=[]}
   # Use component for default patches instead of spec.patches to patch in SM patches w/o overwriting it
   components:
     - ../../../../components/hr
