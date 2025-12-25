@@ -24,32 +24,7 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
         initContainers:
-          doh:
-            image:
-              repository: docker.io/adguard/dnsproxy
-              tag: v0.78.2@sha256:033fec894a60d6f1f7aca48cff4b53bd19a265c0f7a08a862ceaa13b7eb76c25
-            args:
-              - -l
-              - '127.0.0.2'
-              - -p
-              - '53'
-              - -u
-              - '[/cluster.local/]udp://172.17.0.10:53'
-              - -u
-              - '[/in-addr.arpa/]udp://172.17.0.10:53'
-              - -u
-              - '[/ip6.arpa/]udp://172.17.0.10:53'
-              - -u
-              - https://1.1.1.1/dns-query
-              - -b
-              - https://1.1.1.1/dns-query
-              - --http3
-              - --cache
-              - --ipv6-disabled
-              - -v
-            restartPolicy: Always
           gluetun:
-            dependsOn: doh
             lifecycle:
               postStart:
                 exec:
@@ -59,8 +34,6 @@ spec:
               repository: ghcr.io/qdm12/gluetun
               tag: v3.41.0@sha256:6b54856716d0de56e5bb00a77029b0adea57284cf5a466f23aad5979257d3045
             env:
-              DOT: "off"
-              DNS_ADDRESS: '127.0.0.2'
               LOG_LEVEL: debug
               VPN_SERVICE_PROVIDER: custom
               VPN_TYPE: wireguard
