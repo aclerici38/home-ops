@@ -53,12 +53,7 @@ spec:
               OIDC_AUTO_REDIRECT: 'true'
               OIDC_CONFIGURATION_URL: https://id.${SECRET_DOMAIN}/.well-known/openid-configuration
 
-              # ollama
-              # OPENAI_BASE_URL: http://ollama.utilities:11434/v1
-              # OPENAI_MODEL: llama3.2-vision-custom
-              # OPENAI_WORKERS: 1
-              # OPENAI_SEND_DATABASE_DATA: 'false'
-              # OPENAI_REQUEST_TIMEOUT: 120
+              OPENAI_MODEL: gpt-5.2
 
               # postgres
               DB_ENGINE: postgres
