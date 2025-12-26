@@ -16,6 +16,8 @@ localRedirectPolicy: true
 bandwidthManager:
   enabled: true
   bbr: true
+pmtuDiscovery:
+  enabled: true
 cgroup:
   automount:
     enabled: false
@@ -27,8 +29,6 @@ endpointRoutes:
 # Doesn't work on talos
 sysctlfix:
   enabled: false
-egressGateway:
-  enabled: true
 hubble:
   enabled: true
   ui:
