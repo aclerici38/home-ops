@@ -7,12 +7,13 @@ bpf:
   datapathMode: netkit
   masquerade: true
   preallocateMaps: true
-  # tproxy: true
+  mapDynamicSizeRatio: 0.08
+  
   distributedLRU:
     enabled: true
 bpfClockProbe: true
 policyEnforcementMode: never
-enableIPv4BIGTCP: false
+enableIPv4BIGTCP: true
 localRedirectPolicy: true
 bandwidthManager:
   enabled: true
@@ -21,6 +22,8 @@ cgroup:
   automount:
     enabled: false
   hostRoot: /sys/fs/cgroup
+pmtuDiscovery:
+  enabled: true
 debug:
   enabled: false
 endpointRoutes:
@@ -28,8 +31,6 @@ endpointRoutes:
 # Doesn't work on talos
 sysctlfix:
   enabled: false
-egressGateway:
-  enabled: true
 hubble:
   enabled: true
   ui:
