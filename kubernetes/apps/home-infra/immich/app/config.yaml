@@ -22,9 +22,12 @@ spec:
             acceptedVideoCodecs:
               - hevc
               - h264
+            preset: veryslow
             crf: 23
-            preferredHwDevice: auto
-            accel: qsv
+            bframes: -1
+            refs: 0
+            gopSize: 0
+            twoPass: true
             tonemap: "reinhard"
             targetResolution: "1080"
           
