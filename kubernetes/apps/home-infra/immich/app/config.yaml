@@ -18,15 +18,16 @@ spec:
             enabled: true
             days: 30
           ffmpeg:
-            targetVideoCodec: h264
+            targetVideoCodec: hevc
             acceptedVideoCodecs:
+              - hevc
               - h264
-            preset: veryslow
+            preset: slow
             crf: 23
-            bframes: -1
+            bframes: 0
             refs: 0
-            gopSize: 0
-            twoPass: true
+            gopSize: 60
+            cqMode: icq
             preferredHwDevice: auto
             accel: qsv
             accelDecode: true
