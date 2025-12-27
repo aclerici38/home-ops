@@ -18,9 +18,8 @@ spec:
             enabled: true
             days: 30
           ffmpeg:
-            targetVideoCodec: hevc
+            targetVideoCodec: h264
             acceptedVideoCodecs:
-              - hevc
               - h264
             preset: veryslow
             crf: 23
@@ -28,6 +27,9 @@ spec:
             refs: 0
             gopSize: 0
             twoPass: true
+            preferredHwDevice: auto
+            accel: qsv
+            accelDecode: true
             tonemap: "reinhard"
             targetResolution: "1080"
           
