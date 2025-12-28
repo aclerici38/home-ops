@@ -94,4 +94,35 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: zfs-tank
   volumeMode: Filesystem
-
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: frigate-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: "59992103190528"
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: files
+    namespace: ${NS}
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: tank
+    volumeHandle: files
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - bonds
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: zfs-tank
+  volumeMode: Filesystem
