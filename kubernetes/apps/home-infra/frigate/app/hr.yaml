@@ -70,18 +70,14 @@ spec:
         type: ClusterIP
         ports:
           http-auth:
-            port: &http-auth 8971
-            targetPort: *http-auth
+            port: 8971
           http:
             primary: true
-            port: *http
-            targetPort: *http
+            port: &http 5000
           rtsp:
-            port: &rtsp 8554
-            targetPort: *rtsp
+            port: 8554
           webrtc:
-            port: &webrtc 8555
-            targetPort: *webrtc
+            port: 8555
     route:
       main:
         hostnames:
