@@ -8,9 +8,6 @@ spec:
     mode: ${DRIFT_DETECTION:=enabled}
   install:
     crds: CreateReplace
-    remediation:
-      retries: 1
-      remediateLastFailure: true
     strategy:
       name: RetryOnFailure
   upgrade:
@@ -18,6 +15,3 @@ spec:
     cleanupOnFail: true
     strategy:
       name: RemediateOnFailure
-    remediation:
-      retries: 1
-      remediateLastFailure: true
