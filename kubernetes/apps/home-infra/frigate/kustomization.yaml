@@ -7,9 +7,6 @@ configMapGenerator:
     literals:
       - APP=frigate
       - VOLSYNC_CAPACITY=25Gi
-      - VOLSYNC_ACCESSMODES=ReadWriteMany
-      - VOLSYNC_STORAGECLASS=ceph-filesystem
-      - VOLSYNC_SNAPSHOTCLASS=csi-ceph-filesystem
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret
