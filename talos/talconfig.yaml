@@ -83,6 +83,8 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "10.0.30.1"
         mtu: 9000
+        vip: &vip
+          ip: 10.0.30.250
       - interface: bond1
         dhcp: false
         bond:
@@ -156,6 +158,7 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "10.0.30.1"
         mtu: 9000
+        vip: *vip
       - interface: bond1
         dhcp: false
         bond:
@@ -231,6 +234,7 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "10.0.30.1"
         mtu: 9000
+        vip: *vip
       - interface: bond1
         dhcp: false
         bond:
