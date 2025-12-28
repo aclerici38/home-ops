@@ -57,30 +57,6 @@ spec:
                   - FOWNER
                   - DAC_OVERRIDE
                   - PERFMON
-            probes:
-              # liveness: &probes
-              #   enabled: true
-              #   custom: true
-              #   spec:
-              #     httpGet:
-              #       path: &path /api/version
-              #       port: &http 5000
-              #     initialDelaySeconds: 5
-              #     periodSeconds: 15
-              #     timeoutSeconds: 1
-              #     failureThreshold: 3
-              # readiness: *probes
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /api/version
-                    port: &http 5000
-                  initialDelaySeconds: 5
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 60
             resources:
               requests:
                 cpu: 2000m
