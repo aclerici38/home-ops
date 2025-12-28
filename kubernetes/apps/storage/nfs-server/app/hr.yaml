@@ -80,6 +80,10 @@ spec:
         existingClaim: files
         globalMounts:
           - path: /export/files
+      frigate:
+        existingClaim: frigate
+        globalMounts:
+          - path: /export/frigate
       media:
         existingClaim: media
         globalMounts:

@@ -56,3 +56,16 @@ spec:
   resources:
     requests:
       storage: "59992103190528"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: frigate
+spec:
+  storageClassName: zfs-tank
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "59992103190528"
+      

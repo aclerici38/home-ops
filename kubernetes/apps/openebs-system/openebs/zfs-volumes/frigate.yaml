@@ -1,0 +1,14 @@
+apiVersion: zfs.openebs.io/v1
+kind: ZFSVolume
+metadata:
+  name: frigate
+  finalizers:
+    - cluster.local/data-protection
+spec:
+  capacity: "59992103190528"
+  fsType: zfs
+  ownerNodeID: bonds
+  poolName: tank
+  volumeType: DATASET
+  shared: "no"
+  thinProvision: "yes"

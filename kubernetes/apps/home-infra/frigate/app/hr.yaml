@@ -122,15 +122,11 @@ spec:
       config:
         existingClaim: frigate
       media:
-        existingClaim: frigate-media
+        type: nfs
+        server: 10.0.30.25
+        path: /frigate
         globalMounts:
           - path: /media/frigate
-      # exports:
-      #   type: nfs
-      #   server: 10.0.30.25
-      #   path: /files/frigate
-      #   globalMounts:
-      #     - path: /media/frigate/exports
       tmpfs:
         type: emptyDir
         globalMounts:
