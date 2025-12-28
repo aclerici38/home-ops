@@ -107,7 +107,7 @@ spec:
   claimRef:
     apiVersion: v1
     kind: PersistentVolumeClaim
-    name: files
+    name: frigate
     namespace: ${NS}
   csi:
     driver: zfs.csi.openebs.io
