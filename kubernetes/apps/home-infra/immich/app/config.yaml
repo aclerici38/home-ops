@@ -24,7 +24,8 @@ spec:
               - h264
             preset: slow
             crf: 23
-            accel: vaapi
+            bframes: 0
+            accel: qsv
             accelDecode: true
             tonemap: "reinhard"
             targetResolution: "1080"
