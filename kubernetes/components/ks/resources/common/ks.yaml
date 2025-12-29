@@ -5,7 +5,19 @@ kind: Kustomization
 metadata:
   name: APP
 spec:
-  dependsOn: []
+  dependsOn:
+    - name: ${APP_DEP:=flux-system}
+      namespace: ${APP_DEP_NS:=flux-system}
+    - name: ${APP_DEP_2:=flux-system}
+      namespace: ${APP_DEP_2_NS:=flux-system}
+    - name: ${APP_DEP_3:=flux-system}
+      namespace: ${APP_DEP_3_NS:=flux-system}
+    - name: ${APP_DEP_4:=flux-system}
+      namespace: ${APP_DEP_4_NS:=flux-system}
+    - name: ${APP_DEP_5:=flux-system}
+      namespace: ${APP_DEP_5_NS:=flux-system}
+    - name: ${APP_DEP_6:=flux-system}
+      namespace: ${APP_DEP_6_NS:=flux-system}
   # Use component for default patches instead of spec.patches to patch in SM patches w/o overwriting it
   components:
     - ../../../../components/hr

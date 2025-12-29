@@ -6,14 +6,7 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=k8tz
-patches:
-  - patch: |-
-      - op: add
-        path: /spec/dependsOn/-
-        value:
-          name: cert-manager
-    target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
+      - APP_DEP=cert-manager
+      - APP_DEP_NS=${NS}
 components:
   - ../../../components/ks/app
