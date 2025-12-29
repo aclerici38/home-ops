@@ -23,11 +23,9 @@ spec:
               - hevc
               - h264
             preset: slow
-            bframes: 0
-            crf: 18
+            crf: 23
             accel: qsv
             accelDecode: true
-            tonemap: "reinhard"
             targetResolution: "1080"
           
           job:
