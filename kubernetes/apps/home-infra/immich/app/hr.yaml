@@ -45,7 +45,6 @@ spec:
               REDIS_HOSTNAME: dragonfly-db.database.svc.cluster.local
               REDIS_DBINDEX: 2
               IMMICH_TELEMETRY_INCLUDE: all
-              IMMICH_CONFIG_FILE: &config /config/immich-config.yaml
               IMMICH_IGNORE_MOUNT_CHECK_ERRORS: true
               IMMICH_PROCESS_INVALID_IMAGES: true
               DB_URL:
@@ -167,14 +166,6 @@ spec:
           server:
             immich-server:
               - path: /data/encoded-video
-      config:
-        type: secret
-        name: immich-config
-        advancedMounts:
-          server:
-            immich-server:
-              - path: *config
-                subPath: config.yaml
       cache:
         existingClaim: immich-ml-cache
         advancedMounts:
