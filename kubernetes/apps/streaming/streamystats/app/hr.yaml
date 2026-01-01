@@ -114,7 +114,7 @@ spec:
         hostnames:
           - ${APP_URL}
         parentRefs:
-          - name: internal
+          - name: external
             namespace: envoy-system
             sectionName: https
         rules:
