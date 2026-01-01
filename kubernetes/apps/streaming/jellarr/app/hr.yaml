@@ -13,8 +13,6 @@ spec:
     namespace: flux-system
   install:
     timeout: 2m
-    remediation:
-      retries: 1
   rollback:
     # force necessary for a job
     force: true
@@ -22,8 +20,6 @@ spec:
     # force necessary for a job
     force: true
     timeout: 2m
-    remediation:
-      retries: 1
   dependsOn:
     - name: jellyfin
   values:
@@ -83,9 +79,6 @@ spec:
                 - name: Streamyfin
                   url: https://raw.githubusercontent.com/streamyfin/jellyfin-plugin-streamyfin/main/manifest.json
                   enabled: true
-                - name: Xtream
-                  url: https://kevinjil.github.io/Jellyfin.Xtream/repository.json
-                  enabled: true
               trickplayOptions:
                 enableHwAcceleration: true
                 enableHwEncoding: true
@@ -106,25 +99,3 @@ spec:
               enableDecodingColorDepth12HevcRext: true
               allowHevcEncoding: true
               allowAv1Encoding: true
-            library:
-              virtualFolders:
-                - name: Anime Shows
-                  collectionType: tvshows
-                  libraryOptions:
-                    pathInfos:
-                      - path: /allMedia/anime/shows
-                - name: Movies
-                  collectionType: movies
-                  libraryOptions:
-                    pathInfos:
-                      - path: /allMedia/movies
-                - name: TV Shows
-                  collectionType: tvshows
-                  libraryOptions:
-                    pathInfos:
-                      - path: /allMedia/tv
-                - name: Top Gear Extras
-                  collectionType: homevideos
-                  libraryOptions:
-                    pathInfos:
-                      - path: /allMedia/Top Gear Extras
