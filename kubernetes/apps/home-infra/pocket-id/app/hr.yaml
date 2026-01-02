@@ -21,7 +21,7 @@ spec:
       retries: 1
   values:
     controllers:
-      main:
+      pocket-id:
         pod:
           hostUsers: false
           securityContext:
@@ -31,7 +31,6 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
-        strategy: RollingUpdate
         containers:
           pocket-id:
             image:
@@ -40,26 +39,33 @@ spec:
             env:
               APP_URL: https://id.${SECRET_DOMAIN}
               TRUST_PROXY: "true"
-              DB_PROVIDER: postgres
               UPDATE_CHECK_DISABLED: "true"
               SESSION_DURATION: 1440
-              KEYS_STORAGE: database
               EMAILS_VERIFIED: true
+              FILE_BACKEND: database
+              METRICS_ENABLED: true
+              OTEL_METRICS_EXPORTER: prometheus
 
               EMAIL_LOGIN_NOTIFICATION_ENABLED: true
               SMTP_HOST: smtp-relay.cluster-infra.svc.cluster.local
               SMTP_PORT: 25
               SMTP_FROM: bot@${SECRET_DOMAIN}
               SMTP_TLS: none
+              
+              MAXMIND_LICENSE_KEY:
+                secretKeyRef:
+                  name: pocket-id
+                  key: MAXMIND_LICENSE_KEY
+              ENCRYPTION_KEY:
+                secretKeyRef:
+                  name: pocket-id
+                  key: ENCRYPTION_KEY
 
               DB_CONNECTION_STRING:
                 valueFrom:
                   secretKeyRef:
                     name: pocket-id-db-app
                     key: uri
-            envFrom:
-              - secretRef:
-                  name: pocket-id
             probes:
               liveness: &probes
                 enabled: true
@@ -79,13 +85,20 @@ spec:
               limits:
                 memory: 256Mi
     service:
-      main:
-        controller: main
+      pocket-id:
+        controller: pocket-id
         ports:
           http:
             port: &port 1411
+          metrics:
+            port: &promPort 9464
+    serviceMonitor:
+      pocket-id:
+        serviceName: pocket-id
+        endpoints:
+          - port: *promPort
     route:
-      main:
+      pocket-id:
         hostnames:
           - id.${SECRET_DOMAIN}
         parentRefs:
@@ -98,7 +111,7 @@ spec:
                   type: PathPrefix
                   value: /
             backendRefs:
-              - identifier: main
+              - identifier: pocket-id
                 port: *port
     persistence:
       data:
