@@ -91,12 +91,12 @@ spec:
           http:
             port: &port 1411
           metrics:
-            port: &promPort 9464
+            port: 9464
     serviceMonitor:
       pocket-id:
         serviceName: pocket-id
         endpoints:
-          - port: *promPort
+          - port: metrics
     route:
       pocket-id:
         hostnames:
