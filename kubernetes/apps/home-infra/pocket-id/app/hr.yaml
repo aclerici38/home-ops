@@ -45,6 +45,7 @@ spec:
               FILE_BACKEND: database
               METRICS_ENABLED: true
               OTEL_METRICS_EXPORTER: prometheus
+              OTEL_EXPORTER_PROMETHEUS_HOST: 0.0.0.0
 
               EMAIL_LOGIN_NOTIFICATION_ENABLED: true
               SMTP_HOST: smtp-relay.cluster-infra.svc.cluster.local
