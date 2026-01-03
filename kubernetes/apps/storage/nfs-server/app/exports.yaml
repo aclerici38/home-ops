@@ -4,4 +4,4 @@ metadata:
   name: nfs-exports
 data:
   exports: |-
-    /export *(rw,fsid=0,crossmnt,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check)
+    /export *(rw,fsid=0,crossmnt,all_squash,anonuid=1000,anongid=1000,insecure,no_subtree_check,async,no_wdelay)
