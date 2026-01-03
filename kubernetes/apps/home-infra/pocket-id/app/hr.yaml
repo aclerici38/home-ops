@@ -35,7 +35,7 @@ spec:
           pocket-id:
             image:
               repository: ghcr.io/pocket-id/pocket-id
-              tag: v2.0.1-distroless@sha256:fe24e1ef1c8d1da7753cfdeac3fc17c7fbcaec0fca369b2b10161dcf339a7bfb
+              tag: v2.0.2-distroless@sha256:f0d6848353be1bfae425456c6ed2010e8c9e1f36d69fe805f0d8378d3eb3ab49
             env:
               APP_URL: https://id.${SECRET_DOMAIN}
               TRUST_PROXY: "true"
