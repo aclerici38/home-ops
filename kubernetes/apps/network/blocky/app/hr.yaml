@@ -131,6 +131,9 @@ spec:
           - port: http
     route:
       blocky-DOH:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            url: https://dns.${SECRET_DOMAIN}/dns-query
         hostnames:
           - dns.${SECRET_DOMAIN}
         parentRefs:
