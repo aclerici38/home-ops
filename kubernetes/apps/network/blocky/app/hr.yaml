@@ -143,7 +143,7 @@ spec:
                   type: PathPrefix
                   value: /dns-query
             backendRefs:
-              - identifier: k8s
+              - identifier: blocky
                 port: *port
     persistence:
       config:

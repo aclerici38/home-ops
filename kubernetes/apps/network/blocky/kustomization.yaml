@@ -13,11 +13,6 @@ patches:
         value:
           name: dragonfly-cluster
           namespace: database
-      - op: add
-        path: /spec/dependsOn/-
-        value:
-          name: cert-manager
-          namespace: cluster-infra
     target:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io
