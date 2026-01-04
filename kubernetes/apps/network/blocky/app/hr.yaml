@@ -218,10 +218,10 @@ spec:
             bootstrapDns:
               - https://1.1.1.1/dns-query
             
-            dnssec:
-              validate: true
-              cacheExpirationHours: 2
-              clockSkewToleranceSec: 300
+            # dnssec:
+            #   validate: true
+            #   cacheExpirationHours: 2
+            #   clockSkewToleranceSec: 300
             
             upstreams:
               groups:
