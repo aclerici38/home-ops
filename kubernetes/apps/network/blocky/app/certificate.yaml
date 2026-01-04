@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: blocky-tls
+spec:
+  secretName: blocky-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: dot.${SECRET_DOMAIN}
+  dnsNames:
+    - dot.${SECRET_DOMAIN}
+  privateKey:
+    rotationPolicy: Always
