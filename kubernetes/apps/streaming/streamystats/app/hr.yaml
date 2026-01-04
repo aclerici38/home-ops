@@ -22,7 +22,6 @@ spec:
   values:
     controllers:
       frontend:
-        strategy: RollingUpdate
         initContainers: &init
           migrate:
             image:
@@ -63,7 +62,6 @@ spec:
               limits:
                 memory: 1Gi
       job-server:
-        strategy: RollingUpdate
         initContainers: *init
         containers:
           main:
