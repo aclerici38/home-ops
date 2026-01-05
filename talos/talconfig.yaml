@@ -33,7 +33,6 @@ cniConfig:
 nodes:
   - hostname: "bonds"
     ipAddress: "10.0.30.25"
-    ignoreHostname: true
     installDiskSelector:
       wwid: eui.00253841414031f0
     machineSpec:
@@ -111,7 +110,6 @@ nodes:
           grow: true
   - hostname: "cain"
     ipAddress: "10.0.30.18"
-    ignoreHostname: true
     installDiskSelector:
       wwid: eui.6479a79d30000001
     machineSpec:
@@ -192,7 +190,6 @@ nodes:
                 - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
   - hostname: "posey"
     ipAddress: "10.0.30.28"
-    ignoreHostname: true
     installDiskSelector:
       wwid: eui.00000000000000000026b7686e946425
     machineSpec:
