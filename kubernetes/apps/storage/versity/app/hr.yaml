@@ -23,7 +23,7 @@ spec:
     controllers:
       versity:
         pod:
-          priorityClassName: system-node-critical
+          priorityClassName: s3-critical
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
