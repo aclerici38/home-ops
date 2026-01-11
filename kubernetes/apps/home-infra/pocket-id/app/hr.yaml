@@ -22,10 +22,7 @@ spec:
     instance:
       name: pocket-id
       spec:
-        image: ghcr.io/pocket-id/pocket-id:v2.1.0-distroless@sha256:188fa3c6e7852e325ffcb7affe4572e314855ba2b15627af2950143e73609dac
-        auth:
-          userRef:
-            name: anthony
+        image: ghcr.io/pocket-id/pocket-id:v2.2.0
         encryptionKey:
           valueFrom:
             secretKeyRef:
@@ -66,16 +63,11 @@ spec:
             sectionName: https
     users:
       - name: anthony
-        admin: true
-        email: 
-          value: ${EMAIL}
-        firstName: 
-          value: Anthony
-        lastName: 
-          value: Clerici
-        apiKeys:
-          - name: pocket-id-operator
-            description: "Used by pocket-id operator"    
-            secretRef:
-              name: pocket-id
-              key: OPERATOR_API_KEY
+        spec:
+          admin: true
+          email: 
+            value: ${EMAIL}
+          firstName: 
+            value: Anthony
+          lastName: 
+            value: Clerici
