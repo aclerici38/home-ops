@@ -38,6 +38,23 @@ spec:
               key: uri
         appUrl: https://id.${SECRET_DOMAIN}
         hostUsers: false
+        env:
+          - name: UPDATE_CHECK_DISABLED
+            value: true
+          - name: SESSION_DURATION
+            value: 1440
+          - name: FILE_BACKEND
+            value: database
+          - name: EMAIL_LOGIN_NOTIFICATION_ENABLED
+            value: true
+          - name: SMTP_HOST
+            value: smtp-relay.cluster-infra.svc.cluster.local
+          - name: SMTP_PORT
+            value: 25
+          - name: SMTP_FROM
+            value: bot@${SECRET_DOMAIN}
+          - name: SMTP_TLS
+            value: none
       route:
         enabled: true
         host: id.${SECRET_DOMAIN}
@@ -61,7 +78,7 @@ spec:
           value: ${EMAIL}
         apiKeys:
           - name: pocket-id-operator
-            description: "Admin API key"    
+            description: "Used by pocket-id operator"    
             secretRef:
               name: pocket-id
-              key: api-key
+              key: OPERATOR_API_KEY
