@@ -1,15 +1,14 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: pocket-id
+  name: pocket-id-operator
 spec:
   interval: 1h
   maxHistory: 1
   chartRef:
     kind: OCIRepository
-    name: app-template
+    name: pocket-id-operator
     namespace: flux-system
   install:
     timeout: 2m
@@ -20,102 +19,49 @@ spec:
     remediation:
       retries: 1
   values:
-    controllers:
-      pocket-id:
-        pod:
-          hostUsers: false
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: RuntimeDefault }
-        containers:
-          pocket-id:
-            image:
-              repository: ghcr.io/pocket-id/pocket-id
-              tag: v2.1.0-distroless@sha256:188fa3c6e7852e325ffcb7affe4572e314855ba2b15627af2950143e73609dac
-            env:
-              APP_URL: https://id.${SECRET_DOMAIN}
-              TRUST_PROXY: "true"
-              UPDATE_CHECK_DISABLED: "true"
-              SESSION_DURATION: 1440
-              EMAILS_VERIFIED: true
-              FILE_BACKEND: database
-              METRICS_ENABLED: true
-              OTEL_METRICS_EXPORTER: prometheus
-              OTEL_EXPORTER_PROMETHEUS_HOST: 0.0.0.0
-
-              EMAIL_LOGIN_NOTIFICATION_ENABLED: true
-              SMTP_HOST: smtp-relay.cluster-infra.svc.cluster.local
-              SMTP_PORT: 25
-              SMTP_FROM: bot@${SECRET_DOMAIN}
-              SMTP_TLS: none
-              
-              MAXMIND_LICENSE_KEY:
-                secretKeyRef:
-                  name: pocket-id
-                  key: MAXMIND_LICENSE_KEY
-              ENCRYPTION_KEY:
-                secretKeyRef:
-                  name: pocket-id
-                  key: ENCRYPTION_KEY
-
-              DB_CONNECTION_STRING:
-                valueFrom:
-                  secretKeyRef:
-                    name: pocket-id-db-app
-                    key: uri
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  exec:
-                    command: ["/app/pocket-id", "healthcheck"]
-              readiness: *probes
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
-            resources:
-              requests:
-                cpu: 10m
-                memory: 10Mi
-              limits:
-                memory: 256Mi
-    service:
-      pocket-id:
-        controller: pocket-id
-        ports:
-          http:
-            port: &port 1411
-          metrics:
-            port: 9464
-    serviceMonitor:
-      pocket-id:
-        serviceName: pocket-id
-        endpoints:
-          - port: metrics
-    route:
-      pocket-id:
-        hostnames:
-          - id.${SECRET_DOMAIN}
+    instance:
+      name: pocket-id
+      spec:
+        image: ghcr.io/pocket-id/pocket-id:v2.1.0-distroless@sha256:188fa3c6e7852e325ffcb7affe4572e314855ba2b15627af2950143e73609dac
+        auth:
+          userRef:
+            name: anthony
+        encryptionKey:
+          valueFrom:
+            secretKeyRef:
+              name: pocket-id
+              key: ENCRYPTION_KEY
+        databaseUrl:
+          valueFrom:
+            secretKeyRef:
+              name: pocket-id-db-app
+              key: uri
+        appUrl: https://id.${SECRET_DOMAIN}
+        hostUsers: false
+      route:
+        enabled: true
+        host: id.${SECRET_DOMAIN}
         parentRefs:
-          - name: external
+          - group: gateway.networking.k8s.io
+            kind: Gateway
+            name: external
             namespace: envoy-system
             sectionName: https
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /
-            backendRefs:
-              - identifier: pocket-id
-                port: *port
-    persistence:
-      data:
-        type: emptyDir
-        globalMounts:
-          - path: /app/data
+  extraManifests:
+    - |
+      apiVersion: pocketid.internal/v1alpha1
+      kind: PocketIDUser
+      metadata:
+        name: anthony
+      spec:
+        admin: true
+        email:
+          firstName: Anthony
+          lastName: Clerici
+          value: ${EMAIL}
+        apiKeys:
+          - name: pocket-id-operator
+            description: "Admin API key"    
+            secretRef:
+              name: pocket-id
+              key: api-key
