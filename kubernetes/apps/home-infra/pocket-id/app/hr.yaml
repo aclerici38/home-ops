@@ -40,21 +40,21 @@ spec:
         hostUsers: false
         env:
           - name: UPDATE_CHECK_DISABLED
-            value: true
+            value: "true"
           - name: SESSION_DURATION
-            value: 1440
+            value: "1440"
           - name: FILE_BACKEND
-            value: database
+            value: "database"
           - name: EMAIL_LOGIN_NOTIFICATION_ENABLED
-            value: true
+            value: "true"
           - name: SMTP_HOST
-            value: smtp-relay.cluster-infra.svc.cluster.local
+            value: "smtp-relay.cluster-infra.svc.cluster.local"
           - name: SMTP_PORT
-            value: 25
+            value: "25"
           - name: SMTP_FROM
-            value: bot@${SECRET_DOMAIN}
+            value: "bot@${SECRET_DOMAIN}"
           - name: SMTP_TLS
-            value: none
+            value: "none"
       route:
         enabled: true
         host: id.${SECRET_DOMAIN}
