@@ -64,21 +64,21 @@ spec:
             name: external
             namespace: envoy-system
             sectionName: https
-  extraManifests:
-    - |
-      apiVersion: pocketid.internal/v1alpha1
-      kind: PocketIDUser
-      metadata:
-        name: anthony
-      spec:
-        admin: true
-        email:
-          firstName: Anthony
-          lastName: Clerici
-          value: ${EMAIL}
-        apiKeys:
-          - name: pocket-id-operator
-            description: "Used by pocket-id operator"    
-            secretRef:
-              name: pocket-id
-              key: OPERATOR_API_KEY
+    extraManifests:
+      - |
+        apiVersion: pocketid.internal/v1alpha1
+        kind: PocketIDUser
+        metadata:
+          name: anthony
+        spec:
+          admin: true
+          email:
+            firstName: Anthony
+            lastName: Clerici
+            value: ${EMAIL}
+          apiKeys:
+            - name: pocket-id-operator
+              description: "Used by pocket-id operator"    
+              secretRef:
+                name: pocket-id
+                key: OPERATOR_API_KEY
