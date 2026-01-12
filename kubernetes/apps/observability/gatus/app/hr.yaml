@@ -70,7 +70,7 @@ spec:
               CLIENT_SECRET:
                 secretKeyRef:
                   name: gatus-oidc-credentials
-                  key: client_id
+                  key: client_secret
             probes:
               readiness: &probes
                 enabled: true
