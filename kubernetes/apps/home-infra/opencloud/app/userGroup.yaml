@@ -1,0 +1,23 @@
+---
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDUserGroup
+metadata:
+  name: opencloud-users
+spec:
+  userRefs:
+    - name: melanie
+      namespace: home-infra
+    - name: steve
+      namespace: home-infra
+    - name: sam
+      namespace: home-infra
+---
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDUserGroup
+metadata:
+  name: opencloud-admins
+spec:
+  userRefs:
+    - name: anthony
+      namespace: home-infra
+      

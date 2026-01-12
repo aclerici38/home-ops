@@ -37,6 +37,14 @@ spec:
               tag: 1.1.0-stable@sha256:3db0a5ebde84ff1de72c93f776495089e79f3e710e931687c1a720c162e32a20
             env:
               FILEBROWSER_DISABLE_AUTOMATIC_BACKUP: true
+              FILEBROWSER_OIDC_CLIENT_ID: 
+                secretKeyRef:
+                  name: filebrowser-oidc-credentials
+                  key: client_id
+              FILEBROWSER_OIDC_CLIENT_SECRET: 
+                secretKeyRef:
+                  name: filebrowser-oidc-credentials
+                  key: client_secret
             envFrom:
               - secretRef:
                   name: filebrowser

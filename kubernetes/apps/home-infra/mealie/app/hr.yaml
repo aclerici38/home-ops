@@ -51,7 +51,18 @@ spec:
               OIDC_USER_GROUP: "mealie_users"
               OIDC_USER_CLAIM: email
               OIDC_AUTO_REDIRECT: 'true'
-              OIDC_CONFIGURATION_URL: https://id.${SECRET_DOMAIN}/.well-known/openid-configuration
+              OIDC_CONFIGURATION_URL: 
+                secretKeyRef:
+                  name: mealie-oidc-credentials
+                  key: discovery_url
+              OIDC_CLIENT_ID: 
+                secretKeyRef:
+                  name: mealie-oidc-credentials
+                  key: client_id
+              OIDC_CLIENT_SECRET: 
+                secretKeyRef:
+                  name: mealie-oidc-credentials
+                  key: client_secret
 
               OPENAI_MODEL: gpt-5.2
 

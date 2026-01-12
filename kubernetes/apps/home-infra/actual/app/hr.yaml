@@ -38,9 +38,14 @@ spec:
               ACTUAL_OPENID_SERVER_HOSTNAME: https://${APP_URL}
               ACTUAL_OPENID_AUTH_METHOD: openid
               ACTUAL_OPENID_ENFORCE: true
-            envFrom:
-              - secretRef:
-                  name: actual
+              ACTUAL_OPENID_CLIENT_ID:
+                secretKeyRef:
+                  name: actual-oidc-credentials
+                  key: client_id
+              ACTUAL_OPENID_CLIENT_SECRET:
+                secretKeyRef:
+                  name: actual-oidc-credentials
+                  key: client_secret
             probes:
               readiness: &probes
                 enabled: true

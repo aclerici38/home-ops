@@ -65,12 +65,12 @@ spec:
                   key: uri
               CLIENT_ID:
                 secretKeyRef:
-                  name: gatus
-                  key: CLIENT_ID
+                  name: gatus-oidc-credentials
+                  key: client_id
               CLIENT_SECRET:
                 secretKeyRef:
-                  name: gatus
-                  key: CLIENT_SECRET
+                  name: gatus-oidc-credentials
+                  key: client_id
             probes:
               readiness: &probes
                 enabled: true

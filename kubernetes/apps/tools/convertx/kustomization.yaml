@@ -6,7 +6,13 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=convertx
+patches:
+  - path: ./patch.yaml
+    target:
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret
   - ../../../components/kustomize/envoy/oauth
+  - ../../../components/kustomize/pocket-id

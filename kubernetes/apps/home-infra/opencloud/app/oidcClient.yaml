@@ -1,0 +1,36 @@
+---
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: opencloud-web
+spec:
+  clientId: web
+  isPublic: true
+  pkceEnabled: true
+  allowedUserGroups:
+    - name: opencloud-admins
+    - name: opencloud-users
+---
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: opencloud-iOS
+spec:
+  clientId: OpenCloudIOS
+  isPublic: true
+  pkceEnabled: true
+  allowedUserGroups:
+    - name: opencloud-admins
+    - name: opencloud-users
+---
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: opencloud-desktop
+spec:
+  clientId: OpenCloudDesktop
+  isPublic: true
+  pkceEnabled: true
+  allowedUserGroups:
+    - name: opencloud-admins
+    - name: opencloud-users
