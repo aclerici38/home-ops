@@ -6,4 +6,5 @@ metadata:
 spec:
   launchUrl: https://${APP_URL}
   allowedUserGroups:
-    - ${APP}
+    - name: ${APP}
+      namespace: ${NS}
