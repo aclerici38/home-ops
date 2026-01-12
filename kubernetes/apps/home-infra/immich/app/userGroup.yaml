@@ -1,0 +1,15 @@
+---
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDUserGroup
+metadata:
+  name: immich
+spec:
+  userRefs:
+    - name: anthony
+      namespace: home-infra
+    - name: melanie
+      namespace: home-infra
+    - name: steve
+      namespace: home-infra
+    - name: sam
+      namespace: home-infra

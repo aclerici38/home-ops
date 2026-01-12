@@ -1,0 +1,9 @@
+---
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: ${APP}
+spec:
+  launchUrl: https://${APP_URL}
+  allowedUserGroups:
+    - ${APP}
