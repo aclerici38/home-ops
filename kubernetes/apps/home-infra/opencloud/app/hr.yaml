@@ -40,7 +40,7 @@ spec:
               OC_URL: &url https://cloud.${SECRET_DOMAIN}
               OC_OIDC_ISSUER:
                 secretKeyRef:
-                  name: opencloud-web-oidc-secret
+                  name: opencloud-web-oidc-credentials
                   key: discovery_url
               OC_EXCLUDE_RUN_SERVICES: idp,ocm
               OC_ADD_RUN_SERVICES: notifications
