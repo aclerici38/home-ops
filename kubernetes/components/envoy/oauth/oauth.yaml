@@ -13,9 +13,9 @@ spec:
       issuer: "https://id.${SECRET_DOMAIN}"
     clientIDRef:
       kind: Secret
-      name: ${APP}
+      name: ${APP}-oidc-credentials
     clientSecret:
-      name: ${APP}
+      name: ${APP}-oidc-credentials
     refreshToken: true
     cookieDomain: ${SECRET_DOMAIN}
     logoutPath: "${LOGOUT_PATH:-/logout}"

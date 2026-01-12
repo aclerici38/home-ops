@@ -1,0 +1,19 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: patch
+spec:
+  patches:
+    - patch: |-
+        apiVersion: pocketid.internal/v1alpha1
+        kind: PocketIDUserGroup
+        metadata:
+          name: patch
+        spec:
+          secret:
+            keys:
+              clientId: client-id
+              clientSecret: client-secret
+      target:
+        kind: Cluster
