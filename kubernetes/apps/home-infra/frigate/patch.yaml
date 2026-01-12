@@ -7,7 +7,7 @@ spec:
   patches:
     - patch: |-
         apiVersion: pocketid.internal/v1alpha1
-        kind: PocketIDUserGroup
+        kind: PocketIDOIDCClient
         metadata:
           name: patch
         spec:
@@ -16,4 +16,4 @@ spec:
               clientId: client-id
               clientSecret: client-secret
       target:
-        kind: PocketIDUserGroup
+        kind: PocketIDOIDCClient
