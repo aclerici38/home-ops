@@ -72,12 +72,15 @@ spec:
           lastName: 
             value: Clerici
       - name: steve
-        userInfoSecretRef:
-          name: pocket-id-steve-info
+        spec:
+          userInfoSecretRef:
+            name: pocket-id-steve-info
       - name: sam
-        userInfoSecretRef:
-          name: pocket-id-sam-info
+        spec:
+          userInfoSecretRef:
+            name: pocket-id-sam-info
       - name: melanie
-        userInfoSecretRef:
-          name: pocket-id-melanie-info
+        spec:
+          userInfoSecretRef:
+            name: pocket-id-melanie-info
           
