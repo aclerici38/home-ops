@@ -38,10 +38,7 @@ spec:
               OC_INSECURE: false
               OC_LOG_LEVEL: info
               OC_URL: &url https://cloud.${SECRET_DOMAIN}
-              OC_OIDC_ISSUER:
-                secretKeyRef:
-                  name: opencloud-web-oidc-credentials
-                  key: discovery_url
+              OC_OIDC_ISSUER: https://id.${SECRET_DOMAIN}
               OC_EXCLUDE_RUN_SERVICES: idp,ocm
               OC_ADD_RUN_SERVICES: notifications
               OC_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD: true
