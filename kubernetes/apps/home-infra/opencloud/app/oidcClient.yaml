@@ -8,9 +8,9 @@ spec:
   isPublic: true
   pkceEnabled: true
   callbackUrls:
-    - https://id.${SECRET_DOMAIN}
-    - https://id.${SECRET_DOMAIN}/oidc-callback.html
-    - https://id.${SECRET_DOMAIN}/oidc-silent-redirect.html
+    - https://cloud.${SECRET_DOMAIN}
+    - https://cloud.${SECRET_DOMAIN}/oidc-callback.html
+    - https://cloud.${SECRET_DOMAIN}/oidc-silent-redirect.html
   allowedUserGroups:
     - name: opencloud-admins
     - name: opencloud-users
