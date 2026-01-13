@@ -11,6 +11,9 @@ spec:
       namespace: home-infra
     - name: sam
       namespace: home-infra
+  customClaims:
+    - key: oc_groups
+      value: opencloud-users
 ---
 apiVersion: pocketid.internal/v1alpha1
 kind: PocketIDUserGroup
@@ -20,4 +23,7 @@ spec:
   userRefs:
     - name: anthony
       namespace: home-infra
+  customClaims:
+    - key: oc_groups
+      value: opencloud-admins
       
