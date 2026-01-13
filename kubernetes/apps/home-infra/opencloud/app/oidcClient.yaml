@@ -7,6 +7,10 @@ spec:
   clientId: web
   isPublic: true
   pkceEnabled: true
+  callbackUrls:
+    - https://id.${SECRET_DOMAIN}
+    - https://id.${SECRET_DOMAIN}/oidc-callback.html
+    - https://id.${SECRET_DOMAIN}/oidc-silent-redirect.html
   allowedUserGroups:
     - name: opencloud-admins
     - name: opencloud-users
@@ -19,6 +23,10 @@ spec:
   clientId: OpenCloudIOS
   isPublic: true
   pkceEnabled: true
+  callbackUrls:
+    - oc://ios.opencloud.eu
+  logoutCallbackUrls:
+    - oc://ios.opencloud.eu
   allowedUserGroups:
     - name: opencloud-admins
     - name: opencloud-users
@@ -31,6 +39,9 @@ spec:
   clientId: OpenCloudDesktop
   isPublic: true
   pkceEnabled: true
+  callbackUrls:
+    - http://127.0.0.1
+    - http://localhost
   allowedUserGroups:
     - name: opencloud-admins
     - name: opencloud-users
