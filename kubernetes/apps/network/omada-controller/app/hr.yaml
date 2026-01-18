@@ -58,7 +58,7 @@ spec:
               EAP_MONGOD_URI: mongodb://127.0.0.1:27017/app
               MANAGE_HTTP_PORT: "8080" # Must be set on install
               # omada tries to redirect to this port for any traffic to it, set to 443 so already at https
-              MANAGE_HTTPS_PORT: &port "443" # Must be set on install
+              MANAGE_HTTPS_PORT: "443" # Must be set on install
             resources:
               requests:
                 cpu: 500m
@@ -122,7 +122,7 @@ spec:
           coredns.io/hostname: ${APP_URL}
         ports:
           manage-https:
-            port: *port
+            port: &port 443
           app-discovery:
             port: 27001
             protocol: UDP
