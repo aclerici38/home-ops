@@ -45,9 +45,6 @@ spec:
                 secretKeyRef:
                   name: filebrowser-oidc-credentials
                   key: client_secret
-            envFrom:
-              - secretRef:
-                  name: filebrowser
             probes:
               liveness: &probes
                 enabled: true
