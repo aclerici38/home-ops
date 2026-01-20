@@ -4,13 +4,14 @@ kind: PocketIDUserGroup
 metadata:
   name: mealie
 spec:
-  userRefs:
-    - name: anthony
-      namespace: home-infra
-    - name: melanie
-      namespace: home-infra
-    - name: steve
-      namespace: home-infra
-    - name: sam
-      namespace: home-infra
+  users:
+    userRefs:
+      - name: anthony
+        namespace: home-infra
+      - name: melanie
+        namespace: home-infra
+      - name: steve
+        namespace: home-infra
+      - name: sam
+        namespace: home-infra
       

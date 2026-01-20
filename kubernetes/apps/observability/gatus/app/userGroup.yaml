@@ -4,7 +4,8 @@ kind: PocketIDUserGroup
 metadata:
   name: gatus
 spec:
-  userRefs:
-    - name: anthony
-      namespace: home-infra
+  users:
+    userRefs:
+      - name: anthony
+        namespace: home-infra
       

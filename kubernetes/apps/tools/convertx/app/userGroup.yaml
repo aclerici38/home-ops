@@ -4,11 +4,12 @@ kind: PocketIDUserGroup
 metadata:
   name: convertx
 spec:
-  userRefs:
-    - name: anthony
-      namespace: home-infra
-    - name: melanie
-      namespace: home-infra
-    - name: steve
-      namespace: home-infra
+  users:
+    userRefs:
+      - name: anthony
+        namespace: home-infra
+      - name: melanie
+        namespace: home-infra
+      - name: steve
+        namespace: home-infra
       

@@ -4,13 +4,14 @@ kind: PocketIDUserGroup
 metadata:
   name: opencloud-users
 spec:
-  userRefs:
-    - name: melanie
-      namespace: home-infra
-    - name: steve
-      namespace: home-infra
-    - name: sam
-      namespace: home-infra
+  users:
+    userRefs:
+      - name: melanie
+        namespace: home-infra
+      - name: steve
+        namespace: home-infra
+      - name: sam
+        namespace: home-infra
   customClaims:
     - key: oc_groups
       value: opencloud-users
@@ -20,9 +21,10 @@ kind: PocketIDUserGroup
 metadata:
   name: opencloud-admins
 spec:
-  userRefs:
-    - name: anthony
-      namespace: home-infra
+  users:
+    userRefs:
+      - name: anthony
+        namespace: home-infra
   customClaims:
     - key: oc_groups
       value: opencloud-admins
