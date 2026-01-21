@@ -1,0 +1,13 @@
+---
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: GithubAccessToken
+metadata:
+  name: botthebuilder-auth-token
+spec:
+  appID: "1155719"
+  installID: "61553692"
+  auth:
+    privateKey:
+      secretRef:
+        name: renovate-operator # reference secret from component in app
+        key: PRIVATE_KEY.pem
