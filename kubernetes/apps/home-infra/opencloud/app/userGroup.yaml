@@ -5,12 +5,12 @@ metadata:
   name: opencloud-users
 spec:
   users:
+    usernames:
+      - melanie
+    userIDs:
+      - 56f6f365-feb5-464f-bf31-f537d3a34a9e
     userRefs:
-      - name: melanie
-        namespace: home-infra
       - name: steve
-        namespace: home-infra
-      - name: sam
         namespace: home-infra
   customClaims:
     - key: oc_groups
