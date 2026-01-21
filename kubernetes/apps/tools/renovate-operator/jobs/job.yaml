@@ -3,7 +3,7 @@ kind: RenovateJob
 metadata:
   name: aclerici38
 spec:
-  discoveryFilter: aclerici38/*
+  discoverTopics: "renovate"
   extraEnv:
     - name: LOG_LEVEL
       value: debug
