@@ -22,4 +22,3 @@ spec:
         serverAddress: http://prometheus-operated.observability.svc.cluster.local:9090
         query: max(kube_pod_status_ready{namespace="storage",pod=~"nfs-server-.*",condition="true"}) OR on() vector(0)
         threshold: "1"
-        ignoreNullValues: "false"
