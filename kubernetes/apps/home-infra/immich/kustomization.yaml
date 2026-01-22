@@ -8,6 +8,7 @@ configMapGenerator:
       - APP=immich
       - CNPG_CAPACITY=20Gi
       - CNPG_POOLMODE=session
+      - REPLICAS=2
 patches:
   - path: ./patch.yaml
     target:
@@ -27,3 +28,4 @@ components:
   - ../../../components/kustomize/external-secret
   - ../../../components/kustomize/cnpg/restore
   - ../../../components/kustomize/pocket-id
+  - ../../../components/kustomize/nfs
