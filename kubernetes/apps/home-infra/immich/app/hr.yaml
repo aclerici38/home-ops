@@ -21,6 +21,7 @@ spec:
   values:
     controllers:
       server:
+        forceRename: immich
         replicas: 2
         strategy: RollingUpdate
         rollingUpdate:
