@@ -25,4 +25,10 @@ spec:
       parentRefs:
         - name: external
           namespace: envoy-system
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+      dashboard:
+        enabled: true
       
