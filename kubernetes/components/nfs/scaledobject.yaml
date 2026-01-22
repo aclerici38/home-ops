@@ -9,6 +9,8 @@ spec:
     restoreToOriginalReplicaCount: true
   pollingInterval: 10
   cooldownPeriod: 0
+  idleReplicaCount: 0
+  minReplicaCount: ${REPLICAS:=1}
   maxReplicaCount: ${REPLICAS:=1}
   scaleTargetRef:
     apiVersion: apps/v1
