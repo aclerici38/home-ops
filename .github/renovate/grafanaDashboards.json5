@@ -27,7 +27,6 @@
       automergeType: "branch",
       commitMessageExtra: "({{currentVersion}} ➔ {{newVersion}})",
       commitMessageTopic: "dashboard {{sourceDirectory}}",
-      ignoreTests: true,
       matchDatasources: ["custom.grafana-dashboards"],
       matchUpdateTypes: ["major"],
       semanticCommitScope: "grafana-dashboards",
