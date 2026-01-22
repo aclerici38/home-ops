@@ -33,10 +33,15 @@ spec:
           server: "10.0.30.25"
           share: "/"
           subDir: /tank/$${pvc.metadata.namespace}/$${pv.metadata.name}
-        mountOptions:
+        mountOptions: &opt
           - nfsvers=4.2
+          - proto=tcp
+          - softerr
+          - timeo=10
+          - retrans=2
           - nconnect=16
-          - hard
+          - rsize=1048576
+          - wsize=1048576
           - noatime
         reclaimPolicy: Delete
         volumeBindingMode: Immediate
@@ -45,10 +50,6 @@ spec:
           server: "10.0.30.25"
           share: "/"
           subDir: /ssd/$${pvc.metadata.namespace}/$${pv.metadata.name}
-        mountOptions:
-          - nfsvers=4.2
-          - nconnect=16
-          - hard
-          - noatime
+        mountOptions: *opt
         reclaimPolicy: Delete
         volumeBindingMode: Immediate
