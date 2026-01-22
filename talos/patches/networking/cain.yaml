@@ -1,0 +1,64 @@
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: bond0-link1
+selector:
+  match: glob("58:47:ca:7c:77:1e", mac(link.hardware_addr))
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: bond0-link2
+selector:
+  match: glob("58:47:ca:7c:77:1d", mac(link.hardware_addr))
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: bond1-m0
+selector:
+  match: glob("58:47:ca:7c:77:1f", mac(link.hardware_addr))
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: bond0
+links:
+  - bond0-link1
+  - bond0-link2
+bondMode: 802.3ad
+lacpRate: fast
+adLACPActive: on
+adSelect: stable
+xmitHashPolicy: layer3+4
+miimon: 100
+useCarrier: true
+updelay: 200
+downdelay: 200
+minLinks:
+mtu: 9000
+addresses:
+  - address: 10.0.30.18/24
+routes:
+  - gateway: 10.0.30.1
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: bond1
+links:
+  - bond1-m0
+bondMode: active-backup
+---
+apiVersion: v1alpha1
+kind: Layer2VIPConfig
+name: 10.0.30.250
+link: bond0
+---
+apiVersion: v1alpha1
+kind: VLANConfig
+name: bond1.20
+vlanID: 20
+parent: bond1
+---
+apiVersion: v1alpha1
+kind: VLANConfig
+name: bond1.40
+vlanID: 40
+parent: bond1

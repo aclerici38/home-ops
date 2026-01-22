@@ -69,31 +69,6 @@ nodes:
             - siderolabs/mei
             - siderolabs/nfsrahead
     controlPlane: true
-    networkInterfaces:
-      - interface: bond0
-        bond:
-          mode: 802.3ad
-          lacpRate: fast
-          xmitHashPolicy: layer3+4
-          deviceSelectors:
-            - hardwareAddr: 1a:4b:24:aa:f3:*
-        addresses:
-          - "10.0.30.25/24"
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "10.0.30.1"
-        mtu: 9000
-        vip: &vip
-          ip: 10.0.30.250
-      - interface: bond1
-        dhcp: false
-        bond:
-          mode: active-backup
-          deviceSelectors:
-            - hardwareAddr: 58:11:22:a2:e1:6c
-        vlans:
-          - vlanId: 20
-          - vlanId: 40
     volumes:
       - name: EPHEMERAL
         provisioning:
@@ -108,6 +83,8 @@ nodes:
             match: system_disk
           minSize: 500GB
           grow: true
+    patches:
+      - "@./patches/networking/bonds.yaml"
   - hostname: "cain"
     ipAddress: "10.0.30.18"
     installDiskSelector:
@@ -143,31 +120,6 @@ nodes:
             - siderolabs/intel-ucode
             - siderolabs/nfsrahead
     controlPlane: true
-    networkInterfaces:
-      - interface: bond0
-        bond:
-          mode: 802.3ad
-          lacpRate: fast
-          xmitHashPolicy: layer3+4
-          deviceSelectors:
-            - hardwareAddr: 58:47:ca:7c:77:1e
-            - hardwareAddr: 58:47:ca:7c:77:1d
-        addresses:
-          - "10.0.30.18/24"
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "10.0.30.1"
-        mtu: 9000
-        vip: *vip
-      - interface: bond1
-        dhcp: false
-        bond:
-          mode: active-backup
-          deviceSelectors:
-            - hardwareAddr: 58:47:ca:7c:77:1f
-        vlans:
-          - vlanId: 20
-          - vlanId: 40
     volumes:
       - name: EPHEMERAL
         provisioning:
@@ -183,6 +135,7 @@ nodes:
           minSize: 500GB
           grow: true
     patches:
+      - "@./patches/networking/cain.yaml"
       - |-
           machine:
             udev:
@@ -219,31 +172,6 @@ nodes:
             - siderolabs/amd-ucode
             - siderolabs/nfsrahead
     controlPlane: true
-    networkInterfaces:
-      - interface: bond0
-        bond:
-          mode: 802.3ad
-          lacpRate: fast
-          xmitHashPolicy: layer3+4
-          deviceSelectors:
-            - hardwareAddr: c4:62:37:01:8c:ce
-            - hardwareAddr: c4:62:37:01:8c:cf
-        addresses:
-          - "10.0.30.28/24"
-        routes:
-          - network: "0.0.0.0/0"
-            gateway: "10.0.30.1"
-        mtu: 9000
-        vip: *vip
-      - interface: bond1
-        dhcp: false
-        bond:
-          mode: active-backup
-          deviceSelectors:
-            - hardwareAddr: a8:5e:45:9c:d0:99
-        vlans:
-          - vlanId: 20
-          - vlanId: 40
     volumes:
       - name: EPHEMERAL
         provisioning:
@@ -258,6 +186,8 @@ nodes:
             match: system_disk
           minSize: 500GB
           grow: true
+    patches:
+      - "@./patches/networking/posey.yaml"
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
