@@ -23,6 +23,7 @@ spec:
     controllers:
       nfs-server:
         pod:
+          priorityClassName: nfs-critical
           hostNetwork: true
           securityContext:
             runAsUser: 0
