@@ -3,30 +3,12 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: flux-repos
+  name: flux-meta
   namespace: &ns flux-system
 spec:
   interval: 30m
   timeout: 10m
   targetNamespace: *ns
-  path: ./kubernetes/flux/meta/repositories
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  dependsOn: []
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: flux-settings
-  namespace: flux-system
-spec:
-  interval: 30m
-  timeout: 10m
-  path: ./kubernetes/flux/meta/settings
   prune: true
   wait: true
   sourceRef:

@@ -9,7 +9,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: rook-ceph
-    namespace: flux-system
   install:
     timeout: 2m
     remediation:

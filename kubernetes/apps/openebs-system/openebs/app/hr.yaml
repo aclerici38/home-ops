@@ -10,7 +10,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: openebs
-    namespace: flux-system
   install:
     disableHooks: true
     timeout: 2m

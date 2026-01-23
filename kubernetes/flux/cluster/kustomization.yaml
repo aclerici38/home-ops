@@ -28,8 +28,7 @@ patches:
         name: patch
       spec:
         dependsOn:
-          - name: flux-repos
-          - name: flux-settings
+          - name: flux-meta
         postBuild:
           substituteFrom:
             - kind: Secret
