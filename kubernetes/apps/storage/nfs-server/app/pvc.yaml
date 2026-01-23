@@ -1,26 +1,4 @@
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: nfs-ssd-pvc
-spec:
-  accessModes: ["ReadWriteMany"]
-  resources:
-    requests:
-      storage: 500Gi
-  storageClassName: zfs-ssd
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: nfs-tank-pvc
-spec:
-  accessModes: ["ReadWriteMany"]
-  resources:
-    requests:
-      storage: 2Ti
-  storageClassName: zfs-tank
----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
