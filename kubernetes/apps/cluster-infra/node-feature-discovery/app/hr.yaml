@@ -10,7 +10,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: node-feature-discovery
-    namespace: flux-system
   install:
     timeout: 2m
   upgrade:

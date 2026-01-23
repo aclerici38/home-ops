@@ -10,7 +10,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: k8tz
-    namespace: flux-system
   install:
     timeout: 2m
     remediation:

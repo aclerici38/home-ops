@@ -13,7 +13,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: coredns
-    namespace: flux-system
   install:
     timeout: 2m
     remediation:

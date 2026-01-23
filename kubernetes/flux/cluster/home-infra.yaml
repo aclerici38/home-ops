@@ -12,8 +12,6 @@ spec:
   path: ./kubernetes/apps/home-infra
   components:
     - ../../components/namespace
-  dependsOn:
-    - name: flux-repos
   prune: false
   wait: true
   sourceRef:

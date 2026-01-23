@@ -10,7 +10,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: intel-device-plugins-gpu
-    namespace: flux-system
   install:
     timeout: 2m
     remediation:
