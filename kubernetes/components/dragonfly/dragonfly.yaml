@@ -15,7 +15,7 @@ spec:
     - --maxmemory=$(MAX_MEMORY)Mi
     - --dbnum=1
     - --dbfilename=
-    - --proactor_threads=0
+    - --proactor_threads=4
     - --version_check=false
   resources:
     requests:
