@@ -5,7 +5,7 @@ metadata:
   name: immich-pv
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   capacity:
     storage: "59992103190528"
   claimRef:
@@ -37,7 +37,7 @@ metadata:
   name: media-pv
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   capacity:
     storage: "59992103190528"
   claimRef:
@@ -69,7 +69,7 @@ metadata:
   name: files-pv
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   capacity:
     storage: "59992103190528"
   claimRef:
@@ -101,7 +101,7 @@ metadata:
   name: frigate-pv
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   capacity:
     storage: "59992103190528"
   claimRef:

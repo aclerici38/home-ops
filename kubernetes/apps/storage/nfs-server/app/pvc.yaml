@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: nfs-ssd-pvc
 spec:
-  accessModes: ["ReadWriteOnce"]
+  accessModes: ["ReadWriteMany"]
   resources:
     requests:
       storage: 500Gi
@@ -15,7 +15,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: nfs-tank-pvc
 spec:
-  accessModes: ["ReadWriteOnce"]
+  accessModes: ["ReadWriteMany"]
   resources:
     requests:
       storage: 2Ti
@@ -28,7 +28,7 @@ metadata:
 spec:
   storageClassName: zfs-tank
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: "59992103190528"
@@ -40,7 +40,7 @@ metadata:
 spec:
   storageClassName: zfs-tank
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: "59992103190528"
@@ -52,7 +52,7 @@ metadata:
 spec:
   storageClassName: zfs-tank
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: "59992103190528"
@@ -64,7 +64,7 @@ metadata:
 spec:
   storageClassName: zfs-tank
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: "59992103190528"
