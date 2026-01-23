@@ -132,7 +132,7 @@ spec:
           - path: /tmp
       files:
         type: nfs
-        server: 10.0.30.25
+        server: nfs.${SECRET_DOMAIN}
         path: /files/vikunja
         globalMounts:
           - path: *path

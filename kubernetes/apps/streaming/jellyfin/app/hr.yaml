@@ -100,7 +100,7 @@ spec:
               - path: /config/metadata
       media:
         type: nfs
-        server: 10.0.30.25
+        server: nfs.${SECRET_DOMAIN}
         path: /media
         advancedMounts:
           jellyfin:

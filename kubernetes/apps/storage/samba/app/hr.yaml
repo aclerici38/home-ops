@@ -62,7 +62,7 @@ spec:
             subPath: config.yml
       time-machine:
         type: nfs
-        server: 10.0.30.25
+        server: nfs.${SECRET_DOMAIN}
         path: /files/time-machine
         globalMounts:
           - path: /samba/time-machine

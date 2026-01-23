@@ -149,7 +149,7 @@ spec:
     persistence:
       data:
         type: nfs
-        server: 10.0.30.25
+        server: nfs.${SECRET_DOMAIN}
         path: /immich
         advancedMounts:
           server:

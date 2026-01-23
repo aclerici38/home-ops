@@ -30,9 +30,9 @@ spec:
     storageClasses:
       - name: nfs-tank
         parameters:
-          server: "10.0.30.25"
+          server: "nfs.${SECRET_DOMAIN}"
           share: "/"
-          subDir: /tank/$${pvc.metadata.namespace}/$${pv.metadata.name}
+          subDir: /tank/$${pvc.metadata.namespace}/$${pvc.metadata.name}
         mountOptions: &opt
           - nfsvers=4.2
           - proto=tcp
@@ -43,13 +43,13 @@ spec:
           - rsize=1048576
           - wsize=1048576
           - noatime
-        reclaimPolicy: Delete
+        reclaimPolicy: Retain
         volumeBindingMode: Immediate
       - name: nfs-ssd
         parameters:
-          server: "10.0.30.25"
+          server: "nfs.${SECRET_DOMAIN}"
           share: "/"
-          subDir: /ssd/$${pvc.metadata.namespace}/$${pv.metadata.name}
+          subDir: /ssd/$${pvc.metadata.namespace}/$${pvc.metadata.name}
         mountOptions: *opt
-        reclaimPolicy: Delete
+        reclaimPolicy: Retain
         volumeBindingMode: Immediate
