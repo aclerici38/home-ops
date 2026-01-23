@@ -43,8 +43,7 @@ spec:
               tag: v2.4.1@sha256:e6a6298e67ae077808fdb7d8d5565955f60b0708191576143fc02d30ab1389d1
             env:
               IMMICH_LOG_LEVEL: log
-              REDIS_HOSTNAME: dragonfly-db.database.svc.cluster.local
-              REDIS_DBINDEX: 2
+              REDIS_HOSTNAME: immich-dragonfly-db
               IMMICH_TELEMETRY_INCLUDE: all
               IMMICH_IGNORE_MOUNT_CHECK_ERRORS: true
               IMMICH_PROCESS_INVALID_IMAGES: true

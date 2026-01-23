@@ -6,16 +6,7 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=searxng
-patches:
-  - patch: |-
-      - op: add
-        path: /spec/dependsOn/-
-        value:
-          name: dragonfly-cluster
-          namespace: database
-    target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret
+  - ../../../components/kustomize/dragonfly

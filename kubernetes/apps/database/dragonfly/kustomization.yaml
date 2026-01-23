@@ -6,6 +6,5 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=dragonfly
-      - RESOURCES=cluster
 components:
-  - ../../../components/ks/app-resources
+  - ../../../components/ks/app

@@ -13,19 +13,11 @@ patches:
   - path: ./patch.yaml
     target:
       kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
-  - patch: |-
-      - op: add
-        path: /spec/dependsOn/-
-        value:
-          name: dragonfly-cluster
-          namespace: database
-    target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
+      group: kustomize.toolkit.fluxcd.iZ
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret
   - ../../../components/kustomize/cnpg/restore
   - ../../../components/kustomize/pocket-id
   - ../../../components/kustomize/nfs
+  - ../../../components/kustomize/dragonfly
