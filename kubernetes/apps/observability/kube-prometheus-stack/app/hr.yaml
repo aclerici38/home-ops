@@ -68,9 +68,9 @@ spec:
       prometheusSpec:
         version: v2.55.1 # bypass 'unsupported Prometheus version' error
         image:
-          registry: registry.deckhouse.io
-          repository: prompp/prompp
-          tag: 0.7.4
+          registry: ghcr.io
+          repository: deckhouse/prompp
+          tag: 0.7.4@sha256:4ae832179cd9cb3e6a69554fbde8fdd58d8839455ea01a2e2c97ca3e7e8b797e
         securityContext:
           runAsNonRoot: true
           runAsUser: 64535
