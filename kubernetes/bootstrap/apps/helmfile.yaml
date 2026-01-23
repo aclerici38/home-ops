@@ -70,7 +70,7 @@ releases:
     namespace: cluster-infra
     atomic: true
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
-    version: 1.2.1
+    version: 1.3.1
     values:
       - /Users/anthony/home-ops/kubernetes/apps/cluster-infra/external-secrets/app/helm/values.yaml
     needs:
