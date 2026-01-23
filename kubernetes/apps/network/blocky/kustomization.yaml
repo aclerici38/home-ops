@@ -11,11 +11,6 @@ patches:
       - op: add
         path: /spec/dependsOn/-
         value:
-          name: dragonfly-cluster
-          namespace: database
-      - op: add
-        path: /spec/dependsOn/-
-        value:
           name: cert-manager
           namespace: cluster-infra
     target:
@@ -24,3 +19,4 @@ patches:
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/cnpg/no-backup
+  - ../../../components/kustomize/dragonfly

@@ -27,3 +27,9 @@ spec:
                   - /usr/share/postgresql/18/
       target:
         kind: Cluster
+    - patch: |-
+        - op: add
+          path: /spec/args/-
+          value: --default_lua_flags=allow-undeclared-keys
+      target:
+        kind: Dragonfly

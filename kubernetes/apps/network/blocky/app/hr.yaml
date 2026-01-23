@@ -244,8 +244,7 @@ spec:
                 - AAAA
 
             redis:
-              address: dragonfly-db.database.svc.cluster.local:6379
-              database: 4
+              address: blocky-dragonfly-db:6379
               connectionAttempts: 10
               connectionCooldown: 60s
             
