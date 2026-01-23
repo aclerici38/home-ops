@@ -68,4 +68,28 @@ spec:
   resources:
     requests:
       storage: "59992103190528"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: tank-csi-pvc
+spec:
+  storageClassName: zfs-tank
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: "59992103190528"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: ssd-csi-pvc
+spec:
+  storageClassName: zfs-ssd
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: "59992103190528"
       

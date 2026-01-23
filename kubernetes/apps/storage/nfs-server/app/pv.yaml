@@ -126,3 +126,67 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: zfs-tank
   volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: tank-csi-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: "59992103190528"
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: tank-csi-pv
+    namespace: ${NS}
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: tank
+    volumeHandle: tank-csi-pv
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - bonds
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: zfs-tank
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ssd-csi-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: "59992103190528"
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: ssd-csi-pv
+    namespace: ${NS}
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: ssd
+    volumeHandle: ssd-csi-pv
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - bonds
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: zfs-ssd
+  volumeMode: Filesystem

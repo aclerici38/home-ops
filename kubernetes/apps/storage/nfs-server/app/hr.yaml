@@ -104,10 +104,10 @@ spec:
         globalMounts:
           - path: /export/media
       ssd:
-        existingClaim: nfs-ssd-pvc
+        existingClaim: ssd-csi-pvc
         globalMounts:
           - path: /export/ssd
       tank:
-        existingClaim: nfs-tank-pvc
+        existingClaim: tank-csi-pvc
         globalMounts:
           - path: /export/tank
