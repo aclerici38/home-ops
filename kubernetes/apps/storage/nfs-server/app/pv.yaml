@@ -139,7 +139,7 @@ spec:
   claimRef:
     apiVersion: v1
     kind: PersistentVolumeClaim
-    name: tank-csi-pv
+    name: tank-csi-pvc
     namespace: ${NS}
   csi:
     driver: zfs.csi.openebs.io
@@ -171,7 +171,7 @@ spec:
   claimRef:
     apiVersion: v1
     kind: PersistentVolumeClaim
-    name: ssd-csi-pv
+    name: ssd-csi-pvc
     namespace: ${NS}
   csi:
     driver: zfs.csi.openebs.io
