@@ -38,7 +38,7 @@
       matchFileNames: ["**/immich/**"],
       versioning: "regex:^pg18-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
       // https://github.com/immich-app/immich/blob/main/server/src/constants.ts
-      allowedVersions: "/^pg18-v0\\.5\\.3$/",
+      allowedVersions: "/^pg18-v1\\.\\d+\\.\\d+$/",
     },
     {
       description: "Frigate beta and RC",
