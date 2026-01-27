@@ -152,5 +152,15 @@
       },
       minimumGroupSize: 2,
     },
+    {
+      description: "Vectorchord Group",
+      groupName: "Vectorchord",
+      matchPackagePatterns: ["VectorChord", "vchord-scratch"],
+      matchDatasources: ["docker", "github-releases"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+      minimumGroupSize: 2,
+    },
   ]
 }
