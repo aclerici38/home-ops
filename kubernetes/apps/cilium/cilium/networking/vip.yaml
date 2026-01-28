@@ -6,6 +6,7 @@ metadata:
   namespace: kube-system
   annotations:
     lbipam.cilium.io/ips: 10.0.30.250
+    gatus.home-operations.com/enabled: "false"
 spec:
   type: LoadBalancer
   selector:
