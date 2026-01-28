@@ -132,8 +132,9 @@ spec:
     route:
       blocky-DOH:
         annotations:
+          # google.com base64
           gatus.home-operations.com/endpoint: |-
-            url: https://dns.${SECRET_DOMAIN}/dns-query
+            url: https://dns.${SECRET_DOMAIN}/dns-query?dns=AAABAAABAAAAAAAABmdvb2dsZQNjb20AAAEAAQ
         hostnames:
           - dns.${SECRET_DOMAIN}
         parentRefs:
