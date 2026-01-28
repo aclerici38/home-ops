@@ -41,6 +41,13 @@
       allowedVersions: "/^pg18-v1\\.\\d+\\.\\d+$/",
     },
     {
+      description: "VectorChord CNPG extension (immich versioned)",
+      matchDatasources: ["github-releases"],
+      matchPackagePatterns: ["tensorchord/VectorChord"],
+      matchFileNames: ["**/immich/**"],
+      allowedVersions: "/^1\\.\\d+\\.\\d+$/",
+    },
+    {
       description: "Frigate beta and RC",
       matchDatasources: ["docker"],
       matchPackagePatterns: ["blakeblackshear/frigate"],
