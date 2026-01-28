@@ -39,7 +39,6 @@ spec:
               tag: 0.0.12@sha256:83bf82d422e9b0529a8076cb584d557a12158d9d8a4c373b4d27afcb87a17569
             args:
               - --auto-httproute
-              - --auto-service
               - --enable-httproute
               - --enable-service
             resources:
@@ -147,11 +146,8 @@ spec:
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml
-      cache:
-        type: persistentVolumeClaim
-        storageClass: ceph-filesystem
-        size: 1Gi
-        accessMode: ReadWriteMany
+      tmpfs::
+        type: emptyDir
         globalMounts:
           - path: /config
     configMaps:
