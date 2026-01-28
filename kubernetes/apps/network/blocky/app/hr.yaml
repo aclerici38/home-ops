@@ -217,7 +217,9 @@ spec:
               forward: false
             
             bootstrapDns:
-              - https://1.1.1.1/dns-query
+              - 8.8.8.8
+              - 1.1.1.1
+              - 9.9.9.9
             
             upstreams:
               groups:
