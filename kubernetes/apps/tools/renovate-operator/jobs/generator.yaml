@@ -9,5 +9,5 @@ spec:
   auth:
     privateKey:
       secretRef:
-        name: renovate-operator # reference secret from component in app
+        name: renovate-operator-private-key # reference secret from component in app
         key: PRIVATE_KEY.pem

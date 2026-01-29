@@ -1,0 +1,12 @@
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: &name renovate-operator-private-key
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  dataFrom:
+    - extract:
+        key: *name
