@@ -94,9 +94,7 @@ spec:
       config:
         existingClaim: frigate
       media:
-        type: nfs
-        server: nfs.${SECRET_DOMAIN}
-        path: /frigate
+        existingClaim: frigate-media
         globalMounts:
           - path: /media/frigate
       tmpfs:
