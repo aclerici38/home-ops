@@ -13,9 +13,15 @@ selector:
 ---
 apiVersion: v1alpha1
 kind: LinkAliasConfig
-name: bond1-m0
+name: bond1-link1
 selector:
   match: glob("58:47:ca:7c:77:1f", mac(link.permanent_addr))
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: bond1-link2
+selector:
+  match: glob("58:47:ca:7c:77:20", mac(link.permanent_addr))
 ---
 apiVersion: v1alpha1
 kind: BondConfig
@@ -43,7 +49,8 @@ apiVersion: v1alpha1
 kind: BondConfig
 name: bond1
 links:
-  - bond1-m0
+  - bond1-link1
+  - bond1-link2
 bondMode: active-backup
 ---
 apiVersion: v1alpha1
