@@ -18,6 +18,9 @@ spec:
     controllers:
       omada:
         forceRename: omada-controller
+        pod:
+          annotations:
+            cni.cilium.io/mac-address: "64:16:7f:04:20:c5"
         initContainers:
           ferretdb:
             restartPolicy: Always
