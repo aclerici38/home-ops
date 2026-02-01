@@ -136,11 +136,6 @@ nodes:
           grow: true
     patches:
       - "@./patches/networking/cain.yaml"
-      - |-
-          machine:
-            udev:
-              rules:
-                - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
   - hostname: "posey"
     ipAddress: "10.0.30.28"
     installDiskSelector:
@@ -188,6 +183,51 @@ nodes:
           grow: true
     patches:
       - "@./patches/networking/posey.yaml"
+  - hostname: "timmy"
+    ipAddress: "10.0.30.55"
+    installDiskSelector:
+      wwid: 
+    machineSpec:
+      secureboot: false
+      mode: metal
+      useUKI: true
+      arch: arm64
+    kernelModules:
+      - name: nbd
+    schematic:
+      overlay:
+        image: siderolabs/sbc-raspberrypi
+        name: rpi_5
+      customization:
+        extraKernelArgs:
+          - cpufreq.default_governor=performance
+          - apparmor=0
+          - iommu.passthrough=1
+          - init_on_alloc=0
+          - init_on_free=0
+          - mitigations=off
+          - security=none
+          - enforcing=0
+          - -selinux
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/nfsrahead
+    controlPlane: false
+    volumes:
+      - name: EPHEMERAL
+        provisioning:
+          diskSelector:
+            match: system_disk
+          maxSize: 100GB
+          grow: false
+    patches:
+      - "@./patches/networking/timmy.yaml"
+      - |-
+          # 3d printer USB
+          machine:
+            udev:
+              rules:
+                - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
@@ -198,6 +238,7 @@ patches:
   - "@./patches/global/machine-install.yaml"
   - "@./patches/global/machine-kernel.yaml"
   - "@./patches/global/machine-features.yaml"
+  - "@./patches/global/uart.yaml"
 
 # Controller patches
 controlPlane:

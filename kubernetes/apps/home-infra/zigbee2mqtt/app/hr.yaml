@@ -28,7 +28,7 @@ spec:
               repository: ghcr.io/koenkk/zigbee2mqtt
               tag: 2.7.2@sha256:60a295b40f4e7fb7ab4d995932369e50f2529837272fa4979e986ec1ffdb7fce
             env: &env
-              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://z2m.${SECRET_DOMAIN}
+              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://house-z2m.${SECRET_DOMAIN}
               ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://slzb-06.lab.internal:6638
               ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack
               ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: 20
@@ -77,21 +77,27 @@ spec:
                 readiness:
                   enabled: true
                   type: HTTP
-      # house:
-      #   containers:
-      #     main:
-      #       <<: *container
-      #       env:
-      #         <<: *env
-      #         ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://house-zigbee2mqtt.${SECRET_DOMAIN}
-      #         ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://slzb-06.house.internal:6638
-      #         ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack
-      #         ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: 20
-      #         ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: z2m-house
-      #       resources:
-      #         <<: *res
-      #         limits:
-      #           memory: 512Mi
+      cottage:
+        pod:
+          securityContext:
+            supplementalGroups:
+              - 20
+        containers:
+          main:
+            <<: *container
+            env:
+              <<: *env
+              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://cottage-zigbee2mqtt.${SECRET_DOMAIN}
+              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_d4f0088f4c1fef119b9450d0639e525b-if00-port0
+              ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: ember
+              ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: 20
+              ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: z2m-cottage
+            resources:
+              <<: *res
+              limits:
+                memory: 512Mi
+                squat.ai/cottage-zigbee: 1
+    defaultPodOptionsStrategy: merge
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -99,8 +105,6 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups:
-          - 20
     service:
       house:
         controller: house
@@ -110,13 +114,13 @@ spec:
             port: *port
           metrics:
             port: 9000
-      # apt:
-      #   controller: apt
-      #   ports: *ports
+      cottage:
+        controller: cottage
+        ports: *ports
     route:
       house: &route
         hostnames:
-          - z2m.${SECRET_DOMAIN}
+          - house-z2m.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: envoy-system
@@ -125,22 +129,22 @@ spec:
           - backendRefs:
               - identifier: house
                 port: *port
-      # apt:
-      #   <<: *route
-      #   hostnames:
-      #     - apt-z2m.${SECRET_DOMAIN}
-      #   rules:
-      #     - backendRefs:
-      #         - identifier: apt
-      #           port: *port
+      cottage:
+        <<: *route
+        hostnames:
+          - cottage-z2m.${SECRET_DOMAIN}
+        rules:
+          - backendRefs:
+              - identifier: cottage
+                port: *port
     persistence:
-      # apt-data:
-      #   existingClaim: zigbee2mqtt
-      #   advancedMounts:
-      #     apt:
-      #       main:
-      #         - path: /data
-      #           subPath: apt
+      cottage-data:
+        existingClaim: zigbee2mqtt
+        advancedMounts:
+          cottage:
+            main:
+              - path: /data
+                subPath: cottage
       house-data:
         existingClaim: zigbee2mqtt
         advancedMounts:
