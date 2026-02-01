@@ -1,0 +1,22 @@
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: bond0-link1
+selector:
+  match: glob("d8:3a:dd:d2:76:d2", mac(link.permanent_addr))
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: bond1
+links:
+  - bond0-link1
+bondMode: active-backup
+miimon: 100
+useCarrier: true
+updelay: 200
+downdelay: 200
+mtu: 9000
+addresses:
+  - address: 10.0.30.55/24
+routes:
+  - gateway: 10.0.30.1

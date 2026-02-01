@@ -185,8 +185,7 @@ nodes:
       - "@./patches/networking/posey.yaml"
   - hostname: "timmy"
     ipAddress: "10.0.30.55"
-    installDiskSelector:
-      wwid: 
+    installDisk: /dev/disk/by-id/mmc-SC32G_0x616934b3
     machineSpec:
       secureboot: false
       mode: metal
@@ -195,9 +194,9 @@ nodes:
     kernelModules:
       - name: nbd
     schematic:
-      overlay:
-        image: siderolabs/sbc-raspberrypi
-        name: rpi_5
+      # overlay:
+      #   name: rpi5
+      #   image: siderolabs/sbc-raspberrypi
       customization:
         extraKernelArgs:
           - cpufreq.default_governor=performance
@@ -213,15 +212,14 @@ nodes:
           officialExtensions:
             - siderolabs/nfsrahead
     controlPlane: false
-    volumes:
-      - name: EPHEMERAL
-        provisioning:
-          diskSelector:
-            match: system_disk
-          maxSize: 100GB
-          grow: false
+    nodeTaints:
+      rpi5: ":NoSchedule"
     patches:
       - "@./patches/networking/timmy.yaml"
+      - |-
+          machine:
+            install:
+              image: ghcr.io/talos-rpi5/installer:v1.11.5
       - |-
           # 3d printer USB
           machine:
@@ -245,3 +243,4 @@ controlPlane:
   patches:
     - "@./patches/controller/admission-controller-patch.yaml"
     - "@./patches/controller/cluster.yaml"
+    - "@./patches/controller/machine-features.yaml"
