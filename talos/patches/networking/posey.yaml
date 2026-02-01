@@ -3,19 +3,19 @@ apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: bond0-link1
 selector:
-  match: glob("c4:62:37:01:8c:ce", mac(link.hardware_addr))
+  match: glob("c4:62:37:01:8c:ce", mac(link.permanent_addr))
 ---
 apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: bond0-link2
 selector:
-  match: glob("c4:62:37:01:8c:cf", mac(link.hardware_addr))
+  match: glob("c4:62:37:01:8c:cf", mac(link.permanent_addr))
 ---
 apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: bond1-m0
 selector:
-  match: glob("a8:5e:45:9c:d0:99", mac(link.hardware_addr))
+  match: glob("a8:5e:45:9c:d0:99", mac(link.permanent_addr))
 ---
 apiVersion: v1alpha1
 kind: BondConfig
