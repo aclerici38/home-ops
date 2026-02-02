@@ -42,7 +42,7 @@ spec:
                 secretKeyRef:
                   name: blocky-db-app
                   key: uri
-              BLOCKY_API_URL: http://blocky-k8s:4000/api
+              BLOCKY_API_URL: http://blocky-k8s:4000
             probes:
               liveness:
                 enabled: true
