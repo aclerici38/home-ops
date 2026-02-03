@@ -128,8 +128,3 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /.cache
-      data:
-        existingClaim: donetick
-        globalMounts:
-          - path: /app/assets
-            subPath: assets
