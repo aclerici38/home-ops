@@ -6,12 +6,8 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=donetick
-      - VOLSYNC_STORAGECLASS=ceph-filesystem
-      - VOLSYNC_SNAPSHOTCLASS=csi-ceph-filesystem
-      - VOLSYNC_ACCESSMODES=ReadWriteMany
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret
   - ../../../components/kustomize/cnpg/init
   - ../../../components/kustomize/pocket-id
-  - ../../../components/kustomize/volsync/versity
