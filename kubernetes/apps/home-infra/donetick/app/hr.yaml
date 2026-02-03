@@ -58,6 +58,7 @@ spec:
                 secretKeyRef:
                   name: donetick
                   key: JWT_SECRET
+              DT_SERVER_CORS_ALLOW_ORIGINS: https://donetick.${SECRET_DOMAIN}
               DT_EMAIL_HOST: smtp-relay.cluster-infra
               DT_EMAIL_PORT: 25
               DT_EMAIL_EMAIL: bot@${SECRET_DOMAIN}
