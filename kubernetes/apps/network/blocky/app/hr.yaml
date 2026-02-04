@@ -180,6 +180,8 @@ spec:
               exclude:
                 - '/(^|\\.)${SECRET_DOMAIN//./\\.}$/'
                 - '/\\.internal$/'
+                - '/(^|\\.)cluster\\.local$/'
+                - '/(^|\\.)in-addr\\.arpa$/'
             
             log:
               level: info
