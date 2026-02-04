@@ -177,6 +177,9 @@ spec:
               prefetchThreshold: 30
               prefetchMaxItemsCount: 0
               cacheTimeNegative: -1
+              exclude:
+                - '/(^|\\.)${SECRET_DOMAIN//./\\.}$/'
+                - '/(^|\\.)internal$/'
             
             log:
               level: info
