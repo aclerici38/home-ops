@@ -179,7 +179,7 @@ spec:
               cacheTimeNegative: -1
               exclude:
                 - '/(^|\\.)${SECRET_DOMAIN//./\\.}$/'
-                - '/(^|\\.)internal$/'
+                - '/\\.internal$/'
             
             log:
               level: info
