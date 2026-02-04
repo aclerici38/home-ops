@@ -1,0 +1,130 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: donetick
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      donetick:
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          donetick:
+            image:
+              repository: docker.io/donetick/donetick
+              tag: v0.1.64@sha256:e2474d903a60df7d15142e89acc04f8ef32347bc13c3c6f47750f7f14c6dae34
+            env:
+              DT_DATABASE_TYPE: postgres
+              DT_DATABASE_HOST:
+                secretKeyRef:
+                  name: donetick-db-app
+                  key: host
+              DT_DATABASE_USER:
+                secretKeyRef:
+                  name: donetick-db-app
+                  key: user
+              DT_DATABASE_PASSWORD:
+                secretKeyRef:
+                  name: donetick-db-app
+                  key: password
+              DT_DATABASE_NAME:
+                secretKeyRef:
+                  name: donetick-db-app
+                  key: dbname
+              DT_JWT_SECRET:
+                secretKeyRef:
+                  name: donetick
+                  key: JWT_SECRET
+              DT_SERVER_CORS_ALLOW_ORIGINS: https://donetick.${SECRET_DOMAIN}
+              DT_EMAIL_HOST: smtp-relay.cluster-infra
+              DT_EMAIL_PORT: 25
+              DT_EMAIL_EMAIL: bot@${SECRET_DOMAIN}
+              DT_EMAIL_APPHOST: donetick.${SECRET_DOMAIN}
+              DT_OAUTH2_NAME: Pocket ID
+              DT_OAUTH2_CLIENT_ID:
+                secretKeyRef:
+                  name: donetick-oidc-credentials
+                  key: client_id
+              DT_OAUTH2_CLIENT_SECRET:
+                secretKeyRef:
+                  name: donetick-oidc-credentials
+                  key: client_secret
+              DT_OAUTH2_SCOPES: openid,profile,email
+              DT_OAUTH2_REDIRECT_URL: https://donetick.${SECRET_DOMAIN}/auth/oauth2
+              DT_OAUTH2_AUTH_URL:
+                secretKeyRef:
+                  name: donetick-oidc-credentials
+                  key: authorization_url
+              DT_OAUTH2_TOKEN_URL:
+                secretKeyRef:
+                  name: donetick-oidc-credentials
+                  key: token_url
+              DT_OAUTH2_USER_INFO_URL:
+                secretKeyRef:
+                  name: donetick-oidc-credentials
+                  key: userinfo_url
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 2021
+                    path: /health
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 100m
+                memory: 10Mi
+              limits:
+                memory: 256Mi
+    service:
+      donetick:
+        controller: donetick
+        ports:
+          http:
+            port: *port
+    route:
+      donetick:
+        hostnames:
+          - donetick.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: envoy-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: donetick
+                port: *port
+    persistence:
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /.cache

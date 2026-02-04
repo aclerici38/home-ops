@@ -33,10 +33,16 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/ivvija/blocky-ui
-              tag: v0.1@sha256:ae84fc71b4550f34a06c0cc8acce78d2accb8de8c57ce220e6b293cfa6689e20
+              # temp image https://github.com/GabeDuarteM/blocky-ui/pull/242
+              repository: docker.io/ant385525/blocky-ui
+              tag: latest
             env:
-              API_BASE_URL: http://blocky-k8s:4000/api
+              QUERY_LOG_TYPE: postgres
+              QUERY_LOG_TARGET:
+                secretKeyRef:
+                  name: blocky-db-app
+                  key: uri
+              BLOCKY_API_URL: http://blocky-k8s:4000
             probes:
               liveness:
                 enabled: true

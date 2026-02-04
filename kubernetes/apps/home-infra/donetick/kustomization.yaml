@@ -1,0 +1,13 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+configMapGenerator:
+  - name: APP-app-vars
+    literals:
+      - APP=donetick
+components:
+  - ../../../components/ks/app
+  - ../../../components/kustomize/external-secret
+  - ../../../components/kustomize/cnpg/init
+  - ../../../components/kustomize/pocket-id
