@@ -7,8 +7,7 @@ metadata:
 spec:
   clientIPDetection:
     xForwardedFor:
-      trustedCIDRs:
-        - 172.16.0.0/16
+      numTrustedHops: 1
   path:
     disableMergeSlashes: true
     escapedSlashesAction: KeepUnchanged
