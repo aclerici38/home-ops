@@ -122,7 +122,9 @@ spec:
           coredns.io/hostname: ${APP_URL}
         ports:
           manage-https:
-            port: &port 443
+            port: 443
+          upgrade-https:
+            port: 8043
           app-discovery:
             port: 27001
             protocol: UDP
