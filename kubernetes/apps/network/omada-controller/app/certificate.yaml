@@ -1,0 +1,15 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: omada-controller-tls
+spec:
+  secretName: omada-controller-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: ${APP_URL}
+  dnsNames:
+    - ${APP_URL}
+  privateKey:
+    rotationPolicy: Always

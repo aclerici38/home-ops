@@ -18,9 +18,6 @@ spec:
     controllers:
       omada:
         forceRename: omada-controller
-        pod:
-          annotations:
-            cni.cilium.io/mac-address: "64:16:7f:04:20:c5"
         initContainers:
           ferretdb:
             restartPolicy: Always
@@ -34,7 +31,7 @@ spec:
                   name: omada-controller-db-app
                   key: uri
             resources:
-              requests: 
+              requests:
                 cpu: 100m
                 memory: 256Mi
               limits:
@@ -92,7 +89,7 @@ spec:
           omada-exporter:
             image:
               repository: ghcr.io/charlie-haley/omada_exporter
-              tag: 0.13.1
+              tag: 0.13.1@sha256:f1b939655866d87bcc5df4e6017627cfe690dee81c4a8550382d108e9e852171
             env:
               OMADA_HOST: https://omada-controller
               OMADA_INSECURE: true
@@ -121,7 +118,6 @@ spec:
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 10.38.55.10
-          # separate hostname pointing at LB IP
           coredns.io/hostname: ${APP_URL}
         ports:
           manage-https:
@@ -157,21 +153,15 @@ spec:
         endpoints:
           - port: http
             scheme: http
-    route:
-      omada:
-        hostnames:
-          - omada.${SECRET_DOMAIN}
-        parentRefs:
-          - name: internal
-            namespace: envoy-system
-            sectionName: https
-        rules:
-          - backendRefs:
-            - group: gateway.envoyproxy.io
-              kind: Backend
-              name: omada
-              port: *port
     persistence:
+      tls:
+        type: secret
+        name: omada-controller-tls
+        globalMounts:
+          - path: /cert/tls.crt
+            subPath: tls.crt
+          - path: /cert/tls.key
+            subPath: tls.key
       tmpfs:
         type: emptyDir
         globalMounts:
@@ -183,4 +173,3 @@ spec:
             subPath: properties
           - path: /opt/tplink/EAPController/data
             subPath: data
-            
