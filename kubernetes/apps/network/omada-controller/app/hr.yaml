@@ -116,6 +116,7 @@ spec:
         controller: omada
         forceRename: omada-controller
         type: LoadBalancer
+        externalTrafficPolicy: Local
         annotations:
           lbipam.cilium.io/ips: 10.38.55.10
           coredns.io/hostname: ${APP_URL}
