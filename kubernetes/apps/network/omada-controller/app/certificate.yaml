@@ -11,5 +11,6 @@ spec:
   commonName: ${APP_URL}
   dnsNames:
     - ${APP_URL}
+    - omada.${SECRET_DOMAIN}
   privateKey:
     rotationPolicy: Always
