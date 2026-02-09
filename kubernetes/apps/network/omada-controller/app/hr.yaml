@@ -1,5 +1,4 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -8,171 +7,69 @@ spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: app-template
-    namespace: flux-system
+    name: omada-controller
   install:
     timeout: 2m
   upgrade:
     timeout: 2m
   values:
-    controllers:
-      omada:
-        forceRename: omada-controller
-        initContainers:
-          ferretdb:
-            restartPolicy: Always
-            image:
-              repository: ghcr.io/ferretdb/ferretdb
-              tag: 2.7.0@sha256:5706414241eb84f0515512c37b46db0f1b1eac9e5ceb7e4c2523211c184b1985
-            env:
-              FERRETDB_AUTH: false
-              FERRETDB_POSTGRESQL_URL:
-                secretKeyRef:
-                  name: omada-controller-db-app
-                  key: uri
-            resources:
-              requests:
-                cpu: 100m
-                memory: 256Mi
-              limits:
-                memory: 512Mi
-            probes:
-              liveness: &probe
-                enabled: true
-                custom: true
-                spec:
-                  exec:
-                    command:
-                      - /ferretdb
-                      - ping
-              readiness: *probe
-        containers:
-          omada:
-            image:
-              repository: docker.io/mbentley/omada-controller
-              tag: 6.1.0.19@sha256:f60ed42fd65b507a3cc38bd998af8fa38bfa86277d8171589bfc2ef4da47eec9
-            env:
-              ROOTLESS: true
-              SHOW_SERVER_LOGS: "true"
-              MONGO_EXTERNAL: true
-              EAP_MONGOD_URI: mongodb://127.0.0.1:27017/app
-              MANAGE_HTTP_PORT: "8080" # Must be set on install
-              # omada tries to redirect to this port for any traffic to it, set to 443 so already at https
-              MANAGE_HTTPS_PORT: "443" # Must be set on install
-            resources:
-              requests:
-                cpu: 500m
-                memory: 1200Mi
-              limits:
-                memory: 5Gi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
-                add:
-                  - NET_BIND_SERVICE
-            probes:
-              liveness:
-                enabled: true
-              readiness:
-                enabled: true
-              startup:
-                enabled: true
-                spec:
-                  failureThreshold: 30
-                  periodSeconds: 10
-      exporter:
-        strategy: RollingUpdate
-        containers:
-          omada-exporter:
-            image:
-              repository: ghcr.io/charlie-haley/omada_exporter
-              tag: 0.13.1@sha256:f1b939655866d87bcc5df4e6017627cfe690dee81c4a8550382d108e9e852171
-            env:
-              OMADA_HOST: https://omada-controller
-              OMADA_INSECURE: true
-              OMADA_SITE: Lab
-              OMADA_USER:
-                secretKeyRef:
-                  name: omada-controller
-                  key: username
-              OMADA_PASS:
-                secretKeyRef:
-                  name: omada-controller
-                  key: password
-    defaultPodOptions:
-      hostUsers: false
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        runAsNonRoot: true
-        fsGroupChangePolicy: Always
-        seccompProfile: { type: RuntimeDefault }
+    initContainers:
+      - name: ferretdb
+        image: ghcr.io/ferretdb/ferretdb:2.7.0@sha256:5706414241eb84f0515512c37b46db0f1b1eac9e5ceb7e4c2523211c184b1985
+        restartPolicy: Always
+        env:
+          - name: FERRETDB_AUTH
+            value: "false"
+          - name: FERRETDB_POSTGRESQL_URL
+            valueFrom:
+              secretKeyRef:
+                key: uri
+                name: omada-controller-db-app
+        livenessProbe: &probe
+          exec:
+            command: ["/ferretdb", "ping"]
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe: *probe
+    image:
+      repository: docker.io/mbentley/omada-controller
+      pullPolicy: IfNotPresent
+      tag: 6.1.0.19@sha256:f60ed42fd65b507a3cc38bd998af8fa38bfa86277d8171589bfc2ef4da47eec9
+    serviceAccount:
+      create: false
+    config:
+      rootless: true
+      # ferretdb sidecar
+      externalMongoDBUrl: "mongodb://127.0.0.1:27017/app"
+      ports:
+        manageHttp: 8080
+        manageHttps: 443
     service:
-      omada:
-        controller: omada
-        forceRename: omada-controller
-        type: LoadBalancer
-        externalTrafficPolicy: Local
-        annotations:
-          lbipam.cilium.io/ips: 10.38.55.10
-          coredns.io/hostname: ${APP_URL}
-        ports:
-          manage-https:
-            port: 443
-          upgrade-https:
-            port: 8043
-          app-discovery:
-            port: 27001
-            protocol: UDP
-          discovery:
-            port: 29810
-            protocol: UDP
-          manager-v1:
-            port: 29811
-          adopt-v1:
-            port: 29812
-          upgrade-v1:
-            port: 29813
-          manager-v2:
-            port: 29814
-          transfer-v2:
-            port: 29815
-          rtty:
-            port: 29816
-          device-data:
-            port: 29817
-      exporter:
-        controller: exporter
-        ports:
-          http:
-            port: 9202
-    serviceMonitor:
-      exporter:
-        serviceName: omada-exporter
-        endpoints:
-          - port: http
-            scheme: http
+      type: LoadBalancer
+      annotations:
+        lbipam.cilium.io/ips: 10.38.55.10
+        coredns.io/hostname: ${APP_URL}
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1200Mi
+      limits:
+        memory: 5Gi
     persistence:
-      tls:
-        type: secret
-        name: omada-controller-tls
-        globalMounts:
-          - path: /cert/tls.crt
-            subPath: tls.crt
-          - path: /cert/tls.key
-            subPath: tls.key
-      tmpfs:
-        type: emptyDir
-        globalMounts:
-          - path: /tmp
-            subPath: tmp
-          - path: /opt/tplink/EAPController/logs
-            subPath: logs
-          - path: /opt/tplink/EAPController/properties
-            subPath: properties
-          - path: /opt/tplink/EAPController/data
-            subPath: data
+      data:
+        storageClassName: ceph-filesystem
+        size: 5Gi
+      logs:
+        storageClassName: ceph-filesystem
+        size: 5Gi
+    extraVolumes:
+      - name: tls
+        secret:
+          secretName: omada-controller-tls
+    volumeMounts:
+      - name: tls
+        mountPath: /cert
+        readOnly: true
+      
