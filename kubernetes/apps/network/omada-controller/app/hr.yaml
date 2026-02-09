@@ -73,7 +73,7 @@ spec:
             secretName: omada-controller-tls
         - name: ferretdb-state
           emptyDir: {}
-      volumeMounts:
+      extraVolumeMounts:
         - name: tls
           mountPath: /cert
           readOnly: true
