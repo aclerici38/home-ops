@@ -64,12 +64,12 @@ spec:
       logs:
         storageClassName: ceph-filesystem
         size: 5Gi
-    extraVolumes:
-      - name: tls
-        secret:
-          secretName: omada-controller-tls
-    volumeMounts:
-      - name: tls
-        mountPath: /cert
-        readOnly: true
+      extraVolumes:
+        - name: tls
+          secret:
+            secretName: omada-controller-tls
+      volumeMounts:
+        - name: tls
+          mountPath: /cert
+          readOnly: true
       
