@@ -25,6 +25,9 @@ spec:
               secretKeyRef:
                 key: uri
                 name: omada-controller-db-app
+        volumeMounts:
+          - name: ferretdb-state
+            mountPath: /state
         livenessProbe: &probe
           exec:
             command: ["/ferretdb", "ping"]
@@ -68,6 +71,8 @@ spec:
         - name: tls
           secret:
             secretName: omada-controller-tls
+        - name: ferretdb-state
+          emptyDir: {}
       volumeMounts:
         - name: tls
           mountPath: /cert
