@@ -44,8 +44,8 @@ spec:
                   name: omada-controller
                   key: password
     service:
-      exporter:
-        controller: exporter
+      omada-exporter:
+        controller: omada-exporter
         ports:
           http:
             port: 9202
