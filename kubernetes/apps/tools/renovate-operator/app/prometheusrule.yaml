@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: renovate-operator-rules
+spec:
+  groups:
+    - name: renovate-operator.rules
+      rules:
+        - alert: RenovateDependencyIssues
+          expr: |-
+            renovate_operator_dependency_issues == 1
+          for: 1h
+          annotations:
+            summary: >-
+              Renovate dependency issues detected for {{ $labels.project }}
+          labels:
+            severity: warning
