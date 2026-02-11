@@ -33,9 +33,8 @@ spec:
         containers:
           main:
             image:
-              # temp image https://github.com/GabeDuarteM/blocky-ui/pull/242
-              repository: docker.io/ant385525/blocky-ui
-              tag: latest@sha256:72c7d6723d10ef8f1300fe68711cd9360524e6b69a87f4d6b4620fa4cb5166a2
+              repository: ghcr.io/gabeduartem/blocky-ui
+              tag: 1.6.0@sha256:8d76f8b09239c160fad638d9489a10979b40792c76227b067427906e2c128d95
             env:
               QUERY_LOG_TYPE: postgres
               QUERY_LOG_TARGET:
