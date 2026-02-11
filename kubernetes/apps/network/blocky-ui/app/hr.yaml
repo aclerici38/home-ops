@@ -36,7 +36,7 @@ spec:
               repository: ghcr.io/gabeduartem/blocky-ui
               tag: 1.6.0@sha256:8d76f8b09239c160fad638d9489a10979b40792c76227b067427906e2c128d95
             env:
-              QUERY_LOG_TYPE: postgres
+              QUERY_LOG_TYPE: postgresql
               QUERY_LOG_TARGET:
                 secretKeyRef:
                   name: blocky-db-app
