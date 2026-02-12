@@ -8,6 +8,10 @@ spec:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       name: ${APP}
+  csrf:
+    percentageEnabled: 100
+    additionalOrigins:
+      - exact: "https://id.${SECRET_DOMAIN}"
   oauth2:
     extensionRef:
       name: ${APP}-oauth
