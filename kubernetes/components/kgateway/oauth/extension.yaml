@@ -6,8 +6,6 @@ metadata:
 spec:
   oauth2:
     backendRef:
-      group: gateway.networking.k8s.io
-      kind: HTTPRoute
       name: pocket-id
       namespace: home-infra
     issuerURI: "https://id.${SECRET_DOMAIN}"
