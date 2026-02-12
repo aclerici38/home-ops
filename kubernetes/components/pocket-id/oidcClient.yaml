@@ -4,6 +4,7 @@ kind: PocketIDOIDCClient
 metadata:
   name: ${APP}
 spec:
+  clientId: ${APP}
   launchUrl: https://${APP_URL}
   allowedUserGroups:
     - name: ${APP}
