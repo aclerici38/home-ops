@@ -1,0 +1,11 @@
+---
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: Backend
+metadata:
+  name: ${APP}-oauth-backend
+  namespace: tools
+spec:
+  endpoints:
+    - fqdn:
+        hostname: pocket-id.home-infra.svc.cluster.local
+        port: 1411

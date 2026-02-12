@@ -5,10 +5,11 @@ metadata:
   name: ${APP}-oauth
 spec:
   oauth2:
+    # Why is this required??
     backendRef:
-      name: pocket-id
-      namespace: home-infra
-      port: 1411
+      group: gateway.kgateway.dev
+      kind: Backend
+      name: ${APP}-oauth-backend
     issuerURI: "https://id.${SECRET_DOMAIN}"
     scopes: ["openid", "profile", "email", "groups"]
     credentials:
