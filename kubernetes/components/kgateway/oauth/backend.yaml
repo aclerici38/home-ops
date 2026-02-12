@@ -4,7 +4,7 @@ kind: Backend
 metadata:
   name: ${APP}-oauth-backend
 spec:
-  endpoints:
-    - fqdn:
-        hostname: pocket-id.home-infra.svc.cluster.local
+  static:
+    hosts:
+      - host: pocket-id.home-infra.svc.cluster.local
         port: 1411
