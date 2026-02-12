@@ -2,7 +2,7 @@
 apiVersion: gateway.kgateway.dev/v1alpha1
 kind: TrafficPolicy
 metadata:
-  name: default-disable-request-timeout
+  name: traffic-policy
   namespace: kgateway-system
 spec:
   targetSelectors:

@@ -3,7 +3,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: kgateway-external
+  name: external
 spec:
   gatewayClassName: kgateway
   addresses:
@@ -50,4 +50,4 @@ spec:
       honorLabels: true
   selector:
     matchLabels:
-      app.kubernetes.io/name: kgateway-external
+      app.kubernetes.io/name: external
