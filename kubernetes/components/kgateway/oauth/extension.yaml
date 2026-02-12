@@ -8,6 +8,7 @@ spec:
     backendRef:
       name: pocket-id
       namespace: home-infra
+      port: 1411
     issuerURI: "https://id.${SECRET_DOMAIN}"
     scopes: ["openid", "profile", "email", "groups"]
     credentials:
