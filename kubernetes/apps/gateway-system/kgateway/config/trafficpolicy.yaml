@@ -9,11 +9,9 @@ spec:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: internal
-      sectionName: https
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: external
-      sectionName: https
   buffer:
     disable: {}
   compression:
@@ -21,8 +19,6 @@ spec:
     responseCompression: {}
   csrf:
     percentageEnabled: 100
-  retry:
-    attempts: 0
   timeouts:
     request: 0s
     streamIdle: 0s
