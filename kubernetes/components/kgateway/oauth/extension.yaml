@@ -10,7 +10,7 @@ spec:
       kind: HTTPRoute
       name: pocket-id
       namespace: home-infra
-    issuerURI: "https://id.${SECRET_DOMAIN}/.well-known/openid-configuration"
+    issuerURI: "https://id.${SECRET_DOMAIN}"
     scopes: ["openid", "profile", "email", "groups"]
     credentials:
       clientID: "${CLIENT_ID:=${APP}}"
