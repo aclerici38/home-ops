@@ -5,8 +5,9 @@ metadata:
   name: default-disable-request-timeout
   namespace: kgateway-system
 spec:
-  targetRefs:
+  targetSelectors:
     - group: gateway.networking.k8s.io
       kind: Gateway
+      matchLabels: {}
   timeouts:
     request: 0s
