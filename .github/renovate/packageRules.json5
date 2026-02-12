@@ -20,12 +20,6 @@
       versioning: "regex:^V(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
     },
     {
-      description: "Envoy distroless",
-      matchDatasources: ["docker"],
-      matchPackagePatterns: ["envoyproxy/envoy"],
-      versioning: "regex:^distroless-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
-    },
-    {
       description: "Opencloud unzip web extension",
       matchDatasources: ["docker"],
       matchPackagePatterns: ["opencloudeu/web-extensions"],

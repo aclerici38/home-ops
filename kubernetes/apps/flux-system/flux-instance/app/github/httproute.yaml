@@ -11,7 +11,7 @@ spec:
   parentRefs:
     - name: external
       kind: Gateway
-      namespace: envoy-system
+      namespace: gateway-system
       sectionName: https
   hostnames:
     - ${APP_URL}

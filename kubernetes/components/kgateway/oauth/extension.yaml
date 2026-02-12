@@ -1,0 +1,17 @@
+---
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: GatewayExtension
+metadata:
+  name: ${APP}-oauth
+spec:
+  type: OAuth2
+  oauth2:
+    issuerURI: "https://id.${SECRET_DOMAIN}"
+    scopes: ["openid", "profile", "email", "groups"]
+    credentials:
+      clientID: "${CLIENT_ID:=${APP}}"
+      clientSecretRef:
+        name: ${APP}-oidc-credentials
+    cookies:
+      domain: "${SECRET_DOMAIN}"
+    logoutPath: "${LOGOUT_PATH:-/logout}"

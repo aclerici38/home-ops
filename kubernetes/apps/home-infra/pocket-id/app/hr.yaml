@@ -60,7 +60,7 @@ spec:
           - group: gateway.networking.k8s.io
             kind: Gateway
             name: external
-            namespace: envoy-system
+            namespace: gateway-system
             sectionName: https
     users:
       - name: anthony

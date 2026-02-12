@@ -11,13 +11,14 @@
       }
     },
     {
-      "description": ["Envoy Group"],
-      "groupName": "Envoy",
-      "matchPackagePatterns": ["envoy"],
+      "description": ["Kgateway Group"],
+      "groupName": "Kgateway",
+      "matchPackagePatterns": ["kgateway-dev"],
       "matchDatasources": ["docker", "helm"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
-      }
+      },
+      "minimumGroupSize": 2,
     },
     {
       "description": ["Opencloud Group"],

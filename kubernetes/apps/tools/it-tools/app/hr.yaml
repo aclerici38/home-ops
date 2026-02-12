@@ -63,7 +63,7 @@ spec:
           - ${APP_URL}
         parentRefs:
           - name: internal
-            namespace: envoy-system
+            namespace: gateway-system
             sectionName: https
         rules:
           - backendRefs:

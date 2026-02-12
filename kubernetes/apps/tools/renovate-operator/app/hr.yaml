@@ -17,14 +17,14 @@ spec:
         - renovate.${SECRET_DOMAIN}
       parentRefs:
         - name: internal
-          namespace: envoy-system
+          namespace: gateway-system
     webhook:
       enabled: true
       hostnames:
         - renovate-webhook.${SECRET_DOMAIN}
       parentRefs:
         - name: external
-          namespace: envoy-system
+          namespace: gateway-system
     metrics:
       enabled: true
       serviceMonitor:

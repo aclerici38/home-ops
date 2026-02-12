@@ -37,7 +37,7 @@ spec:
         - grafana.${SECRET_DOMAIN}
       parentRefs:
         - name: internal
-          namespace: envoy-system
+          namespace: gateway-system
       rules:
         - backendRefs:
           - name: grafana-service

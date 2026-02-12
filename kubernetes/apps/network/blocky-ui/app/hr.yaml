@@ -67,7 +67,7 @@ spec:
           - blocky.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
-            namespace: envoy-system
+            namespace: gateway-system
             sectionName: https
         rules:
           - backendRefs:

@@ -2,11 +2,14 @@
 apiVersion: gateway.kgateway.dev/v1alpha1
 kind: TrafficPolicy
 metadata:
-  name: openspeedtest-request-buffer
+  name: ${APP}-oauth
 spec:
   targetRefs:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       name: ${APP}
-  buffer:
-    maxRequestSize: 35Mi
+  oauth2:
+    extensionRef:
+      group: gateway.kgateway.dev
+      kind: GatewayExtension
+      name: ${APP}-oidc

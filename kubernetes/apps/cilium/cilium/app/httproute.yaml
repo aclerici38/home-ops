@@ -8,7 +8,7 @@ spec:
   parentRefs:
     - name: internal
       kind: Gateway
-      namespace: envoy-system
+      namespace: gateway-system
       sectionName: https
   hostnames:
     - hubble.${SECRET_DOMAIN}

@@ -88,7 +88,7 @@ spec:
           - search.${SECRET_DOMAIN}
         parentRefs:
           - name: external
-            namespace: envoy-system
+            namespace: gateway-system
             sectionName: https
         rules:
           - backendRefs:
