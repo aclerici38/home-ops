@@ -70,7 +70,7 @@ spec:
         type: ClusterIP
         ports:
           http-auth:
-            port: 8971
+            port: &auth 8971
           http:
             primary: true
             port: &http 5000
@@ -89,7 +89,7 @@ spec:
         rules:
           - backendRefs:
             - identifier: main
-              port: *http
+              port: *auth
     persistence:
       config:
         existingClaim: frigate
