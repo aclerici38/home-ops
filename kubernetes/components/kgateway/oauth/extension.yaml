@@ -5,7 +5,6 @@ metadata:
   name: ${APP}-oauth
 spec:
   oauth2:
-    forwardAccessToken: true
     # Why is this required??
     backendRef:
       group: gateway.kgateway.dev

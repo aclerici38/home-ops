@@ -17,14 +17,3 @@ spec:
               clientSecret: client-secret
       target:
         kind: PocketIDOIDCClient
-    - patch: |-
-        apiVersion: gateway.kgateway.dev/v1alpha1
-        kind: TrafficPolicy
-        metadata:
-          name: patch
-        spec:
-          jwtAuth:
-            extensionRef:
-              name: ${APP}-jwt
-      target:
-        kind: TrafficPolicy
