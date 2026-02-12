@@ -5,7 +5,16 @@ kind: Kustomization
 configMapGenerator:
   - name: APP-app-vars
     literals:
-      - APP=envoy
+      - APP=kgateway
       - RESOURCES=config
+patches:
+  - patch: |-
+      - op: add
+        path: /spec/dependsOn/-
+        value:
+          name: kgateway-crds
+    target:
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/app-resources

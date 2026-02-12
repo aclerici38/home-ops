@@ -5,11 +5,18 @@ kind: Certificate
 metadata:
   name: ${SECRET_DOMAIN/./-}
 spec:
-  secretName: ${SECRET_DOMAIN/./-}-tls
+  dnsNames:
+    - "${SECRET_DOMAIN}"
+    - "*.${SECRET_DOMAIN}"
+  duration: 160h
   issuerRef:
-    name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: ${SECRET_DOMAIN}
-  dnsNames: ["${SECRET_DOMAIN}", "*.${SECRET_DOMAIN}"]
+    name: letsencrypt-production
   privateKey:
+    algorithm: ECDSA
+    size: 256
     rotationPolicy: Always
+  secretName: ${SECRET_DOMAIN/./-}-tls
+  usages:
+    - digital signature
+    

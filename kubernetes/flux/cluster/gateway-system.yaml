@@ -3,13 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &ns envoy-system
+  name: &ns gateway-system
   namespace: flux-system
 spec:
   targetNamespace: *ns
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/apps/envoy-system
+  path: ./kubernetes/apps/gateway-system
   components:
     - ../../components/namespace
   prune: false

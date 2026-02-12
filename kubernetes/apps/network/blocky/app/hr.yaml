@@ -139,7 +139,7 @@ spec:
           - dns.${SECRET_DOMAIN}
         parentRefs:
           - name: external
-            namespace: envoy-system
+            namespace: gateway-system
             sectionName: https
         rules:
           - matches:

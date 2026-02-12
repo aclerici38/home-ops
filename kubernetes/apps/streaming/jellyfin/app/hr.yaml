@@ -83,7 +83,7 @@ spec:
               port: *port
         parentRefs:
           - name: external
-            namespace: envoy-system
+            namespace: gateway-system
             sectionName: https
     persistence:
       config:

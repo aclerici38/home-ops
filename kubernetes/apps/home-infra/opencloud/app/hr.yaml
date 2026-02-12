@@ -257,7 +257,7 @@ spec:
           - cloud.${SECRET_DOMAIN}
         parentRefs:
           - name: external
-            namespace: envoy-system
+            namespace: gateway-system
             sectionName: https
         rules:
           - backendRefs:
@@ -271,7 +271,7 @@ spec:
           - wopi.${SECRET_DOMAIN}
         parentRefs:
           - name: external
-            namespace: envoy-system
+            namespace: gateway-system
             sectionName: https
         rules:
           - backendRefs:
@@ -282,7 +282,7 @@ spec:
           - collabora.${SECRET_DOMAIN}
         parentRefs:
           - name: external
-            namespace: envoy-system
+            namespace: gateway-system
             sectionName: https
         rules:
           - backendRefs:

@@ -6,7 +6,7 @@ patches:
   - patch: |-
       - op: add
         path: /spec/components/-
-        value: ../../../../components/envoy/oauth
+        value: ../../../../components/kgateway/oauth
     target: &target
       group: kustomize.toolkit.fluxcd.io
       kind: Kustomization
@@ -14,5 +14,6 @@ patches:
     target: *target
   - path: ../../deps/eso-stores.yaml
     target: *target
-  - path: ../../deps/envoy.yaml
+  - path: ../../deps/pocket-id.yaml
+  - path: ../../deps/kgateway.yaml
     target: *target

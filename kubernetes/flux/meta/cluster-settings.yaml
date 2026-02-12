@@ -31,8 +31,8 @@ spec:
           BLOCKY_LB_IP: "10.38.55.25"
           NFS_LB_IP: "10.38.55.30"
           D3SAVANT_LB_IP: "10.38.55.38"
-          ENVOY_INTERNAL_LB_IP: "10.38.55.80"
-          ENVOY_EXTERNAL_LB_IP: "10.38.55.81"
+          KGATEWAY_INTERNAL_LB_IP: "10.38.55.90"
+          KGATEWAY_EXTERNAL_LB_IP: "10.38.55.91"
     dataFrom:
       - extract:
           key: cluster-secrets
