@@ -1,8 +1,8 @@
 ---
 apiVersion: gateway.kgateway.dev/v1alpha1
-kind: TrafficPolicy
+kind: HTTPListenerPolicy
 metadata:
-  name: traffic-policy
+  name: http-listener-policy
   namespace: kgateway-system
 spec:
   targetRefs:
@@ -12,15 +12,7 @@ spec:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: external
-  buffer:
-    disable: {}
-  compression:
-    requestDecompression: {}
-    responseCompression: {}
-  csrf:
-    percentageEnabled: 100
-  retry:
-    attempts: 0
-  timeouts:
-    request: 0s
-    streamIdle: 0s
+  streamIdleTimeout: 0s
+  upgradeConfig:
+    enabledUpgrades:
+      - websocket
