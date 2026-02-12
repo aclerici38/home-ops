@@ -4,9 +4,13 @@ kind: GatewayExtension
 metadata:
   name: ${APP}-oauth
 spec:
-  type: OAuth2
   oauth2:
-    issuerURI: "https://id.${SECRET_DOMAIN}"
+    backendRef:
+      group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: pocket-id
+      namespace: home-infra
+    issuerURI: "https://id.${SECRET_DOMAIN}/.well-known/openid-configuration"
     scopes: ["openid", "profile", "email", "groups"]
     credentials:
       clientID: "${CLIENT_ID:=${APP}}"
@@ -14,4 +18,3 @@ spec:
         name: ${APP}-oidc-credentials
     cookies:
       domain: "${SECRET_DOMAIN}"
-    logoutPath: "${LOGOUT_PATH:-/logout}"

@@ -9,5 +9,12 @@ spec:
     - group: gateway.networking.k8s.io
       kind: Gateway
       matchLabels: {}
+  buffer:
+    disable: {}
+  compression:
+    requestDecompression: {}
+    responseCompression: {}
+  csrf:
+    percentageEnabled: 100
   timeouts:
     request: 0s
