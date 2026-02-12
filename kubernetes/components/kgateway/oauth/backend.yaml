@@ -4,6 +4,7 @@ kind: Backend
 metadata:
   name: ${APP}-oauth-backend
 spec:
+  type: Static
   static:
     hosts:
       - host: pocket-id.home-infra.svc.cluster.local
