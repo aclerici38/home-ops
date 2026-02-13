@@ -53,6 +53,10 @@ spec:
             value: "none"
         persistence:
           enabled: false
+        metrics:
+          enabled: true
+      serviceMonitor:
+        enabled: true
       route:
         enabled: true
         host: id.${SECRET_DOMAIN}
