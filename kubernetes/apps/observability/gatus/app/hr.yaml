@@ -186,6 +186,12 @@ spec:
                 url: tcp://google.com:443
                 conditions:
                   - "[CONNECTED] == true"
+                  
+              - name: Bambi
+                group: travel
+                url: tcp://bambi.${SECRET_DOMAIN}:443
+                conditions:
+                  - "[CONNECTED] == true"
             
             metrics: true
             
