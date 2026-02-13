@@ -8,11 +8,9 @@ metadata:
     external-dns.alpha.kubernetes.io/controller: none
 spec:
   parentRefs:
-    - name: kgateway-internal
-      namespace: network
+    - name: internal
       sectionName: http
-    - name: kgateway-external
-      namespace: network
+    - name: external
       sectionName: http
   rules:
     - filters:
