@@ -30,7 +30,7 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: Unconfined }
         containers:
-          main:
+          frigate:
             image:
               repository: ghcr.io/blakeblackshear/frigate
               tag: 0.17.0-rc1@sha256:c758ec715d23d44d0cadde9d1ff884ca80f7364992de7e2401cf29ebb3f3d5f1
@@ -65,7 +65,7 @@ spec:
                 gpu.intel.com/i915: 1
                 memory: 16Gi
     service:
-      main:
+      frigate:
         controller: frigate
         type: ClusterIP
         ports:
@@ -79,7 +79,8 @@ spec:
           webrtc:
             port: 8555
     route:
-      main:
+      auth:
+        forceRename: frigate
         hostnames:
           - ${APP_URL}
         parentRefs:
@@ -88,8 +89,19 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-            - identifier: main
+            - identifier: frigate
               port: *auth
+      admin:
+        hostnames:
+          - frigate-admin.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: gateway-system
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: frigate
+              port: *http
     persistence:
       config:
         existingClaim: frigate
