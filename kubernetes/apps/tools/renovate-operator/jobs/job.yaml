@@ -45,6 +45,8 @@ spec:
       value: enabled
     - name: RENOVATE_CACHE_PRIVATE_PACKAGES
       value: "true"
+    - name: RENOVATE_EXPOSE_ALL_ENV
+      value: "true"
   image: ghcr.io/renovatebot/renovate:43.5.4@sha256:f8b4b782b15999e01b9e590df8ef66c2c4c7459e792a8219bc17ed73be12dabf
   parallelism: 5
   resources:
