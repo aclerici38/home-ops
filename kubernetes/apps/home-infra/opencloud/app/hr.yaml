@@ -55,6 +55,7 @@ spec:
               WEB_OIDC_SCOPE: "openid profile email"
               PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml
               PROXY_OIDC_REWRITE_WELLKNOWN: true # mobile apps try to re-register via internal idp
+              PROXY_OIDC_USERINFO_CACHE_TTL: 1m
               PROXY_HTTP_ADDR: 0.0.0.0:9200
               # metrics
               PROXY_DEBUG_ADDR: 0.0.0.0:9205
