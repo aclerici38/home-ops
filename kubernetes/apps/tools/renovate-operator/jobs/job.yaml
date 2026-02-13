@@ -8,10 +8,9 @@ spec:
     - name: LOG_LEVEL
       value: debug
     - name: RENOVATE_ALLOWED_COMMANDS
-      value: |-
+      value: >-
         [
           "pnpm run bundle",
-          # Pocket-id operator
           "make manifests generate fmt build-installer"
         ]
     - name: RENOVATE_ENDPOINT
@@ -31,7 +30,7 @@ spec:
           name: renovate-operator
           key: DOCKERHUB_TOKEN
     - name: RENOVATE_HOST_RULES
-      value: |-
+      value: >-
         [
           {
             "hostType": "docker",
