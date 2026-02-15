@@ -42,6 +42,7 @@ spec:
       tag: 6.1.0.19@sha256:1f50f63e857eb0ee5e585c14725815a528759e9c9463ee565569cf5da908d0f0
     serviceAccount:
       create: false
+    tlsSecretName: omada-controller-tls
     config:
       rootless: true
       # ferretdb sidecar
@@ -68,13 +69,6 @@ spec:
         storageClassName: ceph-filesystem
         size: 5Gi
       extraVolumes:
-        - name: tls
-          secret:
-            secretName: omada-controller-tls
         - name: ferretdb-state
           emptyDir: {}
-      extraVolumeMounts:
-        - name: tls
-          mountPath: /cert
-          readOnly: true
       
