@@ -44,6 +44,7 @@ spec:
       create: false
     config:
       rootless: true
+      tlsSecretName: omada-controller-tls
       # ferretdb sidecar
       externalMongoDBUrl: "mongodb://127.0.0.1:27017/app"
       ports:
@@ -68,13 +69,6 @@ spec:
         storageClassName: ceph-filesystem
         size: 5Gi
       extraVolumes:
-        - name: tls
-          secret:
-            secretName: omada-controller-tls
         - name: ferretdb-state
           emptyDir: {}
-      extraVolumeMounts:
-        - name: tls
-          mountPath: /cert
-          readOnly: true
       
