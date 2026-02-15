@@ -11,6 +11,15 @@
       }
     },
     {
+      "description": ["Omada-Controller Group"],
+      "groupName": "Omada-Controller",
+      "matchPackagePatterns": ["omada-controller", "omada-controller-helm"],
+      "matchDatasources": ["docker", "helm"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
       "description": ["Kgateway Group"],
       "groupName": "Kgateway",
       "matchPackagePatterns": ["kgateway-dev"],
