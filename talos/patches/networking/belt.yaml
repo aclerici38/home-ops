@@ -3,7 +3,7 @@ apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: bond0-link1
 selector:
-  match: glob("d8:3a:dd:d2:76:d2", mac(link.permanent_addr))
+  match: glob("dc:4a:3e:66:b4:c7", mac(link.permanent_addr))
 ---
 apiVersion: v1alpha1
 kind: BondConfig
@@ -17,6 +17,6 @@ updelay: 200
 downdelay: 200
 mtu: 9000
 addresses:
-  - address: 10.0.30.55/24
+  - address: 10.0.30.9/24
 routes:
   - gateway: 10.0.30.1

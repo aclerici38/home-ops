@@ -18,10 +18,12 @@ additionalApiServerCertSans: &sans
   - "bonds.lab.internal"
   - "cain.lab.internal"
   - "posey.lab.internal"
+  - "belt.lab.internal"
   - "10.0.30.250"
   - "10.0.30.25"
   - "10.0.30.18"
   - "10.0.30.28"
+  - "10.0.30.9"
   - "127.0.0.1"
   - "172.17.0.1"
 additionalMachineCertSans: *sans
@@ -183,49 +185,52 @@ nodes:
           grow: true
     patches:
       - "@./patches/networking/posey.yaml"
-  - hostname: "timmy"
-    ipAddress: "10.0.30.55"
-    installDisk: /dev/disk/by-id/mmc-SC32G_0x616934b3
+  - hostname: "belt"
+    ipAddress: "10.0.30.9"
+    installDiskSelector:
+      wwid: naa.500a07511fc61629
     machineSpec:
       secureboot: false
+      arch: amd64
       mode: metal
       useUKI: true
-      arch: arm64
     kernelModules:
       - name: nbd
     schematic:
-      # overlay:
-      #   name: rpi5
-      #   image: siderolabs/sbc-raspberrypi
       customization:
         extraKernelArgs:
-          - cpufreq.default_governor=performance
+          - -init_on_alloc
+          - -init_on_free
+          - -selinux
           - apparmor=0
-          - iommu.passthrough=1
           - init_on_alloc=0
           - init_on_free=0
+          - intel_iommu=on
+          - iommu=pt
           - mitigations=off
           - security=none
-          - enforcing=0
-          - -selinux
+          - sysctl.kernel.kexec_load_disabled=1
+          - talos.auditd.disabled=1
         systemExtensions:
           officialExtensions:
+            - siderolabs/intel-ucode
             - siderolabs/nfsrahead
     controlPlane: false
-    nodeTaints:
-      rpi5: ":NoSchedule"
+    volumes:
+      - name: EPHEMERAL
+        provisioning:
+          diskSelector:
+            match: system_disk
+          maxSize: 200GB
+          grow: false
     patches:
-      - "@./patches/networking/timmy.yaml"
+      - "@./patches/networking/belt.yaml"
+      # 3d Printer
       - |-
-          machine:
-            install:
-              image: ghcr.io/talos-rpi5/installer:v1.11.5
-      - |-
-          # 3d printer USB
-          machine:
-            udev:
-              rules:
-                - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
+        machine:
+          udev:
+            rules:
+              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
 # Global patches
 patches:
   - "@./patches/global/machine-files.yaml"
