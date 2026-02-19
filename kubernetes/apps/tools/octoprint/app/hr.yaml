@@ -91,12 +91,9 @@ spec:
             port: &port 5000
       go2rtc:
         controller: go2rtc
-        type: LoadBalancer
-        annotations:
-          coredns.io/hostname: octoprint-cam.${SECRET_DOMAIN}
         ports:
           http:
-            port: 1984
+            port: &go2rtc 1984
     route:
       octoprint:
         hostnames:
@@ -109,6 +106,17 @@ spec:
           - backendRefs:
             - identifier: octoprint
               port: *port
+      go2rtc:
+        hostnames:
+          - printer-cam.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: gateway-system
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: go2rtc
+              port: *go2rtc
     configMaps:
       config:
         data:
