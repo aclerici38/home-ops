@@ -146,9 +146,10 @@ spec:
         existingClaim: octoprint
         advancedMounts:
           octoprint:
-            octoprint:
+            config: &config
               - path: /config
                 subPath: data
+            octoprint: *config
       go2rtc:
         type: configMap
         name: octoprint
