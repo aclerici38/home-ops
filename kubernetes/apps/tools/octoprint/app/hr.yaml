@@ -32,6 +32,10 @@ spec:
                 secretKeyRef:
                   name: octoprint
                   key: CAM_PASS
+            securityContext: &sec
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             probes:
               liveness:
                 enabled: true
@@ -53,26 +57,38 @@ spec:
           securityContext:
             supplementalGroups:
               - 20
-        containers:
-          octoprint:
-            image:
+        initContainers:
+          config:
+            image: &img
               repository: ghcr.io/home-operations/octoprint
               tag: 1.11.7@sha256:4459c29aaa874ee247120ff1d8b8ccb1fb11191b34fef4ca187010a1ae5b03f8
+            command: ["/bin/sh", "-c"]
+            args: |
+              alias ocs='octoprint config set'
+              ocs --json server.reverseProxy.trustedProxies '["172.16.0.0/16"]'
+              ocs webcam.ffmpeg /usr/bin/ffmpeg
+              ocs plugins.classicwebcam.snapshot "http://octoprint-go2rtc:1984/api/frame.jpeg?src=printer"
+              ocs plugins.classicwebcam.stream "https://printer-cam.${SECRET_DOMAIN}/api/stream.mjpeg?src=printer"
+              ocs serial.port /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
+            env:
+              OCTOPRINT_BASEDIR: /config
+            securityContext: *sec
+        containers:
+          octoprint:
+            image: *img
             probes:
               liveness: &probes
                 enabled: true
                 type: HTTP
               readiness: *probes
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+            securityContext: *sec
             resources:
               requests:
                 cpu: 100m
                 memory: 100Mi
               limits:
-                memory: 1Gi
+                # Rendering timelapses takes a lot of memory
+                memory: 3Gi
                 squat.ai/anycubic-kobra: 1
     defaultPodOptionsStrategy: merge
     defaultPodOptions:
