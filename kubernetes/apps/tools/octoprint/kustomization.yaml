@@ -6,6 +6,7 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=octoprint
+      - VOLSYNC_CAPACITY=25Gi
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/volsync/versity
