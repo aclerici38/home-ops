@@ -123,7 +123,7 @@ spec:
           go2rtc.yaml: |-
             streams:
               printer:
-                - rtsp://octoprint:$${CAM_PASS}@3d-printer.security.internal
+                - rtsp://octoprint:$${CAM_PASS}@3d-printer.security.internal/avstream/channel=1/stream=0.sdp
     persistence:
       octoprint:
         existingClaim: octoprint
