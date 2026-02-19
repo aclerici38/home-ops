@@ -21,15 +21,36 @@ spec:
       retries: 1
   values:
     controllers:
+      go2rtc:
+        containers:
+          go2rtc:
+            image:
+              repository: ghcr.io/alexxit/go2rtc
+              tag: 1.9.14@sha256:675c318b23c06fd862a61d262240c9a63436b4050d177ffc68a32710d9e05bae
+            env:
+              CAM_PASS:
+                secretKeyRef:
+                  name: octoprint
+                  key: CAM_PASS
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
       octoprint:
+        forceRename: octoprint
         pod:
           securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: RuntimeDefault }
             supplementalGroups:
               - 20
         containers:
@@ -53,12 +74,29 @@ spec:
               limits:
                 memory: 500Mi
                 squat.ai/anycubic-kobra: 1
+    defaultPodOptionsStrategy: merge
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: { type: RuntimeDefault }
     service:
       octoprint:
         controller: octoprint
         ports:
           http:
             port: &port 5000
+      go2rtc:
+        controller: go2rtc
+        type: LoadBalancer
+        annotations:
+          coredns.io/hostname: octoprint-cam.${SECRET_DOMAIN}
+        ports:
+          http:
+            port: 1984
     route:
       octoprint:
         hostnames:
@@ -71,9 +109,26 @@ spec:
           - backendRefs:
             - identifier: octoprint
               port: *port
+    configMaps:
+      config:
+        data:
+          go2rtc.yaml: |-
+            streams:
+              printer:
+                - rtsp://octoprint:$${CAM_PASS}@3d-printer.security.internal
     persistence:
       octoprint:
         existingClaim: octoprint
-        globalMounts:
-          - path: /config
-            subPath: data
+        advancedMounts:
+          octoprint:
+            octoprint:
+              - path: /config
+                subPath: data
+      go2rtc:
+        type: configMap
+        name: octoprint
+        advancedMounts:
+          go2rtc:
+            go2rtc:
+              - path: /config/go2rtc.yaml
+                subPath: go2rtc.yaml
