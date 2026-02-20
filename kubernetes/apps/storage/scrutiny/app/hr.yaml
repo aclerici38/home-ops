@@ -23,7 +23,7 @@ spec:
     controllers:
       scrutiny:
         containers:
-          main:
+          scrutiny:
             image:
               repository: ghcr.io/analogj/scrutiny
               tag: v0.8.6-web@sha256:9eadf87322a7826924a835c9bf5632d52bc2d8d1576f04749eda627da3898518
@@ -50,7 +50,7 @@ spec:
                 memory: 128Mi
       influxdb:
         containers:
-          main:
+          influxdb:
             image:
               repository: docker.io/library/influxdb
               tag: 2.8.0-alpine@sha256:f15dfc604753f53b180364a331b46c2f4bc5c08a665d025982b301efa69bc2f7
@@ -72,20 +72,14 @@ spec:
             securityContext: *sec
       collector:
         type: daemonset
-        pod:
-          tolerations:
-            - key: "rpi"
-              operator: "Equal"
-              value: "true"
-              effect: "NoSchedule"
         containers:
-          main:
+          scrutiny-collector:
             image:
               repository: ghcr.io/analogj/scrutiny
               tag: v0.8.6-collector@sha256:c5228c99119a708e23f6235619273ae8d03735ba2a283aa97ecb5085787ea0f7
             env:
               COLLECTOR_RUN_STARTUP: true
-              COLLECTOR_API_ENDPOINT: "http://scrutiny-main:8080"
+              COLLECTOR_API_ENDPOINT: "http://scrutiny:8080"
               COLLECTOR_CRON_SCHEDULE: "0 * * * *"
               COLLECTOR_HOST_ID:
                 valueFrom:
@@ -116,7 +110,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     service:
-      main:
+      scrutiny:
         controller: scrutiny
         ports:
           http:
@@ -143,11 +137,11 @@ spec:
         existingClaim: scrutiny
         advancedMounts:
           scrutiny:
-            main:
+            scrutiny:
               - path: /opt/scrutiny/config
                 subPath: scrutiny
           influxdb:
-            main:
+            influxdb:
               - path: /var/lib/influxdb2
                 subPath: influxdb
       udev:
