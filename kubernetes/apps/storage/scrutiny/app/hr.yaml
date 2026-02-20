@@ -121,7 +121,7 @@ spec:
           http:
             port: *dbPort
     route:
-      main:
+      scrutiny:
         hostnames:
           - ${APP_URL}
         parentRefs:
@@ -130,7 +130,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-            - identifier: main
+            - identifier: scrutiny
               port: *port
     persistence:
       config:
