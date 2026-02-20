@@ -2,12 +2,6 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
-      description: "Limit renovate image updates to once a week",
-      matchDatasources: ["docker"],
-      matchPackagePatterns: ["renovatebot/renovate"],
-      schedule: ["* 0-3 * * 1"],
-    },
-    {
       description: ["Loose versioning for non-semver containers"],
       matchDatasources: ["docker"],
       matchPackagePatterns: ["searxng"],

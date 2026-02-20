@@ -12,8 +12,7 @@
     {
       "description": ["Auto-merge specific apps' minor versions"],
       "automerge": true,
-      "automergeType": "pr",
-      "rebaseWhen": "behind-base-branch",
+      "automergeType": "branch",
       "matchDatasources": ["docker", "helm"],
       "matchPackageNames": [
         "**/bazarr",
@@ -46,8 +45,7 @@
     {
       "description": ["Auto-merge specific apps' major versions"],
       "automerge": true,
-      "automergeType": "pr",
-      "rebaseWhen": "behind-base-branch",
+      "automergeType": "branch",
       "matchDatasources": ["docker", "helm"],
       "matchPackageNames": [
         "**/firefox",
