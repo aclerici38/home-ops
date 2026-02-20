@@ -149,7 +149,7 @@ spec:
         hostPath: /run/udev
         advancedMounts:
           collector:
-            main:
+            scrutiny-collector:
               - path: /run/udev
                 readOnly: true
       dev:
@@ -157,5 +157,5 @@ spec:
         hostPath: /dev
         advancedMounts:
           collector:
-            main:
+            scrutiny-collector:
               - path: /dev
