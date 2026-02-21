@@ -18,9 +18,9 @@ spec:
     remediation:
       retries: 1
   values:
-    # manager:
-    #   image:
-    #     tag: bf7f6b7-main
+    operator:
+      image:
+        tag: 235209d-main
     instance:
       name: pocket-id
       spec:
