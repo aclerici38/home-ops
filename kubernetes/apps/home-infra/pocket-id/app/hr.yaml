@@ -25,6 +25,14 @@ spec:
       name: pocket-id
       spec:
         image: ghcr.io/pocket-id/pocket-id:v2.3.0-distroless@sha256:85a7485108325e34679b0fbca0baeb8418401f6d6cf59944d50f3ec013aafd09
+        route:
+          enabled: true
+          parentRefs:
+            - group: gateway.networking.k8s.io
+              kind: Gateway
+              name: external
+              namespace: gateway-system
+              sectionName: https
         encryptionKey:
           valueFrom:
             secretKeyRef:
@@ -37,38 +45,28 @@ spec:
               key: uri
         appUrl: https://id.${SECRET_DOMAIN}
         hostUsers: false
-        env:
-          - name: UPDATE_CHECK_DISABLED
-            value: "true"
-          - name: SESSION_DURATION
-            value: "1440"
-          - name: FILE_BACKEND
-            value: "database"
-          - name: EMAIL_LOGIN_NOTIFICATION_ENABLED
-            value: "true"
-          - name: SMTP_HOST
-            value: "smtp-relay.cluster-infra.svc.cluster.local"
-          - name: SMTP_PORT
-            value: "25"
-          - name: SMTP_FROM
-            value: "bot@${SECRET_DOMAIN}"
-          - name: SMTP_TLS
-            value: "none"
+        versionCheckDisabled: true
+        sessionDuration: 1440
+        fileBackend: database
+        ui:
+          appName: Clerici SSO
+        smtp:
+          host: smtp-relay.cluster-infra.svc.cluster.local
+          from: bot@${SECRET_DOMAIN}
+          port: 25
+          tls: none
+        emailNotifications:
+          loginNotification: true
+          oneTimeAccessAsAdmin: true
+          apiKeyExpiration: true
+          verification: true
         persistence:
           enabled: false
         metrics:
           enabled: true
+          
       serviceMonitor:
         enabled: true
-      route:
-        enabled: true
-        host: id.${SECRET_DOMAIN}
-        parentRefs:
-          - group: gateway.networking.k8s.io
-            kind: Gateway
-            name: external
-            namespace: gateway-system
-            sectionName: https
     users:
       - name: anthony
         spec:
