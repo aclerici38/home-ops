@@ -2,7 +2,8 @@
 # yaml-language-server: $schema=https://github.com/aclerici38/pocket-id-operator/releases/latest/download/pocketidusergroup_v1alpha1.json
 apiVersion: pocketid.internal/v1alpha1
 kind: PocketIDUserGroup
-name: immich
+metadata:
+  name: immich
 spec:
   users:
     usernames:
@@ -14,4 +15,3 @@ spec:
         namespace: home-infra
       - name: steve
         namespace: home-infra
-        

@@ -2,7 +2,8 @@
 # yaml-language-server: $schema=https://github.com/aclerici38/pocket-id-operator/releases/latest/download/pocketidusergroup_v1alpha1.json
 apiVersion: pocketid.internal/v1alpha1
 kind: PocketIDUserGroup
-name: opencloud-users
+metadata:
+  name: opencloud-users
 spec:
   users:
     usernames:
@@ -19,7 +20,8 @@ spec:
 # yaml-language-server: $schema=https://github.com/aclerici38/pocket-id-operator/releases/latest/download/pocketidusergroup_v1alpha1.json
 apiVersion: pocketid.internal/v1alpha1
 kind: PocketIDUserGroup
-name: opencloud-admins
+metadata:
+  name: opencloud-admins
 spec:
   users:
     userRefs:
@@ -28,4 +30,3 @@ spec:
   customClaims:
     - key: oc_groups
       value: opencloud-admins
-      
