@@ -46,10 +46,9 @@ spec:
         appUrl: https://id.${SECRET_DOMAIN}
         hostUsers: false
         versionCheckDisabled: true
-        sessionDuration: 1440
         fileBackend: database
         ui:
-          appName: Clerici SSO
+          sessionDuration: 1440
         smtp:
           host: smtp-relay.cluster-infra.svc.cluster.local
           from: bot@${SECRET_DOMAIN}
