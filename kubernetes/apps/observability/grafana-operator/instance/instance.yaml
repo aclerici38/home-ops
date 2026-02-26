@@ -48,8 +48,8 @@ spec:
                 - name: GF_SECURITY_ADMIN_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: grafana-instance
-                      key: GF_SECURITY_ADMIN_PASSWORD
+                      name: grafana-operator
+                      key: password
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
