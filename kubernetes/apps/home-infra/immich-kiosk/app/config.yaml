@@ -13,14 +13,15 @@ spec:
       data:
         config.yaml: |
           weather:
-            - name: {{ .HOME_CITY }}
-              lat: {{ .HOME_LAT }}
-              lon: {{ .HOME_LON }}
-              api: {{ .WEATHER_API_KEY }}
-              unit: imperial
-              lang: en
-              default: true
-              round_temperature: true
+            locations:
+              - name: {{ .HOME_CITY }}
+                lat: {{ .HOME_LAT }}
+                lon: {{ .HOME_LON }}
+                api: {{ .WEATHER_API_KEY }}
+                unit: imperial
+                lang: en
+                default: true
+                round_temperature: true
   dataFrom:
     - extract:
         key: immich-kiosk
