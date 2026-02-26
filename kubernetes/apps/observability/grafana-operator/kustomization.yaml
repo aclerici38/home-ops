@@ -6,5 +6,7 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=grafana-operator
+      - RESOURCES=instance
 components:
-  - ../../../components/ks/app
+  - ../../../components/ks/app-resources
+  - ../../../components/ks/external-secret
