@@ -72,7 +72,9 @@ spec:
         spec:
           admin: true
           email: 
-            value: ${EMAIL}
+            valueFrom:
+              key: EMAIL
+              name: cluster-settings
           firstName: 
             value: Anthony
           lastName: 
