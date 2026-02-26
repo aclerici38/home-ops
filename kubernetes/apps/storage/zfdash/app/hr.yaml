@@ -27,7 +27,7 @@ spec:
             runAsUser: 0
             runAsGroup: 0
             runAsNonRoot: false
-            seccompProfile: { type: Unconfined }
+            seccompProfile: { type: RuntimeDefault }
         containers:
           zfdash:
             image:
