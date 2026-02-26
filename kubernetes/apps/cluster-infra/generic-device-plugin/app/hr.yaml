@@ -79,6 +79,11 @@ spec:
                   - count: 1000
                     paths:
                       - path: /dev/net/tun
+              - name: zfs
+                groups:
+                  - count: 1
+                    paths:
+                      - path: /dev/zfs
               - name: cottage-zigbee
                 groups:
                   - count: 10

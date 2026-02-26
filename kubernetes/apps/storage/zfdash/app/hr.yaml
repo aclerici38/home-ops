@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: zfdash
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      zfdash:
+        pod:
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            runAsNonRoot: false
+            seccompProfile: { type: Unconfined }
+        containers:
+          zfdash:
+            image:
+              repository: ghcr.io/ad4mts/zfdash
+              tag: v1.9.3@sha256:4c52b9aa4954bdf41a705ef5750cba3836d3f1addb8427c97e7f66f7b354a054
+            probes:
+              readiness: &probes
+                enabled: true
+                type: HTTP
+              liveness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: 
+                add:
+                  - SYS_ADMIN
+                drop: 
+                  - ALL
+            resources:
+              requests:
+                cpu: 10m
+                memory: 20Mi
+              limits:
+                squat.ai/zfs: 1
+                memory: 100Mi
+    service:
+      zfdash:
+        controller: zfdash
+        ports:
+          http:
+            port: &port 5001
+    route:
+      zfdash:
+        hostnames:
+          - ${APP_URL}
+        parentRefs:
+          - name: internal
+            namespace: gateway-system
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: zfdash
+              port: *port
+    persistence:
+      config:
+        existingClaim: zfdash
+        globalMounts:
+          - path: /root/.config/ZfDash
+            subPath: config
+      data:
+        existingClaim: zfdash
+        globalMounts:
+          - path: /opt/zfdash/data
+            subPath: data
