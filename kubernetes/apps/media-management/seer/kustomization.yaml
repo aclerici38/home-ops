@@ -5,7 +5,7 @@ kind: Kustomization
 configMapGenerator:
   - name: APP-app-vars
     literals:
-      - APP=jellyseer
+      - APP=seer
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/cnpg/restore
