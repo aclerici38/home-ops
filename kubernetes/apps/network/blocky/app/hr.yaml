@@ -257,8 +257,7 @@ spec:
               connectionCooldown: 60s
             
             queryLog:
-              type: postgresql
-              # type: timescale
+              type: timescale
               logRetentionDays: 90
               creationAttempts: 5
               creationCooldown: 60s
