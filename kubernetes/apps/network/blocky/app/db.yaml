@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://crd.movishell.pl/postgresql.cnpg.io/database_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: blocky-db
+spec:
+  name: app
+  owner: app
+  cluster:
+    name: blocky-db
+  extensions:
+    - ensure: present
+      name: timescale

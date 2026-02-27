@@ -1,0 +1,20 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: patch
+spec:
+  patches:
+    - patch: |-
+        apiVersion: postgresql.cnpg.io/v1
+        kind: Cluster
+        metadata:
+          name: patch
+        spec:
+          postgresql:
+            extensions:
+              - name: timescale
+                image:
+                  reference: ghcr.io/shusaan/timescaledb-testing:2.24.0-18-trixie
+      target:
+        kind: Cluster
