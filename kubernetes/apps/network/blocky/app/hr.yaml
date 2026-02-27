@@ -23,7 +23,7 @@ spec:
     controllers:
       blocky:
         strategy: RollingUpdate
-        replicas: 2
+        replicas: 3
         rollingUpdate:
           surge: 1
           unavailable: 1
