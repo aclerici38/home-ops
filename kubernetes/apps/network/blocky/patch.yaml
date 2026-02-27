@@ -12,6 +12,11 @@ spec:
           name: patch
         spec:
           postgresql:
+            shared_preload_libraries:
+              - "timescaledb"
+            parameters:
+              timescaledb.telemetry_level: 'off'
+              max_locks_per_transaction: '128'
             extensions:
               - name: timescaledb
                 image:
