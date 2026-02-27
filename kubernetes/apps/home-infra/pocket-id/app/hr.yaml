@@ -21,6 +21,8 @@ spec:
   values:
     metrics:
       enabled: true
+      serviceMonitor:
+        enable: true
       dashboard:
         enabled: true
         grafanaDashboard:
