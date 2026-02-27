@@ -256,10 +256,10 @@ spec:
               connectionAttempts: 10
               connectionCooldown: 60s
             
-            # queryLog:
-            #   type: timescale
-            #   logRetentionDays: 90
-            #   creationAttempts: 5
-            #   creationCooldown: 60s
-            #   flushInterval: 5s
+            queryLog:
+              type: timescale
+              logRetentionDays: 90
+              creationAttempts: 5
+              creationCooldown: 60s
+              flushInterval: 5s
     
