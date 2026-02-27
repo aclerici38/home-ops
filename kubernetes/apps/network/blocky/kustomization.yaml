@@ -16,6 +16,10 @@ patches:
     target:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io
+  - path: ./patch.yaml
+    target:
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/cnpg/no-backup
