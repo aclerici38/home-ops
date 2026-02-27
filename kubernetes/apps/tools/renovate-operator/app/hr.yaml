@@ -19,12 +19,7 @@ spec:
         - name: internal
           namespace: gateway-system
     webhook:
-      enabled: true
-      hostnames:
-        - renovate-webhook.${SECRET_DOMAIN}
-      parentRefs:
-        - name: external
-          namespace: gateway-system
+      enabled: false
     metrics:
       enabled: true
       serviceMonitor:
