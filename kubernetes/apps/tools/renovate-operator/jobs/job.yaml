@@ -1,7 +1,7 @@
 apiVersion: renovate-operator.mogenius.com/v1alpha1
 kind: RenovateJob
 metadata:
-  name: hourly
+  name: half-hour
 spec:
   discoverTopics: "renovate"
   extraEnv:
@@ -50,5 +50,5 @@ spec:
     requests:
       cpu: 100m
       memory: 128Mi
-  schedule: 0 * * * *
+  schedule: "*/30 * * * *"
   secretRef: botthebuilder-auth
