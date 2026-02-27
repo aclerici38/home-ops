@@ -19,9 +19,12 @@ spec:
     remediation:
       retries: 1
   values:
-    # operator:
-    #   image:
-    #     tag: 235209d-main
+    metrics:
+      enabled: true
+      dashboard:
+        enabled: true
+        grafanaDashboard:
+          enabled: true
     instance:
       name: pocket-id
       spec:
