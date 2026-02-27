@@ -13,7 +13,7 @@ spec:
         spec:
           postgresql:
             extensions:
-              - name: timescale
+              - name: timescaledb
                 image:
                   reference: ghcr.io/shusaan/timescaledb-testing:2.24.0-18-trixie
       target:
