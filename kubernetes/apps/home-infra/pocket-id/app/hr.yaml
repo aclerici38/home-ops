@@ -70,6 +70,7 @@ spec:
     users:
       - name: anthony
         spec:
+          locale: en
           admin: true
           email: 
             valueFrom:
@@ -81,6 +82,7 @@ spec:
             value: Clerici
       - name: steve
         spec:
+          locale: en
           userInfoSecretRef:
             name: pocket-id-steve-info
           
