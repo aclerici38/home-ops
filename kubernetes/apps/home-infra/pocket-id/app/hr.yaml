@@ -19,14 +19,14 @@ spec:
     remediation:
       retries: 1
   values:
-    # metrics:
-    #   enabled: true
-    #   serviceMonitor:
-    #     enabled: true
-    #   dashboard:
-    #     enabled: true
-    #     grafanaDashboard:
-    #       enabled: true
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+      dashboard:
+        enabled: true
+        grafanaDashboard:
+          enabled: true
     instance:
       name: pocket-id
       spec:
