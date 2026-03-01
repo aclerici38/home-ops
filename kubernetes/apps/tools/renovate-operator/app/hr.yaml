@@ -15,7 +15,7 @@ spec:
       valuesKey: issuer_url
       targetPath: auth.oidc.issuerUrl
     - kind: Secret
-      name: &oidcSecret renovate-operator-oidc-credentials
+      name: *oidcSecret
       valuesKey: client_id
       targetPath: auth.oidc.clientId
   values:
@@ -39,4 +39,5 @@ spec:
         enabled: true
         existingSecret: *oidcSecret
         secretKey: client_secret
+        redirectUrl: https://renovate.${SECRET_DOMAIN}/auth/callback
       
