@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/observability.giantswarm.io/silence_v1alpha2.json
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/observability.giantswarm.io/silence_v1alpha2.json
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
 metadata:
@@ -11,7 +11,7 @@ spec:
     - name: mountpoint
       value: /etc/nfsmount.conf
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/observability.giantswarm.io/silence_v1alpha2.json
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/observability.giantswarm.io/silence_v1alpha2.json
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
 metadata:
@@ -23,7 +23,7 @@ spec:
     - name: instance
       value: 10.0.30.25:9100
 ---
-# yaml-language-server: $schema=https://kochhaus-schemas.pages.dev/observability.giantswarm.io/silence_v1alpha2.json
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/observability.giantswarm.io/silence_v1alpha2.json
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
 metadata:
@@ -34,7 +34,7 @@ spec:
       value: CephNodeNetworkPacketDrops
       matchType: "="
 ---
-# yaml-language-server: $schema=https://kochhaus-schemas.pages.dev/observability.giantswarm.io/silence_v1alpha2.json
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/observability.giantswarm.io/silence_v1alpha2.json
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
 metadata:
@@ -45,7 +45,7 @@ spec:
       value: CephNodeNetworkPacketErrors
       matchType: "="
 ---
-# yaml-language-server: $schema=https://kochhaus-schemas.pages.dev/observability.giantswarm.io/silence_v1alpha2.json
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/observability.giantswarm.io/silence_v1alpha2.json
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
 metadata:
@@ -56,7 +56,7 @@ spec:
       value: CephMonClockSkew
       matchType: "="
 ---
-# yaml-language-server: $schema=https://kochhaus-schemas.pages.dev/observability.giantswarm.io/silence_v1alpha2.json
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/observability.giantswarm.io/silence_v1alpha2.json
 apiVersion: observability.giantswarm.io/v1alpha2
 kind: Silence
 metadata:
