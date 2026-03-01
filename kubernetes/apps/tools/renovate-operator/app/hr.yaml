@@ -9,8 +9,16 @@ spec:
     kind: OCIRepository
     name: renovate-operator
   interval: 30m
+  valuesFrom:
+    - kind: Secret
+      name: &oidcSecret renovate-operator-oidc-credentials
+      valuesKey: issuer_url
+      targetPath: auth.oidc.issuerUrl
+    - kind: Secret
+      name: &oidcSecret renovate-operator-oidc-credentials
+      valuesKey: client_id
+      targetPath: auth.oidc.clientId
   values:
-    fullnameOverride: renovate-operator
     route:
       enabled: true
       hostnames:
@@ -26,4 +34,9 @@ spec:
         enabled: true
       dashboard:
         enabled: true
+    auth:
+      oidc:
+        enabled: true
+        existingSecret: *oidcSecret
+        secretKey: client_secret
       
