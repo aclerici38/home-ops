@@ -43,5 +43,14 @@
       matchStrings: ["oci://(?<depName>[^:]+):(?<currentValue>\\S+)"],
       datasourceTemplate: "docker",
     },
+    {
+      customType: "regex",
+      description: "Process yaml-language-server schema versions from GitHub tags URLs",
+      fileMatch: [".*"],
+      matchStrings: [
+        "\\$schema=https://raw\\.githubusercontent\\.com/(?<depName>[^/]+/[^/]+)/refs/tags/(?<currentValue>[^/]+)/",
+      ],
+      datasourceTemplate: "github-tags",
+    },
   ],
 }
