@@ -52,5 +52,14 @@
       ],
       datasourceTemplate: "github-tags",
     },
+    {
+      customType: "regex",
+      description: "Process yaml-language-server schema versions from flux2-schemas.pages.dev URLs",
+      fileMatch: [".yaml"],
+      matchStrings: [
+        "\\$schema=https://flux2-schemas\\.pages\\.dev/helmrelease/v2/github/(?<depName>[^/]+/[^/]+)/(?<currentValue>[^/]+)/",
+      ],
+      datasourceTemplate: "github-tags",
+    },
   ],
 }
