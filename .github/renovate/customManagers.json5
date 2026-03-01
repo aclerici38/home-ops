@@ -46,7 +46,7 @@
     {
       customType: "regex",
       description: "Process yaml-language-server schema versions from GitHub tags URLs",
-      fileMatch: [".*"],
+      fileMatch: [".yaml"],
       matchStrings: [
         "\\$schema=https://raw\\.githubusercontent\\.com/(?<depName>[^/]+/[^/]+)/refs/tags/(?<currentValue>[^/]+)/",
       ],
