@@ -40,5 +40,4 @@ spec:
         enabled: true
         existingSecret: *oidcSecret
         secretKey: client_secret
-        redirectUrl: https://renovate.${SECRET_DOMAIN}/auth/callback
       
