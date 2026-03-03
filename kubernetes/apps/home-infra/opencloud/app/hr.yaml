@@ -87,6 +87,7 @@ spec:
               NOTIFICATIONS_SMTP_INSECURE: true
 
               STORAGE_USERS_DRIVER: decomposeds3
+              DECOMPOSEDS3_BUCKET: opencloud
               DECOMPOSEDS3_ENDPOINT: http://versity.storage.svc.cluster.local:7070
               DECOMPOSEDS3_REGION: us-east-1
               DECOMPOSEDS3_ACCESS_KEY:
@@ -98,7 +99,6 @@ spec:
                   name: opencloud
                   key: DECOMPOSEDS3_SECRET_KEY
               STORAGE_USERS_ID_CACHE_STORE: nats-js-kv
-              THUMBNAILS_FILESYSTEMSTORAGE_ROOT: /data/thumbs
 
               SEARCH_EXTRACTOR_TYPE: tika
               SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://opencloud-tika:9998
