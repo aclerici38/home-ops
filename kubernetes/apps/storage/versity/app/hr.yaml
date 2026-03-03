@@ -41,7 +41,7 @@ spec:
               - /data
             env:
               VGW_HEALTH: /healthz
-              VGW_WEBUI_PORT: &uiPort 8080
+              VGW_WEBUI_PORT: :8080
               ROOT_ACCESS_KEY_ID:
                 secretKeyRef:
                   name: versity
@@ -77,7 +77,7 @@ spec:
           s3:
             port: *port
           ui:
-            port: *uiPort
+            port: &uiPort 8080
     route:
       s3:
         annotations:
