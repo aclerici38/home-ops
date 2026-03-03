@@ -43,8 +43,8 @@ spec:
             env:
               VGW_HEALTH: /healthz
               VGW_WEBUI_PORT: :8080
-              VGW_CORS_ALLOW_ORIGIN: &fqdn https://s3.${SECRET_DOMAIN}
-              VGW_WEBUI_GATEWAYS: https://${APP_URL}
+              VGW_CORS_ALLOW_ORIGIN: &fqdn https://${APP_URL}
+              VGW_WEBUI_GATEWAYS: https://s3.${SECRET_DOMAIN}
               VGW_VERSIONING_DIR: /versioning
               ROOT_ACCESS_KEY_ID:
                 secretKeyRef:
@@ -54,7 +54,7 @@ spec:
                 secretKeyRef:
                   name: versity
                   key: ROOT_SECRET_ACCESS_KEY
-              VGW_DEBUG: true
+              # VGW_DEBUG: true
             probes:
               liveness: &probes
                 enabled: true
@@ -86,9 +86,9 @@ spec:
       s3:
         annotations:
           gatus.home-operations.com/endpoint: |-
-            url: https://${APP_URL}/healthz
+            url: https://s3.${SECRET_DOMAIN}/healthz
         hostnames:
-          - ${APP_URL}
+          - s3.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: gateway-system
@@ -99,7 +99,7 @@ spec:
               port: *port
       ui:
         hostnames:
-          - s3.${SECRET_DOMAIN}
+          - ${APP_URL}
         parentRefs:
           - name: internal
             namespace: gateway-system
