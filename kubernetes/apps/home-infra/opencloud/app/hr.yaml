@@ -63,11 +63,11 @@ spec:
               # For collaboration to connect
               GATEWAY_GRPC_ADDR: 0.0.0.0:9142
 
-              MICRO_REGISTRY_ADDRESS: nats.home-infra.svc.cluster.local:4222
+              MICRO_REGISTRY_ADDRESS: nats-opencloud.home-infra.svc.cluster.local:4222
               MICRO_REGISTRY: nats-js-kv
-              OC_CACHE_STORE_NODES: nats.home-infra.svc.cluster.local:4222
-              OC_PERSISTENT_STORE_NODES: nats.home-infra.svc.cluster.local:4222
-              OC_EVENTS_ENDPOINT: nats.home-infra.svc.cluster.local:4222
+              OC_CACHE_STORE_NODES: nats-opencloud.home-infra.svc.cluster.local:4222
+              OC_PERSISTENT_STORE_NODES: nats-opencloud.home-infra.svc.cluster.local:4222
+              OC_EVENTS_ENDPOINT: nats-opencloud.home-infra.svc.cluster.local:4222
               OC_EVENTS_CLUSTER: opencloud-cluster
 
               SETTINGS_SETUP_DEFAULT_ASSIGNMENTS: false
