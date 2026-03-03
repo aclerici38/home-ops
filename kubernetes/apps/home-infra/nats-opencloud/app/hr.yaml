@@ -23,14 +23,14 @@ spec:
       cluster:
         enabled: true
         replicas: 3
+        merge:
+          name: opencloud-cluster
       jetstream:
         enabled: true
         fileStore:
           pvc:
             size: 10Gi
             storageClassName: ceph-filesystem
-      merge:
-        cluster_name: opencloud-cluster
     natsBox:
       enabled: false
     podTemplate:
