@@ -45,6 +45,7 @@ spec:
               VGW_WEBUI_PORT: :8080
               VGW_CORS_ALLOW_ORIGIN: &fqdn https://s3.${SECRET_DOMAIN}
               VGW_WEBUI_GATEWAYS: *fqdn
+              VGW_VERSIONING_DIR: /versioning
               ROOT_ACCESS_KEY_ID:
                 secretKeyRef:
                   name: versity
@@ -112,3 +113,6 @@ spec:
         existingClaim: backups
         globalMounts:
           - path: /data
+            subPath: s3
+          - path: /versioning
+            subPath: versioning
