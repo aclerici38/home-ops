@@ -201,6 +201,7 @@ spec:
               readiness: *probes
       tika:
         strategy: RollingUpdate
+        replicas: 2
         pod:
           hostUsers: false
         containers:
