@@ -19,11 +19,11 @@ spec:
               - secretKey: versity-access-key-id
                 remoteRef:
                   key: versity
-                  property: ROOT_ACCESS_KEY_ID
+                  property: username
               - secretKey: versity-secret-access-key
                 remoteRef:
                   key: versity
-                  property: ROOT_SECRET_ACCESS_KEY
+                  property: password
       target:
         kind: ClusterExternalSecret
         labelSelector: dormammu.io/component=external-secret

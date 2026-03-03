@@ -49,11 +49,11 @@ spec:
               ROOT_ACCESS_KEY_ID:
                 secretKeyRef:
                   name: versity
-                  key: ROOT_ACCESS_KEY_ID
+                  key: username
               ROOT_SECRET_ACCESS_KEY:
                 secretKeyRef:
                   name: versity
-                  key: ROOT_SECRET_ACCESS_KEY
+                  key: password
               # VGW_DEBUG: true
             probes:
               liveness: &probes
