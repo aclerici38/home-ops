@@ -52,7 +52,7 @@ spec:
                 secretKeyRef:
                   name: versity
                   key: ROOT_SECRET_ACCESS_KEY
-              # VGW_DEBUG: true
+              VGW_DEBUG: true
             probes:
               liveness: &probes
                 enabled: true
