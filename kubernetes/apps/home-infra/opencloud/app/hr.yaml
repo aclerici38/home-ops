@@ -22,6 +22,7 @@ spec:
   values:
     controllers:
       opencloud:
+        replicas: 2
         strategy: RollingUpdate
         forceRename: opencloud
         containers:
