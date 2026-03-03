@@ -22,6 +22,7 @@ spec:
   values:
     controllers:
       versity:
+        strategy: RollingUpdate
         pod:
           priorityClassName: s3-critical
           securityContext:
