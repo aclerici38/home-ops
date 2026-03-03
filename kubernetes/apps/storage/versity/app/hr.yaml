@@ -44,7 +44,7 @@ spec:
               VGW_HEALTH: /healthz
               VGW_WEBUI_PORT: :8080
               VGW_CORS_ALLOW_ORIGIN: &fqdn https://s3.${SECRET_DOMAIN}
-              VGW_WEBUI_GATEWAYS: *fqdn
+              VGW_WEBUI_GATEWAYS: https://${APP_URL}
               VGW_VERSIONING_DIR: /versioning
               ROOT_ACCESS_KEY_ID:
                 secretKeyRef:
