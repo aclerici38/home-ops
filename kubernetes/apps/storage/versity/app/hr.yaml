@@ -43,10 +43,8 @@ spec:
             env:
               VGW_HEALTH: /healthz
               VGW_WEBUI_PORT: :8080
-              VGW_ADMIN_PORT: :8081
               VGW_CORS_ALLOW_ORIGIN: &fqdn https://s3.${SECRET_DOMAIN}
               VGW_WEBUI_GATEWAYS: *fqdn
-              VGW_WEBUI_ADMIN_GATEWAYS: https://versity-admin.${SECRET_DOMAIN}
               ROOT_ACCESS_KEY_ID:
                 secretKeyRef:
                   name: versity
@@ -81,8 +79,6 @@ spec:
         ports:
           s3:
             port: *port
-          admin:
-            port: &adminPort 8081
           ui:
             port: &uiPort 8080
     route:
@@ -111,17 +107,6 @@ spec:
           - backendRefs:
             - identifier: versity
               port: *uiPort
-      admin:
-        hostnames:
-          - versity-admin.${SECRET_DOMAIN}
-        parentRefs:
-          - name: internal
-            namespace: gateway-system
-            sectionName: https
-        rules:
-          - backendRefs:
-            - identifier: versity
-              port: *adminPort
     persistence:
       backups:
         existingClaim: backups
