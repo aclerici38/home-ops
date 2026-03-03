@@ -29,10 +29,25 @@ spec:
         enabled: true
         fileStore:
           pvc:
-            size: 10Gi
+            size: &pvc 10Gi
             storageClassName: ceph-filesystem
+          maxSize: *pvc
+        memoryStore:
+          enabled: true
+          maxSize: &mem 256Mi
     natsBox:
       enabled: false
+    container:
+      env:
+        # Should be ~80% of memory limit
+        GOMEMLIMIT: 410MiB
+      merge:
+        resources:
+          requests:
+            cpu: 200m
+            memory: 512Mi
+          limits:
+            memory: 512Mi
     podTemplate:
       topologySpreadConstraints:
         kubernetes.io/hostname:
