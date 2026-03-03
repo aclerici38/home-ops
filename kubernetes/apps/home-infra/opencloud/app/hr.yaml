@@ -22,6 +22,7 @@ spec:
   values:
     controllers:
       opencloud:
+        strategy: RollingUpdate
         forceRename: opencloud
         containers:
           opencloud:
@@ -74,6 +75,7 @@ spec:
 
               GRAPH_ASSIGN_DEFAULT_USER_ROLE: false
               GRAPH_USERNAME_MATCH: "none"
+              GRAPH_SPACES_DEFAULT_QUOTA: 0
 
               WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.${SECRET_DOMAIN}/settings/apps
               # prevent nested mounts
@@ -230,8 +232,6 @@ spec:
         ports:
           http:
             port: *port
-          nats:
-            port: 9233
           grpc:
             port: 9142
           debug:
