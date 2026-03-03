@@ -43,6 +43,7 @@ spec:
             env:
               VGW_HEALTH: /healthz
               VGW_WEBUI_PORT: :8080
+              VGW_CORS_ALLOW_ORIGIN: https://s3.${SECRET_DOMAIN}
               ROOT_ACCESS_KEY_ID:
                 secretKeyRef:
                   name: versity
