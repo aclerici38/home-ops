@@ -15,6 +15,14 @@ patches:
     target:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io
+  - patch: |-
+      - op: add
+        path: /spec/dependsOn/-
+        value:
+          name: nats-opencloud
+    target:
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret

@@ -1,0 +1,41 @@
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nats-opencloud
+spec:
+  interval: 1h
+  maxHistory: 1
+  chart:
+    spec:
+      chart: nats
+      sourceRef:
+        kind: HelmRepository
+        name: nats
+      version: 2.12.4
+  install:
+    timeout: 2m
+  upgrade:
+    timeout: 2m
+  values:
+    config:
+      cluster:
+        enabled: true
+        replicas: 3
+      jetstream:
+        enabled: true
+        fileStore:
+          pvc:
+            size: 10Gi
+            storageClassName: ceph-filesystem
+      merge:
+        cluster_name: opencloud-cluster
+    natsBox:
+      enabled: false
+    podTemplate:
+      topologySpreadConstraints:
+        kubernetes.io/hostname:
+          maxSkew: 1
+          whenUnsatisfiable: DoNotSchedule
+    
