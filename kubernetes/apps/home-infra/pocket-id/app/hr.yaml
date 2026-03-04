@@ -99,6 +99,8 @@ spec:
           customClaims:
             - key: oc_groups
               value: opencloud-admins
+            - key: immich_role
+              value: admin
       - name: fam
         spec:
           users: &fam
@@ -116,4 +118,6 @@ spec:
           customClaims:
             - key: oc_groups
               value: opencloud-users
+            - key: immich_role
+              value: user
           
