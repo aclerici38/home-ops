@@ -7,6 +7,7 @@ configMapGenerator:
     literals:
       - APP=frigate
       - VOLSYNC_CAPACITY=25Gi
+      - OIDC_GROUP=fam
 patches:
   - path: ./patch.yaml
     target:

@@ -22,7 +22,7 @@ spec:
     controllers:
       server:
         forceRename: immich
-        replicas: 2
+        replicas: ${REPLICAS}
         strategy: RollingUpdate
         rollingUpdate:
           surge: 0

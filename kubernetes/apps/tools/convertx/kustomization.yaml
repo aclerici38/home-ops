@@ -6,6 +6,7 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=convertx
+      - OIDC_GROUP=all
 patches:
   - path: ./patch.yaml
     target:

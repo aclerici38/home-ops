@@ -8,5 +8,5 @@ spec:
   clientID: ${APP}
   launchUrl: https://${APP_URL}
   allowedUserGroups:
-    - name: ${APP}
-      namespace: ${NS}
+    - name: ${OIDC_GROUP:=admin}
+      namespace: home-infra
