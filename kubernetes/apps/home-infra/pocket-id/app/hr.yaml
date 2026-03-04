@@ -96,6 +96,9 @@ spec:
           users:
             userRefs:
               - name: anthony
+          customClaims:
+            - key: oc_groups
+              value: opencloud-admins
       - name: fam
         spec:
           users: &fam
@@ -110,4 +113,7 @@ spec:
             <<: *fam
             userIDs:
               - 56f6f365-feb5-464f-bf31-f537d3a34a9e
+          customClaims:
+            - key: oc_groups
+              value: opencloud-users
           

@@ -20,6 +20,10 @@ patches:
         path: /spec/dependsOn/-
         value:
           name: nats-opencloud
+      - op: add
+        path: /spec/dependsOn/-
+        value:
+          name: pocket-id
     target:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io

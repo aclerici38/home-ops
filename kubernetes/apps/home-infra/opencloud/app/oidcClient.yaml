@@ -13,8 +13,8 @@ spec:
     - https://cloud.${SECRET_DOMAIN}/oidc-callback.html
     - https://cloud.${SECRET_DOMAIN}/oidc-silent-redirect.html
   allowedUserGroups:
-    - name: opencloud-admins
-    - name: opencloud-users
+    - name: admin
+    - name: all
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/aclerici38/pocket-id-operator/refs/tags/v0.4.3/dist/schemas/pocketidoidcclient_v1alpha1.json
 apiVersion: pocketid.internal/v1alpha1
@@ -30,8 +30,8 @@ spec:
   logoutCallbackUrls:
     - oc://ios.opencloud.eu
   allowedUserGroups:
-    - name: opencloud-admins
-    - name: opencloud-users
+    - name: admin
+    - name: all
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/aclerici38/pocket-id-operator/refs/tags/v0.4.3/dist/schemas/pocketidoidcclient_v1alpha1.json
 apiVersion: pocketid.internal/v1alpha1
@@ -46,5 +46,5 @@ spec:
     - http://127.0.0.1
     - http://localhost
   allowedUserGroups:
-    - name: opencloud-admins
-    - name: opencloud-users
+    - name: admin
+    - name: all
