@@ -53,7 +53,7 @@ spec:
             probes:
               liveness: &probes
                 enabled: true
-                type: HTTP
+                type: TCP
               readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
