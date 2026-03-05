@@ -7,6 +7,7 @@ metadata:
 spec:
   clientID: ${APP}
   launchUrl: https://${APP_URL}
+  pkceEnabled: ${OIDC_PKCE:=true}
   allowedUserGroups:
     - name: ${OIDC_GROUP:=admin}
       namespace: home-infra
