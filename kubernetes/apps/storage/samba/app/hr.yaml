@@ -28,6 +28,8 @@ spec:
             runAsNonRoot: false
             runAsGroup: 0
             runAsUser: 0
+            seccompProfile:
+              type: RuntimeDefault
         containers:
           main:
             image:
@@ -42,6 +44,8 @@ spec:
                 memory: 20Mi
               limits:
                 memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
     service:
       main:
         controller: samba
