@@ -95,7 +95,7 @@ spec:
         type: configMap
         name: filebrowser
         globalMounts:
-          - path: /home/filebrowser/config.yaml
+          - path: /home/filebrowser/data/config.yaml
             subPath: config.yaml
       media:
         type: nfs
@@ -113,6 +113,7 @@ spec:
               externalUrl: https://${APP_URL}
               internalUrl: http://filebrowser.tools.svc.cluster.local:8080
               cacheDir: /tmp
+              database: /home/filebrowser/database/filebrowser.db
               sources:
                 - name: Media
                   path: /mnt/media
