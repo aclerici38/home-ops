@@ -22,7 +22,6 @@ spec:
   values:
     controllers:
       kopia:
-        strategy: RollingUpdate
         pod:
           hostUsers: false
           securityContext:
@@ -81,20 +80,21 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-            - identifier: kopia
-              port: *port
+              - identifier: kopia
+                port: *port
     configMaps:
       config:
         data:
           repository.config: |-
-            "storage": {
-              "type": "s3",
-              "config": {
-                "bucket": "volsync",
-                "endpoint": "versity.storage.svc.cluster.local:7070",
-                "doNotUseTLS": true
-              }
-            },
+            {
+              "storage": {
+                "type": "s3",
+                "config": {
+                  "bucket": "volsync",
+                  "endpoint": "versity.storage.svc.cluster.local:7070",
+                  "doNotUseTLS": true
+                }
+              },
               "hostname": "volsync.{{ .Release.Namespace }}.svc.cluster.local",
               "username": "volsync",
               "description": "volsync",
