@@ -38,6 +38,11 @@ spec:
             env:
               KOPIA_WEB_ENABLED: true
               KOPIA_WEB_PORT: &port 8080
+              KOPIA_SERVER_USERNAME: anthony
+              KOPIA_SERVER_PASSWORD:
+                secretKeyRef:
+                  name: volsync-kopia-versity
+                  key: KOPIA_PASSWORD
               KOPIA_PASSWORD:
                 secretKeyRef:
                   name: volsync-kopia-versity
