@@ -76,6 +76,8 @@ spec:
                 password: $${SMB_PASS}
             
             global:
+              - "force user = root"
+              - "force group = root"
               - "ea support = yes"
               - "vfs objects = catia fruit streams_xattr"
               - "fruit:aapl = yes"
