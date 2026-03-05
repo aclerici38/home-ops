@@ -92,7 +92,7 @@ spec:
         fsGroup: 1000
         seccompProfile: { type: RuntimeDefault }
     service:
-      kopia: &svc
+      versity: &svc
         controller: versity
         ports:
           http:
