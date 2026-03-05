@@ -46,6 +46,9 @@ spec:
               VGW_CORS_ALLOW_ORIGIN: &fqdn https://${APP_URL}
               VGW_WEBUI_GATEWAYS: https://s3.${SECRET_DOMAIN}
               VGW_VERSIONING_DIR: /versioning
+              # kopia doesn't support xattrs so we must store metadata separately
+              # this prob doesn't matter with no acls but why not
+              VGW_META_SIDECAR: /sidecar
               ROOT_ACCESS_KEY_ID:
                 secretKeyRef:
                   name: versity
@@ -95,8 +98,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-            - identifier: versity
-              port: *port
+              - identifier: versity
+                port: *port
       ui:
         hostnames:
           - ${APP_URL}
@@ -106,8 +109,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-            - identifier: versity
-              port: *uiPort
+              - identifier: versity
+                port: *uiPort
     persistence:
       backups:
         existingClaim: backups
@@ -116,3 +119,5 @@ spec:
             subPath: s3
           - path: /versioning
             subPath: versioning
+          - path: /sidecar
+            subPath: sidecar
