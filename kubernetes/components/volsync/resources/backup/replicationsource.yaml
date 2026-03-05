@@ -26,5 +26,5 @@ spec:
     volumeSnapshotClassName: ${VOLSYNC_SNAPSHOTCLASS:=csi-ceph-blockpool}
     cacheStorageClassName: ${VOLSYNC_CACHE_STORAGECLASS:=ceph-filesystem}
     cacheCapacity: ${VOLSYNC_CACHE_CAPACITY:=5Gi}
-    cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODE:=ReadWriteMany}"]
+    cacheAccessModes: ["${VOLSYNC_CACHE_ACCESSMODE:=ReadWriteOnce}"]
     
