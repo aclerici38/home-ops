@@ -1,0 +1,13 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.2-standalone-strict/persistentvolumeclaim-v1.json
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: time-machine
+spec:
+  storageClassName: zfs-tank
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: "59992103190528"
