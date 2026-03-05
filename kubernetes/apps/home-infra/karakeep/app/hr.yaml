@@ -38,11 +38,11 @@ spec:
               DISABLE_NEW_RELEASE_CHECK: true
               COREPACK_INTEGRITY_KEYS: 0
               
-              DISABLE_PASSWORD_AUTH: false
+              DISABLE_PASSWORD_AUTH: true
               DISABLE_SIGNUPS: false
               OAUTH_AUTO_REDIRECT: true
               OAUTH_PROVIDER_NAME: Pocket ID
-              OAUTH_WELL_KNOWN_URL: 
+              OAUTH_WELLKNOWN_URL: 
                 secretKeyRef:
                   name: karakeep-oidc-credentials
                   key: discovery_url
