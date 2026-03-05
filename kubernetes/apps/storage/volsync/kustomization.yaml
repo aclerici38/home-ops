@@ -6,6 +6,7 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=volsync
+      - RESOURCES=kopia
 patches:
   - patch: |-
       - op: add
@@ -16,4 +17,4 @@ patches:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io
 components:
-  - ../../../components/ks/app
+  - ../../../components/ks/app-resources

@@ -6,13 +6,15 @@ patches:
   - patch: |-
       - op: add
         path: /spec/components/-
-        value: ../../../../components/volsync/overlays/remote
+        value: ../../../../components/volsync
     target: &target
       group: kustomize.toolkit.fluxcd.io
       kind: Kustomization
   - path: ../../deps/eso.yaml
     target: *target
   - path: ../../deps/eso-stores.yaml
+    target: *target
+  - path: ../../deps/versity.yaml
     target: *target
   - path: ../../deps/volsync.yaml
     target: *target
