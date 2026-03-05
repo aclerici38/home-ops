@@ -91,10 +91,6 @@ spec:
         existingClaim: immich
         globalMounts:
           - path: /export/immich
-      files:
-        existingClaim: files
-        globalMounts:
-          - path: /export/files
       frigate:
         existingClaim: frigate
         globalMounts:

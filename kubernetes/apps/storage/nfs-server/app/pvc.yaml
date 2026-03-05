@@ -27,30 +27,6 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: files
-spec:
-  storageClassName: zfs-tank
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: "59992103190528"
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: frigate
-spec:
-  storageClassName: zfs-tank
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: "59992103190528"
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
   name: tank-csi-pvc
 spec:
   storageClassName: zfs-tank
