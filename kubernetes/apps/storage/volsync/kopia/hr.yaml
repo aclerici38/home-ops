@@ -21,21 +21,13 @@ spec:
       retries: 1
   values:
     controllers:
-      kopia:
-        pod:
-          hostUsers: false
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            seccompProfile: { type: RuntimeDefault }
+      versity:
         containers:
-          kopia:
+          kopia-versity: &container
             image:
               repository: ghcr.io/home-operations/kopia
               tag: 0.22.3@sha256:17ab64542280197a5368247deaefadc3e3bbe15714ab666c2455a06824e86efd
-            env:
+            env: &env
               KOPIA_WEB_ENABLED: true
               KOPIA_WEB_PORT: &port 8080
               KOPIA_SERVER_USERNAME: anthony
@@ -69,28 +61,69 @@ spec:
                 cpu: 100m
               limits:
                 memory: 512Mi
+      storj:
+        containers:
+          kopia-storj:
+            <<: *container
+            env:
+              <<: *env
+              KOPIA_SERVER_PASSWORD:
+                secretKeyRef:
+                  name: volsync-kopia-storj
+                  key: KOPIA_PASSWORD
+              KOPIA_PASSWORD:
+                secretKeyRef:
+                  name: volsync-kopia-storj
+                  key: KOPIA_PASSWORD
+              AWS_ACCESS_KEY_ID:
+                secretKeyRef:
+                  name: volsync-kopia-storj
+                  key: AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY:
+                secretKeyRef:
+                  name: volsync-kopia-storj
+                  key: AWS_SECRET_ACCESS_KEY
+    defaultPodOptions:
+      hostUsers: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile: { type: RuntimeDefault }
     service:
-      kopia:
-        controller: kopia
+      kopia: &svc
+        controller: versity
         ports:
           http:
             port: *port
+      storj:
+        <<: *svc
+        controller: storj
     route:
-      kopia:
+      versity: &route
         hostnames:
-          - kopia.${SECRET_DOMAIN}
+          - kopia-versity.${SECRET_DOMAIN}
         parentRefs:
           - name: internal
             namespace: gateway-system
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: kopia
+              - identifier: versity
+                port: *port
+      storj:
+        <<: *route
+        hostnames:
+          - kopia-storj.${SECRET_DOMAIN}
+        rules:
+          - backendRefs:
+              - identifier: storj
                 port: *port
     configMaps:
       config:
         data:
-          repository.config: |-
+          versity.repository.config: |-
             {
               "storage": {
                 "type": "s3",
@@ -100,7 +133,21 @@ spec:
                   "doNotUseTLS": true
                 }
               },
-              "hostname": "volsync.{{ .Release.Namespace }}.svc.cluster.local",
+              "hostname": "volsync.${NS}.svc.cluster.local",
+              "username": "volsync",
+              "description": "volsync",
+              "enableActions": false
+            }
+          storj.repository.config: |-
+            {
+              "storage": {
+                "type": "s3",
+                "config": {
+                  "bucket": "volsync",
+                  "endpoint": "gateway.storjshare.io",
+                }
+              },
+              "hostname": "volsync.${NS}.svc.cluster.local",
               "username": "volsync",
               "description": "volsync",
               "enableActions": false
@@ -109,9 +156,15 @@ spec:
       config-file:
         type: configMap
         identifier: config
-        globalMounts:
-          - path: /config/repository.config
-            subPath: repository.config
+        advancedMounts:
+          versity:
+            kopia-versity:
+              - path: /config/repository.config
+                subPath: versity.repository.config
+          storj:
+            kopia-storj:
+              - path: /config/repository.config
+                subPath: storj.repository.config
       tmpfs:
         type: emptyDir
         globalMounts:
