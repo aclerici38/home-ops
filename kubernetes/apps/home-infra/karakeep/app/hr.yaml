@@ -86,6 +86,9 @@ spec:
               limits:
                 memory: 1Gi
       chrome:
+        # hostusers needs to stay on for shared pvc (meili + karakeep)
+        pod:
+          hostUsers: false
         containers:
           chrome:
             image:
@@ -141,7 +144,6 @@ spec:
                     path: /health
               readiness: *probes
     defaultPodOptions:
-      hostUsers: false
       securityContext:
         runAsGroup: 1000
         runAsUser: 1000
