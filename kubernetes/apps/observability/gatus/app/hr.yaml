@@ -154,6 +154,9 @@ spec:
       config:
         data:
           config.yaml: |-
+            # PKCE
+            web:
+              read-buffer-size: 32768
             connectivity:
               checker:
                 target: 172.17.0.10:53

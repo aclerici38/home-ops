@@ -7,6 +7,7 @@ configMapGenerator:
     literals:
       - APP=renovate-operator
       - RESOURCES=jobs
+      - OIDC_PKCE=false
 components:
   - ../../../components/ks/app-resources
   - ../../../components/kustomize/external-secret

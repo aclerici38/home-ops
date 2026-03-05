@@ -7,6 +7,7 @@ configMapGenerator:
     literals:
       - APP=donetick
       - OIDC_GROUP=fam
+      - OIDC_PKCE=false
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret

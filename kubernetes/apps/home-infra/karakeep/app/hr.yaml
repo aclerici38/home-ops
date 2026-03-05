@@ -39,6 +39,8 @@ spec:
               COREPACK_INTEGRITY_KEYS: 0
               
               DISABLE_PASSWORD_AUTH: true
+              DISABLE_SIGNUPS: false
+              OAUTH_AUTO_REDIRECT: true
               OAUTH_PROVIDER_NAME: Pocket ID
               OAUTH_WELL_KNOWN_URL: 
                 secretKeyRef:
