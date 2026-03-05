@@ -33,6 +33,7 @@ kind: Kustomization
 metadata:
   name: files-pvc-backup
 spec:
+  targetNamespace: ${NS}
   path: ./kubernetes/components/volsync/resources/backup
   dependsOn:
     - name: volsync
