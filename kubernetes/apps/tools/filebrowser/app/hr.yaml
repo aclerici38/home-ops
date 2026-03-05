@@ -87,8 +87,10 @@ spec:
         existingClaim: filebrowser
         globalMounts:
           - path: /home/filebrowser/database
-      cache:
-        existingClaim: filebrowser-cache
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
       config:
         type: configMap
         name: filebrowser
@@ -106,11 +108,11 @@ spec:
         data:
           config.yaml: |
             server:
+              disableUpdateCheck: true
               port: 8080
               externalUrl: https://${APP_URL}
-              internalUrl: http://filebrowser.media.svc.cluster.local:8080
-              cacheDir: /cache
-              database: /home/filebrowser/database/filebrowser.db
+              internalUrl: http://filebrowser.tools.svc.cluster.local:8080
+              cacheDir: /tmp
               sources:
                 - name: Media
                   path: /mnt/media
@@ -123,5 +125,5 @@ spec:
                   enabled: true
                   issuerUrl: https://id.${SECRET_DOMAIN}
                   scopes: "email openid profile groups"
-                  adminGroup: filebrowser_admins
+                  adminGroup: admin
                   createUser: true
