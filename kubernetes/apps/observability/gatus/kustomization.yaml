@@ -6,6 +6,7 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=gatus
+      - OIDC_PKCE=false
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret
