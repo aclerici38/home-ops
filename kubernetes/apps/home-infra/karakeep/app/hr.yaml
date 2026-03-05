@@ -182,7 +182,7 @@ spec:
         existingClaim: karakeep
         advancedMounts:
           karakeep:
-            main:
+            karakeep:
               - path: /data
                 subPath: karakeep
           meilisearch:
@@ -195,5 +195,5 @@ spec:
         type: emptyDir
         advancedMounts:
           karakeep:
-            main:
+            karakeep:
               - path: /run
