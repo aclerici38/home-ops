@@ -66,21 +66,20 @@ spec:
               capabilities:
                 drop:
                   - ALL
-            # disable probes for now https://github.com/karakeep-app/karakeep/issues/2344
-            # probes:
-            #   liveness: &probes
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       httpGet:
-            #         port: &port 3000
-            #         path: /api/health
-            #   readiness: *probes
-            # resources: &res
-            #   requests:
-            #     cpu: 10m
-            #   limits:
-            #     memory: 1Gi
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 3000
+                    path: /api/health
+              readiness: *probes
+            resources: &res
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
       chrome:
         containers:
           chrome:
