@@ -10,7 +10,6 @@ spec:
     - name: volsync
     - name: external-secrets
       namespace: cluster-infra
-    - name: nfs-server
   sourceRef:
     kind: GitRepository
     name: flux-system
