@@ -23,7 +23,7 @@ spec:
     controllers:
       karakeep:
         containers:
-          main:
+          karakeep:
             image:
               repository: ghcr.io/karakeep-app/karakeep
               tag: 0.31.0@sha256:20754dbdafb11dfe288bbb1c2342a7855081b08ea069e86fcf2d4a2d945d3653
@@ -37,6 +37,14 @@ spec:
               NEXTAUTH_URL: https://${APP_URL}
               DISABLE_NEW_RELEASE_CHECK: true
               COREPACK_INTEGRITY_KEYS: 0
+              NEXTAUTH_SECRET:
+                secretKeyRef:
+                  name: karakeep
+                  key: NEXTAUTH_SECRET
+              MEILI_MASTER_KEY:
+                secretKeyRef:
+                  name: karakeep
+                  key: MEILI_MASTER_KEY
               
               DISABLE_PASSWORD_AUTH: true
               DISABLE_SIGNUPS: false
@@ -57,10 +65,7 @@ spec:
 
               S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
               S6_READ_ONLY_ROOT: 1
-            envFrom:
-              - secretRef:
-                  name: karakeep
-            securityContext:
+            securityContext: &sec
               readOnlyRootFilesystem: true
               allowPrivilegeEscalation: false
               capabilities:
@@ -96,12 +101,7 @@ spec:
               - --remote-debugging-address=0.0.0.0
               - --remote-debugging-port=9222
               - --hide-scrollbars
-            securityContext: &sec
-              readOnlyRootFilesystem: true
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
+            securityContext: *sec
             resources: *res
             probes:
               liveness:
@@ -122,10 +122,9 @@ spec:
             env:
               MEILI_NO_ANALYTICS: true
               MEILI_MASTER_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: karakeep
-                    key: MEILI_MASTER_KEY
+                secretKeyRef:
+                  name: karakeep
+                  key: MEILI_MASTER_KEY
             resources:
               requests:
                 cpu: 10m
@@ -151,7 +150,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     service:
-      main:
+      karakeep:
         controller: karakeep
         ports:
           http:
@@ -167,7 +166,7 @@ spec:
           http:
             port: 7700
     route:
-      main:
+      karakeep:
         hostnames:
           - ${APP_URL}
         parentRefs:
