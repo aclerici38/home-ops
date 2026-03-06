@@ -42,15 +42,37 @@ spec:
         # Should be ~80% of memory limit
         GOMEMLIMIT: 410MiB
       merge:
+        securityContext: &sec
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
         resources:
           requests:
             cpu: 200m
             memory: 512Mi
           limits:
             memory: 512Mi
+    reloader:
+      merge:
+        securityContext: *sec
+    serviceAccount:
+      enabled: true
     podTemplate:
       topologySpreadConstraints:
         kubernetes.io/hostname:
           maxSkew: 1
           whenUnsatisfiable: DoNotSchedule
-    
+      merge:
+        spec:
+          hostUsers: false
+          automountServiceAccountToken: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
