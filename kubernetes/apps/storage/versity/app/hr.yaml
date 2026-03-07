@@ -1,16 +1,15 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/refs/tags/app-template-4.6.2/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: versity
+  name: versitygw
 spec:
   interval: 1h
   maxHistory: 1
   chartRef:
     kind: OCIRepository
-    name: app-template
-    namespace: flux-system
+    name: versitygw
   install:
     timeout: 2m
     remediation:
@@ -20,104 +19,55 @@ spec:
     remediation:
       retries: 1
   values:
-    controllers:
-      versity:
-        strategy: RollingUpdate
-        pod:
-          priorityClassName: s3-critical
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
-            fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: RuntimeDefault }
-        containers:
-          versity:
-            image:
-              repository: ghcr.io/versity/versitygw
-              tag: v1.3.1@sha256:a86791b684a1dd3c5a255ca755bb51783a72696cf1b5a843f800b08bfd6f921c
-            args:
-              - posix
-              - /data
-            env:
-              VGW_HEALTH: /healthz
-              VGW_WEBUI_PORT: :8080
-              VGW_CORS_ALLOW_ORIGIN: &fqdn https://${APP_URL}
-              VGW_WEBUI_GATEWAYS: https://s3.${SECRET_DOMAIN}
-              VGW_VERSIONING_DIR: /versioning
-              # kopia doesn't support xattrs so we must store metadata separately
-              # this prob doesn't matter with no acls but why not
-              VGW_META_SIDECAR: /sidecar
-              ROOT_ACCESS_KEY_ID:
-                secretKeyRef:
-                  name: versity
-                  key: username
-              ROOT_SECRET_ACCESS_KEY:
-                secretKeyRef:
-                  name: versity
-                  key: password
-              # VGW_DEBUG: true
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /healthz
-                    port: &port 7070
-              readiness: *probes
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
-            resources:
-              requests:
-                cpu: 100m
-                memory: 20Mi
-              limits:
-                memory: 512Mi
-    service:
-      versity:
-        controller: versity
-        ports:
-          s3:
-            port: *port
-          ui:
-            port: &uiPort 8080
-    route:
-      s3:
-        annotations:
-          gatus.home-operations.com/endpoint: |-
-            url: https://s3.${SECRET_DOMAIN}/healthz
-        hostnames:
-          - s3.${SECRET_DOMAIN}
-        parentRefs:
-          - name: internal
-            namespace: gateway-system
-            sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: versity
-                port: *port
-      ui:
-        hostnames:
-          - ${APP_URL}
-        parentRefs:
-          - name: internal
-            namespace: gateway-system
-            sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: versity
-                port: *uiPort
+    image:
+      repository: ghcr.io/versity/versitygw
+      tag: v1.3.1@sha256:a86791b684a1dd3c5a255ca755bb51783a72696cf1b5a843f800b08bfd6f921c
+    serviceAccount:
+      create: false
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    resources:
+      requests:
+        cpu: 100m
+        memory: 20Mi
+      limits:
+        memory: 512Mi
     persistence:
-      backups:
-        existingClaim: backups
-        globalMounts:
-          - path: /data
-            subPath: s3
-          - path: /versioning
-            subPath: versioning
-          - path: /sidecar
-            subPath: sidecar
+      enabled: true
+      claimName: backups
+    httpRoute:
+      enabled: true
+      parentRefs: &gateway
+        - name: internal
+          namespace: gateway-system
+          sectionName: https
+      hostnames:
+        - s3.${SECRET_DOMAIN}
+    auth:
+      existingSecret: versity
+    gateway:
+      backend:
+        type: posix
+        # chart mounts at /mnt/data, need to use s3 subPath
+        args: /mnt/data/s3
+      quiet: true
+      debug: false
+    webui:
+      enabled: true
+      apiGateways:
+        - s3.${SECRET_DOMAIN}
+      httpRoute:
+        enabled: true
+        parentRefs: *gateway
+        hostnames:
+          - versity.${SECRET_DOMAIN}
+    extraEnv:
+      - name: VGW_VERSIONING_DIR
+        value: /mnt/data/versioning
+      # kopia doesn't support xattrs so we must store metadata separately
+      # this prob doesn't matter with no acls but why not
+      - name: VGW_META_SIDECAR
+        value: /mnt/data/sidecar
+    

@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: versitygw
+spec:
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 2.0.0
+  url: oci://ghcr.io/versity/charts/versitygw
+  # TODO: enable cosign on next version
+  # verify:
+  #   provider: cosign
+  #   matchOIDCIdentity:
+  #     - issuer: "^https://token.actions.githubusercontent.com$"
+  #       subject: "^https://github.com/versity/versitygZ.*$"
