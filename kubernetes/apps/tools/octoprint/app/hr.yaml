@@ -61,7 +61,7 @@ spec:
           config:
             image: &img
               repository: ghcr.io/home-operations/octoprint
-              tag: 1.11.7@sha256:eae2bb6769b413acf71fa55d3f9cc9f669c7b80db32de8643ef57ae5b18f723f
+              tag: 1.11.7@sha256:03e789387c0daed3a408881773793045d06d937942830906b61d378b4be3a65c
             command: ["/bin/sh", "-c"]
             args: |
               alias ocs='octoprint config set'
