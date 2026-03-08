@@ -36,6 +36,7 @@ spec:
         memory: 512Mi
     persistence:
       enabled: true
+      # The chart mounts this with subpath: data
       claimName: backups
     httpRoute:
       enabled: true
@@ -57,7 +58,7 @@ spec:
     webui:
       enabled: true
       apiGateways:
-        - s3.${SECRET_DOMAIN}
+        - https://s3.${SECRET_DOMAIN}
       httpRoute:
         enabled: true
         parentRefs: *gateway
