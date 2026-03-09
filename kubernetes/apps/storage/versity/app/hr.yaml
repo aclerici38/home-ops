@@ -38,6 +38,8 @@ spec:
       enabled: true
       # The chart mounts this with subpath: data
       claimName: backups
+      accessMode: ReadWriteMany
+      size: 966367641600
     httpRoute:
       enabled: true
       parentRefs: &gateway
