@@ -47,11 +47,6 @@ spec:
                 secretKeyRef:
                   name: volsync-kopia-versity
                   key: AWS_SECRET_ACCESS_KEY
-            probes:
-              liveness: &probes
-                enabled: true
-                type: TCP
-              readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
