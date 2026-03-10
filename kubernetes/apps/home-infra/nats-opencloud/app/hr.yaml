@@ -19,6 +19,9 @@ spec:
   upgrade:
     timeout: 2m
   values:
+    global:
+      image:
+        registry: mirror.gcr.io
     config:
       cluster:
         enabled: true
