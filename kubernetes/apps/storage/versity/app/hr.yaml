@@ -53,7 +53,6 @@ spec:
         type: posix
         # chart mounts at /mnt/data, need to use s3 subPath
         args: /mnt/data/s3
-      quiet: true
       debug: false
     webui:
       enabled: true
