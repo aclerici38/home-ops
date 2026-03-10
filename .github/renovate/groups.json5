@@ -2,54 +2,54 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
-      description: ["Actions Runner Controller Group"],
+      description: "Actions Runner Controller Group",
       groupName: "Actions Runner Controller",
       matchPackagePatterns: ["gha-runner-scale-set"],
-      matchDatasources: ["docker", "helm"],
+      matchDatasources: ["docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       }
     },
     {
-      description: ["Omada-Controller Group"],
+      description: "Omada-Controller Group",
       groupName: "Omada-Controller",
       matchPackagePatterns: ["omada-controller", "omada-controller-helm"],
-      matchDatasources: ["docker", "helm"],
+      matchDatasources: ["docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       }
     },
     {
-      description: ["Kgateway Group"],
+      description: "Kgateway Group",
       groupName: "Kgateway",
       matchPackagePatterns: ["kgateway-dev"],
-      matchDatasources: ["docker", "helm"],
+      matchDatasources: ["docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
       minimumGroupSize: 2,
     },
     {
-      description: ["Opencloud Group"],
+      description: "Opencloud Group",
       groupName: "Opencloud",
       matchPackagePatterns: ["opencloudeu"],
-      matchDatasources: ["docker", "helm"],
+      matchDatasources: ["docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       }
     },
     {
-      description: ["Flux Operator Group"],
+      description: "Flux Operator Group",
       groupName: "Flux Operator",
-      matchPackagePatterns: ["flux-operator", "flux-instance", "flux-operator-manifests"],
-      matchDatasources: ["docker"],
+      matchPackagePatterns: ["flux-operator", "flux-instance", "flux-operator-manifests", "controlplaneio-fluxcd/charts"],
+      matchDatasources: ["docker", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
       minimumGroupSize: 3,
     },
     {
-      description: ["Intel-Device-Plugins Group"],
+      description: "Intel-Device-Plugins Group",
       groupName: "Intel Device Plugins",
       matchPackagePatterns: ["intel-device-plugins"],
       matchDatasources: ["docker"],
@@ -59,7 +59,7 @@
       minimumGroupSize: 2,
     },
     {
-      description: ["Talos Group"],
+      description: "Talos Group",
       groupName: "Talos",
       matchPackagePatterns: ["siderolabs/talosctl", "siderolabs/installer"],
       matchDatasources: ["docker"],
@@ -71,7 +71,7 @@
       description: "Immich Group",
       groupName: "Immich",
       matchPackagePatterns: ["immich"],
-      matchDatasources: ["docker", "github-releases", "helm"],
+      matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -81,7 +81,7 @@
       description: "External Secrets Group",
       groupName: "External Secrets",
       matchPackagePatterns: ["external-secrets"],
-      matchDatasources: ["docker", "github-releases", "helm"],
+      matchDatasources: ["docker", "github-releases", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -90,7 +90,7 @@
       description: "Cilium group",
       groupName: "Cilium",
       matchPackagePatterns: ["cilium"],
-      matchDatasources: ["docker", "github-releases", "helm"],
+      matchDatasources: ["docker", "github-releases", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -99,7 +99,7 @@
       description: "Coredns group",
       groupName: "Coredns",
       matchPackagePatterns: ["coredns"],
-      matchDatasources: ["docker", "github-releases", "helm"],
+      matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -108,7 +108,7 @@
       description: "1Pass group",
       groupName: "1Pass",
       matchPackagePatterns: ["1password"],
-      matchDatasources: ["docker", "github-releases", "helm"],
+      matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -118,7 +118,7 @@
       description: "Rook-Ceph group",
       groupName: "Rook-Ceph",
       matchPackagePatterns: ["rook"],
-      matchDatasources: ["docker", "github-releases", "helm"],
+      matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -127,8 +127,8 @@
     {
       description: "CNPG-Barman-Cloud group",
       groupName: "CNPG-Barman-Cloud",
-      matchPackagePatterns: ["plugin-barman-cloud", "plugin-barman-cloud-sidecar"],
-      matchDatasources: ["docker", "github-releases", "helm"],
+      matchPackagePatterns: ["plugin-barman-cloud", "plugin-barman-cloud-sidecar", "cloudnative-pg/charts"],
+      matchDatasources: ["docker", "github-releases", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -137,7 +137,7 @@
       description: "CNPG Postgres Containers group",
       groupName: "CNPG-postgres-containers",
       matchPackagePatterns: ["cloudnative-pg/postgresql"],
-      matchDatasources: ["docker", "github-releases", "helm"],
+      matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -146,7 +146,7 @@
       description: "Streamystats group",
       groupName: "Streamystats",
       matchPackagePatterns: ["streamystats-v2-nextjs", "streamystats-v2-job-server", "streamystats-v2-migrate"],
-      matchDatasources: ["docker", "github-releases", "helm"],
+      matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group"
       },
@@ -171,6 +171,52 @@
         commitMessageTopic: "{{{groupName}}} group"
       },
       minimumGroupSize: 2,
+    },
+    {
+      description: "bjw-s-labs group",
+      groupName: "bjw-s-labs",
+      matchPackagePatterns: ["bjw-s-labs"],
+      matchDatasources: ["docker", "github-tags"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+      minimumGroupSize: 2,
+    },
+    {
+      description: "Cert-Manager group",
+      groupName: "Cert-Manager",
+      matchPackagePatterns: ["cert-manager"],
+      matchDatasources: ["docker", "github-tags"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+    },
+    {
+      description: "External-DNS group",
+      groupName: "External-DNS",
+      matchPackagePatterns: ["external-dns"],
+      matchDatasources: ["docker", "github-tags"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+    },
+    {
+      description: "Pocket-ID group",
+      groupName: "Pocket-ID",
+      matchPackagePatterns: ["pocket-id"],
+      matchDatasources: ["docker", "github-tags"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+    },
+    {
+      description: "Silence-Operator group",
+      groupName: "Silence-Operator",
+      matchPackagePatterns: ["silence-operator"],
+      matchDatasources: ["docker", "github-tags"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
     },
   ]
 }
