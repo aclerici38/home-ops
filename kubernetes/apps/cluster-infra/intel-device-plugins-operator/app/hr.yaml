@@ -20,5 +20,7 @@ spec:
       retries: 1
   values:
     manager:
+      image:
+        hub: mirror.gcr.io
       devices:
         gpu: true
