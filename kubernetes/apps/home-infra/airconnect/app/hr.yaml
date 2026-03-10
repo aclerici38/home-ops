@@ -58,19 +58,19 @@ spec:
                 memory: 256Mi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
-              capabilities:
-                drop:
-                  - ALL
-                add:
-                  # S6
-                  - CHOWN
-                  - SETUID
-                  - SETGID
-                  - FOWNER
-                  - DAC_OVERRIDE
-                  - PERFMON
+              readOnlyRootFilesystem: true
+              capabilities: {drop: [ALL]}
+    configMaps:
+      config:
+        data: 
+          type: oneshot
     persistence:
+      type:
+        type: configMap
+        name: airconnect
+        globalMounts:
+          - path: /etc/s6-overlay/s6-rc.d/svc-aircast/type
+            subPath: type
       tmpfs:
         type: emptyDir
         globalMounts:
