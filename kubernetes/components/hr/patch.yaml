@@ -10,10 +10,12 @@ spec:
     mode: ${DRIFT_DETECTION:=enabled}
   install:
     crds: CreateReplace
+    disableTakeOwnership: true
     strategy:
       name: RetryOnFailure
   upgrade:
     crds: CreateReplace
+    disableTakeOwnership: true
     cleanupOnFail: true
     strategy:
       name: RemediateOnFailure
