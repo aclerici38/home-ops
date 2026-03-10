@@ -15,10 +15,6 @@ spec:
         [
           "pnpm run bundle"
         ]
-    - name: RENOVATE_ENDPOINT
-      value: https://api.github.com/
-    - name: RENOVATE_PLATFORM
-      value: github
     - name: RENOVATE_PLATFORM_COMMIT
       value: enabled
     - name: DOCKERHUB_USERNAME
