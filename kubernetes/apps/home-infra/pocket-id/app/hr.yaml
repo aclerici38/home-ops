@@ -19,6 +19,9 @@ spec:
     remediation:
       retries: 1
   values:
+    operator:
+      args:
+        - --zap-log-level=debug
     metrics:
       enabled: true
       serviceMonitor:
