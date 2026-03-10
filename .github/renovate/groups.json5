@@ -2,15 +2,6 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
-      description: "Actions Runner Controller Group",
-      groupName: "Actions Runner Controller",
-      matchPackagePatterns: ["gha-runner-scale-set"],
-      matchDatasources: ["docker"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group"
-      }
-    },
-    {
       description: "Omada-Controller Group",
       groupName: "Omada-Controller",
       matchPackagePatterns: ["omada-controller", "omada-controller-helm"],
@@ -151,16 +142,6 @@
         commitMessageTopic: "{{{groupName}}} group"
       },
       minimumGroupSize: 3,
-    },
-    {
-      description: "Your-Spotify group",
-      groupName: "Your-Spotify",
-      matchPackagePatterns: ["your_spotify_server", "your_spotify_client"],
-      matchDatasources: ["docker"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group"
-      },
-      minimumGroupSize: 2,
     },
     {
       description: "Vectorchord Group",
