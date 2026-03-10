@@ -36,10 +36,8 @@ spec:
         memory: 512Mi
     persistence:
       enabled: true
-      # The chart mounts this with subpath: data
+      create: false
       claimName: backups
-      accessMode: ReadWriteMany
-      size: 966367641600
     httpRoute:
       enabled: true
       parentRefs: &gateway

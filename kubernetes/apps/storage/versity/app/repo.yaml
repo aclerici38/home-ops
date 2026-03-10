@@ -10,11 +10,10 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.2.1
+    tag: 0.3.0
   url: oci://ghcr.io/versity/versitygw/charts/versitygw
-  # TODO: enable cosign on next version
-  # verify:
-  #   provider: cosign
-  #   matchOIDCIdentity:
-  #     - issuer: "^https://token.actions.githubusercontent.com$"
-  #       subject: "^https://github.com/versity/versitygZ.*$"
+  verify:
+    provider: cosign
+    matchOIDCIdentity:
+      - issuer: "^https://token.actions.githubusercontent.com$"
+        subject: "^https://github.com/versity/versitygZ.*$"
