@@ -7,7 +7,7 @@ metadata:
   labels:
     grafana.internal/instance: grafana
 spec:
-  version: docker.io/grafana/grafana:12.4.0@sha256:b0ae311af06228bcfd4a620504b653db80f5b91e94dc3dc2a5b7dab202bcde20
+  version: mirror.gcr.io/grafana/grafana:12.4.0@sha256:b0ae311af06228bcfd4a620504b653db80f5b91e94dc3dc2a5b7dab202bcde20
   config:
     analytics:
       check_for_updates: "false"

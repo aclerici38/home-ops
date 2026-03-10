@@ -38,7 +38,7 @@ spec:
           timeoutSeconds: 1
         readinessProbe: *probe
     image:
-      repository: docker.io/mbentley/omada-controller
+      repository: mirror.gcr.io/mbentley/omada-controller
       pullPolicy: IfNotPresent
       tag: 6.1.0.19@sha256:ae11f51e773d9c17f8578b951ced11253b2ef7cfa9c8d46ef99ecdcd8cc25278
     serviceAccount:

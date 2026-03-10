@@ -32,7 +32,7 @@
       '/(^|/)kubernetes/.+\\.ya?ml$/',
     ],
   },
-  'helm-values': {
+  "helm-values": {
     managerFilePatterns: [
       '/(^|/)kubernetes/.+\\.ya?ml$/',
     ],
@@ -41,5 +41,8 @@
     managerFilePatterns: [
       '/(^|/)kubernetes/.+\\.ya?ml$/',
     ],
+  },
+  registryAliases: {
+    "mirror.gcr.io": "docker.io"
   },
 }

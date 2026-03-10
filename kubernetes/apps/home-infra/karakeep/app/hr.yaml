@@ -114,7 +114,7 @@ spec:
         containers:
           meilisearch:
             image:
-              repository: docker.io/getmeili/meilisearch
+              repository: mirror.gcr.io/getmeili/meilisearch
               tag: v1.38.0@sha256:5a598ce9cec7b33db09a6a60b55d735e97e7b5632c35c9ad1a2e8fb9e3796654
             args:
               - /bin/meilisearch

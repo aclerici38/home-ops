@@ -27,7 +27,7 @@ spec:
         containers:
           opencloud:
             image: &img
-              repository: docker.io/opencloudeu/opencloud-rolling
+              repository: mirror.gcr.io/opencloudeu/opencloud-rolling
               tag: 5.2.0@sha256:c840de29b7287da070ffc9d5eb52a1b291a046877402bf70f387ccf56c820aee
             command:
               - "/bin/sh"
@@ -161,7 +161,7 @@ spec:
         containers:
           collabora:
             image:
-              repository: docker.io/collabora/code
+              repository: mirror.gcr.io/collabora/code
               tag: 25.04.9.2.1@sha256:cfbf62dbed7f3a2bebeb634235c606613813a1857f85111da3a97db316029bba
             env:
               aliasgroup1: http://opencloud-wopi:9300
@@ -206,7 +206,7 @@ spec:
         containers:
           tika:
             image:
-              repository: docker.io/apache/tika
+              repository: mirror.gcr.io/apache/tika
               tag: 3.2.3.0-full@sha256:21d8052de04e491ccf66e8680ade4da6f3d453a56d59f740b4167e54167219b7
             env:
               JAVA_OPTS: "-Xmx3g"
@@ -338,7 +338,7 @@ spec:
       # Web extensions
       unzip:
         type: image
-        image: docker.io/opencloudeu/web-extensions:unzip-1.0.4
+        image: mirror.gcr.io/opencloudeu/web-extensions:unzip-1.0.4@sha256:217e325154a8f5a1732a2cbde4532600b532450e93b85d53522f1df6c84fd173
         advancedMounts:
           opencloud:
             opencloud:

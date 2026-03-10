@@ -1,20 +1,20 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "packageRules": [
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  packageRules: [
     {
-      "description": ["Auto-merge GitHub Actions for minor and patch"],
-      "matchManagers": ["github-actions"],
-      "matchDatasources": ["github-tags"],
-      "automerge": true,
-      "automergeType": "branch",
-      "matchUpdateTypes": ["minor", "patch"]
+      description: ["Auto-merge GitHub Actions for minor and patch"],
+      matchManagers: ["github-actions"],
+      matchDatasources: ["github-tags"],
+      automerge: true,
+      automergeType: "branch",
+      matchUpdateTypes: ["minor", "patch"]
     },
     {
-      "description": ["Auto-merge specific apps' minor versions"],
-      "automerge": true,
-      "automergeType": "branch",
-      "matchDatasources": ["docker", "helm"],
-      "matchPackageNames": [
+      description: ["Auto-merge specific apps' minor versions"],
+      automerge: true,
+      automergeType: "branch",
+      matchDatasources: ["docker", "helm"],
+      matchPackageNames: [
         "**/bazarr",
         "**/calibre-web-automated-book-downloader",
         "**/cloudflare-ddns",
@@ -40,18 +40,18 @@
         "**/sonarr",
         "**/zfs-scrubber"
       ],
-      "matchUpdateTypes": ["minor", "patch", "digest"],
+      matchUpdateTypes: ["minor", "patch", "digest"],
     },
     {
-      "description": ["Auto-merge specific apps' major versions"],
-      "automerge": true,
-      "automergeType": "branch",
-      "matchDatasources": ["docker", "helm"],
-      "matchPackageNames": [
+      description: ["Auto-merge specific apps' major versions"],
+      automerge: true,
+      automergeType: "branch",
+      matchDatasources: ["docker", "helm"],
+      matchPackageNames: [
         "**/firefox",
         "**/http-https-echo",
       ],
-      "matchUpdateTypes": ["major", "minor", "patch", "digest"],
+      matchUpdateTypes: ["major", "minor", "patch", "digest"],
     }
   ]
 }

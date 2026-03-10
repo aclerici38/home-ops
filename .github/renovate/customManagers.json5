@@ -18,10 +18,10 @@
       versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
     },
     {
-      "customType": "regex",
-      "description": ["Process CNPG imageVolume extensions"],
-      "fileMatch": [".*"], // process regex from everywhere
-      "matchStrings": [
+      customType: "regex",
+      description: ["Process CNPG imageVolume extensions"],
+      fileMatch: [".*"], // process regex from everywhere
+      matchStrings: [
         "reference:\\s+(?<depName>[^:@\\s]+):(?<currentValue>[^@\\s]+)(?:@(?<currentDigest>sha256:\\S+))?"
       ],
       datasourceTemplate: "docker",

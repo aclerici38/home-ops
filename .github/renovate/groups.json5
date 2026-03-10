@@ -1,70 +1,70 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "packageRules": [
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  packageRules: [
     {
-      "description": ["Actions Runner Controller Group"],
-      "groupName": "Actions Runner Controller",
-      "matchPackagePatterns": ["gha-runner-scale-set"],
-      "matchDatasources": ["docker", "helm"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
+      description: ["Actions Runner Controller Group"],
+      groupName: "Actions Runner Controller",
+      matchPackagePatterns: ["gha-runner-scale-set"],
+      matchDatasources: ["docker", "helm"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
       }
     },
     {
-      "description": ["Omada-Controller Group"],
-      "groupName": "Omada-Controller",
-      "matchPackagePatterns": ["omada-controller", "omada-controller-helm"],
-      "matchDatasources": ["docker", "helm"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
+      description: ["Omada-Controller Group"],
+      groupName: "Omada-Controller",
+      matchPackagePatterns: ["omada-controller", "omada-controller-helm"],
+      matchDatasources: ["docker", "helm"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
       }
     },
     {
-      "description": ["Kgateway Group"],
-      "groupName": "Kgateway",
-      "matchPackagePatterns": ["kgateway-dev"],
-      "matchDatasources": ["docker", "helm"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      "minimumGroupSize": 2,
-    },
-    {
-      "description": ["Opencloud Group"],
-      "groupName": "Opencloud",
-      "matchPackagePatterns": ["opencloudeu"],
-      "matchDatasources": ["docker", "helm"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      }
-    },
-    {
-      "description": ["Flux Operator Group"],
-      "groupName": "Flux Operator",
-      "matchPackagePatterns": ["flux-operator", "flux-instance", "flux-operator-manifests"],
-      "matchDatasources": ["docker"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      },
-      minimumGroupSize: 3,
-    },
-    {
-      "description": ["Intel-Device-Plugins Group"],
-      "groupName": "Intel Device Plugins",
-      "matchPackagePatterns": ["intel-device-plugins"],
-      "matchDatasources": ["docker"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
+      description: ["Kgateway Group"],
+      groupName: "Kgateway",
+      matchPackagePatterns: ["kgateway-dev"],
+      matchDatasources: ["docker", "helm"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
       },
       minimumGroupSize: 2,
     },
     {
-      "description": ["Talos Group"],
-      "groupName": "Talos",
-      "matchPackagePatterns": ["siderolabs/talosctl", "siderolabs/installer"],
-      "matchDatasources": ["docker"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
+      description: ["Opencloud Group"],
+      groupName: "Opencloud",
+      matchPackagePatterns: ["opencloudeu"],
+      matchDatasources: ["docker", "helm"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      }
+    },
+    {
+      description: ["Flux Operator Group"],
+      groupName: "Flux Operator",
+      matchPackagePatterns: ["flux-operator", "flux-instance", "flux-operator-manifests"],
+      matchDatasources: ["docker"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+      minimumGroupSize: 3,
+    },
+    {
+      description: ["Intel-Device-Plugins Group"],
+      groupName: "Intel Device Plugins",
+      matchPackagePatterns: ["intel-device-plugins"],
+      matchDatasources: ["docker"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
+      },
+      minimumGroupSize: 2,
+    },
+    {
+      description: ["Talos Group"],
+      groupName: "Talos",
+      matchPackagePatterns: ["siderolabs/talosctl", "siderolabs/installer"],
+      matchDatasources: ["docker"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group"
       }
     },
     {
