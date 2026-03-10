@@ -35,6 +35,8 @@ spec:
         enabled: true
       dashboard:
         enabled: true
+        grafanaDashboard:
+          allowCrossNamespaceImport: true
     auth:
       oidc:
         enabled: true
