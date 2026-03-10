@@ -5,7 +5,8 @@ kind: RenovateJob
 metadata:
   name: half-hour
 spec:
-  provider: github
+  provider: 
+    name: github
   discoverTopics: "renovate"
   extraEnv:
     - name: LOG_LEVEL
