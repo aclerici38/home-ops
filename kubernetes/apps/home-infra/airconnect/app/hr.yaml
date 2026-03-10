@@ -23,6 +23,7 @@ spec:
     controllers:
       airconnect:
         pod:
+          hostUsers: false
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
@@ -58,7 +59,17 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
-              capabilities: {drop: [ALL]}
+              capabilities:
+                drop:
+                  - ALL
+                add:
+                  # S6
+                  - CHOWN
+                  - SETUID
+                  - SETGID
+                  - FOWNER
+                  - DAC_OVERRIDE
+                  - PERFMON
     persistence:
       tmpfs:
         type: emptyDir
