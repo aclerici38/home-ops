@@ -6,6 +6,7 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=zfdash
+      - VOLSYNC_FSGROUPCHANGEPOLICY=Always
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/volsync
