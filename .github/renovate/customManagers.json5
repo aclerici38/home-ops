@@ -61,5 +61,15 @@
       ],
       datasourceTemplate: "github-tags",
     },
+    {
+      customType: "regex",
+      fileMatch: [".*\\.ya?ml$"],
+      matchStrings: [
+        "k8s-versioned-schemas\\.pages\\.dev/(?<depName>[^/]+)/(?<currentValue>[^/]+)/"
+      ],
+      datasourceTemplate: "github-tags",
+      packageNameTemplate: "aclerici38/k8s-versioned-schemas",
+      extractVersionTemplate: "^{{{depName}}}/(?<version>.*)$"
+    },
   ],
 }
