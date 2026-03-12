@@ -63,7 +63,7 @@
     },
     {
       customType: "regex",
-      fileMatch: [".*\\.ya?ml$"],
+      fileMatch: [".yaml"],
       matchStrings: [
         "k8s-versioned-schemas\\.pages\\.dev/(?<depName>[^/]+)/(?<currentValue>[^/]+)/"
       ],
