@@ -10,6 +10,7 @@ patches:
     target: &target
       group: kustomize.toolkit.fluxcd.io
       kind: Kustomization
+      labelSelector: components.dormammu/ks
   - path: ../deps/nfs.yaml
     target: *target
   - path: ../deps/keda.yaml
