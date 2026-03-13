@@ -42,3 +42,8 @@ spec:
     substitute:
       SCHEDULE: "*/15 * * * *"
       REPOS: "k8s-versioned-schemas"
+    substituteFrom:
+      - kind: Secret
+        # This gets renamed by kubernetes/components/ks/resources/app-vars/kustomizeconfig.yaml
+        name: renovate-operator-app-vars
+        optional: false
