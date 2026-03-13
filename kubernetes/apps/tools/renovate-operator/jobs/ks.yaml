@@ -21,7 +21,7 @@ spec:
   timeout: 3m
   postBuild:
     substitute:
-      SCHEDULE: "*/30 * * * *"
+      SCHEDULE: "'*/30 * * * *'"
       REPOS: "home-ops,pocket-id-operator,containers,pocket-id-go-client"
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.2/kustomization_v1.json
@@ -46,5 +46,5 @@ spec:
   timeout: 3m
   postBuild:
     substitute:
-      SCHEDULE: "*/15 * * * *"
+      SCHEDULE: "'*/15 * * * *'"
       REPOS: "k8s-versioned-schemas"
