@@ -8,6 +8,7 @@ configMapGenerator:
       - APP=renovate-operator
       - RESOURCES=resources
       - OIDC_PKCE=false
+      - NS=${NS}
 components:
   - ../../../components/ks/app-resources
   - ../../../components/kustomize/external-secret
