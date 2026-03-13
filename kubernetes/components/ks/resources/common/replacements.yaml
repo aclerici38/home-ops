@@ -7,6 +7,7 @@
     - select: &ks
         kind: Kustomization
         group: kustomize.toolkit.fluxcd.io
+        labelSelector: "!components.dormammu/no_app_url"
       fieldPaths:
         - spec.postBuild.substitute.APP_URL
       options:
