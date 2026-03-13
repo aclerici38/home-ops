@@ -7,7 +7,7 @@
       matchDatasources: ["github-tags"],
       automerge: true,
       automergeType: "branch",
-      matchUpdateTypes: ["minor", "patch"]
+      matchUpdateTypes: ["minor", "patch"],
     },
     {
       description: ["Auto-merge specific apps' minor versions"],
@@ -38,7 +38,7 @@
         "**/searxng",
         "**/smartmontools",
         "**/sonarr",
-        "**/zfs-scrubber"
+        "**/zfs-scrubber",
       ],
       matchUpdateTypes: ["minor", "patch", "digest"],
     },
@@ -47,11 +47,16 @@
       automerge: true,
       automergeType: "branch",
       matchDatasources: ["docker", "helm"],
-      matchPackageNames: [
-        "**/firefox",
-        "**/http-https-echo",
-      ],
+      matchPackageNames: ["**/firefox", "**/http-https-echo"],
       matchUpdateTypes: ["major", "minor", "patch", "digest"],
-    }
-  ]
+    },
+    {
+      description: ["Auto-merge k8s-versioned-schemas"],
+      automerge: true,
+      automergeType: "branch",
+      matchDatasources: ["github-tags"],
+      matchPackageNames: ["aclerici38/k8s-versioned-schemas"],
+      matchUpdateTypes: ["major", "minor", "patch"],
+    },
+  ],
 }
