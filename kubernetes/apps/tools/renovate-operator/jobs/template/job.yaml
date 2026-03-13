@@ -7,7 +7,7 @@ metadata:
 spec:
   provider: 
     name: github
-  discoveryFilter: "/aclerici38/{${REPOS}}"
+  discoveryFilter: "aclerici38/{${REPOS}}"
   extraEnv:
     - name: LOG_LEVEL
       value: debug
