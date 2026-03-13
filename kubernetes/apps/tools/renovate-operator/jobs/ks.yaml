@@ -23,7 +23,7 @@ spec:
     substitute:
       NAME: 30-min
       SCHEDULE: "'*/30 * * * *'"
-      REPOS: "home-ops,pocket-id-operator,containers,pocket-id-go-client"
+      REPOS: "home-ops|pocket-id-operator|containers|pocket-id-go-client"
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.2/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
