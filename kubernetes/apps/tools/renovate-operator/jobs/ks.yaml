@@ -9,7 +9,8 @@ metadata:
 spec:
   targetNamespace: ${NS}
   dependsOn:
-    - name: renovate-operator
+    - name: renovate-operator-resources
+  path: ./kubernetes/apps/tools/renovate-operator/jobs
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -33,7 +34,8 @@ metadata:
 spec:
   targetNamespace: ${NS}
   dependsOn:
-    - name: renovate-operator
+    - name: renovate-operator-resources
+  path: ./kubernetes/apps/tools/renovate-operator/jobs
   sourceRef:
     kind: GitRepository
     name: flux-system
