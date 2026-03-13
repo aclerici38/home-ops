@@ -10,7 +10,7 @@ spec:
   targetNamespace: ${NS}
   dependsOn:
     - name: renovate-operator-resources
-  path: ./kubernetes/apps/tools/renovate-operator/jobs
+  path: ./kubernetes/apps/tools/renovate-operator/jobs/template
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -36,7 +36,7 @@ spec:
   targetNamespace: ${NS}
   dependsOn:
     - name: renovate-operator-resources
-  path: ./kubernetes/apps/tools/renovate-operator/jobs
+  path: ./kubernetes/apps/tools/renovate-operator/jobs/template
   sourceRef:
     kind: GitRepository
     name: flux-system
