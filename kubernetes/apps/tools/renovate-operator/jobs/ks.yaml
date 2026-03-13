@@ -21,6 +21,7 @@ spec:
   timeout: 3m
   postBuild:
     substitute:
+      NAME: hourly
       SCHEDULE: "'*/30 * * * *'"
       REPOS: "home-ops,pocket-id-operator,containers,pocket-id-go-client"
 ---
@@ -46,5 +47,6 @@ spec:
   timeout: 3m
   postBuild:
     substitute:
+      NAME: 15-min
       SCHEDULE: "'*/15 * * * *'"
       REPOS: "k8s-versioned-schemas"

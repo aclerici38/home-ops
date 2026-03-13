@@ -3,7 +3,7 @@
 apiVersion: renovate-operator.mogenius.com/v1alpha1
 kind: RenovateJob
 metadata:
-  name: half-hour
+  name: ${NAME}
 spec:
   provider: 
     name: github
