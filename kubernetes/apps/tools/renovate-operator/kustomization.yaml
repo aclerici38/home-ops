@@ -6,10 +6,12 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=renovate-operator
-      - RESOURCES=jobs
+      - RESOURCES=resources
       - OIDC_PKCE=false
 components:
   - ../../../components/ks/app-resources
   - ../../../components/kustomize/external-secret
   - ../../../components/kustomize/dragonfly
   - ../../../components/kustomize/pocket-id
+resources:
+  - jobs/ks.yaml
