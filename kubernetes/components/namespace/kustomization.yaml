@@ -18,7 +18,6 @@ replacements:
       - select: &ks
           kind: Kustomization
           group: kustomize.toolkit.fluxcd.io
-          labelSelector: components.dormammu/ks
         fieldPaths:
           - spec.commonMetadata.labels.app\.kubernetes\.io/namespace
         options:
