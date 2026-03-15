@@ -6,8 +6,13 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=onepassword-connect
-labels:
-  - pairs:
-      kustomize.dormammu/cluster-settings: "false"
+replacements:
+  - sourceValue: "true"
+    targets:
+      - select:
+          kind: Kustomization
+          group: kustomize.toolkit.fluxcd.io
+        fieldPaths:
+          - spec.postBuild.substituteFrom.1.optional
 components:
   - ../../../components/ks/app
