@@ -10,10 +10,6 @@ patches:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io
       labelSelector: "components.dormammu/ks=app-resources"
-  - path: ../common/cluster-settings.yaml
-    target: 
-      <<: *ks
-      labelSelector: "components.dormammu/ks=app-resources,kustomize.dormammu/cluster-settings!=false"
 replacements:
   - path: ../common/replacements.yaml
   - source:
