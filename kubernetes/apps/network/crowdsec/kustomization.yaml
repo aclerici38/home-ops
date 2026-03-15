@@ -6,8 +6,7 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=crowdsec
-      - INSTALL_SSA=false
-      - UPGRADE_SSA=disabled
+      - DRIFT_DETECTION=disabled
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/cnpg/init
