@@ -25,7 +25,7 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/fredrikburmester/streamystats-v2-nextjs
+              repository: ghcr.io/fredrikburmester/streamystats-nextjs
               tag: v2.18.0@sha256:06fb359ad7968d42a5b58421bb3c0ea81142271cf9411f44470dd877a49d7d83
             env: &env
               DATABASE_URL:
@@ -57,7 +57,7 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/fredrikburmester/streamystats-v2-job-server
+              repository: ghcr.io/fredrikburmester/streamystats-job-server
               tag: v2.18.0@sha256:def1912f321ed4414635894786fea192f423006d04116287f3cfc5949116823d
             env:
               <<: *env
