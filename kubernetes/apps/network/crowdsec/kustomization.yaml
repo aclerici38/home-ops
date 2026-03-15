@@ -8,5 +8,4 @@ configMapGenerator:
       - APP=crowdsec
 components:
   - ../../../components/ks/app
-  - ../../../components/kustomize/cnpg/no-backup
-  - ../../../components/kustomize/volsync
+  - ../../../components/kustomize/cnpg/init
