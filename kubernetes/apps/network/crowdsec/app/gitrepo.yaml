@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.2/gitrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: crowdsec-chart
+spec:
+  interval: 1h
+  ref:
+    commit: e590b1d
+  url: https://github.com/aclerici38/crowdsec-chart

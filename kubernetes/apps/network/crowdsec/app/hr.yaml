@@ -7,9 +7,15 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
-    kind: OCIRepository
-    name: crowdsec
+  # chartRef:
+  #   kind: OCIRepository
+  #   name: crowdsec
+  chart:
+    spec:
+      chart: charts/crowdsec
+      sourceRef:
+        kind: GitRepository
+        name: crowdsec-chart
   install:
     timeout: 2m
     remediation:
