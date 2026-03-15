@@ -10,11 +10,13 @@ spec:
     mode: ${DRIFT_DETECTION:=enabled}
   install:
     crds: CreateReplace
+    serverSideApply: ${SSA:=enabled}
     disableTakeOwnership: true
     strategy:
       name: RetryOnFailure
   upgrade:
     crds: CreateReplace
+    serverSideApply: ${SSA:=enabled}
     disableTakeOwnership: true
     cleanupOnFail: true
     strategy:
