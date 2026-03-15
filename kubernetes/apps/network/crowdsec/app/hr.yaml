@@ -93,7 +93,7 @@ spec:
       service:
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: 10.0.30.4
+          lbipam.cilium.io/ips: 10.38.55.50
       persistentVolume:
         data:
           enabled: false
@@ -130,7 +130,7 @@ spec:
       service:
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: 10.0.30.5
+          lbipam.cilium.io/ips: 10.38.55.51
         ports:
           - name: syslog
             port: 514
