@@ -40,11 +40,11 @@ spec:
       config.yaml.local: |
         db_config:
           type: postgresql
-          host: ${DB_HOST}
-          port: ${DB_PORT}
-          user: ${DB_USER}
-          password: ${DB_PASSWORD}
-          db_name: ${DB_NAME}
+          host: $${DB_HOST}
+          port: $${DB_PORT}
+          user: $${DB_USER}
+          password: $${DB_PASSWORD}
+          db_name: $${DB_NAME}
     lapi:
       replicas: 2
       strategy:
