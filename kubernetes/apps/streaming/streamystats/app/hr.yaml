@@ -22,28 +22,17 @@ spec:
   values:
     controllers:
       frontend:
-        initContainers: &init
-          migrate:
+        containers:
+          main:
             image:
-              repository: mirror.gcr.io/fredrikburmester/streamystats-v2-migrate
-              tag: v2.16.0@sha256:dd813b5ea8104ebaf8a58c2105abf322420edf6b91c9bd401969bea69ef179cc
+              repository: ghcr.io/fredrikburmester/streamystats-v2-nextjs
+              tag: v2.18.0@sha256:06fb359ad7968d42a5b58421bb3c0ea81142271cf9411f44470dd877a49d7d83
             env: &env
               DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
                     name: streamystats-db-app
                     key: uri
-            securityContext: &sec
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
-        containers:
-          main:
-            image:
-              repository: mirror.gcr.io/fredrikburmester/streamystats-v2-nextjs
-              tag: v2.16.0@sha256:37afbca0418c77678a4ed6485d9f1a390f227c68cc12a3096c898c18c8fbefcb
-            env:
-              <<: *env
               JOB_SERVER_URL: http://streamystats-job-server:3005
             probes:
               liveness: &probes
@@ -54,7 +43,10 @@ spec:
                     path: /api/health
                     port: &fPort 3000
               readiness: *probes
-            securityContext: *sec
+            securityContext: &sec
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 100m
@@ -62,12 +54,11 @@ spec:
               limits:
                 memory: 1Gi
       job-server:
-        initContainers: *init
         containers:
           main:
             image:
-              repository: mirror.gcr.io/fredrikburmester/streamystats-v2-job-server
-              tag: v2.16.0@sha256:c2ae14a088c438cdfaeedce8e019ae0ddc2681e92ac665ab5980f472dff21a3e
+              repository: ghcr.io/fredrikburmester/streamystats-v2-job-server
+              tag: v2.18.0@sha256:def1912f321ed4414635894786fea192f423006d04116287f3cfc5949116823d
             env:
               <<: *env
               HOST: 0.0.0.0

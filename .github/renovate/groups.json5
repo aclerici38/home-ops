@@ -150,13 +150,12 @@
       matchPackagePatterns: [
         "streamystats-v2-nextjs",
         "streamystats-v2-job-server",
-        "streamystats-v2-migrate",
       ],
       matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
-      minimumGroupSize: 3,
+      minimumGroupSize: 2,
     },
     {
       description: "Vectorchord Group",
