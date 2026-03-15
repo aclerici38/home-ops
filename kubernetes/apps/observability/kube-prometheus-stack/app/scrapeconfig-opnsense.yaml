@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.89.0/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: opnsense
+spec:
+  metricsPath: /metrics
+  scrapeInterval: 60s
+  staticConfigs:
+    - targets:
+        - 10.0.30.1:9100
+      labels:
+        job: opnsense
