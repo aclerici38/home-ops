@@ -79,8 +79,9 @@ spec:
               key: dbname
       service:
         type: LoadBalancer
-        annotations:
-          lbipam.cilium.io/ips: "${CROWDSEC_LB_IP}"
+        annotations: &lb
+          lbipam.cilium.io/ips: 10.38.55.50
+          lbipam.cilium.io/sharing-key: crowdsec
       persistentVolume:
         data:
           enabled: false
@@ -116,8 +117,7 @@ spec:
             type: syslog
       service:
         type: LoadBalancer
-        annotations:
-          lbipam.cilium.io/ips: "${CROWDSEC_AGENT_LB_IP}"
+        annotations: *lb
         ports:
           - name: syslog
             port: 514
