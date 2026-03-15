@@ -7,7 +7,7 @@ configMapGenerator:
     literals:
       - APP=external-secrets
       - RESOURCES=stores
-      - SSA=disabled
+      - SSA=false
 replacements:
   - sourceValue: "true"
     targets:

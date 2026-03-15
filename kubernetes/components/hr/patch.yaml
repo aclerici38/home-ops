@@ -7,10 +7,10 @@ metadata:
 spec:
   maxHistory: 1
   driftDetection:
-    mode: ${DRIFT_DETECTION:=enabled}
+    mode: ${DRIFT_DETECTION:=true}
   install:
     crds: CreateReplace
-    serverSideApply: ${SSA:=enabled}
+    serverSideApply: ${SSA:=true}
     disableTakeOwnership: true
     strategy:
       name: RetryOnFailure
