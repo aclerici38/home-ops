@@ -1,0 +1,111 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.89.0/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: crowdsec-rules
+spec:
+  groups:
+    - name: crowdsec.lapi
+      rules:
+        - alert: CrowdSecLocalAlertTriggered
+          expr: |-
+            increase(cs_alerts{origin!="CAPI"}[5m]) > 0
+          for: 0m
+          annotations:
+            summary: >-
+              CrowdSec local alert triggered for {{ $labels.reason }}
+          labels:
+            severity: warning
+
+        - alert: CrowdSecActiveLocalBans
+          expr: |-
+            sum(cs_active_decisions{origin="crowdsec"}) > 0
+          for: 0m
+          annotations:
+            summary: >-
+              {{ $value }} active local ban decisions in CrowdSec
+          labels:
+            severity: info
+
+        - alert: CrowdSecActiveDecisionsSpike
+          expr: |-
+            sum(cs_active_decisions) > 50000
+          for: 15m
+          annotations:
+            summary: >-
+              CrowdSec total active decisions exceeded 50k ({{ $value }})
+          labels:
+            severity: warning
+
+        - alert: CrowdSecBouncerNoPull
+          expr: |-
+            increase(cs_lapi_bouncer_requests_total[30m]) == 0
+          for: 5m
+          annotations:
+            summary: >-
+              Bouncer {{ $labels.bouncer }} has not pulled decisions in 30m
+          labels:
+            severity: critical
+
+        - alert: CrowdSecAgentNoHeartbeat
+          expr: |-
+            increase(cs_lapi_machine_requests_total{route="/v1/heartbeat"}[15m]) == 0
+          for: 5m
+          annotations:
+            summary: >-
+              CrowdSec agent {{ $labels.machine }} has not sent a heartbeat in 15m
+          labels:
+            severity: critical
+
+        - alert: CrowdSecLAPIHighLatency
+          expr: |-
+            histogram_quantile(0.95, sum(rate(cs_lapi_request_duration_seconds_bucket[5m])) by (le, endpoint)) > 1
+          for: 10m
+          annotations:
+            summary: >-
+              CrowdSec LAPI endpoint {{ $labels.endpoint }} p95 latency above 1s
+          labels:
+            severity: warning
+
+    - name: crowdsec.agent
+      rules:
+        - alert: CrowdSecBucketOverflow
+          expr: |-
+            increase(cs_bucket_overflowed_total[5m]) > 0
+          for: 0m
+          annotations:
+            summary: >-
+              CrowdSec scenario {{ $labels.name }} triggered (bucket overflow)
+          labels:
+            severity: warning
+
+        - alert: CrowdSecBucketOverflowRate
+          expr: |-
+            increase(cs_bucket_overflowed_total[1h]) > 10
+          for: 0m
+          annotations:
+            summary: >-
+              CrowdSec scenario {{ $labels.name }} triggered {{ $value }} times in the last hour
+          labels:
+            severity: critical
+
+        - alert: CrowdSecNoLogsReceived
+          expr: |-
+            increase(cs_syslogsource_hits_total[15m]) == 0
+          for: 5m
+          annotations:
+            summary: >-
+              CrowdSec agent not receiving syslog data from {{ $labels.source }}
+          labels:
+            severity: critical
+
+        - alert: CrowdSecHighParseFailureRate
+          expr: |-
+            rate(cs_parser_hits_ko_total[5m]) / rate(cs_parser_hits_total[5m]) > 0.9
+          for: 15m
+          annotations:
+            summary: >-
+              CrowdSec parse failure rate above 90% for source {{ $labels.source }}
+          labels:
+            severity: warning
