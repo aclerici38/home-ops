@@ -31,7 +31,7 @@ spec:
   values:
     web:
       config:
-        baseURL: https://flux.example.com
+        baseURL: https://flux.${SECRET_DOMAIN}
         authentication:
           type: OAuth2
           oauth2:
@@ -44,4 +44,12 @@ spec:
               - groups
             impersonation:
               groups: "['system:masters']"
+      httpRoute:
+          enabled: true
+          parentRefs:
+            - name: internal
+              namespace: gateway-system
+              sectionName: https
+          hostnames:
+            - flux.${SECRET_DOMAIN}
 
