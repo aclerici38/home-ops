@@ -6,6 +6,8 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=crowdsec
+      - RESOURCES=ui
 components:
-  - ../../../components/ks/app
+  - ../../../components/ks/app-resources
+  - ../../../components/kustomize/external-secret
   - ../../../components/kustomize/cnpg/init
