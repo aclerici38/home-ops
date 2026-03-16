@@ -7,10 +7,11 @@ configMapGenerator:
     literals:
       - APP=external-secrets
       - RESOURCES=stores
-      - INSTALL_SSA=false
-      - UPGRADE_SSA=disabled
+      # - INSTALL_SSA=false
+      # - UPGRADE_SSA=disabled
 replacements:
-  - sourceValue: "true"
+  - # cluster-settings postBuild should be optional here
+    sourceValue: "true"
     targets:
       - select:
           kind: Kustomization
