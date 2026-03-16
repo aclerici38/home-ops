@@ -33,6 +33,11 @@ spec:
     config:
       parsers: {}
       scenarios: {}
+      console.yaml: |
+        share_manual_decisions: false
+        share_custom: true
+        share_tainted: true
+        share_context: true
       postoverflows:
         s01-whitelist:
           01-whitelist-home.yaml: |-
