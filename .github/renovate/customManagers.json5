@@ -65,11 +65,12 @@
       customType: "regex",
       fileMatch: [".yaml"],
       matchStrings: [
-        "k8s-versioned-schemas\\.pages\\.dev/(?<depName>[^/]+)/(?<currentValue>[^/]+)/"
+        "k8s-versioned-schemas\\.pages\\.dev/(?<depName>[^/]+)/(?<currentValue>[^/]+)/",
+        "\\?values=(?<depName>[^/]+)/(?<currentValue>[^\\s]+)"
       ],
       datasourceTemplate: "github-tags",
       packageNameTemplate: "aclerici38/k8s-versioned-schemas",
       extractVersionTemplate: "^{{{depName}}}/(?<version>.*)$"
-    },
+    }
   ],
 }
