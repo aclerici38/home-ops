@@ -76,3 +76,9 @@ spec:
           - backendRefs:
               - identifier: crowdsec-ui
                 port: *port
+    persistence:
+      data:
+        existingClaim: crowdsec
+        globalMounts:
+          - path: /app/data
+            subPath: ui
