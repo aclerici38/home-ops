@@ -22,7 +22,7 @@
       description: ["Process CNPG imageVolume extensions"],
       fileMatch: [".*"], // process regex from everywhere
       matchStrings: [
-        "reference:\\s+(?<depName>[^:@\\s]+):(?<currentValue>[^@\\s]+)(?:@(?<currentDigest>sha256:\\S+))?"
+        "reference:\\s+(?<depName>[^:@\\s]+):(?<currentValue>[^@\\s]+)(?:@(?<currentDigest>sha256:\\S+))?",
       ],
       datasourceTemplate: "docker",
     },
@@ -54,23 +54,15 @@
     },
     {
       customType: "regex",
-      description: "Process yaml-language-server schema versions from flux2-schemas.pages.dev URLs",
-      fileMatch: [".yaml"],
-      matchStrings: [
-        "\\$schema=https://flux2-schemas\\.pages\\.dev/helmrelease/v2/github/(?<depName>[^/]+/[^/]+)/(?<currentValue>[^/]+)/",
-      ],
-      datasourceTemplate: "github-tags",
-    },
-    {
-      customType: "regex",
       fileMatch: [".yaml"],
       matchStrings: [
         "k8s-versioned-schemas\\.pages\\.dev/(?<depName>[^/]+)/(?<currentValue>[^/]+)/",
-        "\\?values=(?<depName>[^/]+)/(?<currentValue>[^\\s]+)"
+        "\\?values=(?<depName>[^/]+)/(?<currentValue>[^\\s]+)",
+        "aclerici38/k8s-versioned-schemas/crds/(?<depName>[^/]+)/(?<currentValue>[^/\\s'\"]+)",
       ],
       datasourceTemplate: "github-tags",
       packageNameTemplate: "aclerici38/k8s-versioned-schemas",
-      extractVersionTemplate: "^{{{depName}}}/(?<version>.*)$"
-    }
+      extractVersionTemplate: "^{{{depName}}}/(?<version>.*)$",
+    },
   ],
 }
