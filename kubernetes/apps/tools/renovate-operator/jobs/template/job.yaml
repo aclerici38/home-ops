@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/renovate-operator/3.1.0/renovatejob_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/renovate-operator/3.2.0/renovatejob_v1alpha1.json
 apiVersion: renovate-operator.mogenius.com/v1alpha1
 kind: RenovateJob
 metadata:
@@ -44,7 +44,7 @@ spec:
       value: enabled
     - name: RENOVATE_CACHE_PRIVATE_PACKAGES
       value: "true"
-  image: ghcr.io/renovatebot/renovate:43.76.2@sha256:dc8993f4762ddadaac36f7bd37295c029f285e0d53916a92a3a1cb3917cbb79b
+  image: ghcr.io/renovatebot/renovate:43.76.4@sha256:b2774e57e7c3a33af71d8a82a5fe156de1e1dd93f7a878d9e039fcccd7238a6d
   parallelism: 5
   resources:
     requests:
