@@ -20,3 +20,29 @@ spec:
   valuesFrom:
     - kind: ConfigMap
       name: flux-operator-helm-values
+    - kind: Secret
+      name: flux-operator-oidc-credentials
+      valuesKey: client_secret
+      targetPath: web.config.authentication.oauth2.clientSecret
+    - kind: Secret
+      name: flux-operator-oidc-credentials
+      valuesKey: client_id
+      targetPath: web.config.authentication.oauth2.clientId
+  values:
+    web:
+      config:
+        baseURL: https://flux.example.com
+        authentication:
+          type: OAuth2
+          oauth2:
+            provider: OIDC
+            issuerURL: https://id.${SECRET_DOMAIN}
+            scopes:
+              - openid
+              - profile
+              - email
+              - groups
+            claims:
+              impersonation:
+                groups: "['system:masters']"
+
