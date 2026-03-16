@@ -27,7 +27,7 @@ spec:
     - kind: Secret
       name: flux-operator-oidc-credentials
       valuesKey: client_id
-      targetPath: web.config.authentication.oauth2.clientId
+      targetPath: web.config.authentication.oauth2.clientID
   values:
     web:
       config:
@@ -42,7 +42,6 @@ spec:
               - profile
               - email
               - groups
-            claims:
-              impersonation:
-                groups: "['system:masters']"
+            impersonation:
+              groups: "['system:masters']"
 
