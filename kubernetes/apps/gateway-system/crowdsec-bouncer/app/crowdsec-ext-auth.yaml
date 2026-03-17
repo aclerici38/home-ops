@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/kgateway/2.2.2/gatewayextension_v1alpha1.json
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: GatewayExtension
+metadata:
+  name: crowdsec-bouncer
+spec:
+  extAuth:
+    failOpen: true
+    grpcService:
+      backendRef:
+        name: crowdsec-bouncer
+        port: 8080
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/kgateway/2.2.2/trafficpolicy_v1alpha1.json
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: TrafficPolicy
+metadata:
+  name: crowdsec-ext-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: external
+  extAuth:
+    extensionRef:
+      name: crowdsec-bouncer
