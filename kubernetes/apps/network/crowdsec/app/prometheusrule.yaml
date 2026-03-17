@@ -10,23 +10,13 @@ spec:
       rules:
         - alert: CrowdSecLocalAlertTriggered
           expr: |-
-            increase(cs_alerts{origin!="CAPI"}[5m]) > 0
+            increase(cs_alerts[1h]) > 5
           for: 0m
           annotations:
             summary: >-
-              CrowdSec local alert triggered for {{ $labels.reason }}
+              CrowdSec local alert {{ $labels.reason }} triggered {{ $value }} times in the last hour
           labels:
             severity: warning
-
-        - alert: CrowdSecActiveLocalBans
-          expr: |-
-            sum(cs_active_decisions{origin="crowdsec"}) > 0
-          for: 0m
-          annotations:
-            summary: >-
-              {{ $value }} active local ban decisions in CrowdSec
-          labels:
-            severity: info
 
         - alert: CrowdSecActiveDecisionsSpike
           expr: |-
@@ -70,16 +60,6 @@ spec:
 
     - name: crowdsec.agent
       rules:
-        - alert: CrowdSecBucketOverflow
-          expr: |-
-            increase(cs_bucket_overflowed_total[5m]) > 0
-          for: 0m
-          annotations:
-            summary: >-
-              CrowdSec scenario {{ $labels.name }} triggered (bucket overflow)
-          labels:
-            severity: warning
-
         - alert: CrowdSecBucketOverflowRate
           expr: |-
             increase(cs_bucket_overflowed_total[1h]) > 10
@@ -99,13 +79,3 @@ spec:
               CrowdSec agent not receiving syslog data from {{ $labels.source }}
           labels:
             severity: critical
-
-        - alert: CrowdSecHighParseFailureRate
-          expr: |-
-            rate(cs_parser_hits_ko_total[5m]) / rate(cs_parser_hits_total[5m]) > 0.9
-          for: 15m
-          annotations:
-            summary: >-
-              CrowdSec parse failure rate above 90% for source {{ $labels.source }}
-          labels:
-            severity: warning
