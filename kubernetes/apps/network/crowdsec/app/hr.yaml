@@ -148,3 +148,28 @@ spec:
         serviceMonitor:
           enabled: true
       acquisition: []
+    appsec:
+      enabled: true
+      replicas: 2
+      strategy:
+        type: RollingUpdate
+      env:
+        - name: COLLECTIONS
+          value: "crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-crs"
+        - name: APPSEC_CONFIGS
+          value: "crowdsecurity/appsec-default"
+      acquisitions:
+        - source: appsec
+          listen_addr: "0.0.0.0:7422"
+          path: /
+          appsec_config: crowdsecurity/appsec-default
+          labels:
+            type: appsec
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          memory: 256Mi
+      service:
+        type: ClusterIP

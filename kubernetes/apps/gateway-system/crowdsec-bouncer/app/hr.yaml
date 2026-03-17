@@ -41,6 +41,12 @@ spec:
         apiKeySecretRef:
           name: crowdsec-bouncer
           key: BOUNCER_API_KEY
+      waf:
+        enabled: true
+        appSecURL: http://crowdsec-appsec-service.network.svc.cluster.local:7422
+        apiKeySecretRef:
+          name: crowdsec-bouncer
+          key: BOUNCER_API_KEY
     resources:
       requests:
         cpu: 10m
