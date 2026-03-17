@@ -155,7 +155,7 @@ spec:
         type: RollingUpdate
       env:
         - name: COLLECTIONS
-          value: "crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-crs"
+          value: "crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-crs crowdsecurity/appsec-experimental"
         - name: APPSEC_CONFIGS
           value: "crowdsecurity/appsec-default"
       acquisitions:
