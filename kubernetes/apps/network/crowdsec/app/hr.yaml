@@ -155,9 +155,11 @@ spec:
         type: RollingUpdate
       env:
         - name: COLLECTIONS
-          value: "crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-crs crowdsecurity/appsec-experimental"
+          value: "crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-crs"
         - name: APPSEC_CONFIGS
           value: "crowdsecurity/appsec-default"
+        - name: APPSEC_RULES
+          value: "crowdsecurity/experimental-no-user-agent crowdsecurity/appsec-generic-test"
       acquisitions:
         - source: appsec
           listen_addr: "0.0.0.0:7422"
