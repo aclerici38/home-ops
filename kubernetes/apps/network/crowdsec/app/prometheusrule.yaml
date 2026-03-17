@@ -30,7 +30,7 @@ spec:
 
         - alert: CrowdSecBouncerNoPull
           expr: |-
-            increase(cs_lapi_bouncer_requests_total[30m]) == 0
+            sum by (bouncer) (increase(cs_lapi_bouncer_requests_total{bouncer!~".*@.*"}[30m])) == 0
           for: 5m
           annotations:
             summary: >-
