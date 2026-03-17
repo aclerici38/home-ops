@@ -36,6 +36,8 @@ spec:
         - 172.16.0.0/16
       bouncer:
         enabled: true
+        metrics: true
+        metricsInterval: 10m
         lapiURL: http://crowdsec-service.network.svc.cluster.local:8080
         tickerInterval: 10s
         apiKeySecretRef:
