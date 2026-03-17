@@ -45,6 +45,8 @@ spec:
       config.yaml.local: |-
         api:
           server:
+            trusted_ips:
+              - 172.16.0.0/16
             auto_registration:
               enabled: true
               token: "$${REGISTRATION_TOKEN}"
