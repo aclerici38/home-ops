@@ -33,7 +33,7 @@ spec:
       - --force-default-targets
     policy: sync
     triggerLoopOnEvent: true
-    sources: ["crd", "gateway-httproute"]
+    sources: ["crd", "gateway-httproute", "service"]
     txtPrefix: k8s.
     txtOwnerId: default
     domainFilters: ["${SECRET_DOMAIN}"]
