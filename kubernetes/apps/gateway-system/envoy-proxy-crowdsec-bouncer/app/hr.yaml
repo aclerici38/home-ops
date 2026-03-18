@@ -1,19 +1,15 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.3/helmrelease_v2.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.3/helmrelease_v2.json?values=envoy-proxy-crowdsec-bouncer/0.5.5
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: crowdsec-bouncer
+  name: envoy-proxy-crowdsec-bouncer
 spec:
   interval: 1h
   maxHistory: 1
-  chart:
-    spec:
-      chart: envoy-proxy-bouncer
-      sourceRef:
-        kind: HelmRepository
-        name: envoy-proxy-bouncer
-      version: 0.5.4
+  chartRef:
+    kind: OCIRepository
+    name: envoy-proxy-crowdsec-bouncer
   install:
     timeout: 2m
     remediation:
@@ -26,8 +22,9 @@ spec:
     replicaCount: 2
     fullnameOverride: crowdsec-bouncer
     image:
+      pullPolicy: IfNotPresent
       repository: ghcr.io/kdwils/envoy-proxy-bouncer
-      tag: v0.5.4@sha256:61ec5b933859d2f6b629a17833856600b83a3d48b150e4bee7b5b5d4183b65f8
+      tag: 0.5.5@sha256:da85657cd1eea9ac813b03be24c50c8d861cd5c4b72563cd8d62d6d403686a3c
     config:
       server:
         grpcPort: 8080
@@ -49,9 +46,9 @@ spec:
         apiKeySecretRef:
           name: crowdsec-bouncer
           key: BOUNCER_API_KEY
-    resources:
-      requests:
-        cpu: 10m
-        memory: 64Mi
-      limits:
-        memory: 128Mi
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          memory: 128Mi

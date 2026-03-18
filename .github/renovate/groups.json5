@@ -329,5 +329,15 @@
         commitMessageTopic: "{{{groupName}}} group",
       },
     },
+    {
+      description: "Envoy-Bouncer Group",
+      groupName: "Envoy-Bouncer",
+      matchPackagePatterns: ["envoy-proxy-bouncer"],
+      matchDatasources: ["docker"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      minimumGroupSize: 2,
+    },
   ],
 }

@@ -5,7 +5,7 @@ kind: Kustomization
 configMapGenerator:
   - name: APP-app-vars
     literals:
-      - APP=crowdsec-bouncer
+      - APP=envoy-proxy-crowdsec-bouncer
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret
