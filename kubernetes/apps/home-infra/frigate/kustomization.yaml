@@ -8,6 +8,7 @@ configMapGenerator:
       - APP=frigate
       - VOLSYNC_CAPACITY=25Gi
       - OIDC_GROUP=fam
+      - OIDC_FORWARD_ACCESS_TOKEN=true
 patches:
   - path: ./patch.yaml
     target:
