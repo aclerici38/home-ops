@@ -6,7 +6,6 @@ metadata:
   name: ${APP}-oauth
 spec:
   oauth2:
-    forwardAccessToken: ${OIDC_FORWARD_ACCESS_TOKEN:=false}
     # Why is this required??
     backendRef:
       group: gateway.kgateway.dev
