@@ -18,7 +18,7 @@ spec:
               name: ${APP}-oauth-backend
         claimsToHeaders:
           - name: "groups"
-            header: "X-Forwarded-Groups"
+            header: "X-Forwarded-Group"
           - name: "email"
             header: "X-Forwarded-Email"
           - name: "preferred_username"
