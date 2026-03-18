@@ -21,10 +21,6 @@ spec:
   values:
     replicaCount: 2
     fullnameOverride: crowdsec-bouncer
-    image:
-      pullPolicy: IfNotPresent
-      repository: ghcr.io/kdwils/envoy-proxy-bouncer
-      tag: 0.5.5@sha256:da85657cd1eea9ac813b03be24c50c8d861cd5c4b72563cd8d62d6d403686a3c
     config:
       server:
         grpcPort: 8080
