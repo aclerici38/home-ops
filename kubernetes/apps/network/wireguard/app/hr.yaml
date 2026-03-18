@@ -26,12 +26,18 @@ spec:
         pod:
           securityContext:
             seccompProfile: { type: RuntimeDefault }
+            runAsUser: 0
+            runAsGroup: 0
+            fsGroup: 0
+            fsGroupChangePolicy: OnRootMismatch
         containers:
           main:
             image:
               repository: ghcr.io/linuxserver/wireguard
               tag: 1.0.20250521@sha256:fd4a95e233a90070372ccf7f488ef005932eb16ca1b0bd40afbdbb3dae9a3951
             env:
+              PUID: 0
+              PGID: 0
               SERVERURL: house.${SECRET_DOMAIN}
               PERSISTENTKEEPALIVE_PEERS: all
               PEERS: bambi
