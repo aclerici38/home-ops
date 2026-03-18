@@ -27,7 +27,7 @@ spec:
           header:
             header: "Authorization"
             prefix: "Bearer "
-    validationMode: Strict
+    validationMode: AllowMissing
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/kgateway/2.2.2/trafficpolicy_v1alpha1.json
 apiVersion: gateway.kgateway.dev/v1alpha1
