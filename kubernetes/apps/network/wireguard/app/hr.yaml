@@ -43,14 +43,19 @@ spec:
               ALLOWEDIPS: 192.168.8.0/24
               S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
               S6_READ_ONLY_ROOT: 1
+            resources:
+              requests:
+                cpu: 15m
+                memory: 15Mi
+              limits:
+                memory: 256Mi
+                squat.ai/tun: 1
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
-                add:
-                  - NET_ADMIN
     service:
       main:
         controller: wireguard
