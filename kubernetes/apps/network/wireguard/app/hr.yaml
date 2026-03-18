@@ -49,6 +49,8 @@ spec:
               capabilities:
                 drop:
                   - ALL
+                add:
+                  - NET_ADMIN
     service:
       main:
         controller: wireguard
