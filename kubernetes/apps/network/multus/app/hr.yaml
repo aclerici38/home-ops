@@ -19,14 +19,7 @@ spec:
     remediation:
       retries: 1
   values:
-    cni-plugins:
-      image:
-        repository: ghcr.io/home-operations/cni-plugins
-        tag: 1.9.1@sha256:56222d9cf686632f0951103a400adeeec8d982aaf8cbf4d21588da17a41dd228
     multus:
-      image:
-        repository: ghcr.io/k8snetworkplumbingwg/multus-cni
-        tag: v4.2.4@sha256:c3b12d1b56d7607a302ec23ececa236256bc940c04b3be5c1f39e0234398c4c9
       resources:
         requests:
           cpu: 10m
