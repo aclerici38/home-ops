@@ -7,13 +7,11 @@ configMapGenerator:
     literals:
       - APP=omada-controller
       - CNPG_POOLMODE=session
-      # TEMP
-      - CNPG_MAJOR_VERSION=17
 patches:
-  # - path: ./patch.yaml
-  #   target:
-  #     kind: Kustomization
-  #     group: kustomize.toolkit.fluxcd.io
+  - path: ./patch.yaml
+    target:
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
   - patch: |-
       - op: add
         path: /spec/dependsOn/-
