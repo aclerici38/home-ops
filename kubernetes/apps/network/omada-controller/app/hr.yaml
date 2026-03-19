@@ -70,13 +70,9 @@ spec:
         memory: 5Gi
     persistence:
       data:
-        storageClassName: ceph-filesystem
-        accessModes: [ReadWriteMany]
-        size: 5Gi
+        enabled: false
       logs:
-        storageClass: ceph-filesystem
-        accessModes: [ReadWriteMany]
-        size: 5Gi
+        enabled: false
       extraVolumeMounts:
         - name: ferretdb-sock
           mountPath: /run/ferretdb
