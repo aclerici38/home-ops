@@ -38,6 +38,11 @@ spec:
               - pg_cron
               - pg_documentdb_core
               - pg_documentdb
+            
+            # These are not needed, only kept b/c they're immutable and were set for ferretdb
+            postgresUID: 999
+            postgresGID: 999
+           
             parameters:
               # seems necessary
               max_connections: "200"
