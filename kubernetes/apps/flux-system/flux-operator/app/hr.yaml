@@ -18,8 +18,6 @@ spec:
     remediation:
       retries: 1
   valuesFrom:
-    - kind: ConfigMap
-      name: flux-operator-helm-values
     - kind: Secret
       name: flux-operator-oidc-credentials
       valuesKey: client_secret
@@ -29,7 +27,28 @@ spec:
       valuesKey: client_id
       targetPath: web.config.authentication.oauth2.clientID
   values:
+    serviceMonitor:
+      create: true
+    installCRDs: true
+    securityContext:
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - "ALL"
+      seccompProfile:
+        type: "RuntimeDefault"
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+      requests:
+        cpu: 100m
+        memory: 64Mi
     web:
+      networkPolicy:
+        create: false
       config:
         baseURL: https://flux.${SECRET_DOMAIN}
         authentication:

@@ -18,7 +18,128 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
-  valuesFrom:
-    - kind: ConfigMap
-      name: cilium-helm-values
-      optional: false
+  values:
+    autoDirectNodeRoutes: true
+    namespaceOverride: cilium
+    interfaces: 'bond0'
+    bpf:
+      datapathMode: netkit
+      masquerade: true
+      preallocateMaps: true
+      distributedLRU:
+        enabled: true
+    bpfClockProbe: true
+    policyEnforcementMode: never
+    enableIPv4BIGTCP: true
+    localRedirectPolicy: true
+    bandwidthManager:
+      enabled: true
+      bbr: true
+    pmtuDiscovery:
+      enabled: true
+    cgroup:
+      automount:
+        enabled: false
+      hostRoot: /sys/fs/cgroup
+    debug:
+      enabled: false
+    endpointRoutes:
+      enabled: true
+    # Doesn't work on talos
+    sysctlfix:
+      enabled: false
+    hubble:
+      enabled: true
+      ui:
+        enabled: true
+        rollOutPods: true
+      metrics:
+        enabled:
+          - "dns:query"
+          - "drop"
+          - "tcp"
+          - "flow"
+          - "port-distribution"
+          - "icmp"
+          - "http"
+        serviceMonitor:
+          enabled: true
+        dashboards:
+          enabled: true
+      relay:
+        enabled: true
+        rollOutPods: true
+        prometheus:
+          serviceMonitor:
+            enabled: true
+    daemon:
+      enableSourceIPVerification: false
+    envoy:
+      enabled: false
+    gatewayAPI:
+      enabled: false
+    dashboards:
+      enabled: true
+    ipam:
+      mode: kubernetes
+    ipv4NativeRoutingCIDR: "172.16.0.0/16"
+    k8sServiceHost: 127.0.0.1
+    k8sServicePort: 7445
+    kubeProxyReplacement: true
+    kubeProxyReplacementHealthzBindAddr: "0.0.0.0:10256"
+    l2announcements:
+      enabled: false
+    loadBalancer:
+      acceleration: best-effort
+      algorithm: maglev
+      mode: "dsr"
+    nodePort:
+      enabled: true
+    operator:
+      replicas: 1
+      rollOutPods: true
+      prometheus:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+      dashboards:
+        enabled: true
+    prometheus:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        trustCRDsExist: true
+    rollOutCiliumPods: true
+    routingMode: native
+    bgpControlPlane:
+      enabled: true
+    cluster:
+      name: main
+      id: 1
+    cni:
+      exclusive: false
+    socketLB:
+      enabled: true
+      hostNamespaceOnly: true
+      terminatePodConnections: true
+    securityContext:
+      capabilities:
+        ciliumAgent:
+          - CHOWN
+          - KILL
+          - NET_ADMIN
+          - NET_RAW
+          - NET_BIND_SERVICE
+          - IPC_LOCK
+          - SYS_ADMIN
+          - SYS_RESOURCE
+          - PERFMON
+          - BPF
+          - DAC_OVERRIDE
+          - FOWNER
+          - SETGID
+          - SETUID
+        cleanCiliumState:
+          - NET_ADMIN
+          - SYS_ADMIN
+          - SYS_RESOURCE
