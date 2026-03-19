@@ -8,7 +8,8 @@ configMapGenerator:
       - APP=omada-controller
       - CNPG_POOLMODE=session
       # TEMP
-      - CNPG_CATALOG_NAME=postgresql-standard-trixie
+      - CNPG_MAJOR_VERSION=17
+      # - CNPG_CATALOG_NAME=postgresql-standard-trixie
 patches:
   # - path: ./patch.yaml
   #   target:
