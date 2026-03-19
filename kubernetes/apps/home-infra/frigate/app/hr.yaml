@@ -81,6 +81,8 @@ spec:
     route:
       auth:
         forceRename: frigate
+        labels:
+          k8s-gateway.dns/ignore: "true"
         hostnames:
           - ${APP_URL}
         parentRefs:
@@ -93,7 +95,7 @@ spec:
               port: *auth
       admin:
         hostnames:
-          - frigate-admin.${SECRET_DOMAIN}
+          - ${APP_URL}
         parentRefs:
           - name: internal
             namespace: gateway-system

@@ -70,6 +70,7 @@ spec:
       nfs-server:
         controller: nfs-server
         type: LoadBalancer
+        externalTrafficPolicy: Local
         annotations:
           lbipam.cilium.io/ips: "${NFS_LB_IP:-1.1.1.1}"
           coredns.io/hostname: nfs.${SECRET_DOMAIN}

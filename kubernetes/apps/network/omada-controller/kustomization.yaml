@@ -6,8 +6,6 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=omada-controller
-      - CNPG_MAJOR_VERSION=17 # documentdb only supports pg17 for now, no imageVolume extensions
-      - CNPG_CATALOG_NAME=documentdb
       - CNPG_POOLMODE=session
 patches:
   - path: ./patch.yaml
@@ -25,5 +23,5 @@ patches:
       group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/app
-  - ../../../components/kustomize/cnpg/restore
+  - ../../../components/kustomize/cnpg/init
   - ../../../components/kustomize/external-secret

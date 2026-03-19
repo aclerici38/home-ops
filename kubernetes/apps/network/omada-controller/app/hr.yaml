@@ -19,8 +19,12 @@ spec:
         image: ghcr.io/ferretdb/ferretdb:2.7.0@sha256:5706414241eb84f0515512c37b46db0f1b1eac9e5ceb7e4c2523211c184b1985
         restartPolicy: Always
         env:
+          - name: FERRETDB_TELEMETRY
+            value: disabled
           - name: FERRETDB_AUTH
             value: "false"
+          - name: FERRETDB_LISTEN_ADDR
+            value: "127.0.0.1:27017"
           - name: FERRETDB_POSTGRESQL_URL
             valueFrom:
               secretKeyRef:
@@ -40,7 +44,7 @@ spec:
     image:
       repository: mirror.gcr.io/mbentley/omada-controller
       pullPolicy: IfNotPresent
-      tag: 6.1.0.19@sha256:c74a8cd7476b434b68e75a88fc72c95841c76d2a3a82a65f063571a620702635
+      tag: 6.1.0.19@sha256:62a26660f008c8cf17e02b7064bd0c35a0fc0ef207910d7d0942fd2173bfcca1
     serviceAccount:
       create: false
     config:
@@ -65,12 +69,19 @@ spec:
         memory: 5Gi
     persistence:
       data:
-        storageClassName: ceph-filesystem
-        size: 5Gi
+        enabled: false
       logs:
-        storageClassName: ceph-filesystem
-        size: 5Gi
+        enabled: false
+      extraVolumeMounts:
+        - name: omada-tmpfs
+          mountPath: /opt/tplink/EAPController/data
+          subPath: data
+        - name: omada-tmpfs
+          mountPath: /opt/tplink/EAPController/logs
+          subPath: logs
       extraVolumes:
+        - name: omada-tmpfs
+          emptyDir: {}
         - name: ferretdb-state
           emptyDir: {}
       

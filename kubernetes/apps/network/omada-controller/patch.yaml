@@ -8,7 +8,6 @@ spec:
   patches:
     # https://blog.ferretdb.io/run-ferretdb-postgres-documentdb-extension-cnpg-kubernetes/
     # extensions initialized in the database CR
-    # TODO: use imagevolume extensions once documentdb supports pg18
     - patch: |-
         apiVersion: postgresql.cnpg.io/v1
         kind: Cluster
@@ -21,11 +20,9 @@ spec:
                 login: true
                 inRoles:
                   - documentdb_admin_role
-          postgresUID: 999
-          postgresGID: 999
           postgresql:
             pg_hba:
-              # docuentdb and pg_cron try to connect to db via localhost
+              # pg_cron and documentdb connect to app db via localhost
               - host app postgres localhost trust
               - host app app localhost trust
             shared_preload_libraries:
@@ -33,6 +30,7 @@ spec:
               - pg_documentdb_core
               - pg_documentdb
             parameters:
+              max_connections: "200"
               # https://github.com/FerretDB/FerretDB/issues/5284#issuecomment-3326399933
               cron.database_name: 'app'
               documentdb.bg_worker_database_name: 'app'
@@ -46,5 +44,12 @@ spec:
               documentdb.enableBypassDocumentValidation: 'true'
               documentdb.enableUserCrud: 'true'
               documentdb.maxUserLimit: '100'
+            extensions:
+              - name: documentdb
+                image:
+                  reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:0.1.1-test
+                dynamic_library_path: ["lib"]
+                extension_control_path: ["share"]
+                ld_library_path: ["lib", "system"]
       target:
         kind: Cluster
