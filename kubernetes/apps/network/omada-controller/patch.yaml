@@ -15,6 +15,11 @@ spec:
         metadata:
           name: patch
         spec:
+          bootstrap:
+            initdb:
+              # gateway connects to postgres db, needs extension for auth
+              postInitSQL:
+                - CREATE EXTENSION documentdb CASCADE
           managed:
             roles:
               # gateway hardcoded to documentdb user/role
