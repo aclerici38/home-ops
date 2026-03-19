@@ -51,6 +51,7 @@ spec:
       ports:
         manageHttp: 8080
         manageHttps: 443
+        upgradeHttps: 443
     service:
       type: LoadBalancer
       annotations:
