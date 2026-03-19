@@ -76,7 +76,15 @@ spec:
       extraVolumeMounts:
         - name: ferretdb-sock
           mountPath: /run/ferretdb
+        - name: omada-tmpfs
+          mountPath: /opt/tplink/EAPController/data
+          subPath: data
+        - name: omada-tmpfs
+          mountPath: /opt/tplink/EAPController/logs
+          subPath: logs
       extraVolumes:
+        - name: omada-tmpfs
+          emptyDir: {}
         - name: ferretdb-state
           emptyDir: {}
         - name: ferretdb-sock
