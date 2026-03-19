@@ -6,8 +6,6 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=omada-controller
-      - CNPG_MAJOR_VERSION=17 # documentdb only supports pg17 for now, no imageVolume extensions
-      - CNPG_CATALOG_NAME=ferretdb
       - CNPG_POOLMODE=session
 patches:
   - path: ./patch.yaml
@@ -20,10 +18,15 @@ patches:
         value:
           name: cert-manager
           namespace: cluster-infra
+      - op: add
+        path: /spec/dependsOn/-
+        value:
+          name: plugin-documentdb-sidecar
+          namespace: database
     target:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/app
-  - ../../../components/kustomize/cnpg/restore
+  - ../../../components/kustomize/cnpg/init
   - ../../../components/kustomize/external-secret

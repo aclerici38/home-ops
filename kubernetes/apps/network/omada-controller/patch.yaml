@@ -15,31 +15,32 @@ spec:
         metadata:
           name: patch
         spec:
-          bootstrap:
-            recovery:
-              source: omada-controller-db
-              database: app
-              owner: app
-              recoveryTarget:
-                targetTime: "2026-03-19T02:00:00Z"
           managed:
             roles:
-              - name: app
+              # gateway hardcoded to documentdb user/role
+              - name: documentdb
                 login: true
                 inRoles:
                   - documentdb_admin_role
-          postgresUID: 999
-          postgresGID: 999
           postgresql:
             pg_hba:
-              # docuentdb and pg_cron try to connect to db via localhost
+              # gateway SetupCustomAdminUser connects as postgres to create roles
+              - host postgres postgres localhost trust
+              
+              # gateway connects as documentdb to the postgres database (version check that fails??)
+              - host postgres documentdb localhost trust
+              
+              # documentdb and pg_cron connect to the db via localhost
               - host app postgres localhost trust
-              - host app app localhost trust
+              - host app documentdb localhost trust
+              - host app documentdb_bg_worker_role localhost trust
             shared_preload_libraries:
               - pg_cron
               - pg_documentdb_core
               - pg_documentdb
             parameters:
+              # seems necessary
+              max_connections: "200"
               # https://github.com/FerretDB/FerretDB/issues/5284#issuecomment-3326399933
               cron.database_name: 'app'
               documentdb.bg_worker_database_name: 'app'
@@ -53,5 +54,20 @@ spec:
               documentdb.enableBypassDocumentValidation: 'true'
               documentdb.enableUserCrud: 'true'
               documentdb.maxUserLimit: '100'
+            extensions:
+              - name: documentdb
+                image:
+                  reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:0.1.1-test
+                dynamic_library_path: ["lib"]
+                extension_control_path: ["share"]
+                ld_library_path: ["lib", "system"]
+          plugins:
+            # plugin needs to be running in same namespace as cnpg
+            # documentdb plugin in database ns patches the cluster with this gateway container
+            - name: cnpg-i-sidecar-injector.documentdb.io
+              enabled: true
+              parameters:
+                gatewayImage: "ghcr.io/documentdb/documentdb-kubernetes-operator/gateway:0.1.1-test"
+                documentDbCredentialSecret: "documentdb-test-db-app"
       target:
         kind: Cluster

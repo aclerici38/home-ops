@@ -14,29 +14,6 @@ spec:
   upgrade:
     timeout: 2m
   values:
-    initContainers:
-      - name: ferretdb
-        image: ghcr.io/ferretdb/ferretdb:2.7.0@sha256:5706414241eb84f0515512c37b46db0f1b1eac9e5ceb7e4c2523211c184b1985
-        restartPolicy: Always
-        env:
-          - name: FERRETDB_AUTH
-            value: "false"
-          - name: FERRETDB_POSTGRESQL_URL
-            valueFrom:
-              secretKeyRef:
-                key: uri
-                name: omada-controller-db-app
-        volumeMounts:
-          - name: ferretdb-state
-            mountPath: /state
-        livenessProbe: &probe
-          exec:
-            command: ["/ferretdb", "ping"]
-          failureThreshold: 3
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 1
-        readinessProbe: *probe
     image:
       repository: mirror.gcr.io/mbentley/omada-controller
       pullPolicy: IfNotPresent
@@ -69,7 +46,4 @@ spec:
       logs:
         storageClassName: ceph-filesystem
         size: 5Gi
-      extraVolumes:
-        - name: ferretdb-state
-          emptyDir: {}
       
