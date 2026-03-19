@@ -68,6 +68,6 @@ spec:
               enabled: true
               parameters:
                 gatewayImage: "ghcr.io/documentdb/documentdb-kubernetes-operator/gateway:0.1.1-test"
-                documentDbCredentialSecret: "documentdb-test-db-app"
+                documentDbCredentialSecret: "omada-controller-db-app"
       target:
         kind: Cluster
