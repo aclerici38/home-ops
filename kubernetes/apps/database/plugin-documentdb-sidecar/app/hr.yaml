@@ -34,7 +34,7 @@ spec:
           sidecar:
             image:
               repository: ghcr.io/documentdb/documentdb-kubernetes-operator/sidecar
-              tag: 0.1.1-test
+              tag: 0.1.3-test
             args:
               - plugin
               - --server-cert=/server/tls.crt
