@@ -33,8 +33,6 @@ spec:
         volumeMounts:
           - name: ferretdb-state
             mountPath: /state
-          - name: ferretdb-sock
-            mountPath: /run/ferretdb
         livenessProbe: &probe
           exec:
             command: ["/ferretdb", "ping"]
@@ -74,8 +72,6 @@ spec:
       logs:
         enabled: false
       extraVolumeMounts:
-        - name: ferretdb-sock
-          mountPath: /run/ferretdb
         - name: omada-tmpfs
           mountPath: /opt/tplink/EAPController/data
           subPath: data
@@ -86,7 +82,5 @@ spec:
         - name: omada-tmpfs
           emptyDir: {}
         - name: ferretdb-state
-          emptyDir: {}
-        - name: ferretdb-sock
           emptyDir: {}
       
