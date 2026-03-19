@@ -74,7 +74,7 @@ spec:
         accessModes: [ReadWriteMany]
         size: 5Gi
       logs:
-        storageClassName: ceph-filesystem
+        storageClass: ceph-filesystem
         accessModes: [ReadWriteMany]
         size: 5Gi
       extraVolumeMounts:
