@@ -6,26 +6,20 @@ configMapGenerator:
   - name: APP-app-vars
     literals:
       - APP=omada-controller
+      - CNPG_MAJOR_VERSION=17 # documentdb only supports pg17 for now, no imageVolume extensions
+      - CNPG_CATALOG_NAME=ferretdb
       - CNPG_POOLMODE=session
-      # TEMP
-      - CNPG_MAJOR_VERSION=17
-      # - CNPG_CATALOG_NAME=postgresql-standard-trixie
 patches:
-  # - path: ./patch.yaml
-  #   target:
-  #     kind: Kustomization
-  #     group: kustomize.toolkit.fluxcd.io
+  - path: ./patch.yaml
+    target:
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
   - patch: |-
       - op: add
         path: /spec/dependsOn/-
         value:
           name: cert-manager
           namespace: cluster-infra
-      - op: add
-        path: /spec/dependsOn/-
-        value:
-          name: plugin-documentdb-sidecar
-          namespace: database
     target:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io
