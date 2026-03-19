@@ -21,6 +21,10 @@ spec:
         env:
           - name: FERRETDB_AUTH
             value: "false"
+          - name: FERRETDB_LISTEN_UNIX
+            value: /run/ferretdb/ferretdb.sock
+          - name: FERRETDB_LISTEN_ADDR
+            value: "-"
           - name: FERRETDB_POSTGRESQL_URL
             valueFrom:
               secretKeyRef:
@@ -29,6 +33,8 @@ spec:
         volumeMounts:
           - name: ferretdb-state
             mountPath: /state
+          - name: ferretdb-sock
+            mountPath: /run/ferretdb
         livenessProbe: &probe
           exec:
             command: ["/ferretdb", "ping"]
@@ -46,8 +52,8 @@ spec:
     config:
       rootless: true
       tlsSecretName: omada-controller-tls
-      # ferretdb sidecar
-      externalMongoDBUrl: "mongodb://127.0.0.1:27017/app"
+      # ferretdb sidecar. Points at ferretdb-sock emptydir with encoded slashes
+      externalMongoDBUrl: "mongodb://%2Frun%2Fferretdb%2Fferretdb.sock/app"
       ports:
         manageHttp: 8080
         manageHttps: 443
@@ -69,7 +75,12 @@ spec:
       logs:
         storageClassName: ceph-filesystem
         size: 5Gi
+      extraVolumeMounts:
+        - name: ferretdb-sock
+          mountPath: /run/ferretdb
       extraVolumes:
         - name: ferretdb-state
+          emptyDir: {}
+        - name: ferretdb-sock
           emptyDir: {}
       
