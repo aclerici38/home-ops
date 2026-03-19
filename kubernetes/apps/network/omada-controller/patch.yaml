@@ -25,6 +25,7 @@ spec:
               # pg_cron and documentdb connect to app db via localhost
               - host app postgres localhost trust
               - host app app localhost trust
+              - host app documentdb_bg_worker_role localhost trust
             shared_preload_libraries:
               - pg_cron
               - pg_documentdb_core
