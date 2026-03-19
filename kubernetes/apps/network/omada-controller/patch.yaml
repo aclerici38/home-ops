@@ -22,6 +22,9 @@ spec:
                 login: true
                 inRoles:
                   - documentdb_admin_role
+          # These are not needed, only kept b/c they're immutable and were set for ferretdb
+          postgresUID: 999
+          postgresGID: 999
           postgresql:
             pg_hba:
               # gateway SetupCustomAdminUser connects as postgres to create roles
@@ -38,10 +41,6 @@ spec:
               - pg_cron
               - pg_documentdb_core
               - pg_documentdb
-            
-            # These are not needed, only kept b/c they're immutable and were set for ferretdb
-            postgresUID: 999
-            postgresGID: 999
            
             parameters:
               # seems necessary
