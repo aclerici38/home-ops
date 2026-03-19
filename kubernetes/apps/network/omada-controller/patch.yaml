@@ -54,13 +54,13 @@ spec:
               documentdb.enableBypassDocumentValidation: 'true'
               documentdb.enableUserCrud: 'true'
               documentdb.maxUserLimit: '100'
-          extensions:
-            - name: documentdb
-              image:
-                reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:0.1.1-test
-              dynamic_library_path: ["lib"]
-              extension_control_path: ["share"]
-              ld_library_path: ["lib", "system"]
+            extensions:
+              - name: documentdb
+                image:
+                  reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:0.1.1-test
+                dynamic_library_path: ["lib"]
+                extension_control_path: ["share"]
+                ld_library_path: ["lib", "system"]
           plugins:
             # plugin needs to be running in same namespace as cnpg
             # documentdb plugin in database ns patches the cluster with this gateway container
