@@ -71,9 +71,11 @@ spec:
     persistence:
       data:
         storageClassName: ceph-filesystem
+        accessModes: [ReadWriteMany]
         size: 5Gi
       logs:
         storageClassName: ceph-filesystem
+        accessModes: [ReadWriteMany]
         size: 5Gi
       extraVolumeMounts:
         - name: ferretdb-sock
