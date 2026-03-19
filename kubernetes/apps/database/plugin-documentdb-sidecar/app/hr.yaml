@@ -61,7 +61,7 @@ spec:
                 memory: 128Mi
     service:
       sidecar:
-        controller: sidecar-injector
+        controller: sidecar
         labels:
           cnpg.io/pluginName: cnpg-i-sidecar-injector.documentdb.io
         annotations:
