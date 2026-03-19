@@ -14,6 +14,12 @@ spec:
         metadata:
           name: patch
         spec:
+          managed:
+            roles:
+              - name: app
+                login: true
+                inRoles:
+                  - documentdb_admin_role
           postgresql:
             pg_hba:
               # pg_cron and documentdb background workers connect via localhost
