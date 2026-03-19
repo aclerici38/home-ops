@@ -19,12 +19,12 @@ spec:
         image: ghcr.io/ferretdb/ferretdb:2.7.0@sha256:5706414241eb84f0515512c37b46db0f1b1eac9e5ceb7e4c2523211c184b1985
         restartPolicy: Always
         env:
+          - name: FERRETDB_TELEMETRY
+            value: disabled
           - name: FERRETDB_AUTH
             value: "false"
-          - name: FERRETDB_LISTEN_UNIX
-            value: /run/ferretdb/ferretdb.sock
           - name: FERRETDB_LISTEN_ADDR
-            value: "-"
+            value: "127.0.0.1:27017"
           - name: FERRETDB_POSTGRESQL_URL
             valueFrom:
               secretKeyRef:
@@ -52,8 +52,8 @@ spec:
     config:
       rootless: true
       tlsSecretName: omada-controller-tls
-      # ferretdb sidecar. Points at ferretdb-sock emptydir with encoded slashes
-      externalMongoDBUrl: "mongodb://%2Frun%2Fferretdb%2Fferretdb.sock/app"
+      # ferretdb sidecar
+      externalMongoDBUrl: "mongodb://127.0.0.1:27017/app"
       ports:
         manageHttp: 8080
         manageHttps: 443
