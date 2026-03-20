@@ -72,6 +72,24 @@ spec:
                 add:
                   - NET_ADMIN
                   - NET_RAW
+    service:
+      ui:
+        controller: wg-easy
+        ports:
+          http:
+            port: 51821
+    route:
+      wg-easy:
+        hostnames:
+          - wg-easy.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: gateway-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: ui
+                port: 51821
     persistence:
       config:
         existingClaim: wg-easy
