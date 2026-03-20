@@ -31,8 +31,9 @@ spec:
                 key: uri
                 name: omada-controller-db-app
         volumeMounts:
-          - name: ferretdb-state
+          - name: tmpfs
             mountPath: /state
+            subPath: ferretdb
         livenessProbe: &probe
           exec:
             command: ["/ferretdb", "ping"]
@@ -55,7 +56,6 @@ spec:
       ports:
         manageHttp: 8080
         manageHttps: 443
-        upgradeHttps: 443
     service:
       type: LoadBalancer
       annotations:
@@ -73,15 +73,13 @@ spec:
       logs:
         enabled: false
       extraVolumeMounts:
-        - name: omada-tmpfs
+        - name: tmpfs
           mountPath: /opt/tplink/EAPController/data
           subPath: data
-        - name: omada-tmpfs
+        - name: tmpfs
           mountPath: /opt/tplink/EAPController/logs
           subPath: logs
       extraVolumes:
-        - name: omada-tmpfs
-          emptyDir: {}
-        - name: ferretdb-state
+        - name: tmpfs
           emptyDir: {}
       
