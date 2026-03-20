@@ -68,6 +68,20 @@ spec:
             per_listener_settings false
             persistence true
             persistence_location /data
+
+            # Victron MQTT bridge
+            connection victron
+            address einstein.bambi.internal:1883
+            topic N/# in 0
+            topic R/# out 0
+            topic W/# out 0
+            try_private false
+            cleansession true
+            start_type automatic
+            keepalive_interval 30
+            restart_timeout 5 30
+            bridge_attempt_unsubscribe false
+            notifications true
     persistence:
       data:
         existingClaim: "${APP}"
