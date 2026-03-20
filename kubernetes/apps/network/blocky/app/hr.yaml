@@ -197,6 +197,10 @@ spec:
             
             prometheus:
               enable: true
+            
+            customDNS:
+              mapping:
+                wireguard.${SECRET_DOMAIN}: 10.0.0.1
 
             conditional:
               fallbackUpstream: false
