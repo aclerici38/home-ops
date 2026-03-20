@@ -210,9 +210,15 @@ spec:
                 # House
                 internal: 10.0.30.1:53
                 0.10.in-addr.arpa: 10.0.30.1:53
+                
                 # kube
                 cluster.local: ${COREDNS_CLUSTER_IP}
                 16.172.in-addr.arpa: ${COREDNS_CLUSTER_IP}
+                
+                # bambi
+                bambi.internal: 192.168.8.1:53
+                console.gl-inet.com: 192.168.8.1:53
+                8.168.192.in-addr.arpa: 192.168.8.1:53
             
             # ClientLookup is set to blocky so it can conditionally forward it to coredns/apt/house DHCP
             clientLookup:
