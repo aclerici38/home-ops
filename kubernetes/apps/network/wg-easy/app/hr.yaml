@@ -62,13 +62,14 @@ spec:
                   - ALL
                 add:
                   - NET_ADMIN
+                  - NET_RAW
     service:
       vpn:
         controller: wg-easy
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 10.38.55.60
-          external-dns.alpha.kubernetes.io/hostname: wg-easy.${SECRET_DOMAIN}
+          external-dns.alpha.kubernetes.io/hostname: wireguard.${SECRET_DOMAIN}
         ports:
           http:
             port: 51820
