@@ -23,6 +23,15 @@ spec:
     controllers:
       wg-easy:
         pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name":"lab",
+                  "namespace": "network",
+                  "ips": ["10.0.30.60/24"]
+                }
+              ]
           securityContext:
             seccompProfile: { type: RuntimeDefault }
             runAsUser: 0
@@ -63,34 +72,6 @@ spec:
                 add:
                   - NET_ADMIN
                   - NET_RAW
-    service:
-      vpn:
-        controller: wg-easy
-        type: LoadBalancer
-        annotations:
-          lbipam.cilium.io/ips: 10.38.55.60
-          external-dns.alpha.kubernetes.io/hostname: wireguard.${SECRET_DOMAIN}
-        ports:
-          http:
-            port: 51820
-            protocol: UDP
-      ui:
-        controller: wg-easy
-        ports:
-          http:
-            port: 51821
-    route:
-      wg-easy:
-        hostnames:
-          - wg-easy.${SECRET_DOMAIN}
-        parentRefs:
-          - name: internal
-            namespace: gateway-system
-            sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: ui
-                port: 51821
     persistence:
       config:
         existingClaim: wg-easy
