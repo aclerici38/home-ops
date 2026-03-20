@@ -5,10 +5,8 @@ kind: Kustomization
 configMapGenerator:
   - name: APP-app-vars
     literals:
-      - APP=wireguard
-      - VOLSYNC_STORAGECLASS=ceph-filesystem
-      - VOLSYNC_SNAPSHOTCLASS=csi-ceph-filesystem
-      - VOLSYNC_ACCESSMODES=ReadWriteMany
+      - APP=wg-easy
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/volsync
+  - ../../../components/external-secret

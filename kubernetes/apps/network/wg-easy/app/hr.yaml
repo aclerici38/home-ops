@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: wireguard
+  name: wg-easy
 spec:
   interval: 1h
   maxHistory: 1
@@ -21,8 +21,7 @@ spec:
       retries: 1
   values:
     controllers:
-      wireguard:
-        strategy: RollingUpdate
+      wg-easy:
         pod:
           securityContext:
             seccompProfile: { type: RuntimeDefault }
@@ -33,16 +32,21 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/linuxserver/wireguard
-              tag: 1.0.20250521@sha256:fd4a95e233a90070372ccf7f488ef005932eb16ca1b0bd40afbdbb3dae9a3951
+              repository: ghcr.io/wg-easy/wg-easy
+              tag: 15.2.2@sha256:cf815209439101842f81d62bb25f7d66140e4cf8c100b4de5d0e84569d38732a
             env:
-              SERVERURL: house.${SECRET_DOMAIN}
-              PERSISTENTKEEPALIVE_PEERS: all
-              PEERS: bambi
-              PEERDNS: 172.17.0.11 # blocky
-              ALLOWEDIPS: 192.168.8.0/24
-              S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
-              S6_READ_ONLY_ROOT: 1
+              DISABLE_IPV6: true
+              INIT_ENABLED: true
+              INIT_USERNAME:
+                secretKeyRef:
+                  name: wg-easy
+                  key: username
+              INIT_PASSWORD:
+                secretKeyRef:
+                  name: wg-easy
+                  key: password
+              INIT_HOST: wireguard.${SECRET_DOMAIN}
+              INIT_DNS: 172.17.0.11
             resources:
               requests:
                 cpu: 15m
@@ -59,22 +63,35 @@ spec:
                 add:
                   - NET_ADMIN
     service:
-      main:
-        controller: wireguard
+      vpn:
+        controller: wg-easy
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: 10.38.55.55
-          external-dns.alpha.kubernetes.io/hostname: wireguard.${SECRET_DOMAIN}
+          lbipam.cilium.io/ips: 10.38.55.60
+          external-dns.alpha.kubernetes.io/hostname: wg-easy.${SECRET_DOMAIN}
         ports:
           http:
             port: 51820
             protocol: UDP
+      ui:
+        controller: wg-easy
+        ports:
+          http:
+            port: 51821
+    route:
+      wg-easy:
+        hostnames:
+          - wg-easy.${SECRET_DOMAIN}
+        parentRefs:
+          - name: internal
+            namespace: gateway-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: wg-easy
+                port: 51821
     persistence:
       config:
-        existingClaim: wireguard
+        existingClaim: wg-easy
         globalMounts:
-          - path: /config
-            subPath: config
-      run:
-        type: emptyDir
-    
+          - path: /etc/wireguard
