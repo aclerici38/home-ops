@@ -30,7 +30,7 @@ spec:
             fsGroup: 0
             fsGroupChangePolicy: OnRootMismatch
         containers:
-          main:
+          wg-easy:
             image:
               repository: ghcr.io/wg-easy/wg-easy
               tag: 15.2.2@sha256:cf815209439101842f81d62bb25f7d66140e4cf8c100b4de5d0e84569d38732a
@@ -95,3 +95,8 @@ spec:
         existingClaim: wg-easy
         globalMounts:
           - path: /etc/wireguard
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /run
+            subPath: run
