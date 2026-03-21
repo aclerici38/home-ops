@@ -24,6 +24,8 @@ spec:
       airconnect:
         pod:
           hostUsers: false
+          nodeSelector:
+            network.dormammu/multus: "true"
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000

@@ -47,6 +47,7 @@ nodes:
       - name: nbd
     nodeLabels:
       storage.openebs.io/hostpath: "true"
+      network.dormammu/multus: "true"
     schematic:
       customization:
         extraKernelArgs:
@@ -100,6 +101,7 @@ nodes:
       - name: nbd
     nodeLabels:
       storage.openebs.io/hostpath: "true"
+      network.dormammu/multus: "true"
     schematic:
       customization:
         extraKernelArgs:
@@ -151,6 +153,7 @@ nodes:
       - name: nbd
     nodeLabels:
       storage.openebs.io/hostpath: "true"
+      network.dormammu/multus: "true"
     schematic:
       customization:
         extraKernelArgs:
@@ -189,6 +192,8 @@ nodes:
     ipAddress: "10.0.30.9"
     installDiskSelector:
       wwid: naa.500a07511fc61629
+    nodeLabels:
+      network.dormammu/multus: "false"
     machineSpec:
       secureboot: false
       arch: amd64

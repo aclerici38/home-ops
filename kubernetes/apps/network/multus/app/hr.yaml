@@ -19,18 +19,6 @@ spec:
     remediation:
       retries: 1
   values:
-    controllers:
-      multus:
-        pod:
-          affinity:
-            nodeAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                nodeSelectorTerms:
-                  - matchExpressions:
-                      - key: kubernetes.io/hostname
-                        operator: NotIn
-                        values:
-                          - belt
     multus:
       resources:
         requests:
