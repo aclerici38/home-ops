@@ -15,6 +15,7 @@
       automergeType: "branch",
       matchDatasources: ["docker", "helm"],
       matchPackageNames: [
+        "**/airconnect",
         "**/bazarr",
         "**/calibre-web-automated-book-downloader",
         "**/cloudflare-ddns",
@@ -38,6 +39,7 @@
         "**/searxng",
         "**/smartmontools",
         "**/sonarr",
+        "**/talhelper",
         "**/zfs-scrubber",
       ],
       matchUpdateTypes: ["minor", "patch", "digest"],
