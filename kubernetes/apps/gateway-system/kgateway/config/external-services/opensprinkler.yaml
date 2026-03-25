@@ -49,7 +49,7 @@ spec:
   hostnames:
     - h2o.${SECRET_DOMAIN}
   parentRefs:
-    - name: internal
+    - name: external
       namespace: gateway-system
       sectionName: https
   rules:
