@@ -38,6 +38,9 @@ spec:
       namespace: gateway-system
       sectionName: https
   rules:
-    - backendRefs:
+    - timeouts:
+        request: "0"
+        backendRequest: "0"
+      backendRefs:
         - name: opensprinkler
           port: 80
