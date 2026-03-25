@@ -38,12 +38,7 @@ spec:
   headerModifiers:
     request:
       remove:
-        - x-forwarded-for
-        - x-forwarded-proto
-        - x-request-id
-        - x-envoy-expected-rq-timeout-ms
-        - x-envoy-original-path
-        - x-envoy-decorator-operation
+        - cookie
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.5.1/httproute_v1.json
 apiVersion: gateway.networking.k8s.io/v1
