@@ -39,8 +39,8 @@ spec:
       sectionName: https
   rules:
     - timeouts:
-        request: "0"
-        backendRequest: "0"
+        request: 0s
+        backendRequest: 0s
       backendRefs:
         - name: opensprinkler
           port: 80
