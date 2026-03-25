@@ -25,6 +25,26 @@ endpoints:
   - addresses:
       - 10.0.20.96
 ---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/kgateway/2.2.2/trafficpolicy_v1alpha1.json
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: TrafficPolicy
+metadata:
+  name: opensprinkler-strip-headers
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: opensprinkler
+  headerModifiers:
+    request:
+      remove:
+        - x-forwarded-for
+        - x-forwarded-proto
+        - x-request-id
+        - x-envoy-expected-rq-timeout-ms
+        - x-envoy-original-path
+        - x-envoy-decorator-operation
+---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.5.1/httproute_v1.json
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
