@@ -60,6 +60,8 @@ spec:
                 memory: 115Mi
               limits:
                 memory: 8Gi
+              claims:
+                - name: gpu
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true

@@ -60,6 +60,8 @@ spec:
                 memory: 500Mi
               limits:
                 memory: 16Gi
+              claims:
+                - name: gpu
     service:
       main:
         controller: jellyfin

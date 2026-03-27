@@ -66,6 +66,8 @@ spec:
                 memory: 2Gi
               limits:
                 memory: 16Gi
+              claims:
+                - name: gpu
     service:
       frigate:
         controller: frigate
