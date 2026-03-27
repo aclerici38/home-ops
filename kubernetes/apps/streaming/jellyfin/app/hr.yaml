@@ -23,6 +23,9 @@ spec:
     controllers:
       jellyfin:
         pod:
+          resourceClaims:
+            - name: gpu
+              resourceClaimTemplateName: jellyfin-gpu
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -30,8 +33,6 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
-            supplementalGroups:
-              - 44
         containers:
           main:
             image:
@@ -58,7 +59,6 @@ spec:
                 cpu: 100m
                 memory: 500Mi
               limits:
-                gpu.intel.com/i915: 1
                 memory: 16Gi
     service:
       main:

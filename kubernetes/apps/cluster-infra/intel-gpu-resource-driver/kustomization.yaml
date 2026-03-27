@@ -5,6 +5,6 @@ kind: Kustomization
 configMapGenerator:
   - name: APP-app-vars
     literals:
-      - APP=intel-device-plugins-gpu
+      - APP=intel-gpu-resource-driver
 components:
   - ../../../components/ks/app

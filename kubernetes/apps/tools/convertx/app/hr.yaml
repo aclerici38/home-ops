@@ -24,6 +24,9 @@ spec:
       convertx:
         strategy: RollingUpdate
         pod:
+          resourceClaims:
+            - name: gpu
+              resourceClaimTemplateName: convertx-gpu
           hostUsers: false
           securityContext:
             runAsNonRoot: true
@@ -57,7 +60,6 @@ spec:
                 memory: 115Mi
               limits:
                 memory: 8Gi
-                gpu.intel.com/i915: 1
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true

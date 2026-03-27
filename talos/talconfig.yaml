@@ -63,9 +63,13 @@ nodes:
           - -selinux
           - zfs.zfs_arc_max=42949672960 # 25Gi
           - zfs.zfs_arc_shrinker_limit=0
+          - i915.enable_guc=3
+          - i915.force_probe=!a7a0
+          - xe.force_probe=a7a0
         systemExtensions:
           officialExtensions:
             - siderolabs/i915
+            - siderolabs/xe
             - siderolabs/zfs
             - siderolabs/amd-ucode
             - siderolabs/nfsd
@@ -117,9 +121,13 @@ nodes:
           - security=none
           - sysctl.kernel.kexec_load_disabled=1
           - talos.auditd.disabled=1
+          - i915.enable_guc=3
+          - i915.force_probe=!a7a0
+          - xe.force_probe=a7a0
         systemExtensions:
           officialExtensions:
             - siderolabs/i915
+            - siderolabs/xe
             - siderolabs/mei
             - siderolabs/intel-ucode
             - siderolabs/nfsrahead
@@ -243,7 +251,6 @@ patches:
   - "@./patches/global/machine-network.yaml"
   - "@./patches/global/machine-sysctls.yaml"
   - "@./patches/global/machine-time.yaml"
-  - "@./patches/global/machine-install.yaml"
   - "@./patches/global/machine-kernel.yaml"
   - "@./patches/global/machine-features.yaml"
   - "@./patches/global/uart.yaml"
