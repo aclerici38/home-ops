@@ -11,7 +11,7 @@ spec:
   install:
     crds: CreateReplace
     serverSideApply: ${INSTALL_SSA:=false}
-    disableTakeOwnership: true
+    disableTakeOwnership: false
     strategy:
       name: RetryOnFailure
   upgrade:
