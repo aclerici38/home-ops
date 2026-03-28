@@ -22,20 +22,20 @@ spec:
     controllers:
       server:
         forceRename: immich
-        replicas: 1
+        replicas: ${REPLICAS}
         strategy: RollingUpdate
-        # rollingUpdate:
-        #   surge: 0
-        #   unavailable: 1
-        # pod:
-        #   affinity:
-        #     podAntiAffinity:
-        #       requiredDuringSchedulingIgnoredDuringExecution:
-        #         - labelSelector:
-        #             matchLabels:
-        #               app.kubernetes.io/controller: server
-        #               app.kubernetes.io/instance: immich
-        #           topologyKey: kubernetes.io/hostname
+        rollingUpdate:
+          surge: 0
+          unavailable: 1
+        pod:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/controller: server
+                      app.kubernetes.io/instance: immich
+                  topologyKey: kubernetes.io/hostname
         containers:
           immich-server:
             image:
