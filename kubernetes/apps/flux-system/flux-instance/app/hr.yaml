@@ -125,7 +125,7 @@ spec:
                 value: --feature-gates=CancelHealthCheckOnNewRevision=true
             target:
               kind: Deployment
-              name: kustomize-controller
+              name: "(kustomize-controller|helm-controller)"
           - # fail postBuilds if var is not present
             patch: |-
               - op: add
