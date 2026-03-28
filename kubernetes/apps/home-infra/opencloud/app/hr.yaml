@@ -52,7 +52,7 @@ spec:
               PROXY_AUTOPROVISION_ACCOUNTS: true
               PROXY_ROLE_ASSIGNMENT_DRIVER: oidc
               PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM: oc_groups
-              PROXY_USER_OIDC_CLAIM: sub
+              PROXY_USER_OIDC_CLAIM: preferred_username
               WEB_OIDC_SCOPE: "openid profile email"
               PROXY_CSP_CONFIG_FILE_LOCATION: &cspPath /etc/opencloud/csp.yaml
               PROXY_OIDC_REWRITE_WELLKNOWN: true # mobile apps try to re-register via internal idp
