@@ -10,7 +10,7 @@ spec:
     mode: ${DRIFT_DETECTION:=enabled}
   install:
     crds: CreateReplace
-    serverSideApply: ${INSTALL_SSA:=false}
+    serverSideApply: ${INSTALL_SSA:=true}
     disableTakeOwnership: false
     strategy:
       name: RetryOnFailure
