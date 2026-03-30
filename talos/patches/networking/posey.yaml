@@ -62,3 +62,9 @@ kind: VLANConfig
 name: bond1.40
 vlanID: 40
 parent: bond1
+---
+apiVersion: v1alpha1
+kind: VLANConfig
+name: bond1.80
+vlanID: 80
+parent: bond1
