@@ -32,9 +32,6 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
-            supplementalGroups:
-              # bluetooth?
-              - 34
           hostname: home-assistant
           annotations:
             k8s.v1.cni.cncf.io/networks: |
