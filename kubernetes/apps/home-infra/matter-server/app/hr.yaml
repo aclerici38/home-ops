@@ -51,7 +51,7 @@ spec:
               repository: ghcr.io/home-assistant-libs/python-matter-server
               tag: 8.1.0@sha256:170aa093ce91c76cde4cc390918307590f0f5558fcec93f913af3cb019e6562a
             args:
-              - --storage-path=/config
+              - --storage-path=/data
               - --primary-interface=net1
             resources:
               requests:
@@ -69,8 +69,10 @@ spec:
           http:
             port: &port 5580
     persistence:
-      config:
+      data:
         existingClaim: matter-server
+        globalMounts:
+          - path: /data
       tmpfs:
         type: emptyDir
         globalMounts:
