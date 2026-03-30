@@ -52,6 +52,8 @@ spec:
               tag: 8.1.0@sha256:170aa093ce91c76cde4cc390918307590f0f5558fcec93f913af3cb019e6562a
             args:
               - --storage-path=/data
+              - --paa-root-cert-dir=/data/credentials
+              - --ota-provider-dir=/data/ota
               - --primary-interface=net1
             resources:
               requests:
