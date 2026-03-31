@@ -42,7 +42,7 @@ spec:
         spec:
           callbackUrls:
             - app.immich:///oauth-callback
-            - https://${APP_URL}/auth/login
-            - https://${APP_URL}/user-settings
+            - https://immich.${SECRET_DOMAIN}/auth/login
+            - https://immich.${SECRET_DOMAIN}/user-settings
       target:
         kind: PocketIDOIDCClient
