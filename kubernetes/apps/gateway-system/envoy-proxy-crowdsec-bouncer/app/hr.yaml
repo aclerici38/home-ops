@@ -42,6 +42,10 @@ spec:
         apiKeySecretRef:
           name: envoy-proxy-crowdsec-bouncer
           key: BOUNCER_API_KEY
+      prometheus:
+        enabled: true
+        serviceMonitor:
+          enabled: true
       resources:
         requests:
           cpu: 10m
