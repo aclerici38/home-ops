@@ -28,24 +28,55 @@ spec:
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
         containers:
-          main:
+          homebox:
             image:
               repository: ghcr.io/sysadminsmedia/homebox
               tag: 0.24.2-rootless@sha256:22a7246fd304ae65df25abbc531b36bb231f36916cc9504f909877d03ae40839
             env:
-              
+              HBOX_OPTIONS_GITHUB_RELEASE_CHECK: false
+              HBOX_OPTIONS_ALLOW_LOCAL_LOGIN: false
+              HBOX_OPTIONS_TRUST_PROXY: true
+              HBOX_OPTIONS_HOSTNAME: ${APP_URL}
+              HBOX_MAILER_HOST: smtp-relay.cluster-infra
+              HBOX_MAILER_PORT: 25
+              HBOX_DATABASE_DRIVER: postgres
+              HBOX_DATABASE_HOST:
+                secretKeyRef:
+                  name: homebox-db-app
+                  key: host
+              HBOX_DATABASE_USERNAME:
+                secretKeyRef:
+                  name: homebox-db-app
+                  key: user
+              HBOX_DATABASE_PASSWORD:
+                secretKeyRef:
+                  name: homebox-db-app
+                  key: password
+              HBOX_DATABASE_DATABASE:
+                secretKeyRef:
+                  name: homebox-db-app
+                  key: dbname
+              HBOX_OIDC_ENABLED: true
+              HBOX_OIDC_ISSUER_URL:
+                secretKeyRef:
+                  name: homebox-oidc-credentials
+                  key: issuer_url
+              HBOX_OIDC_CLIENT_ID:
+                secretKeyRef:
+                  name: homebox-oidc-credentials
+                  key: client_id
+              HBOX_OIDC_CLIENT_SECRET:
+                secretKeyRef:
+                  name: homebox-oidc-credentials
+                  key: client_secret
             probes:
               readiness: &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    port: &port 5006
-                    path: /health
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
+                    port: &port 7745
+                    path: /api/v1/status
               liveness: *probes
             resources:
               requests:
@@ -54,22 +85,21 @@ spec:
               limits:
                 memory: 512M
             securityContext:
-              runAsNonRoot: true
               allowPrivilegeEscalation: false
               seccompProfile: { type: RuntimeDefault }
               capabilities: { drop: ["ALL"] }
     service:
-      main:
+      homebox:
         controller: homebox
         ports:
           http:
             port: *port
     route:
-      main:
+      homebox:
         hostnames:
           - ${APP_URL}
         parentRefs:
-          - name: internal
+          - name: external
             namespace: gateway-system
             sectionName: https
         rules:
