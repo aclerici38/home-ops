@@ -10,6 +10,8 @@ configMapGenerator:
       - VOLSYNC_STORAGECLASS=ceph-filesystem
       - VOLSYNC_SNAPSHOTCLASS=csi-ceph-filesystem
       - VOLSYNC_ACCESSMODES=ReadWriteMany
+      - CNPG_POOLMODE=session
+      - OIDC_GROUP=fam
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/volsync
