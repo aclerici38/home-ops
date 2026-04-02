@@ -56,6 +56,10 @@ spec:
                 secretKeyRef:
                   name: homebox-db-app
                   key: dbname
+              HBOX_DATABASE_PORT:
+                secretKeyRef:
+                  name: homebox-db-app
+                  key: port
               HBOX_OIDC_ENABLED: true
               HBOX_OIDC_ISSUER_URL:
                 secretKeyRef:
