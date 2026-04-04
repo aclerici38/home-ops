@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.3/gitrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: pocket-id-operator-test
+spec:
+  interval: 5m
+  ref:
+    branch: auto-logos
+  url: https://github.com/aclerici38/pocket-id-operator.git

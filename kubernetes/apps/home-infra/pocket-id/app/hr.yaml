@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.3/helmrelease_v2.json?values=pocket-id-operator/0.4.7
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.3/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -7,9 +7,15 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
-    kind: OCIRepository
-    name: pocket-id-operator
+  # chartRef:
+  #     kind: OCIRepository
+  #     name: pocket-id-operator
+  chart:
+    spec:
+      chart: dist/chart
+      sourceRef:
+        kind: GitRepository
+        name: pocket-id-operator-test
   install:
     timeout: 2m
     remediation:
@@ -20,6 +26,8 @@ spec:
       retries: 1
   values:
     operator:
+      image:
+        tag: PR-237@sha256:fdaf4e20c074cb9254e17c4177f4ef6649589af93010240f85607c8574db1faf
       args:
         - --zap-log-level=debug
     metrics:
@@ -70,7 +78,7 @@ spec:
           enabled: false
         metrics:
           enabled: true
-          
+
       serviceMonitor:
         enabled: true
     users:
@@ -78,13 +86,13 @@ spec:
         spec:
           locale: en
           admin: true
-          email: 
+          email:
             valueFrom:
               key: EMAIL
               name: cluster-settings
-          firstName: 
+          firstName:
             value: Anthony
-          lastName: 
+          lastName:
             value: Clerici
       - name: steve
         spec:
@@ -121,4 +129,3 @@ spec:
               value: opencloud-users
             - key: immich_role
               value: user
-          
