@@ -70,6 +70,18 @@ spec:
         ports:
           http:
             port: &port 5580
+    route:
+      matter-server:
+        hostnames:
+          - ${APP_URL}
+        parentRefs:
+          - name: internal
+            namespace: gateway-system
+            sectionName: https
+        rules:
+          - backendRefs:
+            - identifier: matter-server
+              port: *port
     persistence:
       data:
         existingClaim: matter-server
