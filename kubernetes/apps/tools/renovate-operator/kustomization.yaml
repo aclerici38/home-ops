@@ -8,6 +8,7 @@ configMapGenerator:
       - APP=renovate-operator
       - RESOURCES=resources
       - OIDC_PKCE=false
+      - LOGO_NAME=renovate
 components:
   - ../../../components/ks/app-resources
   - ../../../components/kustomize/external-secret

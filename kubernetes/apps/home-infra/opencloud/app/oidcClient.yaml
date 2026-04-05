@@ -5,6 +5,8 @@ kind: PocketIDOIDCClient
 metadata:
   name: opencloud-web
 spec:
+  logos:
+    nameOverride: opencloud
   clientID: opencloud-web
   isPublic: true
   pkceEnabled: true
@@ -22,6 +24,8 @@ kind: PocketIDOIDCClient
 metadata:
   name: opencloud-ios
 spec:
+  logos:
+    nameOverride: opencloud
   clientID: OpenCloudIOS
   isPublic: true
   pkceEnabled: true
@@ -39,6 +43,8 @@ kind: PocketIDOIDCClient
 metadata:
   name: opencloud-desktop
 spec:
+  logos:
+    nameOverride: opencloud
   clientID: OpenCloudDesktop
   isPublic: true
   pkceEnabled: true
