@@ -5,7 +5,7 @@ kind: PocketIDOIDCClient
 metadata:
   name: ${APP}
 spec:
-  logos:
+  logo:
     nameOverride: ${LOGO_NAME:=${APP}}
   clientID: ${APP}
   launchUrl: https://${APP_URL}
