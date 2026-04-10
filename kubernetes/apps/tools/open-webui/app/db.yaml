@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.28.0/database_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: open-webui
+spec:
+  name: app
+  owner: app
+  cluster:
+    name: open-webui-db
+  extensions:
+    - ensure: present
+      name: vector

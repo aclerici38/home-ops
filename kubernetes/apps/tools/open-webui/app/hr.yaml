@@ -1,0 +1,125 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.5/helmrelease_v2.json?values=app-template/4.6.2
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: open-webui
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 3m
+  upgrade:
+    timeout: 3m
+  values:
+    controllers:
+      open-webui:
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          open-webui:
+            image:
+              repository: ghcr.io/open-webui/open-webui
+              tag: v0.8.12@sha256:8113fa5510020ef05a44afc0c42d33eabeeb2524a996e3e3fb8c437c00f0d792
+            env:
+              ENABLE_PERSISTENT_CONFIG: false # always read env vars
+              OLLAMA_BASE_URL: http://mac-mini.cottage.internal:11434
+              ENABLE_RAG_WEB_SEARCH: true
+              ENABLE_SEARCH_QUERY: true
+              RAG_WEB_SEARCH_ENGINE: searxng
+              SEARXNG_QUERY_URL: http://searxng.home-infra:8080/search?q=<query>
+              WEBUI_URL: &url https://chat.${SECRET_DOMAIN}
+              CORS_ALLOW_ORIGIN: *url
+              ENABLE_LOGIN_FORM: false
+              ENABLE_PASSWORD_AUTH: false
+              DEFAULT_USER_ROLE: user
+              ENABLE_AUDIT_STDOUT: true
+              ENABLE_AUDIT_LOGS_FILE: false
+              ENABLE_OPENAI_API: false
+              ENABLE_AUTOCOMPLETE_GENERATION: false
+              ENABLE_VERSION_UPDATE_CHECK: false
+              VECTOR_DB: pgvector
+              PGVECTOR_CREATE_EXTENSION: false
+              DATABASE_ENABLE_SESSION_SHARING: true
+              CONTENT_EXTRACTION_ENGINE: tika
+              TIKA_SERVER_URL: http://opencloud-tika.home-infra:9998
+              RAG_EMBEDDING_ENGINE: ollama
+              RAG_EMBEDDING_MODEL: "mxbai-embed-large"
+              ENABLE_OAUTH_SIGNUP: true
+              OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
+              OAUTH_PROVIDER_NAME: Pocket ID
+              OAUTH_SCOPES: "openid profile email groups"
+              ENABLE_OAUTH_ROLE_MANAGEMENT: true
+              OAUTH_ROLES_CLAIM: groups
+              OAUTH_ALLOWED_ROLES: all # literal group in pocket-id with all users
+              WEBUI_SECRET_KEY:
+                secretKeyRef:
+                  name: open-webui-secret
+                  key: WEBUI_SECRET_KEY
+              WEBUI_ADMIN_EMAIL:
+                secretKeyRef:
+                  name: cluster-settings
+                  key: EMAIL
+              OAUTH_CLIENT_ID:
+                secretKeyRef:
+                  name: open-webui-oidc-credentials
+                  key: client_id
+              OAUTH_CLIENT_SECRET:
+                secretKeyRef:
+                  name: open-webui-oidc-credentials
+                  key: client_secret
+              OPENID_PROVIDER_URL:
+                secretKeyRef:
+                  name: open-webui-oidc-credentials
+                  key: discovery_url
+              DATABASE_URL:
+                secretKeyRef:
+                  name: open-webui-db-app
+                  key: uri
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 8080
+                    path: /health
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 500m
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              seccompProfile: { type: RuntimeDefault }
+              capabilities: { drop: ["ALL"] }
+    service:
+      open-webui:
+        controller: open-webui
+        ports:
+          http:
+            port: *port
+    route:
+      open-webui:
+        hostnames:
+          - chat.${SECRET_DOMAIN}
+        parentRefs:
+          - name: external
+            namespace: gateway-system
+    persistence:
+      data:
+        existingClaim: open-webui
+        globalMounts:
+          - path: /app/backend/data
+            subPath: data
