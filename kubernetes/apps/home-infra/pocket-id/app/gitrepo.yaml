@@ -3,9 +3,9 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
-  name: pocket-id-operator-test
+  name: pocket-id-operator-main
 spec:
   interval: 5m
   ref:
-    branch: auto-logos
+    branch: main
   url: https://github.com/aclerici38/pocket-id-operator.git
