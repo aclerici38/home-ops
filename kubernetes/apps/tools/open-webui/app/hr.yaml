@@ -64,7 +64,7 @@ spec:
               OAUTH_ALLOWED_ROLES: all # literal group in pocket-id with all users
               WEBUI_SECRET_KEY:
                 secretKeyRef:
-                  name: open-webui-secret
+                  name: open-webui
                   key: WEBUI_SECRET_KEY
               WEBUI_ADMIN_EMAIL:
                 secretKeyRef:
