@@ -10,9 +10,11 @@ configMapGenerator:
       - VOLSYNC_STORAGECLASS=ceph-filesystem
       - VOLSYNC_SNAPSHOTCLASS=csi-ceph-filesystem
       - VOLSYNC_ACCESSMODES=ReadWriteMany
+patches:
+  - path: ./patch.yaml
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/cnpg/init
-  - ../../../components/kuistomize/pocket-id
+  - ../../../components/kustomize/pocket-id
   - ../../../components/kustomize/external-secret
   - ../../../components/kustomize/volsync
