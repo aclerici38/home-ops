@@ -22,7 +22,6 @@ spec:
   values:
     controllers:
       crowdsec-ui:
-        strategy: RollingUpdate
         pod:
           hostUsers: false
           securityContext:
