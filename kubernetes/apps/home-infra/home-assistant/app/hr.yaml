@@ -30,7 +30,6 @@ spec:
             runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups: [34]
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
           hostname: home-assistant
@@ -71,7 +70,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: {drop: [ALL]}
+              capabilities: {drop: [ALL], add: [DAC_OVERRIDE]}
     service:
       main:
         controller: home-assistant
@@ -114,4 +113,3 @@ spec:
         hostPath: /run/dbus/system_bus_socket
         globalMounts:
           - path: /run/dbus/system_bus_socket
-            readOnly: true
