@@ -68,9 +68,9 @@ spec:
               limits:
                 memory: 2Gi
             securityContext:
-              allowPrivilegeEscalation: true
+              allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: {drop: [ALL], add: [DAC_OVERRIDE]}
+              capabilities: {drop: [ALL]}
     service:
       main:
         controller: home-assistant
@@ -110,6 +110,7 @@ spec:
             subPath: tmp
       dbus:
         type: hostPath
-        hostPath: /run/dbus/system_bus_socket
+        hostPath: /run/dbus
         globalMounts:
-          - path: /run/dbus/system_bus_socket
+          - path: /run/dbus
+            readOnly: true
