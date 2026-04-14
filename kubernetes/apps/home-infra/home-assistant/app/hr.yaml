@@ -62,6 +62,7 @@ spec:
               tag: 2026.4.2@sha256:924ebacc26fee0fc2f85183014939f01c1a3115a512d93e4158a64c5dd5d6f48
             env:
               VENV_FOLDER: /venv
+              DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/tmp/dbus-stub"
             resources:
               requests:
                 cpu: 47m
@@ -108,9 +109,3 @@ spec:
             subPath: tts
           - path: /tmp
             subPath: tmp
-      dbus:
-        type: hostPath
-        hostPath: /run/dbus
-        globalMounts:
-          - path: /run/dbus
-            readOnly: true
