@@ -111,7 +111,7 @@ spec:
             subPath: tmp
       dbus:
         type: hostPath
-        hostPath: /run/dbus
+        hostPath: /run/dbus/system_bus_socket
         globalMounts:
-          - path: /run/dbus
+          - path: /run/dbus/system_bus_socket
             readOnly: true
