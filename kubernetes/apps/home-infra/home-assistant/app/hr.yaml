@@ -68,7 +68,7 @@ spec:
               limits:
                 memory: 2Gi
             securityContext:
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
               readOnlyRootFilesystem: true
               capabilities: {drop: [ALL], add: [DAC_OVERRIDE]}
     service:
