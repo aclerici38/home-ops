@@ -17,15 +17,7 @@ spec:
               - "vchord.so"
             extensions:
               - name: pgvector
-                image:
-                  reference: ghcr.io/cloudnative-pg/pgvector:0.8.2-18-trixie
               - name: vchord
-                image:
-                  reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.1.1
-                dynamic_library_path:
-                  - /usr/lib/postgresql/18/lib
-                extension_control_path:
-                  - /usr/share/postgresql/18/
       target:
         kind: Cluster
     - patch: |-
