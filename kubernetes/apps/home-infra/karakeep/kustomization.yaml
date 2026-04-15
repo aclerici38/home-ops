@@ -7,12 +7,9 @@ configMapGenerator:
     literals:
       - APP=karakeep
       - VOLSYNC_CAPACITY=25Gi
-      - VOLSYNC_STORAGECLASS=ceph-filesystem
-      - VOLSYNC_SNAPSHOTCLASS=csi-ceph-filesystem
-      - VOLSYNC_ACCESSMODES=ReadWriteMany
       - OIDC_GROUP=fam
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret
-  - ../../../components/kustomize/volsync
+  - ../../../components/kustomize/volsync/cephfs
   - ../../../components/kustomize/pocket-id
