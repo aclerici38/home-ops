@@ -26,10 +26,6 @@ spec:
               - host app postgres localhost trust
               - host app app localhost trust
               - host app documentdb_bg_worker_role localhost trust
-            shared_preload_libraries:
-              - pg_cron
-              - pg_documentdb_core
-              - pg_documentdb
             parameters:
               max_connections: "200"
               # https://github.com/FerretDB/FerretDB/issues/5284#issuecomment-3326399933
@@ -45,12 +41,5 @@ spec:
               documentdb.enableBypassDocumentValidation: 'true'
               documentdb.enableUserCrud: 'true'
               documentdb.maxUserLimit: '100'
-            extensions:
-              - name: documentdb
-                image:
-                  reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:0.1.1-test
-                dynamic_library_path: ["lib"]
-                extension_control_path: ["share"]
-                ld_library_path: ["lib", "system"]
       target:
         kind: Cluster

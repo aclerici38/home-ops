@@ -8,4 +8,21 @@ spec:
   images:
     - major: 18
       image: ghcr.io/cloudnative-pg/postgresql:18.3-minimal-trixie@sha256:9763190ed6207aa900ee762de66cc65922f6f34d1335f7c863dd7255ba147bce
+      extensions:
+        - name: pgvector
+          image:
+            reference: ghcr.io/cloudnative-pg/pgvector:0.8.2-18-trixie@sha256:dcdc1225dcd113613574c11be7a3a891f7304833486660400eb48647b4a91e1b
+        - name: vchord
+          image:
+            reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.1.1@sha256:bdea43bed2a414e21bbf71767bf6f0739747ac480b267b51772dc214ac28dcb3
+          dynamic_library_path:
+            - /usr/lib/postgresql/18/lib
+          extension_control_path:
+            - /usr/share/postgresql/18/
+        - name: documentdb
+          image:
+            reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:0.1.1-test@sha256:91073cb1902ee92f00f9f738f93a85a799c0f1b5d2f911701581bd084b22e9fa
+          dynamic_library_path: ["lib"]
+          extension_control_path: ["share"]
+          ld_library_path: ["lib", "system"]
       
