@@ -27,8 +27,6 @@ spec:
           resourceClaims:
             - name: gpu
               resourceClaimTemplateName: wyoming-whisper-gpu
-          nodeSelector:
-            intel.feature.node.kubernetes.io/gpu: "true"
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
@@ -39,8 +37,8 @@ spec:
         initContainers:
           model-download:
             image:
-              repository: docker.io/curlimages/curl
-              tag: 8.12.1
+              repository: mirror.gcr.io/curlimages/curl
+              tag: latest
             command:
               - /bin/sh
               - -c
