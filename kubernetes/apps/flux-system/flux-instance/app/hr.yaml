@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.5/helmrelease_v2.json?values=flux-instance/0.46.0
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.5/helmrelease_v2.json?values=flux-instance/0.47.0
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -33,7 +33,7 @@ spec:
         path: kubernetes/flux
       distribution:
         registry: "ghcr.io/fluxcd"
-        artifact: oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests:v0.46.0
+        artifact: oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests:v0.47.0
         version: 2.x
       kustomize:
         patches:
