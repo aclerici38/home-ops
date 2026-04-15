@@ -34,48 +34,20 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
             runAsNonRoot: true
             seccompProfile: { type: RuntimeDefault }
-        initContainers:
-          model-download:
-            image:
-              repository: mirror.gcr.io/curlimages/curl
-              tag: latest
-            command:
-              - /bin/sh
-              - -c
-              - |
-                MODEL_FILE="/models/ggml-large-v3-turbo.bin"
-                if [ ! -f "$MODEL_FILE" ]; then
-                  echo "Downloading large-v3-turbo model..."
-                  curl -L -o "$MODEL_FILE" \
-                    "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin"
-                else
-                  echo "Model already exists, skipping download."
-                fi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: [ALL] }
         containers:
-          whisper-server:
+          whisper:
             image:
-              repository: ghcr.io/ggml-org/whisper.cpp
-              tag: main-intel@sha256:40b209b79134412e745e39981a8111392882c13d527562ae0c2779911b563c1f
+              repository: ghcr.io/sjtrny/wyoming-whisper-intel
+              tag: release@sha256:518e804b7464856b9506e48260047aad68732cb1e19b4331067be0414e455def
             env:
-              SYCL_CACHE_PERSISTENT: "1"
-              SYCL_CACHE_DIR: /models/sycl_cache
-              SYCL_DEVICE_ALLOWLIST: "BackendName:level_zero"
-            command:
-              - /app/build/bin/whisper-server
-            args:
-              - -l
-              - en
-              - -m
-              - /models/ggml-large-v3-turbo.bin
-              - --host
-              - 0.0.0.0
-              - --port
-              - "8910"
-              - --suppress-nst
+              ONEAPI_DEVICE_SELECTOR: "level_zero:gpu"
+              ZE_ENABLE_PCI_ID_DEVICE_ORDER: "1"
+              WHISPER_MODEL: large-v3-turbo
+              WHISPER_LANG: en
+              WHISPER_BEAM_SIZE: "5"
+              WHISPER_HTTP_HOST: "127.0.0.1"
+              WHISPER_HTTP_PORT: "8910"
+              WYOMING_URI: tcp://0.0.0.0:10300
             resources:
               requests:
                 cpu: 100m
@@ -84,24 +56,6 @@ spec:
                 memory: 4Gi
               claims:
                 - name: gpu
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: [ALL] }
-          wyoming-api:
-            image:
-              repository: ghcr.io/ser/wyoming-whisper-api-client
-              tag: sha-0166a05@sha256:74e7267915f046d1a5c34b4d38040d516e11b5f4edba74b788f091c1f954aa3a
-            args:
-              - --uri
-              - tcp://0.0.0.0:10300
-              - --api
-              - http://localhost:8910/inference
-            resources:
-              requests:
-                cpu: 25m
-              limits:
-                memory: 256Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
