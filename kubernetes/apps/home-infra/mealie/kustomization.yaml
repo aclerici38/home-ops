@@ -7,9 +7,6 @@ configMapGenerator:
     literals:
       - APP=mealie
       - VOLSYNC_CAPACITY=10Gi
-      - VOLSYNC_STORAGECLASS=ceph-filesystem
-      - VOLSYNC_SNAPSHOTCLASS=csi-ceph-filesystem
-      - VOLSYNC_ACCESSMODES=ReadWriteMany
       - OIDC_GROUP=all
 # patches:
 #   - path: ./patch.yaml
@@ -19,5 +16,5 @@ components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret
   - ../../../components/kustomize/cnpg/restore
-  - ../../../components/kustomize/volsync
+  - ../../../components/kustomize/volsync/cephfs
   - ../../../components/kustomize/pocket-id

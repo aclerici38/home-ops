@@ -7,10 +7,8 @@ configMapGenerator:
     literals:
       - APP=crowdsec
       - RESOURCES=ui
-      - VOLSYNC_STORAGECLASS=ceph-filesystem
-      - VOLSYNC_SNAPSHOTCLASS=csi-ceph-filesystem
 components:
   - ../../../components/ks/app-resources
   - ../../../components/kustomize/external-secret
   - ../../../components/kustomize/cnpg/init
-  - ../../../components/kustomize/volsync
+  - ../../../components/kustomize/volsync/cephfs
