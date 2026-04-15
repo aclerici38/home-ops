@@ -21,7 +21,7 @@ spec:
             - /usr/share/postgresql/18/
         - name: documentdb
           image:
-            reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:0.1.1-test@sha256:91073cb1902ee92f00f9f738f93a85a799c0f1b5d2f911701581bd084b22e9fa
+            reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:0.1.1-test
           dynamic_library_path: ["lib"]
           extension_control_path: ["share"]
           ld_library_path: ["lib", "system"]
