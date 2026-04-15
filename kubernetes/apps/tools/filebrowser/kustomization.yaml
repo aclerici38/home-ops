@@ -9,6 +9,6 @@ configMapGenerator:
       - OIDC_PKCE=false
 components:
   - ../../../components/ks/app
-  - ../../../components/kustomize/volsync
+  - ../../../components/kustomize/volsync/block
   - ../../../components/kustomize/pocket-id
   - ../../../components/kustomize/nfs

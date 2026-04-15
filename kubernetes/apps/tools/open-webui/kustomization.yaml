@@ -7,13 +7,10 @@ configMapGenerator:
     literals:
       - APP=open-webui
       - VOLSYNC_CAPACITY=25Gi
-      - VOLSYNC_STORAGECLASS=ceph-filesystem
-      - VOLSYNC_SNAPSHOTCLASS=csi-ceph-filesystem
-      - VOLSYNC_ACCESSMODES=ReadWriteMany
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/cnpg/init
   - ../../../components/kustomize/cnpg/extensions
   - ../../../components/kustomize/pocket-id
   - ../../../components/kustomize/external-secret
-  - ../../../components/kustomize/volsync
+  - ../../../components/kustomize/volsync/cephfs
