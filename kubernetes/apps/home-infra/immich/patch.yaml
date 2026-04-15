@@ -7,20 +7,6 @@ metadata:
 spec:
   patches:
     - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
-          name: patch
-        spec:
-          postgresql:
-            shared_preload_libraries:
-              - "vchord.so"
-            extensions:
-              - name: pgvector
-              - name: vchord
-      target:
-        kind: Cluster
-    - patch: |-
         - op: add
           path: /spec/args/-
           value: --default_lua_flags=allow-undeclared-keys
