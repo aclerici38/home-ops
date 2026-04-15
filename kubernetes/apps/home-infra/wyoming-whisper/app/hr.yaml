@@ -1,0 +1,121 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.5/helmrelease_v2.json?values=app-template/4.6.2
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: wyoming-whisper
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      wyoming-whisper:
+        strategy: RollingUpdate
+        pod:
+          resourceClaims:
+            - name: gpu
+              resourceClaimTemplateName: wyoming-whisper-gpu
+          nodeSelector:
+            intel.feature.node.kubernetes.io/gpu: "true"
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
+        initContainers:
+          model-download:
+            image:
+              repository: docker.io/curlimages/curl
+              tag: 8.12.1
+            command:
+              - /bin/sh
+              - -c
+              - |
+                MODEL_FILE="/models/ggml-large-v3-turbo.bin"
+                if [ ! -f "$MODEL_FILE" ]; then
+                  echo "Downloading large-v3-turbo model..."
+                  curl -L -o "$MODEL_FILE" \
+                    "https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin"
+                else
+                  echo "Model already exists, skipping download."
+                fi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: [ALL] }
+        containers:
+          whisper-server:
+            image:
+              repository: ghcr.io/ggml-org/whisper.cpp
+              tag: main-intel@sha256:40b209b79134412e745e39981a8111392882c13d527562ae0c2779911b563c1f
+            env:
+              SYCL_CACHE_PERSISTENT: "1"
+              SYCL_CACHE_DIR: /models/sycl_cache
+              SYCL_DEVICE_ALLOWLIST: "BackendName:level_zero"
+            command:
+              - /app/build/bin/whisper-server
+            args:
+              - -l
+              - en
+              - -m
+              - /models/ggml-large-v3-turbo.bin
+              - --host
+              - 0.0.0.0
+              - --port
+              - "8910"
+              - --suppress-nst
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 4Gi
+              claims:
+                - name: gpu
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: [ALL] }
+          wyoming-api:
+            image:
+              repository: ghcr.io/ser/wyoming-whisper-api-client
+              tag: sha-0166a05@sha256:74e7267915f046d1a5c34b4d38040d516e11b5f4edba74b788f091c1f954aa3a
+            args:
+              - --uri
+              - tcp://0.0.0.0:10300
+              - --api
+              - http://localhost:8910/inference
+            resources:
+              requests:
+                cpu: 25m
+              limits:
+                memory: 256Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: [ALL] }
+    service:
+      wyoming-whisper:
+        controller: wyoming-whisper
+        ports:
+          wyoming:
+            port: 10300
+    persistence:
+      models:
+        existingClaim: wyoming-whisper-cache
+        globalMounts:
+          - path: /models

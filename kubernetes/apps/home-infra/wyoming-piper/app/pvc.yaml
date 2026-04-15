@@ -1,0 +1,13 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.35.2-standalone-strict/persistentvolumeclaim-v1.json
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wyoming-piper-cache
+spec:
+  storageClassName: ceph-filesystem
+  resources:
+    requests:
+      storage: 5Gi
+  accessModes:
+    - ReadWriteMany
