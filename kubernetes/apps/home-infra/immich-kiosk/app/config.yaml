@@ -25,7 +25,8 @@ spec:
                 show:
                   humidity: true
                   wind: true
-                  visibility: true
+                  visibility: false
+                  temperature_range: true
   dataFrom:
     - extract:
         key: immich-kiosk
