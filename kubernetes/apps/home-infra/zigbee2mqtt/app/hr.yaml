@@ -103,11 +103,6 @@ spec:
         parentRefs:
           - name: internal
             namespace: gateway-system
-            sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: zigbee2mqtt
-                port: *port
     persistence:
       data:
         existingClaim: zigbee2mqtt

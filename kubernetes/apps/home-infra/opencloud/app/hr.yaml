@@ -267,7 +267,6 @@ spec:
         parentRefs:
           - name: external
             namespace: gateway-system
-            sectionName: https
         rules:
           - backendRefs:
             - identifier: opencloud
@@ -281,7 +280,6 @@ spec:
         parentRefs:
           - name: external
             namespace: gateway-system
-            sectionName: https
         rules:
           - backendRefs:
             - identifier: wopi
@@ -292,7 +290,6 @@ spec:
         parentRefs:
           - name: external
             namespace: gateway-system
-            sectionName: https
         rules:
           - backendRefs:
             - identifier: collabora
