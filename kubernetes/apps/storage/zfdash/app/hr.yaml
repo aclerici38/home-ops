@@ -66,11 +66,6 @@ spec:
         parentRefs:
           - name: internal
             namespace: gateway-system
-            sectionName: https
-        rules:
-          - backendRefs:
-            - identifier: zfdash
-              port: *port
     persistence:
       config:
         existingClaim: zfdash

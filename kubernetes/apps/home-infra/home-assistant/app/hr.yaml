@@ -85,11 +85,6 @@ spec:
         parentRefs:
           - name: external
             namespace: gateway-system
-            sectionName: https
-        rules:
-          - backendRefs:
-            - identifier: main
-              port: *port
     persistence:
       config:
         existingClaim: home-assistant

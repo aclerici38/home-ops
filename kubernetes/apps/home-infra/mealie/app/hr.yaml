@@ -117,11 +117,6 @@ spec:
         parentRefs:
           - name: external
             namespace: gateway-system
-            sectionName: https
-        rules:
-          - backendRefs:
-            - identifier: main
-              port: *port
     persistence:
       data:
         existingClaim: mealie

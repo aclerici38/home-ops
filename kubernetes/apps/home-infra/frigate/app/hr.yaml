@@ -92,7 +92,6 @@ spec:
         parentRefs:
           - name: external
             namespace: gateway-system
-            sectionName: https
         rules:
           - backendRefs:
             - identifier: frigate
@@ -103,7 +102,6 @@ spec:
         parentRefs:
           - name: internal
             namespace: gateway-system
-            sectionName: https
         rules:
           - backendRefs:
             - identifier: frigate
