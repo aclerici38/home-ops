@@ -25,3 +25,13 @@ spec:
       release: kube-prometheus-stack
     grafana:
       dashboards: true
+      namespace: ${NS}
+  postRenderers:
+    - kustomize:
+        patches:
+          - patch: |-
+              - op: replace
+                path: /metadata/labels/app.kubernetes.io~1version
+                value: 2.0.0-rc.0
+            target:
+              labelSelector: app.kubernetes.io/version=xpumd/v2.0.0-rc.0
