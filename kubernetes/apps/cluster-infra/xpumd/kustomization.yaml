@@ -5,15 +5,6 @@ kind: Kustomization
 configMapGenerator:
   - name: APP-app-vars
     literals:
-      - APP=intel-gpu-resource-driver
-patches:
-  - patch: |-
-      - op: add
-        path: /spec/dependsOn/-
-        value:
-          name: xpumd
-    target:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
+      - APP=xpumd
 components:
   - ../../../components/ks/app
