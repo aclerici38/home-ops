@@ -21,4 +21,14 @@ spec:
     cleanupOnFail: true
     strategy:
       name: RemediateOnFailure
-  postRenderers: []
+  postRenderers:
+    - kustomize:
+        patches:
+          - patch: |
+              - op: add
+                path: /spec/rules/0/timeouts
+                value:
+                  request: 0s
+            target:
+              group: gateway.networking.k8s.io
+              kind: HTTPRoute
