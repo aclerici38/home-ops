@@ -42,6 +42,7 @@ spec:
               REDIS_URL: redis://dawarich-dragonfly-db:6379
               TIME_ZONE: ${TZ}
               PROMETHEUS_EXPORTER_ENABLED: true
+              PROMETHEUS_EXPORTER_HOST: 0.0.0.0
               APPLICATION_HOSTS: ${APP_URL}
               DISTANCE_UNIT: mi
               STORE_GEODATA: true
@@ -108,7 +109,7 @@ spec:
             args: ["bundle exec sidekiq"]
             env:
               <<: *env
-              PROMETHEUS_EXPORTER_ENABLED: false
+              PROMETHEUS_EXPORTER_HOST: localhost
             probes:
               liveness:
                 enabled: false
