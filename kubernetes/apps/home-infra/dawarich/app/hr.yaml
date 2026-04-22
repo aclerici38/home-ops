@@ -109,7 +109,7 @@ spec:
             args: ["bundle exec sidekiq"]
             env:
               <<: *env
-              PROMETHEUS_EXPORTER_HOST: localhost
+              PROMETHEUS_EXPORTER_HOST: 127.0.0.1
             probes:
               liveness:
                 enabled: false
