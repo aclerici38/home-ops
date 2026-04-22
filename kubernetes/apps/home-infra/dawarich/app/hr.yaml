@@ -102,7 +102,7 @@ spec:
                 cpu: 100m
                 memory: 256Mi
               limits:
-                memory: 1Gii
+                memory: 1Gi
           sidekiq:
             <<: *container
             command: ["sidekiq-entrypoint.sh"]
