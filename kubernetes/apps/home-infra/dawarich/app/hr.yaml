@@ -40,6 +40,7 @@ spec:
             args: ["bin/rails", "server", "-p", "3000", "-b", "::"]
             env: &env
               RAILS_ENV: production
+              SELF_HOSTED: true
               REDIS_URL: redis://dawarich-dragonfly-db:6379
               TIME_ZONE: ${TZ}
               PROMETHEUS_EXPORTER_ENABLED: true
