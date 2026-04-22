@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.28.0/database_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: dawarich
+spec:
+  name: app
+  owner: app
+  cluster:
+    name: dawarich-db
+  extensions:
+    - name: postgis
+    - name: postgis_raster
+    - name: postgis_sfcgal
+    - name: fuzzystrmatch
+    - name: address_standardizer
+    - name: address_standardizer_data_us
+    - name: postgis_tiger_geocoder
+    - name: postgis_topology

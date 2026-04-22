@@ -1,0 +1,10 @@
+---
+apiVersion: config.local/v1
+kind: Extensions
+metadata:
+  name: cnpg-extensions
+  annotations:
+    config.kubernetes.io/local-config: "true"
+spec:
+  extensions:
+    - name: postgis

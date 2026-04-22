@@ -12,6 +12,16 @@ spec:
         - name: pgvector
           image:
             reference: ghcr.io/cloudnative-pg/pgvector:0.8.2-18-trixie@sha256:506c2359c80be70a160daa149a02050a550d40cb3dbde2bb612f3a346fceb29a
+        - name: postgis
+          image:
+            reference: ghcr.io/cloudnative-pg/postgis-extension:3.6.3-18-trixie@sha256:683877c4412279ed561ce6623fcb722756f6dc1cfb625cc2cce692fa10abf8b0
+          ld_library_path:
+            - system
+          env:
+            - name: GDAL_DATA
+              value: $${image_root}/share/gdal
+            - name: PROJ_DATA
+              value: $${image_root}/share/proj
         - name: vchord
           image:
             reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.1.1@sha256:bdea43bed2a414e21bbf71767bf6f0739747ac480b267b51772dc214ac28dcb3
