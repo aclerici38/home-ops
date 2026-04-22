@@ -7,6 +7,11 @@ configMapGenerator:
     literals:
       - APP=dawarich
       - OIDC_GROUP=fam
+patches:
+  - path: ./patch.yaml
+    target:
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/external-secret
