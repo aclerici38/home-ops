@@ -53,6 +53,10 @@ spec:
               SMTP_SERVER: smtp-relay.cluster-infra
               SMTP_PORT: 25
               SMTP_FROM: bot@${SECRET_DOMAIN}
+              SECRET_KEY_BASE:
+                secretKeyRef:
+                  name: dawarich
+                  key: SECRET_KEY_BASE
               
               DATABASE_HOST:
                 secretKeyRef:
