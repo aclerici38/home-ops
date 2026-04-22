@@ -45,6 +45,9 @@ spec:
               APPLICATION_HOSTS: ${APP_URL}
               DISTANCE_UNIT: mi
               STORE_GEODATA: true
+              RAILS_CACHE_DB: 0
+              RAILS_JOB_QUEUE_DB: 0
+              RAILS_WS_DB: 0
               SMTP_SERVER: smtp-relay.cluster-infra
               SMTP_PORT: 25
               SMTP_FROM: bot@${SECRET_DOMAIN}
@@ -140,3 +143,9 @@ spec:
             subPath: storage
           - path: /var/app/public
             subPath: public
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          # something for pg migrations?
+          - path: /var/app/db
+            subPath: db
