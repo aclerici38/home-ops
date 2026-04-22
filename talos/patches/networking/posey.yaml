@@ -45,6 +45,10 @@ name: bond1
 links:
   - bond1-link1
 bondMode: active-backup
+miimon: 100
+useCarrier: true
+updelay: 200
+downdelay: 200
 ---
 apiVersion: v1alpha1
 kind: Layer2VIPConfig
