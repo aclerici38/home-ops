@@ -45,7 +45,7 @@ spec:
               TIME_ZONE: ${TZ}
               PROMETHEUS_EXPORTER_ENABLED: true
               PROMETHEUS_EXPORTER_HOST: 0.0.0.0
-              APPLICATION_HOSTS: ${APP_URL}
+              APPLICATION_HOSTS: ${APP_URL},dawarich.home-infra.svc.cluster.local
               DISTANCE_UNIT: mi
               STORE_GEODATA: true
               RAILS_CACHE_DB: 0
