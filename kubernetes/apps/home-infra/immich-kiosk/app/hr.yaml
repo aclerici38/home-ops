@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.5/helmrelease_v2.json?values=app-template/4.6.2
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.6/helmrelease_v2.json?values=app-template/4.6.2
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -32,7 +32,7 @@ spec:
           main:
             image:
               repository: ghcr.io/damongolding/immich-kiosk
-              tag: 0.36.2@sha256:754cb9a1ea0681ec474610ccf12c8f037217fba2bf731a6cae3e95f3c4065ebe
+              tag: 0.36.3@sha256:cbc61ca8def2c2b3fb117f8fb5da3838fc10863ab57b59a5d2e10603acefabd2
             env:
               LANG: en_US
               KIOSK_IMMICH_API_KEY:

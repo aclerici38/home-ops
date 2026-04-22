@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.5/ocirepository_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.6/ocirepository_v1.json
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
@@ -10,5 +10,5 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 83.6.0
+    tag: 83.7.0
   url: oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack

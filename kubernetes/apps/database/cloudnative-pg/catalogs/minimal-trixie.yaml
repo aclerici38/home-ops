@@ -7,11 +7,11 @@ metadata:
 spec:
   images:
     - major: 18
-      image: ghcr.io/cloudnative-pg/postgresql:18.3-minimal-trixie@sha256:9763190ed6207aa900ee762de66cc65922f6f34d1335f7c863dd7255ba147bce
+      image: ghcr.io/cloudnative-pg/postgresql:18.3-minimal-trixie@sha256:0d8db02b7b3c45894835630da500a82c088c31e54da6308c05720617576172a9
       extensions:
         - name: pgvector
           image:
-            reference: ghcr.io/cloudnative-pg/pgvector:0.8.2-18-trixie@sha256:dcdc1225dcd113613574c11be7a3a891f7304833486660400eb48647b4a91e1b
+            reference: ghcr.io/cloudnative-pg/pgvector:0.8.2-18-trixie@sha256:506c2359c80be70a160daa149a02050a550d40cb3dbde2bb612f3a346fceb29a
         - name: vchord
           image:
             reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.1.1@sha256:bdea43bed2a414e21bbf71767bf6f0739747ac480b267b51772dc214ac28dcb3

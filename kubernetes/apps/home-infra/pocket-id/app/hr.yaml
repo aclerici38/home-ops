@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.5/helmrelease_v2.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.6/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -39,7 +39,7 @@ spec:
     instance:
       name: pocket-id
       spec:
-        image: ghcr.io/pocket-id/pocket-id:v2.6.0-distroless@sha256:69e3a04ee3cbe975297cce6d0d3e0fcd9190ea732afd6b1e31cb42f125f79e98
+        image: ghcr.io/pocket-id/pocket-id:v2.6.2-distroless@sha256:a9adc636b5d30098307b8a1292c5887a59690cd5429aac5e87b588852f9c346d
         route:
           enabled: true
           parentRefs:
