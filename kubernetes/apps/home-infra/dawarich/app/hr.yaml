@@ -143,6 +143,9 @@ spec:
             subPath: storage
           - path: /var/app/public
             subPath: public
+          # ruby won't let tmp dir be world-writeable so can't be emptydir
+          - path: /tmp
+            subPath: tmp
       tmpfs:
         type: emptyDir
         globalMounts:
@@ -151,5 +154,3 @@ spec:
             subPath: db
           - path: /var/app/tmp
             subPath: app_tmp
-          - path: /tmp
-            subPath: tmp
