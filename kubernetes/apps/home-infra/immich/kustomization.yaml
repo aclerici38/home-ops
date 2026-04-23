@@ -8,7 +8,6 @@ configMapGenerator:
       - APP=immich
       - CNPG_CAPACITY=20Gi
       - CNPG_POOLMODE=session
-      - REPLICAS=2
       - OIDC_GROUP=all
 patches:
   - path: ./patch.yaml
