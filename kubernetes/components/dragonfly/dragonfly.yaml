@@ -19,6 +19,8 @@ spec:
     - --dbfilename=
     - --proactor_threads=4
     - --version_check=false
+    - --cluster_mode=emulated
+    - --lock_on_hashtags
   resources:
     requests:
       cpu: 100m
