@@ -32,6 +32,7 @@ spec:
               repository: ghcr.io/open-webui/open-webui
               tag: v0.9.1@sha256:03d2b006989f0fe6559391a0c5d4ccac12688d7813d23cb4de86e5cc0ab22978
             env:
+              HOME: /app/backend
               ENABLE_PERSISTENT_CONFIG: false # always read env vars
               OLLAMA_BASE_URL: http://mac-mini.cottage.internal:11434
               ENABLE_RAG_WEB_SEARCH: true
