@@ -89,8 +89,10 @@ spec:
               requests:
                 cpu: 100m
                 memory: 10Mi
+                devic.es/disks: 1
               limits:
                 memory: 128Mi
+                devic.es/disks: 1
             securityContext:
               privileged: false
               allowPrivilegeEscalation: false
@@ -99,8 +101,13 @@ spec:
               runAsGroup: 0
               readOnlyRootFilesystem: false
               capabilities:
-                drop: ["ALL"]
-                add: ["SYS_RAWIO", "SYS_ADMIN", "SETUID", "SETGID"]
+                drop:
+                  - ALL
+                add: 
+                  - SYS_RAWIO
+                  - SYS_ADMIN
+                  - SETUID
+                  - SETGID
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -151,10 +158,3 @@ spec:
             scrutiny-collector:
               - path: /run/udev
                 readOnly: true
-      dev:
-        type: hostPath
-        hostPath: /dev
-        advancedMounts:
-          collector:
-            scrutiny-collector:
-              - path: /dev
