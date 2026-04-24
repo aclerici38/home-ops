@@ -100,7 +100,7 @@ spec:
               readOnlyRootFilesystem: false
               capabilities:
                 drop: ["ALL"]
-                add: ["SYS_RAWIO", "SYS_ADMIN"]
+                add: ["SYS_RAWIO", "SYS_ADMIN", "SETUID", "SETGID"]
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -158,4 +158,3 @@ spec:
           collector:
             scrutiny-collector:
               - path: /dev
-                readOnly: true
