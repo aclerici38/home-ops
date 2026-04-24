@@ -26,7 +26,7 @@ spec:
           scrutiny:
             image:
               repository: ghcr.io/analogj/scrutiny
-              tag: v0.9.0-web@sha256:767ec2fd4104166bf8d4c3ca07009c27200f1015c649e2204533785b1cf922f1
+              tag: v0.9.1-web@sha256:a758d2846ed51e43f2b4e36f42e8760899a75f9383884d7849dc0f04d9fd83a1
             env:
               SCRUTINY_WEB_INFLUXDB_HOST: scrutiny-influxdb
             probes:
@@ -76,7 +76,7 @@ spec:
           scrutiny-collector:
             image:
               repository: ghcr.io/analogj/scrutiny
-              tag: v0.9.0-collector@sha256:3ff9e9ba8c0c4dbb83a3537222de8eb1be4115b38a14ec4f57004684973308df
+              tag: v0.9.1-collector@sha256:6c238e9996e8b19dc64916d32d2a0be1dc0619907fc107d7d437f8a5be8449ac
             env:
               COLLECTOR_RUN_STARTUP: true
               COLLECTOR_API_ENDPOINT: "http://scrutiny:8080"
