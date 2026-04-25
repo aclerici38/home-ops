@@ -7,15 +7,15 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  # chartRef:
-  #     kind: OCIRepository
-  #     name: pocket-id-operator
-  chart:
-    spec:
-      chart: dist/chart
-      sourceRef:
-        kind: GitRepository
-        name: pocket-id-operator-main
+  chartRef:
+      kind: OCIRepository
+      name: pocket-id-operator
+  # chart:
+  #   spec:
+  #     chart: dist/chart
+  #     sourceRef:
+  #       kind: GitRepository
+  #       name: pocket-id-operator-main
   install:
     timeout: 2m
     remediation:
@@ -26,8 +26,8 @@ spec:
       retries: 1
   values:
     operator:
-      image:
-        tag: 584f816-main
+      # image:
+      #   tag: PR-237@sha256:8a07067b70f26cc7f2f258f22750a7fb194d6217769f88db7a78ac1f2dcd8cf2
       args:
         - --zap-log-level=debug
     metrics:
@@ -43,11 +43,6 @@ spec:
         podTemplate:
           spec:
             hostUsers: false
-            initContainers:
-              - name: test
-                image: alpine
-                command:
-                  - echo "SIUUU"
         route:
           enabled: true
           parentRefs:
@@ -67,6 +62,7 @@ spec:
               name: pocket-id-db-app
               key: uri
         appUrl: https://id.${SECRET_DOMAIN}
+        hostUsers: false
         versionCheckDisabled: true
         fileBackend: database
         ui:
