@@ -56,27 +56,27 @@ spec:
                 cpu: 100m
               limits:
                 memory: 512Mi
-      storj:
+      backblaze:
         containers:
-          kopia-storj:
+          kopia-backblaze:
             <<: *container
             env:
               <<: *env
               KOPIA_SERVER_PASSWORD:
                 secretKeyRef:
-                  name: volsync-kopia-storj
+                  name: volsync-kopia-backblaze
                   key: KOPIA_PASSWORD
               KOPIA_PASSWORD:
                 secretKeyRef:
-                  name: volsync-kopia-storj
+                  name: volsync-kopia-backblaze
                   key: KOPIA_PASSWORD
               AWS_ACCESS_KEY_ID:
                 secretKeyRef:
-                  name: volsync-kopia-storj
+                  name: volsync-kopia-backblaze
                   key: AWS_ACCESS_KEY_ID
               AWS_SECRET_ACCESS_KEY:
                 secretKeyRef:
-                  name: volsync-kopia-storj
+                  name: volsync-kopia-backblaze
                   key: AWS_SECRET_ACCESS_KEY
     defaultPodOptions:
       hostUsers: false
@@ -92,9 +92,9 @@ spec:
         ports:
           http:
             port: *port
-      storj:
+      backblaze:
         <<: *svc
-        controller: storj
+        controller: backblaze
     route:
       versity: &route
         hostnames:
@@ -106,13 +106,13 @@ spec:
           - backendRefs:
               - identifier: versity
                 port: *port
-      storj:
+      backblaze:
         <<: *route
         hostnames:
-          - kopia-storj.${SECRET_DOMAIN}
+          - kopia-backblaze.${SECRET_DOMAIN}
         rules:
           - backendRefs:
-              - identifier: storj
+              - identifier: backblaze
                 port: *port
     configMaps:
       config:
@@ -132,13 +132,13 @@ spec:
               "description": "volsync",
               "enableActions": false
             }
-          storj.repository.config: |-
+          backblaze.repository.config: |-
             {
               "storage": {
                 "type": "s3",
                 "config": {
-                  "bucket": "kube",
-                  "endpoint": "gateway.storjshare.io"
+                  "bucket": "kopia-k8s",
+                  "endpoint": "s3.us-west-004.backblazeb2.com"
                 }
               },
               "hostname": "volsync.${NS}.svc.cluster.local",
@@ -155,10 +155,10 @@ spec:
             kopia-versity:
               - path: /config/repository.config
                 subPath: versity.repository.config
-          storj:
-            kopia-storj:
+          backblaze:
+            kopia-backblaze:
               - path: /config/repository.config
-                subPath: storj.repository.config
+                subPath: backblaze.repository.config
       tmpfs:
         type: emptyDir
         globalMounts:

@@ -3,10 +3,10 @@
 apiVersion: volsync.backube/v1alpha1
 kind: KopiaMaintenance
 metadata:
-  name: storj
+  name: backblaze
 spec:
   enabled: true
   trigger:
     schedule: 0 10 * * *
   repository:
-    repository: volsync-kopia-storj
+    repository: volsync-kopia-backblaze

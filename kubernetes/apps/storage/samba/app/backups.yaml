@@ -23,7 +23,7 @@ spec:
     substitute:
       APP: time-machine
       VOLSYNC_SCHEDULE: 0 4 * * *
-      VOLSYNC_KOPIA_REPO: volsync-kopia-storj
+      VOLSYNC_KOPIA_REPO: volsync-kopia-backblaze
       VOLSYNC_STORAGECLASS: zfs-tank
       VOLSYNC_SNAPSHOTCLASS: openebs-zfs
       VOLSYNC_CACHE_STORAGECLASS: zfs-ssd
