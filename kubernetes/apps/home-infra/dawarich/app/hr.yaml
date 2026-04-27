@@ -59,6 +59,10 @@ spec:
                 secretKeyRef:
                   name: dawarich
                   key: SECRET_KEY_BASE
+              OTP_ENCRYPTION_PRIMARY_KEY:
+                secretKeyRef:
+                  name: dawarich
+                  key: OTP_ENCRYPTION_PRIMARY_KEY
               
               DATABASE_HOST:
                 secretKeyRef:
