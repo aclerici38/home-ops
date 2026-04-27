@@ -31,11 +31,19 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: { type: RuntimeDefault }
-        containers:
-          server: &container
-            image:
+        initContainers:
+          copy-migrations:
+            image: &img
               repository: mirror.gcr.io/freikin/dawarich
               tag: 1.7.0@sha256:7d5f99c61121fcfa4cbdd6a153392630d9f059ffb0156759278d3e049085ec62
+            command: ["/bin/sh", "-c", "cp -r /var/app/db/. /mnt/db/"]
+            securityContext: &sec
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+        containers:
+          server: &container
+            image: *img
             command: ["web-entrypoint.sh"]
             args: ["bin/rails", "server", "-p", "3000", "-b", "::"]
             env: &env
@@ -113,10 +121,7 @@ spec:
                     port: &port 3000
                     path: /api/v1/health
               readiness: *probes
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+            securityContext: *sec
             resources:
               requests:
                 cpu: 100m
@@ -169,9 +174,17 @@ spec:
             subPath: tmp
       tmpfs:
         type: emptyDir
+        advancedMounts:
+          dawarich:
+            copy-migrations:
+              - path: /mnt/db
+                subPath: db
+            server:
+              - path: /var/app/db
+                subPath: db
+            sidekiq:
+              - path: /var/app/db
+                subPath: db
         globalMounts:
-          # something for pg migrations?
-          - path: /var/app/db
-            subPath: db
           - path: /var/app/tmp
             subPath: app_tmp
