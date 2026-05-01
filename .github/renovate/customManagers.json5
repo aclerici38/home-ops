@@ -54,6 +54,16 @@
     },
     {
       customType: "regex",
+      description: "Process yannh/kubernetes-json-schema versions",
+      fileMatch: [".yaml"],
+      matchStrings: [
+        "\\$schema=https://raw\\.githubusercontent\\.com/yannh/kubernetes-json-schema/master/(?<currentValue>v[^-]+)-standalone-strict/",
+      ],
+      datasourceTemplate: "docker",
+      depNameTemplate: "ghcr.io/siderolabs/kubelet",
+    },
+    {
+      customType: "regex",
       fileMatch: [".yaml"],
       matchStrings: [
         "k8s-versioned-schemas\\.pages\\.dev/(?<depName>[^/]+)/(?<currentValue>[^/]+)/",
