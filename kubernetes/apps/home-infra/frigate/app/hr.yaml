@@ -73,20 +73,15 @@ spec:
         controller: frigate
         type: ClusterIP
         ports:
-          http-auth:
-            port: &auth 8971
           http:
             primary: true
-            port: &http 5000
+            port: &auth 8971
           rtsp:
             port: 8554
           webrtc:
             port: 8555
     route:
       auth:
-        forceRename: frigate
-        labels:
-          k8s-gateway.dns/ignore: "true"
         hostnames:
           - ${APP_URL}
         parentRefs:
@@ -96,16 +91,6 @@ spec:
           - backendRefs:
             - identifier: frigate
               port: *auth
-      admin:
-        hostnames:
-          - ${APP_URL}
-        parentRefs:
-          - name: internal
-            namespace: gateway-system
-        rules:
-          - backendRefs:
-            - identifier: frigate
-              port: *http
     persistence:
       config:
         existingClaim: frigate
