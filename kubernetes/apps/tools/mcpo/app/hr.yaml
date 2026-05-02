@@ -71,6 +71,9 @@ spec:
         ports:
           http:
             port: *port
+            primary: true
+          callback:
+            port: 3030
     persistence:
       config:
         type: configMap
