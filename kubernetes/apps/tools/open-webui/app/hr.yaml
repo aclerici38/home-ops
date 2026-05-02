@@ -73,14 +73,15 @@ spec:
               TOOL_SERVER_CONNECTIONS: |
                   [
                     {
-                    "type": "openapi",
-                    "url": "http://mcpo.tools:8000",
-                    "path": "trek",
-                    "auth_type": "none",
-                    "config": { "enable": true },
-                    "info": {
-                      "name": "TREK",
-                      "description": "TREK travel planner via mcpo"
+                      "type": "openapi",
+                      "url": "http://mcpo.tools:8000",
+                      "path": "trek",
+                      "auth_type": "none",
+                      "config": { "enable": true },
+                      "info": {
+                        "name": "TREK",
+                        "description": "TREK travel planner via mcpo"
+                      }
                     }
                   ]
               OPENAI_API_KEY:
