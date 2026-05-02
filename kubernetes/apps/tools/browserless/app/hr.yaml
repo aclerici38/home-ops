@@ -26,6 +26,9 @@ spec:
         pod:
           securityContext:
             runAsNonRoot: true
+            # "blessuser"
+            runAsGroup: 999
+            runAsUser: 999
             seccompProfile: { type: RuntimeDefault }
         containers:
           browserless:
