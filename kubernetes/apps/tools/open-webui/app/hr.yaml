@@ -35,6 +35,10 @@ spec:
               HOME: /app/backend
               ENABLE_PERSISTENT_CONFIG: false # always read env vars
               OLLAMA_BASE_URL: http://mac-mini.cottage.internal:11434
+              ENABLE_WEB_SEARCH: true
+              WEB_SEARCH_ENGINE: searxng
+              WEB_SEARCH_RESULT_COUNT: 5
+              WEB_SEARCH_CONCURRENT_REQUESTS: 5
               ENABLE_RAG_WEB_SEARCH: true
               ENABLE_SEARCH_QUERY: true
               RAG_WEB_SEARCH_ENGINE: searxng
