@@ -36,13 +36,17 @@ spec:
               ENABLE_PERSISTENT_CONFIG: false # always read env vars
               OLLAMA_BASE_URL: http://mac-mini.cottage.internal:11434
               ENABLE_WEB_SEARCH: true
-              WEB_SEARCH_ENGINE: searxng
-              WEB_SEARCH_RESULT_COUNT: 5
+              WEB_SEARCH_ENGINE: tavily
+              WEB_SEARCH_RESULT_COUNT: 10
               WEB_SEARCH_CONCURRENT_REQUESTS: 5
               ENABLE_RAG_WEB_SEARCH: true
               ENABLE_SEARCH_QUERY: true
-              RAG_WEB_SEARCH_ENGINE: searxng
-              SEARXNG_QUERY_URL: http://searxng.home-infra:8080/search?q=<query>
+              RAG_WEB_SEARCH_ENGINE: tavily
+              TAVILY_API_KEY:
+                secretKeyRef:
+                  name: open-webui
+                  key: TAVILY_API_KEY
+              WEB_LOADER_ENGINE: tavily
               WEBUI_URL: &url https://chat.${SECRET_DOMAIN}
               CORS_ALLOW_ORIGIN: *url
               ENABLE_LOGIN_FORM: false
