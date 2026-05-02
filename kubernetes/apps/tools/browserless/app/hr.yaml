@@ -39,7 +39,6 @@ spec:
               CONCURRENT: 5
               QUEUED: 10
               TIMEOUT: 60000
-              DEFAULT_LAUNCH_ARGS: '["--no-sandbox"]'
               DEBUG: browserless*:info
             probes:
               liveness: &probes
