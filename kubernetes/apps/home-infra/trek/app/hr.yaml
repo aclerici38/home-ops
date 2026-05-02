@@ -32,6 +32,7 @@ spec:
             image:
               repository: mirror.gcr.io/mauriceboe/trek
               tag: 3.0.13@sha256:18db8cb0e93c67d394ec52c0b7032fb874631823062fc817c0ad34b2e133302c
+            args: ["node", "--import", "tsx", "src/index.ts"]
             env:
               ALLOW_INTERNAL_NETWORK: true
               LOG_LEVEL: debug
