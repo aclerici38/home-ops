@@ -76,8 +76,6 @@ spec:
         existingClaim: mcpo
         globalMounts:
           - path: /data
-      tmp:
-        type: emptyDir
     configMaps:
       config:
         data:
