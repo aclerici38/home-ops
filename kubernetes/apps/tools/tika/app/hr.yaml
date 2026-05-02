@@ -48,9 +48,6 @@ spec:
                   httpGet:
                     path: /tika
                     port: &port 9998
-                  initialDelaySeconds: 30
-                  periodSeconds: 30
-                  timeoutSeconds: 5
               readiness: *probes
             resources:
               requests:
