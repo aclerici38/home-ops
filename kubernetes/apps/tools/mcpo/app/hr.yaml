@@ -24,7 +24,6 @@ spec:
       mcpo:
         strategy: RollingUpdate
         pod:
-          hostUsers: false
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
