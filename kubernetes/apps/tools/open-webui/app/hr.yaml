@@ -46,7 +46,6 @@ spec:
               DEFAULT_USER_ROLE: user
               ENABLE_AUDIT_STDOUT: true
               ENABLE_AUDIT_LOGS_FILE: false
-              ENABLE_OPENAI_API: false
               ENABLE_AUTOCOMPLETE_GENERATION: false
               ENABLE_VERSION_UPDATE_CHECK: false
               VECTOR_DB: pgvector
@@ -66,6 +65,11 @@ spec:
               OAUTH_CODE_CHALLENGE_METHOD: S256 # needed for pkce
               WEBUI_SESSION_COOKIE_SAME_SITE: lax
               WEBUI_SESSION_COOKIE_SECURE: true
+              ENABLE_OPENAI_API: true
+              OPENAI_API_KEY:
+                secretKeyRef:
+                  name: open-webui
+                  key: OPENAI_API_KEY
               WEBUI_SECRET_KEY:
                 secretKeyRef:
                   name: open-webui
