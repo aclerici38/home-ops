@@ -101,7 +101,7 @@ spec:
               STORAGE_USERS_ID_CACHE_STORE: nats-js-kv
 
               SEARCH_EXTRACTOR_TYPE: tika
-              SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://opencloud-tika:9998
+              SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://tika.tools:9998
               FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
             securityContext: &sec
               allowPrivilegeEscalation: false
@@ -198,25 +198,6 @@ spec:
                     port: 9980
                     path: /hosting/discovery
               readiness: *probes
-      tika:
-        strategy: RollingUpdate
-        replicas: 2
-        pod:
-          hostUsers: false
-        containers:
-          tika:
-            image:
-              repository: mirror.gcr.io/apache/tika
-              tag: 3.3.0.0-full@sha256:ecdd37e204308266b1f8e28569f8516ebd5b96d7a4518a71d3904710b20c03b3
-            env:
-              JAVA_OPTS: "-Xmx3g"
-            securityContext: *sec
-            resources:
-              requests:
-                cpu: 200m
-                memory: 500Mi
-              limits:
-                memory: 5Gi
     defaultPodOptionsStrategy: merge
     defaultPodOptions:
       securityContext:
@@ -237,11 +218,6 @@ spec:
             port: 9142
           debug:
             port: 9205
-      tika:
-        controller: tika
-        ports:
-          http:
-            port: 9998
       wopi:
         controller: wopi
         ports:
@@ -321,9 +297,6 @@ spec:
       tmpfs:
         type: emptyDir
         advancedMounts:
-          tika:
-            tika:
-              - path: /tmp
           collabora:
             collabora:
               - path: /tmp

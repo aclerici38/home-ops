@@ -1,0 +1,83 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.6/helmrelease_v2.json?values=app-template/4.6.2
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: browserless
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 3m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 3m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      browserless:
+        strategy: RollingUpdate
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            seccompProfile: { type: RuntimeDefault }
+        containers:
+          browserless:
+            image:
+              repository: ghcr.io/browserless/chromium
+              tag: v2.48.2@sha256:af3483eb7f125978d511df0d227d37931941b43d2cdb5f768da57263a7a132bf
+            env:
+              CONCURRENT: 5
+              QUEUED: 10
+              TIMEOUT: 60000
+              DEFAULT_LAUNCH_ARGS: '["--no-sandbox"]'
+              DEBUG: browserless*:info
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /active
+                    port: &port 3000
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 3Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: [ALL] }
+    service:
+      browserless:
+        controller: browserless
+        ports:
+          http:
+            port: *port
+    persistence:
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
+          - path: /var/run
+            subPath: run
+          - path: /home/blessuser
+            subPath: home
+          - path: /usr/src/app/workspace
+            subPath: workspace
+      shm:
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 1Gi
+        globalMounts:
+          - path: /dev/shm

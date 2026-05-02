@@ -37,8 +37,8 @@ spec:
               OLLAMA_BASE_URL: http://mac-mini.cottage.internal:11434
               ENABLE_WEB_SEARCH: true
               WEB_SEARCH_ENGINE: tavily
-              WEB_SEARCH_RESULT_COUNT: 10
-              WEB_SEARCH_CONCURRENT_REQUESTS: 5
+              WEB_SEARCH_RESULT_COUNT: 5
+              WEB_SEARCH_CONCURRENT_REQUESTS: 2
               ENABLE_RAG_WEB_SEARCH: true
               ENABLE_SEARCH_QUERY: true
               RAG_WEB_SEARCH_ENGINE: tavily
@@ -46,7 +46,8 @@ spec:
                 secretKeyRef:
                   name: open-webui
                   key: TAVILY_API_KEY
-              WEB_LOADER_ENGINE: tavily
+              WEB_LOADER_ENGINE: playwright
+              PLAYWRIGHT_WS_URL: ws://browserless.tools:3000/chromium/playwright
               WEBUI_URL: &url https://chat.${SECRET_DOMAIN}
               CORS_ALLOW_ORIGIN: *url
               ENABLE_LOGIN_FORM: false
@@ -60,7 +61,7 @@ spec:
               PGVECTOR_CREATE_EXTENSION: false
               DATABASE_ENABLE_SESSION_SHARING: true
               CONTENT_EXTRACTION_ENGINE: tika
-              TIKA_SERVER_URL: http://opencloud-tika.home-infra:9998
+              TIKA_SERVER_URL: http://tika.tools:9998
               RAG_EMBEDDING_ENGINE: ollama
               RAG_EMBEDDING_MODEL: "mxbai-embed-large"
               ENABLE_OAUTH_SIGNUP: true
