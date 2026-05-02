@@ -36,8 +36,8 @@ spec:
             env:
               ALLOW_INTERNAL_NETWORK: true
               LOG_LEVEL: debug
-              APP_URL: ${APP_URL}
-              ALLOWED_ORIGINS: ${APP_URL}
+              APP_URL: https://${APP_URL}
+              ALLOWED_ORIGINS: https://${APP_URL}
               TRUST_PROXY: true
               ADMIN_EMAIL: ${EMAIL}
               ADMIN_PASSWORD:
