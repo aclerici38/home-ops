@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+configMapGenerator:
+  - name: APP-app-vars
+    literals:
+      - APP=trek
+      - OIDC_GROUP=fam
+components:
+  - ../../../components/ks/app
+  - ../../../components/kustomize/volsync/block
+  - ../../../components/kustomize/pocket-id
+  - ../../../components/kustomize/external-secret
