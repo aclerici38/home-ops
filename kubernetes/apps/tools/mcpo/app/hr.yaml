@@ -42,9 +42,18 @@ spec:
               - --host
               - 0.0.0.0
               - --port
-              - "8000"
+              - &port "8000"
               - --config
               - /config/config.json
+            probes:
+              liveness:
+                enabled: true
+                type: TCP
+                port: 8000
+              readiness:
+                enabled: true
+                type: TCP
+                port: 8000
             resources:
               requests:
                 cpu: 50m
@@ -89,6 +98,22 @@ spec:
                     "server_url": "https://trek.${SECRET_DOMAIN}/mcp",
                     "storage_type": "file"
                   }
+                },
+                "skiplagged": {
+                  "type": "streamable-http",
+                  "url": "https://mcp.skiplagged.com/mcp"
+                },
+                "kiwi": {
+                  "type": "streamable-http",
+                  "url": "https://mcp.kiwi.com"
+                },
+                "trivago": {
+                  "type": "streamable-http",
+                  "url": "https://mcp.trivago.com/mcp"
+                },
+                "ferryhopper": {
+                  "type": "streamable-http",
+                  "url": "https://mcp.ferryhopper.com/mcp"
                 }
               }
             }

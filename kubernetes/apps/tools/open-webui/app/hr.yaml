@@ -37,8 +37,10 @@ spec:
               OLLAMA_BASE_URL: http://mac-mini.cottage.internal:11434
               ENABLE_WEB_SEARCH: true
               WEB_SEARCH_ENGINE: tavily
-              WEB_SEARCH_RESULT_COUNT: 5
-              WEB_SEARCH_CONCURRENT_REQUESTS: 2
+              WEB_SEARCH_RESULT_COUNT: 10
+              WEB_SEARCH_CONCURRENT_REQUESTS: 5
+              BYPASS_EMBEDDING_AND_RETRIEVAL: true
+              RAG_FULL_CONTEXT: true
               ENABLE_RAG_WEB_SEARCH: true
               ENABLE_SEARCH_QUERY: true
               RAG_WEB_SEARCH_ENGINE: tavily
@@ -88,6 +90,54 @@ spec:
                       "info": {
                         "name": "TREK",
                         "description": "TREK travel planner via mcpo"
+                      }
+                    },
+                    {
+                      "type": "openapi",
+                      "url": "http://mcpo.tools:8000/skiplagged",
+                      "path": "openapi.json",
+                      "auth_type": "none",
+                      "key": "",
+                      "config": { "enable": true },
+                      "info": {
+                        "name": "Skiplagged",
+                        "description": "Hidden-city flight fares"
+                      }
+                    },
+                    {
+                      "type": "openapi",
+                      "url": "http://mcpo.tools:8000/kiwi",
+                      "path": "openapi.json",
+                      "auth_type": "none",
+                      "key": "",
+                      "config": { "enable": true },
+                      "info": {
+                        "name": "Kiwi",
+                        "description": "Virtual interlining flight search"
+                      }
+                    },
+                    {
+                      "type": "openapi",
+                      "url": "http://mcpo.tools:8000/trivago",
+                      "path": "openapi.json",
+                      "auth_type": "none",
+                      "key": "",
+                      "config": { "enable": true },
+                      "info": {
+                        "name": "Trivago",
+                        "description": "Hotel metasearch"
+                      }
+                    },
+                    {
+                      "type": "openapi",
+                      "url": "http://mcpo.tools:8000/ferryhopper",
+                      "path": "openapi.json",
+                      "auth_type": "none",
+                      "key": "",
+                      "config": { "enable": true },
+                      "info": {
+                        "name": "Ferryhopper",
+                        "description": "Ferry routes across 33 countries"
                       }
                     }
                   ]
