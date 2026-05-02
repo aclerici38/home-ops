@@ -66,6 +66,17 @@ spec:
           http:
             port: *port
     persistence:
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
+          - path: /var/run
+            subPath: run
+          - path: /home/blessuser
+            subPath: home
+          - path: /usr/src/app/workspace
+            subPath: workspace
       shm:
         type: emptyDir
         medium: Memory
