@@ -78,69 +78,7 @@ spec:
               WEBUI_SESSION_COOKIE_SECURE: true
               ENABLE_OPENAI_API: true
               USER_PERMISSIONS_FEATURES_DIRECT_TOOL_SERVERS: true
-              TOOL_SERVER_CONNECTIONS: |
-                  [
-                    {
-                      "type": "openapi",
-                      "url": "http://mcpo.tools:8000/trek",
-                      "path": "openapi.json",
-                      "auth_type": "none",
-                      "key": "",
-                      "config": { "enable": true },
-                      "info": {
-                        "name": "TREK",
-                        "description": "TREK travel planner via mcpo"
-                      }
-                    },
-                    {
-                      "type": "openapi",
-                      "url": "http://mcpo.tools:8000/skiplagged",
-                      "path": "openapi.json",
-                      "auth_type": "none",
-                      "key": "",
-                      "config": { "enable": true },
-                      "info": {
-                        "name": "Skiplagged",
-                        "description": "Hidden-city flight fares"
-                      }
-                    },
-                    {
-                      "type": "openapi",
-                      "url": "http://mcpo.tools:8000/kiwi",
-                      "path": "openapi.json",
-                      "auth_type": "none",
-                      "key": "",
-                      "config": { "enable": true },
-                      "info": {
-                        "name": "Kiwi",
-                        "description": "Virtual interlining flight search"
-                      }
-                    },
-                    {
-                      "type": "openapi",
-                      "url": "http://mcpo.tools:8000/trivago",
-                      "path": "openapi.json",
-                      "auth_type": "none",
-                      "key": "",
-                      "config": { "enable": true },
-                      "info": {
-                        "name": "Trivago",
-                        "description": "Hotel metasearch"
-                      }
-                    },
-                    {
-                      "type": "openapi",
-                      "url": "http://mcpo.tools:8000/ferryhopper",
-                      "path": "openapi.json",
-                      "auth_type": "none",
-                      "key": "",
-                      "config": { "enable": true },
-                      "info": {
-                        "name": "Ferryhopper",
-                        "description": "Ferry routes across 33 countries"
-                      }
-                    }
-                  ]
+              ENABLE_FORWARD_USER_INFO_HEADERS: true
               OPENAI_API_KEY:
                 secretKeyRef:
                   name: open-webui
