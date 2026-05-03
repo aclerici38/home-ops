@@ -7,6 +7,7 @@ configMapGenerator:
     literals:
       - APP=open-webui
       - VOLSYNC_CAPACITY=25Gi
+      - OIDC_GROUP=fam
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/cnpg/init
