@@ -37,10 +37,11 @@ spec:
               OLLAMA_BASE_URL: http://mac-mini.cottage.internal:11434
               ENABLE_WEB_SEARCH: true
               WEB_SEARCH_ENGINE: tavily
-              WEB_SEARCH_RESULT_COUNT: 10
-              WEB_SEARCH_CONCURRENT_REQUESTS: 5
+              WEB_SEARCH_RESULT_COUNT: 5
+              WEB_SEARCH_CONCURRENT_REQUESTS: 3
               BYPASS_EMBEDDING_AND_RETRIEVAL: true
-              RAG_FULL_CONTEXT: true
+              RAG_FULL_CONTEXT: false
+              TASK_MODEL: llama3.2:3b
               ENABLE_RAG_WEB_SEARCH: true
               ENABLE_SEARCH_QUERY: true
               RAG_WEB_SEARCH_ENGINE: tavily
