@@ -23,9 +23,9 @@ spec:
     monitoring:
       serviceMonitor:
         enabled: true
-    dashboards:
-       enabled: true
-       grafanaOperator:
+      dashboards:
+        enabled: true
+        grafanaOperator:
           enabled: true
           allowCrossNamespaceImport: true
           instanceSelector:
