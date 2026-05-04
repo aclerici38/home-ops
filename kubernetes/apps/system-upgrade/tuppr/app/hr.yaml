@@ -28,6 +28,5 @@ spec:
         grafanaOperator:
           enabled: true
           allowCrossNamespaceImport: true
-          instanceSelector:
-            matchLabels:
-              grafana.internal/instance: grafana
+          matchLabels:
+            grafana.internal/instance: grafana
