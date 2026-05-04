@@ -16,7 +16,9 @@ spec:
           for: 10m
           annotations:
             summary: >-
-              New device on Omada: {{ $labels.host_name }} ({{ $labels.mac }})
+              New device on Omada: {{ $labels.host_name }} via {{ $labels.connection_mode }}
+              {{ if $labels.ssid }}on SSID {{ $labels.ssid }} ({{ $labels.ap_name }}){{ else }}on switch port {{ $labels.switch_port }}{{ end }},
+              VLAN {{ $labels.vlan_id }}.
             description: >-
               {{ $labels.host_name }} ({{ $labels.vendor }}, MAC {{ $labels.mac }}, IP {{ $labels.ip }})
               joined site {{ $labels.site }} via {{ $labels.connection_mode }}
