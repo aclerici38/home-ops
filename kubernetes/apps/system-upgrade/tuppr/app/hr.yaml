@@ -23,3 +23,11 @@ spec:
     monitoring:
       serviceMonitor:
         enabled: true
+    dashboards:
+       enabled: true
+       grafanaOperator:
+          enabled: true
+          allowCrossNamespaceImport: true
+          instanceSelector:
+            matchLabels:
+              grafana.internal/instance: grafana
