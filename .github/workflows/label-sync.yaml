@@ -26,7 +26,7 @@ jobs:
           persist-credentials: false
 
       - name: Sync Labels
-        uses: EndBug/label-sync@7753e99e1e64188c24d7deede343c5a63e7c0d39 # v2.3.3
+        uses: EndBug/label-sync@52074158190acb45f3077f9099fea818aa43f97a # v2.3.3
         with:
           config-file: .github/labels.yaml
           delete-other-labels: true
