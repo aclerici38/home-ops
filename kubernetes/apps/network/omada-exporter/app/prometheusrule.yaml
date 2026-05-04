@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.90.1/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: omada-exporter-rules
+spec:
+  groups:
+    - name: omada.rules
+      rules:
+        - alert: OmadaNewClient
+          expr: |-
+            max by (mac, host_name, vendor, site, connection_mode, ssid, ap_name, switch_port, vlan_id, ip) (omada_client_download_activity_bytes)
+            unless on (mac)
+            max by (mac) (omada_client_download_activity_bytes offset 24h)
+          for: 10m
+          annotations:
+            summary: >-
+              New device on Omada: {{ $labels.host_name }} ({{ $labels.mac }})
+            description: >-
+              {{ $labels.host_name }} ({{ $labels.vendor }}, MAC {{ $labels.mac }}, IP {{ $labels.ip }})
+              joined site {{ $labels.site }} via {{ $labels.connection_mode }}
+              {{ if $labels.ssid }}on SSID {{ $labels.ssid }} ({{ $labels.ap_name }}){{ else }}on switch port {{ $labels.switch_port }}{{ end }},
+              VLAN {{ $labels.vlan_id }}.
+          labels:
+            severity: warning
