@@ -74,6 +74,8 @@ spec:
         type: ClusterIP
         ports:
           http:
+            port: 5000
+          http-auth:
             primary: true
             port: &auth 8971
           rtsp:
