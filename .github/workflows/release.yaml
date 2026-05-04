@@ -7,14 +7,19 @@ on:
   schedule:
     - cron: "0 0 1 * *" # 1st of every month at midnight
 
+permissions:
+  contents: read
+
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Get Previous Release Tag and Determine Next Tag
         id: determine-next-tag
-        uses: actions/github-script@v9
+        uses: actions/github-script@d746ffe35508b1917358783b479e04febd2b8f71 # v9.0.0
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           result-encoding: string
@@ -48,8 +53,8 @@ jobs:
             return `${nextMajorMinor}.${nextPatch}`;
 
       - name: Create Release
-        uses: ncipollo/release-action@v1
-        with:
-          generateReleaseNotes: true
-          tag: "${{ steps.determine-next-tag.outputs.result }}"
-          token: "${{ secrets.GITHUB_TOKEN }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ steps.determine-next-tag.outputs.result }}
+        run: gh release create "$TAG" --generate-notes --target "$GITHUB_SHA"

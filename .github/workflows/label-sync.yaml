@@ -8,16 +8,25 @@ on:
     branches: ["main"]
     paths: [".github/labels.yaml"]
 
+permissions:
+  contents: read
+
 jobs:
   label-sync:
     name: Label Sync
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Sync Labels
-        uses: EndBug/label-sync@v2
+        uses: EndBug/label-sync@7753e99e1e64188c24d7deede343c5a63e7c0d39 # v2.3.3
         with:
           config-file: .github/labels.yaml
           delete-other-labels: true

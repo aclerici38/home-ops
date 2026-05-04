@@ -4,8 +4,11 @@ name: "Labeler"
 
 on:
   workflow_dispatch:
-  pull_request_target:
+  pull_request_target: # zizmor: ignore[dangerous-triggers] no PR code is checked out; only the labeler action runs
     branches: ["main"]
+
+permissions:
+  contents: read
 
 jobs:
   labeler:
@@ -16,6 +19,6 @@ jobs:
       pull-requests: write
     steps:
       - name: Labeler
-        uses: actions/labeler@v6
+        uses: actions/labeler@634933edcd8ababfe52f92936142cc22ac488b1b # v6.0.1
         with:
           configuration-path: .github/labeler.yaml
