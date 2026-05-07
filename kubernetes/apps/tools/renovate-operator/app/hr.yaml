@@ -27,6 +27,11 @@ spec:
       parentRefs:
         - name: internal
           namespace: gateway-system
+    config:
+      logStorage:
+        mode: memory
+    logging:
+      format: console
     webhook:
       enabled: false
     metrics:
