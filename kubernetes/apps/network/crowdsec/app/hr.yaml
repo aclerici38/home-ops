@@ -23,10 +23,6 @@ spec:
     image:
       repository: ghcr.io/crowdsecurity/crowdsec
       pullPolicy: IfNotPresent
-      kubectl:
-        repository: registry.k8s.io/kubectl
-        tag: ${KUBE_VERSION}
-        pullPolicy: IfNotPresent
     config:
       parsers: {}
       scenarios: {}
