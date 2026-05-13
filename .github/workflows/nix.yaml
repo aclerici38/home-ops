@@ -43,7 +43,7 @@ jobs:
         run: nix run nixpkgs#nixfmt -- --check nix-config/*.nix
 
       - name: statix check
-        run: nix run nixpkgs#statix -- check nix-config
+        run: nix run nixpkgs#statix -- check -c nix-config nix-config
 
       - name: deadnix
         run: nix run nixpkgs#deadnix -- --fail nix-config
