@@ -22,7 +22,6 @@
       nix-darwin,
       home-manager,
       opnix,
-      nixpkgs,
       nix-homebrew,
       ...
     }:
