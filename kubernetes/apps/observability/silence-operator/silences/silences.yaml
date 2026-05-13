@@ -21,7 +21,7 @@ spec:
     - name: alertname
       value: NodeMemoryHighUtilization
     - name: instance
-      value: 10.0.30.25:9100
+      value: ${BONDS_IP}:9100
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/silence-operator/0.20.1/silence_v1alpha2.json
 apiVersion: observability.giantswarm.io/v1alpha2

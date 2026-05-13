@@ -19,8 +19,7 @@ spec:
     remediation:
       retries: 1
   values:
-    # placeholder value to pass flux-local
-    # b/c SECRET_DOMAIN comes from kustomize-webhook
+    # stub for flux-local
     domain: ${SECRET_DOMAIN:-example.com}
     fallthrough:
       enabled: true

@@ -3,7 +3,7 @@
 apiVersion: external-secrets.io/v1
 kind: ClusterExternalSecret
 metadata:
-  name: cluster-settings
+  name: cluster-secrets
   namespace: flux-system
 spec:
   namespaceSelectors:
@@ -13,28 +13,6 @@ spec:
     secretStoreRef:
       kind: ClusterSecretStore
       name: onepassword-connect
-    target:
-      template:
-        mergePolicy: Merge
-        data:
-          TZ: "America/Los_Angeles"
-          # renovate: datasource=github-releases depName=siderolabs/talos
-          TALOS_VERSION: "v1.13.2"
-          # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-          KUBE_VERSION: "v1.36.1"
-
-          COREDNS_CLUSTER_IP: "172.17.0.10"
-          BLOCKY_CLUSTER_IP: "172.17.0.11"
-          K8S_GATEWAY_CLUSTER_IP: "172.17.0.13"
-
-          SAMBA_LB_IP: "10.38.55.11"
-          BLOCKY_LB_IP: "10.38.55.25"
-          NFS_LB_IP: "10.38.55.30"
-          CROWDSEC_LB_IP: "10.38.55.50"
-          CROWDSEC_AGENT_LB_IP: "10.38.55.51"
-          D3SAVANT_LB_IP: "10.38.55.38"
-          KGATEWAY_INTERNAL_LB_IP: "10.38.55.90"
-          KGATEWAY_EXTERNAL_LB_IP: "10.38.55.91"
     dataFrom:
       - extract:
           key: cluster-secrets

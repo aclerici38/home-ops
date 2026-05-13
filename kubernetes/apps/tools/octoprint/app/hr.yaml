@@ -65,7 +65,7 @@ spec:
             command: ["/bin/sh", "-c"]
             args: |
               alias ocs='octoprint config set'
-              ocs --json server.reverseProxy.trustedProxies '["172.16.0.0/16"]'
+              ocs --json server.reverseProxy.trustedProxies '["${CLUSTER_POD_CIDR}"]'
               ocs webcam.ffmpeg /usr/bin/ffmpeg
               ocs plugins.classicwebcam.snapshot "http://octoprint-go2rtc:1984/api/frame.jpeg?src=printer"
               ocs plugins.classicwebcam.stream "https://printer-cam.${SECRET_DOMAIN}/api/stream.mjpeg?src=printer"

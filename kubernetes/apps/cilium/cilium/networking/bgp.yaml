@@ -12,7 +12,7 @@ spec:
     peers:
     - name: "opnsense"
       peerASN: 64523
-      peerAddress: 10.0.30.1
+      peerAddress: ${NODE_GATEWAY}
       peerConfigRef:
         name: "cilium-peer"
 ---

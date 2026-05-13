@@ -17,6 +17,6 @@ updelay: 200
 downdelay: 200
 mtu: 9000
 addresses:
-  - address: 10.0.30.9/24
+  - address: ${BELT_IP}/24
 routes:
-  - gateway: 10.0.30.1
+  - gateway: ${NODE_GATEWAY}

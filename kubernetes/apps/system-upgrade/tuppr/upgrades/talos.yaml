@@ -6,8 +6,7 @@ metadata:
   name: talos
 spec:
   talos:
-    # renovate: datasource=github-releases depName=siderolabs/talos
-    version: v1.13.2
+    version: ${TALOS_VERSION}
   policy:
     rebootMode: powercycle
   healthChecks:

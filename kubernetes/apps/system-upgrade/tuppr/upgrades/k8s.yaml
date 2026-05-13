@@ -6,8 +6,7 @@ metadata:
   name: kubernetes
 spec:
   kubernetes:
-    # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-    version: v1.36.1
+    version: ${KUBE_VERSION}
   healthChecks:
     - apiVersion: volsync.backube/v1alpha1
       kind: ReplicationSource

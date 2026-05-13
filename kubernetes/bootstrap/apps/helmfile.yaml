@@ -22,8 +22,15 @@ releases:
         args: ["apply", "--server-side", "-f", "https://github.com/prometheus-operator/prometheus-operator/releases/latest/download/stripped-down-crds.yaml"]
       - events: ["postsync"]
         showlogs: true
-        command: "kubectl"
-        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cilium/cilium/networking/"]
+        command: "sh"
+        args:
+          - "-c"
+          - |
+            export NS=cilium
+            for f in /Users/anthony/home-ops/kubernetes/apps/cilium/cilium/networking/*.yaml; do
+              grep -v 'yaml-language-server' "$f" | envsubst
+              printf '\n---\n'
+            done | kubectl apply -f -
 
   - name: coredns
     namespace: kube-system

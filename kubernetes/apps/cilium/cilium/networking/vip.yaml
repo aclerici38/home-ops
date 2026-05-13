@@ -6,7 +6,7 @@ metadata:
   name: kube-vip
   namespace: kube-system
   annotations:
-    lbipam.cilium.io/ips: 10.0.30.250
+    lbipam.cilium.io/ips: ${CLUSTER_ENDPOINT_VIP}
     gatus.home-operations.com/enabled: "false"
 spec:
   type: LoadBalancer

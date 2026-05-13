@@ -14,8 +14,8 @@ spec:
   imageCatalogRef:
     apiGroup: postgresql.cnpg.io
     kind: ClusterImageCatalog
-    major: ${CNPG_MAJOR_VERSION:-18}
-    name: ${CNPG_CATALOG_NAME:-postgresql-minimal-trixie}
+    major: ${CNPG_MAJOR_VERSION:=18}
+    name: ${CNPG_CATALOG_NAME:=postgresql-minimal-trixie}
   storage:
     size: ${CNPG_CAPACITY:=2Gi}
     storageClass: ${CNPG_STORAGECLASS:=openebs-hostpath}

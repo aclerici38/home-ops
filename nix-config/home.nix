@@ -11,6 +11,7 @@
     cilium-cli
     claude-code
     crane
+    envsubst
     ffmpeg
     fluxcd
     gh
@@ -23,8 +24,10 @@
     kubectl
     kubectl-cnpg
     kubernetes-helm
+    kustomize
     mas
     minio-client
+    minijinja
     nil
     nixd
     nixfmt
@@ -81,6 +84,8 @@
     enableFishIntegration = true;
 
   };
+
+  programs.direnv.enable = true;
 
   programs.fish = {
     enable = true;
