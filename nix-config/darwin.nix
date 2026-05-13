@@ -7,7 +7,7 @@
     onActivation.cleanup = "zap";
     casks = [
       "1password"
-      "discord" 
+      "discord"
       "ghostty"
       "istat-menus"
       "opencloud"
@@ -49,7 +49,7 @@
     finder = {
       AppleShowAllFiles = true;
       FXDefaultSearchScope = "SCcf";
-      FXPreferredViewStyle = "Nlsv";   # default new windows to list
+      FXPreferredViewStyle = "Nlsv"; # default new windows to list
       ShowPathbar = true;
       ShowStatusBar = true;
     };

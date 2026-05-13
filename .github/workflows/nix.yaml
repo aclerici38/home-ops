@@ -40,7 +40,7 @@ jobs:
           determinate: false
 
       - name: nixfmt --check
-        run: nix run nixpkgs#nixfmt -- --check nix-config
+        run: nix run nixpkgs#nixfmt -- --check nix-config/*.nix
 
       - name: statix check
         run: nix run nixpkgs#statix -- check nix-config
