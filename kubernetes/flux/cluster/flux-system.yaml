@@ -10,8 +10,6 @@ spec:
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/flux-system
-  components:
-    - ../../components/namespace
   prune: false
   wait: false
   sourceRef:
