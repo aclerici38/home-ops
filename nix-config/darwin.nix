@@ -7,12 +7,19 @@
     onActivation.cleanup = "zap";
     casks = [
       "1password"
+      "balenaetcher"
       "discord"
+      "docker-desktop"
       "ghostty"
       "istat-menus"
       "opencloud"
+      "spotify"
+      "wireshark-app"
+      "ultimaker-cura"
+      "utm"
       "zen"
       "zed"
+      "zoom"
     ];
     masApps = {
       "Discovery" = 1381004916;

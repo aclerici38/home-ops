@@ -8,23 +8,32 @@
   home.packages = with pkgs; [
     _1password-cli
     age
+    cilium-cli
     claude-code
+    crane
     ffmpeg
     fluxcd
     gh
     helm-docs
     helmfile
+    jq
     k9s
+    kind
+    kubebuilder
     kubectl
     kubectl-cnpg
     kubernetes-helm
     mas
+    minio-mc
     nil
     nixd
     nixfmt
     sops
+    skopeo
+    yq
     talhelper
     talosctl
+    uv
     zizmor
   ];
 
@@ -71,7 +80,7 @@
     };
 
     shellAbbrs = {
-      drs = "sudo darwin-rebuild switch --flake ~/home-ops/nix-config#Anthonys-Mac-mini";
+      drs = "sudo darwin-rebuild switch --flake ~/home-ops/nix-config";
     };
 
     functions.load-secrets = ''
