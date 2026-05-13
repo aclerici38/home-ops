@@ -1,0 +1,82 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Nix
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "nix-config/**"
+      - ".github/workflows/nix.yaml"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "nix-config/**"
+      - ".github/workflows/nix.yaml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Nix - Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+        with:
+          determinate: false
+
+      - name: nixfmt --check
+        run: nix run nixpkgs#nixfmt -- --check nix-config
+
+      - name: statix check
+        run: nix run nixpkgs#statix -- check nix-config
+
+      - name: deadnix
+        run: nix run nixpkgs#deadnix -- --fail nix-config
+
+  flake-checker:
+    name: Nix - Flake Health
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Flake Checker
+        uses: DeterminateSystems/flake-checker-action@3164002371bc90729c68af0e24d5aacf20d7c9f6 # v12
+        with:
+          flake-lock-path: nix-config/flake.lock
+          fail-mode: true
+
+  success:
+    if: ${{ !cancelled() }}
+    needs: ["lint", "flake-checker"]
+    name: Nix - Success
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Any jobs failed?
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
+
+      - name: All jobs passed or skipped?
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: echo "All jobs passed or skipped" && echo "${{ toJSON(needs.*.result) }}"

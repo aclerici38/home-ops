@@ -328,5 +328,14 @@
         commitMessageTopic: "{{{groupName}}} group",
       },
     },
+    {
+      description: "Nix flake inputs group",
+      groupName: "Nix Flake",
+      matchManagers: ["nix"],
+      schedule: ["after 3am before 6am"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
   ],
 }
