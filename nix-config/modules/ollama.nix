@@ -4,6 +4,8 @@
 
   system.activationScripts.ollama.text = ''
     mkdir -p /var/lib/ollama/models
+    /usr/bin/mdutil -i off /var/lib/ollama >/dev/null 2>&1 || true
+    /usr/bin/tmutil addexclusion /var/lib/ollama >/dev/null 2>&1 || true
   '';
 
   launchd.daemons.ollama = {
@@ -19,10 +21,14 @@
         OLLAMA_HOST = "0.0.0.0:11434";
         OLLAMA_MODELS = "/var/lib/ollama/models";
         HOME = "/var/lib/ollama";
+        OLLAMA_FLASH_ATTENTION = "1";
+        OLLAMA_KV_CACHE_TYPE = "q8_0";
+        OLLAMA_KEEP_ALIVE = "24h";
+        OLLAMA_CONTEXT_LENGTH = "8192";
       };
       StandardOutPath = "/var/log/ollama.log";
       StandardErrorPath = "/var/log/ollama.err";
-      ProcessType = "Background";
+      ProcessType = "Standard";
     };
   };
 }
