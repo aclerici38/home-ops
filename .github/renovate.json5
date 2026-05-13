@@ -45,10 +45,6 @@
   nix: {
     enabled: true,
   },
-  lockFileMaintenance: {
-    enabled: true,
-    schedule: ['after 3am before 6am'],
-  },
   registryAliases: {
     "mirror.gcr.io": "docker.io"
   },

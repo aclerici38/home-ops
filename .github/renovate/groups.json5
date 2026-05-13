@@ -333,6 +333,10 @@
       groupName: "Nix Flake",
       matchManagers: ["nix"],
       schedule: ["after 3am before 6am"],
+      lockFileMaintenance: {
+        enabled: true,
+        schedule: ["after 3am before 6am"],
+      },
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
