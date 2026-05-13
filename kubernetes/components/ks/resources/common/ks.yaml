@@ -25,6 +25,9 @@ spec:
       - kind: ConfigMap
         name: APP-app-vars
         optional: false
-      - kind: Secret
+      - kind: ConfigMap
         name: cluster-settings
+        optional: false
+      - kind: Secret
+        name: cluster-secrets
         optional: false

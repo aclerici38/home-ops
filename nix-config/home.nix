@@ -24,6 +24,7 @@
     kubectl
     kubectl-cnpg
     kubernetes-helm
+    kustomize
     mas
     minio-client
     minijinja
