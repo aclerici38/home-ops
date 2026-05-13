@@ -20,6 +20,7 @@
       nix-darwin,
       home-manager,
       opnix,
+      ...
     }:
     {
       # $ darwin-rebuild switch --flake .#Anthonys-Mac-mini
@@ -27,6 +28,7 @@
         specialArgs = { inherit inputs self; };
         modules = [
           ./darwin.nix
+          ./modules/ollama.nix
           home-manager.darwinModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
