@@ -1,17 +1,15 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/refs/tags/v3.1.9/pkg/config/schemas/talconfig.json
-# renovate: datasource=github-releases depName=siderolabs/talos
-talosVersion: v1.13.2
-# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-kubernetesVersion: v1.36.1
+talosVersion: ${TALOS_VERSION}
+kubernetesVersion: ${KUBE_VERSION}
 
-clusterName: dormammu
-endpoint: https://10.0.30.250:6443
+clusterName: ${CLUSTER_NAME}
+endpoint: ${CLUSTER_ENDPOINT_URL}
 
 clusterPodNets:
-  - "172.16.0.0/16"
+  - "${CLUSTER_POD_CIDR}"
 clusterSvcNets:
-  - "172.17.0.0/16"
+  - "${CLUSTER_SVC_CIDR}"
 
 additionalApiServerCertSans: &sans
   - "k8s.lab.internal"
@@ -19,13 +17,13 @@ additionalApiServerCertSans: &sans
   - "cain.lab.internal"
   - "posey.lab.internal"
   - "belt.lab.internal"
-  - "10.0.30.250"
-  - "10.0.30.25"
-  - "10.0.30.18"
-  - "10.0.30.28"
-  - "10.0.30.9"
+  - "${CLUSTER_ENDPOINT_VIP}"
+  - "${BONDS_IP}"
+  - "${CAIN_IP}"
+  - "${POSEY_IP}"
+  - "${BELT_IP}"
   - "127.0.0.1"
-  - "172.17.0.1"
+  - "${CLUSTER_SVC_GATEWAY}"
 additionalMachineCertSans: *sans
 
 # Disable built-in Flannel to use Cilium
@@ -34,7 +32,7 @@ cniConfig:
 
 nodes:
   - hostname: "bonds"
-    ipAddress: "10.0.30.25"
+    ipAddress: "${BONDS_IP}"
     installDiskSelector:
       wwid: eui.00253841414031f0
     machineSpec:
@@ -94,7 +92,7 @@ nodes:
     patches:
       - "@./patches/networking/bonds.yaml"
   - hostname: "cain"
-    ipAddress: "10.0.30.18"
+    ipAddress: "${CAIN_IP}"
     installDiskSelector:
       wwid: eui.6479a79d30000001
     machineSpec:
@@ -150,7 +148,7 @@ nodes:
     patches:
       - "@./patches/networking/cain.yaml"
   - hostname: "posey"
-    ipAddress: "10.0.30.28"
+    ipAddress: "${POSEY_IP}"
     installDiskSelector:
       wwid: eui.00000000000000000026b7686e946425
     machineSpec:
@@ -198,7 +196,7 @@ nodes:
     patches:
       - "@./patches/networking/posey.yaml"
   - hostname: "belt"
-    ipAddress: "10.0.30.9"
+    ipAddress: "${BELT_IP}"
     installDiskSelector:
       wwid: naa.500a07511fc61629
     nodeLabels:

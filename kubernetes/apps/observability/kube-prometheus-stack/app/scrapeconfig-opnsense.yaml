@@ -9,6 +9,6 @@ spec:
   scrapeInterval: 60s
   staticConfigs:
     - targets:
-        - 10.0.30.1:9100
+        - ${NODE_GATEWAY}:9100
       labels:
         job: opnsense

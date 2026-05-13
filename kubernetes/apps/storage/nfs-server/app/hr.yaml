@@ -72,7 +72,7 @@ spec:
         type: LoadBalancer
         externalTrafficPolicy: Local
         annotations:
-          lbipam.cilium.io/ips: "${NFS_LB_IP:-1.1.1.1}"
+          lbipam.cilium.io/ips: "${NFS_LB_IP}"
           coredns.io/hostname: nfs.${SECRET_DOMAIN}
         ports:
           nfs:

@@ -26,7 +26,7 @@ spec:
         grpcPort: 8080
         logLevel: info
       trustedProxies:
-        - 172.16.0.0/16
+        - ${CLUSTER_POD_CIDR}
       bouncer:
         enabled: true
         metrics: true

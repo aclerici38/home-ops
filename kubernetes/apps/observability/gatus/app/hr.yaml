@@ -159,7 +159,7 @@ spec:
               read-buffer-size: 32768
             connectivity:
               checker:
-                target: 172.17.0.10:53
+                target: ${COREDNS_CLUSTER_IP}:53
                 interval: 1m
             
             endpoints:

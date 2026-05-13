@@ -35,9 +35,9 @@ downdelay: 200
 minLinks:
 mtu: 9000
 addresses:
-  - address: 10.0.30.25/24
+  - address: ${BONDS_IP}/24
 routes:
-  - gateway: 10.0.30.1
+  - gateway: ${NODE_GATEWAY}
 ---
 apiVersion: v1alpha1
 kind: BondConfig
@@ -52,7 +52,7 @@ downdelay: 200
 ---
 apiVersion: v1alpha1
 kind: Layer2VIPConfig
-name: 10.0.30.250
+name: ${CLUSTER_ENDPOINT_VIP}
 link: bond0
 ---
 apiVersion: v1alpha1

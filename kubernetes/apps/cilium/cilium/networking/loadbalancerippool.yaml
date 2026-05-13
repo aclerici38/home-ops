@@ -20,4 +20,4 @@ spec:
   allowFirstLastIPs: 'Yes'
   blocks:
     - start: 10.0.30.200
-      stop: 10.0.30.250
+      stop: ${CLUSTER_ENDPOINT_VIP}

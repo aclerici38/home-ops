@@ -40,17 +40,17 @@ spec:
               reason: "Home networks"
               cidr:
                 - "10.0.0.0/16"
-                - "172.16.0.0/12"
+                - "${CLUSTER_POD_CIDR}"
       config.yaml.local: |-
         api:
           server:
             trusted_ips:
-              - 172.16.0.0/16
+              - ${CLUSTER_POD_CIDR}
             auto_registration:
               enabled: true
               token: "$${REGISTRATION_TOKEN}"
               allowed_ranges:
-                - "172.16.0.0/16"
+                - "${CLUSTER_POD_CIDR}"
         db_config:
           type: postgresql
           host: $${DB_HOST}
@@ -93,7 +93,7 @@ spec:
       service:
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: 10.38.55.50
+          lbipam.cilium.io/ips: ${CROWDSEC_LB_IP}
       persistentVolume:
         data:
           enabled: false
@@ -130,7 +130,7 @@ spec:
       service:
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: 10.38.55.51
+          lbipam.cilium.io/ips: ${CROWDSEC_AGENT_LB_IP}
         ports:
           - name: syslog
             port: 514

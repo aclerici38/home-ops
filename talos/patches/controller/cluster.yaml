@@ -13,9 +13,9 @@ cluster:
     disabled: true
   etcd:
     advertisedSubnets:
-      - "10.0.30.0/24"
+      - "${NODE_SUBNET}"
     listenSubnets:
-      - "10.0.30.0/24"
+      - "${NODE_SUBNET}"
     extraArgs:
       listen-metrics-urls: http://0.0.0.0:2381
   proxy:

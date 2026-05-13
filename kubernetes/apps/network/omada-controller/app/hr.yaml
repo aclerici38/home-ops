@@ -59,7 +59,7 @@ spec:
     service:
       type: LoadBalancer
       annotations:
-        lbipam.cilium.io/ips: 10.38.55.10
+        lbipam.cilium.io/ips: ${OMADA_LB_IP}
         coredns.io/hostname: ${APP_URL}
     resources:
       requests:

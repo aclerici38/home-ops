@@ -4,7 +4,7 @@ machine:
       max-pods: 500
     nodeIP:
       validSubnets:
-        - "10.0.30.0/24"
+        - "${NODE_SUBNET}"
     extraConfig:
       featureGates:
         ImageVolume: true

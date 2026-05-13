@@ -5,4 +5,4 @@ machine:
       advertiseKubernetesNetworks: false
     disableSearchDomain: true
     nameservers:
-      - 10.0.30.1
+      - ${NODE_NAMESERVER}
