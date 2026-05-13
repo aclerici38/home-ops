@@ -42,6 +42,13 @@
       '/(^|/)kubernetes/.+\\.ya?ml$/',
     ],
   },
+  nix: {
+    enabled: true,
+  },
+  lockFileMaintenance: {
+    enabled: true,
+    schedule: ['before 5am on monday'],
+  },
   registryAliases: {
     "mirror.gcr.io": "docker.io"
   },
