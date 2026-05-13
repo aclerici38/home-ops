@@ -52,7 +52,11 @@
         # $ darwin-rebuild switch --flake .#Anthonys-Mac-mini
         "Anthonys-Mac-mini" = nix-darwin.lib.darwinSystem {
           specialArgs = { inherit inputs self; };
-          modules = [ ./darwin.nix ./modules/ollama.nix ] ++ sharedModules;
+          modules = [
+            ./darwin.nix
+            ./modules/ollama.nix
+          ]
+          ++ sharedModules;
         };
 
         # $ darwin-rebuild switch --flake .#Anthonys-MacBook-Pro
