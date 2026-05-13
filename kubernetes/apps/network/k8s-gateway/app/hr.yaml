@@ -19,8 +19,8 @@ spec:
     remediation:
       retries: 1
   values:
-
-    domain: ${SECRET_DOMAIN}
+    # stub for flux-local
+    domain: ${SECRET_DOMAIN:-example.com}
     fallthrough:
       enabled: true
       zones:
