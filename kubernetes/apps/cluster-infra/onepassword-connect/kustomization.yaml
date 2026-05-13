@@ -7,7 +7,7 @@ configMapGenerator:
     literals:
       - APP=onepassword-connect
 replacements:
-  - # cluster-settings postBuild should be optional here
+  - # cluster-secrets postBuild should be optional here
     sourceValue: "true"
     targets:
       - select:

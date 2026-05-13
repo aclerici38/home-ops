@@ -10,7 +10,7 @@ configMapGenerator:
       # - INSTALL_SSA=false
       # - UPGRADE_SSA=disabled
 replacements:
-  - # cluster-settings postBuild should be optional here
+  - # cluster-secrets postBuild should be optional here
     sourceValue: "true"
     targets:
       - select:

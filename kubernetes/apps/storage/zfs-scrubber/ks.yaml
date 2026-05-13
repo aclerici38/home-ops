@@ -21,7 +21,7 @@ spec:
       SCRUB_SCHEDULE: "0 3 1 * *"
     substituteFrom:
       - kind: Secret
-        name: cluster-settings
+        name: cluster-secrets
         optional: false
   dependsOn: []
 ---
@@ -47,6 +47,6 @@ spec:
       SCRUB_SCHEDULE: 0 0 1,15 * *
     substituteFrom:
       - kind: Secret
-        name: cluster-settings
+        name: cluster-secrets
         optional: false
   dependsOn: []
