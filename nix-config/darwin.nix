@@ -2,9 +2,12 @@
 {
   homebrew = {
     enable = true;
-    onActivation.autoUpdate = true;
+    onActivation.autoUpdate = false;
     onActivation.upgrade = true;
     onActivation.cleanup = "zap";
+    brews = [
+    ];
+
     casks = [
       "1password"
       "balenaetcher"

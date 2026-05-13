@@ -24,7 +24,7 @@
     kubectl-cnpg
     kubernetes-helm
     mas
-    minio-mc
+    minio-client
     nil
     nixd
     nixfmt
@@ -51,6 +51,14 @@
     };
   };
 
+  programs.ssh = {
+    enable = true;
+    enableDefaultConfig = false;
+    matchBlocks."*" = {
+      extraOptions.IdentityAgent = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+    };
+  };
+
   programs.git = {
     enable = true;
     settings = {
@@ -61,6 +69,10 @@
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
+      gpg.format = "ssh";
+      commit.gpgsign = true;
+      "gpg.ssh".program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+      user.signingkey = "key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKqgluvCmCmTP872eVF1gSq4nUozATZPwjVT4BlnuVtM";
     };
   };
 

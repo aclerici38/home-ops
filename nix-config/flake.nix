@@ -12,6 +12,8 @@
 
     opnix.url = "github:brizzbuzz/opnix";
     opnix.inputs.nixpkgs.follows = "nixpkgs";
+
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
   };
 
   outputs =
@@ -20,41 +22,44 @@
       nix-darwin,
       home-manager,
       opnix,
+      nixpkgs,
+      nix-homebrew,
       ...
     }:
+    let
+      sharedModules = [
+        home-manager.darwinModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.backupFileExtension = "backup";
+          home-manager.sharedModules = [ opnix.homeManagerModules.default ];
+          home-manager.users.anthony = import ./home.nix;
+        }
+        nix-homebrew.darwinModules.nix-homebrew
+        {
+          nix-homebrew = {
+            enable = true;
+            enableRosetta = true;
+            user = "anthony";
+            autoMigrate = true;
+          };
+        }
+      ];
+    in
     {
-      # $ darwin-rebuild switch --flake .#Anthonys-Mac-mini
-      darwinConfigurations."Anthonys-Mac-mini" = nix-darwin.lib.darwinSystem {
-        specialArgs = { inherit inputs self; };
-        modules = [
-          ./darwin.nix
-          ./modules/ollama.nix
-          home-manager.darwinModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-            home-manager.sharedModules = [ opnix.homeManagerModules.default ];
-            home-manager.users.anthony = import ./home.nix;
-          }
-        ];
-      };
-    };
-    {
-      # $ darwin-rebuild switch --flake .#Anthonys-MacBook-Pro-2
-      darwinConfigurations."Anthonys-MacBook-Pro-2" = nix-darwin.lib.darwinSystem {
-        specialArgs = { inherit inputs self; };
-        modules = [
-          ./darwin.nix
-          home-manager.darwinModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-            home-manager.sharedModules = [ opnix.homeManagerModules.default ];
-            home-manager.users.anthony = import ./home.nix;
-          }
-        ];
+      darwinConfigurations = {
+        # $ darwin-rebuild switch --flake .#Anthonys-Mac-mini
+        "Anthonys-Mac-mini" = nix-darwin.lib.darwinSystem {
+          specialArgs = { inherit inputs self; };
+          modules = [ ./darwin.nix ./modules/ollama.nix ] ++ sharedModules;
+        };
+
+        # $ darwin-rebuild switch --flake .#Anthonys-MacBook-Pro
+        "Anthonys-MacBook-Pro" = nix-darwin.lib.darwinSystem {
+          specialArgs = { inherit inputs self; };
+          modules = [ ./darwin.nix ] ++ sharedModules;
+        };
       };
     };
 }
