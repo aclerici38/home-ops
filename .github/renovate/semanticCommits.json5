@@ -43,5 +43,10 @@
       semanticCommitScope: "github-release",
       commitMessageTopic: "release {{depName}}",
     },
+    {
+      matchManagers: ["nix"],
+      semanticCommitScope: "nix",
+      commitMessageTopic: "flake input {{depName}}",
+    },
   ],
 }

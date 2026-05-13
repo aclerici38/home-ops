@@ -61,5 +61,13 @@
       matchPackageNames: ["aclerici38/k8s-versioned-schemas"],
       matchUpdateTypes: ["major", "minor", "patch"],
     },
+    {
+      description: ["Auto-merge nix flake input updates via PR after 6am"],
+      matchManagers: ["nix"],
+      automerge: true,
+      automergeType: "pr",
+      automergeSchedule: ["after 6am before 7am"],
+      matchUpdateTypes: ["minor", "patch", "digest", "pin", "pinDigest", "lockFileMaintenance"],
+    },
   ],
 }
