@@ -31,6 +31,8 @@
     };
   };
 
+  nix.package = pkgs.nix;
+
   nix.settings.experimental-features = "nix-command flakes";
 
   # Deduplicate identical files in /nix/store as they're added.
