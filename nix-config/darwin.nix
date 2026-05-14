@@ -20,6 +20,7 @@
       "wireshark-app"
       "ultimaker-cura"
       "utm"
+      "vlc"
       "zen"
       "zed"
       "zoom"
