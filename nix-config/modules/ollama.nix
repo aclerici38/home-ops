@@ -2,6 +2,11 @@
 {
   environment.systemPackages = [ pkgs.ollama ];
 
+  # Keep the Mac mini awake so the daemon below can actually serve requests.
+  # Display is left to default; only system + disk sleep are disabled.
+  power.sleep.computer = "never";
+  power.sleep.harddisk = "never";
+
   system.activationScripts.ollama.text = ''
     mkdir -p /var/lib/ollama/models
     /usr/bin/mdutil -i off /var/lib/ollama >/dev/null 2>&1 || true
