@@ -8,10 +8,14 @@ configMapGenerator:
       - APP=open-webui
       - VOLSYNC_CAPACITY=25Gi
       - OIDC_GROUP=fam
+patches:
+  - path: ./patch.yaml
+    target:
+      kind: Kustomization
+      group: kustomize.toolkit.fluxcd.io
 components:
   - ../../../components/ks/app
   - ../../../components/kustomize/cnpg/init
-  - ../../../components/kustomize/cnpg/extensions
   - ../../../components/kustomize/pocket-id
   - ../../../components/kustomize/external-secret
   - ../../../components/kustomize/volsync/cephfs

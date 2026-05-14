@@ -6,42 +6,29 @@ metadata:
   name: patch
 spec:
   patches:
-    # - patch: |-
-    #     apiVersion: postgresql.cnpg.io/v1
-    #     kind: Cluster
-    #     metadata:
-    #       name: patch
-    #     spec:
-    #       bootstrap:
-    #         initdb:
-    #           database: app
-    #           owner: jensen
-    #           secret:
-    #             name: jensen-d3savant
-    #       managed:
-    #         roles:
-    #           - name: anthony
-    #             ensure: present
-    #             login: true
-    #             superuser: false
-    #             inRoles:
-    #               - jensen
-    #             passwordSecret:
-    #               name: anthony-d3savant
-    #   target:
-    #     kind: Cluster
+    # The Pooler is now Helm-rendered, so this patch can no longer target
+    # it directly in the kustomize output. Inject it into the HR's
+    # postRenderer to apply at chart-render time.
     - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Pooler
-        metadata:
-          name: patch
-        spec:
-          serviceTemplate:
-            metadata:
-              annotations:
-                lbipam.cilium.io/ips: ${D3SAVANT_LB_IP}
-            spec:
-              type: LoadBalancer
-              externalTrafficPolicy: Local
+        - op: add
+          path: /spec/postRenderers/0/kustomize/patches/-
+          value:
+            target:
+              kind: Pooler
+              name: d3savant-db-pooler-rw
+            patch: |
+              apiVersion: postgresql.cnpg.io/v1
+              kind: Pooler
+              metadata:
+                name: d3savant-db-pooler-rw
+              spec:
+                serviceTemplate:
+                  metadata:
+                    annotations:
+                      lbipam.cilium.io/ips: ${D3SAVANT_LB_IP}
+                  spec:
+                    type: LoadBalancer
+                    externalTrafficPolicy: Local
       target:
-        kind: Pooler
+        kind: HelmRelease
+        name: d3savant-db

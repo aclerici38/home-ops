@@ -1,0 +1,98 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.7/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ${APP}-db
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: cnpg-cluster
+    namespace: database
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  values:
+    type: postgresql
+    mode: standalone
+    fullnameOverride: ${APP}-db
+    cluster:
+      instances: ${CNPG_REPLICAS:=3}
+      imageCatalogRef:
+        apiGroup: postgresql.cnpg.io
+        kind: ClusterImageCatalog
+        major: ${CNPG_MAJOR_VERSION:=18}
+        name: ${CNPG_CATALOG_NAME:=postgresql-minimal-trixie}
+      storage:
+        size: ${CNPG_CAPACITY:=2Gi}
+        storageClass: ${CNPG_STORAGECLASS:=openebs-hostpath}
+      enableSuperuserAccess: true
+      superuserSecret: cloudnative-pg
+      enablePDB: true
+      primaryUpdateMethod: switchover
+      primaryUpdateStrategy: ${CNPG_UPDATE_STRAT:=unsupervised}
+      affinity:
+        podAntiAffinityType: ${CNPG_AFFINITY_TYPE:=required}
+      monitoring:
+        enabled: true
+        podMonitor:
+          enabled: true
+      postgresql:
+        synchronous:
+          method: any
+          number: 1
+          dataDurability: preferred
+          failoverQuorum: true
+        parameters:
+          shared_buffers: "${CNPG_BUFFERS:=512MB}"
+          work_mem: "${CNPG_WORK_MEM:=8MB}"
+          maintenance_work_mem: "${CNPG_MAINTENANCE_WORK_MEM:=128MB}"
+          effective_cache_size: "${CNPG_CACHE_SIZE:=1536MB}"
+          wal_buffers: "${CNPG_WAL_BUFFERS:=16MB}"
+          checkpoint_timeout: "${CNPG_CHECKPOINT_TIMEOUT:=10min}"
+          max_wal_size: "${CNPG_MAX_WAL_SIZE:=4GB}"
+          min_wal_size: "${CNPG_MIN_WAL_SIZE:=1GB}"
+          max_slot_wal_keep_size: "${CNPG_MAX_SLOT_WAL_KEEP_SIZE:=10GB}"
+          checkpoint_completion_target: "${CNPG_CHECKPOINT_COMPLETION_TARGET:='0.9'}"
+          wal_keep_size: "${CNPG_WAL_KEEP_SIZE:=4GB}"
+          wal_sender_timeout: 60s
+          wal_receiver_timeout: 60s
+          log_min_duration_statement: "500"
+          log_checkpoints: "on"
+          log_autovacuum_min_duration: "250"
+          log_temp_files: "128MB"
+          log_lock_waits: "on"
+          autovacuum_vacuum_cost_limit: "${CNPG_AUTOVACUUM_COST_LIMIT:='2000'}"
+          autovacuum_max_workers: "${CNPG_AUTOVACUUM_MAX_WORKERS:='3'}"
+          autovacuum_naptime: "${CNPG_AUTOVACUUM_NAPTIME:=20s}"
+    poolers:
+      - name: rw
+        type: rw
+        poolMode: ${CNPG_POOLMODE:=transaction}
+        instances: ${CNPG_POOLER_REPLICAS:=1}
+        parameters:
+          default_pool_size: "30"
+          min_pool_size: "5"
+          reserve_pool_size: "10"
+          reserve_pool_timeout: "5"
+          max_client_conn: "500"
+          listen_backlog: "1024"
+          query_wait_timeout: "120"
+          idle_transaction_timeout: "60"
+          server_idle_timeout: "180"
+          max_prepared_statements: "200"
+        monitoring:
+          enabled: true
+          podMonitor:
+            enabled: true
+  valuesFrom:
+    - kind: ConfigMap
+      name: ${APP}-cnpg-cluster
+      optional: true

@@ -1,0 +1,29 @@
+---
+# Adds a Kustomize postRenderer to the HelmRelease that injects the
+# barman-cloud plugin into the chart-rendered Cluster. Until upstream
+# chart PR 838 lands (CNPG-I plugin support), the cluster chart cannot
+# emit `spec.plugins`, so we patch it in post-render.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ${APP}-db
+spec:
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Cluster
+              name: ${APP}-db
+            patch: |
+              apiVersion: postgresql.cnpg.io/v1
+              kind: Cluster
+              metadata:
+                name: ${APP}-db
+              spec:
+                plugins:
+                  - name: barman-cloud.cloudnative-pg.io
+                    enabled: true
+                    isWALArchiver: true
+                    parameters:
+                      barmanObjectName: ${APP}
+                      serverName: ${APP}-db

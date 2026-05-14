@@ -6,40 +6,24 @@ metadata:
   name: patch
 spec:
   patches:
-    # https://blog.ferretdb.io/run-ferretdb-postgres-documentdb-extension-cnpg-kubernetes/
-    # extensions initialized in the database CR
+    # Chart 0.6.0 does not pass through cluster.postgresql.extensions, so
+    # append the opt-in to the existing plugin postRenderer.
     - patch: |-
-        apiVersion: postgresql.cnpg.io/v1
-        kind: Cluster
-        metadata:
-          name: patch
-        spec:
-          managed:
-            roles:
-              - name: app
-                login: true
-                inRoles:
-                  - documentdb_admin_role
-          postgresql:
-            pg_hba:
-              # pg_cron and documentdb connect to app db via localhost
-              - host app postgres localhost trust
-              - host app app localhost trust
-              - host app documentdb_bg_worker_role localhost trust
-            parameters:
-              max_connections: "200"
-              # https://github.com/FerretDB/FerretDB/issues/5284#issuecomment-3326399933
-              cron.database_name: 'app'
-              documentdb.bg_worker_database_name: 'app'
-              documentdb.enableBackgroundWorker: 'true'
-              documentdb.enableBackgroundWorkerJobs: 'true'
-              documentdb.enableCompact: 'true'
-              documentdb.enableLetAndCollationForQueryMatch: 'true'
-              documentdb.enableNowSystemVariable: 'true'
-              documentdb.enableSortbyIdPushDownToPrimaryKey: 'true'
-              documentdb.enableSchemaValidation: 'true'
-              documentdb.enableBypassDocumentValidation: 'true'
-              documentdb.enableUserCrud: 'true'
-              documentdb.maxUserLimit: '100'
+        - op: add
+          path: /spec/postRenderers/0/kustomize/patches/-
+          value:
+            target:
+              kind: Cluster
+              name: omada-controller-db
+            patch: |
+              apiVersion: postgresql.cnpg.io/v1
+              kind: Cluster
+              metadata:
+                name: omada-controller-db
+              spec:
+                postgresql:
+                  extensions:
+                    - name: documentdb
       target:
-        kind: Cluster
+        kind: HelmRelease
+        name: omada-controller-db

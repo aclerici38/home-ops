@@ -1,0 +1,40 @@
+---
+# Loaded into the cnpg cluster HelmRelease via valuesFrom (optional).
+# https://blog.ferretdb.io/run-ferretdb-postgres-documentdb-extension-cnpg-kubernetes/
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: omada-controller-cnpg-cluster
+data:
+  values.yaml: |
+    cluster:
+      roles:
+        - name: app
+          login: true
+          inRoles:
+            - documentdb_admin_role
+      postgresql:
+        shared_preload_libraries:
+          - pg_cron
+          - pg_documentdb_core
+          - pg_documentdb
+        pg_hba:
+          # pg_cron and documentdb connect to app db via localhost
+          - host app postgres localhost trust
+          - host app app localhost trust
+          - host app documentdb_bg_worker_role localhost trust
+        parameters:
+          max_connections: "200"
+          # https://github.com/FerretDB/FerretDB/issues/5284#issuecomment-3326399933
+          cron.database_name: app
+          documentdb.bg_worker_database_name: app
+          documentdb.enableBackgroundWorker: "true"
+          documentdb.enableBackgroundWorkerJobs: "true"
+          documentdb.enableCompact: "true"
+          documentdb.enableLetAndCollationForQueryMatch: "true"
+          documentdb.enableNowSystemVariable: "true"
+          documentdb.enableSortbyIdPushDownToPrimaryKey: "true"
+          documentdb.enableSchemaValidation: "true"
+          documentdb.enableBypassDocumentValidation: "true"
+          documentdb.enableUserCrud: "true"
+          documentdb.maxUserLimit: "100"

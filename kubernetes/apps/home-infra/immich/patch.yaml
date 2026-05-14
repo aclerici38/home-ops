@@ -24,3 +24,26 @@ spec:
             - https://immich.${SECRET_DOMAIN}/user-settings
       target:
         kind: PocketIDOIDCClient
+    # Chart 0.6.0 does not pass through cluster.postgresql.extensions, so
+    # append the opt-in to the existing plugin postRenderer. Drop once
+    # upstream support lands (cloudnative-pg/charts#838 or a sibling PR).
+    - patch: |-
+        - op: add
+          path: /spec/postRenderers/0/kustomize/patches/-
+          value:
+            target:
+              kind: Cluster
+              name: immich-db
+            patch: |
+              apiVersion: postgresql.cnpg.io/v1
+              kind: Cluster
+              metadata:
+                name: immich-db
+              spec:
+                postgresql:
+                  extensions:
+                    - name: pgvector
+                    - name: vchord
+      target:
+        kind: HelmRelease
+        name: immich-db

@@ -1,0 +1,13 @@
+---
+# Loaded into the cnpg cluster HelmRelease via valuesFrom (optional).
+# Anything the chart natively supports goes here.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: immich-cnpg-cluster
+data:
+  values.yaml: |
+    cluster:
+      postgresql:
+        shared_preload_libraries:
+          - vchord.so

@@ -5,8 +5,5 @@ kind: Component
 resources:
   - ../../resources/base
 components:
-  - ../../resources/common
-patches:
-  - path: ../../resources/common/recovery.yaml
-    target:
-      kind: Cluster
+  - ../../resources/backup
+  - ../../resources/restore

@@ -6,6 +6,4 @@ resources:
   - ./objectstore.yaml
   - ./scheduled-backup.yaml
 patches:
-  - path: ./plugins.yaml
-    target:
-      kind: Cluster
+  - path: ./hr-plugin-patch.yaml

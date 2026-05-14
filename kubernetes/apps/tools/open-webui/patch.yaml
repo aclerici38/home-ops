@@ -6,12 +6,6 @@ metadata:
   name: patch
 spec:
   patches:
-    - patch: |-
-        - op: add
-          path: /spec/args/-
-          value: --default_lua_flags=allow-undeclared-keys
-      target:
-        kind: Dragonfly
     # Chart 0.6.0 does not pass through cluster.postgresql.extensions, so
     # append the opt-in to the existing plugin postRenderer.
     - patch: |-
@@ -20,16 +14,16 @@ spec:
           value:
             target:
               kind: Cluster
-              name: dawarich-db
+              name: open-webui-db
             patch: |
               apiVersion: postgresql.cnpg.io/v1
               kind: Cluster
               metadata:
-                name: dawarich-db
+                name: open-webui-db
               spec:
                 postgresql:
                   extensions:
-                    - name: postgis
+                    - name: pgvector
       target:
         kind: HelmRelease
-        name: dawarich-db
+        name: open-webui-db

@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+patches:
+  # target.name is regex-matched by kustomize and `$` is special, so we
+  # match by kind/group alone — there is only one HelmRelease in scope.
+  - path: ./hr-recovery-patch.yaml
+    target:
+      group: helm.toolkit.fluxcd.io
+      kind: HelmRelease

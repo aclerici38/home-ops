@@ -1,0 +1,29 @@
+---
+# Appends a Cluster patch to the existing postRenderer (set up by the
+# backup component) that replaces bootstrap with a plugin-based recovery
+# and adds the matching externalClusters entry.
+- op: add
+  path: /spec/postRenderers/0/kustomize/patches/-
+  value:
+    target:
+      kind: Cluster
+      name: ${APP}-db
+    patch: |
+      apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      metadata:
+        name: ${APP}-db
+        annotations:
+          cnpg.io/skipEmptyWalArchiveCheck: enabled
+      spec:
+        bootstrap:
+          $patch: replace
+          recovery:
+            source: ${APP}-db
+        externalClusters:
+          - name: ${APP}-db
+            plugin:
+              name: barman-cloud.cloudnative-pg.io
+              parameters:
+                barmanObjectName: ${APP}
+                serverName: ${APP}-db

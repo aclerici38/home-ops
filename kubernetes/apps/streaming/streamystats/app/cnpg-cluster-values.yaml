@@ -1,0 +1,12 @@
+---
+# Loaded into the cnpg cluster HelmRelease via valuesFrom (optional).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: streamystats-cnpg-cluster
+data:
+  values.yaml: |
+    cluster:
+      postgresql:
+        shared_preload_libraries:
+          - vchord.so
