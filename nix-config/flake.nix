@@ -2,18 +2,18 @@
   description = "My nix-darwin + home-manager config";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "git+https://github.com/NixOS/nixpkgs?ref=nixpkgs-unstable&rev=48d91f2c0ce7b9e589f967d4f685153dd765dcdd";
 
-    nix-darwin.url = "github:nix-darwin/nix-darwin/master";
+    nix-darwin.url = "git+https://github.com/nix-darwin/nix-darwin?ref=master&rev=8c62fba0854ba15c8917aed18894dbccb48a3777";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
-    home-manager.url = "github:nix-community/home-manager/master";
+    home-manager.url = "git+https://github.com/nix-community/home-manager?ref=master&rev=6a0bbd6b4720da1c9ce7ebf35ff5c41a82db367a";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    opnix.url = "github:brizzbuzz/opnix";
+    opnix.url = "github:brizzbuzz/opnix/v0.9.0";
     opnix.inputs.nixpkgs.follows = "nixpkgs";
 
-    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    nix-homebrew.url = "git+https://github.com/zhaofengli/nix-homebrew?ref=main&rev=7d0038b5bb60568ec41f5f4ef5067cd221ca7c0d";
   };
 
   outputs =
