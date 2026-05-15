@@ -44,6 +44,15 @@
   },
   nix: {
     enabled: true,
+    lockFileMaintenance: {
+      enabled: true,
+      // Run every cycle except Mon 04:00–04:59 (the automerge window)
+      schedule: [
+        "* * * * 0,2-6", // Sun, Tue–Sat all day
+        "* 0-3 * * 1",   // Mon 00:00–03:59
+        "* 5-23 * * 1",  // Mon 05:00–23:59
+      ],
+    },
   },
   registryAliases: {
     "mirror.gcr.io": "docker.io"
