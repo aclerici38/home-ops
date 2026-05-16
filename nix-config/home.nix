@@ -28,6 +28,7 @@
     mas
     minio-client
     minijinja
+    neovim
     nil
     nixd
     nixfmt
