@@ -104,6 +104,7 @@ spec:
               OIDC_REDIRECT_URI: https://${APP_URL}/users/auth/openid_connect/callback
               OIDC_PROVIDER_NAME: Pocket-ID
               ALLOW_EMAIL_PASSWORD_REGISTRATION: false
+              ALLOW_EMAIL_PASSWORD_LOGIN: false
             probes:
               liveness: &probes
                 enabled: true
