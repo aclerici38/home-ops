@@ -239,8 +239,9 @@ spec:
             upstreams:
               groups:
                 default:
-                  - https://dns.quad9.net/dns-query
-                  - https://freedns.controld.com/p0
+                  - quic://dns.quad9.net
+                  - quic://p0.freedns.controld.com
+                  # TODO: swap to DoQ when it's supported by these
                   - https://doh.opendns.com/dns-query
                   - https://cloudflare-dns.com/dns-query
             
@@ -248,12 +249,23 @@ spec:
               denylists:
                 ads:
                   - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/multi.txt
+                security:
+                  - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/tif.mini.txt
               allowlists:
                 ads:
                   - |
                     epi-graphql.conde.digital
               clientGroupsBlock:
-                10.0.0.0/8:
+                # all clients
+                0.0.0.0/0:
+                  - security
+                "::/0":
+                  - security
+                # home
+                10.0.20.0/24:
+                  - ads
+                # cottage
+                10.0.40.0/24:
                   - ads
 
             filtering:
