@@ -7,14 +7,14 @@ metadata:
 spec:
   images:
     - major: 18
-      image: ghcr.io/cloudnative-pg/postgresql:18.4-minimal-trixie@sha256:7a91b8daee8589f4825b50da23ed545b57c43a126016af573cbdf5e424d6c2f6
+      image: ghcr.io/cloudnative-pg/postgresql:18.4-minimal-trixie
       extensions:
         - name: pgvector
           image:
-            reference: ghcr.io/cloudnative-pg/pgvector:0.8.2-18-trixie@sha256:9d7163ba30b61b4e67ea5e443eed6bc4b0d99688af1af375686ea5b809fcdad5
+            reference: ghcr.io/cloudnative-pg/pgvector:0.8.2-18-trixie
         - name: postgis
           image:
-            reference: ghcr.io/cloudnative-pg/postgis-extension:3.6.3-18-trixie@sha256:9bfd7b26d6d0e8a6ccf43a60a2320a2162e87cd29abd4d69312176eb1d711b44
+            reference: ghcr.io/cloudnative-pg/postgis-extension:3.6.3-18-trixie
           ld_library_path:
             - system
           env:
@@ -24,7 +24,7 @@ spec:
               value: $${image_root}/share/proj
         - name: vchord
           image:
-            reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.1.1@sha256:bdea43bed2a414e21bbf71767bf6f0739747ac480b267b51772dc214ac28dcb3
+            reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.1.1
           dynamic_library_path:
             - /usr/lib/postgresql/18/lib
           extension_control_path:
