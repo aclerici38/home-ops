@@ -31,12 +31,12 @@ spec:
             runAsGroup: 1000
             seccompProfile: { type: RuntimeDefault }
         containers:
-          main:
+          blocky-ui:
             image:
               repository: ghcr.io/gabeduartem/blocky-ui
               tag: 1.7.0@sha256:51b3fdc5c3d4d184e0a06126e1761df6b4ca948b9788ab3944dda3c07da287b5
             env:
-              QUERY_LOG_TYPE: postgresql
+              QUERY_LOG_TYPE: timescale
               QUERY_LOG_TARGET:
                 secretKeyRef:
                   name: blocky-db-app
@@ -56,13 +56,13 @@ spec:
                 drop:
                   - ALL
     service:
-      main:
+      blocky-ui:
         controller: blocky-ui
         ports:
           http:
-            port: &port 3000
+            port: 3000
     route:
-      main:
+      blocky-ui:
         hostnames:
           - blocky.${SECRET_DOMAIN}
         parentRefs:
