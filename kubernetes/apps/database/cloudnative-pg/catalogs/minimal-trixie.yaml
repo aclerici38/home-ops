@@ -36,7 +36,6 @@ spec:
           extension_control_path: ["share"]
           ld_library_path: ["lib", "system"]
         - name: timescaledb
-          image: 
+          image:
             reference: ghcr.io/m00nwtchr/timescaledb:2.27.0
-            
-      
+          ld_library_path: ["system"]

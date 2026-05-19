@@ -8,3 +8,5 @@ metadata:
 spec:
   extensions:
     - name: timescaledb
+  shared_preload_libraries:
+    - "timescaledb"
