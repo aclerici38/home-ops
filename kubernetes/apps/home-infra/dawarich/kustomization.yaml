@@ -7,7 +7,6 @@ configMapGenerator:
     literals:
       - APP=dawarich
       - OIDC_GROUP=fam
-      - OIDC_PKCE=false
       - CNPG_POOLMODE=session
 patches:
   - path: ./patch.yaml
