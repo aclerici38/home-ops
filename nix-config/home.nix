@@ -28,6 +28,7 @@
     mas
     minio-client
     minijinja
+    mise
     neovim
     nil
     nixd
