@@ -15,6 +15,7 @@
     ffmpeg
     fluxcd
     gh
+    go
     helm-docs
     helmfile
     jq
