@@ -4,29 +4,17 @@ name: Flate
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
+    paths:
+      - kubernetes/**
+      - .github/workflows/flate.yaml
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  filter:
-    name: Flate - Filter
-    runs-on: ubuntu-latest
-    outputs:
-      changed-files: ${{ steps.changed-files.outputs.changed_files }}
-    steps:
-      - name: Get Changed Files
-        id: changed-files
-        uses: bjw-s-labs/action-changed-files@a9a36fb08ce06db9b02fbd8026cc2c0945eb9841 # v0.6.0
-        with:
-          patterns: kubernetes/**/*
-
   flate:
-    if: ${{ needs.filter.outputs.changed-files != '[]' }}
-    needs: filter
     name: Flate
     runs-on: ubuntu-latest
     permissions:
