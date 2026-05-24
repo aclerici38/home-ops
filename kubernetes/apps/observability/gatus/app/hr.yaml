@@ -24,6 +24,7 @@ spec:
       gatus:
         strategy: RollingUpdate
         pod:
+          automountServiceAccountToken: true
           hostUsers: false
           securityContext:
             runAsNonRoot: true
@@ -137,17 +138,15 @@ spec:
             identifier: gatus
           subjects:
             - identifier: gatus
-    serviceAccount:
-      gatus: {} 
     persistence:
-      config:
+      config-file:
         type: configMap
         name: gatus
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml
-      tmpfs:
-        type: emptyDir
+      config-cache:
+        existingClaim: gatus-cache
         globalMounts:
           - path: /config
     configMaps:
