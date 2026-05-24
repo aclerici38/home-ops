@@ -1,0 +1,43 @@
+# Global mise config
+[settings]
+lockfile = true
+experimental = true
+
+[tools]
+# k8s
+kubectl     = "1.36.1"
+helm        = "4.2.0"
+kustomize   = "5.8.1"
+flux2       = "2.8.8"
+k9s         = "0.50.18"
+kind        = "0.31.0"
+kubebuilder = "4.14.0"
+helmfile    = "1.5.2"
+helm-docs   = "1.14.2"
+cilium-cli  = "0.19.4"
+
+# Talos
+talosctl    = "1.13.2"
+talhelper   = "3.1.10"
+
+# Tools
+sops        = "3.13.1"
+age         = "1.3.1"
+zizmor      = "1.25.2"
+crane       = "0.21.6"
+mc          = "latest"
+gh          = "2.92.0"
+jq          = "1.8.1"
+yq          = "4.53.2"
+go          = "1.26.3"
+uv          = "0.11.16"
+envsubst    = "1.4.3"
+claude-code = "2.1.150"
+"1password-cli" = "2.34.0"
+ffmpeg = "8.1.1"
+neovim = "0.12.2"
+
+"github:mitsuhiko/minijinja"            = { version = "2.20.0", exe = "minijinja-cli" }
+"github:cloudnative-pg/cloudnative-pg"  = { version = "1.29.1", exe = "kubectl-cnpg" }
+"github:home-operations/flate"          = "0.1.17"
+"github:home-operations/yamlls"         = "0.0.4"

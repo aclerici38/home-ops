@@ -5,43 +5,19 @@
   # Apparently can't change this
   home.stateVersion = "25.11";
 
+  # Tool versions tracked via mise where possible.
   home.packages = with pkgs; [
-    _1password-cli
-    age
-    cilium-cli
-    claude-code
-    crane
-    envsubst
-    ffmpeg
-    fluxcd
-    gh
-    go
-    helm-docs
-    helmfile
-    jq
-    k9s
-    kind
-    kubebuilder
-    kubectl
-    kubectl-cnpg
-    kubernetes-helm
-    kustomize
     mas
-    minio-client
-    minijinja
-    mise
-    neovim
     nil
     nixd
     nixfmt
-    sops
     skopeo
-    yq
-    talhelper
-    talosctl
-    uv
-    zizmor
   ];
+
+  programs.mise = {
+    enable = true;
+    enableFishIntegration = true;
+  };
 
   programs.home-manager.enable = true;
 
@@ -53,6 +29,11 @@
     secrets.secretDomain = {
       reference = "op://kubernetes/cluster-secrets/SECRET_DOMAIN";
       path = ".local/share/opnix/secret-domain";
+      mode = "0600";
+    };
+    secrets.githubToken = {
+      reference = "op://kubernetes/GITHUB_TOKEN/token";
+      path = ".local/share/opnix/github-token";
       mode = "0600";
     };
   };
@@ -93,6 +74,10 @@
   programs.fish = {
     enable = true;
 
+    shellInit = ''
+      set -gx MISE_GLOBAL_CONFIG_FILE $HOME/home-ops/mise.toml
+    '';
+
     shellAliases = {
       k = "kubectl";
       ll = "ls -lah";
@@ -105,11 +90,13 @@
 
     functions.load-secrets = ''
       set -l f ~/.local/share/opnix/secret-domain
+      set -l gh ~/.local/share/opnix/github-token
       set -gx SOPS_AGE_KEY_FILE $HOME/home-ops/age.key
       set -gx TALOSCONFIG $HOME/home-ops/talos/clusterconfig/talosconfig
       test -f $f; or return
       set -gx SECRET_DOMAIN (cat $f)
       set -gx ATUIN_SYNC_ADDRESS "https://atuin.$SECRET_DOMAIN"
+      test -f $gh; and set -gx GITHUB_TOKEN (cat $gh)
     '';
 
     interactiveShellInit = ''

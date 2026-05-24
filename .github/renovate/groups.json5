@@ -57,8 +57,12 @@
     {
       description: "Talos Group",
       groupName: "Talos",
-      matchPackagePatterns: ["siderolabs/talosctl", "siderolabs/installer"],
-      matchDatasources: ["docker"],
+      matchPackageNames: [
+        "**/siderolabs/talos",
+        "**/siderolabs/talosctl",
+        "**/siderolabs/installer",
+      ],
+      minimumGroupSize: 3,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
@@ -211,10 +215,13 @@
       },
     },
     {
-      description: "CloudNative-PG group",
-      groupName: "CloudNative-PG",
-      matchPackagePatterns: ["^cloudnative-pg$"],
-      matchDatasources: ["docker", "github-tags"],
+      description: "CNPG group",
+      groupName: "CNPG",
+      matchPackageNames: [
+        "**/cloudnative-pg",
+        "cloudnative-pg/cloudnative-pg",
+      ],
+      minimumGroupSize: 2,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
@@ -328,17 +335,46 @@
       },
     },
     {
-      description: "Nix flake inputs group",
+      description: "Nix flake inputs",
       groupName: "Nix Flake",
       matchManagers: ["nix"],
-      rebaseWhen: "behind-base-branch",
-      // Pause all PR activity during for automerge
-      schedule: [
-        "* * * * 0,2-6", // Sun, Tue–Sat all day
-        "* 0-3 * * 1",   // Mon 00:00–03:59
-        "* 6-23 * * 1",  // Mon 06:00–23:59
+      lockFileMaintenance: {
+        enabled: true,
+        automerge: true,
+        automergeType: "pr",
+        platformAutomerge: false,
+        schedule: ["after 3am before 5am on monday"],
+      },
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
+      description: "Mise tools group",
+      groupName: "Mise tools",
+      matchManagers: ["mise"],
+      separateMinorPatch: true,
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
+      description: "Kubernetes group",
+      groupName: "Kubernetes",
+      matchPackageNames: [
+        "kubernetes/kubernetes/kubectl",
+        "ghcr.io/siderolabs/kubelet",
       ],
-      updateNotScheduled: false,
+      minimumGroupSize: 2,
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
+      description: "Talhelper group",
+      groupName: "Talhelper",
+      matchPackageNames: ["budimanjojo/talhelper"],
+      minimumGroupSize: 2,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },

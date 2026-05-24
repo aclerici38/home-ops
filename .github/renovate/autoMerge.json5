@@ -63,13 +63,22 @@
       matchUpdateTypes: ["major", "minor", "patch"],
     },
     {
-      description: ["Auto-merge nix flake input updates Monday 4am"],
-      matchManagers: ["nix"],
+      description: ["Auto-merge mise updates by default"],
+      matchManagers: ["mise"],
       automerge: true,
-      automergeType: "pr",
-      platformAutomerge: false,
-      automergeSchedule: ["after 4am before 5am on monday"],
-      matchUpdateTypes: ["minor", "patch", "digest", "pin", "pinDigest"],
+      automergeType: "branch",
+      matchUpdateTypes: ["major", "minor", "patch", "digest"],
+    },
+    {
+      description: ["Exclude specific mise tools from auto-merge"],
+      matchManagers: ["mise"],
+      matchDepNames: [
+        "kubectl",
+        "talosctl",
+        "talhelper",
+        "github:cloudnative-pg/cloudnative-pg",
+      ],
+      automerge: false,
     },
   ],
 }
