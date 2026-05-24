@@ -13,7 +13,7 @@
       description: ["Auto-merge specific apps' minor versions"],
       automerge: true,
       automergeType: "branch",
-      matchDatasources: ["docker", "helm"],
+      matchDatasources: ["docker", "helm", "github-tags", "github-releases"],
       matchPackageNames: [
         "**/airconnect",
         "**/bazarr",
@@ -24,6 +24,7 @@
         "**/coredns",
         "**/crowdsec-web-ui",
         "**/flaresolverr",
+        "**/flate",
         "**/grafana",
         "**/it-tools",
         "**/k8s-sidecar",
