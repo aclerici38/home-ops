@@ -35,7 +35,6 @@
       matchPackagePatterns: [
         "flux-operator",
         "flux-instance",
-        "flux-operator-manifests",
         "controlplaneio-fluxcd/charts",
         "^flux$",
       ],
@@ -43,7 +42,7 @@
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
-      minimumGroupSize: 4,
+      minimumGroupSize: 3,
     },
     {
       description: "Intel-Device-Plugins Group",
