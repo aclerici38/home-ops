@@ -42,10 +42,10 @@ jobs:
           persist-credentials: false
 
       - name: Setup flate
-        uses: home-operations/flate/action@e3ce30e645c28aa60515aab3f55db68ce00c921c # 0.1.12
+        uses: home-operations/flate/action@7338373a6fce6bf3e37695655e5e54d2dea94ed3 # 0.1.13
         with:
           # renovate: datasource=github-tags depName=home-operations/flate
-          version: 0.1.12
+          version: 0.1.13
 
       - name: Run flate test
         run: flate test ${{ matrix.resource }} --path ./pull --path-orig ./default
