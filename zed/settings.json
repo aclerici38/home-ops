@@ -7,19 +7,44 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "auto_install_extensions": {
+    "fish": true,
+    "html": true,
+    "json5": true,
+    "nix": true,
+    "toml": true,
+  },
+  "completions": {
+    "lsp_insert_mode": "replace"
+  },
+  "project_panel": {
+    "dock": "left"
+  },
+  "pane_split_direction_vertical": "right",
+  "bottom_dock_layout": "contained",
+  "tabs": {
+    "close_position": "left"
+  },
+  "proxy": "",
+  "prettier": {
+    "allowed": true
+  },
+  "restore_on_startup": "launchpad",
+  "cli_default_open_behavior": "new_window",
   "autosave": {
     "after_delay": {
       "milliseconds": 1000,
     },
   },
-  "show_edit_predictions": false,
+  "show_edit_predictions": true,
   "agent": {
+    "sidebar_side": "right",
     "favorite_models": [],
     "play_sound_when_agent_done": "when_hidden",
     "model_parameters": [],
   },
   "telemetry": {
-    "diagnostics": true,
+    "diagnostics": false,
     "metrics": false,
   },
   "ui_font_size": 16,
@@ -30,15 +55,15 @@
     "dark": "One Dark",
   },
   // https://github.com/home-operations/yamlls
-  "lsp": {
-    "yaml-language-server": {
-      "binary": {
-        "ignore_system_version": true,
-        "path": "yamlls",
-      },
-      "initialization_options": {
-        "catalog": true,
-      },
-    },
-  },
+  // "lsp": {
+  //   "yaml-language-server": {
+  //     "binary": {
+  //       "ignore_system_version": true,
+  //       "path": "yamlls",
+  //     },
+  //     "initialization_options": {
+  //       "catalog": true,
+  //     },
+  //   },
+  // },
 }
