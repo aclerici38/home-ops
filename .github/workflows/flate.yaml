@@ -16,8 +16,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  flate:
-    name: Flate
+  test:
+    name: Flate Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout Pull Request Branch
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          path: pull
+          persist-credentials: false
+
+      - name: Setup flate
+        uses: home-operations/flate/action@664c5a4fe7775c208540980f1e8c3d2a26ec2555 # 0.1.17
+        with:
+          # renovate: datasource=github-tags depName=home-operations/flate
+          version: 0.1.17
+
+      - name: Run flate test all
+        run: flate test all --path ./pull
+
+  diff:
+    name: Flate Diff (${{ matrix.resource }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -47,17 +68,8 @@ jobs:
           # renovate: datasource=github-tags depName=home-operations/flate
           version: 0.1.17
 
-      - name: Run flate test
-        # Full reconcile (no --path-orig). In render-driven repos, changed-only mode
-        # excludes cross-parent dependsOn targets from the graph, producing false
-        # "dependency not found" failures. See home-operations/flate#205 cascade note.
-        run: flate test ${{ matrix.resource }} --path ./pull
-
       - name: Run flate diff
         id: diff
-        # `|| true`: flate diff still uses --path-orig (required) and exits 1 on the
-        # same false dep-not-found failures the test step works around. The stdout diff
-        # itself is correct; swallow the exit code so the comment still posts.
         run: |-
           {
             echo 'diff<<EOF'
@@ -86,7 +98,7 @@ jobs:
 
   success:
     if: ${{ !cancelled() }}
-    needs: flate
+    needs: [test, diff]
     name: Flate - Success
     runs-on: ubuntu-latest
     permissions: {}
