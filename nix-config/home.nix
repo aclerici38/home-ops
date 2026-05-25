@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 {
   home.username = "anthony";
   home.homeDirectory = "/Users/anthony";
@@ -28,8 +28,21 @@
   home.file.".config/zed/settings.json".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/home-ops/zed/settings.json";
 
+  # Bootstrap opnix via 1Password desktop
+  home.activation.bootstrapOpnixToken = lib.hm.dag.entryBefore [ "writeBoundary" ] ''
+    TOKEN_FILE="$HOME/.config/opnix/token"
+    if [ ! -s "$TOKEN_FILE" ]; then
+      $DRY_RUN_CMD mkdir -p "$(dirname "$TOKEN_FILE")"
+      if ${pkgs._1password-cli}/bin/op read "op://Private/OPNIX_TOKEN/credential" > "$TOKEN_FILE" 2>/dev/null; then
+        chmod 600 "$TOKEN_FILE"
+      else
+        rm -f "$TOKEN_FILE"
+        echo "warning: opnix token bootstrap failed; ensure 1Password app is unlocked and OPNIX_TOKEN exists in Private vault" >&2
+      fi
+    fi
+  '';
+
   # 1Password secrets materialized at activation time (one read per `drs`).
-  # Token at ~/.config/opnix/token; set via `opnix token set`.
   programs.onepassword-secrets = {
     enable = true;
     tokenFile = "${config.home.homeDirectory}/.config/opnix/token";
