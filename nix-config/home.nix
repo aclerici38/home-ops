@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 {
   home.username = "anthony";
   home.homeDirectory = "/Users/anthony";
@@ -8,11 +13,13 @@
   # Tool versions tracked via mise where possible.
   home.packages = with pkgs; [
     _1password-cli
+    deadnix
     mas
     nil
     nixd
     nixfmt
     skopeo
+    statix
   ];
 
   programs.mise = {

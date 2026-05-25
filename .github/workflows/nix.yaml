@@ -7,11 +7,13 @@ on:
     branches: ["main"]
     paths:
       - "nix-config/**"
+      - "lefthook.yaml"
       - ".github/workflows/nix.yaml"
   pull_request:
     branches: ["main"]
     paths:
       - "nix-config/**"
+      - "lefthook.yaml"
       - ".github/workflows/nix.yaml"
 
 concurrency:
@@ -39,14 +41,10 @@ jobs:
         with:
           determinate: false
 
-      - name: nixfmt --check
-        run: nix run nixpkgs#nixfmt -- --check nix-config/*.nix
-
-      - name: statix check
-        run: nix run nixpkgs#statix -- check -c nix-config nix-config
-
-      - name: deadnix
-        run: nix run nixpkgs#deadnix -- --fail nix-config
+      - name: Lint via lefthook
+        run: |
+          nix shell nixpkgs#lefthook nixpkgs#nixfmt nixpkgs#statix nixpkgs#deadnix \
+            --command lefthook run pre-push --force
 
   flake-checker:
     name: Nix - Flake Health
