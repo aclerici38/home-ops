@@ -48,14 +48,20 @@ jobs:
           version: 0.1.17
 
       - name: Run flate test
-        run: flate test ${{ matrix.resource }} --path ./pull --path-orig ./default
+        # Full reconcile (no --path-orig). In render-driven repos, changed-only mode
+        # excludes cross-parent dependsOn targets from the graph, producing false
+        # "dependency not found" failures. See home-operations/flate#205 cascade note.
+        run: flate test ${{ matrix.resource }} --path ./pull
 
       - name: Run flate diff
         id: diff
+        # `|| true`: flate diff still uses --path-orig (required) and exits 1 on the
+        # same false dep-not-found failures the test step works around. The stdout diff
+        # itself is correct; swallow the exit code so the comment still posts.
         run: |-
           {
             echo 'diff<<EOF'
-            flate diff ${{ matrix.resource }} --path ./pull --path-orig ./default
+            flate diff ${{ matrix.resource }} --path ./pull --path-orig ./default || true
             echo 'EOF'
           } >> $GITHUB_OUTPUT
 
