@@ -22,6 +22,12 @@
 
   programs.home-manager.enable = true;
 
+  # Zed (installed via brew cask) — symlink settings.json to the repo so
+  # edits via Zed's "Open settings" land in version control and apply
+  # without a darwin-rebuild round-trip.
+  home.file.".config/zed/settings.json".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/home-ops/zed/settings.json";
+
   # 1Password secrets materialized at activation time (one read per `drs`).
   # Token at ~/.config/opnix/token; set via `opnix token set`.
   programs.onepassword-secrets = {

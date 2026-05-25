@@ -1,0 +1,44 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "autosave": {
+    "after_delay": {
+      "milliseconds": 1000,
+    },
+  },
+  "show_edit_predictions": false,
+  "agent": {
+    "favorite_models": [],
+    "play_sound_when_agent_done": "when_hidden",
+    "model_parameters": [],
+  },
+  "telemetry": {
+    "diagnostics": true,
+    "metrics": false,
+  },
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "One Dark",
+  },
+  // https://github.com/home-operations/yamlls
+  "lsp": {
+    "yaml-language-server": {
+      "binary": {
+        "ignore_system_version": true,
+        "path": "yamlls",
+      },
+      "initialization_options": {
+        "catalog": true,
+      },
+    },
+  },
+}
