@@ -335,6 +335,15 @@
       },
     },
     {
+      description: "Flate group",
+      groupName: "Flate",
+      matchPackagePatterns: ["home-operations/flate"],
+      matchDatasources: ["github-releases", "github-tags"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "Nix flake inputs",
       groupName: "Nix Flake",
       matchManagers: ["nix"],
