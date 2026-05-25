@@ -352,7 +352,7 @@
         automerge: true,
         automergeType: "pr",
         platformAutomerge: false,
-        schedule: ["after 3am before 5am on monday"],
+        schedule: ["* 3-4 * * *"],
       },
       group: {
         commitMessageTopic: "{{{groupName}}} group",
