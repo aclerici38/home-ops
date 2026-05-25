@@ -29,10 +29,10 @@ jobs:
           persist-credentials: false
 
       - name: Setup flate
-        uses: home-operations/flate/action@664c5a4fe7775c208540980f1e8c3d2a26ec2555 # 0.1.17
+        uses: home-operations/flate/action@338bc690761d1c02d6a5d553a89486cb1d30b913 # 0.1.18
         with:
           # renovate: datasource=github-tags depName=home-operations/flate
-          version: 0.1.17
+          version: 0.1.18
 
       - name: Run flate test all
         run: flate test all --path ./pull
@@ -63,10 +63,10 @@ jobs:
           persist-credentials: false
 
       - name: Setup flate
-        uses: home-operations/flate/action@664c5a4fe7775c208540980f1e8c3d2a26ec2555 # 0.1.17
+        uses: home-operations/flate/action@338bc690761d1c02d6a5d553a89486cb1d30b913 # 0.1.18
         with:
           # renovate: datasource=github-tags depName=home-operations/flate
-          version: 0.1.17
+          version: 0.1.18
 
       - name: Run flate diff
         id: diff
