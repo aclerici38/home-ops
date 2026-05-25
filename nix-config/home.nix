@@ -7,6 +7,7 @@
 
   # Tool versions tracked via mise where possible.
   home.packages = with pkgs; [
+    _1password-cli
     mas
     nil
     nixd
