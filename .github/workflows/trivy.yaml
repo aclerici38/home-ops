@@ -86,7 +86,15 @@ jobs:
           version: v0.70.0
 
       - name: Collect image refs
-        run: flate get images --path . --allow-missing-secrets -o name > /tmp/images.txt
+        run: |
+          flate get images --path . --allow-missing-secrets -o name > /tmp/images.txt || true
+          count=$(wc -l < /tmp/images.txt | tr -d ' ')
+          echo "Resolved $count images:"
+          cat /tmp/images.txt
+          if [ "$count" -eq 0 ]; then
+            echo "::error::flate returned no images"
+            exit 1
+          fi
 
       - name: Scan images
         run: |
