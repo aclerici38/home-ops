@@ -4,7 +4,8 @@ name: Flate
 
 on:
   pull_request:
-    branches: [main]
+    branches:
+      - main
     paths:
       - kubernetes/**
       - .github/workflows/flate.yaml
@@ -75,7 +76,7 @@ jobs:
             echo 'diff<<EOF'
             flate diff ${{ matrix.resource }} --path ./pull --path-orig ./default
             echo 'EOF'
-          } >> $GITHUB_OUTPUT
+          } >> "$GITHUB_OUTPUT"
 
       - if: ${{ steps.diff.outputs.diff != '' }}
         name: Generate Token
@@ -84,6 +85,7 @@ jobs:
         with:
           client-id: ${{ secrets.BOT_APP_CLIENT_ID }}
           private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
+          permission-pull-requests: write
 
       - if: ${{ steps.diff.outputs.diff != '' }}
         name: Add Comment
@@ -98,7 +100,9 @@ jobs:
 
   success:
     if: ${{ !cancelled() }}
-    needs: [test, diff]
+    needs:
+      - test
+      - diff
     name: Flate - Success
     runs-on: ubuntu-latest
     permissions: {}

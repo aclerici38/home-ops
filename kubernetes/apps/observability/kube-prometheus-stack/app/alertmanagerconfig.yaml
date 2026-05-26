@@ -6,7 +6,9 @@ metadata:
   name: alertmanager
 spec:
   route:
-    groupBy: ["alertname", "job"]
+    groupBy:
+      - "alertname"
+      - "job"
     groupInterval: 10m
     groupWait: 1m
     receiver: discord
@@ -26,7 +28,9 @@ spec:
             value: Watchdog
             matchType: =
   inhibitRules:
-    - equal: ["alertname", "namespace"]
+    - equal:
+        - "alertname"
+        - "namespace"
       sourceMatch:
         - name: severity
           value: critical

@@ -20,7 +20,7 @@ spec:
   timeout: 3m
   postBuild:
     substitute:
-      APP_URL: APP.${SECRET_DOMAIN}
+      APP_URL: APP.clerici.tech
     substituteFrom:
       - kind: ConfigMap
         name: APP-app-vars

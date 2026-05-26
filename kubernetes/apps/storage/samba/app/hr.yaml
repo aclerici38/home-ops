@@ -71,14 +71,14 @@ spec:
     configMaps:
       config:
         data:
-          config.yml: |
+          config.yml: |-
             auth:
               - user: time_machine_users
                 group: time_machine_users
                 uid: 1000
                 gid: 1000
                 password: $${SMB_PASS}
-            
+
             global:
               - "force user = root"
               - "force group = root"
@@ -99,7 +99,7 @@ spec:
               - "server max protocol = SMB3"
               # Allow use of LB IP
               - "host msdfs = no"
-            
+
             share:
               - name: time_machine
                 path: /samba/time-machine

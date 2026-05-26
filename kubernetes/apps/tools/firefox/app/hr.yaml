@@ -26,7 +26,7 @@ spec:
           securityContext:
             runAsUser: 0
             runAsGroup: 0
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
             supplementalGroups:
               - 44
         containers:
@@ -81,7 +81,7 @@ spec:
         existingClaim: firefox
       data:
         type: nfs
-        server: nfs.${SECRET_DOMAIN}
+        server: nfs.clerici.tech
         path: /media
         globalMounts:
           - path: /allMedia

@@ -32,7 +32,7 @@ spec:
             runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         containers:
           main:
             image:
@@ -53,7 +53,7 @@ spec:
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 100m
@@ -78,7 +78,7 @@ spec:
       main:
         hostnames:
           - ${APP_URL}
-          - tv.${SECRET_DOMAIN}
+          - tv.clerici.tech
         parentRefs:
           - name: external
             namespace: gateway-system
@@ -97,7 +97,7 @@ spec:
               - path: /config/metadata
       media:
         type: nfs
-        server: nfs.${SECRET_DOMAIN}
+        server: nfs.clerici.tech
         path: /media
         advancedMounts:
           jellyfin:

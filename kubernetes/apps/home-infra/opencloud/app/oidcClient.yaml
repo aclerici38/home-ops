@@ -11,9 +11,9 @@ spec:
   isPublic: true
   pkceEnabled: true
   callbackUrls:
-    - https://cloud.${SECRET_DOMAIN}
-    - https://cloud.${SECRET_DOMAIN}/oidc-callback.html
-    - https://cloud.${SECRET_DOMAIN}/oidc-silent-redirect.html
+    - https://cloud.clerici.tech
+    - https://cloud.clerici.tech/oidc-callback.html
+    - https://cloud.clerici.tech/oidc-silent-redirect.html
   allowedUserGroups:
     - name: admin
     - name: all

@@ -30,7 +30,7 @@ spec:
             runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         containers:
           main:
             image:
@@ -50,15 +50,15 @@ spec:
               OIDC_REMEMBER_ME: "true"
               OIDC_USER_CLAIM: email
               OIDC_AUTO_REDIRECT: 'true'
-              OIDC_CONFIGURATION_URL: 
+              OIDC_CONFIGURATION_URL:
                 secretKeyRef:
                   name: mealie-oidc-credentials
                   key: discovery_url
-              OIDC_CLIENT_ID: 
+              OIDC_CLIENT_ID:
                 secretKeyRef:
                   name: mealie-oidc-credentials
                   key: client_id
-              OIDC_CLIENT_SECRET: 
+              OIDC_CLIENT_SECRET:
                 secretKeyRef:
                   name: mealie-oidc-credentials
                   key: client_secret
@@ -77,14 +77,14 @@ spec:
               SMTP_HOST: smtp-relay.cluster-infra.svc.cluster.local
               SMTP_PORT: 25
               SMTP_AUTH_STRATEGY: None
-              SMTP_FROM_EMAIL: bot@${SECRET_DOMAIN}
+              SMTP_FROM_EMAIL: bot@clerici.tech
             envFrom:
               - secretRef:
                   name: mealie
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 100m

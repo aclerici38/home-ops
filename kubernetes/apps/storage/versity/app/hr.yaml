@@ -45,7 +45,7 @@ spec:
           namespace: gateway-system
           sectionName: https
       hostnames:
-        - s3.${SECRET_DOMAIN}
+        - s3.clerici.tech
     auth:
       existingSecret: versity
     gateway:
@@ -57,12 +57,12 @@ spec:
     webui:
       enabled: true
       apiGateways:
-        - https://s3.${SECRET_DOMAIN}
+        - https://s3.clerici.tech
       httpRoute:
         enabled: true
         parentRefs: *gateway
         hostnames:
-          - versity.${SECRET_DOMAIN}
+          - versity.clerici.tech
     extraEnv:
       - name: VGW_VERSIONING_DIR
         value: /mnt/data/versioning
@@ -70,4 +70,3 @@ spec:
       # this prob doesn't matter with no acls but why not
       - name: VGW_META_SIDECAR
         value: /mnt/data/sidecar
-    

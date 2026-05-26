@@ -31,7 +31,7 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
             runAsNonRoot: false
-            seccompProfile: { type: Unconfined }
+            seccompProfile: {type: Unconfined}
         containers:
           nfs-server:
             image:
@@ -73,7 +73,7 @@ spec:
         externalTrafficPolicy: Local
         annotations:
           lbipam.cilium.io/ips: "${NFS_LB_IP}"
-          coredns.io/hostname: nfs.${SECRET_DOMAIN}
+          coredns.io/hostname: nfs.clerici.tech
         ports:
           nfs:
             port: 2049

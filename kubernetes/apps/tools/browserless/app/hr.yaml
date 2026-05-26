@@ -29,7 +29,7 @@ spec:
             # "blessuser"
             runAsGroup: 999
             runAsUser: 999
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         containers:
           browserless:
             image:
@@ -58,7 +58,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: [ALL] }
+              capabilities: {drop: [ALL]}
     service:
       browserless:
         controller: browserless

@@ -29,13 +29,17 @@ spec:
     extraArgs:
       - --cloudflare-dns-records-per-page=1000
       - --gateway-name=external
-      - --default-targets=house.${SECRET_DOMAIN}
+      - --default-targets=house.clerici.tech
       - --force-default-targets
     policy: sync
     triggerLoopOnEvent: true
-    sources: ["crd", "gateway-httproute", "service"]
+    sources:
+      - "crd"
+      - "gateway-httproute"
+      - "service"
     txtPrefix: k8s.
     txtOwnerId: default
-    domainFilters: ["${SECRET_DOMAIN}"]
+    domainFilters:
+      - "clerici.tech"
     serviceMonitor:
       enabled: true

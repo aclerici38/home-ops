@@ -30,11 +30,11 @@ spec:
       angular_support_enabled: "true"
     server:
       enable_gzip: "true"
-      root_url: https://grafana.${SECRET_DOMAIN}
+      root_url: https://grafana.clerici.tech
   httpRoute:
     spec:
       hostnames:
-        - grafana.${SECRET_DOMAIN}
+        - grafana.clerici.tech
       parentRefs:
         - name: internal
           namespace: gateway-system

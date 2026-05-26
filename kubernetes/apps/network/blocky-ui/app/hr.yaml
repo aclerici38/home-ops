@@ -29,7 +29,7 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
             runAsGroup: 1000
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         containers:
           blocky-ui:
             image:
@@ -64,7 +64,7 @@ spec:
     route:
       blocky-ui:
         hostnames:
-          - blocky.${SECRET_DOMAIN}
+          - blocky.clerici.tech
         parentRefs:
           - name: internal
             namespace: gateway-system

@@ -38,8 +38,8 @@ spec:
               OC_ENABLE_OCM: false
               OC_INSECURE: false
               OC_LOG_LEVEL: info
-              OC_URL: &url https://cloud.${SECRET_DOMAIN}
-              OC_OIDC_ISSUER: https://id.${SECRET_DOMAIN}
+              OC_URL: &url https://cloud.clerici.tech
+              OC_OIDC_ISSUER: https://id.clerici.tech
               OC_EXCLUDE_RUN_SERVICES: idp,ocm,nats
               OC_ADD_RUN_SERVICES: notifications
               OC_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD: true
@@ -77,13 +77,13 @@ spec:
               GRAPH_USERNAME_MATCH: "none"
               GRAPH_SPACES_DEFAULT_QUOTA: 0
 
-              WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.${SECRET_DOMAIN}/settings/apps
+              WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.clerici.tech/settings/apps
               # prevent nested mounts
               WEB_ASSET_APPS_PATH: /opt/extensions/usr/share/nginx/html/apps
 
               NOTIFICATIONS_SMTP_HOST: smtp-relay.cluster-infra
               NOTIFICATIONS_SMTP_PORT: 25
-              NOTIFICATIONS_SMTP_SENDER: bot@${SECRET_DOMAIN}
+              NOTIFICATIONS_SMTP_SENDER: bot@clerici.tech
               NOTIFICATIONS_SMTP_INSECURE: true
 
               STORAGE_USERS_DRIVER: decomposeds3
@@ -106,7 +106,7 @@ spec:
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 200m
@@ -137,8 +137,8 @@ spec:
               COLLABORATION_APP_PRODUCT: Collabora
               COLLABORATION_APP_INSECURE: true
               COLLABORATION_CS3API_DATAGATEWAY_INSECURE: true
-              COLLABORATION_APP_ADDR: https://collabora.${SECRET_DOMAIN}
-              COLLABORATION_APP_ICON: https://collabora.${SECRET_DOMAIN}/favicon.ico
+              COLLABORATION_APP_ADDR: https://collabora.clerici.tech
+              COLLABORATION_APP_ICON: https://collabora.clerici.tech/favicon.ico
               COLLABORATION_APP_PROOF_DISABLE: true
               COLLABORATION_GRPC_ADDR: 0.0.0.0:9301
               COLLABORATION_HTTP_ADDR: 0.0.0.0:9300
@@ -171,7 +171,7 @@ spec:
                 --o:ssl.ssl_verification=false \
                 --o:ssl.termination=true \
                 --o:welcome.enable=false \
-                --o:net.frame_ancestors=cloud.${SECRET_DOMAIN}
+                --o:net.frame_ancestors=cloud.clerici.tech
               username:
                 valueFrom:
                   secretKeyRef:
@@ -206,7 +206,7 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     service:
       opencloud:
         forceRename: opencloud
@@ -239,37 +239,37 @@ spec:
       opencloud:
         forceRename: opencloud
         hostnames:
-          - cloud.${SECRET_DOMAIN}
+          - cloud.clerici.tech
         parentRefs:
           - name: external
             namespace: gateway-system
         rules:
           - backendRefs:
-            - identifier: opencloud
-              port: *port
+              - identifier: opencloud
+                port: *port
       wopi:
         annotations:
           gatus.home-operations.com/endpoint: |-
             conditions: ["[STATUS] == 404"]
         hostnames:
-          - wopi.${SECRET_DOMAIN}
+          - wopi.clerici.tech
         parentRefs:
           - name: external
             namespace: gateway-system
         rules:
           - backendRefs:
-            - identifier: wopi
-              port: 9300
+              - identifier: wopi
+                port: 9300
       collabora:
         hostnames:
-          - collabora.${SECRET_DOMAIN}
+          - collabora.clerici.tech
         parentRefs:
           - name: external
             namespace: gateway-system
         rules:
           - backendRefs:
-            - identifier: collabora
-              port: 9980
+              - identifier: collabora
+                port: 9980
     persistence:
       config:
         type: configMap
@@ -313,7 +313,7 @@ spec:
           opencloud:
             opencloud:
               - path: /opt/extensions
-    configMaps: 
+    configMaps:
       config:
         data:
           csp.yaml: |
@@ -323,10 +323,10 @@ spec:
               connect-src:
                 - '''self'''
                 - 'blob:'
-                - 'https://wopi.${SECRET_DOMAIN}/'
-                - 'wss://wopi.${SECRET_DOMAIN}/'
+                - 'https://wopi.clerici.tech/'
+                - 'wss://wopi.clerici.tech/'
                 - 'https://raw.githubusercontent.com/opencloud-eu/awesome-apps/'
-                - 'https://id.${SECRET_DOMAIN}/'
+                - 'https://id.clerici.tech/'
               default-src:
                 - '''none'''
               font-src:
@@ -337,7 +337,7 @@ spec:
                 - '''self'''
                 - 'blob:'
                 - 'https://embed.diagrams.net/'
-                - 'https://collabora.${SECRET_DOMAIN}/'
+                - 'https://collabora.clerici.tech/'
                 # This is needed for the external-sites web extension when embedding sites
                 - 'https://docs.opencloud.eu'
               img-src:
@@ -345,7 +345,7 @@ spec:
                 - 'data:'
                 - 'blob:'
                 - 'https://raw.githubusercontent.com/opencloud-eu/awesome-apps/'
-                - 'https://collabora.${SECRET_DOMAIN}/'
+                - 'https://collabora.clerici.tech/'
               manifest-src:
                 - '''self'''
               media-src:
@@ -356,11 +356,11 @@ spec:
               script-src:
                 - '''self'''
                 - '''unsafe-inline'''
-                - 'https://id.${SECRET_DOMAIN}/'
+                - 'https://id.clerici.tech/'
               style-src:
                 - '''self'''
                 - '''unsafe-inline'''
-          proxy.yaml: |
+          proxy.yaml: |-
             role_assignment:
               driver: oidc
               oidc_role_mapper:

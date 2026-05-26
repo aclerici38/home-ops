@@ -37,7 +37,7 @@ spec:
               repository: ghcr.io/koenkk/zigbee2mqtt
               tag: 2.10.1@sha256:67c26dcf8346aced02fe1380a6afd1b57268bcef10faae3f6057c13d5d3dfa80
             env:
-              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://cottage-zigbee2mqtt.${SECRET_DOMAIN}
+              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://cottage-zigbee2mqtt.clerici.tech
               ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_d4f0088f4c1fef119b9450d0639e525b-if00-port0
               ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: ember
               ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: 20
@@ -79,14 +79,14 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
-              probes:
-                liveness:
-                  enabled: true
-                  type: HTTP
-                readiness:
-                  enabled: true
-                  type: HTTP
+              capabilities: {drop: ["ALL"]}
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+              readiness:
+                enabled: true
+                type: HTTP
     service:
       zigbee2mqtt:
         controller: zigbee2mqtt
@@ -99,7 +99,7 @@ spec:
     route:
       zigbee2mqtt:
         hostnames:
-          - z2m.${SECRET_DOMAIN}
+          - z2m.clerici.tech
         parentRefs:
           - name: internal
             namespace: gateway-system

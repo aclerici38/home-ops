@@ -50,7 +50,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 100m
@@ -85,7 +85,7 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     service:
       versity: &svc
         controller: versity
@@ -98,7 +98,7 @@ spec:
     route:
       versity: &route
         hostnames:
-          - kopia-versity.${SECRET_DOMAIN}
+          - kopia-versity.clerici.tech
         parentRefs:
           - name: internal
             namespace: gateway-system
@@ -109,7 +109,7 @@ spec:
       backblaze:
         <<: *route
         hostnames:
-          - kopia-backblaze.${SECRET_DOMAIN}
+          - kopia-backblaze.clerici.tech
         rules:
           - backendRefs:
               - identifier: backblaze

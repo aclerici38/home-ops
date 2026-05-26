@@ -31,7 +31,7 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
             runAsNonRoot: true
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
           hostname: home-assistant
           annotations:
             k8s.v1.cni.cncf.io/networks: |
@@ -81,7 +81,7 @@ spec:
     route:
       main:
         hostnames:
-          - hass.${SECRET_DOMAIN}
+          - hass.clerici.tech
         parentRefs:
           - name: external
             namespace: gateway-system

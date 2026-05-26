@@ -27,7 +27,7 @@ tasks:
   unlock:
     desc: Unlock all restic source repos
     cmds:
-      - for: { var: SOURCES, split: "\n" }
+      - for: {var: SOURCES, split: "\n"}
         cmd: kubectl --namespace {{splitList "," .ITEM | first}} patch --field-manager=flux-client-side-apply replicationsources {{splitList "," .ITEM | last}} --type merge --patch "{\"spec\":{\"restic\":{\"unlock\":\"{{now | unixEpoch}}\"}}}"
     vars:
       SOURCES:
@@ -45,7 +45,8 @@ tasks:
       NS: '{{.NS | default "default"}}'
       JOB: volsync-src-{{.APP}}
     requires:
-      vars: [APP]
+      vars:
+        - APP
     preconditions:
       - kubectl --namespace {{.NS}} get replicationsources {{.APP}}
       - which kubectl
@@ -87,7 +88,9 @@ tasks:
       PGID:
         sh: kubectl --namespace {{.NS}} get replicationsources/{{.APP}} --output=jsonpath="{.spec.restic.moverSecurityContext.runAsGroup}"
     requires:
-      vars: [APP, PREVIOUS]
+      vars:
+        - APP
+        - PREVIOUS
     preconditions:
       - test -f {{.VOLSYNC_RESOURCES_DIR}}/replicationdestination.yaml.j2
       - which flux kubectl minijinja-cli
@@ -106,7 +109,8 @@ tasks:
       NS: '{{.NS}}'
       APP: '{{.APP}}'
     requires:
-      vars: [APP]
+      vars:
+        - APP
     preconditions:
       - test -f {{.VOLSYNC_RESOURCES_DIR}}/unlock.yaml.j2
       - which kubectl minijinja-cli stern

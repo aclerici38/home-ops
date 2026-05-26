@@ -32,10 +32,15 @@ spec:
         - name: documentdb
           image:
             reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:0.110.0
-          dynamic_library_path: ["lib"]
-          extension_control_path: ["share"]
-          ld_library_path: ["lib", "system"]
+          dynamic_library_path:
+            - "lib"
+          extension_control_path:
+            - "share"
+          ld_library_path:
+            - "lib"
+            - "system"
         - name: timescaledb
           image:
             reference: ghcr.io/m00nwtchr/timescaledb:2.27.1
-          ld_library_path: ["system"]
+          ld_library_path:
+            - "system"

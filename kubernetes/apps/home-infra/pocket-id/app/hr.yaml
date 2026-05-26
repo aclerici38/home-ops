@@ -8,8 +8,8 @@ spec:
   interval: 1h
   maxHistory: 1
   chartRef:
-      kind: OCIRepository
-      name: pocket-id-operator
+    kind: OCIRepository
+    name: pocket-id-operator
   # chart:
   #   spec:
   #     chart: dist/chart
@@ -61,7 +61,7 @@ spec:
             secretKeyRef:
               name: pocket-id-db-app
               key: uri
-        appUrl: https://id.${SECRET_DOMAIN}
+        appUrl: https://id.clerici.tech
         hostUsers: false
         versionCheckDisabled: true
         fileBackend: database
@@ -69,7 +69,7 @@ spec:
           sessionDuration: 1440
         smtp:
           host: smtp-relay.cluster-infra.svc.cluster.local
-          from: bot@${SECRET_DOMAIN}
+          from: bot@clerici.tech
           port: 25
           tls: none
         emailNotifications:

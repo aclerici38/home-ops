@@ -32,7 +32,8 @@ spec:
       route:
         main:
           enabled: true
-          hostnames: ["alertmanager.${SECRET_DOMAIN}"]
+          hostnames:
+            - "alertmanager.clerici.tech"
           parentRefs:
             - name: internal
               namespace: gateway-system
@@ -42,7 +43,7 @@ spec:
           name: alertmanager
           global:
             resolveTimeout: 5m
-        externalUrl: https://alertmanager.${SECRET_DOMAIN}
+        externalUrl: https://alertmanager.clerici.tech
         storage:
           volumeClaimTemplate:
             spec:
@@ -60,7 +61,8 @@ spec:
       route:
         main:
           enabled: true
-          hostnames: ["prometheus.${SECRET_DOMAIN}"]
+          hostnames:
+            - "prometheus.clerici.tech"
           parentRefs:
             - name: internal
               namespace: gateway-system
@@ -104,7 +106,8 @@ spec:
             - action: replace
               regex: (.*)
               replacement: $1
-              sourceLabels: ["__meta_kubernetes_pod_node_name"]
+              sourceLabels:
+                - "__meta_kubernetes_pod_node_name"
               targetLabel: kubernetes_node
     kube-state-metrics:
       fullnameOverride: kube-state-metrics
@@ -119,7 +122,8 @@ spec:
             - action: replace
               regex: (.*)
               replacement: $1
-              sourceLabels: ["__meta_kubernetes_pod_node_name"]
+              sourceLabels:
+                - "__meta_kubernetes_pod_node_name"
               targetLabel: kubernetes_node
     grafana:
       enabled: false
@@ -129,28 +133,28 @@ spec:
         groups:
           - name: cnpg-barman-cloud
             rules:
-            - alert: CNPGBackupFailedRecently
-              expr: |
-                max by (namespace, job) (barman_cloud_cloudnative_pg_io_last_failed_backup_timestamp)
-                  >
-                max by (namespace, job) (barman_cloud_cloudnative_pg_io_last_available_backup_timestamp)
-              for: 2m
-              labels:
-                severity: critical
-              annotations:
-                summary: "CNPG backup failed ({{ $labels.namespace }}/{{ $labels.pod }})"
-                description: "Most recent backup failure is newer than the most recent success."
-            - alert: CNPGWalArchivingFailing
-              expr: |
-                max by (namespace, job) (cnpg_pg_stat_archiver_last_failed_time)
-                  >
-                max by (namespace, job) (cnpg_pg_stat_archiver_last_archived_time)
-              for: 5m
-              labels:
-                severity: critical
-              annotations:
-                summary: "CNPG WAL archiving failing ({{ $labels.namespace }}/{{ $labels.pod }})"
-                description: "Latest WAL archiving failure is newer than the last successful archival."
+              - alert: CNPGBackupFailedRecently
+                expr: |
+                  max by (namespace, job) (barman_cloud_cloudnative_pg_io_last_failed_backup_timestamp)
+                    >
+                  max by (namespace, job) (barman_cloud_cloudnative_pg_io_last_available_backup_timestamp)
+                for: 2m
+                labels:
+                  severity: critical
+                annotations:
+                  summary: "CNPG backup failed ({{ $labels.namespace }}/{{ $labels.pod }})"
+                  description: "Most recent backup failure is newer than the most recent success."
+              - alert: CNPGWalArchivingFailing
+                expr: |
+                  max by (namespace, job) (cnpg_pg_stat_archiver_last_failed_time)
+                    >
+                  max by (namespace, job) (cnpg_pg_stat_archiver_last_archived_time)
+                for: 5m
+                labels:
+                  severity: critical
+                annotations:
+                  summary: "CNPG WAL archiving failing ({{ $labels.namespace }}/{{ $labels.pod }})"
+                  description: "Latest WAL archiving failure is newer than the last successful archival."
       dockerhub-rules:
         groups:
           - name: dockerhub

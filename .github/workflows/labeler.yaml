@@ -5,7 +5,8 @@ name: "Labeler"
 on:
   workflow_dispatch:
   pull_request_target: # zizmor: ignore[dangerous-triggers] no PR code is checked out; only the labeler action runs
-    branches: ["main"]
+    branches:
+      - "main"
 
 permissions:
   contents: read

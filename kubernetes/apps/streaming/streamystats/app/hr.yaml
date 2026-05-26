@@ -46,7 +46,7 @@ spec:
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 100m
@@ -86,7 +86,7 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     service:
       frontend:
         controller: frontend
@@ -107,5 +107,5 @@ spec:
             namespace: gateway-system
         rules:
           - backendRefs:
-            - identifier: frontend
-              port: *fPort
+              - identifier: frontend
+                port: *fPort

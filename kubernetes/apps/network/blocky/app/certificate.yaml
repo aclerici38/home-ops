@@ -9,8 +9,8 @@ spec:
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: dot.${SECRET_DOMAIN}
+  commonName: dot.clerici.tech
   dnsNames:
-    - dot.${SECRET_DOMAIN}
+    - dot.clerici.tech
   privateKey:
     rotationPolicy: Always

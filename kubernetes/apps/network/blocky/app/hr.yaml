@@ -45,7 +45,7 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
             runAsGroup: 1000
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         containers:
           main:
             image:
@@ -108,7 +108,7 @@ spec:
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: "${BLOCKY_LB_IP}"
-          coredns.io/hostname: dot.${SECRET_DOMAIN}
+          coredns.io/hostname: dot.clerici.tech
         ports: &p
           dns-tcp:
             port: 53
@@ -134,9 +134,9 @@ spec:
         annotations:
           # google.com base64
           gatus.home-operations.com/endpoint: |-
-            url: https://dns.${SECRET_DOMAIN}/dns-query?dns=AAABAAABAAAAAAAABmdvb2dsZQNjb20AAAEAAQ
+            url: https://dns.clerici.tech/dns-query?dns=AAABAAABAAAAAAAABmdvb2dsZQNjb20AAAEAAQ
         hostnames:
-          - dns.${SECRET_DOMAIN}
+          - dns.clerici.tech
         parentRefs:
           - name: external
             namespace: gateway-system
@@ -166,7 +166,7 @@ spec:
     configMaps:
       config:
         data:
-          config.yml: |
+          config.yml: |-
             caching:
               minTime: 2m
               maxTime: 1h
@@ -177,14 +177,14 @@ spec:
               prefetchMaxItemsCount: 0
               cacheTimeNegative: -1
               exclude:
-                - '/(^|\\.)${SECRET_DOMAIN//./\\.}$/'
+                - '/(^|\\.)clerici\\.tech$/'
                 - '/\\.internal$/'
                 - '/(^|\\.)cluster\\.local$/'
                 - '/(^|\\.)in-addr\\.arpa$/'
-            
+
             log:
               level: info
-            
+
             connectIPVersion: v4
             minTlsServeVersion: 1.3
             certFile: /certs/tls.crt
@@ -193,49 +193,49 @@ spec:
               dns: 53
               tls: 853
               http: 4000
-            
+
             prometheus:
               enable: true
-            
+
             customDNS:
               mapping:
-                wireguard.${SECRET_DOMAIN}: 10.0.0.1
+                wireguard.clerici.tech: 10.0.0.1
 
             conditional:
               fallbackUpstream: false
               mapping:
-                ${SECRET_DOMAIN}: ${K8S_GATEWAY_CLUSTER_IP}:53
+                clerici.tech: ${K8S_GATEWAY_CLUSTER_IP}:53
 
                 # House
                 internal: ${NODE_GATEWAY}:53
                 0.10.in-addr.arpa: ${NODE_GATEWAY}:53
-                
+
                 # kube
                 cluster.local: ${COREDNS_CLUSTER_IP}
                 16.172.in-addr.arpa: ${COREDNS_CLUSTER_IP}
-                
+
                 # bambi
                 bambi.internal: 192.168.8.1:53
                 console.gl-inet.com: 192.168.8.1:53
                 8.168.192.in-addr.arpa: 192.168.8.1:53
-            
+
             # ClientLookup is set to blocky so it can conditionally forward it to coredns/apt/house DHCP
             clientLookup:
               upstream: 127.0.0.1
               clients:
                 localhost:
                   - 127.0.0.1
-            
+
             # To resolve devices behind coredns
             ecs:
               useAsClient: true
               forward: false
-            
+
             bootstrapDns:
               - 8.8.8.8
               - 1.1.1.1
               - 9.9.9.9
-            
+
             upstreams:
               groups:
                 default:
@@ -244,7 +244,7 @@ spec:
                   # TODO: swap to DoQ when it's supported by these
                   - https://doh.opendns.com/dns-query
                   - https://cloudflare-dns.com/dns-query
-            
+
             blocking:
               denylists:
                 ads:
@@ -276,11 +276,10 @@ spec:
               address: blocky-dragonfly-db:6379
               connectionAttempts: 10
               connectionCooldown: 60s
-            
+
             queryLog:
               type: timescale
               logRetentionDays: 90
               creationAttempts: 5
               creationCooldown: 60s
               flushInterval: 5s
-    

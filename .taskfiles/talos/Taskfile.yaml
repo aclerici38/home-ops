@@ -30,7 +30,8 @@ tasks:
     vars:
       MODE: '{{.MODE | default "auto"}}'
     requires:
-      vars: [HOSTNAME]
+      vars:
+        - HOSTNAME
     preconditions:
       - talosctl --nodes {{.HOSTNAME}} get machineconfig
       - talosctl config info
@@ -51,7 +52,8 @@ tasks:
       TALOS_VERSION:
         sh: yq '.talosVersion' {{.TALHELPER_CONFIG_FILE}}
     requires:
-      vars: [HOSTNAME]
+      vars:
+        - HOSTNAME
     preconditions:
       - curl -fsSL -o /dev/null --fail https://github.com/siderolabs/talos/releases/tag/{{.TALOS_VERSION}}
       - talosctl --nodes {{.HOSTNAME}} get machineconfig

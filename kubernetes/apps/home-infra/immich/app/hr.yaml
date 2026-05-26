@@ -60,7 +60,7 @@ spec:
             securityContext: &contSec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 100m
@@ -104,7 +104,7 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     service:
       server:
         controller: server
@@ -138,7 +138,7 @@ spec:
     persistence:
       data:
         type: nfs
-        server: nfs.${SECRET_DOMAIN}
+        server: nfs.clerici.tech
         path: /immich
         advancedMounts:
           server:

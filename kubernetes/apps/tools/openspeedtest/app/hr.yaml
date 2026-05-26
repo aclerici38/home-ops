@@ -29,20 +29,21 @@ spec:
             runAsNonRoot: true
             runAsUser: 101
             runAsGroup: 101
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         containers:
           main:
             image:
               repository: mirror.gcr.io/openspeedtest/latest
               tag: v2.0.6@sha256:a6a7e3b3e9e93cfe7b9b2eb49c60b2a93644149a0a600845d4df57148b193ff6
-            command: ["nginx"]
+            command:
+              - "nginx"
             args:
               - -g
               - daemon off;
               - -c
               - /etc/nginx/nginx.conf
             env:
-              DOMAIN_NAME: ${SECRET_DOMAIN}
+              DOMAIN_NAME: clerici.tech
             probes:
               liveness: &probes
                 enabled: true
@@ -51,7 +52,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 25m

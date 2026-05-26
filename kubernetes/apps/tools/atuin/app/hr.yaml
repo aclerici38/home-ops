@@ -26,13 +26,14 @@ spec:
             runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         containers:
           main:
             image:
               repository: ghcr.io/atuinsh/atuin
               tag: 18.16.1@sha256:9d4d79507b51be6d292b218f5cc791d79ca0a72f51ab48f786b091bd6eafb39f
-            args: ["start"]
+            args:
+              - "start"
             env:
               ATUIN_HOST: 0.0.0.0
               ATUIN_PORT: &port 8888
@@ -65,8 +66,8 @@ spec:
                 memory: 100Mi
             securityContext:
               allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
-              capabilities: { drop: ["ALL"] }
+              seccompProfile: {type: RuntimeDefault}
+              capabilities: {drop: ["ALL"]}
     service:
       main:
         controller: atuin
@@ -83,4 +84,3 @@ spec:
     persistence:
       config:
         type: emptyDir
-

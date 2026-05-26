@@ -45,16 +45,16 @@ spec:
                 secretKeyRef:
                   name: karakeep
                   key: MEILI_MASTER_KEY
-              
+
               DISABLE_PASSWORD_AUTH: true
               DISABLE_SIGNUPS: false
               OAUTH_AUTO_REDIRECT: true
               OAUTH_PROVIDER_NAME: Pocket ID
-              OAUTH_WELLKNOWN_URL: 
+              OAUTH_WELLKNOWN_URL:
                 secretKeyRef:
                   name: karakeep-oidc-credentials
                   key: discovery_url
-              OAUTH_CLIENT_ID: 
+              OAUTH_CLIENT_ID:
                 secretKeyRef:
                   name: karakeep-oidc-credentials
                   key: client_id
@@ -148,7 +148,7 @@ spec:
         runAsNonRoot: true
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     service:
       karakeep:
         controller: karakeep
@@ -174,8 +174,8 @@ spec:
             namespace: gateway-system
         rules:
           - backendRefs:
-            - identifier: karakeep
-              port: *port
+              - identifier: karakeep
+                port: *port
     persistence:
       data:
         existingClaim: karakeep

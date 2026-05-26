@@ -1,3 +1,4 @@
+---
 machine:
   files:
     - op: create
@@ -11,7 +12,7 @@ machine:
     - op: overwrite
       path: /etc/nfsmount.conf
       permissions: 0o644
-      content: |
+      content: |-
         [ NFSMount_Global_Options ]
         nfsvers=4.2
         proto=tcp
@@ -20,5 +21,5 @@ machine:
         retrans=2
         nconnect=16
         rsize=1048576
-        wsize=1048576        
+        wsize=1048576
         noatime=True

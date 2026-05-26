@@ -20,11 +20,11 @@ spec:
       retries: 1
   values:
     # stub for flux-local
-    domain: ${SECRET_DOMAIN:-example.com}
+    domain: clerici.tech
     fallthrough:
       enabled: true
       zones:
-        - ${SECRET_DOMAIN}
+        - clerici.tech
     replicaCount: 2
     watchedResources:
       - HTTPRoute

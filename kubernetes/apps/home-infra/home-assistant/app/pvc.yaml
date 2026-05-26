@@ -5,7 +5,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: hass-cache
 spec:
-  accessModes: ["ReadWriteOnce"]
+  accessModes:
+    - "ReadWriteOnce"
   resources:
     requests:
       storage: 10Gi
