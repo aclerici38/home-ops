@@ -45,8 +45,9 @@ spec:
       value: enabled
     - name: RENOVATE_CACHE_PRIVATE_PACKAGES
       value: "true"
-    - name: MISE_TRUSTED_CONFIG_PATHS
-      value: /tmp/repos
+    - name: RENOVATE_CUSTOM_ENV_VARIABLES
+      value: >-
+        {"MISE_TRUSTED_CONFIG_PATHS": "/tmp/repos"}
   image: ghcr.io/renovatebot/renovate:43.195.6@sha256:72d184865d505d5badc5c3b32a48410096e0d9d7e0d875dae28ee97832178f47
   parallelism: 5
   resources:
