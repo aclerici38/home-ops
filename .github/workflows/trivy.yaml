@@ -1,0 +1,117 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Trivy
+
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "kubernetes/**"
+      - ".github/workflows/trivy.yaml"
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - "kubernetes/**"
+      - ".github/workflows/trivy.yaml"
+  schedule:
+    # Daily for new CVEs
+    - cron: "0 6 * * *"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  config:
+    name: Config Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Trivy IaC scan
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        env:
+          TRIVY_MISCONFIG_SCANNERS: kubernetes
+        with:
+          scan-type: "config"
+          scan-ref: "kubernetes/"
+          hide-progress: true
+          format: "sarif"
+          output: "trivy-config.sarif"
+          exit-code: "0"
+          severity: "HIGH,CRITICAL"
+          skip-files: "**/*.sops.yaml"
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@dc73d59c2d7bd4f8194098a91219eeee6d8a1719 # v2.25.5
+        with:
+          sarif_file: "trivy-config.sarif"
+          category: "trivy-config"
+
+  image:
+    name: Image CVEs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup flate
+        uses: home-operations/flate/action@3696fcf52d1a197d5f8cbea5dbe6b49f9e06f535 # 0.1.22
+        with:
+          # renovate: datasource=github-tags depName=home-operations/flate
+          version: 0.1.22
+
+      - name: Setup Trivy
+        uses: aquasecurity/setup-trivy@3fb12ec12f41e471780db15c232d5dd185dcb514 # v0.2.6
+        with:
+          cache: true
+          # renovate: datasource=github-releases depName=aquasecurity/trivy
+          version: v0.70.0
+
+      - name: Collect image refs
+        run: flate get images --path . --allow-missing-secrets -o name > /tmp/images.txt
+
+      - name: Scan images
+        run: |
+          mkdir -p /tmp/sarif
+          i=0
+          while read -r img; do
+            i=$((i+1))
+            safe=$(echo "$img" | tr '/:@' '___')
+            echo "::group::$img"
+            trivy image \
+              --scanners vuln \
+              --severity HIGH,CRITICAL \
+              --ignore-status will_not_fix,fix_deferred,end_of_life \
+              --timeout 10m \
+              --exit-code 0 \
+              --no-progress \
+              --format sarif \
+              --output "/tmp/sarif/${i}-${safe}.sarif" \
+              "$img" || true
+            echo "::endgroup::"
+          done < /tmp/images.txt
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@dc73d59c2d7bd4f8194098a91219eeee6d8a1719 # v2.25.5
+        with:
+          sarif_file: "/tmp/sarif"
+          category: "trivy-image"
