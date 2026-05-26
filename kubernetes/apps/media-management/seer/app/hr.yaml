@@ -30,7 +30,7 @@ spec:
             runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         containers:
           seer:
             image:
@@ -39,10 +39,10 @@ spec:
             env:
               DB_TYPE: postgres
               DB_HOST:
-                  valueFrom:
-                    secretKeyRef:
-                      name: seer-db-app
-                      key: host
+                valueFrom:
+                  secretKeyRef:
+                    name: seer-db-app
+                    key: host
               DB_USER:
                 valueFrom:
                   secretKeyRef:

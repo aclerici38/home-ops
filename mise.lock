@@ -80,6 +80,14 @@ backend = "aqua:kubernetes-sigs/kind"
 version = "4.14.0"
 backend = "aqua:kubernetes-sigs/kubebuilder"
 
+[[tools.kubeconform]]
+version = "0.7.0"
+backend = "aqua:yannh/kubeconform"
+
+[tools.kubeconform."platforms.macos-arm64"]
+checksum = "sha256:b5d32b2cb77f9c781c976b20a85e2d0bc8f9184d5d1cfe665a2f31a19f99eeb9"
+url = "https://github.com/yannh/kubeconform/releases/download/v0.7.0/kubeconform-darwin-arm64.tar.gz"
+
 [[tools.kubectl]]
 version = "1.36.1"
 backend = "aqua:kubernetes/kubernetes/kubectl"
@@ -119,6 +127,14 @@ backend = "aqua:siderolabs/talos"
 [[tools.uv]]
 version = "0.11.16"
 backend = "aqua:astral-sh/uv"
+
+[[tools.yamlfmt]]
+version = "0.21.0"
+backend = "aqua:google/yamlfmt"
+
+[[tools.yamllint]]
+version = "1.37.1"
+backend = "pipx:yamllint"
 
 [[tools.yq]]
 version = "4.53.2"

@@ -26,7 +26,7 @@ spec:
           securityContext:
             runAsUser: 0
             runAsGroup: 0
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
             supplementalGroups:
               - 44
         containers:

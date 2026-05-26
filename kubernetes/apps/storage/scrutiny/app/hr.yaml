@@ -41,7 +41,7 @@ spec:
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 100m
@@ -103,7 +103,7 @@ spec:
               capabilities:
                 drop:
                   - ALL
-                add: 
+                add:
                   - SYS_RAWIO
                   - SYS_ADMIN
                   - SETUID
@@ -115,7 +115,7 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     service:
       scrutiny:
         controller: scrutiny
@@ -136,8 +136,8 @@ spec:
             namespace: gateway-system
         rules:
           - backendRefs:
-            - identifier: scrutiny
-              port: *port
+              - identifier: scrutiny
+                port: *port
     persistence:
       config:
         existingClaim: scrutiny

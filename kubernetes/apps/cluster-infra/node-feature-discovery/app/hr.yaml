@@ -18,6 +18,9 @@ spec:
     worker:
       config:
         core:
-          labelSources: ["pci", "system", "usb"]
+          labelSources:
+            - "pci"
+            - "system"
+            - "usb"
     prometheus:
       enable: true

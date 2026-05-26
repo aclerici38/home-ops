@@ -1,0 +1,25 @@
+---
+extends: default
+
+ignore: |
+  clusterconfig/
+  talos/clusterconfig/
+  *.sops.yaml
+  nix-config/
+  .pytest_cache/
+
+rules:
+  line-length: disable
+  truthy:
+    check-keys: false
+  comments:
+    min-spaces-from-content: 1
+  document-start:
+    present: true
+  indentation:
+    spaces: 2
+    indent-sequences: true
+  braces:
+    max-spaces-inside: 1
+  brackets:
+    max-spaces-inside: 1

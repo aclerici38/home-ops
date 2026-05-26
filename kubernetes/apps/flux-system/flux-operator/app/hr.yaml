@@ -1,3 +1,4 @@
+---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json?values=flux-operator/0.50.0
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -64,11 +65,11 @@ spec:
             impersonation:
               groups: "['system:masters']"
       httpRoute:
-          enabled: true
-          parentRefs:
-            - name: internal
-              namespace: gateway-system
-              sectionName: https
-          hostnames:
-            - flux.${SECRET_DOMAIN}
+        enabled: true
+        parentRefs:
+          - name: internal
+            namespace: gateway-system
+            sectionName: https
+        hostnames:
+          - flux.${SECRET_DOMAIN}
 

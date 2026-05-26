@@ -106,7 +106,7 @@ spec:
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 200m
@@ -206,7 +206,7 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     service:
       opencloud:
         forceRename: opencloud
@@ -245,8 +245,8 @@ spec:
             namespace: gateway-system
         rules:
           - backendRefs:
-            - identifier: opencloud
-              port: *port
+              - identifier: opencloud
+                port: *port
       wopi:
         annotations:
           gatus.home-operations.com/endpoint: |-
@@ -258,8 +258,8 @@ spec:
             namespace: gateway-system
         rules:
           - backendRefs:
-            - identifier: wopi
-              port: 9300
+              - identifier: wopi
+                port: 9300
       collabora:
         hostnames:
           - collabora.${SECRET_DOMAIN}
@@ -268,8 +268,8 @@ spec:
             namespace: gateway-system
         rules:
           - backendRefs:
-            - identifier: collabora
-              port: 9980
+              - identifier: collabora
+                port: 9980
     persistence:
       config:
         type: configMap
@@ -313,7 +313,7 @@ spec:
           opencloud:
             opencloud:
               - path: /opt/extensions
-    configMaps: 
+    configMaps:
       config:
         data:
           csp.yaml: |
@@ -360,7 +360,7 @@ spec:
               style-src:
                 - '''self'''
                 - '''unsafe-inline'''
-          proxy.yaml: |
+          proxy.yaml: |-
             role_assignment:
               driver: oidc
               oidc_role_mapper:

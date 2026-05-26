@@ -30,7 +30,7 @@ spec:
             runAsUser: 1000
             runAsGroup: 1000
             runAsNonRoot: true
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
           annotations:
             k8s.v1.cni.cncf.io/networks: |
               [
@@ -52,7 +52,7 @@ spec:
               # (allegedly)
               AIRCAST_VAR: kill
               AIRUPNP_VAR: -l 200:400 -o S15
-              
+
               S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
               S6_READ_ONLY_ROOT: 1
             resources:
@@ -66,7 +66,7 @@ spec:
               capabilities: {drop: [ALL]}
     configMaps:
       config:
-        data: 
+        data:
           type: oneshot
     persistence:
       type:

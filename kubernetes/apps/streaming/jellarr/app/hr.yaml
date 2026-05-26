@@ -33,7 +33,7 @@ spec:
             runAsUser: 1000
             runAsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         containers:
           main:
             image:
@@ -47,7 +47,7 @@ spec:
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 1m
@@ -64,7 +64,7 @@ spec:
     configMaps:
       config:
         data:
-          config.yml: |
+          config.yml: |-
             version: 1
             base_url: http://jellyfin:8096
             system:

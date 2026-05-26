@@ -16,11 +16,17 @@ releases:
     values:
       - /Users/anthony/home-ops/kubernetes/apps/cilium/cilium/app/helm/values.yaml
     hooks:
-      - events: ["presync"]
+      - events:
+          - "presync"
         showlogs: true
         command: "kubectl"
-        args: ["apply", "--server-side", "-f", "https://github.com/prometheus-operator/prometheus-operator/releases/latest/download/stripped-down-crds.yaml"]
-      - events: ["postsync"]
+        args:
+          - "apply"
+          - "--server-side"
+          - "-f"
+          - "https://github.com/prometheus-operator/prometheus-operator/releases/latest/download/stripped-down-crds.yaml"
+      - events:
+          - "postsync"
         showlogs: true
         command: "sh"
         args:
@@ -84,10 +90,14 @@ releases:
       - kube-system/coredns
       - onepassword-connect
     hooks:
-      - events: ["postsync"]
+      - events:
+          - "postsync"
         showlogs: true
         command: "kubectl"
-        args: ["apply", "-f", "/Users/anthony/home-ops/kubernetes/apps/cluster-infra/external-secrets/stores/onepassword.yaml"]
+        args:
+          - "apply"
+          - "-f"
+          - "/Users/anthony/home-ops/kubernetes/apps/cluster-infra/external-secrets/stores/onepassword.yaml"
 
   - name: flux-operator
     namespace: flux-system

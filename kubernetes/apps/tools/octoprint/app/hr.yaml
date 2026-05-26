@@ -35,7 +35,7 @@ spec:
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             probes:
               liveness:
                 enabled: true
@@ -62,7 +62,9 @@ spec:
             image: &img
               repository: ghcr.io/home-operations/octoprint
               tag: 1.11.7@sha256:03e789387c0daed3a408881773793045d06d937942830906b61d378b4be3a65c
-            command: ["/bin/sh", "-c"]
+            command:
+              - "/bin/sh"
+              - "-c"
             args: |
               alias ocs='octoprint config set'
               ocs --json server.reverseProxy.trustedProxies '["${CLUSTER_POD_CIDR}"]'
@@ -98,7 +100,7 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     service:
       octoprint:
         controller: octoprint
@@ -119,8 +121,8 @@ spec:
             namespace: gateway-system
         rules:
           - backendRefs:
-            - identifier: octoprint
-              port: *port
+              - identifier: octoprint
+                port: *port
       go2rtc:
         hostnames:
           - printer-cam.${SECRET_DOMAIN}
@@ -129,8 +131,8 @@ spec:
             namespace: gateway-system
         rules:
           - backendRefs:
-            - identifier: go2rtc
-              port: *go2rtc
+              - identifier: go2rtc
+                port: *go2rtc
     configMaps:
       config:
         data:

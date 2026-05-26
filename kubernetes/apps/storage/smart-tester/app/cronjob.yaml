@@ -19,7 +19,9 @@ spec:
           containers:
             - name: smart-tester
               image: ghcr.io/aclerici38/smartmontools:7.5.0@sha256:2f7291450312c77edae14409504d202164d90145ddfe4e9bc3217412350f8058
-              command: ["sh", "-c"]
+              command:
+                - "sh"
+                - "-c"
               args:
                 - |
                   for disk in $(smartctl --scan | awk '{print $1}'); do

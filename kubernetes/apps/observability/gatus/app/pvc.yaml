@@ -5,7 +5,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: gatus-cache
 spec:
-  accessModes: ["ReadWriteMany"]
+  accessModes:
+    - "ReadWriteMany"
   resources:
     requests:
       storage: 1Gi

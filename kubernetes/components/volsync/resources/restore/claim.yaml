@@ -7,7 +7,8 @@ metadata:
   labels:
     dormammu.io/component: volsync
 spec:
-  accessModes: ["${VOLSYNC_ACCESSMODES:=ReadWriteOnce}"]
+  accessModes:
+    - "${VOLSYNC_ACCESSMODES:=ReadWriteOnce}"
   dataSourceRef:
     kind: ReplicationDestination
     apiGroup: volsync.backube

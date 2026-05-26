@@ -14,7 +14,7 @@ tasks:
   resources:
     desc: Gather common resources in your cluster, useful when asking for support
     cmds:
-      - for: { var: RESOURCE }
+      - for: {var: RESOURCE}
         cmd: kubectl get {{.ITEM}} {{.CLI_ARGS | default "-A"}}
     vars:
       RESOURCE: >-
@@ -40,7 +40,8 @@ tasks:
       | yq 'with(select(.apiVersion == "kustomize.toolkit.fluxcd.io/v1" and .kind == "Kustomization"); .metadata.namespace = "flux-system")' -
       | kubectl {{.OPERATION}} {{if eq .OPERATION "apply"}}--server-side  --field-manager=kustomize-controller{{end}} --filename -
     requires:
-      vars: [PATH]
+      vars:
+        - PATH
     vars:
       OPERATION: '{{index .MATCH 0}}'
       KUSTOMIZATION:
@@ -56,7 +57,8 @@ tasks:
     vars:
       NS: '{{.NS | default "default"}}'
     requires:
-      vars: [CLAIM]
+      vars:
+        - CLAIM
     preconditions:
       - kubectl --namespace {{.NS}} get persistentvolumeclaims {{.CLAIM}}
       - kubectl browse-pvc --version
@@ -65,7 +67,7 @@ tasks:
   sync-secrets:
     desc: Sync all ExternalSecrets
     cmds:
-      - for: { var: SECRETS, split: "\n" }
+      - for: {var: SECRETS, split: "\n"}
         cmd: kubectl --namespace {{splitList "," .ITEM | first}} annotate externalsecret {{splitList "," .ITEM | last}} force-sync="{{now | unixEpoch}}" --overwrite
     vars:
       SECRETS:
@@ -78,7 +80,10 @@ tasks:
     cmds:
       - for:
           matrix:
-            PHASE: [Failed, Pending, Succeeded]
+            PHASE:
+              - Failed
+              - Pending
+              - Succeeded
         cmd: kubectl delete pods --all-namespaces --field-selector status.phase={{.ITEM.PHASE}} --ignore-not-found=true
     preconditions:
       - which kubectl
@@ -90,7 +95,8 @@ tasks:
     vars:
       NS: '{{.NS | default .APP}}'
     requires:
-      vars: [APP]
+      vars:
+        - APP
     preconditions:
       - flux --version
       - which flux

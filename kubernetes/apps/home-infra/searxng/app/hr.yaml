@@ -30,7 +30,7 @@ spec:
             runAsGroup: *uid
             fsGroup: *uid
             fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         strategy: RollingUpdate
         containers:
           main:
@@ -101,18 +101,18 @@ spec:
     configMaps:
       config:
         data:
-          settings.yml: |
+          settings.yml: |-
             use_default_settings: true
-            
+
             server:
               public_instance: false
               limiter: true
               image_proxy: true
               method: GET # https://github.com/searxng/searxng/pull/3619
-            
+
             outgoing:
               request_timeout: 1.0
-            
+
             search:
               autocomplete: google
               favicon_resolver: duckduckgo
@@ -122,7 +122,7 @@ spec:
               formats:
                 - html
                 - json
-            
+
             ui:
               static_use_hash: true
               default_theme: simple
@@ -130,7 +130,7 @@ spec:
                 simple_style: dark
               infinite_scroll: true
               results_on_new_tab: false
-            
+
             enabled_plugins:
               - Basic Calculator
               - Hash plugin
@@ -139,7 +139,7 @@ spec:
               - Self Informations
               - Tracker URL remover
               - Unit converter plugin
-            
+
             hostnames:
               high_priority:
                 - (.*)\/blog\/(.*)

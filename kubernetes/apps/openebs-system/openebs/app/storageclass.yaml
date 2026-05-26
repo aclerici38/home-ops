@@ -7,9 +7,9 @@ metadata:
 allowVolumeExpansion: true
 allowedTopologies:
   - matchLabelExpressions:
-    - key: kubernetes.io/hostname
-      values:
-        - bonds
+      - key: kubernetes.io/hostname
+        values:
+          - bonds
 parameters:
   poolname: "ssd"
   fstype: "zfs"
@@ -23,9 +23,9 @@ metadata:
 allowVolumeExpansion: true
 allowedTopologies:
   - matchLabelExpressions:
-    - key: kubernetes.io/hostname
-      values:
-        - bonds
+      - key: kubernetes.io/hostname
+        values:
+          - bonds
 parameters:
   poolname: "tank"
   fstype: "zfs"

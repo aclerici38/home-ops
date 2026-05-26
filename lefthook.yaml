@@ -1,24 +1,13 @@
-# Mirrors .github/workflows/nix.yaml lint job.
-# Install once per clone: `lefthook install`
-
+---
+remotes:
+  - git_url: "https://github.com/home-operations/.github"
+    ref: "main"
+    configs:
+      - "lefthook.common.toml"
 pre-commit:
   parallel: true
   commands:
     nixfmt:
-      glob: "nix-config/**"
-      run: nixfmt --check nix-config/*.nix
-    statix:
-      glob: "nix-config/**"
-      run: statix check -c nix-config nix-config
-    deadnix:
-      glob: "nix-config/**"
-      run: deadnix --fail nix-config
-
-pre-push:
-  commands:
-    nixfmt:
-      run: nixfmt --check nix-config/*.nix
-    statix:
-      run: statix check -c nix-config nix-config
-    deadnix:
-      run: deadnix --fail nix-config
+      glob: "nix-config/**/*.nix"
+      run: nixfmt --check {staged_files}
+      stage_fixed: true

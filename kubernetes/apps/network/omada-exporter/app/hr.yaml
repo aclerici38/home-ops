@@ -26,7 +26,7 @@ spec:
             runAsGroup: 1000
             fsGroup: 1000
             runAsNonRoot: true
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         strategy: RollingUpdate
         containers:
           omada-exporter:
@@ -57,4 +57,4 @@ spec:
         endpoints:
           - port: http
             scheme: http
-    
+

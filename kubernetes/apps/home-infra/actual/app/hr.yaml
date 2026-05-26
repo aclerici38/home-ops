@@ -25,7 +25,7 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
             runAsNonRoot: true
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         containers:
           main:
             image:
@@ -68,8 +68,8 @@ spec:
             securityContext:
               runAsNonRoot: true
               allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
-              capabilities: { drop: ["ALL"] }
+              seccompProfile: {type: RuntimeDefault}
+              capabilities: {drop: ["ALL"]}
     service:
       main:
         controller: actual

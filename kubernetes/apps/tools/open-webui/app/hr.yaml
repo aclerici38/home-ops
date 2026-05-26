@@ -25,7 +25,7 @@ spec:
             runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         containers:
           open-webui:
             image:
@@ -82,21 +82,21 @@ spec:
               USER_PERMISSIONS_FEATURES_DIRECT_TOOL_SERVERS: true
               ENABLE_FORWARD_USER_INFO_HEADERS: true
               TOOL_SERVER_CONNECTIONS: |
-                  [
-                    {
-                      "type": "mcp",
-                      "url": "https://trek.${SECRET_DOMAIN}/mcp",
-                      "path": "",
-                      "auth_type": "oauth_2.1",
-                      "key": "",
-                      "config": { "enable": true },
-                      "info": {
-                        "id": "trek",
-                        "name": "TREK",
-                        "description": "TREK travel planner"
-                      }
+                [
+                  {
+                    "type": "mcp",
+                    "url": "https://trek.${SECRET_DOMAIN}/mcp",
+                    "path": "",
+                    "auth_type": "oauth_2.1",
+                    "key": "",
+                    "config": { "enable": true },
+                    "info": {
+                      "id": "trek",
+                      "name": "TREK",
+                      "description": "TREK travel planner"
                     }
-                  ]
+                  }
+                ]
               OPENAI_API_KEY:
                 secretKeyRef:
                   name: open-webui
@@ -141,8 +141,8 @@ spec:
                 memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
-              capabilities: { drop: ["ALL"] }
+              seccompProfile: {type: RuntimeDefault}
+              capabilities: {drop: ["ALL"]}
     service:
       open-webui:
         controller: open-webui

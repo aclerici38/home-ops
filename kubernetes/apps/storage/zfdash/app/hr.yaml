@@ -27,7 +27,7 @@ spec:
             runAsUser: 0
             runAsGroup: 0
             runAsNonRoot: false
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         containers:
           zfdash:
             image:
@@ -41,10 +41,10 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: 
+              capabilities:
                 add:
                   - SYS_ADMIN
-                drop: 
+                drop:
                   - ALL
             resources:
               requests:

@@ -26,13 +26,17 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
             runAsNonRoot: true
-            seccompProfile: { type: RuntimeDefault }
+            seccompProfile: {type: RuntimeDefault}
         containers:
           trek:
             image:
               repository: mirror.gcr.io/mauriceboe/trek
               tag: 3.0.22@sha256:c6cfd1ee6f32b1ac6ca580c6ed4060d7108c5fa7ba4d26a3954647574568ccce
-            args: ["node", "--import", "tsx", "src/index.ts"]
+            args:
+              - "node"
+              - "--import"
+              - "tsx"
+              - "src/index.ts"
             env:
               ALLOW_INTERNAL_NETWORK: true
               LOG_LEVEL: debug
@@ -66,7 +70,7 @@ spec:
                 secretKeyRef:
                   name: trek-oidc-credentials
                   key: client_secret
-              
+
               SMTP_HOST: smtp-relay.cluster-infra
               SMTP_PORT: 25
               SMTP_FROM: TREK <bot@${SECRET_DOMAIN}>
@@ -88,8 +92,8 @@ spec:
             securityContext:
               runAsNonRoot: true
               allowPrivilegeEscalation: false
-              seccompProfile: { type: RuntimeDefault }
-              capabilities: { drop: ["ALL"] }
+              seccompProfile: {type: RuntimeDefault}
+              capabilities: {drop: ["ALL"]}
     service:
       trek:
         controller: trek

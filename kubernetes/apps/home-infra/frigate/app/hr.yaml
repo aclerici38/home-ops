@@ -31,7 +31,7 @@ spec:
             runAsUser: 0
             runAsGroup: 0
             fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: { type: Unconfined }
+            seccompProfile: {type: Unconfined}
         containers:
           frigate:
             image:
@@ -91,8 +91,8 @@ spec:
             namespace: gateway-system
         rules:
           - backendRefs:
-            - identifier: frigate
-              port: *auth
+              - identifier: frigate
+                port: *auth
     persistence:
       config:
         existingClaim: frigate

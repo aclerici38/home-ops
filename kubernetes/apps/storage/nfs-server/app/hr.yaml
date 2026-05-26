@@ -31,7 +31,7 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
             runAsNonRoot: false
-            seccompProfile: { type: Unconfined }
+            seccompProfile: {type: Unconfined}
         containers:
           nfs-server:
             image:

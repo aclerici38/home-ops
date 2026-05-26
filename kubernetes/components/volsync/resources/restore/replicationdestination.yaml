@@ -15,9 +15,11 @@ spec:
     copyMethod: Snapshot
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:=csi-ceph-blockpool}"
     cacheStorageClassName: "${VOLSYNC_CACHE_STORAGECLASS:=ceph-block}"
-    cacheAccessModes: ["ReadWriteOnce"]
+    cacheAccessModes:
+      - "ReadWriteOnce"
     storageClassName: "${VOLSYNC_STORAGECLASS:=ceph-block}"
-    accessModes: ["ReadWriteOnce"]
+    accessModes:
+      - "ReadWriteOnce"
     capacity: "${VOLSYNC_CAPACITY:=5Gi}"
     moverSecurityContext:
       runAsUser: ${VOLSYNC_PUID:=1000}

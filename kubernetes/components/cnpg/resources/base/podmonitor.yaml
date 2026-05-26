@@ -8,7 +8,7 @@ metadata:
   name: ${APP}-db
 spec:
   podMetricsEndpoints:
-  - port: metrics
+    - port: metrics
   selector:
     matchLabels:
       cnpg.io/cluster: ${APP}-db
@@ -22,9 +22,9 @@ metadata:
   name: ${APP}-pooler-rw
 spec:
   podMetricsEndpoints:
-  - port: metrics
+    - port: metrics
   selector:
     matchLabels:
       cnpg.io/podRole: pooler
       cnpg.io/poolerName: ${APP}-pooler-rw
-      
+
