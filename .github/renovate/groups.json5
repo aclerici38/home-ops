@@ -2,6 +2,15 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
+      description: "Mise tools group",
+      groupName: "Mise tools",
+      matchManagers: ["mise"],
+      separateMinorPatch: true,
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "Omada-Controller Group",
       groupName: "Omada-Controller",
       matchPackagePatterns: ["omada-controller", "omada-controller-helm"],
@@ -354,15 +363,6 @@
         platformAutomerge: false,
         schedule: ["* 3-4 * * *"],
       },
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
-      description: "Mise tools group",
-      groupName: "Mise tools",
-      matchManagers: ["mise"],
-      separateMinorPatch: true,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
