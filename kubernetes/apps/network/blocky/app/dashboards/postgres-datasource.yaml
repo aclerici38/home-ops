@@ -21,7 +21,7 @@ spec:
       database: $${dbname}
       sslmode: 'disable'
       postgresVersion: 1801
-      timescaledb: true
+      timescaledb: false
     secureJsonData:
       password: $${password}
   valuesFrom:

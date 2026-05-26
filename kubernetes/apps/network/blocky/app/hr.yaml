@@ -27,12 +27,6 @@ spec:
         rollingUpdate:
           surge: 1
           unavailable: 1
-        pod:
-          tolerations:
-            - key: "rpi"
-              operator: "Equal"
-              value: "true"
-              effect: "NoSchedule"
           affinity:
             podAntiAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
@@ -278,7 +272,7 @@ spec:
               connectionCooldown: 60s
 
             queryLog:
-              type: timescale
+              type: postgres
               logRetentionDays: 90
               creationAttempts: 5
               creationCooldown: 60s
