@@ -3,12 +3,10 @@
   extends: [
     'config:recommended',
     'docker:enableMajor',
-    ':automergeBranch',
     ':disableRateLimiting',
     ':dependencyDashboard',
     ':semanticCommits',
     ':separatePatchReleases',
-    ':skipStatusChecks',
     ':timezone(America/Los_Angeles)',
     'github>aclerici38/home-ops//.github/renovate/autoMerge.json5',
     'github>aclerici38/home-ops//.github/renovate/customManagers.json5',
@@ -20,6 +18,7 @@
   ],
   dependencyDashboardTitle: 'Renovate Dashboard 🤖',
   rebaseWhen: 'behind-base-branch',
+  assignees: ['aclerici38'],
   suppressNotifications: [
     'prEditedNotification',
     'prIgnoreNotification',
