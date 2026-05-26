@@ -520,6 +520,11 @@ url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.29.
 version = "0.1.24"
 backend = "github:home-operations/flate"
 
+[tools."github:home-operations/flate"."platforms.macos-arm64"]
+checksum = "sha256:d8363fce58eaacc1cbe41095ab23a094011e1a930321bf5a2fb7f02a9c712371"
+url = "https://github.com/home-operations/flate/releases/download/0.1.24/flate_0.1.24_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/430346053"
+
 [[tools."github:home-operations/yamlls"]]
 version = "0.0.4"
 backend = "github:home-operations/yamlls"
