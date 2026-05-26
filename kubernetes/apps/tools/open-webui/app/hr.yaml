@@ -51,7 +51,7 @@ spec:
                   key: TAVILY_API_KEY
               WEB_LOADER_ENGINE: playwright
               PLAYWRIGHT_WS_URL: ws://browserless.tools:3000/chromium/playwright
-              WEBUI_URL: &url https://chat.${SECRET_DOMAIN}
+              WEBUI_URL: &url https://chat.clerici.tech
               CORS_ALLOW_ORIGIN: *url
               ENABLE_LOGIN_FORM: false
               ENABLE_PASSWORD_AUTH: false
@@ -85,7 +85,7 @@ spec:
                 [
                   {
                     "type": "mcp",
-                    "url": "https://trek.${SECRET_DOMAIN}/mcp",
+                    "url": "https://trek.clerici.tech/mcp",
                     "path": "",
                     "auth_type": "oauth_2.1",
                     "key": "",
@@ -152,7 +152,7 @@ spec:
     route:
       open-webui:
         hostnames:
-          - chat.${SECRET_DOMAIN}
+          - chat.clerici.tech
         parentRefs:
           - name: external
             namespace: gateway-system

@@ -43,7 +43,7 @@ spec:
               - -c
               - /etc/nginx/nginx.conf
             env:
-              DOMAIN_NAME: ${SECRET_DOMAIN}
+              DOMAIN_NAME: clerici.tech
             probes:
               liveness: &probes
                 enabled: true

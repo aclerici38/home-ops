@@ -77,7 +77,7 @@ spec:
               SMTP_HOST: smtp-relay.cluster-infra.svc.cluster.local
               SMTP_PORT: 25
               SMTP_AUTH_STRATEGY: None
-              SMTP_FROM_EMAIL: bot@${SECRET_DOMAIN}
+              SMTP_FROM_EMAIL: bot@clerici.tech
             envFrom:
               - secretRef:
                   name: mealie

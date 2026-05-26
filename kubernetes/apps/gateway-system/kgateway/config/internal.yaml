@@ -26,14 +26,14 @@ spec:
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: "*.${SECRET_DOMAIN}"
+      hostname: "*.clerici.tech"
       allowedRoutes:
         namespaces:
           from: All
       tls:
         certificateRefs:
           - kind: Secret
-            name: ${SECRET_DOMAIN/./-}-tls
+            name: clerici-tech-tls
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor

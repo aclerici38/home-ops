@@ -38,7 +38,7 @@ spec:
               repository: ghcr.io/searxng/searxng
               tag: 2026.5.25-e29e861e2@sha256:edc36e78ba9c0651893435f9bccb50418340f9b24979871ade139e54b2ea0a81
             env:
-              SEARXNG_BASE_URL: &url https://search.${SECRET_DOMAIN}
+              SEARXNG_BASE_URL: &url https://search.clerici.tech
               SEARXNG_URL: *url
               SEARXNG_PORT: &port 8080
               SEARXNG_VALKEY_URL: redis://searxng-dragonfly-db:6379
@@ -85,7 +85,7 @@ spec:
     route:
       main:
         hostnames:
-          - search.${SECRET_DOMAIN}
+          - search.clerici.tech
         parentRefs:
           - name: external
             namespace: gateway-system

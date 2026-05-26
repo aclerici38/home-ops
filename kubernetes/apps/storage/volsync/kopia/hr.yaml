@@ -98,7 +98,7 @@ spec:
     route:
       versity: &route
         hostnames:
-          - kopia-versity.${SECRET_DOMAIN}
+          - kopia-versity.clerici.tech
         parentRefs:
           - name: internal
             namespace: gateway-system
@@ -109,7 +109,7 @@ spec:
       backblaze:
         <<: *route
         hostnames:
-          - kopia-backblaze.${SECRET_DOMAIN}
+          - kopia-backblaze.clerici.tech
         rules:
           - backendRefs:
               - identifier: backblaze

@@ -60,8 +60,8 @@ spec:
               RAILS_WS_DB: 0
               SMTP_SERVER: smtp-relay.cluster-infra
               SMTP_PORT: 25
-              SMTP_FROM: bot@${SECRET_DOMAIN}
-              DOMAIN: ${SECRET_DOMAIN}
+              SMTP_FROM: bot@clerici.tech
+              DOMAIN: clerici.tech
               SECRET_KEY_BASE:
                 secretKeyRef:
                   name: dawarich
@@ -163,7 +163,7 @@ spec:
     route:
       dawarich:
         hostnames:
-          - dawarich.${SECRET_DOMAIN}
+          - dawarich.clerici.tech
         parentRefs:
           - name: external
             namespace: gateway-system

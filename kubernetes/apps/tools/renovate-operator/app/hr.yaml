@@ -23,7 +23,7 @@ spec:
     route:
       enabled: true
       hostnames:
-        - renovate.${SECRET_DOMAIN}
+        - renovate.clerici.tech
       parentRefs:
         - name: internal
           namespace: gateway-system

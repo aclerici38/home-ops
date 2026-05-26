@@ -20,7 +20,7 @@ spec:
         spec:
           callbackUrls:
             - app.immich:///oauth-callback
-            - https://immich.${SECRET_DOMAIN}/auth/login
-            - https://immich.${SECRET_DOMAIN}/user-settings
+            - https://immich.clerici.tech/auth/login
+            - https://immich.clerici.tech/user-settings
       target:
         kind: PocketIDOIDCClient

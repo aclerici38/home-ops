@@ -94,7 +94,7 @@ spec:
             subPath: config.yaml
       media:
         type: nfs
-        server: nfs.${SECRET_DOMAIN}
+        server: nfs.clerici.tech
         path: /media
         globalMounts:
           - path: /mnt/media
@@ -119,7 +119,7 @@ spec:
                   enabled: false
                 oidc:
                   enabled: true
-                  issuerUrl: https://id.${SECRET_DOMAIN}
+                  issuerUrl: https://id.clerici.tech
                   scopes: "email openid profile groups"
                   adminGroup: admin
                   createUser: true

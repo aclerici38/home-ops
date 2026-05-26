@@ -6,7 +6,7 @@ metadata:
   name: wg-easy
 spec:
   endpoints:
-    - dnsName: wireguard.${SECRET_DOMAIN}
+    - dnsName: wireguard.clerici.tech
       recordType: CNAME
       targets:
-        - house.${SECRET_DOMAIN}
+        - house.clerici.tech

@@ -29,7 +29,7 @@ spec:
     storageClasses:
       - name: nfs-tank
         parameters:
-          server: "nfs.${SECRET_DOMAIN}"
+          server: "nfs.clerici.tech"
           share: "/"
           subDir: /tank/$${pvc.metadata.namespace}/$${pvc.metadata.name}
         mountOptions: &opt
@@ -46,7 +46,7 @@ spec:
         volumeBindingMode: Immediate
       - name: nfs-ssd
         parameters:
-          server: "nfs.${SECRET_DOMAIN}"
+          server: "nfs.clerici.tech"
           share: "/"
           subDir: /ssd/$${pvc.metadata.namespace}/$${pvc.metadata.name}
         mountOptions: *opt

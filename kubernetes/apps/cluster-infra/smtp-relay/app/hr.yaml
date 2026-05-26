@@ -44,7 +44,7 @@ spec:
             env:
               SMTP_RELAY_METRICS_PORT: &metricsPort 8080
               SMTP_RELAY_SMTP_PORT: &smtpPort 25
-              HOSTNAME: relay.${SECRET_DOMAIN}
+              HOSTNAME: relay.clerici.tech
             envFrom:
               - secretRef:
                   name: smtp-relay

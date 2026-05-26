@@ -81,7 +81,7 @@ spec:
         existingClaim: firefox
       data:
         type: nfs
-        server: nfs.${SECRET_DOMAIN}
+        server: nfs.clerici.tech
         path: /media
         globalMounts:
           - path: /allMedia

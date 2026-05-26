@@ -11,7 +11,7 @@ spec:
       group: gateway.kgateway.dev
       kind: Backend
       name: ${APP}-oauth-backend
-    issuerURI: "https://id.${SECRET_DOMAIN}"
+    issuerURI: "https://id.clerici.tech"
     scopes:
       - "openid"
       - "profile"
@@ -22,4 +22,4 @@ spec:
       clientSecretRef:
         name: ${APP}-oidc-credentials
     cookies:
-      domain: "${SECRET_DOMAIN}"
+      domain: "clerici.tech"

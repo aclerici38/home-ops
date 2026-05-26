@@ -53,11 +53,6 @@
   programs.onepassword-secrets = {
     enable = true;
     tokenFile = "${config.home.homeDirectory}/.config/opnix/token";
-    secrets.secretDomain = {
-      reference = "op://kubernetes/cluster-secrets/SECRET_DOMAIN";
-      path = ".local/share/opnix/secret-domain";
-      mode = "0600";
-    };
     secrets.githubToken = {
       reference = "op://kubernetes/GITHUB_TOKEN/token";
       path = ".local/share/opnix/github-token";
@@ -118,8 +113,7 @@
       set -gx SOPS_AGE_KEY_FILE $HOME/home-ops/age.key
       set -gx TALOSCONFIG $HOME/home-ops/talos/clusterconfig/talosconfig
       test -f $f; or return
-      set -gx SECRET_DOMAIN (cat $f)
-      set -gx ATUIN_SYNC_ADDRESS "https://atuin.$SECRET_DOMAIN"
+      set -gx ATUIN_SYNC_ADDRESS "https://atuin.clerici.tech"
       test -f $gh; and set -gx GITHUB_TOKEN (cat $gh)
     '';
 

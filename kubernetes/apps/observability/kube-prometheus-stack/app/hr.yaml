@@ -33,7 +33,7 @@ spec:
         main:
           enabled: true
           hostnames:
-            - "alertmanager.${SECRET_DOMAIN}"
+            - "alertmanager.clerici.tech"
           parentRefs:
             - name: internal
               namespace: gateway-system
@@ -43,7 +43,7 @@ spec:
           name: alertmanager
           global:
             resolveTimeout: 5m
-        externalUrl: https://alertmanager.${SECRET_DOMAIN}
+        externalUrl: https://alertmanager.clerici.tech
         storage:
           volumeClaimTemplate:
             spec:
@@ -62,7 +62,7 @@ spec:
         main:
           enabled: true
           hostnames:
-            - "prometheus.${SECRET_DOMAIN}"
+            - "prometheus.clerici.tech"
           parentRefs:
             - name: internal
               namespace: gateway-system

@@ -17,7 +17,7 @@ spec:
               key: CLOUDFLARE_API_TOKEN
         selector:
           dnsZones:
-            - "${SECRET_DOMAIN}"
+            - "clerici.tech"
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.20.2/clusterissuer_v1.json
 apiVersion: cert-manager.io/v1
@@ -37,4 +37,4 @@ spec:
               key: CLOUDFLARE_API_TOKEN
         selector:
           dnsZones:
-            - "${SECRET_DOMAIN}"
+            - "clerici.tech"
