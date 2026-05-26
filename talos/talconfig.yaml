@@ -12,6 +12,10 @@ clusterSvcNets:
   - "${CLUSTER_SVC_CIDR}"
 
 additionalApiServerCertSans: &sans
+  - "bonds"
+  - "cain"
+  - "posey"
+  - "belt"
   - "k8s.lab.internal"
   - "bonds.lab.internal"
   - "cain.lab.internal"
