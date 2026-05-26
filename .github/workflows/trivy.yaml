@@ -121,6 +121,7 @@ jobs:
             i=$((i+1))
             safe=$(echo "$img" | tr '/:@' '___')
             echo "::group::$img"
+            sarif="/tmp/sarif/${i}-${safe}.sarif"
             trivy image \
               --scanners vuln \
               --severity HIGH,CRITICAL \
@@ -129,8 +130,14 @@ jobs:
               --exit-code 0 \
               --no-progress \
               --format sarif \
-              --output "/tmp/sarif/${i}-${safe}.sarif" \
+              --output "$sarif" \
               "$img" || true
+            # Unique runAutomationDetails.id so each file uploads
+            if [ -s "$sarif" ]; then
+              jq --arg id "trivy-image/$img" \
+                '.runs[0].automationDetails = {id: $id}' \
+                "$sarif" > "${sarif}.tmp" && mv "${sarif}.tmp" "$sarif"
+            fi
             echo "::endgroup::"
           done < /tmp/images.txt
 
@@ -139,4 +146,3 @@ jobs:
         uses: github/codeql-action/upload-sarif@dc73d59c2d7bd4f8194098a91219eeee6d8a1719 # v2.25.5
         with:
           sarif_file: "/tmp/sarif"
-          category: "trivy-image"
