@@ -114,10 +114,12 @@ jobs:
           cat /tmp/images.txt
 
       - name: Scan images
+        id: scan
         run: |
           mkdir -p /tmp/sarif
           i=0
-          while read -r img; do
+          while IFS= read -r img; do
+            [ -z "$img" ] && continue
             i=$((i+1))
             safe=$(echo "$img" | tr '/:@' '___')
             echo "::group::$img"
@@ -132,17 +134,41 @@ jobs:
               --format sarif \
               --output "$sarif" \
               "$img" || true
-            # Unique runAutomationDetails.id so each file uploads
-            if [ -s "$sarif" ]; then
-              jq --arg id "trivy-image/$img" \
-                '.runs[0].automationDetails = {id: $id}' \
-                "$sarif" > "${sarif}.tmp" && mv "${sarif}.tmp" "$sarif"
-            fi
+            jq empty "$sarif" >/dev/null 2>&1 || rm -f "$sarif"
             echo "::endgroup::"
           done < /tmp/images.txt
 
+          shopt -s nullglob
+          files=(/tmp/sarif/*.sarif)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No SARIF results to upload"
+            echo "uploaded=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Collapse per-image SARIFs into one run
+          jq -s '{
+            "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+            version: "2.1.0",
+            runs: [{
+              tool: {
+                driver: {
+                  name: "Trivy",
+                  informationUri: "https://github.com/aquasecurity/trivy",
+                  version: (.[0].runs[0].tool.driver.version // ""),
+                  rules: ([.[].runs[0].tool.driver.rules // []] | add | unique_by(.id))
+                }
+              },
+              results: ([.[].runs[0].results // []] | add),
+              columnKind: "utf16CodeUnits"
+            }]
+          }' "${files[@]}" > /tmp/trivy-images.sarif
+
+          echo "uploaded=true" >> "$GITHUB_OUTPUT"
+
       - name: Upload SARIF
-        if: always()
+        if: always() && steps.scan.outputs.uploaded == 'true'
         uses: github/codeql-action/upload-sarif@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0
         with:
-          sarif_file: "/tmp/sarif"
+          sarif_file: "/tmp/trivy-images.sarif"
+          category: "trivy-image"
