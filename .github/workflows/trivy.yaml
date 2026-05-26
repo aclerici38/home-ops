@@ -75,10 +75,10 @@ jobs:
           fetch-depth: 0
 
       - name: Setup flate
-        uses: home-operations/flate/action@3696fcf52d1a197d5f8cbea5dbe6b49f9e06f535 # 0.1.22
+        uses: home-operations/flate/action@dd56e5509f6040289c60a89702b3bac247481322 # 0.1.23
         with:
           # renovate: datasource=github-tags depName=home-operations/flate
-          version: 0.1.22
+          version: 0.1.23
 
       - name: Setup Trivy
         uses: aquasecurity/setup-trivy@3fb12ec12f41e471780db15c232d5dd185dcb514 # v0.2.6
