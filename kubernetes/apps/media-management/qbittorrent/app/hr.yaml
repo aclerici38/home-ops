@@ -42,7 +42,7 @@ spec:
               VPN_TYPE: wireguard
               VPN_INTERFACE: wg0
               WIREGUARD_ENDPOINT_PORT: 51820
-              VPN_PORT_FORWARDING: on
+              VPN_PORT_FORWARDING: "on"
               VPN_PORT_FORWARDING_PROVIDER: protonvpn
               FIREWALL_INPUT_PORTS: &port 8080
               FIREWALL_OUTBOUND_SUBNETS: ${CLUSTER_POD_CIDR},${CLUSTER_SVC_CIDR}

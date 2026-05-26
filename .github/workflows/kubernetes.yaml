@@ -54,7 +54,6 @@ jobs:
             | kubeconform \
                 -strict \
                 -ignore-missing-schemas \
-                -kubernetes-version 1.36.1 \
                 -schema-location default \
                 -schema-location 'https://k8s-versioned-schemas.pages.dev/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
                 -summary \
