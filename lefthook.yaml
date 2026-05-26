@@ -11,6 +11,9 @@ pre-commit:
       glob: "nix-config/**/*.nix"
       run: nixfmt --check {staged_files}
       stage_fixed: true
+    actionlint:
+      glob: ".github/{workflows,actions}/**/*.{yaml,yml}"
+      run: actionlint {staged_files}
     talhelper-talconfig:
       glob: "talos/talconfig.yaml"
       run: talhelper validate talconfig talos/talconfig.yaml
