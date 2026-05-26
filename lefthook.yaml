@@ -11,3 +11,13 @@ pre-commit:
       glob: "nix-config/**/*.nix"
       run: nixfmt --check {staged_files}
       stage_fixed: true
+    talhelper-talconfig:
+      glob: "talos/talconfig.yaml"
+      run: talhelper validate talconfig talos/talconfig.yaml
+    talhelper-nodeconfig:
+      glob: "talos/{talconfig.yaml,patches/**}"
+      run: |-
+        for f in talos/clusterconfig/*.yaml; do
+          [ -e "$f" ] || continue
+          talhelper validate nodeconfig "$f" || exit 1
+        done
