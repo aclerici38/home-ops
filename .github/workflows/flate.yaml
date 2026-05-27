@@ -49,7 +49,7 @@ jobs:
             --api-versions "${API_VERSIONS}" \
             --skip-crds=false \
             --skip-secrets=false \
-            --path ./kubernetes/flux/cluster
+            --path ./kubernetes/flux
 
   diff:
     if: ${{ github.event_name == 'pull_request' }}
@@ -87,7 +87,7 @@ jobs:
             --api-versions "${API_VERSIONS}"
             --skip-crds=false
             --skip-secrets=false
-            --path ./kubernetes/flux/cluster
+            --path ./kubernetes/flux
           )
           if [[ "${IS_UPGRADE}" == "true" ]]; then
             args+=(--is-upgrade)
@@ -147,7 +147,7 @@ jobs:
             --allow-missing-secrets=true \
             --kube-version "${KUBE_VERSION}" \
             --api-versions "${API_VERSIONS}" \
-            --path ./kubernetes/flux/cluster \
+            --path ./kubernetes/flux \
             -o name | sort -u | jq -R . | jq -sc . || echo '[]')
           echo "images=${images}" >> "$GITHUB_OUTPUT"
           echo "${images}" | jq .
