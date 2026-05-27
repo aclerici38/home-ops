@@ -74,7 +74,7 @@ jobs:
         run: |-
           {
             echo 'diff<<EOF'
-            flate diff ${{ matrix.resource }} --allow-missing-secrets=true --path ./pull --path-orig ./default
+            flate diff ${{ matrix.resource }} --allow-missing-secrets=true --path ./pull
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
