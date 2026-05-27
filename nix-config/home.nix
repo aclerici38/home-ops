@@ -94,7 +94,7 @@
     enable = true;
 
     shellInit = ''
-      set -gx MISE_GLOBAL_CONFIG_FILE $HOME/home-ops/mise.toml
+      set -gx MISE_GLOBAL_CONFIG_FILE $HOME/home-ops/.global.mise.toml
     '';
 
     shellAliases = {
@@ -108,17 +108,11 @@
     };
 
     functions.load-secrets = ''
-      set -l f ~/.local/share/opnix/secret-domain
       set -l gh ~/.local/share/opnix/github-token
-      set -gx SOPS_AGE_KEY_FILE $HOME/home-ops/age.key
-      set -gx TALOSCONFIG $HOME/home-ops/talos/clusterconfig/talosconfig
-      test -f $f; or return
-      set -gx ATUIN_SYNC_ADDRESS "https://atuin.clerici.tech"
       test -f $gh; and set -gx GITHUB_TOKEN (cat $gh)
     '';
 
     interactiveShellInit = ''
-      set -gx EDITOR nvim
       set fish_greeting
       load-secrets
     '';

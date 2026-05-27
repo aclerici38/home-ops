@@ -3,6 +3,12 @@
 lockfile = true
 experimental = true
 
+[env]
+EDITOR = "nvim"
+SOPS_AGE_KEY_FILE = "{{ env.HOME }}/home-ops/age.key"
+TALOSCONFIG = "{{ env.HOME }}/home-ops/talos/clusterconfig/talosconfig"
+ATUIN_SYNC_ADDRESS = "https://atuin.clerici.tech"
+
 [tools]
 # k8s
 kubectl = "1.36.1"
