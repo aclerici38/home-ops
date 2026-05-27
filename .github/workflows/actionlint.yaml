@@ -38,6 +38,8 @@ jobs:
 
       - name: Setup mise
         uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
+        env:
+          MISE_NO_HOOKS: "1"
         with:
           experimental: true
           install_args: actionlint
