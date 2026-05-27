@@ -57,10 +57,16 @@ jobs:
 
   diff:
     if: ${{ github.event_name == 'pull_request' }}
-    name: Diff
+    name: Flate Diff (${{ matrix.resource }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    strategy:
+      matrix:
+        resource:
+          - hr
+          - ks
+      fail-fast: false
     steps:
       - name: Checkout PR
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -75,14 +81,18 @@ jobs:
           path: base
           persist-credentials: false
 
-      - name: Setup flate
-        uses: home-operations/flate/action@aef47adc856bb97038ff321e5136cf65e0fa23cf # 0.1.27
+      - name: Setup tools
+        uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
+        env:
+          MISE_NO_HOOKS: "1"
         with:
-          cache: true
+          experimental: true
+          install_args: "dyff github:home-operations/flate"
 
       - name: Build both sides
         env:
           IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
+          RESOURCE: ${{ matrix.resource }}
         run: |-
           args=(
             --allow-missing-secrets=true
@@ -95,27 +105,15 @@ jobs:
           if [[ "${IS_UPGRADE}" == "true" ]]; then
             args+=(--is-upgrade)
           fi
-          flate build all --path ./base "${args[@]}" 2>/dev/null > /tmp/base.yaml || true
-          flate build all --path ./pull "${args[@]}" 2>/dev/null > /tmp/pull.yaml || true
+          flate build "${RESOURCE}" --path ./base "${args[@]}" 2>/dev/null > /tmp/base.yaml || true
+          flate build "${RESOURCE}" --path ./pull "${args[@]}" 2>/dev/null > /tmp/pull.yaml || true
 
       - name: Compute diff
         id: diff
         run: |-
           {
             echo 'diff<<EOF'
-            diff -u /tmp/base.yaml /tmp/pull.yaml || true
-            echo 'EOF'
-          } >> "$GITHUB_OUTPUT"
-
-      - name: List changed images
-        id: images
-        run: |-
-          awk '$1 == "image:" {print $2}' /tmp/base.yaml | sort -u > /tmp/base.images
-          awk '$1 == "image:" {print $2}' /tmp/pull.yaml | sort -u > /tmp/pull.images
-          images=$(comm -13 /tmp/base.images /tmp/pull.images)
-          {
-            echo 'images<<EOF'
-            echo "${images}"
+            dyff between --omit-header /tmp/base.yaml /tmp/pull.yaml || true
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
@@ -133,13 +131,26 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@0ea0beb66eb9baf113663a64ec522f60e49231c0 # v3.0.4
         with:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          header: ${{ github.event.pull_request.number }}/kubernetes
+          header: ${{ github.event.pull_request.number }}/kubernetes/${{ matrix.resource }}
           message: |-
-            ```diff
+            ```
             ${{ steps.diff.outputs.diff }}
             ```
 
-      - if: ${{ steps.images.outputs.images != '' }}
+      - if: ${{ matrix.resource == 'hr' }}
+        name: List changed images
+        id: images
+        run: |-
+          awk '$1 == "image:" {print $2}' /tmp/base.yaml | sort -u > /tmp/base.images
+          awk '$1 == "image:" {print $2}' /tmp/pull.yaml | sort -u > /tmp/pull.images
+          images=$(comm -13 /tmp/base.images /tmp/pull.images)
+          {
+            echo 'images<<EOF'
+            echo "${images}"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - if: ${{ matrix.resource == 'hr' && steps.images.outputs.images != '' }}
         name: Inspect changed images
         env:
           IMAGES: ${{ steps.images.outputs.images }}
