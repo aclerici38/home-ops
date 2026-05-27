@@ -111,7 +111,7 @@ jobs:
         run: |-
           {
             echo 'diff<<EOF'
-            dyff between --omit-header /tmp/base.yaml /tmp/pull.yaml || true
+            dyff between --omit-header --exclude-regexp 'checksum/|caBundle$' /tmp/base.yaml /tmp/pull.yaml || true
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
