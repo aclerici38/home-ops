@@ -9,6 +9,12 @@ on:
     paths:
       - kubernetes/**
       - .github/workflows/flate.yaml
+  push:
+    branches:
+      - main
+    paths:
+      - kubernetes/**
+      - .github/workflows/flate.yaml
 
 permissions: {}
 
@@ -50,6 +56,7 @@ jobs:
             --path ./pull
 
   diff:
+    if: ${{ github.event_name == 'pull_request' }}
     name: Flate Diff (${{ matrix.resource }})
     runs-on: ubuntu-latest
     permissions:
