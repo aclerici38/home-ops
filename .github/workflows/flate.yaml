@@ -52,6 +52,7 @@ jobs:
             --kube-version "${KUBE_VERSION}" \
             --api-versions "${API_VERSIONS}" \
             --skip-crds=false \
+            --skip-secrets=false \
             --path ./pull
 
   diff:
