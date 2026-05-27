@@ -16,6 +16,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+  KUBE_VERSION: v1.36.1
+  API_VERSIONS: cert-manager.io/v1,monitoring.coreos.com/v1,monitoring.coreos.com/v1alpha1,gateway.networking.k8s.io/v1,gateway.networking.k8s.io/v1beta1,grafana.integreatly.org/v1beta1,external-secrets.io/v1,volsync.backube/v1alpha1,snapshot.storage.k8s.io/v1
+
 jobs:
   test:
     name: Flate Test
@@ -36,7 +41,14 @@ jobs:
           version: 0.1.25
 
       - name: Run flate test all
-        run: flate test all --allow-missing-secrets=true --path ./pull
+        run: |-
+          flate test all \
+            --allow-missing-secrets=true \
+            --kube-version "${KUBE_VERSION}" \
+            --api-versions "${API_VERSIONS}" \
+            --skip-crds=false \
+            --skip-secrets=false \
+            --path ./pull
 
   diff:
     name: Flate Diff (${{ matrix.resource }})
@@ -65,10 +77,25 @@ jobs:
 
       - name: Run flate diff
         id: diff
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
         run: |-
+          args=(
+            --allow-missing-secrets=true
+            --kube-version "${KUBE_VERSION}"
+            --api-versions "${API_VERSIONS}"
+            --skip-crds=false
+            --skip-secrets=false
+            --base "origin/${BASE_REF}"
+            --path ./pull
+          )
+          if [[ "${IS_UPGRADE}" == "true" ]]; then
+            args+=(--is-upgrade)
+          fi
           {
             echo 'diff<<EOF'
-            flate diff ${{ matrix.resource }} --allow-missing-secrets=true --path ./pull
+            flate diff ${{ matrix.resource }} "${args[@]}"
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
