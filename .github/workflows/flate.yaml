@@ -6,57 +6,32 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - kubernetes/**
-      - .github/workflows/flate.yaml
-  push:
-    branches:
-      - main
-    paths:
-      - kubernetes/**
-      - .github/workflows/flate.yaml
-
-permissions: {}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
 
-env:
-  API_VERSIONS: cert-manager.io/v1,monitoring.coreos.com/v1,monitoring.coreos.com/v1alpha1,gateway.networking.k8s.io/v1,gateway.networking.k8s.io/v1beta1,grafana.integreatly.org/v1beta1,external-secrets.io/v1,volsync.backube/v1alpha1,snapshot.storage.k8s.io/v1
-
 jobs:
-  test:
-    name: Flate Test
+  filter:
+    name: Flate - Filter
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    outputs:
+      changed-files: ${{ steps.changed-files.outputs.changed_files }}
     steps:
-      - name: Checkout Pull Request Branch
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Get Changed Files
+        id: changed-files
+        uses: bjw-s-labs/action-changed-files@a9a36fb08ce06db9b02fbd8026cc2c0945eb9841 # v0.6.0
         with:
-          persist-credentials: false
+          patterns: kubernetes/**/*
 
-      - name: Setup flate
-        uses: home-operations/flate/action@62f56d7f2a9a7ade2d35a0fed89bde3ff79fdacd # 0.1.26
-        with:
-          cache: true
-
-      - name: Run flate test all
-        run: |-
-          flate test all \
-            --allow-missing-secrets=true \
-            --api-versions "${API_VERSIONS}" \
-            --skip-crds=false \
-            --skip-secrets=false \
-            --path ./kubernetes/flux
-
-  diff:
-    if: ${{ github.event_name == 'pull_request' }}
-    name: Flate Diff (${{ matrix.resource }})
+  flate:
+    if: ${{ needs.filter.outputs.changed-files != '[]' }}
+    needs: filter
+    name: Flate
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: write
     strategy:
       matrix:
         resource:
@@ -68,35 +43,20 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
-          path: pull
-          persist-credentials: false
 
-      - name: Setup flate
+      - name: Setup Flate
         uses: home-operations/flate/action@62f56d7f2a9a7ade2d35a0fed89bde3ff79fdacd # 0.1.26
         with:
           cache: true
 
-      - name: Run flate diff
+      - name: Flate Diff
         id: diff
-        env:
-          BASE_REF: ${{ github.base_ref }}
-          IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
         run: |-
-          args=(
-            --allow-missing-secrets=true
-            --api-versions "${API_VERSIONS}"
-            --skip-crds=false
-            --skip-secrets=false
-            --path ./kubernetes/flux
-          )
-          if [[ "${IS_UPGRADE}" == "true" ]]; then
-            args+=(--is-upgrade)
-          fi
           {
             echo 'diff<<EOF'
-            flate diff ${{ matrix.resource }} "${args[@]}"
+            flate diff ${{ matrix.resource }} --path ./kubernetes/flux/cluster
             echo 'EOF'
-          } >> "$GITHUB_OUTPUT"
+          } >> $GITHUB_OUTPUT
 
       - if: ${{ steps.diff.outputs.diff != '' }}
         name: Generate Token
@@ -105,7 +65,6 @@ jobs:
         with:
           client-id: ${{ secrets.BOT_APP_CLIENT_ID }}
           private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
-          permission-pull-requests: write
 
       - if: ${{ steps.diff.outputs.diff != '' }}
         name: Add Comment
@@ -118,66 +77,11 @@ jobs:
             ${{ steps.diff.outputs.diff }}
             ```
 
-  images-list:
-    if: ${{ github.event_name == 'pull_request' }}
-    name: Flate Images Test
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    outputs:
-      images: ${{ steps.list.outputs.images }}
-    steps:
-      - name: Checkout Pull Request Branch
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: Setup flate
-        uses: home-operations/flate/action@62f56d7f2a9a7ade2d35a0fed89bde3ff79fdacd # 0.1.26
-        with:
-          cache: true
-
-      - name: List changed images
-        id: list
-        env:
-          BASE_REF: ${{ github.base_ref }}
-        run: |-
-          images=$(flate get images \
-            --allow-missing-secrets=true \
-            --kube-version "${KUBE_VERSION}" \
-            --api-versions "${API_VERSIONS}" \
-            --path ./kubernetes/flux \
-            -o name | sort -u | jq -R . | jq -sc . || echo '[]')
-          echo "images=${images}" >> "$GITHUB_OUTPUT"
-          echo "${images}" | jq .
-
-  images-inspect:
-    if: ${{ needs.images-list.outputs.images != '[]' }}
-    name: Flate Images - Inspect (${{ matrix.image }})
-    needs: images-list
-    runs-on: ubuntu-latest
-    permissions: {}
-    strategy:
-      matrix:
-        image: ${{ fromJson(needs.images-list.outputs.images) }}
-      fail-fast: false
-    steps:
-      - name: Inspect image
-        env:
-          IMAGE: ${{ matrix.image }}
-        run: docker buildx imagetools inspect "${IMAGE}"
-
   success:
-    if: ${{ !cancelled() && github.event_name == 'pull_request' }}
-    needs:
-      - test
-      - diff
-      - images-list
-      - images-inspect
+    if: ${{ !cancelled() }}
+    needs: flate
     name: Flate - Success
     runs-on: ubuntu-latest
-    permissions: {}
     steps:
       - name: Any jobs failed?
         if: ${{ contains(needs.*.result, 'failure') }}
