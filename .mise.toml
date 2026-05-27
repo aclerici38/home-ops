@@ -1,5 +1,9 @@
 [env]
 _.file = "globals.env"
+FLATE_KUBE_VERSION = "{{ env.KUBE_VERSION }}"
+FLATE_API_VERSIONS = "cert-manager.io/v1,monitoring.coreos.com/v1,monitoring.coreos.com/v1alpha1,gateway.networking.k8s.io/v1,gateway.networking.k8s.io/v1beta1,grafana.integreatly.org/v1beta1,external-secrets.io/v1,volsync.backube/v1alpha1,snapshot.storage.k8s.io/v1"
+FLATE_ALLOW_MISSING_SECRETS = "true"
+FLATE_SKIP_CRDS = "false"
 
 [hooks]
 postinstall = "lefthook install"

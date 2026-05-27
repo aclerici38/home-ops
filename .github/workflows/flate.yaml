@@ -22,11 +22,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
 
-env:
-  # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-  KUBE_VERSION: v1.36.1
-  API_VERSIONS: cert-manager.io/v1,monitoring.coreos.com/v1,monitoring.coreos.com/v1alpha1,gateway.networking.k8s.io/v1,gateway.networking.k8s.io/v1beta1,grafana.integreatly.org/v1beta1,external-secrets.io/v1,volsync.backube/v1alpha1,snapshot.storage.k8s.io/v1
-
 jobs:
   test:
     name: Flate Test
@@ -37,7 +32,6 @@ jobs:
       - name: Checkout Pull Request Branch
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          path: pull
           persist-credentials: false
 
       - name: Setup flate
@@ -47,13 +41,7 @@ jobs:
 
       - name: Run flate test all
         run: |-
-          flate test all \
-            --allow-missing-secrets=true \
-            --kube-version "${KUBE_VERSION}" \
-            --api-versions "${API_VERSIONS}" \
-            --skip-crds=false \
-            --skip-secrets=false \
-            --path ./pull
+          flate test all --skip-secrets=false --path .
 
   diff:
     if: ${{ github.event_name == 'pull_request' }}
@@ -90,21 +78,11 @@ jobs:
 
       - name: Build both sides
         env:
-          IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
+          FLATE_IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
           RESOURCE: ${{ matrix.resource }}
         run: |-
-          args=(
-            --allow-missing-secrets=true
-            --kube-version "${KUBE_VERSION}"
-            --api-versions "${API_VERSIONS}"
-            --skip-crds=false
-            -o yaml
-          )
-          if [[ "${IS_UPGRADE}" == "true" ]]; then
-            args+=(--is-upgrade)
-          fi
-          flate build "${RESOURCE}" --path ./base "${args[@]}" 2>/dev/null > /tmp/base.yaml || true
-          flate build "${RESOURCE}" --path . "${args[@]}" 2>/dev/null > /tmp/pull.yaml || true
+          flate build "${RESOURCE}" --path ./base -o yaml 2>/dev/null > /tmp/base.yaml || true
+          flate build "${RESOURCE}" --path . -o yaml 2>/dev/null > /tmp/pull.yaml || true
 
       - name: Compute diff
         id: diff
