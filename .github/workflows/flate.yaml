@@ -125,7 +125,7 @@ jobs:
             ```
 
   success:
-    if: ${{ !cancelled() }}
+    if: ${{ !cancelled() && github.event_name == 'pull_request' }}
     needs:
       - test
       - diff
