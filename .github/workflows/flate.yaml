@@ -57,23 +57,22 @@ jobs:
 
   diff:
     if: ${{ github.event_name == 'pull_request' }}
-    name: Flate Diff (${{ matrix.resource }})
+    name: Diff
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    strategy:
-      matrix:
-        resource:
-          - helmrelease
-          - kustomization
-          - images
-      fail-fast: false
     steps:
-      - name: Checkout
+      - name: Checkout PR
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          fetch-depth: 0
           path: pull
+          persist-credentials: false
+
+      - name: Checkout base
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ github.base_ref }}
+          path: base
           persist-credentials: false
 
       - name: Setup flate
@@ -81,12 +80,9 @@ jobs:
         with:
           cache: true
 
-      - name: Run flate diff
-        id: diff
+      - name: Build both sides
         env:
-          BASE_REF: ${{ github.base_ref }}
           IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
-          RESOURCE: ${{ matrix.resource }}
         run: |-
           args=(
             --allow-missing-secrets=true
@@ -94,22 +90,36 @@ jobs:
             --api-versions "${API_VERSIONS}"
             --skip-crds=false
             --skip-secrets=false
-            --base "origin/${BASE_REF}"
-            --path ./pull
+            -o yaml
           )
           if [[ "${IS_UPGRADE}" == "true" ]]; then
             args+=(--is-upgrade)
           fi
-          if [[ "${RESOURCE}" == "images" ]]; then
-            args+=(-o name)
-          fi
+          flate build all --path ./base "${args[@]}" 2>/dev/null > /tmp/base.yaml || true
+          flate build all --path ./pull "${args[@]}" 2>/dev/null > /tmp/pull.yaml || true
+
+      - name: Compute diff
+        id: diff
+        run: |-
           {
             echo 'diff<<EOF'
-            flate diff "${RESOURCE}" "${args[@]}" || true
+            diff -u /tmp/base.yaml /tmp/pull.yaml || true
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
-      - if: ${{ matrix.resource != 'images' && steps.diff.outputs.diff != '' }}
+      - name: List changed images
+        id: images
+        run: |-
+          awk '$1 == "image:" {print $2}' /tmp/base.yaml | sort -u > /tmp/base.images
+          awk '$1 == "image:" {print $2}' /tmp/pull.yaml | sort -u > /tmp/pull.images
+          images=$(comm -13 /tmp/base.images /tmp/pull.images)
+          {
+            echo 'images<<EOF'
+            echo "${images}"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - if: ${{ steps.diff.outputs.diff != '' }}
         name: Generate Token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: app-token
@@ -118,21 +128,21 @@ jobs:
           private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
           permission-pull-requests: write
 
-      - if: ${{ matrix.resource != 'images' && steps.diff.outputs.diff != '' }}
+      - if: ${{ steps.diff.outputs.diff != '' }}
         name: Add Comment
         uses: marocchino/sticky-pull-request-comment@0ea0beb66eb9baf113663a64ec522f60e49231c0 # v3.0.4
         with:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          header: ${{ github.event.pull_request.number }}/kubernetes/${{ matrix.resource }}
+          header: ${{ github.event.pull_request.number }}/kubernetes
           message: |-
             ```diff
             ${{ steps.diff.outputs.diff }}
             ```
 
-      - if: ${{ matrix.resource == 'images' && steps.diff.outputs.diff != '' }}
+      - if: ${{ steps.images.outputs.images != '' }}
         name: Inspect changed images
         env:
-          IMAGES: ${{ steps.diff.outputs.diff }}
+          IMAGES: ${{ steps.images.outputs.images }}
         run: |-
           while IFS= read -r img; do
             [ -z "${img}" ] && continue
