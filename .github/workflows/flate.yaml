@@ -52,7 +52,6 @@ jobs:
             --kube-version "${KUBE_VERSION}" \
             --api-versions "${API_VERSIONS}" \
             --skip-crds=false \
-            --skip-secrets=false \
             --path ./pull
 
   diff:
@@ -98,7 +97,6 @@ jobs:
             --kube-version "${KUBE_VERSION}"
             --api-versions "${API_VERSIONS}"
             --skip-crds=false
-            --skip-secrets=false
             -o yaml
           )
           if [[ "${IS_UPGRADE}" == "true" ]]; then
