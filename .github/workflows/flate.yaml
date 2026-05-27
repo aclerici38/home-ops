@@ -71,7 +71,6 @@ jobs:
       - name: Checkout PR
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          path: pull
           persist-credentials: false
 
       - name: Checkout base
@@ -106,7 +105,7 @@ jobs:
             args+=(--is-upgrade)
           fi
           flate build "${RESOURCE}" --path ./base "${args[@]}" 2>/dev/null > /tmp/base.yaml || true
-          flate build "${RESOURCE}" --path ./pull "${args[@]}" 2>/dev/null > /tmp/pull.yaml || true
+          flate build "${RESOURCE}" --path . "${args[@]}" 2>/dev/null > /tmp/pull.yaml || true
 
       - name: Compute diff
         id: diff
