@@ -53,7 +53,7 @@ jobs:
             --api-versions "${API_VERSIONS}" \
             --skip-crds=false \
             --skip-secrets=false \
-            --path ./pull
+            --path ./pull/kubernetes/flux
 
   diff:
     if: ${{ github.event_name == 'pull_request' }}
@@ -95,7 +95,7 @@ jobs:
             --skip-crds=false
             --skip-secrets=false
             --base "origin/${BASE_REF}"
-            --path ./pull
+            --path ./pull/kubernetes/flux
           )
           if [[ "${IS_UPGRADE}" == "true" ]]; then
             args+=(--is-upgrade)
