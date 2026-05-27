@@ -79,19 +79,23 @@ jobs:
         id: diff
         env:
           BASE_REF: ${{ github.base_ref }}
-          IS_UPGRADE_FLAG: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') && '--is-upgrade' || '' }}
+          IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
         run: |-
+          args=(
+            --allow-missing-secrets=true
+            --kube-version "${KUBE_VERSION}"
+            --api-versions "${API_VERSIONS}"
+            --skip-crds=false
+            --skip-secrets=false
+            --base "origin/${BASE_REF}"
+            --path ./pull
+          )
+          if [[ "${IS_UPGRADE}" == "true" ]]; then
+            args+=(--is-upgrade)
+          fi
           {
             echo 'diff<<EOF'
-            flate diff ${{ matrix.resource }} \
-              --allow-missing-secrets=true \
-              --kube-version "${KUBE_VERSION}" \
-              --api-versions "${API_VERSIONS}" \
-              --skip-crds=false \
-              --skip-secrets=false \
-              --base "origin/${BASE_REF}" \
-              --path ./pull \
-              ${IS_UPGRADE_FLAG}
+            flate diff ${{ matrix.resource }} "${args[@]}"
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
