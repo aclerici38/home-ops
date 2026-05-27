@@ -100,7 +100,7 @@ jobs:
           fi
           {
             echo 'diff<<EOF'
-            flate diff ${{ matrix.resource }} "${args[@]}" || true
+            flate diff ${{ matrix.resource }} "${args[@]}"
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
@@ -124,11 +124,65 @@ jobs:
             ${{ steps.diff.outputs.diff }}
             ```
 
+  images-list:
+    if: ${{ github.event_name == 'pull_request' }}
+    name: Flate Images Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      images: ${{ steps.list.outputs.images }}
+    steps:
+      - name: Checkout Pull Request Branch
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          path: pull
+          persist-credentials: false
+
+      - name: Setup flate
+        uses: home-operations/flate/action@62f56d7f2a9a7ade2d35a0fed89bde3ff79fdacd # 0.1.26
+        with:
+          cache: true
+
+      - name: List changed images
+        id: list
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |-
+          images=$(flate get images \
+            --allow-missing-secrets=true \
+            --kube-version "${KUBE_VERSION}" \
+            --api-versions "${API_VERSIONS}" \
+            --base "origin/${BASE_REF}" \
+            --path ./pull \
+            -o name | sort -u | jq -R . | jq -sc . || echo '[]')
+          echo "images=${images}" >> "$GITHUB_OUTPUT"
+          echo "${images}" | jq .
+
+  images-inspect:
+    if: ${{ needs.images-list.outputs.images != '[]' }}
+    name: Flate Images - Inspect (${{ matrix.image }})
+    needs: images-list
+    runs-on: ubuntu-latest
+    permissions: {}
+    strategy:
+      matrix:
+        image: ${{ fromJson(needs.images-list.outputs.images) }}
+      fail-fast: false
+    steps:
+      - name: Inspect image
+        env:
+          IMAGE: ${{ matrix.image }}
+        run: docker buildx imagetools inspect "${IMAGE}"
+
   success:
     if: ${{ !cancelled() && github.event_name == 'pull_request' }}
     needs:
       - test
       - diff
+      - images-list
+      - images-inspect
     name: Flate - Success
     runs-on: ubuntu-latest
     permissions: {}
