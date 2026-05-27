@@ -54,7 +54,7 @@ jobs:
         run: |-
           {
             echo 'diff<<EOF'
-            flate diff ${{ matrix.resource }} --path ./kubernetes/flux/cluster
+            flate diff ${{ matrix.resource }} --allow-missing-secrets=true --path ./kubernetes/flux
             echo 'EOF'
           } >> $GITHUB_OUTPUT
 
