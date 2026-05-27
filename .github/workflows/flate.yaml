@@ -87,7 +87,6 @@ jobs:
             --api-versions "${API_VERSIONS}"
             --skip-crds=false
             --skip-secrets=false
-            --base "origin/${BASE_REF}"
             --path ./kubernetes/flux/cluster
           )
           if [[ "${IS_UPGRADE}" == "true" ]]; then
@@ -148,7 +147,6 @@ jobs:
             --allow-missing-secrets=true \
             --kube-version "${KUBE_VERSION}" \
             --api-versions "${API_VERSIONS}" \
-            --base "origin/${BASE_REF}" \
             --path ./kubernetes/flux/cluster \
             -o name | sort -u | jq -R . | jq -sc . || echo '[]')
           echo "images=${images}" >> "$GITHUB_OUTPUT"
