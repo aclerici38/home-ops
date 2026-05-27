@@ -100,7 +100,7 @@ jobs:
           fi
           {
             echo 'diff<<EOF'
-            flate diff ${{ matrix.resource }} "${args[@]}"
+            flate diff ${{ matrix.resource }} "${args[@]}" || true
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
