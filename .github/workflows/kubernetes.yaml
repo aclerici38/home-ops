@@ -8,6 +8,7 @@ on:
       - "main"
     paths:
       - "kubernetes/**"
+      - "globals.env"
       - ".yamllint.yaml"
       - ".mise.toml"
       - ".github/workflows/kubernetes.yaml"
@@ -16,6 +17,7 @@ on:
       - "main"
     paths:
       - "kubernetes/**"
+      - "globals.env"
       - ".yamllint.yaml"
       - ".mise.toml"
       - ".github/workflows/kubernetes.yaml"
@@ -42,9 +44,11 @@ jobs:
 
       - name: Setup mise
         uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
+        env:
+          MISE_NO_HOOKS: "1"
         with:
           experimental: true
-          install_args: yamllint flate kubeconform
+          install_args: "yamllint github:home-operations/flate kubeconform"
 
       - name: yamllint
         run: yamllint kubernetes

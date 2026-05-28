@@ -8,12 +8,16 @@ on:
       - main
     paths:
       - kubernetes/**
+      - globals.env
+      - .mise.toml
       - .github/workflows/flate.yaml
   push:
     branches:
       - main
     paths:
       - kubernetes/**
+      - globals.env
+      - .mise.toml
       - .github/workflows/flate.yaml
 
 permissions: {}
@@ -21,11 +25,6 @@ permissions: {}
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
-
-env:
-  # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
-  KUBE_VERSION: v1.36.1
-  API_VERSIONS: cert-manager.io/v1,monitoring.coreos.com/v1,monitoring.coreos.com/v1alpha1,gateway.networking.k8s.io/v1,gateway.networking.k8s.io/v1beta1,grafana.integreatly.org/v1beta1,external-secrets.io/v1,volsync.backube/v1alpha1,snapshot.storage.k8s.io/v1
 
 jobs:
   test:
@@ -37,23 +36,19 @@ jobs:
       - name: Checkout Pull Request Branch
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          path: pull
           persist-credentials: false
 
-      - name: Setup flate
-        uses: home-operations/flate/action@aef47adc856bb97038ff321e5136cf65e0fa23cf # 0.1.27
+      - name: Setup tools
+        uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
+        env:
+          MISE_NO_HOOKS: "1"
         with:
-          cache: true
+          experimental: true
+          install_args: "github:home-operations/flate"
 
       - name: Run flate test all
         run: |-
-          flate test all \
-            --allow-missing-secrets=true \
-            --kube-version "${KUBE_VERSION}" \
-            --api-versions "${API_VERSIONS}" \
-            --skip-crds=false \
-            --skip-secrets=false \
-            --path ./pull
+          flate test all --skip-secrets=false --path .
 
   diff:
     if: ${{ github.event_name == 'pull_request' }}
@@ -64,43 +59,44 @@ jobs:
     strategy:
       matrix:
         resource:
-          - helmrelease
-          - kustomization
+          - hr
+          - ks
       fail-fast: false
     steps:
-      - name: Checkout
+      - name: Checkout PR
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          fetch-depth: 0
-          path: pull
           persist-credentials: false
 
-      - name: Setup flate
-        uses: home-operations/flate/action@aef47adc856bb97038ff321e5136cf65e0fa23cf # 0.1.27
+      - name: Checkout base
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          cache: true
+          ref: ${{ github.base_ref }}
+          path: base
+          persist-credentials: false
 
-      - name: Run flate diff
-        id: diff
+      - name: Setup tools
+        uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
         env:
-          BASE_REF: ${{ github.base_ref }}
-          IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
+          MISE_NO_HOOKS: "1"
+        with:
+          experimental: true
+          install_args: "dyff github:home-operations/flate"
+
+      - name: Build both sides
+        env:
+          FLATE_IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
+          RESOURCE: ${{ matrix.resource }}
         run: |-
-          args=(
-            --allow-missing-secrets=true
-            --kube-version "${KUBE_VERSION}"
-            --api-versions "${API_VERSIONS}"
-            --skip-crds=false
-            --skip-secrets=false
-            --base "origin/${BASE_REF}"
-            --path ./pull
-          )
-          if [[ "${IS_UPGRADE}" == "true" ]]; then
-            args+=(--is-upgrade)
-          fi
+          flate build "${RESOURCE}" --path ./base -o yaml 2>/dev/null > /tmp/base.yaml || true
+          flate build "${RESOURCE}" --path . -o yaml 2>/dev/null > /tmp/pull.yaml || true
+
+      - name: Compute diff
+        id: diff
+        run: |-
           {
             echo 'diff<<EOF'
-            flate diff ${{ matrix.resource }} "${args[@]}"
+            dyff between --omit-header --exclude-regexp 'checksum/|caBundle$' /tmp/base.yaml /tmp/pull.yaml || true
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
@@ -120,69 +116,40 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           header: ${{ github.event.pull_request.number }}/kubernetes/${{ matrix.resource }}
           message: |-
-            ```diff
+            ```
             ${{ steps.diff.outputs.diff }}
             ```
 
-  images-list:
-    if: ${{ github.event_name == 'pull_request' }}
-    name: Flate Images Test
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    outputs:
-      images: ${{ steps.list.outputs.images }}
-    steps:
-      - name: Checkout Pull Request Branch
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: 0
-          path: pull
-          persist-credentials: false
-
-      - name: Setup flate
-        uses: home-operations/flate/action@aef47adc856bb97038ff321e5136cf65e0fa23cf # 0.1.27
-        with:
-          cache: true
-
-      - name: List changed images
-        id: list
-        env:
-          BASE_REF: ${{ github.base_ref }}
+      - if: ${{ matrix.resource == 'hr' }}
+        name: List changed images
+        id: images
         run: |-
-          images=$(flate get images \
-            --allow-missing-secrets=true \
-            --kube-version "${KUBE_VERSION}" \
-            --api-versions "${API_VERSIONS}" \
-            --base "origin/${BASE_REF}" \
-            --path ./pull \
-            -o name | sort -u | jq -R . | jq -sc . || echo '[]')
-          echo "images=${images}" >> "$GITHUB_OUTPUT"
-          echo "${images}" | jq .
+          awk '$1 == "image:" {print $2}' /tmp/base.yaml | sort -u > /tmp/base.images
+          awk '$1 == "image:" {print $2}' /tmp/pull.yaml | sort -u > /tmp/pull.images
+          images=$(comm -13 /tmp/base.images /tmp/pull.images)
+          {
+            echo 'images<<EOF'
+            echo "${images}"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
 
-  images-inspect:
-    if: ${{ needs.images-list.outputs.images != '[]' }}
-    name: Flate Images - Inspect (${{ matrix.image }})
-    needs: images-list
-    runs-on: ubuntu-latest
-    permissions: {}
-    strategy:
-      matrix:
-        image: ${{ fromJson(needs.images-list.outputs.images) }}
-      fail-fast: false
-    steps:
-      - name: Inspect image
+      - if: ${{ matrix.resource == 'hr' && steps.images.outputs.images != '' }}
+        name: Inspect changed images
         env:
-          IMAGE: ${{ matrix.image }}
-        run: docker buildx imagetools inspect "${IMAGE}"
+          IMAGES: ${{ steps.images.outputs.images }}
+        run: |-
+          while IFS= read -r img; do
+            [ -z "${img}" ] && continue
+            echo "::group::${img}"
+            docker buildx imagetools inspect "${img}" || true
+            echo "::endgroup::"
+          done <<< "${IMAGES}"
 
   success:
     if: ${{ !cancelled() && github.event_name == 'pull_request' }}
     needs:
       - test
       - diff
-      - images-list
-      - images-inspect
     name: Flate - Success
     runs-on: ubuntu-latest
     permissions: {}
