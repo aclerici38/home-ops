@@ -8,12 +8,16 @@ on:
       - main
     paths:
       - kubernetes/**
+      - globals.env
+      - .mise.toml
       - .github/workflows/flate.yaml
   push:
     branches:
       - main
     paths:
       - kubernetes/**
+      - globals.env
+      - .mise.toml
       - .github/workflows/flate.yaml
 
 permissions: {}
