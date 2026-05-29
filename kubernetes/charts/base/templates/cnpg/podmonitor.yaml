@@ -1,0 +1,31 @@
+{{- if .Values.cnpg.enabled }}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.91.0/podmonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  labels:
+    cnpg.io/cluster: {{ include "base.cnpg.clusterName" . }}
+  name: {{ include "base.cnpg.clusterName" . }}
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/cluster: {{ include "base.cnpg.clusterName" . }}
+      cnpg.io/podRole: instance
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  labels:
+    cnpg.io/poolerName: {{ include "base.cnpg.poolerName" . }}
+  name: {{ include "base.cnpg.poolerName" . }}
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/podRole: pooler
+      cnpg.io/poolerName: {{ include "base.cnpg.poolerName" . }}
+{{- end }}

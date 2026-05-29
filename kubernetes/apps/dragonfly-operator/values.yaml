@@ -1,0 +1,11 @@
+---
+base:
+  app-template:
+    enabled: false
+
+dragonfly-operator:
+  replicaCount: 2
+  serviceMonitor:
+    enabled: true
+  grafanaDashboard:
+    enabled: true

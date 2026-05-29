@@ -1,0 +1,118 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/0xERR0R/blocky/main/docs/config.schema.json
+caching:
+  minTime: 2m
+  maxTime: 1h
+  maxItemsCount: 0
+  prefetching: true
+  prefetchExpires: 1h
+  prefetchThreshold: 30
+  prefetchMaxItemsCount: 0
+  cacheTimeNegative: -1
+  exclude:
+    - '/(^|\.)clerici\.tech$/'
+    - '/\.internal$/'
+    - '/(^|\.)cluster\.local$/'
+    - '/(^|\.)in-addr\.arpa$/'
+
+log:
+  level: info
+
+connectIPVersion: v4
+minTlsServeVersion: 1.3
+certFile: /certs/tls.crt
+keyFile: /certs/tls.key
+ports:
+  dns: 53
+  tls: 853
+  http: 4000
+
+prometheus:
+  enable: true
+
+customDNS:
+  mapping:
+    wireguard.clerici.tech: 10.0.0.1
+
+conditional:
+  fallbackUpstream: false
+  mapping:
+    clerici.tech: {{ .cs.K8S_GATEWAY_CLUSTER_IP }}:53
+
+    # House
+    internal: {{ .cs.NODE_GATEWAY }}:53
+    0.10.in-addr.arpa: {{ .cs.NODE_GATEWAY }}:53
+
+    # kube
+    cluster.local: {{ .cs.COREDNS_CLUSTER_IP }}
+    16.172.in-addr.arpa: {{ .cs.COREDNS_CLUSTER_IP }}
+
+    # bambi
+    bambi.internal: 192.168.8.1:53
+    console.gl-inet.com: 192.168.8.1:53
+    8.168.192.in-addr.arpa: 192.168.8.1:53
+
+# ClientLookup is set to blocky so it can conditionally forward it to coredns/apt/house DHCP
+clientLookup:
+  upstream: 127.0.0.1
+  clients:
+    localhost:
+      - 127.0.0.1
+
+# To resolve devices behind coredns
+ecs:
+  useAsClient: true
+  forward: false
+
+bootstrapDns:
+  - 8.8.8.8
+  - 1.1.1.1
+  - 9.9.9.9
+
+upstreams:
+  groups:
+    default:
+      - quic://dns.quad9.net
+      - quic://p0.freedns.controld.com
+      # TODO: swap to DoQ when it's supported by these
+      - https://doh.opendns.com/dns-query
+      - https://cloudflare-dns.com/dns-query
+
+blocking:
+  denylists:
+    ads:
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/multi.txt
+    security:
+      - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/tif.mini.txt
+  allowlists:
+    ads:
+      - |
+        epi-graphql.conde.digital
+  clientGroupsBlock:
+    # all clients
+    0.0.0.0/0:
+      - security
+    "::/0":
+      - security
+    # home
+    10.0.20.0/24:
+      - ads
+    # cottage
+    10.0.40.0/24:
+      - ads
+
+filtering:
+  queryTypes:
+    - AAAA
+
+redis:
+  address: blocky-dragonfly-db:6379
+  connectionAttempts: 10
+  connectionCooldown: 60s
+
+queryLog:
+  type: postgresql
+  logRetentionDays: 90
+  creationAttempts: 5
+  creationCooldown: 60s
+  flushInterval: 5s

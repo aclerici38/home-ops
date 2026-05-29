@@ -1,0 +1,21 @@
+{{- if .Values.volsync.enabled }}
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.1-standalone-strict/persistentvolumeclaim-v1.json
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "base.volsync.pvcName" . }}
+  labels:
+    dormammu.io/component: volsync
+spec:
+  accessModes:
+    {{- include "base.volsync.accessModes" . | nindent 4 }}
+  dataSourceRef:
+    apiGroup: volsync.backube
+    kind: ReplicationDestination
+    name: {{ include "base.volsync.dstName" . }}
+  resources:
+    requests:
+      storage: {{ .Values.volsync.capacity | quote }}
+  storageClassName: {{ include "base.volsync.storageClass" . }}
+{{- end }}

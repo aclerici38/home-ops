@@ -1,0 +1,46 @@
+{{- $b := .Values.networking.bgp -}}
+{{- if $b.enabled }}
+---
+apiVersion: cilium.io/v2
+kind: CiliumBGPClusterConfig
+metadata:
+  name: cilium-bgp
+spec:
+  bgpInstances:
+    - name: lab
+      localASN: {{ $b.localASN }}
+      peers:
+        - name: opnsense
+          peerASN: {{ $b.peerASN }}
+          peerAddress: {{ required "networking.bgp.peerAddress is required" $b.peerAddress }}
+          peerConfigRef:
+            name: cilium-peer
+---
+apiVersion: cilium.io/v2
+kind: CiliumBGPPeerConfig
+metadata:
+  name: cilium-peer
+spec:
+  families:
+    - afi: ipv4
+      safi: unicast
+      advertisements:
+        matchLabels:
+          advertise: bgp
+---
+apiVersion: cilium.io/v2
+kind: CiliumBGPAdvertisement
+metadata:
+  name: lb-advertisement
+  labels:
+    advertise: bgp
+spec:
+  advertisements:
+    - advertisementType: Service
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
+        matchExpressions:
+          - { key: somekey, operator: NotIn, values: ["never-used-value"] }
+{{- end }}

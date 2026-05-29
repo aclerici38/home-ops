@@ -1,0 +1,51 @@
+---
+base:
+  externalSecret:
+    enabled: true
+    name: cloudflare
+    key: cloudflare
+
+  image:
+    repository: ghcr.io/larivierec/cloudflare-ddns
+    tag: v1.2.5@sha256:feb3660900ecb43ec2f585fbf3926f27b2e3da6c21cb38789539a812d8ea166d
+  args:
+    - --zone-name=clerici.tech
+    - --record-name=house.clerici.tech
+    - --proxied=false
+    - --create-missing=true
+  ports:
+    http: 9000
+    health: 8080
+  env:
+    ACCOUNT_TOKEN:
+      valueFrom:
+        secretKeyRef:
+          name: cloudflare
+          key: CLOUDFLARE_API_TOKEN
+  probes:
+    liveness:
+      enabled: true
+      custom: true
+      spec:
+        httpGet:
+          path: /health/alive
+          port: 8080
+    readiness:
+      enabled: true
+      custom: true
+      spec:
+        httpGet:
+          path: /health/ready
+          port: 8080
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      memory: 128Mi
+  serviceMonitor:
+    cloudflare-ddns:
+      serviceName: cloudflare-ddns
+      endpoints:
+        - port: health
+          scheme: http

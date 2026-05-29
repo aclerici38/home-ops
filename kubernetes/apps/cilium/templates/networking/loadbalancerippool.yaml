@@ -1,0 +1,23 @@
+{{- if .Values.networking.lbPools.enabled }}
+{{- $lb := .Values.networking.lbPools.lb -}}
+{{- $lab := .Values.networking.lbPools.lab -}}
+---
+apiVersion: cilium.io/v2
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: lb-pool
+spec:
+  allowFirstLastIPs: "Yes"
+  blocks:
+    - cidr: {{ $lb.cidr | quote }}
+---
+apiVersion: cilium.io/v2
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: lab-pool
+spec:
+  allowFirstLastIPs: "Yes"
+  blocks:
+    - start: {{ $lab.start | quote }}
+      stop: {{ $lab.stop | quote }}
+{{- end }}

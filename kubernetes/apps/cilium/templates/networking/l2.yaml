@@ -1,0 +1,15 @@
+{{- $l := .Values.networking.l2 -}}
+{{- if $l.enabled }}
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: l2-policy
+spec:
+  loadBalancerIPs: true
+  interfaces:
+    {{- toYaml $l.interfaces | nindent 4 }}
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/os: linux
+{{- end }}

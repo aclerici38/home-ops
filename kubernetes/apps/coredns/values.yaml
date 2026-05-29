@@ -1,0 +1,61 @@
+---
+base:
+  app-template:
+    enabled: false
+  createNamespace: false
+
+coredns:
+  fullnameOverride: coredns
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: null
+      memory: 512Mi
+  image:
+    repository: mirror.gcr.io/coredns/coredns
+  replicaCount: 3
+  k8sAppLabelOverride: kube-dns
+  serviceAccount:
+    create: true
+  service:
+    name: kube-dns
+    # COREDNS_CLUSTER_IP from globals.env — coredns subchart values aren't
+    # helm-templated so the cluster-settings lookup can't be used here.
+    clusterIP: 172.17.0.10
+  servers:
+    - zones:
+        - zone: .
+          scheme: dns://
+          use_tcp: true
+      port: 53
+      plugins:
+        - name: errors
+        - name: health
+          configBlock: |-
+            lameduck 5s
+        - name: ready
+        - name: log
+          configBlock: |-
+            class error
+        - name: prometheus
+          parameters: 0.0.0.0:9153
+        - name: kubernetes
+          parameters: cluster.local in-addr.arpa ip6.arpa
+          configBlock: |-
+            pods verified
+            fallthrough in-addr.arpa ip6.arpa
+        # Enable ECS so blocky gets the client's ip as source instead of coredns
+        - name: rewrite
+          parameters: edns0 subnet set 32 128
+        # BLOCKY_CLUSTER_IP from globals.env
+        - name: forward
+          parameters: . 172.17.0.11
+          configBlock: |-
+            except cluster.local 16.172.in-addr.arpa
+        - name: loop
+        - name: reload
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists

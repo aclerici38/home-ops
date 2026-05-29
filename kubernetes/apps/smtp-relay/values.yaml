@@ -1,0 +1,48 @@
+base:
+  externalSecret:
+    enabled: true
+  image:
+    repository: ghcr.io/foxcpp/maddy
+    tag: 0.9.5@sha256:de42151adff6388edb5e4ee88f60334fa1ab85e309485193ecb1c2db20203315
+  env:
+    SMTP_RELAY_METRICS_PORT: 8080
+    SMTP_RELAY_SMTP_PORT: 25
+    HOSTNAME: relay.clerici.tech
+    MIGADU_USERNAME:
+      secretKeyRef:
+        name: smtp-relay
+        key: MIGADU_USERNAME
+    MIGADU_PASSWORD:
+      secretKeyRef:
+        name: smtp-relay
+        key: MIGADU_PASSWORD
+    MIGADU_SERVER:
+      secretKeyRef:
+        name: smtp-relay
+        key: MIGADU_SERVER
+  ports:
+    http: 8080
+    smtp: 25
+  resources:
+    requests:
+      cpu: 10m
+    limits:
+      memory: 64Mi
+  probes:
+    liveness:
+      enabled: true
+    readiness:
+      enabled: true
+  replicas: 2
+  strategy: RollingUpdate
+  serviceMonitor: true
+
+  persistence:
+    cache:
+      type: emptyDir
+    config:
+      type: configMap
+      name: smtp-relay
+      globalMounts:
+        - path: /data/maddy.conf
+          subPath: maddy.conf

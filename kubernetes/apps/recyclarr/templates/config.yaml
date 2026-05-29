@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: recyclarr-config
+data:
+  recyclarr.yml: |
+{{ .Files.Get "files/recyclarr.yml" | indent 4 }}

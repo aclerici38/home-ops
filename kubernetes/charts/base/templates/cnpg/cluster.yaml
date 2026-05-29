@@ -1,0 +1,86 @@
+{{- if .Values.cnpg.enabled }}
+{{- $c := .Values.cnpg.cluster -}}
+{{- $mode := .Values.cnpg.mode -}}
+{{- $backupEnabled := ne $mode "no-backup" -}}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.28.2/cluster_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ include "base.cnpg.clusterName" . }}
+  {{- if eq $mode "restore" }}
+  annotations:
+    cnpg.io/skipEmptyWalArchiveCheck: "enabled"
+  {{- end }}
+spec:
+  affinity:
+    podAntiAffinityType: {{ $c.affinityType }}
+  instances: {{ $c.instances }}
+  primaryUpdateStrategy: {{ $c.primaryUpdateStrategy }}
+  primaryUpdateMethod: {{ $c.primaryUpdateMethod }}
+  enablePDB: true
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: {{ $c.imageCatalog.kind }}
+    major: {{ $c.imageCatalog.major }}
+    name: {{ $c.imageCatalog.name }}
+  storage:
+    size: {{ $c.storage.size }}
+    storageClass: {{ $c.storage.storageClass }}
+  superuserSecret:
+    name: cloudnative-pg
+  enableSuperuserAccess: true
+  {{- with $c.managed }}
+  managed:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- if eq $mode "restore" }}
+  bootstrap:
+    recovery:
+      source: {{ include "base.cnpg.clusterName" . }}
+  externalClusters:
+    - name: {{ include "base.cnpg.clusterName" . }}
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: {{ include "base.cnpg.barmanObjectName" . }}
+          serverName: {{ include "base.cnpg.clusterName" . }}
+  {{- end }}
+  {{- if $backupEnabled }}
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      enabled: true
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: {{ include "base.cnpg.barmanObjectName" . }}
+        serverName: {{ include "base.cnpg.clusterName" . }}
+  {{- end }}
+  postgresql:
+    synchronous:
+      method: any
+      number: 1
+      dataDurability: preferred
+      failoverQuorum: true
+    {{- with $c.extensions }}
+    extensions:
+      {{- range . }}
+      {{- if kindIs "string" . }}
+      - name: {{ . }}
+      {{- else }}
+      - {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+    {{- end }}
+    {{- with $c.sharedPreloadLibraries }}
+    shared_preload_libraries:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with $c.pgHba }}
+    pg_hba:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    parameters:
+      {{- range $k, $v := $c.parameters }}
+      {{ $k }}: {{ $v | quote }}
+      {{- end }}
+{{- end }}

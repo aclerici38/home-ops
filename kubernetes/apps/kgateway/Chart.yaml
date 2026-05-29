@@ -1,0 +1,16 @@
+---
+apiVersion: v2
+name: kgateway
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../charts/base
+  # CRDs must install before the controller — bundled here so both land in the
+  # same namespace and ship together.
+  - name: kgateway-crds
+    version: 2.3.1
+    repository: oci://ghcr.io/kgateway-dev/charts
+  - name: kgateway
+    version: 2.3.1
+    repository: oci://ghcr.io/kgateway-dev/charts

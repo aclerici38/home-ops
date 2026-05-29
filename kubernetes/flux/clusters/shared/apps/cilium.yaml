@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cilium
+  namespace: flux-system
+spec:
+  interval: 1h
+  targetNamespace: cilium
+  chart:
+    spec:
+      chart: ./kubernetes/apps/cilium
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    crds: CreateReplace
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    crds: CreateReplace
+    remediation:
+      retries: 1
+  values:
+    cilium:
+      ipv4NativeRoutingCIDR: ${CLUSTER_POD_CIDR}
+    networking:
+      bgp:
+        peerAddress: ${NODE_GATEWAY}
+      lbPools:
+        lab:
+          stop: ${CLUSTER_ENDPOINT_VIP}
+      vip:
+        address: ${CLUSTER_ENDPOINT_VIP}

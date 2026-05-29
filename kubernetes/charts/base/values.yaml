@@ -1,0 +1,198 @@
+# Consumed by templates/namespace.yaml (override at .Values.base.* in consumer charts).
+# Set createNamespace: false for charts targeting a pre-existing namespace
+# owned by another component (e.g. kube-system managed by Talos).
+createNamespace: true
+namespace: ""
+psa: restricted
+extraNamespaceLabels: {}
+extraNamespaceAnnotations: {}
+
+# app-template workload rendering. Defaults to enabled — non-workload apps
+# (cilium, flux-operator) set `base.app-template.enabled: false` to skip it.
+app-template:
+  enabled: true
+
+# Pod-level defaults applied to every controller pod.
+defaultPodOptions:
+  automountServiceAccountToken: false
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile:
+      type: RuntimeDefault
+
+# Container-level defaults applied to every container in the synthesized
+# controller (via bjw-s `controllers.<name>.defaultContainerOptions`). User
+# `securityContext` set per-app deep-merges over these.
+defaultContainerOptions:
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: [ALL]
+
+# Opt-in ExternalSecret. When enabled, renders an ExternalSecret in the chart's
+# namespace. If `namespaceSelectors:` is set, switches to a ClusterExternalSecret
+# and passes the selectors through verbatim (e.g. `- {}` for all, or
+# `- matchLabels: {dormammu.io/cnpg-cluster: "true"}` to target labeled ns).
+externalSecret:
+  enabled: false
+  store: onepassword-connect
+  # name: ""              # secret + ES name; defaults to .Release.Name
+  # key: ""               # 1Password entry key; defaults to .Release.Name
+  # namespaceSelectors: [] # when set, ClusterExternalSecret w/ these selectors
+  # data: []              # granular per-field mapping (overrides default dataFrom)
+
+# Opt-in CNPG cluster. When enabled, renders:
+#   - Cluster + Pooler + PodMonitors (always)
+#   - ExternalSecret with cnpg-pass-generator (always)
+#   - ObjectStore + ScheduledBackup + barman plugin (when mode != no-backup)
+#   - bootstrap.recovery on Cluster (when mode = restore)
+# Also auto-labels the chart's namespace with dormammu.io/cnpg-cluster=true so
+# the versity creds CES (from the cloudnative-pg chart) reaches it.
+#
+# Cluster name is fixed as <release-name>-db. Secret name is
+# <release-name>-db-<user.name>. Pooler is <release-name>-pooler-rw.
+cnpg:
+  enabled: false
+  mode: init                            # init | restore | no-backup
+
+  user:
+    name: app
+    dbName: app
+
+  cluster:
+    instances: 3
+    affinityType: required              # required | preferred
+    primaryUpdateStrategy: unsupervised
+    primaryUpdateMethod: switchover
+    imageCatalog:
+      kind: ClusterImageCatalog
+      name: postgresql-minimal-trixie
+      major: 18
+    storage:
+      size: 2Gi
+      storageClass: openebs-hostpath
+    # Each item: {name: <ext>} — also accepts upstream's full shape.
+    extensions: []
+    sharedPreloadLibraries: []
+    # pg_hba lines (appended) and spec.managed (passthrough — e.g. roles).
+    pgHba: []
+    managed: {}
+    parameters:
+      shared_buffers: 512MB
+      work_mem: 8MB
+      maintenance_work_mem: 128MB
+      effective_cache_size: 1536MB
+      wal_buffers: 16MB
+      checkpoint_timeout: 10min
+      max_wal_size: 4GB
+      min_wal_size: 1GB
+      max_slot_wal_keep_size: 10GB
+      checkpoint_completion_target: "0.9"
+      wal_keep_size: 4GB
+      wal_sender_timeout: 60s
+      wal_receiver_timeout: 60s
+      log_min_duration_statement: "500"
+      log_checkpoints: "on"
+      log_autovacuum_min_duration: "250"
+      log_temp_files: 128MB
+      log_lock_waits: "on"
+      autovacuum_vacuum_cost_limit: "2000"
+      autovacuum_max_workers: "3"
+      autovacuum_naptime: 20s
+
+  pooler:
+    instances: 1
+    poolMode: transaction
+
+  backup:
+    schedule: "0 0 4 * * *"
+    retentionPolicy: 14d
+    barmanObjectStore:
+      destinationPath: s3://cnpg
+      endpointURL: http://versitygw.storage.svc.cluster.local:7070
+      # Secret w/ versity creds — shipped by the cloudnative-pg chart to any
+      # namespace labeled dormammu.io/cnpg-cluster=true (auto-added above).
+      credentialsSecretName: cloudnative-pg
+
+# Opt-in volsync (kopia → versity backups). When enabled, renders:
+#   - PVC <release-name> with dataSourceRef on the ReplicationDestination
+#     (triggers a restore on first creation)
+#   - ReplicationSource (scheduled kopia snapshots)
+#   - ReplicationDestination (manual restore-once trigger)
+# Consumers reference the created PVC via persistence.<x>.existingClaim:
+# <release-name>.
+volsync:
+  enabled: false
+  flavor: block                         # block | cephfs
+
+  capacity: 5Gi
+  # Override flavor defaults when needed:
+  # storageClass: ""
+  # snapshotClass: ""
+  # accessModes: []
+
+  schedule: "0 */12 * * *"
+  retain:
+    hourly: 24
+    daily: 7
+
+  kopia:
+    repository: volsync-kopia-versity
+    compression: zstd-best-compression
+    parallelism: 2
+
+  moverSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+
+  cache:
+    capacity: 5Gi
+    storageClass: ceph-filesystem
+    accessModes: [ReadWriteOnce]
+
+  # Source for the initial restore — defaults to <release-name> and the
+  # chart's namespace. Override sourceNamespace when migrating from an old
+  # namespace (e.g. media-management).
+  # sourceName: ""
+  # sourceNamespace: ""
+
+# Opt-in PocketID OIDC client. When enabled, renders a PocketIDOIDCClient
+# whose metadata.name and clientID default to the release name.
+# launchUrl: derived from `host:` if simple-mode is used; otherwise required.
+pocketid:
+  enabled: false
+  # launchUrl: ""               # required if host: is not set
+  # logoName: ""                # default: release name
+  pkceEnabled: true
+  allowedUserGroups:
+    - name: admin
+      namespace: home-infra
+
+# Opt-in Dragonfly cache. When enabled, renders a Dragonfly CR named
+# <release-name>-dragonfly-db. Defaults mirror the previous cluster-wide
+# component; consumers append to args via extraArgs without restating defaults.
+dragonfly:
+  enabled: false
+  image: ghcr.io/dragonflydb/dragonfly:v1.38.1@sha256:baf70ba7ad182a992b988497cfa31a488978c8fab7712079784c2401f447e402
+  replicas: 3
+  args:
+    - --maxmemory=$(MAX_MEMORY)Mi
+    - --dbnum=1
+    - --dbfilename=
+    - --proactor_threads=4
+    - --version_check=false
+    - --cluster_mode=emulated
+    - --lock_on_hashtags
+  extraArgs: []
+  resources:
+    requests:
+      cpu: 100m
+    limits:
+      memory: 1Gi

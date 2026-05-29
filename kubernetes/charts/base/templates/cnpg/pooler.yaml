@@ -1,0 +1,27 @@
+{{- if .Values.cnpg.enabled }}
+{{- $p := .Values.cnpg.pooler -}}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.28.2/pooler_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: {{ include "base.cnpg.poolerName" . }}
+spec:
+  cluster:
+    name: {{ include "base.cnpg.clusterName" . }}
+  instances: {{ $p.instances }}
+  type: rw
+  pgbouncer:
+    poolMode: {{ $p.poolMode | quote }}
+    parameters:
+      default_pool_size: "30"
+      min_pool_size: "5"
+      reserve_pool_size: "10"
+      reserve_pool_timeout: "5"
+      max_client_conn: "500"
+      listen_backlog: "1024"
+      query_wait_timeout: "120"
+      idle_transaction_timeout: "60"
+      server_idle_timeout: "180"
+      max_prepared_statements: "200"
+{{- end }}

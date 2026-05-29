@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: cert-manager
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../charts/base
+  - name: cert-manager
+    version: v1.20.2
+    repository: oci://quay.io/jetstack/charts

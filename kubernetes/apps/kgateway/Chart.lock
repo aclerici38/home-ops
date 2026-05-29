@@ -1,0 +1,12 @@
+dependencies:
+- name: base
+  repository: file://../../charts/base
+  version: 0.0.0
+- name: kgateway-crds
+  repository: oci://ghcr.io/kgateway-dev/charts
+  version: 2.3.1
+- name: kgateway
+  repository: oci://ghcr.io/kgateway-dev/charts
+  version: 2.3.1
+digest: sha256:a39bb16edbfe7cde078ec3076b8a760c2978c38903f59ba92b02929a85711768
+generated: "2026-05-28T20:52:40.795279-07:00"

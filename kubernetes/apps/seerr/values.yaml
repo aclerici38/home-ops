@@ -1,0 +1,64 @@
+---
+base:
+  cnpg:
+    enabled: true
+    mode: restore
+
+  volsync:
+    enabled: true
+
+  host:
+    name: seerr.clerici.tech
+    gateway: external
+
+  image:
+    repository: ghcr.io/seerr-team/seerr
+    tag: v3.2.0@sha256:c4cbd5121236ac2f70a843a0b920b68a27976be57917555f1c45b08a1e6b2aad
+  ports:
+    http: 5055
+  env:
+    DB_TYPE: postgres
+    DB_HOST:
+      valueFrom:
+        secretKeyRef:
+          name: seer-db-app
+          key: pooler-host
+    DB_USER:
+      valueFrom:
+        secretKeyRef:
+          name: seer-db-app
+          key: username
+    DB_PASS:
+      valueFrom:
+        secretKeyRef:
+          name: seer-db-app
+          key: password
+    DB_NAME:
+      valueFrom:
+        secretKeyRef:
+          name: seer-db-app
+          key: dbname
+  probes:
+    liveness: &probes
+      enabled: true
+      custom: true
+      spec:
+        httpGet:
+          port: 5055
+          path: /api/v1/status
+    readiness: *probes
+  resources:
+    requests:
+      cpu: 15m
+      memory: 350M
+    limits:
+      memory: 600M
+  persistence:
+    config:
+      existingClaim: seerr
+      globalMounts:
+        - path: /app/config
+    cache:
+      type: emptyDir
+      globalMounts:
+        - path: /app/.next/cache

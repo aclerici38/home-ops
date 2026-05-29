@@ -24,3 +24,11 @@ pre-commit:
           [ -e "$f" ] || continue
           talhelper validate nodeconfig "$f" || exit 1
         done
+    helm-dep-update:
+      glob: "kubernetes/{apps,charts}/*/Chart.yaml"
+      run: |-
+        for f in {staged_files}; do
+          d=$(dirname "$f")
+          helm dependency update "$d" || exit 1
+          [ -f "$d/Chart.lock" ] && git add "$d/Chart.lock"
+        done

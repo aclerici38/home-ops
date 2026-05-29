@@ -1,0 +1,36 @@
+{{- if .Values.volsync.enabled }}
+{{- $v := .Values.volsync -}}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/perfectra1n-volsync/0.18.5/replicationdestination_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: {{ include "base.volsync.dstName" . }}
+  labels:
+    dormammu.io/component: volsync
+    # IfNotPresent: don't reapply spec after first restore (the manual trigger
+    # only fires on apply; subsequent reconciles would re-trigger).
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+  trigger:
+    manual: restore-once
+  kopia:
+    repository: {{ $v.kopia.repository }}
+    copyMethod: Snapshot
+    volumeSnapshotClassName: {{ include "base.volsync.snapshotClass" . }}
+    cacheStorageClassName: {{ $v.cache.storageClass }}
+    cacheAccessModes:
+      - ReadWriteOnce
+    storageClassName: {{ include "base.volsync.storageClass" . }}
+    accessModes:
+      {{- include "base.volsync.accessModes" . | nindent 6 }}
+    capacity: {{ $v.capacity | quote }}
+    moverSecurityContext:
+      {{- toYaml $v.moverSecurityContext | nindent 6 }}
+    enableFileDeletion: true
+    cleanupCachePVC: true
+    cleanupTempPVC: true
+    sourceIdentity:
+      sourceName: {{ include "base.volsync.sourceName" . }}
+      sourceNamespace: {{ include "base.volsync.sourceNamespace" . }}
+{{- end }}

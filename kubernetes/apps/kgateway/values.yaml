@@ -1,0 +1,10 @@
+---
+base:
+  app-template:
+    enabled: false
+
+kgateway:
+  controller:
+    replicaCount: 2
+  serviceMonitor:
+    enabled: true

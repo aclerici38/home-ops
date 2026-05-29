@@ -1,0 +1,17 @@
+{{- if and .Values.cnpg.enabled (ne .Values.cnpg.mode "no-backup") }}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.28.2/scheduledbackup_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: {{ include "base.cnpg.barmanObjectName" . }}
+spec:
+  schedule: {{ .Values.cnpg.backup.schedule | quote }}
+  immediate: true
+  backupOwnerReference: self
+  cluster:
+    name: {{ include "base.cnpg.clusterName" . }}
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+{{- end }}

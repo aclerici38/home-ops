@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: cilium
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../charts/base
+  - name: cilium
+    version: 1.19.4
+    repository: oci://quay.io/cilium/charts

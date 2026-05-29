@@ -1,0 +1,14 @@
+---
+apiVersion: v2
+name: flux-operator
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../charts/base
+  - name: flux-operator
+    version: 0.50.0
+    repository: oci://ghcr.io/controlplaneio-fluxcd/charts
+  - name: flux-instance
+    version: 0.50.0
+    repository: oci://ghcr.io/controlplaneio-fluxcd/charts

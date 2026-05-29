@@ -1,0 +1,100 @@
+{{- if (index .Values "app-template" "enabled") }}
+
+{{- /* Replicates app-template's nameOverride convention: release name as the default. */ -}}
+{{- $_ := set .Values "global" (default dict .Values.global) -}}
+{{- $_ := set .Values.global "nameOverride" (default .Release.Name .Values.global.nameOverride) -}}
+
+{{- /*
+  Simple mode: when `image` is set at the root and the consumer has NOT defined
+  their own `controllers`, synthesize the bjw-s controllers/service shape from
+  flat keys. Consumers can drop to full mode by setting `controllers:` directly.
+
+  Controller, container, and service identifiers are all set to the release
+  name so the rendered pod/container/service all share the app name.
+*/ -}}
+{{- if and (hasKey .Values "image") (not (hasKey .Values "controllers")) -}}
+
+  {{- $name := .Release.Name -}}
+
+  {{- $container := dict "image" .Values.image -}}
+  {{- with .Values.env             }}{{- $_ := set $container "env" .             }}{{- end -}}
+  {{- with .Values.envFrom         }}{{- $_ := set $container "envFrom" .         }}{{- end -}}
+  {{- with .Values.args            }}{{- $_ := set $container "args" .            }}{{- end -}}
+  {{- with .Values.command         }}{{- $_ := set $container "command" .         }}{{- end -}}
+  {{- with .Values.resources       }}{{- $_ := set $container "resources" .       }}{{- end -}}
+  {{- with .Values.probes          }}{{- $_ := set $container "probes" .          }}{{- end -}}
+  {{- with .Values.securityContext }}{{- $_ := set $container "securityContext" . }}{{- end -}}
+
+  {{- $controller := dict "containers" (dict $name $container) -}}
+  {{- with .Values.defaultContainerOptions }}{{- $_ := set $controller "defaultContainerOptions" . }}{{- end -}}
+  {{- with .Values.replicas       }}{{- $_ := set $controller "replicas" .       }}{{- end -}}
+  {{- with .Values.strategy       }}{{- $_ := set $controller "strategy" .       }}{{- end -}}
+  {{- with .Values.pod            }}{{- $_ := set $controller "pod" .            }}{{- end -}}
+  {{- with .Values.initContainers }}{{- $_ := set $controller "initContainers" . }}{{- end -}}
+
+  {{- $_ := set .Values "controllers" (dict $name $controller) -}}
+
+  {{- /* Synthesize service.<name> from `ports` map if no explicit service. */ -}}
+  {{- if and (hasKey .Values "ports") (not (hasKey .Values "service")) -}}
+    {{- $svcPorts := dict -}}
+    {{- range $pname, $port := .Values.ports -}}
+      {{- $_ := set $svcPorts $pname (dict "port" $port) -}}
+    {{- end -}}
+    {{- $_ := set .Values "service" (dict $name (dict "controller" $name "ports" $svcPorts)) -}}
+  {{- end -}}
+
+  {{- /*
+    Synthesize serviceMonitor.<name> from a bool/map at root.
+      serviceMonitor: true              # scrape ports.http (or first port)
+      serviceMonitor: {port: metrics}   # override port name
+    Skip if user already defined a `serviceMonitor:` map (full mode).
+  */ -}}
+  {{- if and (hasKey .Values "serviceMonitor") (not (kindIs "map" .Values.serviceMonitor)) .Values.serviceMonitor -}}
+    {{- $smCfg := .Values.serviceMonitor -}}
+    {{- $smPort := "http" -}}
+    {{- if kindIs "map" $smCfg -}}
+      {{- with $smCfg.port }}{{- $smPort = . -}}{{- end -}}
+    {{- end -}}
+    {{- $_ := set .Values "serviceMonitor" (dict $name (dict
+          "serviceName" $name
+          "endpoints" (list (dict "port" $smPort)))) -}}
+  {{- end -}}
+
+  {{- /*
+    Synthesize route.<name> from `host` if no explicit route. Accepts:
+      host: bazarr.clerici.tech                          # string → internal
+      host: {name: bazarr.clerici.tech, gateway: external, port: http}
+    Gateway namespace is fixed to `kgateway` and sectionName to `https`.
+    Port falls back to `http` if `ports.http` exists; otherwise rules are
+    omitted and bjw-s common will fill backendRefs from the service.
+  */ -}}
+  {{- if and (hasKey .Values "host") (not (hasKey .Values "route")) -}}
+    {{- $hostCfg  := .Values.host -}}
+    {{- $hostname := "" -}}
+    {{- $gateway  := "internal" -}}
+    {{- $port     := "" -}}
+    {{- if kindIs "string" $hostCfg -}}
+      {{- $hostname = $hostCfg -}}
+    {{- else -}}
+      {{- $hostname = $hostCfg.name -}}
+      {{- with $hostCfg.gateway }}{{- $gateway = . -}}{{- end -}}
+      {{- with $hostCfg.port    }}{{- $port    = . -}}{{- end -}}
+    {{- end -}}
+    {{- if and (eq $port "") (hasKey .Values "ports") (hasKey .Values.ports "http") -}}
+      {{- $port = "http" -}}
+    {{- end -}}
+    {{- $route := dict
+          "hostnames"  (list $hostname)
+          "parentRefs" (list (dict "name" $gateway "namespace" "kgateway" "sectionName" "https"))
+    -}}
+    {{- if ne $port "" -}}
+      {{- $_ := set $route "rules" (list (dict "backendRefs" (list (dict "identifier" $name "port" $port)))) -}}
+    {{- end -}}
+    {{- $_ := set .Values "route" (dict $name $route) -}}
+  {{- end -}}
+
+{{- end -}}
+
+{{- include "bjw-s.common.loader.init" . -}}
+{{- include "bjw-s.common.loader.generate" . -}}
+{{- end }}

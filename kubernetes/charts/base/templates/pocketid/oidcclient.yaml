@@ -1,0 +1,28 @@
+{{- if .Values.pocketid.enabled }}
+{{- $p := .Values.pocketid -}}
+{{- $launchUrl := $p.launchUrl | default "" -}}
+{{- /* Derive https://<host> if launchUrl not set and host: is */ -}}
+{{- if and (eq $launchUrl "") (hasKey .Values "host") -}}
+  {{- $hostCfg := .Values.host -}}
+  {{- if kindIs "string" $hostCfg -}}
+    {{- $launchUrl = printf "https://%s" $hostCfg -}}
+  {{- else -}}
+    {{- $launchUrl = printf "https://%s" $hostCfg.name -}}
+  {{- end -}}
+{{- end -}}
+{{- $launchUrl = required "base.pocketid.launchUrl is required (or set base.host)" $launchUrl -}}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/pocket-id-operator/0.6.1/pocketidoidcclient_v1alpha1.json
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  clientID: {{ .Release.Name }}
+  launchUrl: {{ $launchUrl }}
+  pkceEnabled: {{ $p.pkceEnabled }}
+  allowedUserGroups:
+    {{- toYaml $p.allowedUserGroups | nindent 4 }}
+  logo:
+    nameOverride: {{ $p.logoName | default .Release.Name }}
+{{- end }}

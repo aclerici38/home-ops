@@ -1,0 +1,22 @@
+{{- $v := .Values.networking.vip -}}
+{{- if $v.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-vip
+  namespace: kube-system
+  annotations:
+    lbipam.cilium.io/ips: {{ required "networking.vip.address is required" $v.address | quote }}
+    gatus.home-operations.com/enabled: "false"
+spec:
+  type: LoadBalancer
+  selector:
+    k8s-app: kube-apiserver
+    tier: control-plane
+  ports:
+    - name: https
+      port: 6443
+      protocol: TCP
+      targetPort: 6443
+{{- end }}

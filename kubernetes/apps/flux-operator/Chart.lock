@@ -1,0 +1,12 @@
+dependencies:
+- name: base
+  repository: file://../../charts/base
+  version: 0.0.0
+- name: flux-operator
+  repository: oci://ghcr.io/controlplaneio-fluxcd/charts
+  version: 0.50.0
+- name: flux-instance
+  repository: oci://ghcr.io/controlplaneio-fluxcd/charts
+  version: 0.50.0
+digest: sha256:74e52ebabf024504536b579abde1c96423e270656f5fdad0bec9c25272a6e667
+generated: "2026-05-29T02:09:42.913992-07:00"

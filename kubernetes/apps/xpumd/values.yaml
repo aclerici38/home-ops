@@ -1,0 +1,13 @@
+---
+base:
+  app-template:
+    enabled: false
+
+xpumd:
+  gpuAccess: dra
+  prometheus:
+    monitor: true
+    release: kube-prometheus-stack
+  grafana:
+    dashboards: true
+    namespace: xpumd

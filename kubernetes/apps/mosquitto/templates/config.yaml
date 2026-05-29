@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mosquitto
+data:
+  mosquitto.conf: |
+{{ .Files.Get "files/mosquitto.conf" | indent 4 }}

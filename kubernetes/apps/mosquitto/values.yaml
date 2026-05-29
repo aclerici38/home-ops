@@ -1,0 +1,36 @@
+---
+base:
+  image:
+    repository: public.ecr.aws/docker/library/eclipse-mosquitto
+    tag: 2.0.22@sha256:914f529386804c8278a4e581526b9be5e1604df44b30daabc70aa97dcefe5268
+  ports:
+    mqtt: 1883
+  resources:
+    requests:
+      cpu: 10m
+    limits:
+      memory: 100Mi
+  probes:
+    liveness:
+      enabled: true
+      type: TCP
+    readiness:
+      enabled: true
+      type: TCP
+  strategy: RollingUpdate
+
+  persistence:
+    data:
+      enabled: true
+      type: persistentVolumeClaim
+      storageClass: ceph-filesystem
+      accessMode: ReadWriteMany
+      size: 5Gi
+      globalMounts:
+        - path: /data
+    config:
+      type: configMap
+      name: mosquitto
+      globalMounts:
+        - path: /mosquitto/config/mosquitto.conf
+          subPath: mosquitto.conf

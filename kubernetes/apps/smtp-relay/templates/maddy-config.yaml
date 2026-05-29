@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: smtp-relay
+data:
+  maddy.conf: |
+{{ .Files.Get "files/maddy.conf" | indent 4 }}

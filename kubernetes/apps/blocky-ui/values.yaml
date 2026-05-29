@@ -1,0 +1,24 @@
+---
+base:
+  createNamespace: false
+  host: blocky.clerici.tech
+  image:
+    repository: ghcr.io/gabeduartem/blocky-ui
+    tag: 1.8.1@sha256:08fa12ce0132fea9af9abf324cb2e24d6b6064f750934d1d41a34100654fbe6d
+  ports:
+    http: 3000
+  env:
+    QUERY_LOG_TYPE: postgresql
+    QUERY_LOG_TARGET:
+      valueFrom:
+        secretKeyRef:
+          name: blocky-db-app
+          key: pooler-uri
+    BLOCKY_API_URL: http://blocky-k8s:4000
+  probes:
+    liveness:
+      enabled: true
+      type: HTTP
+    readiness:
+      enabled: true
+      type: HTTP

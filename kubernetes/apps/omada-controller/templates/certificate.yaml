@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.20.2/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: omada-controller-tls
+spec:
+  secretName: omada-controller-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: omada.clerici.tech
+  dnsNames:
+    - omada.clerici.tech
+  privateKey:
+    rotationPolicy: Always

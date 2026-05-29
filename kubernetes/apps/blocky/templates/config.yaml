@@ -1,0 +1,9 @@
+{{- $cs := (include "base.cluster-settings" .) | fromYaml -}}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blocky
+data:
+  config.yml: |
+{{ tpl (.Files.Get "files/config.yml") (merge (dict "cs" $cs) .) | indent 4 }}

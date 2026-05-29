@@ -1,0 +1,29 @@
+{{- if and .Values.cnpg.enabled (ne .Values.cnpg.mode "no-backup") }}
+{{- $b := .Values.cnpg.backup -}}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/plugin-barman-cloud/0.6.0/objectstore_v1.json
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: {{ include "base.cnpg.barmanObjectName" . }}
+spec:
+  retentionPolicy: {{ $b.retentionPolicy | quote }}
+  configuration:
+    data:
+      compression: gzip
+      jobs: 8
+    wal:
+      compression: zstd
+      maxParallel: 12
+    destinationPath: {{ $b.barmanObjectStore.destinationPath }}
+    endpointURL: {{ $b.barmanObjectStore.endpointURL }}
+    historyTags:
+      keepHistory: "true"
+    s3Credentials:
+      accessKeyId:
+        name: {{ $b.barmanObjectStore.credentialsSecretName }}
+        key: versity-access-key-id
+      secretAccessKey:
+        name: {{ $b.barmanObjectStore.credentialsSecretName }}
+        key: versity-secret-access-key
+{{- end }}

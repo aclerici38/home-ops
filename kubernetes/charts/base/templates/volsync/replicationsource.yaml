@@ -1,0 +1,30 @@
+{{- if .Values.volsync.enabled }}
+{{- $v := .Values.volsync -}}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/perfectra1n-volsync/0.18.5/replicationsource_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: {{ include "base.volsync.pvcName" . }}
+spec:
+  sourcePVC: {{ include "base.volsync.pvcName" . }}
+  trigger:
+    schedule: {{ $v.schedule | quote }}
+  kopia:
+    accessModes:
+      {{- include "base.volsync.accessModes" . | nindent 6 }}
+    compression: {{ $v.kopia.compression }}
+    copyMethod: Snapshot
+    moverSecurityContext:
+      {{- toYaml $v.moverSecurityContext | nindent 6 }}
+    parallelism: {{ $v.kopia.parallelism }}
+    repository: {{ $v.kopia.repository }}
+    retain:
+      {{- toYaml $v.retain | nindent 6 }}
+    storageClassName: {{ include "base.volsync.storageClass" . }}
+    volumeSnapshotClassName: {{ include "base.volsync.snapshotClass" . }}
+    cacheStorageClassName: {{ $v.cache.storageClass }}
+    cacheCapacity: {{ $v.cache.capacity | quote }}
+    cacheAccessModes:
+      {{- toYaml $v.cache.accessModes | nindent 6 }}
+{{- end }}

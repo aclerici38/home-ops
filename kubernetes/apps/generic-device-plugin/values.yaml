@@ -1,0 +1,49 @@
+---
+base:
+  app-template:
+    enabled: false
+  createNamespace: false
+
+generic-device-plugin:
+  image:
+    repository: ghcr.io/squat/generic-device-plugin
+    tag: 0.2.0@sha256:66c8d5c270eb2b721f1064c549b9b7898152a6d2f0163380a5d37dc7636c20ff
+    pullPolicy: IfNotPresent
+  args:
+    - --log-level=info
+  devices:
+    - name: tun
+      groups:
+        - count: 1000
+          paths:
+            - path: /dev/net/tun
+    - name: zfs
+      groups:
+        - count: 1
+          paths:
+            - path: /dev/zfs
+    - name: cottage-zigbee
+      groups:
+        - count: 10
+          paths:
+            - path: /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_d4f0088f4c1fef119b9450d0639e525b-if00-port0
+    - name: anycubic-kobra
+      groups:
+        - count: 10
+          paths:
+            - path: /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
+    - name: disks
+      groups:
+        - count: 1
+          paths:
+            - {path: /dev/sda, optional: true}
+            - {path: /dev/sdb, optional: true}
+            - {path: /dev/sdc, optional: true}
+            - {path: /dev/sdd, optional: true}
+            - {path: /dev/sde, optional: true}
+            - {path: /dev/sdf, optional: true}
+            - {path: /dev/sdg, optional: true}
+            - {path: /dev/sdh, optional: true}
+            - {path: /dev/nvme0, optional: true}
+            - {path: /dev/nvme1, optional: true}
+            - {path: /dev/nvme2, optional: true}

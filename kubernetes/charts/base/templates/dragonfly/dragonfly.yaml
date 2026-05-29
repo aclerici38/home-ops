@@ -1,0 +1,22 @@
+{{- if .Values.dragonfly.enabled }}
+{{- $d := .Values.dragonfly -}}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/dragonfly-operator/1.5.0/dragonfly_v1alpha1.json
+apiVersion: dragonflydb.io/v1alpha1
+kind: Dragonfly
+metadata:
+  name: {{ .Release.Name }}-dragonfly-db
+spec:
+  image: {{ $d.image }}
+  replicas: {{ $d.replicas }}
+  env:
+    - name: MAX_MEMORY
+      valueFrom:
+        resourceFieldRef:
+          resource: limits.memory
+          divisor: 1Mi
+  args:
+    {{- toYaml (concat $d.args $d.extraArgs) | nindent 4 }}
+  resources:
+    {{- toYaml $d.resources | nindent 4 }}
+{{- end }}
