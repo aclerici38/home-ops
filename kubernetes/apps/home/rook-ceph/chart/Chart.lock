@@ -1,0 +1,12 @@
+dependencies:
+- name: base
+  repository: file://../../../../charts/base
+  version: 0.0.0
+- name: rook-ceph
+  repository: oci://ghcr.io/rook
+  version: v1.19.6
+- name: rook-ceph-cluster
+  repository: oci://ghcr.io/rook
+  version: v1.19.6
+digest: sha256:0f9f4e0077e8fcb680274ffc82b699005ec1b26e910f48a617842566bc41ef19
+generated: "2026-05-29T17:18:00.066733-07:00"

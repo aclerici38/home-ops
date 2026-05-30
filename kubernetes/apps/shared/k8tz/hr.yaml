@@ -1,0 +1,47 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: k8tz
+  namespace: k8tz
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: ./kubernetes/apps/shared/k8tz/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    crds: CreateReplace
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    crds: CreateReplace
+    remediation:
+      retries: 1
+  values:
+    base:
+      app-template:
+        enabled: false
+      createNamespace: false
+    k8tz:
+      createNamespace: false
+      replicaCount: 2
+      timezone: ${TZ}
+      cronJobTimeZone: true
+      webhook:
+        failurePolicy: Ignore
+        ignoredNamespaces:
+          - cilium
+          - kube-system
+          - multus
+        certManager:
+          enabled: true
+          issuerRef:
+            name: k8tz-webhook-selfsign
+            kind: Issuer

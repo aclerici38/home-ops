@@ -1,0 +1,58 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: recyclarr
+  namespace: recyclarr
+spec:
+  interval: 1h
+  dependsOn:
+    - name: sonarr
+      namespace: sonarr
+    - name: radarr
+      namespace: radarr
+  chart:
+    spec:
+      chart: ./kubernetes/apps/home/recyclarr/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  values:
+    base:
+      image:
+        repository: ghcr.io/recyclarr/recyclarr
+        tag: 8.6.0@sha256:3c38ceeb54438dd8327e4e65c9b48ba601a6d20fff833342d93c9b0bc4b1930b
+      envFrom:
+        # Provides SONARR/RADARR API keys for recyclarr.yml's ${...} placeholders.
+        - secretRef:
+            name: recyclarr
+      securityContext:
+        readOnlyRootFilesystem: false
+      resources:
+        requests:
+          cpu: 10m
+          memory: 50Mi
+        limits:
+          memory: 200Mi
+      persistence:
+        config:
+          type: emptyDir
+          globalMounts:
+            - path: /config
+        config-file:
+          type: configMap
+          name: recyclarr-config
+          globalMounts:
+            - path: /config/recyclarr.yml
+              subPath: recyclarr.yml
+      createNamespace: false

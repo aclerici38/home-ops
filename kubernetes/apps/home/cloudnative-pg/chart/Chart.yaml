@@ -1,0 +1,16 @@
+---
+apiVersion: v2
+name: cloudnative-pg
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../../../charts/base
+  - name: cloudnative-pg
+    version: 0.28.2
+    repository: oci://ghcr.io/cloudnative-pg/charts
+  # Plugins must run in the operator's namespace, so we bundle barman-cloud
+  # here rather than as its own HelmRelease.
+  - name: plugin-barman-cloud
+    version: 0.6.0
+    repository: oci://ghcr.io/cloudnative-pg/charts

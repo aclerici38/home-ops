@@ -8,14 +8,14 @@ metadata:
 spec:
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/flux/clusters/cloud/apps
+  path: ./kubernetes/apps/cloud
   prune: false
   wait: false
   dependsOn:
     - name: flux-meta
   sourceRef:
     kind: GitRepository
-    name: flux-system  
+    name: flux-system
   postBuild:
     substituteFrom:
       - kind: ConfigMap

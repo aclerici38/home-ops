@@ -1,0 +1,55 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: node-feature-discovery
+  namespace: node-feature-discovery
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: ./kubernetes/apps/home/node-feature-discovery/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  values:
+    base:
+      app-template:
+        enabled: false
+      createNamespace: false
+    node-feature-discovery:
+      master:
+        hostUsers: false
+      gc:
+        hostUsers: false
+      worker:
+        hostUsers: false
+        config:
+          core:
+            labelSources:
+              - pci
+              - system
+              - usb
+          sources:
+            custom:
+              - name: intel.gpu
+                labels:
+                  intel.feature.node.kubernetes.io/gpu: "true"
+                matchFeatures:
+                  - feature: pci.device
+                    matchExpressions:
+                      vendor: {op: In, value: ["8086"]}
+                      class: {op: In, value: ["0300", "0380"]}
+      prometheus:
+        enable: true
+        scrapeInterval: 1m

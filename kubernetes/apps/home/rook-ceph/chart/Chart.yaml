@@ -1,0 +1,14 @@
+---
+apiVersion: v2
+name: rook-ceph
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../../../charts/base
+  - name: rook-ceph
+    version: v1.19.6
+    repository: oci://ghcr.io/rook
+  - name: rook-ceph-cluster
+    version: v1.19.6
+    repository: oci://ghcr.io/rook

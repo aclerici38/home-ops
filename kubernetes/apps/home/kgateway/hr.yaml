@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kgateway
+  namespace: kgateway
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: ./kubernetes/apps/home/kgateway/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    crds: CreateReplace
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    crds: CreateReplace
+    remediation:
+      retries: 1
+  values:
+    base:
+      app-template:
+        enabled: false
+      createNamespace: false
+    kgateway:
+      controller:
+        replicaCount: 2
+      serviceMonitor:
+        enabled: true

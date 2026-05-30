@@ -1,0 +1,62 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns
+  namespace: external-dns
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: ./kubernetes/apps/home/external-dns/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  values:
+    base:
+      app-template:
+        enabled: false
+      externalSecret:
+        enabled: true
+        name: cloudflare
+        key: cloudflare
+      createNamespace: false
+    external-dns:
+      image:
+        repository: registry.k8s.io/external-dns/external-dns
+        tag: v0.21.0
+      provider:
+        name: cloudflare
+      env:
+        - name: CF_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: cloudflare
+              key: CLOUDFLARE_API_TOKEN
+      extraArgs:
+        - --cloudflare-dns-records-per-page=1000
+        - --gateway-name=external
+        - --default-targets=house.clerici.tech
+        - --force-default-targets
+      policy: sync
+      triggerLoopOnEvent: true
+      sources:
+        - "crd"
+        - "gateway-httproute"
+        - "service"
+      txtPrefix: k8s.
+      txtOwnerId: default
+      domainFilters:
+        - "clerici.tech"
+      serviceMonitor:
+        enabled: true

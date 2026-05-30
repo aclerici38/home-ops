@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: intel-gpu-resource-driver
+  namespace: intel-gpu-resource-driver
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: ./kubernetes/apps/home/intel-gpu-resource-driver/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  values:
+    base:
+      app-template:
+        enabled: false
+      createNamespace: false
+    intel-gpu-resource-driver:
+      cdi:
+        staticPath: /var/cdi/static
+        dynamicPath: /var/cdi/dynamic
+      kubeletPlugin:
+        privileged: true
+        healthMonitoring:
+          enabled: false

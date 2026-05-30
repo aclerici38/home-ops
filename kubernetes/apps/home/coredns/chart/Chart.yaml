@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: coredns
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../../../charts/base
+  - name: coredns
+    version: 1.45.2
+    repository: oci://ghcr.io/coredns/charts

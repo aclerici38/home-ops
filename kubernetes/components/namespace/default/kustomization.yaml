@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+resources:
+  - ./namespace.yaml
+replacements:
+  # Name the Namespace after the HelmRelease's own namespace.
+  - source:
+      kind: HelmRelease
+      fieldPath: metadata.namespace
+    targets:
+      - select:
+          kind: Namespace
+        fieldPaths:
+          - metadata.name

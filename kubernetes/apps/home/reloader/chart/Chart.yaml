@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: reloader
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../../../charts/base
+  - name: reloader
+    version: 2.2.12
+    repository: oci://ghcr.io/stakater/charts

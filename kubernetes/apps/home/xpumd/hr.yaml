@@ -1,0 +1,41 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: xpumd
+  namespace: xpumd
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: ./kubernetes/apps/home/xpumd/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  postRenderers:
+    - kustomize:
+        commonLabels:
+          app.kubernetes.io/version: 2.0.0-rc.0
+  values:
+    base:
+      app-template:
+        enabled: false
+      createNamespace: false
+    xpumd:
+      gpuAccess: dra
+      prometheus:
+        monitor: true
+        release: kube-prometheus-stack
+      grafana:
+        dashboards: true
+        namespace: xpumd

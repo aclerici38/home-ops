@@ -94,7 +94,7 @@
     enable = true;
 
     shellInit = ''
-      set -gx MISE_GLOBAL_CONFIG_FILE $HOME/home-ops/.global.mise.toml
+      set -gx MISE_GLOBAL_CONFIG_FILE $HOME/home-ops/.mise.global.toml
     '';
 
     shellAliases = {

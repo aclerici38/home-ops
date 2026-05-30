@@ -1,0 +1,58 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vuetorrent
+  namespace: qbittorrent
+spec:
+  interval: 1h
+  dependsOn:
+    - name: qbittorrent
+  chart:
+    spec:
+      chart: ./kubernetes/apps/home/vuetorrent/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  values:
+    base:
+      createNamespace: false
+      host: qbit.clerici.tech
+      image:
+        repository: ghcr.io/vuetorrent/vuetorrent-backend
+        tag: 2.7.3@sha256:9e81304f91116961f07f0a85c5db5e2cbef2fcd6d86d3d5278f5508af41ed670
+      ports:
+        http: 8080
+      env:
+        # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
+        RELEASE_TYPE: v2.34.0
+        PORT: 8080
+        QBIT_BASE: http://qbittorrent:8080
+      probes:
+        liveness: &probes
+          enabled: true
+          custom: true
+          spec:
+            httpGet:
+              path: /backend/ping
+              port: 8080
+        readiness: *probes
+      resources:
+        requests:
+          cpu: 10m
+          memory: 20Mi
+        limits:
+          memory: 200Mi
+      persistence:
+        vuetorrent:
+          type: emptyDir

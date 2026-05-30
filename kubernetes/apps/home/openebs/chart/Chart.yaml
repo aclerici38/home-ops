@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: openebs
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../../../charts/base
+  - name: openebs
+    version: 4.4.0
+    repository: oci://ghcr.io/openebs/charts

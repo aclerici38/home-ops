@@ -1,9 +1,10 @@
 ---
-remotes:
-  - git_url: "https://github.com/home-operations/.github"
-    ref: "main"
-    configs:
-      - "lefthook.common.toml"
+# TODO: fix yamllint
+# remotes:
+#   - git_url: "https://github.com/home-operations/.github"
+#     ref: "main"
+#     configs:
+#       - "lefthook.common.toml"
 pre-commit:
   parallel: true
   commands:

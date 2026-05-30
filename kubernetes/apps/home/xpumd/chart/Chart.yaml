@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: xpumd
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../../../charts/base
+  - name: xpumd
+    version: 2.0.0-rc.0
+    repository: oci://ghcr.io/intel/xpumanager/charts
