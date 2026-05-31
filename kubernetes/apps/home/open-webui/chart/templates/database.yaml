@@ -1,0 +1,13 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  name: app
+  owner: app
+  cluster:
+    name: {{ .Release.Name }}-db
+  extensions:
+    - ensure: present
+      name: vector

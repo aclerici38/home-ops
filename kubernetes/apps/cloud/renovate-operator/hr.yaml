@@ -1,0 +1,81 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: renovate-operator
+  namespace: renovate-operator
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: ./kubernetes/apps/cloud/renovate-operator/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 1
+  upgrade:
+    remediation:
+      retries: 1
+  valuesFrom:
+    - kind: Secret
+      name: &oidcSecret renovate-operator-oidc-credentials
+      valuesKey: issuer_url
+      targetPath: renovate-operator.auth.oidc.issuerUrl
+    - kind: Secret
+      name: *oidcSecret
+      valuesKey: client_id
+      targetPath: renovate-operator.auth.oidc.clientId
+  values:
+    base:
+      app-template:
+        enabled: false
+      dragonfly:
+        enabled: true
+      externalSecret:
+        enabled: true
+      pocketid:
+        enabled: true
+        pkceEnabled: false
+        logoName: renovate
+        launchUrl: https://renovate.clerici.tech
+    renovate-operator:
+      forceRename: renovate-operator
+      route:
+        enabled: true
+        hostnames:
+          - renovate.clerici.tech
+        parentRefs:
+          - name: internal
+            namespace: kgateway
+            sectionName: https
+      config:
+        logStorage:
+          mode: memory
+      logging:
+        format: console
+      webhook:
+        enabled: false
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+        dashboard:
+          enabled: true
+          grafanaDashboard:
+            allowCrossNamespaceImport: true
+      auth:
+        oidc:
+          enabled: true
+          existingSecret: *oidcSecret
+          secretKey: client_secret
+    renovatejobs:
+      - name: 30-min
+        schedule: '*/30 * * * *'
+        repos: home-ops|pocket-id-operator|containers
+      - name: 15-min
+        schedule: '*/15 * * * *'
+        repos: k8s-versioned-schemas|pocket-id-go-client|workflows

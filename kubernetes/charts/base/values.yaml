@@ -1,12 +1,3 @@
-# Consumed by templates/namespace.yaml (override at .Values.base.* in consumer charts).
-# Set createNamespace: false for charts targeting a pre-existing namespace
-# owned by another component (e.g. kube-system managed by Talos).
-createNamespace: true
-namespace: ""
-psa: restricted
-extraNamespaceLabels: {}
-extraNamespaceAnnotations: {}
-
 # app-template workload rendering. Defaults to enabled — non-workload apps
 # (cilium, flux-operator) set `base.app-template.enabled: false` to skip it.
 app-template:
@@ -51,8 +42,9 @@ externalSecret:
 #   - ExternalSecret with cnpg-pass-generator (always)
 #   - ObjectStore + ScheduledBackup + barman plugin (when mode != no-backup)
 #   - bootstrap.recovery on Cluster (when mode = restore)
-# Also auto-labels the chart's namespace with dormammu.io/cnpg-cluster=true so
-# the versity creds CES (from the cloudnative-pg chart) reaches it.
+# NOTE: the chart's namespace must be labeled dormammu.io/cnpg-cluster=true (via
+# its namespace component) for the versity creds CES (from the cloudnative-pg
+# chart) to reach it — base no longer auto-labels the namespace.
 #
 # Cluster name is fixed as <release-name>-db. Secret name is
 # <release-name>-db-<user.name>. Pooler is <release-name>-pooler-rw.
@@ -116,7 +108,7 @@ cnpg:
       destinationPath: s3://cnpg
       endpointURL: http://versitygw.storage.svc.cluster.local:7070
       # Secret w/ versity creds — shipped by the cloudnative-pg chart to any
-      # namespace labeled dormammu.io/cnpg-cluster=true (auto-added above).
+      # namespace labeled dormammu.io/cnpg-cluster=true.
       credentialsSecretName: cloudnative-pg
 
 # Opt-in volsync (kopia → versity backups). When enabled, renders:

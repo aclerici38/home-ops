@@ -26,25 +26,6 @@ spec:
     base:
       app-template:
         enabled: false
-      # Versity S3 creds for plugin-barman-cloud — distributed to any namespace
-      # labeled with dormammu.io/cnpg-cluster=true so CNPG ObjectStore objects can
-      # reference the `cloudnative-pg` secret.
-      externalSecret:
-        enabled: true
-        name: cloudnative-pg
-        namespaceSelectors:
-          - matchLabels:
-              dormammu.io/cnpg-cluster: "true"
-        data:
-          - secretKey: versity-access-key-id
-            remoteRef:
-              key: versity
-              property: username
-          - secretKey: versity-secret-access-key
-            remoteRef:
-              key: versity
-              property: password
-      createNamespace: false
     cloudnative-pg:
       crds:
         create: true

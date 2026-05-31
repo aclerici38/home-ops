@@ -86,7 +86,6 @@ spec:
             documentdb.enableBypassDocumentValidation: "true"
             documentdb.enableUserCrud: "true"
             documentdb.maxUserLimit: "100"
-      createNamespace: false
     omada-controller:
       initContainers:
         - name: ferretdb

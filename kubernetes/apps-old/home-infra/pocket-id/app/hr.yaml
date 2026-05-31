@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/aclerici38/pocket-id-operator/refs/heads/main/dist/schemas/helmrelease_v2_pocket-id-operator.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/aclerici38/pocket-id-operator/ac7c1925539ab77b17ecd67c2e160a8f45159e1d/dist/schemas/helmrelease_v2_pocket-id-operator.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -132,3 +132,4 @@ spec:
               value: opencloud-users
             - key: immich_role
               value: user
+              

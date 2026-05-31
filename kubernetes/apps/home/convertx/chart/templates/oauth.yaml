@@ -1,0 +1,47 @@
+---
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: Backend
+metadata:
+  name: {{ .Release.Name }}-oauth-backend
+spec:
+  type: Static
+  static:
+    hosts:
+      - host: pocket-id.home-infra.svc.cluster.local
+        port: 1411
+---
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: GatewayExtension
+metadata:
+  name: {{ .Release.Name }}-oauth
+spec:
+  oauth2:
+    backendRef:
+      group: gateway.kgateway.dev
+      kind: Backend
+      name: {{ .Release.Name }}-oauth-backend
+    issuerURI: "https://id.clerici.tech"
+    scopes: ["openid", "profile", "email", "groups"]
+    credentials:
+      clientID: {{ .Release.Name | quote }}
+      clientSecretRef:
+        name: {{ .Release.Name }}-oidc-credentials
+    cookies:
+      domain: "clerici.tech"
+---
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: TrafficPolicy
+metadata:
+  name: {{ .Release.Name }}-oauth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: {{ .Release.Name }}
+  csrf:
+    percentageEnabled: 100
+    additionalOrigins:
+      - exact: "https://id.clerici.tech"
+  oauth2:
+    extensionRef:
+      name: {{ .Release.Name }}-oauth

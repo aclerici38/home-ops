@@ -26,10 +26,8 @@ spec:
       retries: 1
   values:
     base:
-      psa: privileged
       app-template:
         enabled: false
-      createNamespace: false
     networking:
       bgp:
         enabled: true

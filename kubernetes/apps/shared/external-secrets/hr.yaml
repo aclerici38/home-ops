@@ -107,7 +107,6 @@ spec:
           type: emptyDir
           globalMounts:
             - path: *configDir
-      createNamespace: false
     external-secrets:
       installCRDs: true
       replicaCount: 2

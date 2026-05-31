@@ -30,7 +30,6 @@ spec:
         enabled: true
         name: cloudflare
         key: cloudflare
-      createNamespace: false
     external-dns:
       image:
         repository: registry.k8s.io/external-dns/external-dns
