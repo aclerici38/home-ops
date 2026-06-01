@@ -9,6 +9,7 @@ configMapGenerator:
       - CNPG_CAPACITY=20Gi
       - CNPG_POOLMODE=session
       - OIDC_GROUP=all
+      - SECRET_ROTATION_ENABLED=false
 patches:
   - path: ./patch.yaml
     target:

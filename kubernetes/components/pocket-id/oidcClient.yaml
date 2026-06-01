@@ -11,7 +11,7 @@ spec:
   launchUrl: https://${APP_URL}
   pkceEnabled: ${OIDC_PKCE:=true}
   clientSecretRotation:
-    enabled: true
+    enabled: ${SECRET_ROTATION_ENABLED:=true}
     interval: 24h
     window:
       opens: "0 2 * * *"
