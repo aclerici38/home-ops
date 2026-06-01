@@ -10,6 +10,12 @@ spec:
   clientID: ${APP}
   launchUrl: https://${APP_URL}
   pkceEnabled: ${OIDC_PKCE:=true}
+  clientSecretRotation:
+    enabled: true
+    interval: 24h
+    window:
+      opens: "0 12 * * *"
+      closesAfter: 1h
   allowedUserGroups:
     - name: ${OIDC_GROUP:=admin}
       namespace: home-infra

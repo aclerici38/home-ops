@@ -81,6 +81,8 @@ spec:
           enabled: false
         metrics:
           enabled: true
+        OIDCClientRotation:
+          minSpacing: 5m
 
       serviceMonitor:
         enabled: true
