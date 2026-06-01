@@ -24,7 +24,7 @@
 
   programs.mise = {
     enable = true;
-    enableFishIntegration = true;
+    enableFishIntegration = false;
   };
 
   programs.home-manager.enable = true;
@@ -115,6 +115,17 @@
     interactiveShellInit = ''
       set fish_greeting
       load-secrets
+      set -l _aqua_mise_dir $HOME/.local/share/mise/installs/aqua-jdx-mise
+      if test -d $_aqua_mise_dir
+        set -l _ver (command ls $_aqua_mise_dir | sort -V | tail -1)
+        if test -n "$_ver"; and test -x $_aqua_mise_dir/$_ver/mise/bin/mise
+          $_aqua_mise_dir/$_ver/mise/bin/mise activate fish | source
+        else
+          mise activate fish | source
+        end
+      else
+        mise activate fish | source
+      end
     '';
   };
 }
