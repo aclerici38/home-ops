@@ -14,8 +14,8 @@ spec:
     enabled: true
     interval: 24h
     window:
-      opens: "0 12 * * *"
-      closesAfter: 1h
+      opens: "0 2 * * *"
+      closesAfter: 4h
   allowedUserGroups:
     - name: ${OIDC_GROUP:=admin}
       namespace: home-infra
