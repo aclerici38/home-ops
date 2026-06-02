@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: csi-driver-nfs
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../../../charts/base
+  - name: csi-driver-nfs
+    version: 4.13.2
+    repository: oci://ghcr.io/home-operations/charts-mirror

@@ -1,0 +1,30 @@
+{{- /* Grafana instance lives in its own namespace now, so these must allow
+       cross-namespace import. */ -}}
+{{- $dashboards := list
+  (dict "name" "kubernetes-api-server" "url" "https://grafana.com/api/dashboards/15761/revisions/21/download")
+  (dict "name" "kubernetes-global"     "url" "https://grafana.com/api/dashboards/15757/revisions/43/download")
+  (dict "name" "kubernetes-namespaces" "url" "https://grafana.com/api/dashboards/15758/revisions/46/download")
+  (dict "name" "kubernetes-nodes"      "url" "https://grafana.com/api/dashboards/15759/revisions/40/download")
+  (dict "name" "kubernetes-pods"       "url" "https://grafana.com/api/dashboards/15760/revisions/39/download")
+  (dict "name" "kubernetes-volumes"    "url" "https://grafana.com/api/dashboards/11454/revisions/14/download")
+  (dict "name" "node-exporter-full"    "url" "https://grafana.com/api/dashboards/1860/revisions/45/download")
+  (dict "name" "opnsense"              "url" "https://grafana.com/api/dashboards/19366/revisions/8/download")
+  (dict "name" "prometheus"            "url" "https://grafana.com/api/dashboards/19105/revisions/9/download")
+}}
+{{- range $dashboards }}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/grafana-operator/5.23.0/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: {{ .name }}
+spec:
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  datasources:
+    - datasourceName: prometheus
+      inputName: DS_PROMETHEUS
+  url: {{ .url }}
+{{- end }}

@@ -1,0 +1,12 @@
+---
+apiVersion: v2
+name: volsync
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../../../charts/base
+  - name: volsync-perfectra1n
+    alias: volsync
+    version: 0.18.5
+    repository: oci://ghcr.io/home-operations/charts-mirror

@@ -1,0 +1,118 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: streamystats
+  namespace: streamystats
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: ./kubernetes/apps/home/streamystats/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  values:
+    base:
+      cnpg:
+        enabled: true
+        mode: restore
+        cluster:
+          extensions:
+            - name: pgvector
+            - name: vchord
+          sharedPreloadLibraries:
+            - vchord.so
+      defaultPodOptions:
+        hostUsers: false
+      controllers:
+        frontend:
+          containers:
+            main:
+              image:
+                repository: ghcr.io/fredrikburmester/streamystats-nextjs
+                tag: v2.18.0@sha256:06fb359ad7968d42a5b58421bb3c0ea81142271cf9411f44470dd877a49d7d83
+              env: &env
+                DATABASE_URL:
+                  valueFrom:
+                    secretKeyRef:
+                      name: streamystats-db-app
+                      key: uri
+                JOB_SERVER_URL: http://streamystats-job-server:3005
+              probes:
+                liveness: &probes
+                  enabled: true
+                  custom: true
+                  spec:
+                    httpGet:
+                      path: /api/health
+                      port: &fPort 3000
+                readiness: *probes
+              securityContext: &sec
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities: {drop: ["ALL"]}
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 112Mi
+                limits:
+                  memory: 1Gi
+        job-server:
+          containers:
+            main:
+              image:
+                repository: ghcr.io/fredrikburmester/streamystats-job-server
+                tag: v2.18.0@sha256:def1912f321ed4414635894786fea192f423006d04116287f3cfc5949116823d
+              env:
+                <<: *env
+                HOST: 0.0.0.0
+              probes:
+                liveness: &bprobes
+                  enabled: true
+                  custom: true
+                  spec:
+                    httpGet:
+                      path: /health
+                      port: &bPort 3005
+                readiness: *bprobes
+              securityContext: *sec
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 112Mi
+                limits:
+                  memory: 1Gi
+      service:
+        frontend:
+          controller: frontend
+          ports:
+            http:
+              port: *fPort
+        job-server:
+          controller: job-server
+          ports:
+            http:
+              port: *bPort
+      route:
+        main:
+          hostnames:
+            - streamystats.clerici.tech
+          parentRefs:
+            - name: external
+              namespace: kgateway
+              sectionName: https
+          rules:
+            - backendRefs:
+                - identifier: frontend
+                  port: *fPort

@@ -1,0 +1,17 @@
+{{- if .Values.gpu.enabled }}
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.1-standalone-strict/resourceclaimtemplate-resource-v1.json
+apiVersion: resource.k8s.io/v1
+kind: ResourceClaimTemplate
+metadata:
+  name: {{ .Release.Name }}-gpu
+spec:
+  spec:
+    devices:
+      requests:
+        - name: gpu
+          exactly:
+            deviceClassName: {{ .Values.gpu.deviceClassName }}
+            adminAccess: {{ .Values.gpu.adminAccess }}
+            allocationMode: {{ .Values.gpu.allocationMode }}
+{{- end }}

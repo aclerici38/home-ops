@@ -30,8 +30,6 @@ Caveats (helm lookup):
 {{/* Volsync naming + flavor-aware class/accessMode resolution. */}}
 {{- define "base.volsync.pvcName" -}}{{ .Release.Name }}{{- end -}}
 {{- define "base.volsync.dstName" -}}{{ .Release.Name }}-dst{{- end -}}
-{{- define "base.volsync.sourceName" -}}{{ .Values.volsync.sourceName | default .Release.Name }}{{- end -}}
-{{- define "base.volsync.sourceNamespace" -}}{{ .Values.volsync.sourceNamespace | default .Release.Namespace }}{{- end -}}
 
 {{- define "base.volsync.storageClass" -}}
 {{- if .Values.volsync.storageClass -}}

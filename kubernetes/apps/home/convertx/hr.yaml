@@ -19,6 +19,8 @@ spec:
       retries: 1
   values:
     base:
+      gpu:
+        enabled: true
       controllers:
         convertx:
           strategy: RollingUpdate

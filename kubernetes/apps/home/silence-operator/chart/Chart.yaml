@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: silence-operator
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../../../charts/base
+  - name: silence-operator
+    version: 0.20.1
+    repository: oci://gsoci.azurecr.io/charts/giantswarm

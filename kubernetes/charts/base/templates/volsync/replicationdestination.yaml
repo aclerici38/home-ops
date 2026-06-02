@@ -30,7 +30,4 @@ spec:
     enableFileDeletion: true
     cleanupCachePVC: true
     cleanupTempPVC: true
-    sourceIdentity:
-      sourceName: {{ include "base.volsync.sourceName" . }}
-      sourceNamespace: {{ include "base.volsync.sourceNamespace" . }}
 {{- end }}

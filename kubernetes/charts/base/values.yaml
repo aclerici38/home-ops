@@ -106,7 +106,7 @@ cnpg:
     retentionPolicy: 14d
     barmanObjectStore:
       destinationPath: s3://cnpg
-      endpointURL: http://versitygw.storage.svc.cluster.local:7070
+      endpointURL: http://versitygw.versity.svc.cluster.local:7070
       # Secret w/ versity creds — shipped by the cloudnative-pg chart to any
       # namespace labeled dormammu.io/cnpg-cluster=true.
       credentialsSecretName: cloudnative-pg
@@ -149,12 +149,6 @@ volsync:
     storageClass: ceph-filesystem
     accessModes: [ReadWriteOnce]
 
-  # Source for the initial restore — defaults to <release-name> and the
-  # chart's namespace. Override sourceNamespace when migrating from an old
-  # namespace (e.g. media-management).
-  # sourceName: ""
-  # sourceNamespace: ""
-
 # Opt-in PocketID OIDC client. When enabled, renders a PocketIDOIDCClient
 # whose metadata.name and clientID default to the release name.
 # launchUrl: derived from `host:` if simple-mode is used; otherwise required.
@@ -188,3 +182,15 @@ dragonfly:
       cpu: 100m
     limits:
       memory: 1Gi
+
+# Opt-in GPU ResourceClaimTemplate (DRA). When enabled, renders a
+# ResourceClaimTemplate named <release-name>-gpu requesting an Intel GPU.
+# Consumers wire it into the pod via:
+#   controllers.<c>.pod.resourceClaims:
+#     - {name: gpu, resourceClaimTemplateName: <release-name>-gpu}
+#   containers.<x>.resources.claims: [{name: gpu}]
+gpu:
+  enabled: false
+  deviceClassName: gpu.intel.com
+  allocationMode: All
+  adminAccess: true

@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/perfectra1n-volsync/0.18.5/replicationsource_v1alpha1.json
+# Backs up the immich dataset to Backblaze (kopia). Restore from the existing
+# storage-namespace lineage is unaffected — the same ZFS volume is rebound here.
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: immich
+spec:
+  sourcePVC: immich
+  trigger:
+    schedule: 0 4 * * *
+  kopia:
+    accessModes:
+      - ReadWriteOnce
+    compression: zstd-best-compression
+    copyMethod: Snapshot
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+    parallelism: 2
+    repository: volsync-kopia-backblaze
+    retain:
+      hourly: 24
+      daily: 7
+    storageClassName: zfs-tank
+    volumeSnapshotClassName: openebs-zfs
+    cacheStorageClassName: zfs-ssd
+    cacheCapacity: 100Gi
+    cacheAccessModes:
+      - ReadWriteOnce

@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/perfectra1n-volsync/0.18.5/replicationsource_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: backups
+spec:
+  sourcePVC: backups
+  trigger:
+    schedule: 0 2,14 * * *
+  kopia:
+    accessModes:
+      - ReadWriteOnce
+    compression: zstd-best-compression
+    copyMethod: Snapshot
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+    parallelism: 2
+    repository: volsync-kopia-backblaze
+    retain:
+      hourly: 24
+      daily: 7
+    storageClassName: zfs-ssd
+    volumeSnapshotClassName: openebs-zfs
+    cacheStorageClassName: zfs-ssd
+    cacheCapacity: 100Gi
+    cacheAccessModes:
+      - ReadWriteOnce

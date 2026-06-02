@@ -1,0 +1,44 @@
+{{- /* TALOS_VERSION comes from the cluster-settings ConfigMap, resolved at Flux apply time. */ -}}
+{{- $cs := (include "base.cluster-settings" .) | fromYaml }}
+{{- range .Values.zfsScrubs }}
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.1-standalone-strict/cronjob-batch-v1.json
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .pool }}-zfs-scrubber
+spec:
+  schedule: {{ .schedule | quote }}
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
+          containers:
+            - name: zfs-scrubber
+              image: ghcr.io/heavybullets8/zfs-scrubber:1.1.2@sha256:d142396cbf0926b84a586666b777e357c622c7780bcf1444af4384bf3f14411b
+              env:
+                - name: ACTION
+                  value: "scrub"
+                - name: ZFS_POOL
+                  value: {{ .pool | quote }}
+                - name: PUSHOVER_NOTIFICATION
+                  value: "false"
+                - name: TALOS_VERSION
+                  value: {{ $cs.TALOS_VERSION | quote }}
+              securityContext:
+                privileged: true
+              volumeMounts:
+                - name: dev
+                  mountPath: /dev/zfs
+          restartPolicy: Never
+          volumes:
+            - name: dev
+              hostPath:
+                path: /dev/zfs
+{{- end }}

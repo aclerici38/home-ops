@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: disk-maintenance
+  namespace: disk-maintenance
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: ./kubernetes/apps/home/disk-maintenance/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  values:
+    base:
+      app-template:
+        enabled: false
+    smartTests:
+      - type: short
+        # days 8, 16, 22 of month to not conflict w/ scrub or long test
+        schedule: "0 0 8,16,22 * *"
+      - type: long
+        schedule: "0 2 3 * *"
+    zfsScrubs:
+      - pool: tank
+        schedule: "0 3 1 * *"
+      - pool: ssd
+        schedule: "0 0 1,15 * *"

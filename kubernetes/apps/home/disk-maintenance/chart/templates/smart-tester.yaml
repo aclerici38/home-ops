@@ -1,0 +1,44 @@
+{{- range .Values.smartTests }}
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.1-standalone-strict/cronjob-batch-v1.json
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .type }}-smart-test
+spec:
+  schedule: {{ .schedule | quote }}
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
+          containers:
+            - name: smart-tester
+              image: ghcr.io/aclerici38/smartmontools:7.5.0@sha256:2f7291450312c77edae14409504d202164d90145ddfe4e9bc3217412350f8058
+              command:
+                - "sh"
+                - "-c"
+              args:
+                - |
+                  for disk in $(smartctl --scan | awk '{print $1}'); do
+                    if [ -b "$disk" ] && smartctl -i "$disk" >/dev/null 2>&1; then
+                      echo "Running {{ .type }} test on $disk"
+                      smartctl -t "{{ .type }}" "$disk"
+                    fi
+                  done
+              securityContext:
+                privileged: true
+              volumeMounts:
+                - name: dev
+                  mountPath: /dev
+          restartPolicy: Never
+          volumes:
+            - name: dev
+              hostPath:
+                path: /dev
+{{- end }}

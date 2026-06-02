@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: tuppr
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../../../charts/base
+  - name: tuppr
+    version: 0.1.37
+    repository: oci://ghcr.io/home-operations/charts

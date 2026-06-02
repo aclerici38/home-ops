@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: smartctl-exporter
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../../../charts/base
+  - name: prometheus-smartctl-exporter
+    version: 0.16.1
+    repository: oci://ghcr.io/prometheus-community/charts

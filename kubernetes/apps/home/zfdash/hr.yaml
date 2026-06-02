@@ -1,0 +1,92 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: zfdash
+  namespace: zfdash
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: ./kubernetes/apps/home/zfdash/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  values:
+    base:
+      volsync:
+        enabled: true
+        flavor: block
+        moverSecurityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+          fsGroup: 1000
+          fsGroupChangePolicy: Always
+      controllers:
+        zfdash:
+          pod:
+            securityContext:
+              runAsUser: 0
+              runAsGroup: 0
+              runAsNonRoot: false
+              seccompProfile: {type: RuntimeDefault}
+          containers:
+            zfdash:
+              image:
+                repository: ghcr.io/ad4mts/zfdash
+                tag: v1.9.3@sha256:4c52b9aa4954bdf41a705ef5750cba3836d3f1addb8427c97e7f66f7b354a054
+              probes:
+                readiness: &probes
+                  enabled: true
+                  type: HTTP
+                liveness: *probes
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  add:
+                    - SYS_ADMIN
+                  drop:
+                    - ALL
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 20Mi
+                limits:
+                  devic.es/zfs: 1
+                  memory: 100Mi
+      service:
+        zfdash:
+          controller: zfdash
+          ports:
+            http:
+              port: &port 5001
+      route:
+        zfdash:
+          hostnames:
+            - zfdash.clerici.tech
+          parentRefs:
+            - name: internal
+              namespace: kgateway
+              sectionName: https
+      persistence:
+        config:
+          existingClaim: zfdash
+          globalMounts:
+            - path: /root/.config/ZfDash
+              subPath: config
+        data:
+          existingClaim: zfdash
+          globalMounts:
+            - path: /opt/zfdash/data
+              subPath: data

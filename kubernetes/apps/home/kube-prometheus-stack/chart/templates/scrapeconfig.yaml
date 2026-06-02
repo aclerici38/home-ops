@@ -1,0 +1,16 @@
+{{- /* NODE_GATEWAY (opnsense) comes from cluster-settings, resolved at apply time. */ -}}
+{{- $cs := (include "base.cluster-settings" .) | fromYaml }}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.91.0/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: opnsense
+spec:
+  metricsPath: /metrics
+  scrapeInterval: 60s
+  staticConfigs:
+    - targets:
+        - {{ $cs.NODE_GATEWAY }}:9100
+      labels:
+        job: opnsense
