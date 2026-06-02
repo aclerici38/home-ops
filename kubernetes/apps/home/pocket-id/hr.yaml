@@ -1,0 +1,144 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: pocket-id-operator
+  namespace: pocket-id
+spec:
+  interval: 1h
+  maxHistory: 1
+  driftDetection:
+    mode: disabled
+  chart:
+    spec:
+      chart: ./kubernetes/apps/home/pocket-id/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  values:
+    base:
+      app-template:
+        enabled: false
+      externalSecret:
+        enabled: true
+        name: pocket-id
+        key: pocket-id
+      cnpg:
+        enabled: true
+        mode: restore
+    pocket-id-operator:
+      operator:
+        args:
+          - --zap-log-level=debug
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+        dashboard:
+          enabled: true
+      instance:
+        name: pocket-id
+        spec:
+          image: ghcr.io/pocket-id/pocket-id:v2.7.0-distroless@sha256:ba71ff2988ba42d527784ccfc7530b356ec3f931e600a195de48f2962e2ce1ba
+          podTemplate:
+            spec:
+              hostUsers: false
+          route:
+            enabled: true
+            parentRefs:
+              - group: gateway.networking.k8s.io
+                kind: Gateway
+                name: external
+                namespace: kgateway
+                sectionName: https
+          encryptionKey:
+            valueFrom:
+              secretKeyRef:
+                name: pocket-id
+                key: ENCRYPTION_KEY
+          databaseUrl:
+            valueFrom:
+              secretKeyRef:
+                name: pocket-id-db-app
+                key: uri
+          appUrl: https://id.clerici.tech
+          hostUsers: false
+          versionCheckDisabled: true
+          fileBackend: database
+          ui:
+            sessionDuration: 1440
+          smtp:
+            host: smtp-relay.smtp-relay.svc.cluster.local
+            from: bot@clerici.tech
+            port: 25
+            tls: none
+          emailNotifications:
+            loginNotification: true
+            oneTimeAccessAsAdmin: true
+            apiKeyExpiration: true
+            verification: true
+          persistence:
+            enabled: false
+          metrics:
+            enabled: true
+
+        serviceMonitor:
+          enabled: true
+      users:
+        - name: anthony
+          spec:
+            locale: en
+            admin: true
+            email:
+              valueFrom:
+                key: EMAIL
+                name: cluster-secrets
+            firstName:
+              value: Anthony
+            lastName:
+              value: Clerici
+        - name: steve
+          spec:
+            locale: en
+            userInfoSecretRef:
+              name: pocket-id-steve-info
+      userGroups:
+        - name: admin
+          spec:
+            users:
+              userRefs:
+                - name: anthony
+            customClaims:
+              - key: oc_groups
+                value: opencloud-admins
+              - key: immich_role
+                value: admin
+        - name: fam
+          spec:
+            users: &fam
+              userRefs:
+                - name: anthony
+                - name: steve
+              usernames:
+                - melanie
+        - name: all
+          spec:
+            users:
+              <<: *fam
+              userIDs:
+                - 56f6f365-feb5-464f-bf31-f537d3a34a9e
+            customClaims:
+              - key: oc_groups
+                value: opencloud-users
+              - key: immich_role
+                value: user

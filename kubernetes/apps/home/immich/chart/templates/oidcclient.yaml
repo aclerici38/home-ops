@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/pocket-id-operator/0.6.1/pocketidoidcclient_v1alpha1.json
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  clientID: {{ .Release.Name }}
+  launchUrl: https://immich.clerici.tech
+  pkceEnabled: true
+  allowedUserGroups:
+    - name: all
+      namespace: home-infra
+  logo:
+    nameOverride: {{ .Release.Name }}
+  callbackUrls:
+    - app.immich:///oauth-callback
+    - https://immich.clerici.tech/auth/login
+    - https://immich.clerici.tech/user-settings

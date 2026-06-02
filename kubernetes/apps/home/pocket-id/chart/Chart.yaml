@@ -1,0 +1,11 @@
+---
+apiVersion: v2
+name: pocket-id
+version: 0.0.0
+dependencies:
+  - name: base
+    version: 0.0.0
+    repository: file://../../../../charts/base
+  - name: pocket-id-operator
+    version: 0.6.1
+    repository: oci://ghcr.io/aclerici38/charts

@@ -1,0 +1,113 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich-kiosk
+  namespace: immich-kiosk
+spec:
+  interval: 1h
+  maxHistory: 1
+  chart:
+    spec:
+      chart: ./kubernetes/apps/home/immich-kiosk/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  values:
+    base:
+      externalSecret:
+        enabled: true
+      controllers:
+        immich-kiosk:
+          strategy: RollingUpdate
+          pod:
+            hostUsers: false
+            securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+              fsGroup: 1000
+              fsGroupChangePolicy: OnRootMismatch
+              runAsNonRoot: true
+              seccompProfile: {type: RuntimeDefault}
+          containers:
+            main:
+              image:
+                repository: ghcr.io/damongolding/immich-kiosk
+                tag: 0.38.1@sha256:28cf751b556e5c9fefc18f0c2b0ed2d6fe672df734ca3c860d6adc9b2b7fdffb
+              env:
+                LANG: en_US
+                KIOSK_IMMICH_API_KEY:
+                  secretKeyRef:
+                    name: immich-kiosk
+                    key: IMMICH_API_KEY
+                KIOSK_IMMICH_URL: http://immich-server.immich:2283
+                KIOSK_IMMICH_EXTERNAL_URL: https://immich.clerici.tech
+                # TV pics
+                KIOSK_ALBUMS: d64b33a8-d61d-4468-9403-f7a594ed6bd9
+                KIOSK_SHOW_TIME: true
+                KIOSK_TIME_FORMAT: 12
+                KIOSK_CLOCK_SOURCE: server
+                KIOSK_SHOW_DATE: true
+                KIOSK_DATE_FORMAT: MM/DD/YY
+                KIOSK_SHOW_PROGRESS_BAR: true
+                KIOSK_SHOW_USER: true
+                KIOSK_SHOW_PERSON_NAME: true
+                KIOSK_SHOW_IMAGE_DATE: true
+                KIOSK_SHOW_AM_PM: true
+                KIOSK_IMAGE_DATE_FORMAT: MM/DD/YYYY
+                KIOSK_SHOW_IMAGE_DESCRIPTION: true
+                KIOSK_SHOW_IMAGE_LOCATION: true
+                KIOSK_BEHIND_PROXY: true
+                KIOSK_SHOW_VIDEOS: true
+                KIOSK_TRANSITION: fade
+              probes:
+                readiness: &probes
+                  enabled: true
+                  custom: true
+                  spec:
+                    httpGet:
+                      port: &port 3000
+                      path: /health
+                liveness: *probes
+              resources:
+                requests:
+                  cpu: 250m
+                  memory: 128M
+                limits:
+                  memory: 512M
+              securityContext:
+                runAsNonRoot: true
+                allowPrivilegeEscalation: false
+                seccompProfile: {type: RuntimeDefault}
+                capabilities: {drop: ["ALL"]}
+      service:
+        main:
+          controller: immich-kiosk
+          ports:
+            http:
+              port: *port
+      route:
+        main:
+          hostnames:
+            - immich-kiosk.clerici.tech
+          parentRefs:
+            - name: internal
+              namespace: kgateway
+              sectionName: https
+      persistence:
+        config:
+          type: secret
+          name: immich-kiosk-config
+          globalMounts:
+            - path: /config/config.yaml
+              subPath: config.yaml

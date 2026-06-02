@@ -1,0 +1,90 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nats-opencloud
+  namespace: nats-opencloud
+spec:
+  interval: 1h
+  maxHistory: 1
+  chart:
+    spec:
+      chart: ./kubernetes/apps/home/nats-opencloud/chart
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  values:
+    base:
+      app-template:
+        enabled: false
+    global:
+      image:
+        registry: mirror.gcr.io
+    nats:
+      config:
+        cluster:
+          enabled: true
+          replicas: 3
+          merge:
+            name: opencloud-cluster
+        jetstream:
+          enabled: true
+          fileStore:
+            pvc:
+              size: &pvc 10Gi
+              storageClassName: ceph-filesystem
+            maxSize: *pvc
+          memoryStore:
+            enabled: true
+            maxSize: &mem 256Mi
+      natsBox:
+        enabled: false
+      container:
+        env:
+          # Should be ~80% of memory limit
+          GOMEMLIMIT: 410MiB
+        merge:
+          securityContext: &sec
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              memory: 512Mi
+      reloader:
+        merge:
+          securityContext: *sec
+      serviceAccount:
+        enabled: true
+      podTemplate:
+        topologySpreadConstraints:
+          kubernetes.io/hostname:
+            maxSkew: 1
+            whenUnsatisfiable: DoNotSchedule
+        merge:
+          spec:
+            hostUsers: false
+            automountServiceAccountToken: false
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 1000
+              runAsGroup: 1000
+              fsGroup: 1000
+              seccompProfile:
+                type: RuntimeDefault
