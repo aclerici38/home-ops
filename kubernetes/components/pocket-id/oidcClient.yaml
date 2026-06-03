@@ -12,7 +12,7 @@ spec:
   pkceEnabled: ${OIDC_PKCE:=true}
   clientSecretRotation:
     enabled: ${SECRET_ROTATION_ENABLED:=true}
-    interval: 24h
+    interval: 6h # don't rotate if rotated in last 6 hours
     window:
       opens: "0 2 * * *"
       closesAfter: 4h
