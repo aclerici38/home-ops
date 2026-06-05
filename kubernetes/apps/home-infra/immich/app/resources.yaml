@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich-resources
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: kubernetes/charts/resource-bundle
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+  upgrade:
+    timeout: 5m
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: database
+    - name: plugin-barman-cloud
+      namespace: database
+    - name: external-secrets
+      namespace: cluster-infra
+    - name: dragonfly-operator
+      namespace: database
+    - name: pocket-id-operator
+      namespace: home-infra
+    - name: keda
+      namespace: observability
+    - name: kube-prometheus-stack
+      namespace: observability
+  values:
+    cnpg:
+      mode: restore
+      capacity: 20Gi
+      poolMode: session
+      pgExtensions: [pgvector, vchord]
+      preload: [vchord.so]
+      dbExtensions:
+        - name: vector
+          ensure: present
+        - name: vchord
+          ensure: present
+          version: 1.1.1
+        - name: earthdistance
+          ensure: present
+        - name: cube
+          ensure: present
+    externalSecret: {}
+    dragonfly:
+      extraArgs:
+        - --default_lua_flags=allow-undeclared-keys
+    pocketId:
+      group: all
+      secretRotation: false
+      callbackUrls:
+        - app.immich:///oauth-callback
+        - https://${APP_URL}/auth/login
+        - https://${APP_URL}/user-settings
+    nfs: {}
+    gpu: {}

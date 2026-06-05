@@ -1,25 +1,8 @@
 ---
-# yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./cilium.yaml
-  - ./cluster-infra.yaml
-  - ./d3savant.yaml
-  - ./database.yaml
-  - ./flux-system.yaml
-  - ./gateway-system.yaml
-  - ./home-infra.yaml
-  - ./kube-system.yaml
-  - ./media-management.yaml
-  - ./network.yaml
-  - ./observability.yaml
-  - ./openebs-system.yaml
-  - ./rook-ceph.yaml
-  - ./storage.yaml
-  - ./streaming.yaml
-  - ./system-upgrade.yaml
-  - ./tools.yaml
+  - ./apps.yaml
 patches:
   - patch: |-
       apiVersion: kustomize.toolkit.fluxcd.io/v1

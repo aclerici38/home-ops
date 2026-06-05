@@ -1,0 +1,35 @@
+---
+# A feature renders only if its key is present in the HelmRelease values.
+# `dragonfly: {}` enables it with defaults; omit the key to disable.
+# Sub-knobs all have in-template defaults — only override what actually varies.
+# To change anything else, edit the template directly; that's the point.
+#
+# Optional: override the app name. Defaults to the release name minus "-resources",
+# so a release named "immich-resources" yields app=immich automatically.
+# app: immich
+#
+# --- Reference of every knob (all optional) -------------------------------
+# cnpg:
+#   mode: init            # init | restore
+#   capacity: 2Gi
+#   poolMode: transaction # transaction | session
+#   backup: true          # false drops object-store backups (old "no-backup")
+#   pgExtensions: []      # spec.postgresql.extensions (image-mounted)
+#   preload: []           # spec.postgresql.shared_preload_libraries
+#   dbExtensions: []      # Database CR extensions (CREATE EXTENSION)
+#   clusterSpec: {}       # deep-merged onto Cluster .spec (roles, pg_hba, params, ...)
+# dragonfly:
+#   extraArgs: []
+# pocketId:
+#   group: admin
+#   secretRotation: true
+#   url: <app>.clerici.tech   # default; override per app
+#   callbackUrls: []
+# externalSecret: {}      # 1Password app secret (key = app name)
+# volsync:
+#   capacity: 5Gi
+#   mode: backup          # backup | restore
+#   cephfs: false         # true -> RWX on ceph-filesystem
+# nfs:
+#   replicas: 1
+# gpu: {}                 # Intel GPU ResourceClaimTemplate (<app>-gpu)

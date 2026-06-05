@@ -1,0 +1,88 @@
+{{- if hasKey .Values "volsync" }}
+{{- $app := include "resources.app" . -}}
+{{- $ns := include "resources.ns" . -}}
+{{- $v := .Values.volsync -}}
+{{- $cap := dig "capacity" "5Gi" $v -}}
+{{- $cephfs := dig "cephfs" false $v -}}
+{{- $sc := ternary "ceph-filesystem" "ceph-block" $cephfs -}}
+{{- $access := ternary "ReadWriteMany" "ReadWriteOnce" $cephfs -}}
+{{- if eq (dig "mode" "backup" $v) "restore" }}
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: {{ $app }}-dst
+  labels:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+    dormammu.io/component: volsync
+spec:
+  trigger:
+    manual: restore-once
+  kopia:
+    repository: volsync-kopia-versity
+    copyMethod: Snapshot
+    volumeSnapshotClassName: csi-ceph-blockpool
+    cacheStorageClassName: ceph-block
+    cacheAccessModes: ["ReadWriteOnce"]
+    storageClassName: {{ $sc }}
+    accessModes: [{{ $access | quote }}]
+    capacity: {{ $cap | quote }}
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+    enableFileDeletion: true
+    cleanupCachePVC: true
+    cleanupTempPVC: true
+    sourceIdentity:
+      sourceName: {{ $app }}
+      sourceNamespace: {{ $ns }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $app }}
+  labels:
+    dormammu.io/component: volsync
+spec:
+  accessModes: [{{ $access | quote }}]
+  dataSourceRef:
+    kind: ReplicationDestination
+    apiGroup: volsync.backube
+    name: {{ $app }}-dst
+  resources:
+    requests:
+      storage: {{ $cap | quote }}
+  storageClassName: {{ $sc }}
+{{- else }}
+---
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: {{ $app }}
+spec:
+  sourcePVC: {{ $app }}
+  trigger:
+    schedule: "0 */12 * * *"
+  kopia:
+    accessModes: [{{ $access | quote }}]
+    compression: zstd-best-compression
+    copyMethod: Snapshot
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+    parallelism: 2
+    repository: volsync-kopia-versity
+    retain:
+      hourly: 24
+      daily: 7
+    storageClassName: {{ $sc }}
+    volumeSnapshotClassName: csi-ceph-blockpool
+    cacheStorageClassName: ceph-filesystem
+    cacheCapacity: 5Gi
+    cacheAccessModes: ["ReadWriteOnce"]
+{{- end }}
+{{- end }}

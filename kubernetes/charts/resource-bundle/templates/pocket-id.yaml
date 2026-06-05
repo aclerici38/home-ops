@@ -1,0 +1,27 @@
+{{- if hasKey .Values "pocketId" }}
+{{- $app := include "resources.app" . -}}
+{{- $p := .Values.pocketId -}}
+---
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: {{ $app }}
+spec:
+  logo:
+    nameOverride: {{ $app }}
+  clientID: {{ $app }}
+  launchUrl: https://{{ dig "url" (printf "%s.clerici.tech" $app) $p }}
+  pkceEnabled: true
+  clientSecretRotation:
+    enabled: {{ dig "secretRotation" true $p }}
+    interval: 6h
+    window:
+      opens: "0 0 * * *"
+      closesAfter: 4h
+  allowedUserGroups:
+    - name: {{ dig "group" "admin" $p }}
+      namespace: home-infra
+  {{- with $p.callbackUrls }}
+  callbackUrls: {{ toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

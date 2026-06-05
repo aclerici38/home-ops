@@ -3,20 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &ns cilium
+  name: apps
   namespace: flux-system
 spec:
-  targetNamespace: *ns
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/apps/cilium
-  components:
-    - ../../components/namespace
-  prune: false
+  path: ./kubernetes/apps
+  prune: true
   wait: false
   sourceRef:
     kind: GitRepository
     name: flux-system
-  postBuild:
-    substitute:
-      NS: *ns

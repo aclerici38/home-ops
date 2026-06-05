@@ -16,6 +16,8 @@ spec:
   upgrade:
     timeout: 5m
   dependsOn:
+    - name: immich-resources
+      namespace: home-infra
     - name: nfs-server
       namespace: storage
   values:
