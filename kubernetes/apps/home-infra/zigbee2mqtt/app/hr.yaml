@@ -41,6 +41,7 @@ spec:
               # Serial / adapter (EFR32 radio of the SLZB-Ultima3 over TCP)
               ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://cottage-slzb-ultima3.iot.internal:6638
               ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: ember
+              ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE: 115200
               # MQTT
               ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://mosquitto.database.svc.cluster.local
               ZIGBEE2MQTT_CONFIG_MQTT_VERSION: 5
