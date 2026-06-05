@@ -1,3 +1,6 @@
+[settings]
+lockfile_platforms = ["linux-x64", "macos-arm64"]
+
 [env]
 _.file = "globals.env"
 FLATE_KUBE_VERSION = "{{ env.KUBE_VERSION }}"

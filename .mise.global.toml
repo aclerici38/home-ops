@@ -1,6 +1,7 @@
 # Global mise config
 [settings]
 experimental = true
+lockfile_platforms = ["linux-x64", "macos-arm64"]
 
 [env]
 EDITOR = "nvim"
@@ -51,4 +52,4 @@ neovim = "0.12.2"
 "github:mitsuhiko/minijinja" = { version = "2.20.0", exe = "minijinja-cli" }
 "github:cloudnative-pg/cloudnative-pg" = { version = "1.29.1", exe = "kubectl-cnpg" }
 "github:home-operations/flate" = "0.2.12"
-"github:home-operations/yamlls" = "0.0.14"
+"github:home-operations/yayamlls" = "0.0.14"
