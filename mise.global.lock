@@ -681,16 +681,8 @@ url = "https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-macos-arm64"
 provenance = "github-attestations"
 
 [[tools.k9s]]
-version = "0.50.18"
+version = "0.51.0"
 backend = "aqua:derailed/k9s"
-
-[tools.k9s."platforms.linux-x64"]
-checksum = "sha256:0b697ed4aa80997f7de4deeed6f1fba73df191b28bf691b1f28d2f45fa2a9e9b"
-url = "https://github.com/derailed/k9s/releases/download/v0.50.18/k9s_Linux_amd64.tar.gz"
-
-[tools.k9s."platforms.macos-arm64"]
-checksum = "sha256:68ff1541c60620466989019e86101805c1b6c70a746b1561261a403801f7fd48"
-url = "https://github.com/derailed/k9s/releases/download/v0.50.18/k9s_Darwin_arm64.tar.gz"
 
 [[tools.kind]]
 version = "0.32.0"
