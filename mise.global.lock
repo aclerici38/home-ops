@@ -369,16 +369,8 @@ url = "https://github.com/FiloSottile/age/releases/download/v1.3.1/age-v1.3.1-da
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "2026.6.0"
+version = "2026.6.1"
 backend = "aqua:jdx/mise"
-
-[tools."aqua:jdx/mise"."platforms.linux-x64"]
-checksum = "sha256:3ad68b3c1c15262b1f4a24e39b40eb4609413bb7c85492e4d2ba624de3d14ce2"
-url = "https://github.com/jdx/mise/releases/download/v2026.6.0/mise-v2026.6.0-linux-x64-musl.tar.gz"
-
-[tools."aqua:jdx/mise"."platforms.macos-arm64"]
-checksum = "sha256:8830cf720025583bfbc5ca77bcf15958bf6efb4743fb84be6b572fd85d3a6cd0"
-url = "https://github.com/jdx/mise/releases/download/v2026.6.0/mise-v2026.6.0-macos-arm64.tar.gz"
 
 [[tools.cilium-cli]]
 version = "0.19.4"
@@ -393,14 +385,14 @@ checksum = "sha256:9e58b4b8cb6d926946b2e59eb25fc2fb923965d3e000e00325e0227704fcd
 url = "https://github.com/cilium/cilium-cli/releases/download/v0.19.4/cilium-darwin-arm64.tar.gz"
 
 [[tools.claude-code]]
-version = "2.1.167"
+version = "2.1.168"
 backend = "aqua:anthropics/claude-code"
 
 [tools.claude-code."platforms.linux-x64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.167/linux-x64/claude"
+url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.168/linux-x64/claude"
 
 [tools.claude-code."platforms.macos-arm64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.167/darwin-arm64/claude"
+url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.168/darwin-arm64/claude"
 
 [[tools.crane]]
 version = "0.21.6"
