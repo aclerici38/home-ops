@@ -17,6 +17,7 @@
       "istat-menus"
       "opencloud"
       "spotify"
+      "android-platform-tools"
       "wireshark-app"
       "ultimaker-cura"
       "utm"
