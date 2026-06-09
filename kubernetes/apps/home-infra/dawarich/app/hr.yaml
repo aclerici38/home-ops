@@ -58,7 +58,7 @@ spec:
               RAILS_CACHE_DB: 0
               RAILS_JOB_QUEUE_DB: 0
               RAILS_WS_DB: 0
-              SMTP_SERVER: smtp-relay.cluster-infra
+              SMTP_SERVER: smtp-relay.smtp-relay
               SMTP_PORT: 25
               SMTP_FROM: bot@clerici.tech
               DOMAIN: clerici.tech
@@ -164,7 +164,7 @@ spec:
           - dawarich.clerici.tech
         parentRefs:
           - name: external
-            namespace: gateway-system
+            namespace: kgateway
     persistence:
       data:
         existingClaim: dawarich

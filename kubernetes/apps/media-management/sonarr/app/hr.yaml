@@ -97,7 +97,7 @@ spec:
           - sonarr.clerici.tech
         parentRefs:
           - name: internal
-            namespace: gateway-system
+            namespace: kgateway
     persistence:
       tmpfs:
         type: emptyDir

@@ -59,7 +59,7 @@ spec:
                   name: donetick
                   key: JWT_SECRET
               DT_SERVER_CORS_ALLOW_ORIGINS: https://donetick.clerici.tech
-              DT_EMAIL_HOST: smtp-relay.cluster-infra
+              DT_EMAIL_HOST: smtp-relay.smtp-relay
               DT_EMAIL_PORT: 25
               DT_EMAIL_EMAIL: bot@clerici.tech
               DT_EMAIL_APPHOST: donetick.clerici.tech
@@ -117,7 +117,7 @@ spec:
           - donetick.clerici.tech
         parentRefs:
           - name: external
-            namespace: gateway-system
+            namespace: kgateway
     persistence:
       cache:
         type: emptyDir

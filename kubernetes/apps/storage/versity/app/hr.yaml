@@ -42,7 +42,7 @@ spec:
       enabled: true
       parentRefs: &gateway
         - name: internal
-          namespace: gateway-system
+          namespace: kgateway
           sectionName: https
       hostnames:
         - s3.clerici.tech

@@ -34,7 +34,7 @@ spec:
           pathType: PathPrefix
         parentRefs:
           - name: internal
-            namespace: gateway-system
+            namespace: kgateway
             sectionName: https
     cephClusterSpec:
       mon:

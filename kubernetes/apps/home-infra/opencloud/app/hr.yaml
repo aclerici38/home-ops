@@ -73,7 +73,7 @@ spec:
               WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.clerici.tech/settings/apps
               # prevent nested mounts
               WEB_ASSET_APPS_PATH: /opt/extensions/usr/share/nginx/html/apps
-              NOTIFICATIONS_SMTP_HOST: smtp-relay.cluster-infra
+              NOTIFICATIONS_SMTP_HOST: smtp-relay.smtp-relay
               NOTIFICATIONS_SMTP_PORT: 25
               NOTIFICATIONS_SMTP_SENDER: bot@clerici.tech
               NOTIFICATIONS_SMTP_INSECURE: true
@@ -91,7 +91,7 @@ spec:
                   key: DECOMPOSEDS3_SECRET_KEY
               STORAGE_USERS_ID_CACHE_STORE: nats-js-kv
               SEARCH_EXTRACTOR_TYPE: tika
-              SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://tika.tools:9998
+              SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://tika.tika:9998
               FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
             securityContext: &sec
               allowPrivilegeEscalation: false
@@ -232,7 +232,7 @@ spec:
           - cloud.clerici.tech
         parentRefs:
           - name: external
-            namespace: gateway-system
+            namespace: kgateway
         rules:
           - backendRefs:
               - identifier: opencloud
@@ -245,7 +245,7 @@ spec:
           - wopi.clerici.tech
         parentRefs:
           - name: external
-            namespace: gateway-system
+            namespace: kgateway
         rules:
           - backendRefs:
               - identifier: wopi
@@ -255,7 +255,7 @@ spec:
           - collabora.clerici.tech
         parentRefs:
           - name: external
-            namespace: gateway-system
+            namespace: kgateway
         rules:
           - backendRefs:
               - identifier: collabora

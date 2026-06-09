@@ -36,7 +36,7 @@ spec:
             - "alertmanager.clerici.tech"
           parentRefs:
             - name: internal
-              namespace: gateway-system
+              namespace: kgateway
               sectionName: https
       alertmanagerSpec:
         alertmanagerConfiguration:
@@ -65,7 +65,7 @@ spec:
             - "prometheus.clerici.tech"
           parentRefs:
             - name: internal
-              namespace: gateway-system
+              namespace: kgateway
               sectionName: https
       prometheusSpec:
         version: v2.55.1 # bypass 'unsupported Prometheus version' error

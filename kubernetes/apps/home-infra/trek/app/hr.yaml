@@ -69,7 +69,7 @@ spec:
                 secretKeyRef:
                   name: trek-oidc-credentials
                   key: client_secret
-              SMTP_HOST: smtp-relay.cluster-infra
+              SMTP_HOST: smtp-relay.smtp-relay
               SMTP_PORT: 25
               SMTP_FROM: TREK <bot@clerici.tech>
             probes:
@@ -104,7 +104,7 @@ spec:
           - trek.clerici.tech
         parentRefs:
           - name: external
-            namespace: gateway-system
+            namespace: kgateway
     persistence:
       data:
         existingClaim: trek

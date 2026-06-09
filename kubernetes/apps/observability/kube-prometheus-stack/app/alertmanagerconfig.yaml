@@ -44,13 +44,13 @@ spec:
     # - name: heartbeat
     #   webhookConfigs:
     #     - urlSecret:
-    #         name: &secret alertmanager
+    #         name: &secret kube-prometheus-stack
     #         key: ALERTMANAGER_HEARTBEAT_URL
     - name: discord
       discordConfigs:
         - sendResolved: false
           apiURL:
-            name: alertmanager
+            name: kube-prometheus-stack
             key: DISCORD_WEBHOOK_URL
           title: >-
             [{{ .Status | toUpper }}] [{{ .CommonLabels.alertname }}]: {{

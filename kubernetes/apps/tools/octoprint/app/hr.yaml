@@ -118,7 +118,7 @@ spec:
           - octoprint.clerici.tech
         parentRefs:
           - name: internal
-            namespace: gateway-system
+            namespace: kgateway
         rules:
           - backendRefs:
               - identifier: octoprint
@@ -128,7 +128,7 @@ spec:
           - printer-cam.clerici.tech
         parentRefs:
           - name: internal
-            namespace: gateway-system
+            namespace: kgateway
         rules:
           - backendRefs:
               - identifier: go2rtc

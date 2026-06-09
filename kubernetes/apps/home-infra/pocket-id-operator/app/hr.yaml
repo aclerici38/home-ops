@@ -49,7 +49,7 @@ spec:
             - group: gateway.networking.k8s.io
               kind: Gateway
               name: external
-              namespace: gateway-system
+              namespace: kgateway
               sectionName: https
         encryptionKey:
           valueFrom:

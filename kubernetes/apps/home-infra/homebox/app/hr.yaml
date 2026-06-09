@@ -37,7 +37,7 @@ spec:
               HBOX_OPTIONS_ALLOW_LOCAL_LOGIN: false
               HBOX_OPTIONS_TRUST_PROXY: true
               HBOX_OPTIONS_HOSTNAME: homebox.clerici.tech
-              HBOX_MAILER_HOST: smtp-relay.cluster-infra
+              HBOX_MAILER_HOST: smtp-relay.smtp-relay
               HBOX_MAILER_PORT: 25
               HBOX_DATABASE_DRIVER: postgres
               HBOX_DATABASE_HOST:
@@ -104,7 +104,7 @@ spec:
           - homebox.clerici.tech
         parentRefs:
           - name: external
-            namespace: gateway-system
+            namespace: kgateway
     persistence:
       data:
         existingClaim: homebox

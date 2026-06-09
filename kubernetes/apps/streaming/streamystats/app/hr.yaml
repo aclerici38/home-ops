@@ -104,7 +104,7 @@ spec:
           - streamystats.clerici.tech
         parentRefs:
           - name: external
-            namespace: gateway-system
+            namespace: kgateway
         rules:
           - backendRefs:
               - identifier: frontend

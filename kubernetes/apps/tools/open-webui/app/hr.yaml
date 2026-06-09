@@ -50,7 +50,7 @@ spec:
                   name: open-webui
                   key: TAVILY_API_KEY
               WEB_LOADER_ENGINE: playwright
-              PLAYWRIGHT_WS_URL: ws://browserless.tools:3000/chromium/playwright
+              PLAYWRIGHT_WS_URL: ws://browserless.browserless:3000/chromium/playwright
               WEBUI_URL: &url https://chat.clerici.tech
               CORS_ALLOW_ORIGIN: *url
               ENABLE_LOGIN_FORM: false
@@ -65,7 +65,7 @@ spec:
               PGVECTOR_CREATE_EXTENSION: false
               DATABASE_ENABLE_SESSION_SHARING: true
               CONTENT_EXTRACTION_ENGINE: tika
-              TIKA_SERVER_URL: http://tika.tools:9998
+              TIKA_SERVER_URL: http://tika.tika:9998
               RAG_EMBEDDING_ENGINE: ollama
               RAG_EMBEDDING_MODEL: "mxbai-embed-large"
               ENABLE_OAUTH_SIGNUP: true
@@ -155,7 +155,7 @@ spec:
           - chat.clerici.tech
         parentRefs:
           - name: external
-            namespace: gateway-system
+            namespace: kgateway
     persistence:
       data:
         existingClaim: open-webui
