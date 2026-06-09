@@ -14,6 +14,8 @@ spec:
     timeout: 2m
   upgrade:
     timeout: 2m
+  dependsOn:
+    - name: external-dns-resources
   values:
     image:
       repository: registry.k8s.io/external-dns/external-dns
@@ -24,7 +26,7 @@ spec:
       - name: CF_API_TOKEN
         valueFrom:
           secretKeyRef:
-            name: cloudflare
+            name: external-dns
             key: CLOUDFLARE_API_TOKEN
     extraArgs:
       - --cloudflare-dns-records-per-page=1000

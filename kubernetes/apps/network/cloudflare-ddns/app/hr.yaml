@@ -19,6 +19,8 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  dependsOn:
+    - name: cloudflare-ddns-resources
   values:
     controllers:
       cloudflare-ddns:
@@ -43,7 +45,7 @@ spec:
             env:
               ACCOUNT_TOKEN:
                 secretKeyRef:
-                  name: cloudflare
+                  name: cloudflare-ddns
                   key: CLOUDFLARE_API_TOKEN
             probes:
               liveness:
