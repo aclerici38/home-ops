@@ -19,19 +19,17 @@ spec:
     timeout: 5m
   dependsOn:
     - name: cloudnative-pg
-      namespace: database
+      namespace: cloudnative-pg
     - name: plugin-barman-cloud
-      namespace: database
+      namespace: plugin-barman-cloud
     - name: external-secrets
-      namespace: cluster-infra
+      namespace: external-secrets
     - name: dragonfly-operator
-      namespace: database
+      namespace: dragonfly-operator
     - name: pocket-id-operator
-      namespace: home-infra
-    - name: keda
-      namespace: observability
+      namespace: pocket-id-operator
     - name: kube-prometheus-stack
-      namespace: observability
+      namespace: kube-prometheus-stack
   values:
     cnpg:
       mode: restore
@@ -58,7 +56,7 @@ spec:
       secretRotation: false
       callbackUrls:
         - app.immich:///oauth-callback
-        - https://${APP_URL}/auth/login
-        - https://${APP_URL}/user-settings
-    nfs: {}
+      callbackPaths:
+        - /auth/login
+        - /user-settings
     gpu: {}

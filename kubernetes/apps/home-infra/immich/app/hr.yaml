@@ -16,10 +16,9 @@ spec:
   upgrade:
     timeout: 5m
   dependsOn:
-    - name: immich-resources
-      namespace: home-infra
     - name: nfs-server
-      namespace: storage
+      namespace: nfs-server
+    - name: immich-resources
   values:
     controllers:
       server:
@@ -129,7 +128,7 @@ spec:
     route:
       immich:
         hostnames:
-          - ${APP_URL}
+          - immich.clerici.tech
         parentRefs:
           - name: external
             namespace: gateway-system

@@ -1,0 +1,60 @@
+{{- if hasKey .Values "oidc" }}
+{{- $app := include "resources.app" . -}}
+{{- $o := .Values.oidc -}}
+{{- $route := dig "route" $app $o -}}
+{{- $clientID := dig "clientID" $app $o -}}
+{{- $host := dig "backendHost" "pocket-id.pocket-id-operator.svc.cluster.local" $o -}}
+{{- $port := dig "backendPort" 1411 $o -}}
+{{/* kgateway oauth2 forward-auth for an HTTPRoute, backed by pocket-id (id.clerici.tech). */}}
+---
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: Backend
+metadata:
+  name: {{ $app }}-oauth-backend
+spec:
+  type: Static
+  static:
+    hosts:
+      - host: {{ $host }}
+        port: {{ $port }}
+---
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: GatewayExtension
+metadata:
+  name: {{ $app }}-oauth
+spec:
+  oauth2:
+    backendRef:
+      group: gateway.kgateway.dev
+      kind: Backend
+      name: {{ $app }}-oauth-backend
+    issuerURI: {{ dig "issuerURI" "https://id.clerici.tech" $o | quote }}
+    scopes:
+      - openid
+      - profile
+      - email
+      - groups
+    credentials:
+      clientID: {{ $clientID | quote }}
+      clientSecretRef:
+        name: {{ $app }}-oidc-credentials
+    cookies:
+      domain: {{ dig "cookieDomain" "clerici.tech" $o | quote }}
+---
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: TrafficPolicy
+metadata:
+  name: {{ $app }}-oauth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: {{ $route }}
+  csrf:
+    percentageEnabled: 100
+    additionalOrigins:
+      - exact: {{ dig "issuerURI" "https://id.clerici.tech" $o | quote }}
+  oauth2:
+    extensionRef:
+      name: {{ $app }}-oauth
+{{- end }}

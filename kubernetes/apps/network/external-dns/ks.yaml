@@ -1,0 +1,25 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: external-dns
+spec:
+  targetNamespace: external-dns
+  path: ./kubernetes/apps/network/external-dns/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: external-dns
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: external-dns-endpoints
+spec:
+  targetNamespace: external-dns
+  dependsOn:
+    - name: external-dns
+  path: ./kubernetes/apps/network/external-dns/endpoints
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: external-dns

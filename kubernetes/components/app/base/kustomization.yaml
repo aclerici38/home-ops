@@ -2,29 +2,16 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
-# Injects the shared Flux Kustomization defaults so each app's ks.yaml only
-# carries app-specific fields (name, path, APP_URL). Then wires the app's
-# namespace: the Namespace (from the privileged/unprivileged variant) and the
-# ks targetNamespace are both named from the ks's own metadata.name.
+# Injects the shared Flux Kustomization defaults (components/hr, interval/timeout,
+# prune/wait, cluster-settings/secrets substituteFrom) so each app's ks.yaml only
+# carries app-specific fields (name, path, APP_URL).
+#
+# This does NOT touch the namespace. Pair it with:
+#   - ../privileged or ../unprivileged  -> app gets its own namespace == ks name
+#   - nothing (use base directly) + an explicit spec.targetNamespace in ks.yaml
+#     -> app lives in a pre-existing shared namespace (e.g. kube-system, flux-system)
 patches:
   - path: ./ks.yaml
     target:
       kind: Kustomization
       group: kustomize.toolkit.fluxcd.io
-replacements:
-  - source:
-      kind: Kustomization
-      group: kustomize.toolkit.fluxcd.io
-      fieldPath: metadata.name
-    targets:
-      - select:
-          kind: Namespace
-        fieldPaths:
-          - metadata.name
-      - select:
-          kind: Kustomization
-          group: kustomize.toolkit.fluxcd.io
-        fieldPaths:
-          - spec.targetNamespace
-        options:
-          create: true

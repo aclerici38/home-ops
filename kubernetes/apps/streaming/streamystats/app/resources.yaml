@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: streamystats-resources
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: kubernetes/charts/resource-bundle
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+  upgrade:
+    timeout: 5m
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: cloudnative-pg
+    - name: kube-prometheus-stack
+      namespace: kube-prometheus-stack
+    - name: plugin-barman-cloud
+      namespace: plugin-barman-cloud
+  values:
+    cnpg:
+      mode: restore
+      pgExtensions: [pgvector, vchord]
+      preload: ["vchord.so"]
+      dbExtensions:
+        - {name: vector, ensure: present}
+        - {name: vchord, ensure: present, version: 1.1.1}

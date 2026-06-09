@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: recyclarr
+spec:
+  dependsOn:
+    - name: sonarr
+      namespace: sonarr
+    - name: radarr
+      namespace: radarr
+  path: ./kubernetes/apps/media-management/recyclarr/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: recyclarr

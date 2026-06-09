@@ -1,0 +1,63 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: omada-controller-resources
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: kubernetes/charts/resource-bundle
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+  upgrade:
+    timeout: 5m
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: cloudnative-pg
+    - name: external-secrets
+      namespace: external-secrets
+    - name: kube-prometheus-stack
+      namespace: kube-prometheus-stack
+    - name: plugin-barman-cloud
+      namespace: plugin-barman-cloud
+  values:
+    externalSecret: {}
+    cnpg:
+      mode: init
+      poolMode: session
+      pgExtensions: [documentdb]
+      preload: [pg_cron, pg_documentdb_core, pg_documentdb]
+      dbExtensions:
+        - {name: pg_cron, ensure: present}
+        - {name: tsm_system_rows, ensure: present}
+        - {name: vector, ensure: present}
+        - {name: postgis, ensure: present}
+        - {name: documentdb_core, ensure: present}
+        - {name: documentdb, ensure: present}
+      clusterSpec:
+        managed:
+          roles:
+            - name: app
+              login: true
+              inRoles:
+                - documentdb_admin_role
+        postgresql:
+          pg_hba:
+            - host app postgres localhost trust
+            - host app app localhost trust
+            - host app documentdb_bg_worker_role localhost trust
+          parameters:
+            max_connections: "200"
+            cron.database_name: app
+            documentdb.bg_worker_database_name: app
+            documentdb.enableBackgroundWorker: "true"
+            documentdb.enableBackgroundWorkerJobs: "true"
+            documentdb.enableCompact: "true"
+            documentdb.enableLetAndCollationForQueryMatch: "true"
+            documentdb.enableNowSystemVariable: "true"

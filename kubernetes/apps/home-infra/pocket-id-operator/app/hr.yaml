@@ -1,0 +1,137 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/aclerici38/pocket-id-operator/refs/heads/main/dist/schemas/helmrelease_v2_pocket-id-operator.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: pocket-id-operator
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: pocket-id-operator
+  # chart:
+  #   spec:
+  #     chart: dist/chart
+  #     sourceRef:
+  #       kind: GitRepository
+  #       name: pocket-id-operator-main
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    operator:
+      # image:
+      #   tag: PR-366
+      args:
+        - --zap-log-level=debug
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+      dashboard:
+        enabled: true
+    instance:
+      name: pocket-id
+      spec:
+        image: ghcr.io/pocket-id/pocket-id:v2.8.0-distroless@sha256:6a3aad6023ea0729e3763c75b77060d6d5d9069ad566af0b0b14a2288da0c9e0
+        podTemplate:
+          spec:
+            hostUsers: false
+        route:
+          enabled: true
+          parentRefs:
+            - group: gateway.networking.k8s.io
+              kind: Gateway
+              name: external
+              namespace: gateway-system
+              sectionName: https
+        encryptionKey:
+          valueFrom:
+            secretKeyRef:
+              name: pocket-id
+              key: ENCRYPTION_KEY
+        databaseUrl:
+          valueFrom:
+            secretKeyRef:
+              name: pocket-id-db-app
+              key: uri
+        appUrl: https://id.clerici.tech
+        hostUsers: false
+        versionCheckDisabled: true
+        fileBackend: database
+        ui:
+          sessionDuration: 1440
+        smtp:
+          host: smtp-relay.smtp-relay.svc.cluster.local
+          from: bot@clerici.tech
+          port: 25
+          tls: none
+        emailNotifications:
+          loginNotification: true
+          oneTimeAccessAsAdmin: true
+          apiKeyExpiration: true
+          verification: true
+        persistence:
+          enabled: false
+        metrics:
+          enabled: true
+        OIDCClientRotation:
+          minSpacing: 5m
+      serviceMonitor:
+        enabled: true
+    users:
+      - name: anthony
+        spec:
+          locale: en
+          admin: true
+          email:
+            valueFrom:
+              key: EMAIL
+              name: cluster-secrets
+          firstName:
+            value: Anthony
+          lastName:
+            value: Clerici
+      - name: steve
+        spec:
+          locale: en
+          userInfoSecretRef:
+            name: pocket-id-steve-info
+    userGroups:
+      - name: admin
+        spec:
+          users:
+            userRefs:
+              - name: anthony
+          customClaims:
+            - key: oc_groups
+              value: opencloud-admins
+            - key: immich_role
+              value: admin
+      - name: fam
+        spec:
+          users: &fam
+            userRefs:
+              - name: anthony
+              - name: steve
+            usernames:
+              - melanie
+      - name: all
+        spec:
+          users:
+            !!merge <<: *fam
+            userIDs:
+              - 56f6f365-feb5-464f-bf31-f537d3a34a9e
+          customClaims:
+            - key: oc_groups
+              value: opencloud-users
+            - key: immich_role
+              value: user
+  dependsOn:
+    - name: pocket-id-operator-resources

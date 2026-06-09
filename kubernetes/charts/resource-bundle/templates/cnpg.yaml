@@ -29,6 +29,9 @@ spec:
     name: {{ $app }}-db
   instances: 1
   type: rw
+  {{- with $c.poolerService }}
+  serviceTemplate: {{ toYaml . | nindent 4 }}
+  {{- end }}
   pgbouncer:
     poolMode: {{ dig "poolMode" "transaction" $c | quote }}
     parameters:
@@ -101,7 +104,7 @@ spec:
     data: {compression: gzip, jobs: 8}
     wal: {compression: zstd, maxParallel: 12}
     destinationPath: s3://cnpg
-    endpointURL: http://versitygw.storage.svc.cluster.local:7070
+    endpointURL: http://versitygw.versity.svc.cluster.local:7070
     historyTags: {keepHistory: "true"}
     s3Credentials:
       accessKeyId: {name: cloudnative-pg, key: versity-access-key-id}
