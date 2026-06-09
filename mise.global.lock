@@ -372,6 +372,14 @@ provenance = "github-attestations"
 version = "2026.6.1"
 backend = "aqua:jdx/mise"
 
+[tools."aqua:jdx/mise"."platforms.linux-x64"]
+checksum = "sha256:1c82e40ff6e87657fe60acfe75a9e269402fc4246d86f673528efd6168a1cf97"
+url = "https://github.com/jdx/mise/releases/download/v2026.6.1/mise-v2026.6.1-linux-x64-musl.tar.gz"
+
+[tools."aqua:jdx/mise"."platforms.macos-arm64"]
+checksum = "sha256:ed4786b826de4319634dde2294e7d8b9d64e5ee52db69148045b9a199cc3ae43"
+url = "https://github.com/jdx/mise/releases/download/v2026.6.1/mise-v2026.6.1-macos-arm64.tar.gz"
+
 [[tools.cilium-cli]]
 version = "0.19.4"
 backend = "aqua:cilium/cilium-cli"
@@ -392,6 +400,7 @@ backend = "aqua:anthropics/claude-code"
 url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.169/linux-x64/claude"
 
 [tools.claude-code."platforms.macos-arm64"]
+checksum = "blake3:752ffd32fb4d1a191ad29c953c5aeab50cfbdbe37778c8f630c7dbba6de9d6ce"
 url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.169/darwin-arm64/claude"
 
 [[tools.crane]]
@@ -586,6 +595,16 @@ url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/44
 version = "0.1.1"
 backend = "github:home-operations/yayamlls"
 
+[tools."github:home-operations/yayamlls"."platforms.linux-x64"]
+checksum = "sha256:e6f414bebedd083823c7ad1a8e93af0486a88dd794a52fcb79a67b1de9bee878"
+url = "https://github.com/home-operations/yayamlls/releases/download/0.1.1/yayamlls_0.1.1_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/yayamlls/releases/assets/442558862"
+
+[tools."github:home-operations/yayamlls"."platforms.macos-arm64"]
+checksum = "sha256:7d566c8057ff08d6fe6426c879109dfbe1070e54646f7d1c52f3e59c1dc2438b"
+url = "https://github.com/home-operations/yayamlls/releases/download/0.1.1/yayamlls_0.1.1_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/yayamlls/releases/assets/442558860"
+
 [[tools."github:mitsuhiko/minijinja"]]
 version = "2.20.0"
 backend = "github:mitsuhiko/minijinja"
@@ -640,6 +659,14 @@ url = "https://github.com/norwoodj/helm-docs/releases/download/v1.14.2/helm-docs
 version = "1.5.3"
 backend = "aqua:helmfile/helmfile"
 
+[tools.helmfile."platforms.linux-x64"]
+checksum = "sha256:1a93e6889737eba70339860ba5a71799cd71a95d0c29daf636c09c76b63cd660"
+url = "https://github.com/helmfile/helmfile/releases/download/v1.5.3/helmfile_1.5.3_linux_amd64.tar.gz"
+
+[tools.helmfile."platforms.macos-arm64"]
+checksum = "sha256:4cd54e6a8ccf69daf7a64ba073b1a7814d3084c5a0d8328a4c7f6f3693252553"
+url = "https://github.com/helmfile/helmfile/releases/download/v1.5.3/helmfile_1.5.3_darwin_arm64.tar.gz"
+
 [[tools.jq]]
 version = "1.8.1"
 backend = "aqua:jqlang/jq"
@@ -657,6 +684,14 @@ provenance = "github-attestations"
 [[tools.k9s]]
 version = "0.51.0"
 backend = "aqua:derailed/k9s"
+
+[tools.k9s."platforms.linux-x64"]
+checksum = "sha256:c3752ad51a5a4015a113819c4eeb6e55a4d0e4b8e652494797532f6fc8161dd7"
+url = "https://github.com/derailed/k9s/releases/download/v0.51.0/k9s_Linux_amd64.tar.gz"
+
+[tools.k9s."platforms.macos-arm64"]
+checksum = "sha256:9b8c0e8f461e5d33aeee43a67f5ef4aff646a008a786887b8266cbb153c610cc"
+url = "https://github.com/derailed/k9s/releases/download/v0.51.0/k9s_Darwin_arm64.tar.gz"
 
 [[tools.kind]]
 version = "0.32.0"
