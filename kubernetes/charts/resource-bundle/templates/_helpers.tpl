@@ -35,7 +35,11 @@ postgresql:
     dataDurability: preferred
     failoverQuorum: true
   {{- with $c.pgExtensions }}
-  extensions: {{ toYaml . | nindent 4 }}
+  {{- $exts := list }}
+  {{- range . }}
+  {{- $exts = append $exts (ternary (dict "name" .) . (kindIs "string" .)) }}
+  {{- end }}
+  extensions: {{ toYaml $exts | nindent 4 }}
   {{- end }}
   {{- with $c.preload }}
   shared_preload_libraries: {{ toYaml . | nindent 4 }}
