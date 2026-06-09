@@ -18,6 +18,6 @@ spec:
     remediation:
       retries: 1
   values:
-    alertmanagerAddress: http://kube-prometheus-stack-alertmanager:9093
+    alertmanagerAddress: http://kube-prometheus-stack-alertmanager.kube-prometheus-stack:9093
     networkPolicy:
       enabled: false

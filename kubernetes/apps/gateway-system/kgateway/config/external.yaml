@@ -43,7 +43,7 @@ spec:
   jobLabel: kgateway-external
   namespaceSelector:
     matchNames:
-      - network
+      - kgateway
   podMetricsEndpoints:
     - port: http-monitoring
       path: /metrics
