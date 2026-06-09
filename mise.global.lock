@@ -369,16 +369,8 @@ url = "https://github.com/FiloSottile/age/releases/download/v1.3.1/age-v1.3.1-da
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "2026.6.0"
+version = "2026.6.1"
 backend = "aqua:jdx/mise"
-
-[tools."aqua:jdx/mise"."platforms.linux-x64"]
-checksum = "sha256:3ad68b3c1c15262b1f4a24e39b40eb4609413bb7c85492e4d2ba624de3d14ce2"
-url = "https://github.com/jdx/mise/releases/download/v2026.6.0/mise-v2026.6.0-linux-x64-musl.tar.gz"
-
-[tools."aqua:jdx/mise"."platforms.macos-arm64"]
-checksum = "sha256:8830cf720025583bfbc5ca77bcf15958bf6efb4743fb84be6b572fd85d3a6cd0"
-url = "https://github.com/jdx/mise/releases/download/v2026.6.0/mise-v2026.6.0-macos-arm64.tar.gz"
 
 [[tools.cilium-cli]]
 version = "0.19.4"
@@ -393,14 +385,14 @@ checksum = "sha256:9e58b4b8cb6d926946b2e59eb25fc2fb923965d3e000e00325e0227704fcd
 url = "https://github.com/cilium/cilium-cli/releases/download/v0.19.4/cilium-darwin-arm64.tar.gz"
 
 [[tools.claude-code]]
-version = "2.1.165"
+version = "2.1.169"
 backend = "aqua:anthropics/claude-code"
 
 [tools.claude-code."platforms.linux-x64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.165/linux-x64/claude"
+url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.169/linux-x64/claude"
 
 [tools.claude-code."platforms.macos-arm64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.165/darwin-arm64/claude"
+url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.169/darwin-arm64/claude"
 
 [[tools.crane]]
 version = "0.21.6"
@@ -577,32 +569,22 @@ url_api = "https://api.github.com/repos/cloudnative-pg/cloudnative-pg/releases/a
 url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.29.1/multiple.intoto.jsonl"
 
 [[tools."github:home-operations/flate"]]
-version = "0.2.12"
+version = "0.3.3"
 backend = "github:home-operations/flate"
 
 [tools."github:home-operations/flate"."platforms.linux-x64"]
-checksum = "sha256:e4cac4c631cc5b5fd12687817ab4157519db38741647bfb83e4e1696d39d04e7"
-url = "https://github.com/home-operations/flate/releases/download/0.2.12/flate_0.2.12_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/438295634"
+checksum = "sha256:a892f712398de972096d4a40748c15aa5222419231558b8ab844d7053c653d9e"
+url = "https://github.com/home-operations/flate/releases/download/v0.3.3/flate_0.3.3_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/440896064"
 
 [tools."github:home-operations/flate"."platforms.macos-arm64"]
-checksum = "sha256:5b906bfcb08c805631cfa95757121f8c531d1d209f84c236bafbee6e6613b860"
-url = "https://github.com/home-operations/flate/releases/download/0.2.12/flate_0.2.12_darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/438295635"
+checksum = "sha256:5ed6e4dd7f6f42acebe53e020e6a3b3a0ee09960bf888cd32789e3577bb7d4ac"
+url = "https://github.com/home-operations/flate/releases/download/v0.3.3/flate_0.3.3_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/440896067"
 
 [[tools."github:home-operations/yayamlls"]]
-version = "0.0.14"
+version = "0.1.1"
 backend = "github:home-operations/yayamlls"
-
-[tools."github:home-operations/yayamlls"."platforms.linux-x64"]
-checksum = "sha256:bfa14178a72e724fd6d2e83ba7f5fd4ae7fa399c827ddb3e98416a8eff0ebcf4"
-url = "https://github.com/home-operations/yayamlls/releases/download/0.0.14/yayamlls_0.0.14_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/home-operations/yayamlls/releases/assets/437991000"
-
-[tools."github:home-operations/yayamlls"."platforms.macos-arm64"]
-checksum = "sha256:b033ee9b65a08fcaa108b444127917ab77fbbcb5a0c3bf7d874fc05c6ce849e4"
-url = "https://github.com/home-operations/yayamlls/releases/download/0.0.14/yayamlls_0.0.14_darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/home-operations/yayamlls/releases/assets/437990998"
 
 [[tools."github:mitsuhiko/minijinja"]]
 version = "2.20.0"
@@ -655,16 +637,8 @@ checksum = "sha256:2d8399db5b33d240d5f8985241bcf5483563150b968e3229823822979f3e4
 url = "https://github.com/norwoodj/helm-docs/releases/download/v1.14.2/helm-docs_1.14.2_Darwin_arm64.tar.gz"
 
 [[tools.helmfile]]
-version = "1.5.2"
+version = "1.5.3"
 backend = "aqua:helmfile/helmfile"
-
-[tools.helmfile."platforms.linux-x64"]
-checksum = "sha256:96e342ff19a45c2e36371f93cf6264f3ef285bbde0fc363e56cb53bdef3df1ff"
-url = "https://github.com/helmfile/helmfile/releases/download/v1.5.2/helmfile_1.5.2_linux_amd64.tar.gz"
-
-[tools.helmfile."platforms.macos-arm64"]
-checksum = "sha256:55e22265177e3d21fcf5a5dfed51f7deaf9c4f6bd460f3961263ebefd428579f"
-url = "https://github.com/helmfile/helmfile/releases/download/v1.5.2/helmfile_1.5.2_darwin_arm64.tar.gz"
 
 [[tools.jq]]
 version = "1.8.1"
@@ -681,16 +655,8 @@ url = "https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-macos-arm64"
 provenance = "github-attestations"
 
 [[tools.k9s]]
-version = "0.50.18"
+version = "0.51.0"
 backend = "aqua:derailed/k9s"
-
-[tools.k9s."platforms.linux-x64"]
-checksum = "sha256:0b697ed4aa80997f7de4deeed6f1fba73df191b28bf691b1f28d2f45fa2a9e9b"
-url = "https://github.com/derailed/k9s/releases/download/v0.50.18/k9s_Linux_amd64.tar.gz"
-
-[tools.k9s."platforms.macos-arm64"]
-checksum = "sha256:68ff1541c60620466989019e86101805c1b6c70a746b1561261a403801f7fd48"
-url = "https://github.com/derailed/k9s/releases/download/v0.50.18/k9s_Darwin_arm64.tar.gz"
 
 [[tools.kind]]
 version = "0.32.0"
@@ -865,16 +831,16 @@ version = "1.38.0"
 backend = "pipx:yamllint"
 
 [[tools.yq]]
-version = "4.53.2"
+version = "4.53.3"
 backend = "aqua:mikefarah/yq"
 
 [tools.yq."platforms.linux-x64"]
-checksum = "sha256:d56bf5c6819e8e696340c312bd70f849dc1678a7cda9c2ad63eebd906371d56b"
-url = "https://github.com/mikefarah/yq/releases/download/v4.53.2/yq_linux_amd64"
+checksum = "sha256:fa52a4e758c63d38299163fbdd1edfb4c4963247918bf9c1c5d31d84789eded4"
+url = "https://github.com/mikefarah/yq/releases/download/v4.53.3/yq_linux_amd64"
 
 [tools.yq."platforms.macos-arm64"]
-checksum = "sha256:541ba2287560df70f561955e2d7f7e1cd00cf2a15a884f6b5c87a4bfa887bc07"
-url = "https://github.com/mikefarah/yq/releases/download/v4.53.2/yq_darwin_arm64"
+checksum = "sha256:877de31753a4dd2401aa048937aa9a7fc4d5f6ce858cf31508c5802954297213"
+url = "https://github.com/mikefarah/yq/releases/download/v4.53.3/yq_darwin_arm64"
 
 [[tools.zizmor]]
 version = "1.25.2"
