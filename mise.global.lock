@@ -637,16 +637,8 @@ checksum = "sha256:2d8399db5b33d240d5f8985241bcf5483563150b968e3229823822979f3e4
 url = "https://github.com/norwoodj/helm-docs/releases/download/v1.14.2/helm-docs_1.14.2_Darwin_arm64.tar.gz"
 
 [[tools.helmfile]]
-version = "1.5.2"
+version = "1.5.3"
 backend = "aqua:helmfile/helmfile"
-
-[tools.helmfile."platforms.linux-x64"]
-checksum = "sha256:96e342ff19a45c2e36371f93cf6264f3ef285bbde0fc363e56cb53bdef3df1ff"
-url = "https://github.com/helmfile/helmfile/releases/download/v1.5.2/helmfile_1.5.2_linux_amd64.tar.gz"
-
-[tools.helmfile."platforms.macos-arm64"]
-checksum = "sha256:55e22265177e3d21fcf5a5dfed51f7deaf9c4f6bd460f3961263ebefd428579f"
-url = "https://github.com/helmfile/helmfile/releases/download/v1.5.2/helmfile_1.5.2_darwin_arm64.tar.gz"
 
 [[tools.jq]]
 version = "1.8.1"
