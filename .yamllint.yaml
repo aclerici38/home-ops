@@ -8,6 +8,7 @@ ignore: |
   *.sops.yaml
   nix-config/
   .pytest_cache/
+  kubernetes/charts/*/templates/
 
 rules:
   line-length: disable
