@@ -13,6 +13,8 @@
 {{- $c := .Values.cnpg -}}
 affinity:
   podAntiAffinityType: required
+  nodeSelector:
+    storage.openebs.io/hostpath: "true"
 instances: 3
 primaryUpdateStrategy: unsupervised
 primaryUpdateMethod: switchover
