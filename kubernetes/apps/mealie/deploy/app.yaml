@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: mealie
+  namespace: flux-system
+spec:
+  targetNamespace: mealie
+  sourceRef:
+    kind: OCIRepository
+    name: mealie
+  path: ./app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: mealie

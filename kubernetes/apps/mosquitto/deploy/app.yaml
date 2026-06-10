@@ -5,22 +5,11 @@ metadata:
   name: mosquitto
   namespace: flux-system
 spec:
-  interval: 1h
   targetNamespace: mosquitto
   sourceRef:
     kind: OCIRepository
     name: mosquitto
   path: ./app
-  prune: true
-  wait: true
   commonMetadata:
     labels:
       app.kubernetes.io/name: mosquitto
-  postBuild:
-    substitute:
-      NS: mosquitto
-    substituteFrom:
-      - kind: ConfigMap
-        name: cluster-settings
-      - kind: Secret
-        name: cluster-secrets

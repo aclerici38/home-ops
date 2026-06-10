@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: airconnect
+  namespace: flux-system
+spec:
+  targetNamespace: airconnect
+  sourceRef:
+    kind: OCIRepository
+    name: airconnect
+  path: ./app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: airconnect

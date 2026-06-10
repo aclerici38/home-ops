@@ -1,0 +1,17 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: immich-kiosk
+  namespace: flux-system
+  labels:
+    app.kubernetes.io/name: immich-kiosk
+    oci.home/managed: "true"
+spec:
+  interval: 1h
+  url: oci://ghcr.io/aclerici38/home-ops/immich-kiosk
+  ref:
+    tag: main
+  layerSelector:
+    mediaType: application/vnd.cncf.flux.content.v1.tar+gzip
+    operation: extract

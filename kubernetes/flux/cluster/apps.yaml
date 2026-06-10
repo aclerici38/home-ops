@@ -9,6 +9,8 @@ spec:
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps
+  dependsOn:
+    - name: flux-meta
   prune: true
   wait: false
   sourceRef:

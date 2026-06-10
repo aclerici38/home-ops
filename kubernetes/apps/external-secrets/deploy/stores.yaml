@@ -5,7 +5,6 @@ metadata:
   name: external-secrets-stores
   namespace: flux-system
 spec:
-  interval: 1h
   targetNamespace: external-secrets
   dependsOn:
     - name: external-secrets
@@ -13,16 +12,6 @@ spec:
     kind: OCIRepository
     name: external-secrets
   path: ./stores
-  prune: true
-  wait: true
   commonMetadata:
     labels:
       app.kubernetes.io/name: external-secrets
-  postBuild:
-    substitute:
-      NS: external-secrets
-    substituteFrom:
-      - kind: ConfigMap
-        name: cluster-settings
-      - kind: Secret
-        name: cluster-secrets

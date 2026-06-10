@@ -13,6 +13,3 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: cert-manager
-  postBuild:
-    substitute:
-      NS: cert-manager

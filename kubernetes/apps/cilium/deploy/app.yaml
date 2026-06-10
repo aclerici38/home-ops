@@ -7,22 +7,11 @@ metadata:
   name: cilium
   namespace: flux-system
 spec:
-  interval: 1h
   targetNamespace: cilium
   sourceRef:
     kind: OCIRepository
     name: cilium
   path: ./app
-  prune: true
-  wait: true
   commonMetadata:
     labels:
       app.kubernetes.io/name: cilium
-  postBuild:
-    substitute:
-      NS: cilium
-    substituteFrom:
-      - kind: ConfigMap
-        name: cluster-settings
-      - kind: Secret
-        name: cluster-secrets

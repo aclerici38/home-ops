@@ -1,0 +1,17 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: wyoming-piper
+  namespace: flux-system
+  labels:
+    app.kubernetes.io/name: wyoming-piper
+    oci.home/managed: "true"
+spec:
+  interval: 1h
+  url: oci://ghcr.io/aclerici38/home-ops/wyoming-piper
+  ref:
+    tag: main
+  layerSelector:
+    mediaType: application/vnd.cncf.flux.content.v1.tar+gzip
+    operation: extract

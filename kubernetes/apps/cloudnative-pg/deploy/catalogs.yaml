@@ -5,7 +5,6 @@ metadata:
   name: cloudnative-pg-catalogs
   namespace: flux-system
 spec:
-  interval: 1h
   targetNamespace: cloudnative-pg
   dependsOn:
     - name: cloudnative-pg
@@ -13,16 +12,6 @@ spec:
     kind: OCIRepository
     name: cloudnative-pg
   path: ./catalogs
-  prune: true
-  wait: true
   commonMetadata:
     labels:
       app.kubernetes.io/name: cloudnative-pg
-  postBuild:
-    substitute:
-      NS: cloudnative-pg
-    substituteFrom:
-      - kind: ConfigMap
-        name: cluster-settings
-      - kind: Secret
-        name: cluster-secrets
