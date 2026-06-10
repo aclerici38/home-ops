@@ -5,11 +5,11 @@ metadata:
   name: plugin-barman-cloud
   namespace: flux-system
 spec:
-  targetNamespace: plugin-barman-cloud
+  targetNamespace: cloudnative-pg
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/plugin-barman-cloud/app
+  path: ./kubernetes/apps/cloudnative-pg/plugin-barman-cloud
   commonMetadata:
     labels:
-      app.kubernetes.io/name: plugin-barman-cloud
+      app.kubernetes.io/name: cloudnative-pg
