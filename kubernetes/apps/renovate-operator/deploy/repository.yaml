@@ -1,0 +1,17 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: renovate-operator
+  namespace: flux-system
+  labels:
+    app.kubernetes.io/name: renovate-operator
+    oci.home/managed: "true"
+spec:
+  interval: 1h
+  url: oci://ghcr.io/aclerici38/home-ops/renovate-operator
+  ref:
+    tag: main
+  layerSelector:
+    mediaType: application/vnd.cncf.flux.content.v1.tar+gzip
+    operation: extract

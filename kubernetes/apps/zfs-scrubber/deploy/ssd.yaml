@@ -1,0 +1,19 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: ssd-zfs-scrubber
+  namespace: flux-system
+spec:
+  targetNamespace: zfs-scrubber
+  sourceRef:
+    kind: OCIRepository
+    name: zfs-scrubber
+  path: ./app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: zfs-scrubber
+  postBuild:
+    substitute:
+      POOL: ssd
+      SCRUB_SCHEDULE: "0 0 1,15 * *"

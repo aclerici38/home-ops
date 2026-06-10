@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: filebrowser
+  namespace: flux-system
+spec:
+  targetNamespace: filebrowser
+  sourceRef:
+    kind: OCIRepository
+    name: filebrowser
+  path: ./app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: filebrowser

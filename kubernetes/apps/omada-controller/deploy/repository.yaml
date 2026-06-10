@@ -1,0 +1,17 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: omada-controller
+  namespace: flux-system
+  labels:
+    app.kubernetes.io/name: omada-controller
+    oci.home/managed: "true"
+spec:
+  interval: 1h
+  url: oci://ghcr.io/aclerici38/home-ops/omada-controller
+  ref:
+    tag: main
+  layerSelector:
+    mediaType: application/vnd.cncf.flux.content.v1.tar+gzip
+    operation: extract

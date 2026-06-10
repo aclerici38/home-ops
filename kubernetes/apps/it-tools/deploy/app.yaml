@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: it-tools
+  namespace: flux-system
+spec:
+  targetNamespace: it-tools
+  sourceRef:
+    kind: OCIRepository
+    name: it-tools
+  path: ./app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: it-tools

@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: rook-ceph-cluster
+  namespace: flux-system
+spec:
+  targetNamespace: rook-ceph
+  dependsOn:
+    - name: rook-ceph
+  sourceRef:
+    kind: OCIRepository
+    name: rook-ceph
+  path: ./cluster
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: rook-ceph-cluster
