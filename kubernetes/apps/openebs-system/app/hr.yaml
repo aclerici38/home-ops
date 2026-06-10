@@ -1,0 +1,82 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openebs
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: openebs
+  install:
+    disableHooks: true
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    disableHooks: true
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    loki:
+      enabled: false
+    alloy:
+      enabled: false
+    openebs-crds:
+      csi:
+        volumeSnapshots:
+          enabled: false # snapshot-controller manages those CRDs
+    sidecar:
+      image:
+        repository: ghcr.io/kiwigrid/k8s-sidecar
+    # https://github.com/openebs/dynamic-localpv-provisioner/blob/HEAD/deploy/helm/charts/values.yaml
+    localpv-provisioner:
+      enabled: true
+      global:
+        imageRegistry: ghcr.io
+      localpv:
+        basePath: &hostPath /var/mnt/local-path
+      hostpathClass:
+        enabled: true
+        name: openebs-hostpath
+        isDefaultClass: false
+        basePath: *hostPath
+        nodeAffinityLabels:
+          - "storage.openebs.io/hostpath"
+          - "kubernetes.io/hostname"
+    # https://github.com/openebs/zfs-localpv/blob/HEAD/deploy/helm/charts/values.yaml
+    zfs-localpv:
+      enabled: true
+      analytics:
+        enabled: false
+      zfs:
+        bin: /usr/local/sbin/zfs
+      zfsNode:
+        encrKeysDir: /var/openebs/keys
+        nodeSelector:
+          kubernetes.io/hostname: bonds
+      zfsPlugin:
+        image:
+          registry: ghcr.io/
+      crds:
+        csi:
+          volumeSnapshots:
+            enabled: false
+    # https://github.com/openebs/lvm-localpv/blob/HEAD/deploy/helm/charts/values.yaml
+    lvm-localpv:
+      enabled: false
+    # https://github.com/openebs/mayastor-extensions/blob/v2.7.0/chart/values.yaml
+    mayastor:
+      enabled: false
+    engines:
+      local:
+        lvm:
+          enabled: false
+        zfs:
+          enabled: true
+      replicated:
+        mayastor:
+          enabled: false

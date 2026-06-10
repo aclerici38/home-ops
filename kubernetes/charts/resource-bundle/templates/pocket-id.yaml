@@ -1,0 +1,34 @@
+{{- if hasKey .Values "pocketId" }}
+{{- $app := include "resources.app" . -}}
+{{- $p := .Values.pocketId -}}
+{{- $host := dig "url" (printf "%s.clerici.tech" $app) $p -}}
+{{/* callbackUrls = explicit literal entries + https://<host><path> for each callbackPaths entry */}}
+{{- $cbs := default (list) $p.callbackUrls -}}
+{{- range (default (list) $p.callbackPaths) }}{{ $cbs = append $cbs (printf "https://%s%s" $host .) }}{{- end -}}
+---
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: {{ $app }}
+spec:
+  logo:
+    nameOverride: {{ $app }}
+  clientID: {{ $app }}
+  launchUrl: https://{{ $host }}
+  pkceEnabled: {{ dig "pkce" true $p }}
+  {{- with $p.secret }}
+  secret: {{ toYaml . | nindent 4 }}
+  {{- end }}
+  clientSecretRotation:
+    enabled: {{ dig "secretRotation" true $p }}
+    interval: 6h
+    window:
+      opens: "0 0 * * *"
+      closesAfter: 4h
+  allowedUserGroups:
+    - name: {{ dig "group" "admin" $p }}
+      namespace: pocket-id-operator
+  {{- with $cbs }}
+  callbackUrls: {{ toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

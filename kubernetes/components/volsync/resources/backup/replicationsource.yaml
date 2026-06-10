@@ -19,7 +19,7 @@ spec:
       fsGroup: ${VOLSYNC_PGID:=1000}
       fsGroupChangePolicy: ${VOLSYNC_FSGROUPCHANGEPOLICY:=OnRootMismatch}
     parallelism: 2
-    repository: ${VOLSYNC_KOPIA_REPO:=volsync-kopia-versity}
+    repository: ${VOLSYNC_KOPIA_REPO:=volsync-kopia-backblaze}
     retain:
       hourly: 24
       daily: 7

@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: zfdash
+  namespace: flux-system
+spec:
+  targetNamespace: zfdash
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/zfdash/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: zfdash

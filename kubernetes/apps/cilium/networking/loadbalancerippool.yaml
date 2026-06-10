@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.19.4/ciliumloadbalancerippool_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: "lb-pool"
+spec:
+  allowFirstLastIPs: "Yes"
+  blocks:
+    - cidr: 10.38.55.0/24
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.19.4/ciliumloadbalancerippool_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: "lab-pool"
+spec:
+  allowFirstLastIPs: 'Yes'
+  blocks:
+    - start: 10.0.30.200
+      stop: ${CLUSTER_ENDPOINT_VIP}

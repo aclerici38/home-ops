@@ -1,0 +1,129 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.1-standalone-strict/persistentvolume-v1.json
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: "59992103190528"
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: immich
+    namespace: nfs-server
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: tank
+    volumeHandle: immich
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - bonds
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: zfs-tank
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: media-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: "59992103190528"
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: media
+    namespace: nfs-server
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: tank
+    volumeHandle: media
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - bonds
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: zfs-tank
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: tank-csi-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: "59992103190528"
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: tank-csi-pvc
+    namespace: nfs-server
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: tank
+    volumeHandle: tank-csi-pv
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - bonds
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: zfs-tank
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ssd-csi-pv
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: "59992103190528"
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: ssd-csi-pvc
+    namespace: nfs-server
+  csi:
+    driver: zfs.csi.openebs.io
+    fsType: zfs
+    volumeAttributes:
+      openebs.io/poolname: ssd
+    volumeHandle: ssd-csi-pv
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - bonds
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: zfs-ssd
+  volumeMode: Filesystem

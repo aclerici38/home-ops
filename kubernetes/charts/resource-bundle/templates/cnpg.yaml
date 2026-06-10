@@ -1,0 +1,181 @@
+{{- if hasKey .Values "cnpg" }}
+{{- $app := include "resources.app" . -}}
+{{- $ns := include "resources.ns" . -}}
+{{- $c := .Values.cnpg -}}
+{{- $backup := dig "backup" true $c -}}
+{{- $restore := eq (dig "mode" "init" $c) "restore" -}}
+{{- $host := printf "%s-pooler-rw.%s.svc.cluster.local" $app $ns -}}
+{{- $pw := "{{ .password }}" -}}
+{{- $spec := fromYaml (include "resources.cnpg.clusterSpec" .) -}}
+{{- $spec = mergeOverwrite $spec (deepCopy (dig "clusterSpec" dict $c)) -}}
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ $app }}-db
+  {{- if $restore }}
+  annotations:
+    cnpg.io/skipEmptyWalArchiveCheck: enabled
+  {{- end }}
+spec:
+  {{- toYaml $spec | nindent 2 }}
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: {{ $app }}-pooler-rw
+spec:
+  cluster:
+    name: {{ $app }}-db
+  instances: 1
+  type: rw
+  {{- with $c.poolerService }}
+  serviceTemplate: {{ toYaml . | nindent 4 }}
+  {{- end }}
+  pgbouncer:
+    poolMode: {{ dig "poolMode" "transaction" $c | quote }}
+    parameters:
+      default_pool_size: "30"
+      min_pool_size: "5"
+      reserve_pool_size: "10"
+      reserve_pool_timeout: "5"
+      max_client_conn: "500"
+      listen_backlog: "1024"
+      query_wait_timeout: "120"
+      idle_transaction_timeout: "60"
+      server_idle_timeout: "180"
+      max_prepared_statements: "200"
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: {{ $app }}
+spec:
+  name: app
+  owner: app
+  cluster:
+    name: {{ $app }}-db
+  {{- with $c.dbExtensions }}
+  extensions: {{ toYaml . | nindent 4 }}
+  {{- end }}
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: {{ $app }}-db-app
+  labels:
+    dormammu.internal/component: cnpg
+spec:
+  refreshPolicy: OnChange
+  target:
+    creationPolicy: Orphan
+    template:
+      engineVersion: v2
+      metadata:
+        labels:
+          cnpg.io/cluster: {{ $app }}-db
+          cnpg.io/userType: app
+          cnpg.io/reload: "true"
+      data:
+        user: app
+        username: app
+        dbname: app
+        host: {{ $host | quote }}
+        password: {{ $pw | quote }}
+        port: "5432"
+        pgpass: {{ printf "%s:5432:app:app:%s" $host $pw | quote }}
+        jdbc-uri: {{ printf "jdbc:postgresql://%s:5432/app?password=%s&user=app" $host $pw | quote }}
+        uri: {{ printf "postgresql://app:%s@%s:5432/app" $pw $host | quote }}
+  dataFrom:
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: ClusterGenerator
+          name: cnpg-pass-generator
+---
+# Superuser credentials + versity object-store keys, pulled per-namespace
+# (referenced by the Cluster's superuserSecret and the ObjectStore's s3Credentials).
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: cloudnative-pg
+  labels:
+    dormammu.internal/component: cnpg
+spec:
+  refreshInterval: "1m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  data:
+    - secretKey: versity-access-key-id
+      remoteRef:
+        key: versity
+        property: username
+    - secretKey: versity-secret-access-key
+      remoteRef:
+        key: versity
+        property: password
+  dataFrom:
+    - extract:
+        key: cloudnative-pg
+{{- if $backup }}
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: {{ $app }}
+spec:
+  retentionPolicy: 14d
+  configuration:
+    data: {compression: gzip, jobs: 8}
+    wal: {compression: zstd, maxParallel: 12}
+    destinationPath: s3://cnpg
+    endpointURL: http://versitygw.versity.svc.cluster.local:7070
+    historyTags: {keepHistory: "true"}
+    s3Credentials:
+      accessKeyId: {name: cloudnative-pg, key: versity-access-key-id}
+      secretAccessKey: {name: cloudnative-pg, key: versity-secret-access-key}
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: {{ $app }}
+spec:
+  schedule: "0 0 4 * * *"
+  immediate: true
+  backupOwnerReference: self
+  cluster:
+    name: {{ $app }}-db
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+{{- end }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ $app }}-db
+  labels:
+    cnpg.io/cluster: {{ $app }}-db
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/cluster: {{ $app }}-db
+      cnpg.io/podRole: instance
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ $app }}-pooler-rw
+  labels:
+    cnpg.io/poolerName: {{ $app }}-pooler-rw
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/podRole: pooler
+      cnpg.io/poolerName: {{ $app }}-pooler-rw
+{{- end }}

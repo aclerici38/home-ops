@@ -6,7 +6,7 @@ metadata:
   name: ${APP}-dst
   labels:
     kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
-    dormammu.io/component: volsync
+    dormammu.internal/component: volsync
 spec:
   trigger:
     manual: restore-once
@@ -31,4 +31,4 @@ spec:
     cleanupTempPVC: true
     sourceIdentity:
       sourceName: ${APP}
-      sourceNamespace: ${PREV_NS:=${NS}}
+      sourceNamespace: ${PREV_NS}

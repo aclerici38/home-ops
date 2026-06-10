@@ -1,0 +1,174 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json?values=crowdsec/0.24.0
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: crowdsec
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: crowdsec
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    container_runtime: containerd
+    image:
+      repository: ghcr.io/crowdsecurity/crowdsec
+      pullPolicy: IfNotPresent
+    config:
+      parsers: {}
+      scenarios: {}
+      console.yaml: |
+        share_manual_decisions: false
+        share_custom: true
+        share_tainted: true
+        share_context: true
+      postoverflows:
+        s01-whitelist:
+          01-whitelist-home.yaml: |-
+            name: crowdsec/whitelist-home
+            description: "Whitelist home IP ranges"
+            whitelist:
+              reason: "Home networks"
+              cidr:
+                - "10.0.0.0/16"
+                - "${CLUSTER_POD_CIDR}"
+      config.yaml.local: |-
+        api:
+          server:
+            trusted_ips:
+              - ${CLUSTER_POD_CIDR}
+            auto_registration:
+              enabled: true
+              token: "$${REGISTRATION_TOKEN}"
+              allowed_ranges:
+                - "${CLUSTER_POD_CIDR}"
+        db_config:
+          type: postgresql
+          host: $${DB_HOST}
+          port: $${DB_PORT}
+          user: $${DB_USER}
+          password: $${DB_PASSWORD}
+          db_name: $${DB_NAME}
+    lapi:
+      replicas: 2
+      strategy:
+        type: RollingUpdate
+      storeCAPICredentialsInSecret: true
+      storeLAPICscliCredentialsInSecret: true
+      env:
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-db-app
+              key: host
+        - name: DB_PORT
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-db-app
+              key: port
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-db-app
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-db-app
+              key: password
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-db-app
+              key: dbname
+      service:
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: ${CROWDSEC_LB_IP}
+      persistentVolume:
+        data:
+          enabled: false
+        config:
+          enabled: false
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          memory: 512Mi
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+    agent:
+      enabled: true
+      isDeployment: true
+      replicas: 2
+      strategy:
+        type: RollingUpdate
+      hostVarLog: false
+      env:
+        - name: COLLECTIONS
+          value: "crowdsecurity/opnsense firewallservices/pf"
+        - name: PARSERS
+          value: "crowdsecurity/syslog-logs firewallservices/pf-logs"
+      additionalAcquisition:
+        - source: syslog
+          listen_addr: "0.0.0.0"
+          listen_port: 514
+          labels:
+            type: syslog
+      service:
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: ${CROWDSEC_AGENT_LB_IP}
+        ports:
+          - name: syslog
+            port: 514
+            protocol: UDP
+            targetPort: 514
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          memory: 256Mi
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+      acquisition: []
+    appsec:
+      enabled: true
+      replicas: 2
+      strategy:
+        type: RollingUpdate
+      env:
+        - name: COLLECTIONS
+          value: "crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-crs crowdsecurity/appsec-generic-rules"
+      acquisitions:
+        - source: appsec
+          listen_addr: "0.0.0.0:7422"
+          path: /
+          appsec_config: crowdsecurity/appsec-default
+          labels:
+            type: appsec
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          memory: 256Mi
+      service:
+        type: ClusterIP
+  dependsOn:
+    - name: crowdsec-resources

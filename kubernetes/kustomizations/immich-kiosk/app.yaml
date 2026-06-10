@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: immich-kiosk
+  namespace: flux-system
+spec:
+  targetNamespace: immich-kiosk
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/immich-kiosk/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: immich-kiosk

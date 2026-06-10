@@ -1,0 +1,46 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mealie-resources
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: kubernetes/charts/resource-bundle
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+  upgrade:
+    timeout: 5m
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: cloudnative-pg
+    - name: external-secrets
+      namespace: external-secrets
+    - name: kube-prometheus-stack
+      namespace: kube-prometheus-stack
+    - name: plugin-barman-cloud
+      namespace: plugin-barman-cloud
+    - name: pocket-id-operator
+      namespace: pocket-id-operator
+    - name: volsync
+      namespace: volsync
+  values:
+    cnpg:
+      mode: restore
+      clusterSpec:
+        bootstrap:
+          recovery:
+            recoveryTarget:
+              targetTLI: "112"
+              targetLSN: "2/E8000130"
+    externalSecret: {}
+    pocketId:
+      group: all
+    volsync:
+      cephfs: true

@@ -44,11 +44,10 @@ jobs:
           MISE_NO_HOOKS: "1"
         with:
           experimental: true
-          install_args: "github:home-operations/flate"
+          install_args: github:home-operations/flate
 
-      - name: Run flate test all
-        run: |-
-          flate test all --skip-secrets=false --path .
+      - name: Run flate test
+        run: flate test all --path ./kubernetes/flux
 
   diff:
     if: ${{ github.event_name == 'pull_request' }}
@@ -63,17 +62,11 @@ jobs:
           - ks
       fail-fast: false
     steps:
-      - name: Checkout PR
+      - name: Checkout Pull Request Branch
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
-
-      - name: Checkout base
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
-        with:
-          ref: ${{ github.base_ref }}
-          path: base
-          persist-credentials: false
+          fetch-depth: 0
 
       - name: Setup tools
         uses: jdx/mise-action@dba19683ed58901619b14f395a24841710cb4925 # v4.1.0
@@ -81,22 +74,19 @@ jobs:
           MISE_NO_HOOKS: "1"
         with:
           experimental: true
-          install_args: "dyff github:home-operations/flate"
+          install_args: github:home-operations/flate
 
-      - name: Build both sides
+      # flate diffs the PR tree against the base checkout directly — no
+      # build-both-sides + dyff needed.
+      - name: Compute diff
+        id: diff
         env:
           FLATE_IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
           RESOURCE: ${{ matrix.resource }}
         run: |-
-          flate build "${RESOURCE}" --path ./base -o yaml 2>/dev/null > /tmp/base.yaml || true
-          flate build "${RESOURCE}" --path . -o yaml 2>/dev/null > /tmp/pull.yaml || true
-
-      - name: Compute diff
-        id: diff
-        run: |-
           {
             echo 'diff<<EOF'
-            dyff between --omit-header --exclude-regexp 'checksum/|caBundle$' /tmp/base.yaml /tmp/pull.yaml || true
+            flate diff "${RESOURCE}" --path ./kubernetes/flux
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
@@ -121,29 +111,16 @@ jobs:
             ```
 
       - if: ${{ matrix.resource == 'hr' }}
-        name: List changed images
-        id: images
-        run: |-
-          awk '$1 == "image:" {print $2}' /tmp/base.yaml | sort -u > /tmp/base.images
-          awk '$1 == "image:" {print $2}' /tmp/pull.yaml | sort -u > /tmp/pull.images
-          images=$(comm -13 /tmp/base.images /tmp/pull.images)
-          {
-            echo 'images<<EOF'
-            echo "${images}"
-            echo 'EOF'
-          } >> "$GITHUB_OUTPUT"
-
-      - if: ${{ matrix.resource == 'hr' && steps.images.outputs.images != '' }}
         name: Inspect changed images
         env:
-          IMAGES: ${{ steps.images.outputs.images }}
+          FLATE_IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
         run: |-
-          while IFS= read -r img; do
+          flate diff images ./kubernetes/flux 2>/dev/null | while IFS= read -r img; do
             [ -z "${img}" ] && continue
             echo "::group::${img}"
             docker buildx imagetools inspect "${img}" || true
             echo "::endgroup::"
-          done <<< "${IMAGES}"
+          done
 
   success:
     if: ${{ !cancelled() && github.event_name == 'pull_request' }}

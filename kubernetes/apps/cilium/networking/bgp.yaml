@@ -1,0 +1,45 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.19.4/ciliumbgpclusterconfig_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumBGPClusterConfig
+metadata:
+  name: cilium-bgp
+spec:
+  bgpInstances:
+    - name: "lab"
+      localASN: 64513
+      peers:
+        - name: "opnsense"
+          peerASN: 64523
+          peerAddress: ${NODE_GATEWAY}
+          peerConfigRef:
+            name: "cilium-peer"
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.19.4/ciliumbgpclusterconfig_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumBGPPeerConfig
+metadata:
+  name: cilium-peer
+spec:
+  families:
+    - afi: ipv4
+      safi: unicast
+      advertisements:
+        matchLabels:
+          advertise: "bgp"
+---
+apiVersion: cilium.io/v2
+kind: CiliumBGPAdvertisement
+metadata:
+  name: lb-advertisement
+  labels:
+    advertise: bgp
+spec:
+  advertisements:
+    - advertisementType: "Service"
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
+        matchExpressions:
+          - {key: somekey, operator: NotIn, values: ['never-used-value']}

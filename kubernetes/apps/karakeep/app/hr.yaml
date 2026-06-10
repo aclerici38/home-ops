@@ -1,0 +1,198 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json?values=app-template/5.0.1
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: karakeep
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      karakeep:
+        containers:
+          karakeep:
+            image:
+              repository: ghcr.io/karakeep-app/karakeep
+              tag: 0.32.0@sha256:64d6a9bbf2d37b5c808cf06b5d87f1f1c7846fdd3844724145a9741aeb06fd31
+            env:
+              BROWSER_WEB_URL: http://karakeep-chrome:9222
+              CRAWLER_DOWNLOAD_BANNER_IMAGE: true
+              CRAWLER_ENABLE_ADBLOCKER: true
+              CRAWLER_STORE_SCREENSHOT: true
+              DATA_DIR: /data
+              MEILI_ADDR: http://karakeep-meilisearch:7700
+              NEXTAUTH_URL: https://karakeep.clerici.tech
+              DISABLE_NEW_RELEASE_CHECK: true
+              COREPACK_INTEGRITY_KEYS: 0
+              NEXTAUTH_SECRET:
+                secretKeyRef:
+                  name: karakeep
+                  key: NEXTAUTH_SECRET
+              MEILI_MASTER_KEY:
+                secretKeyRef:
+                  name: karakeep
+                  key: MEILI_MASTER_KEY
+              DISABLE_PASSWORD_AUTH: true
+              DISABLE_SIGNUPS: false
+              OAUTH_AUTO_REDIRECT: true
+              OAUTH_PROVIDER_NAME: Pocket ID
+              OAUTH_WELLKNOWN_URL:
+                secretKeyRef:
+                  name: karakeep-oidc-credentials
+                  key: discovery_url
+              OAUTH_CLIENT_ID:
+                secretKeyRef:
+                  name: karakeep-oidc-credentials
+                  key: client_id
+              OAUTH_CLIENT_SECRET:
+                secretKeyRef:
+                  name: karakeep-oidc-credentials
+                  key: client_secret
+              S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
+              S6_READ_ONLY_ROOT: 1
+            securityContext: &sec
+              readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &port 3000
+                    path: /api/health
+              readiness: *probes
+            resources: &res
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
+      chrome:
+        containers:
+          chrome:
+            image:
+              repository: ghcr.io/zenika/alpine-chrome
+              tag: 124@sha256:1a0046448e0bb6c275c88f86e01faf0de62b02ec8572901256ada0a8c08be23f
+            command:
+              - chromium-browser
+            args:
+              - --headless
+              - --no-sandbox
+              - --disable-gpu
+              - --disable-dev-shm-usage
+              - --remote-debugging-address=0.0.0.0
+              - --remote-debugging-port=9222
+              - --hide-scrollbars
+            securityContext: *sec
+            resources: *res
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+              readiness:
+                enabled: true
+                type: HTTP
+      meilisearch:
+        containers:
+          meilisearch:
+            image:
+              repository: mirror.gcr.io/getmeili/meilisearch
+              tag: v1.46.1@sha256:cbe0e500a5fc04397dfe0245cf143fee40658b26470daaf549f0a6927c5c08dc
+            args:
+              - /bin/meilisearch
+              - --experimental-dumpless-upgrade
+            env:
+              MEILI_NO_ANALYTICS: true
+              MEILI_MASTER_KEY:
+                secretKeyRef:
+                  name: karakeep
+                  key: MEILI_MASTER_KEY
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 4Gi
+            securityContext: *sec
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: 7700
+                    path: /health
+              readiness: *probes
+    defaultPodOptions:
+      hostUsers: false
+      securityContext:
+        runAsGroup: 1000
+        runAsUser: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: {type: RuntimeDefault}
+    service:
+      karakeep:
+        controller: karakeep
+        ports:
+          http:
+            port: *port
+      chrome:
+        controller: chrome
+        ports:
+          http:
+            port: 9222
+      meilisearch:
+        controller: meilisearch
+        ports:
+          http:
+            port: 7700
+    route:
+      karakeep:
+        hostnames:
+          - karakeep.clerici.tech
+        parentRefs:
+          - name: external
+            namespace: kgateway
+        rules:
+          - backendRefs:
+              - identifier: karakeep
+                port: *port
+    persistence:
+      data:
+        existingClaim: karakeep
+        advancedMounts:
+          karakeep:
+            karakeep:
+              - path: /data
+                subPath: karakeep
+          meilisearch:
+            meilisearch:
+              - path: /meili_data
+                subPath: meilisearch
+      tmp:
+        type: emptyDir
+      run:
+        type: emptyDir
+        advancedMounts:
+          karakeep:
+            karakeep:
+              - path: /run
+  dependsOn:
+    - name: karakeep-resources

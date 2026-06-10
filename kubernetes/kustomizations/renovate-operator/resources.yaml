@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: renovate-operator-auth
+  namespace: flux-system
+spec:
+  targetNamespace: renovate-operator
+  dependsOn:
+    - name: renovate-operator
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/renovate-operator/resources
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: renovate-operator-auth

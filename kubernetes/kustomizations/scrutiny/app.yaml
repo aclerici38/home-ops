@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: scrutiny
+  namespace: flux-system
+spec:
+  targetNamespace: scrutiny
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/scrutiny/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: scrutiny
