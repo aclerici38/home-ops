@@ -30,4 +30,9 @@ spec:
     app: pocket-id
     cnpg:
       mode: restore
-    externalSecret: {}
+    externalSecret:
+      data:
+        - secretKey: EMAIL
+          remoteRef:
+            key: cluster-secrets
+            property: EMAIL

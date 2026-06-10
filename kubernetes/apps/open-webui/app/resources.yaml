@@ -35,7 +35,12 @@ spec:
       pgExtensions: [pgvector]
       dbExtensions:
         - {name: vector, ensure: present}
-    externalSecret: {}
+    externalSecret:
+      data:
+        - secretKey: EMAIL
+          remoteRef:
+            key: cluster-secrets
+            property: EMAIL
     pocketId:
       group: fam
     volsync:

@@ -4,7 +4,6 @@ apiVersion: cilium.io/v2
 kind: CiliumLoadBalancerIPPool
 metadata:
   name: "lb-pool"
-  namespace: ${NS}
 spec:
   allowFirstLastIPs: "Yes"
   blocks:
@@ -15,7 +14,6 @@ apiVersion: cilium.io/v2
 kind: CiliumLoadBalancerIPPool
 metadata:
   name: "lab-pool"
-  namespace: ${NS}
 spec:
   allowFirstLastIPs: 'Yes'
   blocks:

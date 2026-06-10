@@ -92,6 +92,32 @@ spec:
           apiVersion: generators.external-secrets.io/v1alpha1
           kind: ClusterGenerator
           name: cnpg-pass-generator
+---
+# Superuser credentials + versity object-store keys, pulled per-namespace
+# (referenced by the Cluster's superuserSecret and the ObjectStore's s3Credentials).
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: cloudnative-pg
+  labels:
+    dormammu.internal/component: cnpg
+spec:
+  refreshInterval: "1m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  data:
+    - secretKey: versity-access-key-id
+      remoteRef:
+        key: versity
+        property: username
+    - secretKey: versity-secret-access-key
+      remoteRef:
+        key: versity
+        property: password
+  dataFrom:
+    - extract:
+        key: cloudnative-pg
 {{- if $backup }}
 ---
 apiVersion: barmancloud.cnpg.io/v1

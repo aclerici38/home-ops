@@ -13,7 +13,7 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     name: immich
-    namespace: ${NS}
+    namespace: nfs-server
   csi:
     driver: zfs.csi.openebs.io
     fsType: zfs
@@ -45,7 +45,7 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     name: media
-    namespace: ${NS}
+    namespace: nfs-server
   csi:
     driver: zfs.csi.openebs.io
     fsType: zfs
@@ -77,7 +77,7 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     name: tank-csi-pvc
-    namespace: ${NS}
+    namespace: nfs-server
   csi:
     driver: zfs.csi.openebs.io
     fsType: zfs
@@ -109,7 +109,7 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     name: ssd-csi-pvc
-    namespace: ${NS}
+    namespace: nfs-server
   csi:
     driver: zfs.csi.openebs.io
     fsType: zfs

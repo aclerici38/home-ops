@@ -9,7 +9,5 @@ configMapGenerator:
   - name: cluster-settings
     envs:
       - ../../../../globals.env
-    literals:
-      - NS=flux-system
 generatorOptions:
   disableNameSuffixHash: true

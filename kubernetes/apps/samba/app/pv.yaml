@@ -13,7 +13,7 @@ spec:
     apiVersion: v1
     kind: PersistentVolumeClaim
     name: time-machine
-    namespace: ${NS}
+    namespace: samba
   csi:
     driver: zfs.csi.openebs.io
     fsType: zfs

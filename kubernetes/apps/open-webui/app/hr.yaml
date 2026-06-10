@@ -107,7 +107,7 @@ spec:
                   key: WEBUI_SECRET_KEY
               WEBUI_ADMIN_EMAIL:
                 secretKeyRef:
-                  name: cluster-secrets
+                  name: open-webui
                   key: EMAIL
               OAUTH_CLIENT_ID:
                 secretKeyRef:

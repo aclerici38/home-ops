@@ -4,7 +4,6 @@ apiVersion: cilium.io/v2
 kind: CiliumBGPClusterConfig
 metadata:
   name: cilium-bgp
-  namespace: ${NS}
 spec:
   bgpInstances:
     - name: "lab"
@@ -21,7 +20,6 @@ apiVersion: cilium.io/v2
 kind: CiliumBGPPeerConfig
 metadata:
   name: cilium-peer
-  namespace: ${NS}
 spec:
   families:
     - afi: ipv4
@@ -34,7 +32,6 @@ apiVersion: cilium.io/v2
 kind: CiliumBGPAdvertisement
 metadata:
   name: lb-advertisement
-  namespace: ${NS}
   labels:
     advertise: bgp
 spec:

@@ -31,4 +31,4 @@ spec:
     cleanupTempPVC: true
     sourceIdentity:
       sourceName: ${APP}
-      sourceNamespace: ${PREV_NS:=${NS}}
+      sourceNamespace: ${PREV_NS}
