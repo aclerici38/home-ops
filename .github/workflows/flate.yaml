@@ -46,9 +46,8 @@ jobs:
           experimental: true
           install_args: github:home-operations/flate
 
-      # Renders every Kustomization + HelmRelease offline and validates them.
       - name: Run flate test
-        run: flate test all
+        run: flate test all --path ./kubernetes/flux
 
   diff:
     if: ${{ github.event_name == 'pull_request' }}
@@ -63,17 +62,11 @@ jobs:
           - ks
       fail-fast: false
     steps:
-      - name: Checkout PR
+      - name: Checkout Pull Request Branch
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
-
-      - name: Checkout base
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
-        with:
-          ref: ${{ github.base_ref }}
-          path: base
-          persist-credentials: false
+          fetch-depth: 0
 
       - name: Setup tools
         uses: jdx/mise-action@dba19683ed58901619b14f395a24841710cb4925 # v4.1.0
@@ -93,7 +86,7 @@ jobs:
         run: |-
           {
             echo 'diff<<EOF'
-            flate diff "${RESOURCE}" --path . --path-orig ./base 2>/dev/null || true
+            flate diff "${RESOURCE}" --path ./kubernetes/flux
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
@@ -122,7 +115,7 @@ jobs:
         env:
           FLATE_IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
         run: |-
-          flate diff images --path . --path-orig ./base 2>/dev/null | while IFS= read -r img; do
+          flate diff images ./kubernetes/flux 2>/dev/null | while IFS= read -r img; do
             [ -z "${img}" ] && continue
             echo "::group::${img}"
             docker buildx imagetools inspect "${img}" || true

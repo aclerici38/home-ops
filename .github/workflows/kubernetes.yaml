@@ -56,8 +56,10 @@ jobs:
       # Separate render + validate so a flate render error and a kubeconform
       # schema failure are each visible on their own step (not hidden by a pipe).
       - name: Render manifests
+        env:
+          FLATE_IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
         run: |
-          flate build all --path . --allow-missing-secrets --log-level error -o yaml > /tmp/manifests.yaml
+          flate build all --path ./kubernetes/flux --allow-missing-secrets -o yaml > /tmp/manifests.yaml
           echo "Rendered $(grep -c '^kind:' /tmp/manifests.yaml) document(s)"
 
       - name: Validate with kubeconform
