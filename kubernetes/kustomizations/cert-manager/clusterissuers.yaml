@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cert-manager-clusterissuers
+  namespace: flux-system
+spec:
+  targetNamespace: cert-manager
+  dependsOn:
+    - name: cert-manager
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/cert-manager/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: cert-manager
