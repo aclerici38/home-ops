@@ -20,8 +20,6 @@ spec:
   dependsOn:
     - name: cloudnative-pg
       namespace: cloudnative-pg
-    - name: plugin-barman-cloud
-      namespace: plugin-barman-cloud
     - name: external-secrets
       namespace: external-secrets
     - name: dragonfly-operator
