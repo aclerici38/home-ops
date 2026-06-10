@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.28.3/database_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: omada-controller
+spec:
+  name: app
+  owner: app
+  cluster:
+    name: omada-controller-db
+  extensions:
+    - ensure: present
+      name: pg_cron
+    - ensure: present
+      name: tsm_system_rows
+    - ensure: present
+      name: vector
+    - ensure: present
+      name: postgis
+    - ensure: present
+      name: documentdb_core
+    - ensure: present
+      name: documentdb

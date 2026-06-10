@@ -61,7 +61,7 @@ spec:
                       name: RetryOnFailure
                   upgrade:
                     crds: CreateReplace
-                    serverSideApply: true
+                    serverSideApply: enabled
                     disableTakeOwnership: true
                     cleanupOnFail: true
                     strategy:
