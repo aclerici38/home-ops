@@ -25,6 +25,7 @@ spec:
     timezone: ${TZ}
     cronJobTimeZone: true
     webhook:
+      failurePolicy: Ignore
       ignoredNamespaces:
         - cilium
         - kube-system
