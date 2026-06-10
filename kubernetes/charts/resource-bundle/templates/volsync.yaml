@@ -41,8 +41,10 @@ spec:
   dataFrom:
     - extract:
         key: volsync-kopia-versity
-{{- if eq (dig "mode" "backup" $v) "restore" }}
 ---
+# ReplicationDestination seeds the PVC from the kopia repo on first creation
+# (restore-once). Once the PVC is bound it never restores again, so it is safe
+# to render unconditionally alongside the ReplicationSource.
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
 metadata:
@@ -90,7 +92,6 @@ spec:
     requests:
       storage: {{ $cap | quote }}
   storageClassName: {{ $sc }}
-{{- else }}
 ---
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
@@ -119,5 +120,4 @@ spec:
     cacheStorageClassName: ceph-filesystem
     cacheCapacity: 5Gi
     cacheAccessModes: ["ReadWriteOnce"]
-{{- end }}
 {{- end }}

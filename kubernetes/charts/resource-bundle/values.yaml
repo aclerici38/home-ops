@@ -27,9 +27,8 @@
 #   callbackUrls: []
 # externalSecret: {}      # 1Password app secret (key = app name)
 #   data: []              # extra per-key pulls (ExternalSecret spec.data entries)
-# volsync:
+# volsync:                # renders PVC + ReplicationDestination + ReplicationSource
 #   capacity: 5Gi
-#   mode: backup          # backup | restore
 #   cephfs: false         # true -> RWX on ceph-filesystem
 #
 # cnpg and volsync each also render the supporting credentials secret they
