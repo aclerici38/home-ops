@@ -1,0 +1,18 @@
+---
+# Deploys the ../networking payload after the cilium install is ready.
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cilium-networking
+  namespace: flux-system
+spec:
+  targetNamespace: cilium
+  dependsOn:
+    - name: cilium
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/cilium/networking
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: cilium

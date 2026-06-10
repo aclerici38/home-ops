@@ -1,5 +1,0 @@
-# Keep each namespace's deploy/ (the git-reconciled control plane) and namespace.yaml in the
-# Flux artifact. Everything else under a namespace is OCI-delivered payload, pulled via OCIRepository.
-kubernetes/apps/*/*
-!kubernetes/apps/*/deploy
-!kubernetes/apps/*/namespace.yaml

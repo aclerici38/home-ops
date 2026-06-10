@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: browserless
+  namespace: flux-system
+spec:
+  targetNamespace: browserless
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/browserless/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: browserless

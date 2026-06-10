@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: generic-device-plugin
+  namespace: flux-system
+spec:
+  targetNamespace: kube-system
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/kube-system/generic-device-plugin
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: generic-device-plugin

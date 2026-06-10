@@ -4,7 +4,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: smartctl-exporter
-  namespace: smartctl-exporter
 spec:
   interval: 1h
   chartRef:

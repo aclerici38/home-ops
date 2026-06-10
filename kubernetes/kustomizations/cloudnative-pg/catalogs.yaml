@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cloudnative-pg-catalogs
+  namespace: flux-system
+spec:
+  targetNamespace: cloudnative-pg
+  dependsOn:
+    - name: cloudnative-pg
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/cloudnative-pg/catalogs
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: cloudnative-pg

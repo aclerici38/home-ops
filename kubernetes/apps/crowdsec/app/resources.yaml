@@ -4,7 +4,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: crowdsec-resources
-  namespace: crowdsec
 spec:
   interval: 1h
   chart:

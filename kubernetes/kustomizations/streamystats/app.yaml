@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: streamystats
+  namespace: flux-system
+spec:
+  targetNamespace: streamystats
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/streamystats/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: streamystats

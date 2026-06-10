@@ -10,7 +10,6 @@ on:
       - kubernetes/**
       - globals.env
       - .mise.toml
-      - scripts/flate-normalize.sh
       - .github/workflows/flate.yaml
   push:
     branches:
@@ -19,7 +18,6 @@ on:
       - kubernetes/**
       - globals.env
       - .mise.toml
-      - scripts/flate-normalize.sh
       - .github/workflows/flate.yaml
 
 permissions: {}
@@ -46,12 +44,11 @@ jobs:
           MISE_NO_HOOKS: "1"
         with:
           experimental: true
-          install_args: yq github:home-operations/flate
+          install_args: github:home-operations/flate
 
-      # Same task you run locally: copies the tree, normalizes the per-namespace
-      # OCI artifacts for offline render, and validates every KS + HR.
+      # Renders every Kustomization + HelmRelease offline and validates them.
       - name: Run flate test
-        run: mise run flate-test
+        run: flate test all
 
   diff:
     if: ${{ github.event_name == 'pull_request' }}
@@ -84,15 +81,10 @@ jobs:
           MISE_NO_HOOKS: "1"
         with:
           experimental: true
-          install_args: yq github:home-operations/flate
+          install_args: github:home-operations/flate
 
-      # Normalize both checkouts in place (ephemeral CI runner), then let flate
-      # diff them directly — no build-both-sides + dyff needed.
-      - name: Normalize both trees
-        run: |-
-          ./scripts/flate-normalize.sh .
-          ./scripts/flate-normalize.sh base
-
+      # flate diffs the PR tree against the base checkout directly — no
+      # build-both-sides + dyff needed.
       - name: Compute diff
         id: diff
         env:

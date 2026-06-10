@@ -1,40 +1,30 @@
 # apps/
 
-**Folder == namespace.** Each `apps/<namespace>/` holds one namespace, delivered as a single
-OCI artifact. Manifests are packaged to OCI by CI; Flux pulls them — it does not read them from
-git. Only `deploy/` is reconciled from git.
+**Payload only.** Each `apps/<namespace>/<component>/` holds the manifests for one component
+(HelmRelease, ConfigMaps, the chart's source `repo.yaml`, etc.). These dirs are *not* reconciled
+directly — a Flux `Kustomization` in [`../kustomizations/`](../kustomizations) points its `path` at
+each one and builds it into the cluster from the `flux-system` GitRepository.
 
 ```
 apps/<namespace>/
-  deploy/                 # git-reconciled control plane (one resource per file)
-    repository.yaml       #   OCIRepository — the namespace's manifest artifact (oci://…/<namespace>)
-    <component>.yaml      #   a Kustomization per component, sourcing that OCIRepository
-  <component>/            # OCI payload — NO kustomization.yaml (kustomize-controller auto-generates)
+  <component>/            # payload — NO kustomization.yaml (kustomize-controller auto-generates one)
     …manifests
 ```
 
-Example — `cilium/` has two components off one artifact: `deploy/app.yaml` (`path ./app`) and
-`deploy/networking.yaml` (`path ./networking`, `dependsOn` the first).
-
-## Rules
-
-- **`deploy/` = control plane, the rest = payload.** Everything outside `deploy/` is OCI-delivered.
 - **No `kustomization.yaml` in payload dirs** — Flux auto-generates one over the `path`.
-- **`path:` is artifact-relative** (`./app`), not git-relative.
-- **One OCIRepository per namespace**, shared by all that namespace's Kustomizations.
-- The repo-root **`.sourceignore`** keeps payload dirs out of the Flux git artifact, so the `apps`
-  Kustomization only ever applies `deploy/` CRs (never double-applying manifests from git).
+- **The control plane lives in [`../kustomizations/`](../kustomizations)** (one folder per namespace,
+  mirroring this tree): the namespace's `namespace.yaml` plus a `Kustomization` per component.
 
 ## Reconcile path
 
 ```
-GitRepository ─▶ Kustomization "apps" (flux/cluster/apps.yaml, path ./kubernetes/apps)
-             ─▶ applies <namespace>/deploy/*.yaml
-                  ├─ OCIRepository  ──pulls──▶ oci://…/<namespace>:main
-                  └─ Kustomization(s) ─builds path─▶ payload into the namespace
+GitRepository flux-system
+  └─▶ Kustomization "apps" (flux/cluster/apps.yaml, path ./kubernetes/kustomizations)
+        └─▶ applies kustomizations/<namespace>/{namespace.yaml, <component>.yaml…}
+              └─▶ each Kustomization builds path ./kubernetes/apps/<namespace>/<component>
+                    └─▶ into targetNamespace: <namespace>
 ```
 
-## CI
-
-On a change under `apps/<namespace>/`, CI packages that folder, moves the mutable `main` tag, and
-pokes a `generic-hmac` Receiver to reconcile now.
+Everything is delivered from the single `flux-system` GitRepository — no per-namespace OCI artifacts.
+Because the `apps` Kustomization only ever scans `kubernetes/kustomizations` (control-plane CRs), it
+never double-applies the payload, and the whole tree renders offline with `mise run flate-test`.
