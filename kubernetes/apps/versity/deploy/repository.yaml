@@ -6,7 +6,6 @@ metadata:
   namespace: flux-system
   labels:
     app.kubernetes.io/name: versity
-    dormammu.internal/managed: "true"
 spec:
   interval: 1h
   url: oci://ghcr.io/aclerici38/home-ops/versity
