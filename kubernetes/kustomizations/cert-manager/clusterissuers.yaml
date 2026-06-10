@@ -11,7 +11,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/cert-manager/app
+  path: ./kubernetes/apps/cert-manager/clusterissuers
   commonMetadata:
     labels:
       app.kubernetes.io/name: cert-manager
