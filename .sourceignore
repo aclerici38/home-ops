@@ -1,0 +1,4 @@
+# Keep ONLY each namespace's deploy/ (the git-reconciled control plane) in the Flux artifact.
+# Everything else under a namespace is OCI-delivered payload, pulled via OCIRepository.
+kubernetes/apps/*/*
+!kubernetes/apps/*/deploy

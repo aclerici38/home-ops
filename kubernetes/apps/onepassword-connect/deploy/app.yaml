@@ -1,0 +1,26 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: onepassword-connect
+  namespace: flux-system
+spec:
+  interval: 1h
+  targetNamespace: onepassword-connect
+  sourceRef:
+    kind: OCIRepository
+    name: onepassword-connect
+  path: ./app
+  prune: true
+  wait: true
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: onepassword-connect
+  postBuild:
+    substitute:
+      NS: onepassword-connect
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings
+      - kind: Secret
+        name: cluster-secrets

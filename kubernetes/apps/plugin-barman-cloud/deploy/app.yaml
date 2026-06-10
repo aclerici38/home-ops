@@ -1,0 +1,26 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: plugin-barman-cloud
+  namespace: flux-system
+spec:
+  interval: 1h
+  targetNamespace: plugin-barman-cloud
+  sourceRef:
+    kind: OCIRepository
+    name: plugin-barman-cloud
+  path: ./app
+  prune: true
+  wait: true
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: plugin-barman-cloud
+  postBuild:
+    substitute:
+      NS: plugin-barman-cloud
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings
+      - kind: Secret
+        name: cluster-secrets
