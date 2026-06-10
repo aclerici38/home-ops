@@ -64,7 +64,7 @@ kind: ExternalSecret
 metadata:
   name: {{ $app }}-db-app
   labels:
-    dormammu.io/component: cnpg
+    dormammu.internal/component: cnpg
 spec:
   refreshPolicy: OnChange
   target:

@@ -5,7 +5,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: ${APP}
   labels:
-    dormammu.io/component: volsync
+    dormammu.internal/component: volsync
 spec:
   accessModes:
     - "${VOLSYNC_ACCESSMODES:=ReadWriteOnce}"

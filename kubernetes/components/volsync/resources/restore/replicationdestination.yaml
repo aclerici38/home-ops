@@ -6,7 +6,7 @@ metadata:
   name: ${APP}-dst
   labels:
     kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
-    dormammu.io/component: volsync
+    dormammu.internal/component: volsync
 spec:
   trigger:
     manual: restore-once

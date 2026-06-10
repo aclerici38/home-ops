@@ -14,7 +14,7 @@ metadata:
   name: {{ $app }}-dst
   labels:
     kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
-    dormammu.io/component: volsync
+    dormammu.internal/component: volsync
 spec:
   trigger:
     manual: restore-once
@@ -44,7 +44,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ $app }}
   labels:
-    dormammu.io/component: volsync
+    dormammu.internal/component: volsync
 spec:
   accessModes: [{{ $access | quote }}]
   dataSourceRef:

@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
   labels:
     app.kubernetes.io/name: crowdsec
-    oci.home/managed: "true"
+    dormammu.internal/managed: "true"
 spec:
   interval: 1h
   url: oci://ghcr.io/aclerici38/home-ops/crowdsec
