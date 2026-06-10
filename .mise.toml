@@ -17,4 +17,22 @@ dyff = "1.12.0"
 kubeconform = "0.8.0"
 lefthook = "2.1.9"
 yamllint = "1.38.0"
+yq = "4.53.3"
 "github:home-operations/flate" = "v0.3.3"
+
+[tasks.flate-test]
+description = "Render & validate all Flux manifests offline (per-namespace OCI artifacts)"
+dir = "{{ config_root }}"
+shell = "bash -c"
+# Work on a throwaway copy so the normalize never mutates the working tree.
+# `flate test all` renders the whole cluster from the entrypoint and validates
+# every Kustomization + HelmRelease; cross-resource deps resolve because the
+# whole repo is present. Referenced verbatim by the CI test job.
+run = '''
+set -euo pipefail
+tmp="$(mktemp -d)"
+trap 'rm -rf "$tmp"' EXIT
+rsync -a --exclude=.git ./ "$tmp/"
+"$tmp/scripts/flate-normalize.sh" "$tmp"
+flate test all --skip-secrets=false --path "$tmp"
+'''

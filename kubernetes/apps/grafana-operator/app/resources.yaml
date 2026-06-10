@@ -4,6 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: grafana-operator-resources
+  namespace: grafana-operator
 spec:
   interval: 1h
   chart:

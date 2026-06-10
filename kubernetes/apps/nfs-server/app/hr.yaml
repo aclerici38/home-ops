@@ -4,6 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: nfs-server
+  namespace: nfs-server
 spec:
   interval: 1h
   maxHistory: 1

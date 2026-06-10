@@ -4,6 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: airconnect
+  namespace: airconnect
 spec:
   interval: 1h
   maxHistory: 1
@@ -52,7 +53,6 @@ spec:
               # (allegedly)
               AIRCAST_VAR: kill
               AIRUPNP_VAR: -l 200:400 -o S15
-
               S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
               S6_READ_ONLY_ROOT: 1
             resources:

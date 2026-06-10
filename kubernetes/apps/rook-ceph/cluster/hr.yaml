@@ -4,6 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: rook-ceph-cluster
+  namespace: rook-ceph
 spec:
   interval: 1h
   maxHistory: 1
@@ -110,7 +111,6 @@ spec:
                 memory: 1Gi
               limits:
                 memory: 4Gi
-
         storageClass:
           enabled: true
           isDefault: false

@@ -4,6 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: nats-opencloud
+  namespace: nats-opencloud
 spec:
   interval: 1h
   maxHistory: 1

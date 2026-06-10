@@ -4,6 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: wyoming-whisper
+  namespace: wyoming-whisper
 spec:
   interval: 1h
   maxHistory: 1

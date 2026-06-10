@@ -4,6 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: plugin-barman-cloud
+  namespace: plugin-barman-cloud
 spec:
   interval: 1h
   maxHistory: 1

@@ -4,6 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: kopia
+  namespace: volsync
 spec:
   interval: 1h
   maxHistory: 1
@@ -59,9 +60,9 @@ spec:
       backblaze:
         containers:
           kopia-backblaze:
-            <<: *container
+            !!merge <<: *container
             env:
-              <<: *env
+              !!merge <<: *env
               KOPIA_SERVER_PASSWORD:
                 secretKeyRef:
                   name: volsync-kopia-backblaze
@@ -93,7 +94,7 @@ spec:
           http:
             port: *port
       backblaze:
-        <<: *svc
+        !!merge <<: *svc
         controller: backblaze
     route:
       versity: &route
@@ -107,7 +108,7 @@ spec:
               - identifier: versity
                 port: *port
       backblaze:
-        <<: *route
+        !!merge <<: *route
         hostnames:
           - kopia-backblaze.clerici.tech
         rules:

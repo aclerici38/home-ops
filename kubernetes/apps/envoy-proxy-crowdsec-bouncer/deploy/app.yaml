@@ -8,7 +8,6 @@ spec:
   targetNamespace: envoy-proxy-crowdsec-bouncer
   dependsOn:
     - name: kgateway
-      namespace: kgateway
   sourceRef:
     kind: OCIRepository
     name: envoy-proxy-crowdsec-bouncer

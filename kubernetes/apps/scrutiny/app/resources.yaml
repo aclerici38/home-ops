@@ -4,6 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: scrutiny-resources
+  namespace: scrutiny
 spec:
   interval: 1h
   chart:

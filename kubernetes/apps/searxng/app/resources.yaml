@@ -4,6 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: searxng-resources
+  namespace: searxng
 spec:
   interval: 1h
   chart:

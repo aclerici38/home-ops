@@ -4,6 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: omada-exporter
+  namespace: omada-controller
 spec:
   interval: 1h
   chartRef:
