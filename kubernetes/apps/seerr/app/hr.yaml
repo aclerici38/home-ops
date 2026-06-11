@@ -41,22 +41,22 @@ spec:
               DB_HOST:
                 valueFrom:
                   secretKeyRef:
-                    name: seer-db-app
+                    name: seerr-db-app
                     key: host
               DB_USER:
                 valueFrom:
                   secretKeyRef:
-                    name: seer-db-app
+                    name: seerr-db-app
                     key: username
               DB_PASS:
                 valueFrom:
                   secretKeyRef:
-                    name: seer-db-app
+                    name: seerr-db-app
                     key: password
               DB_NAME:
                 valueFrom:
                   secretKeyRef:
-                    name: seer-db-app
+                    name: seerr-db-app
                     key: dbname
             resources:
               requests:
@@ -95,7 +95,7 @@ spec:
             namespace: kgateway
     persistence:
       config:
-        existingClaim: seer
+        existingClaim: seerr
         globalMounts:
           - path: /app/config
       cache:
