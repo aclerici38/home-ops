@@ -8,6 +8,7 @@
 {{- $cacheCap := dig "cacheCapacity" $cap $v -}}
 {{- $cephfs := dig "cephfs" false $v -}}
 {{- $sc := ternary "ceph-filesystem" "ceph-block" $cephfs -}}
+{{- $snapClass := ternary "csi-ceph-filesystem" "csi-ceph-blockpool" $cephfs -}}
 {{- $access := ternary "ReadWriteMany" "ReadWriteOnce" $cephfs -}}
 {{- /* Restore identity. Defaults to this app's own name@namespace. Override
        restoreFrom (and optionally restoreName) for a one-time cross-namespace
@@ -66,7 +67,7 @@ spec:
   kopia:
     repository: volsync-kopia-versity
     copyMethod: Snapshot
-    volumeSnapshotClassName: csi-ceph-blockpool
+    volumeSnapshotClassName: {{ $snapClass }}
     cacheStorageClassName: ceph-block
     cacheCapacity: {{ $cacheCap | quote }}
     cacheAccessModes: ["ReadWriteOnce"]
@@ -131,7 +132,7 @@ spec:
       hourly: 24
       daily: 7
     storageClassName: {{ $sc }}
-    volumeSnapshotClassName: csi-ceph-blockpool
+    volumeSnapshotClassName: {{ $snapClass }}
     cacheStorageClassName: ceph-filesystem
     cacheCapacity: {{ $cacheCap | quote }}
     cacheAccessModes: ["ReadWriteOnce"]
