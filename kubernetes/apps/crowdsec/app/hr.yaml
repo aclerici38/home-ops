@@ -64,6 +64,15 @@ spec:
         type: RollingUpdate
       storeCAPICredentialsInSecret: true
       storeLAPICscliCredentialsInSecret: true
+      podSecurityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      securityContext:
+        allowPrivilegeEscalation: false
+        privileged: false
+        capabilities:
+          drop:
+            - ALL
       env:
         - name: DB_HOST
           valueFrom:
@@ -116,6 +125,22 @@ spec:
       strategy:
         type: RollingUpdate
       hostVarLog: false
+      podSecurityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      securityContext:
+        allowPrivilegeEscalation: false
+        privileged: false
+        capabilities:
+          drop:
+            - ALL
+      wait_for_lapi:
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          capabilities:
+            drop:
+              - ALL
       env:
         - name: COLLECTIONS
           value: "crowdsecurity/opnsense firewallservices/pf"
@@ -152,6 +177,22 @@ spec:
       replicas: 2
       strategy:
         type: RollingUpdate
+      podSecurityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      securityContext:
+        allowPrivilegeEscalation: false
+        privileged: false
+        capabilities:
+          drop:
+            - ALL
+      wait_for_lapi:
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          capabilities:
+            drop:
+              - ALL
       env:
         - name: COLLECTIONS
           value: "crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-crs crowdsecurity/appsec-generic-rules"
