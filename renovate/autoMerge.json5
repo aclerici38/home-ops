@@ -3,19 +3,18 @@
   platformAutomerge: false,
   // Override the preset bundle's :automergeBranch back to PR-style automerge.
   automergeType: "pr",
+  assignAutomerge: false,
   packageRules: [
     {
       description: ["Auto-merge GitHub Actions for minor and patch"],
       matchManagers: ["github-actions"],
       matchDatasources: ["github-tags"],
       automerge: true,
-      assignees: [],
       matchUpdateTypes: ["minor", "patch"],
     },
     {
       description: ["Auto-merge specific apps' minor versions"],
       automerge: true,
-      assignees: [],
       matchDatasources: ["docker", "helm", "github-tags", "github-releases"],
       matchPackageNames: [
         "**/airconnect",
@@ -50,7 +49,6 @@
     {
       description: ["Auto-merge specific apps' major versions"],
       automerge: true,
-      assignees: [],
       matchDatasources: ["docker", "helm"],
       matchPackageNames: ["**/firefox", "**/http-https-echo"],
       matchUpdateTypes: ["major", "minor", "patch", "digest"],
@@ -58,7 +56,6 @@
     {
       description: ["Auto-merge k8s-versioned-schemas"],
       automerge: true,
-      assignees: [],
       matchDatasources: ["github-tags"],
       matchPackageNames: ["aclerici38/k8s-versioned-schemas"],
       matchUpdateTypes: ["major", "minor", "patch"],
@@ -67,7 +64,6 @@
       description: ["Auto-merge mise updates by default"],
       matchManagers: ["mise"],
       automerge: true,
-      assignees: [],
       matchUpdateTypes: ["major", "minor", "patch", "digest"],
     },
     {
