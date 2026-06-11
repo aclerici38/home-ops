@@ -58,7 +58,7 @@ spec:
           streamystats:
             image:
               repository: ghcr.io/fredrikburmester/streamystats-job-server
-              tag: v2.18.0@sha256:def1912f321ed4414635894786fea192f423006d04116287f3cfc5949116823d
+              tag: v2.18.1@sha256:fba43363b72e1418418e881aca05a8f85652fde5461ff7d71cda209f5d50ab4a
             env:
               !!merge <<: *env
               HOST: 0.0.0.0
