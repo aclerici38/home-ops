@@ -20,6 +20,9 @@ jobs:
       github.event.pull_request.draft == false &&
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: home-ops-runners
+    # Loop mode does up to 3 planning calls + the review on the local model;
+    # cap the job so a hung call can't hold the runner forever.
+    timeout-minutes: 22
     permissions:
       contents: read
       pull-requests: write
@@ -51,9 +54,13 @@ jobs:
           # local model
           context_limit_mode: minimal
           review_scope: auto
-          tool_mode: plan_execute_once
-          tool_max_requests: "4"
-          tool_planning_max_tokens: "4096"
+          tool_mode: plan_execute_loop
+          # Re-plan after each round so the model can chase a lead
+          tool_max_rounds: "3"
+          tool_max_requests: "6"
+          tool_planning_max_tokens: "6144"
+          # Let later rounds' planning see more of the accumulated evidence
+          tool_planning_max_context_bytes: "80000"
           tool_planning_timeout_sec: "180"
           tool_request_timeout_sec: "30"
           # Allow reading any upstream repo's releases
