@@ -68,6 +68,9 @@ spec:
         mgr:
           limits:
             memory: 4Gi
+        osd:
+          limits:
+            memory: 8Gi
       network:
         provider: host
         connections:
@@ -110,9 +113,6 @@ spec:
                 memory: 1Gi
               limits:
                 memory: 4Gi
-          osd:
-            limits:
-              memory: "8Gi"
         storageClass:
           enabled: true
           isDefault: false
