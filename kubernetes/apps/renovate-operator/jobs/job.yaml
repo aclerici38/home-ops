@@ -61,7 +61,7 @@ spec:
       memory: 128Mi
   schedule: "${SCHEDULE}"
   githubAppReference:
-    secretName: github-app-credentials
+    secretName: renovate-operator
     appIdSecretKey: APP_ID
     installationIdSecretKey: INSTALL_ID
     pemSecretKey: PEM

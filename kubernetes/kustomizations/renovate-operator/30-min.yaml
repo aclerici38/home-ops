@@ -7,7 +7,7 @@ metadata:
 spec:
   targetNamespace: renovate-operator
   dependsOn:
-    - name: renovate-operator-auth
+    - name: renovate-operator
   sourceRef:
     kind: GitRepository
     name: flux-system
