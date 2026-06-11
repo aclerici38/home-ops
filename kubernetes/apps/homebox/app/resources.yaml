@@ -26,7 +26,13 @@ spec:
       namespace: volsync
   values:
     cnpg:
+      mode: restore
       poolMode: session
+      clusterSpec:
+        bootstrap:
+          recovery:
+            recoveryTarget:
+              backupID: 20260526T110001
     pocketId:
       group: fam
     volsync:

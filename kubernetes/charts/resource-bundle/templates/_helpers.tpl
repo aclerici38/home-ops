@@ -68,7 +68,7 @@ postgresql:
     autovacuum_vacuum_cost_limit: "2000"
     autovacuum_max_workers: "3"
     autovacuum_naptime: 20s
-{{- if dig "backup" true $c }}
+{{- if ne $c.mode "no-backup" }}
 plugins:
   - name: barman-cloud.cloudnative-pg.io
     enabled: true
@@ -77,7 +77,7 @@ plugins:
       barmanObjectName: {{ $app }}
       serverName: {{ $app }}-db
 {{- end }}
-{{- if eq (dig "mode" "init" $c) "restore" }}
+{{- if eq $c.mode "restore" }}
 bootstrap:
   recovery:
     source: {{ $app }}-db

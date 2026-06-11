@@ -10,7 +10,7 @@
 #
 # --- Reference of every knob (all optional) -------------------------------
 # cnpg:
-#   mode: init            # init | restore
+#   mode: init            # REQUIRED: init (backup, no restore) | restore (backup + restore) | no-backup
 #   capacity: 2Gi
 #   poolMode: transaction # transaction | session
 #   backup: true          # false drops object-store backups (old "no-backup")

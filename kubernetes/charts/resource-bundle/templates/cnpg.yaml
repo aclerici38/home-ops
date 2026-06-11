@@ -2,8 +2,9 @@
 {{- $app := include "resources.app" . -}}
 {{- $ns := include "resources.ns" . -}}
 {{- $c := .Values.cnpg -}}
-{{- $backup := dig "backup" true $c -}}
-{{- $restore := eq (dig "mode" "init" $c) "restore" -}}
+{{- if not (hasKey $c "mode") }}{{ fail "cnpg.mode is required (init | restore | no-backup)" }}{{- end -}}
+{{- $backup := ne $c.mode "no-backup" -}}
+{{- $restore := eq $c.mode "restore" -}}
 {{- $host := printf "%s-pooler-rw.%s.svc.cluster.local" $app $ns -}}
 {{- $pw := "{{ .password }}" -}}
 {{- $spec := fromYaml (include "resources.cnpg.clusterSpec" .) -}}

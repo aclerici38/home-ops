@@ -28,7 +28,13 @@ spec:
       namespace: volsync
   values:
     cnpg:
+      mode: restore
       pgExtensions: [pgvector]
+      clusterSpec:
+        bootstrap:
+          recovery:
+            recoveryTarget:
+              backupID: 20260603T110001
       dbExtensions:
         - {name: vector, ensure: present}
     externalSecret:
