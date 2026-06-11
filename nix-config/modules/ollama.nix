@@ -29,7 +29,7 @@
         OLLAMA_FLASH_ATTENTION = "1";
         OLLAMA_KV_CACHE_TYPE = "q8_0";
         OLLAMA_KEEP_ALIVE = "24h";
-        OLLAMA_CONTEXT_LENGTH = "12288";
+        OLLAMA_CONTEXT_LENGTH = "32768";
       };
       StandardOutPath = "/var/log/ollama.log";
       StandardErrorPath = "/var/log/ollama.err";

@@ -39,6 +39,7 @@ jobs:
           ai_base_url: http://mac-mini.cottage.internal:11434/v1
           ai_api_format: openai
           ai_model: gpt-oss:20b
+          ai_max_tokens: "8192"
           ai_request_timeout_sec: "600"
           # Post a native review and let the model approve / request changes.
           publish_mode: review_verdict
