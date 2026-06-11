@@ -35,13 +35,6 @@ spec:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
       capabilities: {drop: [ALL]}
-    # readOnlyRootFilesystem needs a writable scratch dir for controller-runtime.
-    volumes:
-      - name: tmp
-        emptyDir: {}
-    volumeMounts:
-      - name: tmp
-        mountPath: /tmp
     resources:
       requests:
         cpu: 25m

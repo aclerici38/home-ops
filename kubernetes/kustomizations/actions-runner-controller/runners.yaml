@@ -6,8 +6,6 @@ metadata:
   namespace: flux-system
 spec:
   targetNamespace: actions-runner-controller
-  dependsOn:
-    - name: actions-runner-controller
   sourceRef:
     kind: GitRepository
     name: flux-system
