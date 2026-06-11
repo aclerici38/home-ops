@@ -1,0 +1,60 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: home-ops-runners
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: gha-runner-scale-set
+  install:
+    timeout: 5m
+  upgrade:
+    timeout: 5m
+  dependsOn:
+    - name: gha-runner-scale-set-controller
+    - name: home-ops-runners-resources
+  values:
+    # The label workflows target with `runs-on:`.
+    runnerScaleSetName: home-ops-runners
+    githubConfigUrl: https://github.com/aclerici38/home-ops
+    githubConfigSecret: home-ops-runners
+    # Scale to zero when idle
+    minRunners: 0
+    maxRunners: 1
+    controllerServiceAccount:
+      namespace: actions-runner-controller
+      name: gha-rs-controller
+    listenerTemplate:
+      spec:
+        securityContext:
+          runAsNonRoot: true
+          seccompProfile: {type: RuntimeDefault}
+        containers:
+          - name: listener
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: [ALL]}
+    template:
+      spec:
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          runAsGroup: 1001
+          fsGroup: 1001
+          seccompProfile: {type: RuntimeDefault}
+        containers:
+          - name: runner
+            image: ghcr.io/home-operations/actions-runner:2.334.0@sha256:95d91d7f8d241e319ef2f4fec08f417aa1606b96fbb327643f75c303acd30002
+            command: ["/home/runner/run.sh"]
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: [ALL]}
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 1Gi

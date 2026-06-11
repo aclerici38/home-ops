@@ -1,0 +1,58 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: AI PR Review
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: AI PR Review
+    # Skip drafts, and only review branches pushed to this repo.
+    if: >-
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: home-ops-runners
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - name: Review pull request
+        id: review
+        uses: misospace/pr-reviewer-action@b0d992dbc7fff892b0776cf61b52b5de85a787e9 # v1.2.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          ai_base_url: http://mac-mini.cottage.internal:11434/v1
+          ai_api_format: openai
+          ai_model: gpt-oss:20b
+          ai_request_timeout_sec: "600"
+          # Post a native review and let the model approve / request changes.
+          publish_mode: review_verdict
+          allow_approve: "true"
+          skip_if_diff_unchanged: "false"
+
+      - name: Flag non-approval
+        if: steps.review.outputs.verdict == 'request_changes'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          VERDICT: ${{ steps.review.outputs.verdict }}
+        run: |
+          set -euo pipefail
+          gh pr edit "${PR}" --add-assignee aclerici38
+          echo "::error title=AI requested changes::verdict=${VERDICT}"
+          exit 1
