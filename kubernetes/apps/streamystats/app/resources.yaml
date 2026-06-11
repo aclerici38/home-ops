@@ -20,8 +20,6 @@ spec:
   dependsOn:
     - name: cloudnative-pg
       namespace: cloudnative-pg
-    - name: kube-prometheus-stack
-      namespace: kube-prometheus-stack
   values:
     cnpg:
       mode: restore

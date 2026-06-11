@@ -20,8 +20,6 @@ spec:
   dependsOn:
     - name: cloudnative-pg
       namespace: cloudnative-pg
-    - name: kube-prometheus-stack
-      namespace: kube-prometheus-stack
     - name: nfs-server
       namespace: nfs-server
     - name: volsync

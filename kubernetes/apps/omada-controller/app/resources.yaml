@@ -22,8 +22,6 @@ spec:
       namespace: cloudnative-pg
     - name: external-secrets
       namespace: external-secrets
-    - name: kube-prometheus-stack
-      namespace: kube-prometheus-stack
   values:
     externalSecret: {}
     cnpg:
