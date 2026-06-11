@@ -15,8 +15,9 @@ concurrency:
 jobs:
   review:
     name: AI PR Review
-    # Skip drafts, and only review branches pushed to this repo.
+    # Skip drafts and already-merged/closed PRs
     if: >-
+      github.event.pull_request.state == 'open' &&
       github.event.pull_request.draft == false &&
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: home-ops-runners
