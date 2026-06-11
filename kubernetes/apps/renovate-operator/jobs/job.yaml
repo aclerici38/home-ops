@@ -60,4 +60,8 @@ spec:
       cpu: 100m
       memory: 128Mi
   schedule: "${SCHEDULE}"
-  secretRef: botthebuilder-auth
+  githubAppReference:
+    secretName: github-app-credentials
+    appIdSecretKey: APP_ID
+    installationIdSecretKey: INSTALL_ID
+    pemSecretKey: PEM
