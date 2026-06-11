@@ -32,6 +32,7 @@ jobs:
           persist-credentials: false
 
       - name: Review pull request
+        id: review
         uses: misospace/pr-reviewer-action@b0d992dbc7fff892b0776cf61b52b5de85a787e9 # v1.2.5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -42,3 +43,16 @@ jobs:
           # Post a native review and let the model approve / request changes.
           publish_mode: review_verdict
           allow_approve: "true"
+          skip_if_diff_unchanged: "false"
+
+      - name: Flag non-approval
+        if: steps.review.outputs.verdict == 'request_changes'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          VERDICT: ${{ steps.review.outputs.verdict }}
+        run: |
+          set -euo pipefail
+          gh pr edit "${PR}" --add-assignee aclerici38
+          echo "::error title=AI requested changes::verdict=${VERDICT}"
+          exit 1
