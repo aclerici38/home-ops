@@ -25,10 +25,13 @@ spec:
     timezone: ${TZ}
     cronJobTimeZone: true
     webhook:
-      failurePolicy: Ignore
+      failurePolicy: Fail
       ignoredNamespaces:
         - cilium
         - kube-system
+        - cert-manager
+        - external-secrets
+        - flux-system
       certManager:
         enabled: true
         issuerRef:
