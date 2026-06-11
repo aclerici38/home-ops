@@ -2,9 +2,38 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
+      // Default grouping: bundle any deps that share a package "basename"
+      // (the last path segment of depName) across managers/datasources. This
+      // auto-groups a k8s-versioned-schemas CRD (depName e.g. "multus") with
+      // its upstream chart/image (e.g. ghcr.io/bjw-s-labs/helm/multus) without
+      // an explicit per-app rule. Explicit groups below override this where a
+      // bundle must span differently-named packages (e.g. Talos, Kgateway).
+      description: "Group by package basename (schema <-> upstream)",
+      matchDatasources: ["docker", "helm", "github-tags", "github-releases"],
+      groupName: "{{ replace '.+/' '' depName }}",
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
+      description: "Require an upstream sibling before grouping a schema",
+      matchPackageNames: ["aclerici38/k8s-versioned-schemas"],
+      groupName: "{{ replace '.+/' '' depName }}",
+      minimumGroupSize: 2,
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "Mise tools group",
       groupName: "Mise tools",
       matchManagers: ["mise"],
+      excludeDepNames: [
+        "kubectl",
+        "talosctl",
+        "talhelper",
+        "github:cloudnative-pg/cloudnative-pg",
+      ],
       separateMinorPatch: true,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -21,7 +50,7 @@
     },
     {
       description: "Kgateway Group",
-      groupName: "Kgateway",
+      groupName: "kgateway",
       matchPackagePatterns: ["kgateway-dev", "^kgateway$"],
       matchDatasources: ["docker", "github-tags"],
       group: {
@@ -70,6 +99,8 @@
         "**/siderolabs/talos",
         "**/siderolabs/talosctl",
       ],
+      // Override separateMinorPatch inherited from the Mise tools group
+      separateMinorPatch: false,
       minimumGroupSize: 2,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -84,24 +115,6 @@
         commitMessageTopic: "{{{groupName}}} group",
       },
       minimumGroupSize: 2,
-    },
-    {
-      description: "External Secrets Group",
-      groupName: "External Secrets",
-      matchPackagePatterns: ["external-secrets"],
-      matchDatasources: ["docker", "github-releases", "github-tags"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
-      description: "Cilium group",
-      groupName: "Cilium",
-      matchPackagePatterns: ["cilium"],
-      matchDatasources: ["docker", "github-releases", "github-tags"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
     },
     {
       description: "Coredns group",
@@ -178,33 +191,6 @@
       minimumGroupSize: 2,
     },
     {
-      description: "bjw-s-labs group",
-      groupName: "bjw-s-labs",
-      matchPackagePatterns: ["bjw-s-labs"],
-      matchDatasources: ["docker", "github-tags"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
-      description: "Cert-Manager group",
-      groupName: "Cert-Manager",
-      matchPackagePatterns: ["cert-manager"],
-      matchDatasources: ["docker", "github-tags"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
-      description: "External-DNS group",
-      groupName: "External-DNS",
-      matchPackagePatterns: ["external-dns"],
-      matchDatasources: ["docker", "github-tags"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
       description: "Pocket-ID group",
       groupName: "Pocket-ID",
       matchPackagePatterns: ["pocket-id"],
@@ -214,56 +200,9 @@
       },
     },
     {
-      description: "Silence-Operator group",
-      groupName: "Silence-Operator",
-      matchPackagePatterns: ["silence-operator"],
-      matchDatasources: ["docker", "github-tags"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
-      description: "CNPG group",
-      groupName: "CNPG",
-      matchPackageNames: [
-        "**/cloudnative-pg",
-        "cloudnative-pg/cloudnative-pg",
-      ],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
-      description: "Gateway-API group",
-      groupName: "Gateway-API",
-      matchPackagePatterns: ["gateway-api"],
-      matchDatasources: ["github-tags"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
-      description: "Grafana-Operator group",
-      groupName: "Grafana-Operator",
-      matchPackagePatterns: ["grafana-operator"],
-      matchDatasources: ["docker", "github-tags"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
       description: "Kube-Prometheus-Stack group",
       groupName: "Kube-Prometheus-Stack",
       matchPackagePatterns: ["kube-prometheus-stack"],
-      matchDatasources: ["docker", "github-tags"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
-      description: "OpenEBS group",
-      groupName: "OpenEBS",
-      matchPackagePatterns: ["openebs"],
       matchDatasources: ["docker", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -288,24 +227,6 @@
       },
     },
     {
-      description: "Multus group",
-      groupName: "Multus",
-      matchPackagePatterns: ["multus"],
-      matchDatasources: ["docker", "github-tags"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
-      description: "Node-Feature-Discovery group",
-      groupName: "Node-Feature-Discovery",
-      matchPackagePatterns: ["node-feature-discovery"],
-      matchDatasources: ["docker", "github-tags"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
       description: "KEDA group",
       groupName: "KEDA",
       matchPackagePatterns: ["keda"],
@@ -315,27 +236,9 @@
       },
     },
     {
-      description: "Tuppr group",
-      groupName: "Tuppr",
-      matchPackagePatterns: ["tuppr"],
-      matchDatasources: ["docker", "github-tags"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
       description: "Volsync group",
       groupName: "Volsync",
       matchPackagePatterns: ["perfectra1n-volsync", "perfectra1n/volsync"],
-      matchDatasources: ["docker", "github-tags"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
-      description: "Renovate-Operator group",
-      groupName: "Renovate-Operator",
-      matchPackagePatterns: ["renovate-operator"],
       matchDatasources: ["docker", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
