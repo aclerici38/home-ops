@@ -45,7 +45,7 @@ spec:
               UWSGI_THREADS:
                 valueFrom:
                   resourceFieldRef:
-                    containerName: main
+                    containerName: searxng
                     resource: limits.cpu
               UWSGI_WORKERS: 1
             envFrom:
