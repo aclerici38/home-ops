@@ -29,12 +29,6 @@ spec:
   values:
     cnpg:
       mode: restore
-      clusterSpec:
-        bootstrap:
-          recovery:
-            recoveryTarget:
-              targetTLI: "112"
-              targetLSN: "2/E8000130"
     externalSecret: {}
     pocketId:
       group: all
