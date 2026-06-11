@@ -26,4 +26,5 @@ spec:
       namespace: volsync
   values:
     externalSecret: {}
-    volsync: {}
+    volsync:
+      restoreFrom: media-management

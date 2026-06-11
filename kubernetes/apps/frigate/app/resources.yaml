@@ -29,4 +29,6 @@ spec:
   values:
     externalSecret: {}
     gpu: {}
-    volsync: {}
+    volsync:
+      restoreFrom: home-infra
+      capacity: 25Gi

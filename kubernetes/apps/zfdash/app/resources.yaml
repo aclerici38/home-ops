@@ -21,4 +21,5 @@ spec:
     - name: volsync
       namespace: volsync
   values:
-    volsync: {}
+    volsync:
+      restoreFrom: storage

@@ -26,4 +26,5 @@ spec:
       namespace: volsync
   values:
     gpu: {}
-    volsync: {}
+    volsync:
+      restoreFrom: streaming

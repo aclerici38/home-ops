@@ -24,4 +24,6 @@ spec:
       namespace: volsync
   values:
     externalSecret: {}
-    volsync: {}
+    volsync:
+      restoreFrom: tools
+      capacity: 25Gi

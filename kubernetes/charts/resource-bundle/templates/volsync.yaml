@@ -6,6 +6,11 @@
 {{- $cephfs := dig "cephfs" false $v -}}
 {{- $sc := ternary "ceph-filesystem" "ceph-block" $cephfs -}}
 {{- $access := ternary "ReadWriteMany" "ReadWriteOnce" $cephfs -}}
+{{- /* Restore identity. Defaults to this app's own name@namespace. Override
+       restoreFrom (and optionally restoreName) for a one-time cross-namespace
+       restore, e.g. seeding a per-app namespace from the old monolith. */ -}}
+{{- $srcNs := dig "restoreFrom" $ns $v -}}
+{{- $srcName := dig "restoreName" $app $v -}}
 ---
 # Kopia repository credentials, pulled per-namespace (used by both the
 # ReplicationSource and the ReplicationDestination movers).
@@ -73,8 +78,8 @@ spec:
     cleanupCachePVC: true
     cleanupTempPVC: true
     sourceIdentity:
-      sourceName: {{ $app }}
-      sourceNamespace: {{ $ns }}
+      sourceName: {{ $srcName }}
+      sourceNamespace: {{ $srcNs }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

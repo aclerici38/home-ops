@@ -30,6 +30,10 @@
 # volsync:                # renders PVC + ReplicationDestination + ReplicationSource
 #   capacity: 5Gi
 #   cephfs: false         # true -> RWX on ceph-filesystem
+#   restoreFrom: <ns>     # one-time cross-namespace restore: old source namespace
+#                         # (kopia identity is <name>@<namespace>). Drop after the
+#                         # PVC is seeded so future restores use this namespace.
+#   restoreName: <name>   # only if the old source name differed from this app
 #
 # cnpg and volsync each also render the supporting credentials secret they
 # reference (cloudnative-pg, volsync-kopia-versity) into the app's namespace —
