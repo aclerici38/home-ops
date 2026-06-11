@@ -17,6 +17,11 @@ spec:
         [
           "pnpm run bundle"
         ]
+    - name: RENOVATE_ALLOWED_UNSAFE_EXECUTIONS
+      value: >-
+        [
+          "mise"
+        ]
     - name: RENOVATE_PLATFORM_COMMIT
       value: enabled
     - name: DOCKERHUB_USERNAME

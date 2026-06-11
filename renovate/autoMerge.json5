@@ -1,6 +1,8 @@
 {
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   platformAutomerge: false,
+  // Override the preset bundle's :automergeBranch back to PR-style automerge.
+  automergeType: "pr",
   packageRules: [
     {
       description: ["Auto-merge GitHub Actions for minor and patch"],
