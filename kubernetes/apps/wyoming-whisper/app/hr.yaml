@@ -71,5 +71,10 @@ spec:
         existingClaim: wyoming-whisper-cache
         globalMounts:
           - path: /models
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
   dependsOn:
     - name: wyoming-whisper-resources
