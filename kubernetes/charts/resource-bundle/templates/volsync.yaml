@@ -3,6 +3,9 @@
 {{- $ns := include "resources.ns" . -}}
 {{- $v := .Values.volsync -}}
 {{- $cap := dig "capacity" "5Gi" $v -}}
+{{- /* Cache defaults to the PVC capacity: always >= the working set, and thin-
+       provisioned on Ceph so the headroom is just quota, not consumed space. */ -}}
+{{- $cacheCap := dig "cacheCapacity" $cap $v -}}
 {{- $cephfs := dig "cephfs" false $v -}}
 {{- $sc := ternary "ceph-filesystem" "ceph-block" $cephfs -}}
 {{- $access := ternary "ReadWriteMany" "ReadWriteOnce" $cephfs -}}
@@ -65,6 +68,7 @@ spec:
     copyMethod: Snapshot
     volumeSnapshotClassName: csi-ceph-blockpool
     cacheStorageClassName: ceph-block
+    cacheCapacity: {{ $cacheCap | quote }}
     cacheAccessModes: ["ReadWriteOnce"]
     storageClassName: {{ $sc }}
     accessModes: [{{ $access | quote }}]
@@ -123,6 +127,6 @@ spec:
     storageClassName: {{ $sc }}
     volumeSnapshotClassName: csi-ceph-blockpool
     cacheStorageClassName: ceph-filesystem
-    cacheCapacity: 5Gi
+    cacheCapacity: {{ $cacheCap | quote }}
     cacheAccessModes: ["ReadWriteOnce"]
 {{- end }}

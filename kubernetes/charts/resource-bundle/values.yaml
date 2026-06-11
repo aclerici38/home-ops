@@ -29,6 +29,7 @@
 #   data: []              # extra per-key pulls (ExternalSecret spec.data entries)
 # volsync:                # renders PVC + ReplicationDestination + ReplicationSource
 #   capacity: 5Gi
+#   cacheCapacity: <cap>  # kopia cache PVC for both movers; defaults to capacity
 #   cephfs: false         # true -> RWX on ceph-filesystem
 #   restoreFrom: <ns>     # one-time cross-namespace restore: old source namespace
 #                         # (kopia identity is <name>@<namespace>). Drop after the
