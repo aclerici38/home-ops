@@ -74,10 +74,13 @@ spec:
     accessModes: [{{ $access | quote }}]
     capacity: {{ $cap | quote }}
     moverSecurityContext:
+      runAsNonRoot: true
       runAsUser: 1000
       runAsGroup: 1000
       fsGroup: 1000
       fsGroupChangePolicy: OnRootMismatch
+      seccompProfile:
+        type: RuntimeDefault
     enableFileDeletion: true
     cleanupCachePVC: true
     cleanupTempPVC: true
@@ -115,10 +118,13 @@ spec:
     compression: zstd-best-compression
     copyMethod: Snapshot
     moverSecurityContext:
+      runAsNonRoot: true
       runAsUser: 1000
       runAsGroup: 1000
       fsGroup: 1000
       fsGroupChangePolicy: OnRootMismatch
+      seccompProfile:
+        type: RuntimeDefault
     parallelism: 2
     repository: volsync-kopia-versity
     retain:
