@@ -32,7 +32,7 @@ jobs:
           persist-credentials: false
 
       - name: Review pull request
-        uses: misospace/pr-reviewer-action@8f72b519d2aaa4824673f5f4cbaafb7aba299349 # v1.2.5
+        uses: misospace/pr-reviewer-action@b0d992dbc7fff892b0776cf61b52b5de85a787e9 # v1.2.5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           ai_base_url: http://mac-mini.cottage.internal:11434/v1
