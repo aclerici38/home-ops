@@ -22,17 +22,35 @@ spec:
     installCRDs: true
     replicaCount: 2
     leaderElect: true
+    hostUsers: false
     image:
       repository: ghcr.io/external-secrets/external-secrets
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: RuntimeDefault
     webhook:
+      hostUsers: false
       image:
         repository: ghcr.io/external-secrets/external-secrets
+      podSecurityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
       serviceMonitor:
         enabled: true
         interval: 1m
     certController:
+      hostUsers: false
       image:
         repository: ghcr.io/external-secrets/external-secrets
+      podSecurityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
       serviceMonitor:
         enabled: true
         interval: 1m
