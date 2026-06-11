@@ -29,6 +29,11 @@ spec:
   values:
     cnpg:
       mode: restore
+      clusterSpec:
+        bootstrap:
+          recovery:
+            recoveryTarget:
+              backupID: backup-20260610110010
     externalSecret: {}
     pocketId:
       group: all
