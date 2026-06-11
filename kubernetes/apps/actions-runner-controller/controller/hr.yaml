@@ -1,0 +1,50 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gha-runner-scale-set-controller
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: gha-runner-scale-set-controller
+  install:
+    timeout: 3m
+  upgrade:
+    timeout: 3m
+  values:
+    # Pin the manager image by digest (chart default is a floating tag).
+    image:
+      repository: ghcr.io/actions/gha-runner-scale-set-controller
+      tag: 0.14.2@sha256:1b4c7f62e971ab259a4b8798e48e2adaad4af747f45990f474ea5feefa03531d
+    # Pinned so the scale set's controllerServiceAccount reference is stable.
+    serviceAccount:
+      create: true
+      name: gha-rs-controller
+    # Only manage runners in this namespace (least privilege RBAC).
+    flags:
+      watchSingleNamespace: actions-runner-controller
+      logLevel: info
+      logFormat: json
+    replicaCount: 1
+    podSecurityContext:
+      runAsNonRoot: true
+      seccompProfile: {type: RuntimeDefault}
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities: {drop: [ALL]}
+    # readOnlyRootFilesystem needs a writable scratch dir for controller-runtime.
+    volumes:
+      - name: tmp
+        emptyDir: {}
+    volumeMounts:
+      - name: tmp
+        mountPath: /tmp
+    resources:
+      requests:
+        cpu: 25m
+        memory: 64Mi
+      limits:
+        memory: 256Mi

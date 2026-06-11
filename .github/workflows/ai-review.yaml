@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: AI PR Review
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: AI PR Review
+    # Skip drafts, and only review branches pushed to this repo. Public forks
+    # must never run on the self-hosted (in-cluster) runner.
+    if: >-
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: home-ops-runners
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      # The runner image already ships git/curl/jq/python3/gh, so the composite
+      # action's dependency check passes with no install step.
+      - name: Review pull request
+        uses: misospace/pr-reviewer-action@8f72b519d2aaa4824673f5f4cbaafb7aba299349 # v1.2.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Ollama on the always-on Mac mini (OpenAI-compatible /v1 endpoint).
+          ai_base_url: http://mac-mini.cottage.internal:11434/v1
+          ai_api_format: openai
+          ai_model: gpt-oss:20b
+          # Local inference is slower than a cloud API; give it room.
+          ai_request_timeout_sec: "600"
+          # Post a native review and let the model approve / request changes.
+          publish_mode: review_verdict
+          allow_approve: "true"

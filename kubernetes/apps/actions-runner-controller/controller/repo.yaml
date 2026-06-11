@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: gha-runner-scale-set-controller
+spec:
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 0.14.2
+    digest: sha256:3081ba15c41f0aa791058dedd2a7406fece24c9aeaa94956c268e5099427a452
+  url: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller

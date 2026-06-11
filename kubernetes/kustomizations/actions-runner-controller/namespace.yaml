@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.1-standalone-strict/namespace-v1.json
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: actions-runner-controller
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+    # Every pod this app controls (controller, listener, runners) is hardened to
+    # restricted-equivalent securityContext below. Enforcement is left at
+    # "baseline" only because the listener pod is created by the controller and
+    # its compliance isn't fully under our control; audit/warn at "restricted"
+    # surface any drift. Flip enforce to restricted once the listener is
+    # confirmed compliant (no restricted warnings on its pod).
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
