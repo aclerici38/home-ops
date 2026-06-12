@@ -103,7 +103,7 @@ spec:
         controller: blocky
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: "${BLOCKY_LB_IP}"
+          lbipam.cilium.io/ips: "${BLOCKY_LB_IP},${BLOCKY_LB_IPV6}"
           coredns.io/hostname: dot.clerici.tech
         ports: &p
           dns-tcp:
