@@ -27,8 +27,12 @@ spec:
     cnpg:
       mode: restore
       poolMode: session
-      pgExtensions: [documentdb]
-      preload: [pg_cron, pg_documentdb_core, pg_documentdb]
+      pgExtensions:
+        - documentdb
+      preload:
+        - pg_cron
+        - pg_documentdb_core
+        - pg_documentdb
       dbExtensions:
         - {name: pg_cron, ensure: present}
         - {name: tsm_system_rows, ensure: present}

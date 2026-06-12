@@ -131,13 +131,13 @@ spec:
               limits:
                 memory: 4Gi
           sidekiq:
-            !!merge <<: *container
+            <<: *container
             command:
               - "sidekiq-entrypoint.sh"
             args:
               - "bundle exec sidekiq"
             env:
-              !!merge <<: *env
+              <<: *env
               PROMETHEUS_EXPORTER_PORT: 9395
             probes:
               liveness:

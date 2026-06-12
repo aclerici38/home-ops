@@ -29,7 +29,8 @@ spec:
   values:
     cnpg:
       mode: restore
-      pgExtensions: [pgvector]
+      pgExtensions:
+        - pgvector
       clusterSpec:
         bootstrap:
           recovery:
