@@ -27,7 +27,12 @@ spec:
             network.dormammu/multus: "true"
           securityContext:
             sysctls:
+              # accept RA route-info (Thread OMR prefix) on every multus interface
               - name: net.ipv6.conf.net1.accept_ra_rt_info_max_plen
+                value: "64"
+              - name: net.ipv6.conf.net2.accept_ra_rt_info_max_plen
+                value: "64"
+              - name: net.ipv6.conf.net3.accept_ra_rt_info_max_plen
                 value: "64"
             runAsUser: 1000
             runAsGroup: 1000
@@ -39,6 +44,8 @@ spec:
               # Matter?
               - 34
           annotations:
+            # net1 = iot (wifi matter devices), net2/net3 = trusted VLANs
+            # (Thread OMR routes + operational mDNS from the OTBR backbones)
             k8s.v1.cni.cncf.io/networks: |
               [
                 {
@@ -46,6 +53,18 @@ spec:
                   "namespace": "multus",
                   "ips": ["10.0.80.23/24"],
                   "mac": "64:16:7F:33:88:AC"
+                },
+                {
+                  "name":"cottage",
+                  "namespace": "multus",
+                  "ips": ["10.0.40.23/24"],
+                  "mac": "64:16:7F:33:88:AD"
+                },
+                {
+                  "name":"house",
+                  "namespace": "multus",
+                  "ips": ["10.0.20.23/24"],
+                  "mac": "64:16:7F:33:88:AE"
                 }
               ]
         containers:

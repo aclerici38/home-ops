@@ -272,7 +272,7 @@
       description: "Kubernetes group",
       groupName: "Kubernetes",
       matchPackageNames: [
-        "kubernetes/kubernetes/kubectl",
+        "**/kubectl",
         "ghcr.io/siderolabs/kubelet",
       ],
       minimumGroupSize: 2,
