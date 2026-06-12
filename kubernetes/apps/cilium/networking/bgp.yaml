@@ -27,6 +27,11 @@ spec:
       advertisements:
         matchLabels:
           advertise: "bgp"
+    - afi: ipv6
+      safi: unicast
+      advertisements:
+        matchLabels:
+          advertise: "bgp"
 ---
 apiVersion: cilium.io/v2
 kind: CiliumBGPAdvertisement
