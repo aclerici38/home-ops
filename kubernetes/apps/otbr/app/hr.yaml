@@ -35,12 +35,6 @@ spec:
                   "mac": "64:16:7F:9B:69:70"
                 },
                 {
-                  "name":"house",
-                  "namespace": "multus",
-                  "ips": ["10.0.20.21/24"],
-                  "mac": "64:16:7F:61:46:69"
-                },
-                {
                   "name":"iot",
                   "namespace": "multus",
                   "ips": ["10.0.80.22/24"],
@@ -89,12 +83,6 @@ spec:
           annotations:
             k8s.v1.cni.cncf.io/networks: |
               [
-                {
-                  "name":"cottage",
-                  "namespace": "multus",
-                  "ips": ["10.0.40.21/24"],
-                  "mac": "64:16:7F:61:46:5D"
-                },
                 {
                   "name":"house",
                   "namespace": "multus",
