@@ -72,6 +72,7 @@ jobs:
           publish_mode: review_verdict
           allow_approve: "true"
           skip_if_diff_unchanged: "false"
+          ci_status_check: true
 
       - name: Flag non-approval
         if: steps.review.outputs.verdict == 'request_changes'
