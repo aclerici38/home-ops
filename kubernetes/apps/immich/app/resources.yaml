@@ -31,8 +31,11 @@ spec:
       mode: restore
       capacity: 20Gi
       poolMode: session
-      pgExtensions: [pgvector, vchord]
-      preload: [vchord.so]
+      pgExtensions:
+        - pgvector
+        - vchord
+      preload:
+        - vchord.so
       dbExtensions:
         - name: vector
           ensure: present

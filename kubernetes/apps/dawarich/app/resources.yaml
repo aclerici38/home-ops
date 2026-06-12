@@ -37,7 +37,8 @@ spec:
           recovery:
             recoveryTarget:
               backupID: 20260610T110009
-      pgExtensions: [postgis]
+      pgExtensions:
+        - postgis
       dbExtensions:
         - {name: postgis}
         - {name: postgis_raster}

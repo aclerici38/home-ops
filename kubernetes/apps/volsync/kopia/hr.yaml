@@ -59,9 +59,9 @@ spec:
       backblaze:
         containers:
           kopia-backblaze:
-            !!merge <<: *container
+            <<: *container
             env:
-              !!merge <<: *env
+              <<: *env
               KOPIA_SERVER_PASSWORD:
                 secretKeyRef:
                   name: volsync-kopia-backblaze
@@ -93,7 +93,7 @@ spec:
           http:
             port: *port
       backblaze:
-        !!merge <<: *svc
+        <<: *svc
         controller: backblaze
     route:
       versity: &route
@@ -107,7 +107,7 @@ spec:
               - identifier: versity
                 port: *port
       backblaze:
-        !!merge <<: *route
+        <<: *route
         hostnames:
           - kopia-backblaze.clerici.tech
         rules:

@@ -117,7 +117,7 @@ spec:
         controller: blocky
         clusterIP: "${BLOCKY_CLUSTER_IP}"
         ports:
-          !!merge <<: *p
+          <<: *p
           http:
             port: &port 4000
     serviceMonitor:

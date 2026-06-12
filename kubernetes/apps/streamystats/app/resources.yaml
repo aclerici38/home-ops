@@ -23,8 +23,11 @@ spec:
   values:
     cnpg:
       mode: restore
-      pgExtensions: [pgvector, vchord]
-      preload: ["vchord.so"]
+      pgExtensions:
+        - pgvector
+        - vchord
+      preload:
+        - "vchord.so"
       dbExtensions:
         - {name: vector, ensure: present}
         - name: vchord

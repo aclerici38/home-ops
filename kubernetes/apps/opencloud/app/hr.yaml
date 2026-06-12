@@ -173,7 +173,7 @@ spec:
                     name: opencloud
                     key: COLLABORA_ADMIN_PASS
             securityContext:
-              !!merge <<: *sec
+              <<: *sec
               capabilities:
                 add:
                   - MKNOD
