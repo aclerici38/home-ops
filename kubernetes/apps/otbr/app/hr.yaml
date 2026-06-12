@@ -37,8 +37,8 @@ spec:
                   "mac": "64:16:7F:9B:69:68"
                 }
               ]
-        containers: &container
-          otbr:
+        containers:
+          otbr: &container
             image:
               repository: ghcr.io/wittdennis/homeassistant-otbr
               tag: 4.0.1@sha256:85cafeae73dd3a48a6b4271a2ed9ed47833551c1bb6ecbb87ff7fdb86ce7c5a8
