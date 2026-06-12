@@ -6,7 +6,8 @@ machine:
       allowed-unsafe-sysctls: net.ipv6.conf.all.forwarding
     nodeIP:
       validSubnets:
-        - "${NODE_SUBNET}"
+        - "${NODE_V4_SUBNET}"
+        - "${NODE_V6_SUBNET}"
     extraConfig:
       featureGates:
         ImageVolume: true
