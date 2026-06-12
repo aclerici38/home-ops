@@ -21,6 +21,9 @@ spec:
   dependsOn:
     - name: gatus-resources
   values:
+    podSecurityContext:
+      seccompProfile:
+        type: RuntimeDefault
     gatus:
       image:
         repository: ghcr.io/twin/gatus
