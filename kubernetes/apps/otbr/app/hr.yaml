@@ -24,9 +24,7 @@ spec:
   values:
     controllers:
       cottage:
-        pod: &pod
-          nodeSelector:
-            network.dormammu/multus: "true"
+        pod:
           annotations:
             k8s.v1.cni.cncf.io/networks: |
               [
@@ -47,20 +45,35 @@ spec:
               BAUDRATE: "460800"
               FIREWALL: "1"
               NAT64: "1"
-              OTBR_LOG_LEVEL: warning
-              OTBR_REST_PORT: "8081"
               NETWORK_DEVICE: cottage-slzb-ultima3.iot.internal:7638
+              S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
+              S6_READ_ONLY_ROOT: 1
             resources:
               requests:
                 cpu: 50m
                 memory: 64Mi
               limits:
                 memory: 128Mi
+                devic.es/tun: 1
+            probes:
+              liveness: &probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /node/state
+                    port: &port 8081
+              readiness: *probe
             securityContext:
-              privileged: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: 
+                  - ALL
+                add:
+                  - NET_ADMIN
+                  - NET_RAW
       house:
         pod:
-          <<: *pod
           annotations:
             k8s.v1.cni.cncf.io/networks: |
               [
@@ -77,17 +90,23 @@ spec:
             env:
               <<: *env
               NETWORK_DEVICE: house-slzb-ultima3.iot.internal:7638
+    defaultPodOptions:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      nodeSelector:
+        network.dormammu/multus: "true"
     service:
       cottage:
         controller: cottage
         ports:
           http:
-            port: 8081
+            port: *port
       house:
         controller: house
         ports:
           http:
-            port: 8081
+            port: *port
     persistence:
       data:
         existingClaim: otbr
@@ -100,3 +119,8 @@ spec:
             otbr:
               - path: /data
                 subPath: house
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /run
+            subPath: run
