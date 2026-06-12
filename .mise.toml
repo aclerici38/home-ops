@@ -40,6 +40,16 @@ else
 fi
 """
 
+[tasks."cleanse-pods"]
+description = "Cleanse pods with a Failed/Pending/Succeeded phase"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+for phase in Failed Pending Succeeded; do
+  kubectl delete pods --all-namespaces --field-selector "status.phase=${phase}" --ignore-not-found=true
+done
+"""
+
 [tools]
 actionlint = "1.7.12"
 dyff = "1.12.0"

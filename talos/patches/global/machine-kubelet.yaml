@@ -3,6 +3,7 @@ machine:
   kubelet:
     extraArgs:
       max-pods: 500
+      allowed-unsafe-sysctls: net.ipv6.conf.all.forwarding
     nodeIP:
       validSubnets:
         - "${NODE_SUBNET}"
