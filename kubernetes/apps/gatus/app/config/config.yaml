@@ -43,7 +43,8 @@ security:
     redirect-url: https://gatus.clerici.tech/authorization-code/callback
     client-id: $${CLIENT_ID}
     client-secret: $${CLIENT_SECRET}
-    scopes: [openid]
+    scopes:
+      - openid
 
 storage:
   type: postgres
