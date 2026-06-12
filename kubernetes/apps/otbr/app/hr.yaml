@@ -49,7 +49,7 @@ spec:
               NAT64: "1"
               OTBR_LOG_LEVEL: warning
               OTBR_REST_PORT: "8081"
-              NETWORK_DEVICE: cottage-slzb-ultima3.iot.internal:8082
+              NETWORK_DEVICE: cottage-slzb-ultima3.iot.internal:7638
             resources:
               requests:
                 cpu: 50m
@@ -76,7 +76,7 @@ spec:
             <<: *container
             env:
               <<: *env
-              NETWORK_DEVICE: house-slzb-ultima3.iot.internal:8082
+              NETWORK_DEVICE: house-slzb-ultima3.iot.internal:7638
     service:
       cottage:
         controller: cottage
