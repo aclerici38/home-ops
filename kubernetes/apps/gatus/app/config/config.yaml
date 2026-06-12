@@ -1,0 +1,52 @@
+---
+# PKCE
+web:
+  read-buffer-size: 32768
+connectivity:
+  checker:
+    target: ${COREDNS_CLUSTER_IP}:53
+    interval: 1m
+
+endpoints:
+  - name: Cloudflare
+    group: connectivity
+    url: tcp://1.1.1.1:53
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: Google-DNS
+    group: connectivity
+    url: tcp://8.8.8.8:53
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: Quad9
+    group: connectivity
+    url: tcp://9.9.9.9:53
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: Google-HTTPS
+    group: connectivity
+    url: tcp://google.com:443
+    conditions:
+      - "[CONNECTED] == true"
+
+metrics: true
+
+security:
+  oidc:
+    issuer-url: https://id.clerici.tech
+    redirect-url: https://gatus.clerici.tech/authorization-code/callback
+    client-id: $${CLIENT_ID}
+    client-secret: $${CLIENT_SECRET}
+    scopes:
+      - openid
+
+storage:
+  type: postgres
+  caching: true
+  path: $${PG_URI}
