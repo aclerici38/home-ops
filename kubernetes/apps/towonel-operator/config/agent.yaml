@@ -3,11 +3,6 @@ apiVersion: towonel.io/v1alpha1
 kind: TowonelAgent
 metadata:
   name: external
-  labels:
-    # operator-owned -> the Service sources write their spec.services entries onto
-    # this agent (ownership = this label; source_target.go:agentIsOperatorOwned).
-    app.kubernetes.io/managed-by: towonel-operator
-    app.kubernetes.io/part-of: towonel-operator
 spec:
   tunnelRef:
     name: towonel
@@ -32,11 +27,5 @@ spec:
       origin: *origin
     - hostname: tesla.clerici.tech
       origin: *origin
-  connectivity:
-    autodiscover: true
-    irohPort: 51820
-    nodePort:
-      create: true
-      port: 31820
   workload:
     image: codeberg.org/towonel/towonel-agent:0.1.32
