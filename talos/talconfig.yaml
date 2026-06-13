@@ -49,8 +49,7 @@ nodes:
       - name: nbd
     nodeLabels:
       storage.openebs.io/hostpath: "true"
-      # TODO: fix this once I figure out why it's broken
-      # network.dormammu/multus: "true"
+      network.dormammu/multus: "true"
     schematic:
       customization:
         extraKernelArgs:
@@ -69,6 +68,7 @@ nodes:
           - i915.enable_guc=3
           - i915.force_probe=!a7a0
           - xe.force_probe=a7a0
+          - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
         systemExtensions:
           officialExtensions:
             - siderolabs/i915
@@ -127,6 +127,7 @@ nodes:
           - i915.enable_guc=3
           - i915.force_probe=!a7a0
           - xe.force_probe=a7a0
+          - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
         systemExtensions:
           officialExtensions:
             - siderolabs/i915
@@ -178,6 +179,7 @@ nodes:
           - security=none
           - enforcing=0
           - -selinux
+          - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
         systemExtensions:
           officialExtensions:
             - siderolabs/amd-ucode
@@ -227,6 +229,7 @@ nodes:
           - security=none
           - sysctl.kernel.kexec_load_disabled=1
           - talos.auditd.disabled=1
+          - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
         systemExtensions:
           officialExtensions:
             - siderolabs/intel-ucode

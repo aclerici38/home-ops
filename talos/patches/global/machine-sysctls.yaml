@@ -4,7 +4,11 @@ machine:
     net.core.bpf_jit_harden: 1
     fs.inotify.max_user_instances: "8192"
     fs.inotify.max_user_watches: "1048576"
-    net.core.default_qdisc: fq
+    # fq_codel, not fq: fq attaches pacing state to every qlen>0 device
+    # including virtual ones (bond/vlan), which have no TX watchdog to recover
+    # a wedged queue (seen as ENOBUFS + tx_dropped on bond1.40, 2026-06).
+    # BBR has used internal pacing since kernel 4.20 and no longer needs fq.
+    net.core.default_qdisc: fq_codel
     net.core.rmem_max: "67108864"
     net.core.wmem_max: "67108864"
     net.ipv4.neigh.default.gc_thresh1: "4096"

@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.91.0/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: node-network-rules
+spec:
+  groups:
+    - name: node-network.rules
+      rules:
+        # Catches the silent multus/bond TX wedge (ENOBUFS, every transmit
+        # dropped at the vlan/macvlan layer) seen on bond1.40, 2026-06.
+        # A healthy interface drops ~0; a wedged one drops every ARP retry.
+        - alert: NodeNetworkTransmitDrops
+          expr: |-
+            increase(node_network_transmit_drop_total{device=~"bond1(\\..+)?"}[15m]) > 100
+          for: 15m
+          annotations:
+            summary: >-
+              {{ $labels.instance }} {{ $labels.device }} dropped
+              {{ $value | humanize }} TX packets in 15m — likely wedged
+              TX queue; a reboot of the node clears it
+          labels:
+            severity: critical
+        # Catches a multus underlay with no carrier (e.g. bond built on an
+        # unplugged NIC) — invisible from inside pods except as ARP timeouts.
+        - alert: NodeNetworkCarrierDown
+          expr: |-
+            node_network_carrier{device=~"bond1(\\..+)?"} == 0
+          for: 15m
+          annotations:
+            summary: >-
+              {{ $labels.instance }} {{ $labels.device }} has no carrier —
+              multus attachments on this underlay are dead
+          labels:
+            severity: critical

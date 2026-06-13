@@ -15,7 +15,8 @@ apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: bond1-link1
 selector:
-  match: glob("58:11:22:a2:e1:6c", mac(link.permanent_addr))
+
+  match: glob("58:11:22:a2:e1:6b", mac(link.permanent_addr))
 ---
 apiVersion: v1alpha1
 kind: BondConfig
