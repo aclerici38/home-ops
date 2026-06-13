@@ -4,11 +4,6 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: external
-  annotations:
-    towonel.io/tunnel: enable
-    towonel.io/tunnel-ref: towonel/towonel
-    towonel.io/gateway-service: kgateway/external:443
-    towonel.io/agent-ref: kgateway-external
 spec:
   gatewayClassName: kgateway
   addresses:

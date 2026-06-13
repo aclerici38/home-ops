@@ -147,6 +147,12 @@ spec:
     service:
       dawarich:
         controller: dawarich
+        annotations:
+          towonel.io/tunnel: enable
+          towonel.io/tunnel-ref: towonel/towonel
+          towonel.io/hostname: dawarich.clerici.tech
+          towonel.io/origin: external.kgateway.svc.cluster.local:443
+          towonel.io/agent-ref: external
         ports:
           http:
             port: *port

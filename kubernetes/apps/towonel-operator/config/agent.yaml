@@ -3,11 +3,35 @@ apiVersion: towonel.io/v1alpha1
 kind: TowonelAgent
 metadata:
   name: external
+  labels:
+    # operator-owned -> the Service sources write their spec.services entries onto
+    # this agent (ownership = this label; source_target.go:agentIsOperatorOwned).
+    app.kubernetes.io/managed-by: towonel-operator
+    app.kubernetes.io/part-of: towonel-operator
 spec:
   tunnelRef:
     name: towonel
     namespace: towonel
-  # TODO: forward UDP/31820
+  # multi-hostname services
+  services:
+    - hostname: jellyfin.clerici.tech
+      origin: &origin external.kgateway.svc.cluster.local:443
+    - hostname: tv.clerici.tech
+      origin: *origin
+    - hostname: seer.clerici.tech
+      origin: *origin
+    - hostname: seerr.clerici.tech
+      origin: *origin
+    - hostname: h2o.clerici.tech
+      origin: *origin
+    - hostname: gatus.clerici.tech
+      origin: *origin
+    - hostname: flux-instance.clerici.tech
+      origin: *origin
+    - hostname: id.clerici.tech
+      origin: *origin
+    - hostname: tesla.clerici.tech
+      origin: *origin
   connectivity:
     autodiscover: true
     irohPort: 51820
