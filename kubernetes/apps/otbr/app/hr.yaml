@@ -46,6 +46,14 @@ spec:
             image:
               repository: ghcr.io/wittdennis/homeassistant-otbr
               tag: 4.0.1@sha256:85cafeae73dd3a48a6b4271a2ed9ed47833551c1bb6ecbb87ff7fdb86ce7c5a8
+            lifecycle:
+              postStart:
+                exec:
+                  command:
+                    # Set TX power
+                    - sh
+                    - -c
+                    - for i in $(seq 1 60); do ot-ctl txpower 20 >/dev/null 2>&1 && exit 0; sleep 2; done; exit 0
             env: &env
               BACKBONE_IF: net1
               BAUDRATE: "460800"
