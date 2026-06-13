@@ -115,8 +115,10 @@ spec:
         sysctls:
           - name: net.ipv6.conf.all.forwarding
             value: "1"
-          - name: net.ipv6.conf.all.accept_ra
+          - name: net.ipv6.conf.net1.accept_ra
             value: "2"
+          - name: net.ipv6.conf.net1.accept_ra_rt_info_max_plen
+            value: "64"
         seccompProfile:
           type: RuntimeDefault
       nodeSelector:
