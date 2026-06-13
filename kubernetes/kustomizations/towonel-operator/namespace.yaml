@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.1-standalone-strict/namespace-v1.json
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: towonel
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+    # baseline (not restricted): the operator renders the agent Deployment with no
+    # securityContext and the TowonelAgent CRD exposes no way to set one, so a
+    # restricted namespace would reject the agent pod. (The agent image still runs
+    # as non-root 10001; it just isn't declared in the pod spec.)
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/audit: baseline
+    pod-security.kubernetes.io/warn: baseline

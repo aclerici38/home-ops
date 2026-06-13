@@ -1,0 +1,32 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/towonel-operator/1.0.1/towonelagent_v1alpha1.json
+apiVersion: towonel.io/v1alpha1
+kind: TowonelAgent
+metadata:
+  name: external
+spec:
+  tunnelRef:
+    name: towonel
+    namespace: towonel
+  # multi-hostname services
+  services:
+    - hostname: jellyfin.clerici.tech
+      origin: &origin external.kgateway.svc.cluster.local:443
+    - hostname: tv.clerici.tech
+      origin: *origin
+    - hostname: seer.clerici.tech
+      origin: *origin
+    - hostname: seerr.clerici.tech
+      origin: *origin
+    - hostname: h2o.clerici.tech
+      origin: *origin
+    - hostname: gatus.clerici.tech
+      origin: *origin
+    - hostname: flux-instance.clerici.tech
+      origin: *origin
+    - hostname: id.clerici.tech
+      origin: *origin
+    - hostname: tesla.clerici.tech
+      origin: *origin
+  workload:
+    image: codeberg.org/towonel/towonel-agent:0.1.32@sha256:1a26380e2c2af6ccf8720526134e13221dbc43cc54d333a22993a64db593ecac
