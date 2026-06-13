@@ -21,6 +21,8 @@ spec:
   dependsOn:
     - name: towonel-resources
   values:
+    leaderElection:
+      enabled: false
     credentials:
       existingSecret: towonel
       tokenKey: TOWONEL_API_KEY
