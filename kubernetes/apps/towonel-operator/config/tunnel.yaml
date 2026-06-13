@@ -1,0 +1,15 @@
+---
+apiVersion: towonel.io/v1alpha1
+kind: TowonelTunnel
+metadata:
+  name: towonel
+spec:
+  # Region the hub issues the invite/edge in. Must match a region your hub
+  # advertises — verify against the self-hosted hub (default EU).
+  region: EU
+  # don't release the invite + reserved ports if the CR is deleted
+  deletionPolicy: Retain
+  # never expire (no upstream token-refresh; avoids rotation churn)
+  tokenExpiry: 0
+  # apiKeySecretRef omitted -> the operator's chart-wired TOWONEL_API_KEY
+  # (credentials.existingSecret) is used. One key, one hub.

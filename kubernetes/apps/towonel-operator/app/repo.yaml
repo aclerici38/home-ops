@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: towonel-operator
+spec:
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: v1.0.1
+    digest: sha256:2e40669dc14c5fe7e575dd889b5612dc3793b1e785741e0eff2a1561a3323934
+  url: oci://ghcr.io/jacaudi/charts/towonel-operator

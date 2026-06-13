@@ -1,0 +1,25 @@
+---
+apiVersion: towonel.io/v1alpha1
+kind: TowonelAgent
+metadata:
+  name: kgateway-external
+  labels:
+    # Marks the agent operator-owned so the Gateway source (annotation on the
+    # external kgateway Gateway) writes spec.services onto it via agent-ref.
+    # Ownership is exactly this label (internal/controller/source_target.go:
+    # agentIsOperatorOwned). No towonel.io/auto-created annotation -> never GC'd.
+    app.kubernetes.io/managed-by: towonel-operator
+    app.kubernetes.io/part-of: towonel-operator
+spec:
+  tunnelRef:
+    name: towonel
+    namespace: towonel
+  # TODO: forward UDP/31820
+  connectivity:
+    autodiscover: true
+    irohPort: 51820
+    nodePort:
+      create: true
+      port: 31820
+  workload:
+    image: codeberg.org/towonel/towonel-agent:0.1.32
