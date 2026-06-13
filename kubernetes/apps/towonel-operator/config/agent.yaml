@@ -2,14 +2,11 @@
 apiVersion: towonel.io/v1alpha1
 kind: TowonelAgent
 metadata:
-  name: kgateway-external
+  name: external
 spec:
   tunnelRef:
     name: towonel
     namespace: towonel
-  services:
-    - hostname: "*.clerici.tech"
-      origin: external.kgateway.svc.cluster.local:443
   # TODO: forward UDP/31820
   connectivity:
     autodiscover: true
