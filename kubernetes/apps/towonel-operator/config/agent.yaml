@@ -7,6 +7,9 @@ spec:
   tunnelRef:
     name: towonel
     namespace: towonel
+  services:
+    - hostname: "*.clerici.tech"
+      origin: external.kgateway.svc.cluster.local:443
   # TODO: forward UDP/31820
   connectivity:
     autodiscover: true
