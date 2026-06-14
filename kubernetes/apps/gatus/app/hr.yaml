@@ -80,6 +80,9 @@ spec:
         enabled: true
     httpRoute:
       enabled: true
+      annotations:
+        towonel.io/tunnel: enable
+        towonel.io/tunnel-ref: towonel/towonel
       hostnames:
         - gatus.clerici.tech
       parentRefs:

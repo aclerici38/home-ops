@@ -3,12 +3,13 @@
 apiVersion: towonel.io/v1alpha1
 kind: TowonelTunnel
 metadata:
-  name: towonel
+  name: main
 spec:
   region: CA
   failoverRegions:
     - EU
   extraHostnames:
-    - "operator-test.sui"
-  deletionPolicy: Retain
+    - "*.clerici.tech"
+    - "clerici.tech"
+  deletionPolicy: Delete
   tokenExpiry: 0

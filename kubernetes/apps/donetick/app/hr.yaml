@@ -108,17 +108,14 @@ spec:
     service:
       donetick:
         controller: donetick
-        annotations:
-          towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel/towonel
-          towonel.io/hostname: donetick.clerici.tech
-          towonel.io/origin: external.kgateway.svc.cluster.local:443
-          towonel.io/agent-ref: external
         ports:
           http:
             port: *port
     route:
       donetick:
+        annotations:
+          towonel.io/tunnel: enable
+          towonel.io/tunnel-ref: towonel/towonel
         hostnames:
           - donetick.clerici.tech
         parentRefs:

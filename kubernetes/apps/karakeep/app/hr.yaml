@@ -150,12 +150,6 @@ spec:
     service:
       karakeep:
         controller: karakeep
-        annotations:
-          towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel/towonel
-          towonel.io/hostname: karakeep.clerici.tech
-          towonel.io/origin: external.kgateway.svc.cluster.local:443
-          towonel.io/agent-ref: external
         ports:
           http:
             port: *port
@@ -171,6 +165,9 @@ spec:
             port: 7700
     route:
       karakeep:
+        annotations:
+          towonel.io/tunnel: enable
+          towonel.io/tunnel-ref: towonel/towonel
         hostnames:
           - karakeep.clerici.tech
         parentRefs:

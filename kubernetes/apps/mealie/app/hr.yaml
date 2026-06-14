@@ -103,17 +103,14 @@ spec:
     service:
       mealie:
         controller: mealie
-        annotations:
-          towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel/towonel
-          towonel.io/hostname: mealie.clerici.tech
-          towonel.io/origin: external.kgateway.svc.cluster.local:443
-          towonel.io/agent-ref: external
         ports:
           http:
             port: *port
     route:
       mealie:
+        annotations:
+          towonel.io/tunnel: enable
+          towonel.io/tunnel-ref: towonel/towonel
         hostnames:
           - mealie.clerici.tech
         parentRefs:

@@ -201,12 +201,6 @@ spec:
       opencloud:
         forceRename: opencloud
         controller: opencloud
-        annotations:
-          towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel/towonel
-          towonel.io/hostname: cloud.clerici.tech
-          towonel.io/origin: external.kgateway.svc.cluster.local:443
-          towonel.io/agent-ref: external
         ports:
           http:
             port: *port
@@ -216,12 +210,6 @@ spec:
             port: 9205
       wopi:
         controller: wopi
-        annotations:
-          towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel/towonel
-          towonel.io/hostname: wopi.clerici.tech
-          towonel.io/origin: external.kgateway.svc.cluster.local:443
-          towonel.io/agent-ref: external
         ports:
           http:
             port: 9300
@@ -229,12 +217,6 @@ spec:
             port: 9301
       collabora:
         controller: collabora
-        annotations:
-          towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel/towonel
-          towonel.io/hostname: collabora.clerici.tech
-          towonel.io/origin: external.kgateway.svc.cluster.local:443
-          towonel.io/agent-ref: external
         ports:
           http:
             port: 9980
@@ -246,6 +228,9 @@ spec:
     route:
       opencloud:
         forceRename: opencloud
+        annotations:
+          towonel.io/tunnel: enable
+          towonel.io/tunnel-ref: towonel/towonel
         hostnames:
           - cloud.clerici.tech
         parentRefs:
@@ -257,6 +242,8 @@ spec:
                 port: *port
       wopi:
         annotations:
+          towonel.io/tunnel: enable
+          towonel.io/tunnel-ref: towonel/towonel
           gatus.home-operations.com/endpoint: |-
             conditions: ["[STATUS] == 404"]
         hostnames:
@@ -269,6 +256,9 @@ spec:
               - identifier: wopi
                 port: 9300
       collabora:
+        annotations:
+          towonel.io/tunnel: enable
+          towonel.io/tunnel-ref: towonel/towonel
         hostnames:
           - collabora.clerici.tech
         parentRefs:
