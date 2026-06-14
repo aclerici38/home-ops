@@ -118,12 +118,6 @@ spec:
       k8s:
         controller: blocky
         clusterIP: "${BLOCKY_CLUSTER_IP}"
-        annotations:
-          towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel/towonel
-          towonel.io/hostname: dns.clerici.tech
-          towonel.io/origin: external.kgateway.svc.cluster.local:443
-          towonel.io/agent-ref: external
         ports:
           <<: *p
           http:
@@ -136,6 +130,8 @@ spec:
     route:
       blocky-DOH:
         annotations:
+          towonel.io/tunnel: enable
+          towonel.io/tunnel-ref: towonel/towonel
           # google.com base64
           gatus.home-operations.com/endpoint: |-
             url: https://dns.clerici.tech/dns-query?dns=AAABAAABAAAAAAAABmdvb2dsZQNjb20AAAEAAQ

@@ -45,6 +45,9 @@ spec:
             hostUsers: false
         route:
           enabled: true
+          annotations:
+            towonel.io/tunnel: enable
+            towonel.io/tunnel-ref: towonel/towonel
           parentRefs:
             - group: gateway.networking.k8s.io
               kind: Gateway

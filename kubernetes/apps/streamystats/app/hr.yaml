@@ -90,12 +90,6 @@ spec:
     service:
       frontend:
         controller: frontend
-        annotations:
-          towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel/towonel
-          towonel.io/hostname: streamystats.clerici.tech
-          towonel.io/origin: external.kgateway.svc.cluster.local:443
-          towonel.io/agent-ref: external
         ports:
           http:
             port: *fPort
@@ -106,6 +100,9 @@ spec:
             port: *bPort
     route:
       streamystats:
+        annotations:
+          towonel.io/tunnel: enable
+          towonel.io/tunnel-ref: towonel/towonel
         hostnames:
           - streamystats.clerici.tech
         parentRefs:
