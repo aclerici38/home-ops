@@ -11,6 +11,7 @@ clusterPodNets:
   - "${CLUSTER_POD_CIDR_V6}"
 clusterSvcNets:
   - "${CLUSTER_SVC_CIDR}"
+  - "${CLUSTER_SVC_CIDR_V6}"
 
 additionalApiServerCertSans: &sans
   - "bonds"
