@@ -21,6 +21,8 @@ spec:
   dependsOn:
     - name: towonel-resources
   values:
+    towonel:
+      apiURL: https://hub.towonel.dev
     leaderElection:
       enabled: false
     credentials:
