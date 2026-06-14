@@ -35,5 +35,7 @@ spec:
         enabled: true
         grafanaOperator:
           enabled: true
+          matchLabels:
+            grafana.internal/instance: grafana
   dependsOn:
     - name: towonel-agent-resources
