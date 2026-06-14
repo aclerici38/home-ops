@@ -19,7 +19,6 @@ spec:
     remediation:
       retries: 1
   values:
-    replicaCount: 1
     agent:
       inviteTokenSecret:
         # key: TOWONEL_INVITE_TOKEN
@@ -27,5 +26,14 @@ spec:
       services:
         - hostname: "*.clerici.tech"
           origin: external.kgateway.svc.cluster.local:443
+    monitoring:
+      serviceMonitor:
+        enabled: true
+      prometheusRule:
+        enabled: true
+      dashboards:
+        enabled: true
+        grafanaOperator:
+          enabled: true
   dependsOn:
     - name: towonel-agent-resources
