@@ -1,0 +1,31 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: home-metrics
+  labels:
+    app.kubernetes.io/instance: home
+    app.kubernetes.io/component: metrics
+spec:
+  selector:
+    app.kubernetes.io/name: towonel-agent
+    app.kubernetes.io/instance: home
+  ports:
+    - name: metrics
+      port: 9090
+      targetPort: 9090
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/monitoring.coreos.com/servicemonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: towonel-agent-home
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: home
+      app.kubernetes.io/component: metrics
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 30s
