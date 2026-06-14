@@ -4,6 +4,11 @@ apiVersion: towonel.io/v1alpha1
 kind: TowonelAgent
 metadata:
   name: external
+  labels:
+    # operator-owned -> the Service sources write their spec.services entries onto
+    # this agent (ownership = this label; source_target.go:agentIsOperatorOwned).
+    app.kubernetes.io/managed-by: towonel-operator
+    app.kubernetes.io/part-of: towonel-operator
 spec:
   tunnelRef:
     name: towonel
