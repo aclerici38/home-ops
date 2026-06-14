@@ -6,7 +6,7 @@ metadata:
   name: flux-webhook
   annotations:
     towonel.io/tunnel: enable
-    towonel.io/tunnel-ref: towonel/towonel
+    towonel.io/tunnel-ref: main/towonel
     gatus.home-operations.com/endpoint: |-
       conditions: ["[STATUS] == 404"]
 spec:
