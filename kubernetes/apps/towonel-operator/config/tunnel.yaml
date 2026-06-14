@@ -8,5 +8,7 @@ spec:
   region: CA
   failoverRegions:
     - EU
+  extraHostnames:
+    - "*.clerici.tech"
   deletionPolicy: Retain
   tokenExpiry: 0
