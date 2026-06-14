@@ -4,6 +4,9 @@ apiVersion: towonel.io/v1alpha1
 kind: TowonelAgent
 metadata:
   name: home
+  labels:
+    app.kubernetes.io/managed-by: towonel-operator
+    app.kubernetes.io/part-of: towonel-operator
 spec:
   tunnelRef:
     name: main

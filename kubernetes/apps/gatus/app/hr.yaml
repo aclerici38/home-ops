@@ -82,7 +82,8 @@ spec:
       enabled: true
       annotations:
         towonel.io/tunnel: enable
-        towonel.io/tunnel-ref: towonel-main
+        towonel.io/tunnel-ref: towonel/main
+        towonel.io/agent-ref: home
       hostnames:
         - gatus.clerici.tech
       parentRefs:

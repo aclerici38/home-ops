@@ -73,7 +73,8 @@ spec:
       echo-server:
         annotations:
           towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel-main
+          towonel.io/tunnel-ref: towonel/main
+          towonel.io/agent-ref: home
         hostnames:
           - echo-server.clerici.tech
         parentRefs:

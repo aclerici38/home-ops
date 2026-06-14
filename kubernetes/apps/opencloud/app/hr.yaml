@@ -230,7 +230,8 @@ spec:
         forceRename: opencloud
         annotations:
           towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel-main
+          towonel.io/tunnel-ref: towonel/main
+          towonel.io/agent-ref: home
         hostnames:
           - cloud.clerici.tech
         parentRefs:
@@ -243,7 +244,8 @@ spec:
       wopi:
         annotations:
           towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel-main
+          towonel.io/tunnel-ref: towonel/main
+          towonel.io/agent-ref: home
           gatus.home-operations.com/endpoint: |-
             conditions: ["[STATUS] == 404"]
         hostnames:
@@ -258,7 +260,8 @@ spec:
       collabora:
         annotations:
           towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel-main
+          towonel.io/tunnel-ref: towonel/main
+          towonel.io/agent-ref: home
         hostnames:
           - collabora.clerici.tech
         parentRefs:
