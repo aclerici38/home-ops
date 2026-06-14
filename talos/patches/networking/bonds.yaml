@@ -37,6 +37,7 @@ minLinks:
 mtu: 9000
 addresses:
   - address: ${BONDS_IP}/24
+  - address: ${BONDS_V6}/64
 routes:
   - gateway: ${NODE_GATEWAY}
 ---

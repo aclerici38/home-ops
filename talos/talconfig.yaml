@@ -8,6 +8,7 @@ endpoint: ${CLUSTER_ENDPOINT_URL}
 
 clusterPodNets:
   - "${CLUSTER_POD_CIDR}"
+  - "${CLUSTER_POD_CIDR_V6}"
 clusterSvcNets:
   - "${CLUSTER_SVC_CIDR}"
 

@@ -42,6 +42,7 @@ minLinks:
 mtu: 9000
 addresses:
   - address: ${CAIN_IP}/24
+  - address: ${CAIN_V6}/64
 routes:
   - gateway: ${NODE_GATEWAY}
 ---

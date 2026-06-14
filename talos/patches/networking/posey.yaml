@@ -36,6 +36,7 @@ minLinks:
 mtu: 9000
 addresses:
   - address: ${POSEY_IP}/24
+  - address: ${POSEY_V6}/64
 routes:
   - gateway: ${NODE_GATEWAY}
 ---

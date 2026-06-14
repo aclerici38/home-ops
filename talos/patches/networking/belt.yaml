@@ -18,5 +18,6 @@ downdelay: 200
 mtu: 9000
 addresses:
   - address: ${BELT_IP}/24
+  - address: ${BELT_V6}/64
 routes:
   - gateway: ${NODE_GATEWAY}
