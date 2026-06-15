@@ -112,6 +112,10 @@
       groupName: "Immich",
       matchPackagePatterns: ["immich-app"],
       matchDatasources: ["docker", "github-releases"],
+      // Allow rc prereleases and openvino
+      versioning: "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:-(?<prerelease>rc\\.\\d+))?(?:-(?<compatibility>openvino))?$",
+      ignoreUnstable: false,
+      respectLatest: false,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
