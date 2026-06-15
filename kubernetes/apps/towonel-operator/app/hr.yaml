@@ -23,10 +23,10 @@ spec:
   values:
     replicas: 2
     logLevel: debug
-    observability:
-      metrics:
-        serviceMonitor:
-          enabled: true
+    # observability:
+    #   metrics:
+    #     serviceMonitor:
+    #       enabled: true
     credentials:
       existingSecret: towonel
       tokenKey: TOWONEL_API_KEY
