@@ -21,10 +21,12 @@ spec:
   dependsOn:
     - name: towonel-resources
   values:
-    towonel:
-      apiURL: https://hub.towonel.dev
-    leaderElection:
-      enabled: false
+    replicas: 2
+    logLevel: debug
+    observability:
+      metrics:
+        serviceMonitor:
+          enabled: true
     credentials:
       existingSecret: towonel
       tokenKey: TOWONEL_API_KEY
