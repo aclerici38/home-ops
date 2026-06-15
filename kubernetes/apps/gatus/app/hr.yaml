@@ -24,6 +24,12 @@ spec:
     podSecurityContext:
       seccompProfile:
         type: RuntimeDefault
+    resources:
+      limits:
+        memory: 256Mi
+      requests:
+        cpu: 10m
+        memory: 64Mi
     gatus:
       image:
         repository: ghcr.io/twin/gatus
@@ -46,12 +52,6 @@ spec:
             secretKeyRef:
               name: gatus-oidc-credentials
               key: client_secret
-      resources:
-        limits:
-          memory: 256Mi
-        requests:
-          cpu: 10m
-          memory: 64Mi
     sidecar:
       defaultInterval: 10s
       kinds:
@@ -60,11 +60,6 @@ spec:
           auto: true
         service:
           enabled: true
-      resources:
-        requests:
-          cpu: 10m
-        limits:
-          cpu: 64Mi
     config:
       existingConfigMap: gatus-sidecar-config
       items:
