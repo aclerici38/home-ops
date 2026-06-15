@@ -6,6 +6,7 @@ metadata:
   name: time-machine-pvc-backup
   namespace: samba
 spec:
+  suspend: true
   targetNamespace: samba
   path: ./kubernetes/components/volsync/resources/backup
   dependsOn:
