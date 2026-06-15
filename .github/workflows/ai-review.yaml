@@ -44,7 +44,7 @@ jobs:
 
       - name: Review pull request
         id: review
-        uses: misospace/pr-reviewer-action@c87ab3fb2f8de58756c47185b0cac18c71210944 # v1.2.11
+        uses: misospace/pr-reviewer-action@3479bf51ab9133414ae07af783bff985d3929884 # v1.3.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           ai_base_url: http://mac-mini.cottage.internal:11434/v1
