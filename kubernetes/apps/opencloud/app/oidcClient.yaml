@@ -15,7 +15,6 @@ spec:
     - https://cloud.clerici.tech/oidc-callback.html
     - https://cloud.clerici.tech/oidc-silent-redirect.html
   allowedUserGroups:
-    - name: admin
     - name: all
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/pocket-id-operator/0.7.3/pocketidoidcclient_v1alpha1.json
@@ -34,7 +33,6 @@ spec:
   logoutCallbackUrls:
     - oc://ios.opencloud.eu
   allowedUserGroups:
-    - name: admin
     - name: all
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/pocket-id-operator/0.7.3/pocketidoidcclient_v1alpha1.json
@@ -52,5 +50,4 @@ spec:
     - http://127.0.0.1
     - http://localhost
   allowedUserGroups:
-    - name: admin
     - name: all
