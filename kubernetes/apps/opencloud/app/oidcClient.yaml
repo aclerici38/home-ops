@@ -16,6 +16,7 @@ spec:
     - https://cloud.clerici.tech/oidc-silent-redirect.html
   allowedUserGroups:
     - name: all
+      namespace: pocket-id-operator
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/pocket-id-operator/0.7.3/pocketidoidcclient_v1alpha1.json
 apiVersion: pocketid.internal/v1alpha1
@@ -34,6 +35,7 @@ spec:
     - oc://ios.opencloud.eu
   allowedUserGroups:
     - name: all
+      namespace: pocket-id-operator
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/pocket-id-operator/0.7.3/pocketidoidcclient_v1alpha1.json
 apiVersion: pocketid.internal/v1alpha1
@@ -51,3 +53,4 @@ spec:
     - http://localhost
   allowedUserGroups:
     - name: all
+      namespace: pocket-id-operator
