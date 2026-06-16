@@ -1,6 +1,4 @@
 ---
-# Deploys the apps/cilium/app payload (no kustomization.yaml there — kustomize-controller
-# auto-generates one over the path).
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -8,10 +6,12 @@ metadata:
   namespace: flux-system
 spec:
   targetNamespace: cilium
+  dependsOn:
+    - name: cilium-base
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/cilium/app
+  path: ./kubernetes/apps/home/cilium/app
   commonMetadata:
     labels:
       app.kubernetes.io/name: cilium

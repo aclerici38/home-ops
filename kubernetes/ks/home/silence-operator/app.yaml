@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: silence-operator
+  namespace: flux-system
+spec:
+  targetNamespace: silence-operator
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/home/silence-operator/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: silence-operator

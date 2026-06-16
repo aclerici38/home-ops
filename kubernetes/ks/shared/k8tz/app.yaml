@@ -9,7 +9,9 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/k8tz/app
+  path: ./kubernetes/apps/shared/k8tz/app
+  dependsOn:
+    - name: cert-manager
   commonMetadata:
     labels:
       app.kubernetes.io/name: k8tz
