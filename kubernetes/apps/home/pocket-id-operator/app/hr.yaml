@@ -24,19 +24,17 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  dependsOn:
+    - name: pocket-id-operator-resources
+  valuesFrom:
+    - kind: ConfigMap
+      name: pocket-id-operator-values
+      valuesKey: values.yaml
+  # home-only: the pocket-id instance, users and groups (base operator/metrics values
+  # come from the shared pocket-id-operator-values ConfigMap).
   values:
-    operator:
-      # image:
-      #   tag: PR-366
-      args:
-        - --zap-log-level=debug
-    metrics:
-      enabled: true
-      serviceMonitor:
-        enabled: true
-      dashboard:
-        enabled: true
     instance:
+      enabled: true
       name: pocket-id
       spec:
         image: ghcr.io/pocket-id/pocket-id:v2.8.0-distroless@sha256:6a3aad6023ea0729e3763c75b77060d6d5d9069ad566af0b0b14a2288da0c9e0
@@ -137,5 +135,3 @@ spec:
               value: opencloud-users
             - key: immich_role
               value: user
-  dependsOn:
-    - name: pocket-id-operator-resources

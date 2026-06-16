@@ -1,17 +1,17 @@
 ---
+# Shared base: OCIRepository + pocket-id-operator-values ConfigMap. The per-cluster
+# HelmReleases (ks/<cluster>/pocket-id-operator) consume these and dependsOn this.
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: pocket-id-operator
+  name: pocket-id-operator-base
   namespace: flux-system
 spec:
   targetNamespace: pocket-id-operator
-  dependsOn:
-    - name: pocket-id-operator-base
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/pocket-id-operator/app
+  path: ./kubernetes/apps/shared/pocket-id-operator/app
   commonMetadata:
     labels:
       app.kubernetes.io/name: pocket-id-operator
