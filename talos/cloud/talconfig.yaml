@@ -1,14 +1,11 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/refs/tags/v3.1.11/pkg/config/schemas/talconfig.json
-# Single-node Oracle Cloud (OCI) ARM control-plane cluster. Values are inlined
-# (no talenv); TALOS_VERSION/KUBE_VERSION come from globals.env so both clusters
-# stay on the same versions. Shared, cluster-agnostic patches live in
-# ../global; cloud-specific patches live in ./patches.
-talosVersion: ${TALOS_VERSION}
-kubernetesVersion: ${KUBE_VERSION}
+# renovate: datasource=github-releases depName=siderolabs/talos
+talosVersion: v1.13.4
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+kubernetesVersion: v1.36.2
 
-clusterName: madbum
-endpoint: https://madbum.clerici.tech:6443
+clusterName: cloud
+endpoint: https://cloud.clerici.tech:6443
 
 clusterPodNets:
   - "172.16.0.0/16"
@@ -17,26 +14,17 @@ clusterSvcNets:
 
 additionalApiServerCertSans: &sans
   - "madbum"
-  - "madbum.clerici.tech"
-  - "192.9.147.24" # public (NAT) IP
-  - "10.40.40.41" # private (eth0, DHCP) IP
+  - "cloud.clerici.tech"
+  - "192.9.147.24"
+  - "10.40.40.41"
   - "127.0.0.1"
 additionalMachineCertSans: *sans
 
-# Disable built-in Flannel to use Cilium (matches home cluster)
 cniConfig:
   name: none
 
 nodes:
   - hostname: "madbum"
-    # eth0 is configured by the Oracle cloud platform over DHCP; no static
-    # network/bond config is required here.
-    #
-    # ipAddress is only used by talhelper for certSANs and for the generated
-    # talosconfig/apply targeting -- NOT to assign a static address. It is set
-    # to the public (NAT) IP so the node is reachable for talosctl from outside
-    # OCI. The node's real address stays 10.40.40.41 (kubelet/etcd use the
-    # 10.40.40.0/24 validSubnets), and that private IP is kept in certSANs below.
     ipAddress: "192.9.147.24"
     installDiskSelector:
       wwid: naa.608a262117364966b0e79854d296a06a
@@ -64,14 +52,14 @@ nodes:
         provisioning:
           diskSelector:
             match: system_disk
-          maxSize: 80GB
+          maxSize: 100GB
           grow: false
     userVolumes:
       - name: local-path
         provisioning:
           diskSelector:
             match: system_disk
-          minSize: 50GB
+          minSize: 30GB
           grow: true
 # Global patches (shared base from ../global, then this cluster's overrides)
 patches:
