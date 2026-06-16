@@ -8,7 +8,7 @@ metadata:
 spec:
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/kustomizations
+  path: ./kubernetes/ks/home
   dependsOn:
     - name: flux-meta
   prune: true
@@ -17,9 +17,6 @@ spec:
     kind: GitRepository
     name: flux-system
   patches:
-    # Defaults merged onto every per-namespace Kustomization that apps renders:
-    #   - Flux Kustomization fields (interval/timeout/prune/wait/substituteFrom)
-    #   - HelmRelease defaults, nested into spec.patches so they patch the HRs at payload build
     - target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization

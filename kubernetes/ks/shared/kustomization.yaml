@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./cloudflare-ddns/namespace.yaml
+  - ./cloudflare-ddns/app.yaml
+  - ./dragonfly-operator/namespace.yaml
+  - ./dragonfly-operator/app.yaml
+  - ./echo-server/namespace.yaml
+  - ./echo-server/app.yaml
+  - ./external-dns/namespace.yaml
+  - ./external-dns/app.yaml
+  - ./external-dns/endpoints.yaml
+  - ./external-secrets/namespace.yaml
+  - ./external-secrets/app.yaml
+  - ./external-secrets/stores.yaml
+  - ./gatus/namespace.yaml
+  - ./gatus/app.yaml
+  - ./grafana-operator/namespace.yaml
+  - ./grafana-operator/app.yaml
+  - ./grafana-operator/instance.yaml
+  - ./k8tz/namespace.yaml
+  - ./k8tz/app.yaml
+  - ./kgateway/namespace.yaml
+  - ./kgateway/app.yaml
+  - ./kgateway/config.yaml
+  - ./kgateway/crds.yaml
+  - ./kube-prometheus-stack/namespace.yaml
+  - ./kube-prometheus-stack/app.yaml
+  - ./onepassword-connect/namespace.yaml
+  - ./onepassword-connect/app.yaml
+  - ./reloader/namespace.yaml
+  - ./reloader/app.yaml
+  - ./silence-operator/namespace.yaml
+  - ./silence-operator/app.yaml
+  - ./silence-operator/silences.yaml

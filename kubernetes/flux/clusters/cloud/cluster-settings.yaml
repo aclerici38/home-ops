@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-settings
+  namespace: flux-system
+data:
+  FLUX_PATH: kubernetes/flux/clusters/cloud
+  CLUSTER_NAME: madbum
+  SECRET_DOMAIN: clerici.tech
+  TZ: America/Los_Angeles

@@ -1,0 +1,9 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./renovate-operator/namespace.yaml
+  - ./renovate-operator/15-min.yaml
+  - ./renovate-operator/30-min.yaml
+  - ./renovate-operator/app.yaml

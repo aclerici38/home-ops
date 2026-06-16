@@ -31,7 +31,8 @@ spec:
         kind: GitRepository
         url: "https://github.com/aclerici38/home-ops.git"
         ref: refs/heads/main
-        path: kubernetes/flux
+        # FLUX_PATH comes from each cluster's cluster-settings.
+        path: "${FLUX_PATH}"
       distribution:
         registry: "ghcr.io/fluxcd"
         version: 2.x

@@ -2,6 +2,9 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: flux-system
 resources:
-  - ./meta/ks.yaml
-  - ./cluster/apps.yaml
+  - ../../meta/ks.yaml
+  - ./apps.yaml
+  - ../shared-apps.yaml
+  - ./cluster-settings.yaml
