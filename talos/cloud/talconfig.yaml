@@ -1,0 +1,93 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/refs/tags/v3.1.11/pkg/config/schemas/talconfig.json
+# Single-node Oracle Cloud (OCI) ARM control-plane cluster. Values are inlined
+# (no talenv); TALOS_VERSION/KUBE_VERSION come from globals.env so both clusters
+# stay on the same versions. Shared, cluster-agnostic patches live in
+# ../global; cloud-specific patches live in ./patches.
+talosVersion: ${TALOS_VERSION}
+kubernetesVersion: ${KUBE_VERSION}
+
+clusterName: madbum
+endpoint: https://madbum.clerici.tech:6443
+
+clusterPodNets:
+  - "172.16.0.0/16"
+clusterSvcNets:
+  - "172.17.0.0/16"
+
+additionalApiServerCertSans: &sans
+  - "madbum"
+  - "madbum.clerici.tech"
+  - "192.9.147.24" # public (NAT) IP
+  - "10.40.40.41" # private (eth0, DHCP) IP
+  - "127.0.0.1"
+additionalMachineCertSans: *sans
+
+# Disable built-in Flannel to use Cilium (matches home cluster)
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: "madbum"
+    # eth0 is configured by the Oracle cloud platform over DHCP; no static
+    # network/bond config is required here.
+    #
+    # ipAddress is only used by talhelper for certSANs and for the generated
+    # talosconfig/apply targeting -- NOT to assign a static address. It is set
+    # to the public (NAT) IP so the node is reachable for talosctl from outside
+    # OCI. The node's real address stays 10.40.40.41 (kubelet/etcd use the
+    # 10.40.40.0/24 validSubnets), and that private IP is kept in certSANs below.
+    ipAddress: "192.9.147.24"
+    installDiskSelector:
+      wwid: naa.608a262117364966b0e79854d296a06a
+    machineSpec:
+      secureboot: false
+      arch: arm64
+      mode: metal
+      useUKI: false
+    kernelModules:
+      - name: nbd
+    nodeLabels:
+      storage.openebs.io/hostpath: "true"
+    schematic:
+      customization:
+        extraKernelArgs:
+          - -selinux
+          - apparmor=0
+          - init_on_alloc=0
+          - init_on_free=0
+          - mitigations=off
+          - security=none
+    controlPlane: true
+    volumes:
+      - name: EPHEMERAL
+        provisioning:
+          diskSelector:
+            match: system_disk
+          maxSize: 80GB
+          grow: false
+    userVolumes:
+      - name: local-path
+        provisioning:
+          diskSelector:
+            match: system_disk
+          minSize: 50GB
+          grow: true
+# Global patches (shared base from ../global, then this cluster's overrides)
+patches:
+  - "@../global/machine-kubelet.yaml"
+  - "@./patches/global/machine-kubelet.yaml"
+  - "@../global/machine-network.yaml"
+  - "@./patches/global/machine-network.yaml"
+  - "@./patches/global/machine-sysctls.yaml"
+  - "@./patches/global/machine-time.yaml"
+  - "@../global/machine-kernel.yaml"
+  - "@../global/machine-features.yaml"
+
+# Controller patches (shared base from ../global, then this cluster's overrides)
+controlPlane:
+  patches:
+    - "@../global/admission-controller-patch.yaml"
+    - "@../global/cluster.yaml"
+    - "@./patches/controller/etcd.yaml"
+    - "@../global/controller-machine-features.yaml"

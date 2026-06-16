@@ -1,0 +1,8 @@
+---
+# Overrides ../../global/cluster.yaml with this cluster's etcd subnets.
+cluster:
+  etcd:
+    advertisedSubnets:
+      - "${NODE_V4_SUBNET}"
+    listenSubnets:
+      - "${NODE_V4_SUBNET}"

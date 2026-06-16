@@ -1,4 +1,6 @@
 ---
+# Shared controlPlane cluster config. Per-cluster etcd subnets are layered on
+# via each cluster's patches/controller/etcd.yaml (applied after this patch).
 cluster:
   discovery:
     enabled: true
@@ -13,10 +15,6 @@ cluster:
   coreDNS:
     disabled: true
   etcd:
-    advertisedSubnets:
-      - "${NODE_V4_SUBNET}"
-    listenSubnets:
-      - "${NODE_V4_SUBNET}"
     extraArgs:
       listen-metrics-urls: http://0.0.0.0:2381
   proxy:

@@ -1,9 +1,0 @@
----
-machine:
-  network:
-    kubespan:
-      enabled: false
-      advertiseKubernetesNetworks: false
-    disableSearchDomain: true
-    nameservers:
-      - ${NODE_NAMESERVER}

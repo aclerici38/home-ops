@@ -1,0 +1,7 @@
+---
+machine:
+  time:
+    disabled: false
+    # Oracle Cloud metadata service provides NTP.
+    servers:
+      - 169.254.169.254

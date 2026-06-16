@@ -13,26 +13,34 @@ FLATE_SKIP_CRDS = "false"
 postinstall = "lefthook install"
 
 [tasks."talos:gen"]
-description = "Regenerate Talos cluster configs from talconfig.yaml into clusterconfig/"
-dir = "talos"
-run = "talhelper genconfig"
-
-[tasks."talos:apply"]
-description = "Apply Talos config to all nodes, or a single node: mise run talos:apply [node]"
+description = "Regenerate Talos configs for a cluster: mise run talos:gen [home|cloud] (default home)"
 dir = "talos"
 run = """
 #!/usr/bin/env bash
 set -euo pipefail
+cluster="${1:-home}"
+cd "$cluster"
+talhelper genconfig
+"""
+
+[tasks."talos:apply"]
+description = "Apply Talos config: mise run talos:apply [home|cloud] [node] (cluster default home)"
+dir = "talos"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+cluster="${1:-home}"
+cd "$cluster"
 
 diff=$(talhelper genconfig --dry-run 2>&1 | grep -v "^no changes found" || true)
 if [[ -n "$diff" ]]; then
-  echo "ERROR: clusterconfig is out of sync with talconfig.yaml. Run 'mise run talos:gen' first and review the changes."
+  echo "ERROR: $cluster clusterconfig is out of sync with talconfig.yaml. Run 'mise run talos:gen $cluster' first and review the changes."
   echo ""
   echo "$diff"
   exit 1
 fi
 
-node="${1:-}"
+node="${2:-}"
 if [[ -n "$node" ]]; then
   talhelper gencommand apply --node "$node" | bash
 else

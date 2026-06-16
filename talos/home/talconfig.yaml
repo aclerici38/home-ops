@@ -252,20 +252,23 @@ nodes:
           udev:
             rules:
               - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
-# Global patches
+# Global patches (shared base from ../global, then this cluster's overrides)
 patches:
   - "@./patches/global/machine-files.yaml"
+  - "@../global/machine-kubelet.yaml"
   - "@./patches/global/machine-kubelet.yaml"
+  - "@../global/machine-network.yaml"
   - "@./patches/global/machine-network.yaml"
   - "@./patches/global/machine-sysctls.yaml"
   - "@./patches/global/machine-time.yaml"
-  - "@./patches/global/machine-kernel.yaml"
-  - "@./patches/global/machine-features.yaml"
+  - "@../global/machine-kernel.yaml"
+  - "@../global/machine-features.yaml"
   - "@./patches/global/uart.yaml"
 
-# Controller patches
+# Controller patches (shared base from ../global, then this cluster's overrides)
 controlPlane:
   patches:
-    - "@./patches/controller/admission-controller-patch.yaml"
-    - "@./patches/controller/cluster.yaml"
-    - "@./patches/controller/machine-features.yaml"
+    - "@../global/admission-controller-patch.yaml"
+    - "@../global/cluster.yaml"
+    - "@./patches/controller/etcd.yaml"
+    - "@../global/controller-machine-features.yaml"

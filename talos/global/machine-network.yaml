@@ -1,0 +1,9 @@
+---
+# Shared network config. Per-cluster nameservers are layered on via each
+# cluster's patches/global/machine-network.yaml (applied after this patch).
+machine:
+  network:
+    kubespan:
+      enabled: false
+      advertiseKubernetesNetworks: false
+    disableSearchDomain: true
