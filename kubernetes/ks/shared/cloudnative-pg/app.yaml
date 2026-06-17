@@ -6,6 +6,8 @@ metadata:
   namespace: flux-system
 spec:
   targetNamespace: cloudnative-pg
+  dependsOn:
+    - name: external-secrets
   sourceRef:
     kind: GitRepository
     name: flux-system
