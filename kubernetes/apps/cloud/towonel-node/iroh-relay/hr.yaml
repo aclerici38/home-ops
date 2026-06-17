@@ -17,7 +17,6 @@ spec:
   values:
     controllers:
       iroh-relay:
-        strategy: RollingUpdate
         pod:
           # The relay needs a routable address; bind the node's host network so
           # agents/edges can reach :8444 (TCP) and :7842 (UDP) directly.
