@@ -42,18 +42,7 @@ spec:
         csi:
           volumeSnapshots:
             enabled: false
-    # https://github.com/openebs/lvm-localpv/blob/HEAD/deploy/helm/charts/values.yaml
-    lvm-localpv:
-      enabled: false
-    # https://github.com/openebs/mayastor-extensions/blob/v2.7.0/chart/values.yaml
-    mayastor:
-      enabled: false
     engines:
       local:
-        lvm:
-          enabled: false
         zfs:
           enabled: true
-      replicated:
-        mayastor:
-          enabled: false

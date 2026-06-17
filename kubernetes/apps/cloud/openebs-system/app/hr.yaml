@@ -23,3 +23,8 @@ spec:
   valuesFrom:
     - kind: ConfigMap
       name: openebs-values
+  values:
+    engines:
+      local:
+        zfs:
+          enabled: true
