@@ -1,0 +1,11 @@
+---
+# Shared kubelet config. Per-cluster nodeIP.validSubnets is layered on via each
+# cluster's patches/global/machine-kubelet.yaml (applied after this patch).
+machine:
+  kubelet:
+    extraArgs:
+      max-pods: 500
+      allowed-unsafe-sysctls: net.ipv6.conf.*
+    extraConfig:
+      featureGates:
+        ImageVolume: true

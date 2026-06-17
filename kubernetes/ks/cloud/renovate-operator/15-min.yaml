@@ -1,0 +1,22 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: renovate-operator-15-min
+  namespace: flux-system
+spec:
+  targetNamespace: renovate-operator
+  dependsOn:
+    - name: renovate-operator
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/cloud/renovate-operator/jobs
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: renovate-operator
+  postBuild:
+    substitute:
+      NAME: 15-min
+      SCHEDULE: "'*/15 * * * *'"
+      REPOS: "k8s-versioned-schemas|pocket-id-go-client|workflows"

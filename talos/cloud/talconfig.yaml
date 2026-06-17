@@ -1,0 +1,64 @@
+---
+# renovate: datasource=github-releases depName=siderolabs/talos
+talosVersion: v1.13.4
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+kubernetesVersion: v1.36.2
+
+clusterName: cloud
+endpoint: https://oracle.clerici.tech:6443
+
+clusterPodNets:
+  - "172.16.0.0/16"
+clusterSvcNets:
+  - "172.17.0.0/16"
+
+additionalApiServerCertSans: &sans
+  - "madbum"
+  - "oracle.clerici.tech"
+  - "192.9.147.24"
+  - "10.40.40.41"
+  - "127.0.0.1"
+additionalMachineCertSans: *sans
+
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: "madbum"
+    ipAddress: "192.9.147.24"
+    installDiskSelector:
+      wwid: naa.608a262117364966b0e79854d296a06a
+    machineSpec:
+      secureboot: false
+      arch: arm64
+      mode: oracle
+      useUKI: false
+    schematic:
+      customization:
+        extraKernelArgs:
+          - -selinux
+          - apparmor=0
+          - init_on_alloc=0
+          - init_on_free=0
+          - mitigations=off
+          - security=none
+          - talos.platform=oracle
+    controlPlane: true
+# Global patches (shared base from ../global, then this cluster's overrides)
+patches:
+  - "@../global/machine-kubelet.yaml"
+  - "@./patches/global/machine-kubelet.yaml"
+  - "@../global/machine-network.yaml"
+  - "@./patches/global/machine-network.yaml"
+  - "@./patches/global/machine-sysctls.yaml"
+  - "@./patches/global/machine-time.yaml"
+  - "@../global/machine-kernel.yaml"
+  - "@../global/machine-features.yaml"
+
+# Controller patches (shared base from ../global, then this cluster's overrides)
+controlPlane:
+  patches:
+    - "@../global/admission-controller-patch.yaml"
+    - "@../global/cluster.yaml"
+    - "@./patches/controller/etcd.yaml"
+    - "@../global/controller-machine-features.yaml"

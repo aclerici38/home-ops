@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: grafana-operator
+  namespace: flux-system
+spec:
+  targetNamespace: grafana-operator
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/shared/grafana-operator/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: grafana-operator

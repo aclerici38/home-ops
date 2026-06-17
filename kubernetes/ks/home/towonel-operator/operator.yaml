@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: towonel
+  namespace: flux-system
+spec:
+  targetNamespace: towonel
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/home/towonel-operator/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: towonel

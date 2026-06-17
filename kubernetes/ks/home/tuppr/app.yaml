@@ -1,0 +1,15 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: tuppr
+  namespace: flux-system
+spec:
+  targetNamespace: tuppr
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/home/tuppr/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: tuppr

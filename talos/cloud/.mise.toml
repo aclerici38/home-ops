@@ -1,0 +1,6 @@
+[env]
+TALOSCONFIG = "{{ env.HOME }}/home-ops/talos/cloud/clusterconfig/talosconfig"
+
+[hooks]
+enter = "kubectl config use-context admin@cloud 2>/dev/null || true"
+leave = "kubectl config use-context admin@dormammu 2>/dev/null || true"

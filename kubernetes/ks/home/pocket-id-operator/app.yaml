@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: pocket-id-operator
+  namespace: flux-system
+spec:
+  targetNamespace: pocket-id-operator
+  dependsOn:
+    - name: pocket-id-operator-base
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/home/pocket-id-operator/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: pocket-id-operator

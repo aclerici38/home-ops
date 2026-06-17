@@ -1,0 +1,137 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/aclerici38/pocket-id-operator/refs/heads/main/dist/schemas/helmrelease_v2_pocket-id-operator.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: pocket-id-operator
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: pocket-id-operator
+  # chart:
+  #   spec:
+  #     chart: dist/chart
+  #     sourceRef:
+  #       kind: GitRepository
+  #       name: pocket-id-operator-main
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  dependsOn:
+    - name: pocket-id-operator-resources
+  valuesFrom:
+    - kind: ConfigMap
+      name: pocket-id-operator-values
+      valuesKey: values.yaml
+  # home-only: the pocket-id instance, users and groups (base operator/metrics values
+  # come from the shared pocket-id-operator-values ConfigMap).
+  values:
+    instance:
+      enabled: true
+      name: pocket-id
+      spec:
+        image: ghcr.io/pocket-id/pocket-id:v2.9.0-distroless@sha256:968866bdb73c67ce7d75baf2b992b9b33db385668822e936625dc5116f372d2c
+        podTemplate:
+          spec:
+            hostUsers: false
+        route:
+          enabled: true
+          annotations:
+            towonel.io/tunnel: enable
+            towonel.io/tunnel-ref: towonel/main
+            towonel.io/agent-ref: home
+          parentRefs:
+            - group: gateway.networking.k8s.io
+              kind: Gateway
+              name: external
+              namespace: kgateway
+              sectionName: https
+        encryptionKey:
+          valueFrom:
+            secretKeyRef:
+              name: pocket-id
+              key: ENCRYPTION_KEY
+        databaseUrl:
+          valueFrom:
+            secretKeyRef:
+              name: pocket-id-db-app
+              key: uri
+        appUrl: https://id.clerici.tech
+        hostUsers: false
+        versionCheckDisabled: true
+        fileBackend: database
+        ui:
+          sessionDuration: 1440
+        smtp:
+          host: smtp-relay.smtp-relay.svc.cluster.local
+          from: bot@clerici.tech
+          port: 25
+          tls: none
+        emailNotifications:
+          loginNotification: true
+          oneTimeAccessAsAdmin: true
+          apiKeyExpiration: true
+          verification: true
+        persistence:
+          enabled: false
+        metrics:
+          enabled: true
+        OIDCClientRotation:
+          minSpacing: 5m
+      serviceMonitor:
+        enabled: true
+    users:
+      - name: anthony
+        spec:
+          locale: en
+          admin: true
+          email:
+            valueFrom:
+              key: EMAIL
+              name: pocket-id
+          firstName:
+            value: Anthony
+          lastName:
+            value: Clerici
+      - name: steve
+        spec:
+          locale: en
+          userInfoSecretRef:
+            name: pocket-id-steve-info
+    userGroups:
+      - name: admin
+        spec:
+          users:
+            userRefs:
+              - name: anthony
+          customClaims:
+            - key: oc_groups
+              value: opencloud-admins
+            - key: immich_role
+              value: admin
+      - name: fam
+        spec:
+          users: &fam
+            userRefs:
+              - name: anthony
+              - name: steve
+            usernames:
+              - melanie
+      - name: all
+        spec:
+          users:
+            <<: *fam
+            userIDs:
+              - 56f6f365-feb5-464f-bf31-f537d3a34a9e
+          customClaims:
+            - key: oc_groups
+              value: opencloud-users
+            - key: immich_role
+              value: user

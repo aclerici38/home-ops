@@ -1,0 +1,17 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: kgateway-external
+spec:
+  jobLabel: kgateway-external
+  namespaceSelector:
+    matchNames:
+      - kgateway
+  podMetricsEndpoints:
+    - port: http-monitoring
+      path: /metrics
+      honorLabels: true
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: external

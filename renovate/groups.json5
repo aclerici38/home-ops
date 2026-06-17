@@ -94,15 +94,32 @@
       minimumGroupSize: 2,
     },
     {
-      description: "Talos Group",
-      groupName: "Talos",
+
+      description: "Talos (home)",
+      groupName: "Talos (home)",
       matchPackageNames: [
         "**/siderolabs/talos",
         "**/siderolabs/talosctl",
       ],
+      matchFileNames: ["globals.env"],
+      additionalBranchPrefix: "home-",
       // Override separateMinorPatch inherited from the Mise tools group
       separateMinorPatch: false,
-      minimumGroupSize: 2,
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
+      // Cloud cluster Talos version is pinned directly in talos/cloud/talconfig.yaml.
+      description: "Talos (cloud)",
+      groupName: "Talos (cloud)",
+      matchPackageNames: [
+        "**/siderolabs/talos",
+        "**/siderolabs/talosctl",
+      ],
+      matchFileNames: ["talos/cloud/**"],
+      additionalBranchPrefix: "cloud-",
+      separateMinorPatch: false,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },

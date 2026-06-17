@@ -1,0 +1,6 @@
+---
+# Overrides ../../global/machine-network.yaml with this cluster's nameservers.
+machine:
+  network:
+    nameservers:
+      - ${NODE_NAMESERVER}

@@ -1,0 +1,19 @@
+---
+# Deploys the ../flux-instance payload after flux-operator is ready: the FluxInstance CR it
+# applies needs the operator (and its CRD, installed via flux-operator's installCRDs) present first.
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-instance
+  namespace: flux-system
+spec:
+  targetNamespace: flux-system
+  dependsOn:
+    - name: flux-operator
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/shared/flux-system/flux-instance
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: flux-instance

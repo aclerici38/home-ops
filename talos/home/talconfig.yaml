@@ -1,0 +1,274 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/refs/tags/v3.1.11/pkg/config/schemas/talconfig.json
+talosVersion: ${TALOS_VERSION}
+kubernetesVersion: ${KUBE_VERSION}
+
+clusterName: ${CLUSTER_NAME}
+endpoint: ${CLUSTER_ENDPOINT_URL}
+
+clusterPodNets:
+  - "${CLUSTER_POD_CIDR}"
+  - "${CLUSTER_POD_CIDR_V6}"
+clusterSvcNets:
+  - "${CLUSTER_SVC_CIDR}"
+  - "${CLUSTER_SVC_CIDR_V6}"
+
+additionalApiServerCertSans: &sans
+  - "bonds"
+  - "cain"
+  - "posey"
+  - "belt"
+  - "k8s.lab.internal"
+  - "bonds.lab.internal"
+  - "cain.lab.internal"
+  - "posey.lab.internal"
+  - "belt.lab.internal"
+  - "${CLUSTER_ENDPOINT_VIP}"
+  - "${BONDS_IP}"
+  - "${CAIN_IP}"
+  - "${POSEY_IP}"
+  - "${BELT_IP}"
+  - "127.0.0.1"
+  - "${CLUSTER_SVC_GATEWAY}"
+additionalMachineCertSans: *sans
+
+# Disable built-in Flannel to use Cilium
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: "bonds"
+    ipAddress: "${BONDS_IP}"
+    installDiskSelector:
+      wwid: eui.00253841414031f0
+    machineSpec:
+      secureboot: false
+      arch: amd64
+      mode: metal
+      useUKI: true
+    kernelModules:
+      - name: zfs
+      - name: nbd
+    nodeLabels:
+      storage.openebs.io/hostpath: "true"
+      network.dormammu/multus: "true"
+    schematic:
+      customization:
+        extraKernelArgs:
+          - amd_pstate=active
+          - cpufreq.default_governor=performance
+          - apparmor=0
+          - iommu.passthrough=1
+          - init_on_alloc=0
+          - init_on_free=0
+          - mitigations=off
+          - security=none
+          - enforcing=0
+          - -selinux
+          - zfs.zfs_arc_max=42949672960 # 25Gi
+          - zfs.zfs_arc_shrinker_limit=0
+          - i915.enable_guc=3
+          - i915.force_probe=!a7a0
+          - xe.force_probe=a7a0
+          - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/i915
+            - siderolabs/xe
+            - siderolabs/zfs
+            - siderolabs/amd-ucode
+            - siderolabs/nfsd
+            - siderolabs/mei
+            - siderolabs/nfsrahead
+    controlPlane: true
+    volumes:
+      - name: EPHEMERAL
+        provisioning:
+          diskSelector:
+            match: system_disk
+          maxSize: 400GB
+          grow: false
+    userVolumes:
+      - name: local-path
+        provisioning:
+          diskSelector:
+            match: system_disk
+          minSize: 500GB
+          grow: true
+    patches:
+      - "@./patches/networking/bonds.yaml"
+  - hostname: "cain"
+    ipAddress: "${CAIN_IP}"
+    installDiskSelector:
+      wwid: eui.6479a79d30000001
+    machineSpec:
+      secureboot: false
+      arch: amd64
+      mode: metal
+      useUKI: true
+    kernelModules:
+      - name: nbd
+    nodeLabels:
+      storage.openebs.io/hostpath: "true"
+      network.dormammu/multus: "true"
+    schematic:
+      customization:
+        extraKernelArgs:
+          - -init_on_alloc
+          - -init_on_free
+          - -selinux
+          - apparmor=0
+          - init_on_alloc=0
+          - init_on_free=0
+          - intel_iommu=on
+          - iommu=pt
+          - mitigations=off
+          - security=none
+          - sysctl.kernel.kexec_load_disabled=1
+          - talos.auditd.disabled=1
+          - i915.enable_guc=3
+          - i915.force_probe=!a7a0
+          - xe.force_probe=a7a0
+          - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/i915
+            - siderolabs/xe
+            - siderolabs/mei
+            - siderolabs/intel-ucode
+            - siderolabs/nfsrahead
+    controlPlane: true
+    volumes:
+      - name: EPHEMERAL
+        provisioning:
+          diskSelector:
+            match: system_disk
+          maxSize: 400GB
+          grow: false
+    userVolumes:
+      - name: local-path
+        provisioning:
+          diskSelector:
+            match: system_disk
+          minSize: 500GB
+          grow: true
+    patches:
+      - "@./patches/networking/cain.yaml"
+  - hostname: "posey"
+    ipAddress: "${POSEY_IP}"
+    installDiskSelector:
+      wwid: eui.00000000000000000026b7686e946425
+    machineSpec:
+      secureboot: false
+      mode: metal
+      useUKI: true
+      arch: amd64
+    kernelModules:
+      - name: nbd
+    nodeLabels:
+      storage.openebs.io/hostpath: "true"
+      network.dormammu/multus: "true"
+    schematic:
+      customization:
+        extraKernelArgs:
+          - amd_pstate=active
+          - cpufreq.default_governor=performance
+          - apparmor=0
+          - iommu.passthrough=1
+          - init_on_alloc=0
+          - init_on_free=0
+          - mitigations=off
+          - security=none
+          - enforcing=0
+          - -selinux
+          - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/amd-ucode
+            - siderolabs/nfsrahead
+    controlPlane: true
+    volumes:
+      - name: EPHEMERAL
+        provisioning:
+          diskSelector:
+            match: system_disk
+          maxSize: 400GB
+          grow: false
+    userVolumes:
+      - name: local-path
+        provisioning:
+          diskSelector:
+            match: system_disk
+          minSize: 500GB
+          grow: true
+    patches:
+      - "@./patches/networking/posey.yaml"
+  - hostname: "belt"
+    ipAddress: "${BELT_IP}"
+    installDiskSelector:
+      wwid: naa.500a07511fc61629
+    nodeLabels:
+      network.dormammu/multus: "false"
+    machineSpec:
+      secureboot: false
+      arch: amd64
+      mode: metal
+      useUKI: true
+    kernelModules:
+      - name: nbd
+    schematic:
+      customization:
+        extraKernelArgs:
+          - -init_on_alloc
+          - -init_on_free
+          - -selinux
+          - apparmor=0
+          - init_on_alloc=0
+          - init_on_free=0
+          - intel_iommu=on
+          - iommu=pt
+          - mitigations=off
+          - security=none
+          - sysctl.kernel.kexec_load_disabled=1
+          - talos.auditd.disabled=1
+          - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/intel-ucode
+            - siderolabs/nfsrahead
+    controlPlane: false
+    volumes:
+      - name: EPHEMERAL
+        provisioning:
+          diskSelector:
+            match: system_disk
+          maxSize: 200GB
+          grow: false
+    patches:
+      - "@./patches/networking/belt.yaml"
+      # 3d Printer
+      - |-
+        machine:
+          udev:
+            rules:
+              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
+# Global patches (shared base from ../global, then this cluster's overrides)
+patches:
+  - "@./patches/global/machine-files.yaml"
+  - "@../global/machine-kubelet.yaml"
+  - "@./patches/global/machine-kubelet.yaml"
+  - "@../global/machine-network.yaml"
+  - "@./patches/global/machine-network.yaml"
+  - "@./patches/global/machine-sysctls.yaml"
+  - "@./patches/global/machine-time.yaml"
+  - "@../global/machine-kernel.yaml"
+  - "@../global/machine-features.yaml"
+  - "@./patches/global/uart.yaml"
+
+# Controller patches (shared base from ../global, then this cluster's overrides)
+controlPlane:
+  patches:
+    - "@../global/admission-controller-patch.yaml"
+    - "@../global/cluster.yaml"
+    - "@./patches/controller/etcd.yaml"
+    - "@../global/controller-machine-features.yaml"

@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: k8tz
+  namespace: flux-system
+spec:
+  targetNamespace: k8tz
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/shared/k8tz/app
+  dependsOn:
+    - name: cert-manager
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: k8tz

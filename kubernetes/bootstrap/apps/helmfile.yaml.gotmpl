@@ -1,0 +1,120 @@
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
+#
+# Bootstrap helmfile. Run via `mise run bootstrap:helmfile <home|cloud>`, which
+# exports ROOT_DIR + CLUSTER and the cluster's settings (globals.env overlaid
+# with kubernetes/flux/<cluster>/cluster-settings.yaml) into the environment.
+#
+# Chart url/version and values are read straight out of the Flux manifests so
+# there's a single source of truth:
+#   - chart  <- OCIRepository .spec.url      (repo.yaml)
+#   - version<- OCIRepository .spec.ref.tag  (repo.yaml)
+#   - values <- ConfigMap .data."values.yaml" (base, optional) then
+#               HelmRelease .spec.values       (overlay, wins)
+# `yq -o=json -I=0` emits single-line JSON (valid YAML) so it drops in after a
+# `- `, and `envsubst` resolves the ${VARS} Flux would substitute at runtime.
+{{ $root    := requiredEnv "ROOT_DIR" }}
+{{ $cluster := requiredEnv "CLUSTER" }}
+{{ $apps := list
+  (dict
+    "name" "cilium" "namespace" "cilium" "atomic" false
+    "repo"  "kubernetes/apps/shared/cilium/app/repo.yaml"
+    "base"  "kubernetes/apps/shared/cilium/app/values.yaml"
+    "hr"    (printf "kubernetes/apps/%s/cilium/app/hr.yaml" $cluster)
+    "needs" (list))
+  (dict
+    "name" "coredns" "namespace" "kube-system" "atomic" true
+    "repo"  "kubernetes/apps/shared/coredns/repo.yaml"
+    "base"  "kubernetes/apps/shared/coredns/values.yaml"
+    "hr"    (printf "kubernetes/apps/%s/coredns/hr.yaml" $cluster)
+    "needs" (list))
+  (dict
+    "name" "flux-operator" "namespace" "flux-system" "atomic" true
+    "repo"  "kubernetes/apps/shared/flux-system/flux-operator/repo.yaml"
+    "base"  ""
+    "hr"    ""
+    "needs" (list "kube-system/coredns"))
+  (dict
+    "name" "flux-instance" "namespace" "flux-system" "atomic" true
+    "repo"  "kubernetes/apps/shared/flux-system/flux-instance/repo.yaml"
+    "base"  ""
+    "hr"    "kubernetes/apps/shared/flux-system/flux-instance/hr.yaml"
+    "needs" (list "flux-system/flux-operator"))
+}}
+
+helmDefaults:
+  timeout: 600
+  force: false
+  cleanupOnFail: false
+  wait: true
+  waitForJobs: true
+
+releases:
+{{- range $apps }}
+{{- $repo := printf "%s/%s" $root .repo }}
+{{- $hr   := printf "%s/%s" $root .hr }}
+  - name: {{ .name }}
+    namespace: {{ .namespace }}
+    chart: {{ exec "yq" (list "e" ".spec.url" $repo) | trim }}
+    version: {{ exec "yq" (list "e" ".spec.ref.tag" $repo) | trim | quote }}
+    atomic: {{ .atomic }}
+    {{- if .needs }}
+    needs:
+      {{- range .needs }}
+      - {{ . }}
+      {{- end }}
+    {{- end }}
+    values:
+    {{- if ne .base "" }}
+      - {{ exec "bash" (list "-c" (printf "yq '.data.\"values.yaml\"' %s/%s | yq -p=yaml -o=json -I=0 | envsubst" $root .base)) }}
+    {{- end }}
+    {{- if ne .hr "" }}
+      - {{ exec "bash" (list "-c" (printf "yq -o=json -I=0 '.spec.values // {}' %s | envsubst" $hr)) }}
+    {{- end }}
+    {{- if eq .name "cilium" }}
+    hooks:
+      - events: ["presync"]
+        showlogs: true
+        command: kubectl
+        args:
+          - apply
+          - --server-side
+          - -f
+          - https://github.com/prometheus-operator/prometheus-operator/releases/latest/download/stripped-down-crds.yaml
+      - events: ["presync"]
+        showlogs: true
+        command: kubectl
+        args:
+          - apply
+          - --server-side
+          - -f
+          - https://github.com/grafana/grafana-operator/releases/latest/download/crds.yaml
+      - events: ["presync"]
+        showlogs: true
+        command: kubectl
+        args:
+          - apply
+          - --server-side
+          - -f
+          - https://github.com/kubernetes-sigs/gateway-api/releases/latest/download/standard-install.yaml
+      # Cilium networking (BGP/L2/LB pools) for this cluster, if it has any.
+      - events: ["postsync"]
+        showlogs: true
+        command: bash
+        args:
+          - -c
+          - |
+            set -euo pipefail
+            shopt -s nullglob
+            dir="{{ $root }}/kubernetes/apps/{{ $cluster }}/cilium/networking"
+            files=("$dir"/*.yaml)
+            if [[ ${#files[@]} -eq 0 ]]; then
+              echo "no cilium networking manifests for {{ $cluster }}, skipping"
+              exit 0
+            fi
+            export NS={{ .namespace }}
+            for f in "${files[@]}"; do
+              grep -v 'yaml-language-server' "$f" | envsubst
+              printf '\n---\n'
+            done | kubectl apply -f -
+    {{- end }}
+{{- end }}

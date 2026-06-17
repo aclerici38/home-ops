@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-values
+  namespace: kube-system
+data:
+  values.yaml: |
+    fullnameOverride: coredns
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: null
+        memory: 512Mi
+    image:
+      repository: mirror.gcr.io/coredns/coredns
+    replicaCount: 3
+    k8sAppLabelOverride: kube-dns
+    serviceAccount:
+      create: true
+    service:
+      name: kube-dns
+      clusterIP: ${COREDNS_CLUSTER_IP}

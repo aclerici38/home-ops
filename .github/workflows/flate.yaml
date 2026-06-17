@@ -28,10 +28,16 @@ concurrency:
 
 jobs:
   test:
-    name: Flate Test
+    name: Flate Test (${{ matrix.cluster }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    strategy:
+      matrix:
+        cluster:
+          - home
+          - cloud
+      fail-fast: false
     steps:
       - name: Checkout Pull Request Branch
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
@@ -47,16 +53,19 @@ jobs:
           install_args: github:home-operations/flate
 
       - name: Run flate test
-        run: flate test all --path ./kubernetes/flux
+        run: flate test all --path ./kubernetes/flux/${{ matrix.cluster }}
 
   diff:
     if: ${{ github.event_name == 'pull_request' }}
-    name: Flate Diff (${{ matrix.resource }})
+    name: Flate Diff (${{ matrix.cluster }}/${{ matrix.resource }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
     strategy:
       matrix:
+        cluster:
+          - home
+          - cloud
         resource:
           - hr
           - ks
@@ -83,10 +92,11 @@ jobs:
         env:
           FLATE_IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
           RESOURCE: ${{ matrix.resource }}
+          CLUSTER: ${{ matrix.cluster }}
         run: |-
           {
             echo 'diff<<EOF'
-            flate diff "${RESOURCE}" --path ./kubernetes/flux
+            flate diff "${RESOURCE}" --path "./kubernetes/flux/${CLUSTER}"
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
 
@@ -104,7 +114,7 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@0ea0beb66eb9baf113663a64ec522f60e49231c0 # v3.0.4
         with:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          header: ${{ github.event.pull_request.number }}/kubernetes/${{ matrix.resource }}
+          header: ${{ github.event.pull_request.number }}/kubernetes/${{ matrix.cluster }}/${{ matrix.resource }}
           message: |-
             ```
             ${{ steps.diff.outputs.diff }}
@@ -114,8 +124,9 @@ jobs:
         name: Inspect changed images
         env:
           FLATE_IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
+          CLUSTER: ${{ matrix.cluster }}
         run: |-
-          flate diff images ./kubernetes/flux 2>/dev/null | while IFS= read -r img; do
+          flate diff images "./kubernetes/flux/${CLUSTER}" 2>/dev/null | while IFS= read -r img; do
             [ -z "${img}" ] && continue
             echo "::group::${img}"
             docker buildx imagetools inspect "${img}" || true

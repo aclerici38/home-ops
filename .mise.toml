@@ -13,31 +13,131 @@ FLATE_SKIP_CRDS = "false"
 postinstall = "lefthook install"
 
 [tasks."talos:gen"]
-description = "Regenerate Talos cluster configs from talconfig.yaml into clusterconfig/"
-dir = "talos"
-run = "talhelper genconfig"
-
-[tasks."talos:apply"]
-description = "Apply Talos config to all nodes, or a single node: mise run talos:apply [node]"
+description = "Regenerate Talos configs for a cluster: mise run talos:gen [home|cloud] (default home)"
 dir = "talos"
 run = """
 #!/usr/bin/env bash
 set -euo pipefail
+cluster="${1:-}"
+[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
+cd "$cluster"
+talhelper genconfig
+"""
+
+[tasks."talos:apply"]
+description = "Apply Talos config: mise run talos:apply [home|cloud] [node] (cluster default home)"
+dir = "talos"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+cluster="${1:-}"
+[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
+cd "$cluster"
 
 diff=$(talhelper genconfig --dry-run 2>&1 | grep -v "^no changes found" || true)
 if [[ -n "$diff" ]]; then
-  echo "ERROR: clusterconfig is out of sync with talconfig.yaml. Run 'mise run talos:gen' first and review the changes."
+  echo "ERROR: $cluster clusterconfig is out of sync with talconfig.yaml. Run 'mise run talos:gen $cluster' first and review the changes."
   echo ""
   echo "$diff"
   exit 1
 fi
 
-node="${1:-}"
+node="${2:-}"
 if [[ -n "$node" ]]; then
   talhelper gencommand apply --node "$node" | bash
 else
   talhelper gencommand apply | bash
 fi
+"""
+
+[tasks."bootstrap:resources"]
+description = "Bootstrap namespaces + secrets: mise run bootstrap:resources <home|cloud>"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+cluster="${1:-}"
+[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
+case "$cluster" in
+  home)  export CLUSTER_NAME=dormammu ;;
+  cloud) export CLUSTER_NAME=cloud ;;
+  *) echo "ERROR: unknown cluster '$cluster' (expected home|cloud)" >&2; exit 1 ;;
+esac
+ctx="admin@${CLUSTER_NAME}"
+kubectl config get-contexts --output name | grep -qx "$ctx" || {
+  echo "ERROR: kube context '$ctx' not found; merge it first (e.g. talosctl kubeconfig)" >&2; exit 1; }
+kubectl config use-context "$ctx" >/dev/null
+echo "==> [$cluster] applying namespaces + secrets to $ctx"
+
+op user get --me >/dev/null
+export VAULT="${VAULT:-Kubernetes}"
+export KCTX="$ctx"
+
+kubectl --context "$ctx" apply --server-side --filename - <<'EOF'
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flux-system
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: onepassword-connect
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kgateway
+EOF
+
+op run --env-file kubernetes/bootstrap/.secrets.env --no-masking -- bash -c '
+  set -euo pipefail
+  kubectl --context "$KCTX" create secret generic onepassword-connect --namespace onepassword-connect \
+    --from-literal=1password-credentials.json="$(echo "$ONEPASSWORD_CREDENTIALS" | base64)" \
+    --from-literal=token="$ONEPASSWORD_CONNECT_TOKEN" \
+    --dry-run=client --output yaml | kubectl --context "$KCTX" apply --server-side --filename -
+'
+"""
+
+[tasks."bootstrap:helmfile"]
+description = "Bootstrap helmfile (cilium, coredns, cert-manager, 1p-connect, external-secrets, flux): mise run bootstrap:helmfile <home|cloud>"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+cluster="${1:-}"
+[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
+case "$cluster" in
+  home)  export CLUSTER_NAME=dormammu ;;
+  cloud) export CLUSTER_NAME=cloud ;;
+  *) echo "ERROR: unknown cluster '$cluster' (expected home|cloud)" >&2; exit 1 ;;
+esac
+ctx="admin@${CLUSTER_NAME}"
+kubectl config get-contexts --output name | grep -qx "$ctx" || {
+  echo "ERROR: kube context '$ctx' not found; merge it first (e.g. talosctl kubeconfig)" >&2; exit 1; }
+kubectl config use-context "$ctx" >/dev/null
+echo "==> [$cluster] applying helmfile to $ctx"
+
+# globals.env (loaded by mise) holds the home defaults; overlay this cluster's
+# settings on top so ${VARS} in the Flux manifests resolve per-cluster.
+export ROOT_DIR="${MISE_PROJECT_ROOT:-$(git rev-parse --show-toplevel)}"
+export CLUSTER="$cluster"
+settings="$ROOT_DIR/kubernetes/flux/$cluster/cluster-settings.yaml"
+if [[ -f "$settings" ]]; then
+  while IFS= read -r kv; do export "$kv"; done \
+    < <(yq -r '.data | to_entries[] | .key + "=" + .value' "$settings")
+fi
+
+helmfile --kube-context "$ctx" --file kubernetes/bootstrap/apps/helmfile.yaml.gotmpl apply --skip-diff-on-install --suppress-diff
+"""
+
+[tasks."bootstrap:apps"]
+description = "Full bootstrap (namespaces + secrets, then helmfile): mise run bootstrap:apps <home|cloud>"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+cluster="${1:-}"
+[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
+mise run bootstrap:resources "$cluster"
+mise run bootstrap:helmfile "$cluster"
 """
 
 [tasks."cleanse-pods"]

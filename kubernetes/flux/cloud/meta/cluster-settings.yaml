@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-settings
+  namespace: flux-system
+data:
+  FLUX_PATH: kubernetes/flux/clusters/cloud
+  CLUSTER_NAME: cloud
+  SECRET_DOMAIN: clerici.tech
+  TZ: America/Los_Angeles
+  COREDNS_CLUSTER_IP: "172.17.0.10"
