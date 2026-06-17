@@ -89,8 +89,8 @@ spec:
       seerr:
         annotations:
           towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel/main
-          towonel.io/agent-ref: home
+          towonel.io/tunnel-ref: towonel/${CLUSTER_NAME}-k8s
+          towonel.io/agent-ref: ${CLUSTER_NAME}
         hostnames:
           - seer.clerici.tech
           - seerr.clerici.tech

@@ -5,6 +5,7 @@ kind: TowonelAgent
 metadata:
   name: ${CLUSTER_NAME}
 spec:
+  relayUrl: https://vps.clerici.tech:8444
   tunnelRef:
     name: main
     namespace: towonel

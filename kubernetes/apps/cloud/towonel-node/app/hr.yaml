@@ -49,6 +49,10 @@ spec:
                   key: TOWONEL_HUB_LINK_PSK
     route:
       towonel-node:
+        annotations:
+          towonel.io/tunnel: enable
+          towonel.io/tunnel-ref: towonel/${CLUSTER_NAME}-k8s
+          towonel.io/agent-ref: ${CLUSTER_NAME}
         hostnames:
           - towonel.clerici.tech
         parentRefs:
