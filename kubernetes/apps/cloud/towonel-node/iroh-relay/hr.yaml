@@ -20,7 +20,7 @@ spec:
         strategy: RollingUpdate
         pod:
           # The relay needs a routable address; bind the node's host network so
-          # agents/edges can reach :8443 (TCP) and :7842 (UDP) directly.
+          # agents/edges can reach :8444 (TCP) and :7842 (UDP) directly.
           hostNetwork: true
           dnsPolicy: ClusterFirstWithHostNet
           securityContext:
@@ -31,7 +31,7 @@ spec:
         containers:
           iroh-relay:
             image:
-              repository: docker.io/n0computer/iroh-relay
+              repository: mirror.gcr.io/n0computer/iroh-relay
               tag: v1.0.0@sha256:0124f8c335d9ad6618db13dc580b597ad5f1be0c987b6742696f4c1f5e325720
             args:
               - "--config-path"
@@ -69,7 +69,7 @@ spec:
           http:
             port: *httpPort
           https:
-            port: 8443
+            port: 8444
           quic:
             port: 7842
             protocol: UDP
@@ -102,5 +102,5 @@ spec:
             cert_mode = "Reloading"
             manual_cert_path = "/tls/tls.crt"
             manual_key_path = "/tls/tls.key"
-            https_bind_addr = "0.0.0.0:8443"
+            https_bind_addr = "0.0.0.0:8444"
             quic_bind_addr = "0.0.0.0:7842"

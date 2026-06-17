@@ -19,7 +19,7 @@ spec:
             env:
               TOWONEL_HUB_DB_DRIVER: postgres
               TOWONEL_HUB_PUBLIC_URL: https://towonel.clerici.tech
-              TOWONEL_HUB_RELAY_URL: &iroh https://vps.clerici.tech:8443
+              TOWONEL_HUB_RELAY_URL: &iroh https://vps.clerici.tech:8444
               TOWONEL_EDGE_RELAY_URL: *iroh
               TOWONEL_HUB_DB_DSN:
                 secretKeyRef:
