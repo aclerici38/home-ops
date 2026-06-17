@@ -41,6 +41,12 @@ spec:
               class error
           - name: prometheus
             parameters: 0.0.0.0:9153
+          # towonel -> kgateway for the agent pre-bootstrap
+          - name: rewrite
+            parameters: stop
+            configBlock: |-
+              name exact towonel.clerici.tech external.kgateway.svc.cluster.local
+              answer name external\.kgateway\.svc\.cluster\.local towonel.clerici.tech
           - name: kubernetes
             parameters: cluster.local in-addr.arpa ip6.arpa
             configBlock: |-
