@@ -46,6 +46,11 @@ spec:
             configBlock: |-
               pods verified
               fallthrough in-addr.arpa ip6.arpa
+          # TODO: investigate v6 on oracle
+          - name: template
+            parameters: ANY AAAA
+            configBlock: |-
+              rcode NOERROR
           # No blocky on cloud: forward to the node's system resolver.
           - name: forward
             parameters: . /etc/resolv.conf
