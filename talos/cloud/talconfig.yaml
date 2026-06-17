@@ -31,7 +31,7 @@ nodes:
     machineSpec:
       secureboot: false
       arch: arm64
-      mode: metal
+      mode: oracle-installer
       useUKI: false
     kernelModules:
       - name: nbd
@@ -46,6 +46,7 @@ nodes:
           - init_on_free=0
           - mitigations=off
           - security=none
+          - talos.platform=oracle
     controlPlane: true
     volumes:
       - name: EPHEMERAL
