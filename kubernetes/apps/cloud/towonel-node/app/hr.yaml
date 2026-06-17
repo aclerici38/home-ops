@@ -59,18 +59,18 @@ spec:
                 secretKeyRef:
                   name: towonel-node-oidc-credentials
                   key: client_secret
-      route:
-        towonel-node:
-          hostnames:
-            - towonel.clerici.tech
-          parentRefs:
-            - name: external
-              namespace: kgateway
-              sectionName: https
-          rules:
-            - backendRefs:
-                - identifier: app
-                  port: 8443
+    route:
+      towonel-node:
+        hostnames:
+          - towonel.clerici.tech
+        parentRefs:
+          - name: external
+            namespace: kgateway
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: main
+                port: 8443
     serviceMonitor:
       main:
         enabled: true
