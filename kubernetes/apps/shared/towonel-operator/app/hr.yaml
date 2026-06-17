@@ -24,7 +24,7 @@ spec:
     replicas: 2
     logLevel: debug
     towonel:
-      apiUrl: ${TOWONEL_API_URL:=https://towonel.clerici.tech}
+      apiURL: ${TOWONEL_API_URL:=https://towonel.clerici.tech}
     # observability:
     #   metrics:
     #     serviceMonitor:
