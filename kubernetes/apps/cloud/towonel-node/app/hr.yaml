@@ -12,8 +12,6 @@ spec:
   dependsOn:
     - name: towonel-node-resources
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       main:
         containers:
