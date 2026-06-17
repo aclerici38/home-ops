@@ -18,12 +18,8 @@ spec:
   upgrade:
     timeout: 5m
   dependsOn:
-    - name: dragonfly-operator
-      namespace: dragonfly-operator
     - name: external-secrets
       namespace: external-secrets
-    - name: pocket-id-operator
-      namespace: pocket-id-operator
   values:
     externalSecret: {}
     # pocketId:
