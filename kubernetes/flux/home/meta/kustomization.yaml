@@ -1,9 +1,5 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
-# cluster-settings is generated from globals.env here (a dir built by the
-# `cluster-meta` Flux Kustomization) rather than in the flux entrypoint
-# kustomization — flate (and Flux) only materialize generators inside
-# Kustomization-built paths, not the bootstrap entrypoint itself.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:

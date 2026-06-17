@@ -82,6 +82,11 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: onepassword-connect
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kgateway
 EOF
 
 op run --env-file kubernetes/bootstrap/.secrets.env --no-masking -- bash -c '

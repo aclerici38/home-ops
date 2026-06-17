@@ -26,18 +26,12 @@
     "repo"  "kubernetes/apps/shared/coredns/repo.yaml"
     "base"  "kubernetes/apps/shared/coredns/values.yaml"
     "hr"    (printf "kubernetes/apps/%s/coredns/hr.yaml" $cluster)
-    "needs" (list "cilium/cilium"))
-  (dict
-    "name" "cert-manager" "namespace" "cert-manager" "atomic" true
-    "repo"  "kubernetes/apps/shared/cert-manager/app/repo.yaml"
-    "base"  ""
-    "hr"    "kubernetes/apps/shared/cert-manager/app/hr.yaml"
-    "needs" (list "kube-system/coredns"))
+    "needs" (list))
   (dict
     "name" "flux-operator" "namespace" "flux-system" "atomic" true
     "repo"  "kubernetes/apps/shared/flux-system/flux-operator/repo.yaml"
     "base"  ""
-    "hr"    "kubernetes/apps/shared/flux-system/flux-operator/hr.yaml"
+    "hr"    ""
     "needs" (list "kube-system/coredns"))
   (dict
     "name" "flux-instance" "namespace" "flux-system" "atomic" true
@@ -49,8 +43,8 @@
 
 helmDefaults:
   timeout: 600
-  force: true
-  cleanupOnFail: true
+  force: false
+  cleanupOnFail: false
   wait: true
   waitForJobs: true
 
@@ -73,7 +67,9 @@ releases:
     {{- if ne .base "" }}
       - {{ exec "bash" (list "-c" (printf "yq '.data.\"values.yaml\"' %s/%s | yq -p=yaml -o=json -I=0 | envsubst" $root .base)) }}
     {{- end }}
+    {{- if ne .hr "" }}
       - {{ exec "bash" (list "-c" (printf "yq -o=json -I=0 '.spec.values // {}' %s | envsubst" $hr)) }}
+    {{- end }}
     {{- if eq .name "cilium" }}
     hooks:
       - events: ["presync"]
@@ -92,6 +88,14 @@ releases:
           - --server-side
           - -f
           - https://github.com/grafana/grafana-operator/releases/latest/download/crds.yaml
+      - events: ["presync"]
+        showlogs: true
+        command: kubectl
+        args:
+          - apply
+          - --server-side
+          - -f
+          - https://github.com/kubernetes-sigs/gateway-api/releases/latest/download/standard-install.yaml
       # Cilium networking (BGP/L2/LB pools) for this cluster, if it has any.
       - events: ["postsync"]
         showlogs: true
