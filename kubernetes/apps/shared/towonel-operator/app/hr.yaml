@@ -19,7 +19,7 @@ spec:
     remediation:
       retries: 1
   dependsOn:
-    - name: towonel-resources
+    - name: towonel-operator-resources
   values:
     replicas: 2
     logLevel: debug
