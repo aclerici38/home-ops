@@ -4,6 +4,8 @@ kind: Kustomization
 metadata:
   name: gateway-api-crds
 spec:
+  interval: 30m
+  prune: false
   sourceRef:
     kind: GitRepository
     name: gateway-api
