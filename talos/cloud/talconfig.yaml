@@ -44,6 +44,8 @@ nodes:
           - security=none
           - talos.platform=oracle
     controlPlane: true
+    nodeLabels:
+      storage.openebs.io/hostpath: "true"
 # Global patches (shared base from ../global, then this cluster's overrides)
 patches:
   - "@../global/machine-kubelet.yaml"

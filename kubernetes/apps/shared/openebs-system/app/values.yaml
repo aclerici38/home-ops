@@ -1,0 +1,33 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openebs-values
+data:
+  values.yaml: |
+    loki:
+      enabled: false
+    alloy:
+      enabled: false
+    openebs-crds:
+      csi:
+        volumeSnapshots:
+          enabled: false # snapshot-controller manages those CRDs
+    sidecar:
+      image:
+        repository: ghcr.io/kiwigrid/k8s-sidecar
+    # https://github.com/openebs/dynamic-localpv-provisioner/blob/HEAD/deploy/helm/charts/values.yaml
+    localpv-provisioner:
+      enabled: true
+      global:
+        imageRegistry: ghcr.io
+      localpv:
+        basePath: &hostPath /var/mnt/local-path
+      hostpathClass:
+        enabled: true
+        name: openebs-hostpath
+        isDefaultClass: false
+        basePath: *hostPath
+        nodeAffinityLabels:
+          - "storage.openebs.io/hostpath"
+          - "kubernetes.io/hostname"
