@@ -11,6 +11,8 @@ spec:
   path: ./kubernetes/ks/shared
   prune: true
   wait: false
+  dependsOn:
+    - name: cluster-meta
   sourceRef:
     kind: GitRepository
     name: flux-system
