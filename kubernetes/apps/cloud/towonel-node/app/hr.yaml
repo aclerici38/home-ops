@@ -21,6 +21,7 @@ spec:
               TOWONEL_HUB_PUBLIC_URL: https://towonel.clerici.tech
               TOWONEL_HUB_RELAY_URL: &iroh https://vps.clerici.tech:8444
               TOWONEL_EDGE_RELAY_URL: *iroh
+              TOWONEL_EDGE_ADVERTISED_ADDRESSES: vps.clerici.tech:443
               TOWONEL_HUB_DB_DSN:
                 secretKeyRef:
                   name: towonel-node-db-app
@@ -45,18 +46,6 @@ spec:
                 secretKeyRef:
                   name: towonel-node
                   key: TOWONEL_HUB_LINK_PSK
-              TOWONEL_HUB_OIDC_CODEBERG_REDIRECT_URI:
-                secretKeyRef:
-                  name: towonel-node-oidc-credentials
-                  key: issuer_url
-              TOWONEL_HUB_OIDC_CODEBERG_CLIENT_ID:
-                secretKeyRef:
-                  name: towonel-node-oidc-credentials
-                  key: client_id
-              TOWONEL_HUB_OIDC_CODEBERG_CLIENT_SECRET:
-                secretKeyRef:
-                  name: towonel-node-oidc-credentials
-                  key: client_secret
     route:
       towonel-node:
         hostnames:
