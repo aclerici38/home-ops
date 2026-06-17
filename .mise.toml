@@ -18,7 +18,8 @@ dir = "talos"
 run = """
 #!/usr/bin/env bash
 set -euo pipefail
-cluster="${1:-home}"
+cluster="${1:-}"
+[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
 cd "$cluster"
 talhelper genconfig
 """
@@ -29,7 +30,8 @@ dir = "talos"
 run = """
 #!/usr/bin/env bash
 set -euo pipefail
-cluster="${1:-home}"
+cluster="${1:-}"
+[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
 cd "$cluster"
 
 diff=$(talhelper genconfig --dry-run 2>&1 | grep -v "^no changes found" || true)
@@ -46,6 +48,91 @@ if [[ -n "$node" ]]; then
 else
   talhelper gencommand apply | bash
 fi
+"""
+
+[tasks."bootstrap:resources"]
+description = "Bootstrap namespaces + secrets: mise run bootstrap:resources <home|cloud>"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+cluster="${1:-}"
+[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
+case "$cluster" in
+  home)  export CLUSTER_NAME=dormammu ;;
+  cloud) export CLUSTER_NAME=madbum ;;
+  *) echo "ERROR: unknown cluster '$cluster' (expected home|cloud)" >&2; exit 1 ;;
+esac
+ctx="admin@${CLUSTER_NAME}"
+kubectl config get-contexts --output name | grep -qx "$ctx" || {
+  echo "ERROR: kube context '$ctx' not found; merge it first (e.g. talosctl kubeconfig)" >&2; exit 1; }
+kubectl config use-context "$ctx" >/dev/null
+echo "==> [$cluster] applying namespaces + secrets to $ctx"
+
+op user get --me >/dev/null
+export VAULT="${VAULT:-Kubernetes}"
+export KCTX="$ctx"
+export GITHUB_KEYS="$(curl -fsSL https://api.github.com/meta | jq --raw-output '"github.com "+.ssh_keys[]')"
+
+kubectl --context "$ctx" apply --server-side --filename - <<'EOF'
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cluster-infra
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: network
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flux-system
+EOF
+
+op run --env-file kubernetes/bootstrap/.secrets.env --no-masking -- bash -c '
+  set -euo pipefail
+  kubectl --context "$KCTX" create secret generic github-deploy-key --namespace flux-system \
+    --from-literal=identity="$token" \
+    --from-literal=known_hosts="$GITHUB_KEYS" \
+    --dry-run=client --output yaml | kubectl --context "$KCTX" apply --server-side --filename -
+  kubectl --context "$KCTX" create secret generic onepassword-connect --namespace cluster-infra \
+    --from-literal=1password-credentials.json="$(echo "$ONEPASSWORD_CREDENTIALS" | base64)" \
+    --from-literal=token="$ONEPASSWORD_CONNECT_TOKEN" \
+    --dry-run=client --output yaml | kubectl --context "$KCTX" apply --server-side --filename -
+'
+"""
+
+[tasks."bootstrap:helmfile"]
+description = "Bootstrap helmfile (cilium, coredns, cert-manager, 1p-connect, external-secrets, flux): mise run bootstrap:helmfile <home|cloud>"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+cluster="${1:-}"
+[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
+case "$cluster" in
+  home)  export CLUSTER_NAME=dormammu ;;
+  cloud) export CLUSTER_NAME=madbum ;;
+  *) echo "ERROR: unknown cluster '$cluster' (expected home|cloud)" >&2; exit 1 ;;
+esac
+ctx="admin@${CLUSTER_NAME}"
+kubectl config get-contexts --output name | grep -qx "$ctx" || {
+  echo "ERROR: kube context '$ctx' not found; merge it first (e.g. talosctl kubeconfig)" >&2; exit 1; }
+kubectl config use-context "$ctx" >/dev/null
+echo "==> [$cluster] applying helmfile to $ctx"
+
+helmfile --kube-context "$ctx" --file kubernetes/bootstrap/apps/helmfile.yaml apply --skip-diff-on-install --suppress-diff
+"""
+
+[tasks."bootstrap:apps"]
+description = "Full bootstrap (namespaces + secrets, then helmfile): mise run bootstrap:apps <home|cloud>"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+cluster="${1:-}"
+[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
+mise run bootstrap:resources "$cluster"
+mise run bootstrap:helmfile "$cluster"
 """
 
 [tasks."cleanse-pods"]
