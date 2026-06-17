@@ -11,14 +11,23 @@
 {{- define "resources.cnpg.clusterSpec" -}}
 {{- $app := include "resources.app" . -}}
 {{- $c := .Values.cnpg -}}
+{{- $instances := int (dig "instances" 3 $c) -}}
+{{- $single := eq $instances 1 -}}
 affinity:
-  podAntiAffinityType: required
+  {{- /* A single-instance cluster has nothing to anti-affine; "preferred" keeps
+         the pod schedulable on a single-node cluster (and during its own
+         restart) instead of being blocked by a "required" rule. */}}
+  podAntiAffinityType: {{ ternary "preferred" "required" $single }}
   nodeSelector:
     storage.openebs.io/hostpath: "true"
-instances: 3
+instances: {{ $instances }}
 primaryUpdateStrategy: unsupervised
-primaryUpdateMethod: switchover
-enablePDB: true
+{{- /* With one instance there is no replica to promote, so updates restart the
+       primary in place; multi-instance clusters switch over first. */}}
+primaryUpdateMethod: {{ ternary "restart" "switchover" $single }}
+{{- /* A PDB on a single-instance cluster only blocks node drains (there is no
+       second pod to keep available), so disable it. */}}
+enablePDB: {{ not $single }}
 imageCatalogRef:
   apiGroup: postgresql.cnpg.io
   kind: ClusterImageCatalog
@@ -31,11 +40,15 @@ superuserSecret:
   name: cloudnative-pg
 enableSuperuserAccess: true
 postgresql:
+  {{- /* Synchronous replication needs at least one standby; a single-instance
+         cluster has none, so the durability guarantee is the primary's PVC. */}}
+  {{- if not $single }}
   synchronous:
     method: any
     number: 1
     dataDurability: preferred
     failoverQuorum: true
+  {{- end }}
   {{- with $c.pgExtensions }}
   {{- $exts := list }}
   {{- range . }}

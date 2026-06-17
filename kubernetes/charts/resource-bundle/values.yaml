@@ -11,6 +11,8 @@
 # --- Reference of every knob (all optional) -------------------------------
 # cnpg:
 #   mode: init            # REQUIRED: init (backup, no restore) | restore (backup + restore) | no-backup
+#   instances: 3          # 1 = single-node mode: drops PDB, sync replication and
+#                         #     switchover, and relaxes pod anti-affinity
 #   capacity: 2Gi
 #   poolMode: transaction # transaction | session
 #   backup: true          # false drops object-store backups (old "no-backup")
