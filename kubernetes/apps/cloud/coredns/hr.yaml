@@ -7,9 +7,6 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  dependsOn:
-    - name: blocky
-      namespace: blocky
   chartRef:
     kind: OCIRepository
     name: coredns
@@ -49,12 +46,10 @@ spec:
             configBlock: |-
               pods verified
               fallthrough in-addr.arpa ip6.arpa
-          # Enable ECS so blocky gets the client's ip as source instead of coredns
-          - name: rewrite
-            parameters: edns0 subnet set 32 128
+          # No blocky on cloud: forward to the node's system resolver.
           - name: forward
-            parameters: . ${BLOCKY_CLUSTER_IP}
+            parameters: . /etc/resolv.conf
             configBlock: |-
-              except cluster.local 16.172.in-addr.arpa
+              except cluster.local
           - name: loop
           - name: reload

@@ -71,32 +71,22 @@ echo "==> [$cluster] applying namespaces + secrets to $ctx"
 op user get --me >/dev/null
 export VAULT="${VAULT:-Kubernetes}"
 export KCTX="$ctx"
-export GITHUB_KEYS="$(curl -fsSL https://api.github.com/meta | jq --raw-output '"github.com "+.ssh_keys[]')"
 
 kubectl --context "$ctx" apply --server-side --filename - <<'EOF'
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: cluster-infra
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: network
----
-apiVersion: v1
-kind: Namespace
-metadata:
   name: flux-system
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: onepassword-connect
 EOF
 
 op run --env-file kubernetes/bootstrap/.secrets.env --no-masking -- bash -c '
   set -euo pipefail
-  kubectl --context "$KCTX" create secret generic github-deploy-key --namespace flux-system \
-    --from-literal=identity="$token" \
-    --from-literal=known_hosts="$GITHUB_KEYS" \
-    --dry-run=client --output yaml | kubectl --context "$KCTX" apply --server-side --filename -
-  kubectl --context "$KCTX" create secret generic onepassword-connect --namespace cluster-infra \
+  kubectl --context "$KCTX" create secret generic onepassword-connect --namespace onepassword-connect \
     --from-literal=1password-credentials.json="$(echo "$ONEPASSWORD_CREDENTIALS" | base64)" \
     --from-literal=token="$ONEPASSWORD_CONNECT_TOKEN" \
     --dry-run=client --output yaml | kubectl --context "$KCTX" apply --server-side --filename -
@@ -121,7 +111,17 @@ kubectl config get-contexts --output name | grep -qx "$ctx" || {
 kubectl config use-context "$ctx" >/dev/null
 echo "==> [$cluster] applying helmfile to $ctx"
 
-helmfile --kube-context "$ctx" --file kubernetes/bootstrap/apps/helmfile.yaml apply --skip-diff-on-install --suppress-diff
+# globals.env (loaded by mise) holds the home defaults; overlay this cluster's
+# settings on top so ${VARS} in the Flux manifests resolve per-cluster.
+export ROOT_DIR="${MISE_PROJECT_ROOT:-$(git rev-parse --show-toplevel)}"
+export CLUSTER="$cluster"
+settings="$ROOT_DIR/kubernetes/flux/$cluster/cluster-settings.yaml"
+if [[ -f "$settings" ]]; then
+  while IFS= read -r kv; do export "$kv"; done \
+    < <(yq -r '.data | to_entries[] | .key + "=" + .value' "$settings")
+fi
+
+helmfile --kube-context "$ctx" --file kubernetes/bootstrap/apps/helmfile.yaml.gotmpl apply --skip-diff-on-install --suppress-diff
 """
 
 [tasks."bootstrap:apps"]
