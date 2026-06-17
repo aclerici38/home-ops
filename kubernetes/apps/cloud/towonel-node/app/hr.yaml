@@ -22,7 +22,7 @@ spec:
               TOWONEL_HUB_RELAY_URL: &iroh https://vps.clerici.tech:8444
               TOWONEL_EDGE_RELAY_URL: *iroh
               TOWONEL_EDGE_ADVERTISED_ADDRESSES: vps.clerici.tech:443
-              TOWONEL_EDGE_REGION: US-WEST
+              TOWONEL_EDGE_REGION: CA
               TOWONEL_HUB_DB_DSN:
                 secretKeyRef:
                   name: towonel-node-db-app
