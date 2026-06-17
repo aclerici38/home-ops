@@ -100,6 +100,8 @@ spec:
             port: *port
     route:
       homebox:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - homebox.clerici.tech
         parentRefs:

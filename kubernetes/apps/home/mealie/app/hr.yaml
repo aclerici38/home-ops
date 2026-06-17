@@ -108,6 +108,8 @@ spec:
             port: *port
     route:
       mealie:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - mealie.clerici.tech
         parentRefs:

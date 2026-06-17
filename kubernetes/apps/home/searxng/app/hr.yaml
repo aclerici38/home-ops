@@ -84,6 +84,8 @@ spec:
             port: *port
     route:
       searxng:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - search.clerici.tech
         parentRefs:

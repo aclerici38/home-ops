@@ -160,6 +160,8 @@ spec:
             scheme: http
     route:
       dawarich:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - dawarich.clerici.tech
         parentRefs:

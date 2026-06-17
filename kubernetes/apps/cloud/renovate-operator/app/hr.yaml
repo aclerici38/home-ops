@@ -22,6 +22,9 @@ spec:
     forceRename: renovate-operator
     route:
       enabled: true
+      metadata:
+        annotations:
+          towonel.io/tunnel: enable
       hostnames:
         - renovate.clerici.tech
       parentRefs:

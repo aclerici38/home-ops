@@ -71,6 +71,8 @@ spec:
           - port: http
     route:
       echo-server:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - ${CLUSTER_NAME}.echo.clerici.tech
         parentRefs:

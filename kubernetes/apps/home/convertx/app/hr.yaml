@@ -76,6 +76,8 @@ spec:
             port: *port
     route:
       convertx:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - convertx.clerici.tech
         parentRefs:

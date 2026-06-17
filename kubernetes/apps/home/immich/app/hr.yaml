@@ -127,6 +127,8 @@ spec:
             scheme: http
     route:
       immich:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - immich.clerici.tech
         parentRefs:

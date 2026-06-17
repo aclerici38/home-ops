@@ -113,6 +113,8 @@ spec:
             port: *port
     route:
       donetick:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - donetick.clerici.tech
         parentRefs:

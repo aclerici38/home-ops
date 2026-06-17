@@ -87,6 +87,8 @@ spec:
             port: *port
     route:
       seerr:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - seer.clerici.tech
           - seerr.clerici.tech

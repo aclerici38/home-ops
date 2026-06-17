@@ -100,6 +100,8 @@ spec:
             port: *bPort
     route:
       streamystats:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - streamystats.clerici.tech
         parentRefs:

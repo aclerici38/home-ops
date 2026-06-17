@@ -75,6 +75,8 @@ spec:
           - port: http
     route:
       jellyfin:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - jellyfin.clerici.tech
           - tv.clerici.tech

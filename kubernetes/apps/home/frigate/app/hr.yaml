@@ -84,6 +84,8 @@ spec:
             port: 8555
     route:
       auth:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - frigate.clerici.tech
         parentRefs:

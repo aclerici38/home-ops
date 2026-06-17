@@ -228,6 +228,8 @@ spec:
     route:
       opencloud:
         forceRename: opencloud
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - cloud.clerici.tech
         parentRefs:
@@ -239,6 +241,7 @@ spec:
                 port: *port
       wopi:
         annotations:
+          towonel.io/tunnel: enable
           gatus.home-operations.com/endpoint: |-
             conditions: ["[STATUS] == 404"]
         hostnames:
@@ -251,6 +254,8 @@ spec:
               - identifier: wopi
                 port: 9300
       collabora:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - collabora.clerici.tech
         parentRefs:

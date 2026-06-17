@@ -151,6 +151,8 @@ spec:
             port: *port
     route:
       open-webui:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - chat.clerici.tech
         parentRefs:

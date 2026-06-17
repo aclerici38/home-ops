@@ -165,6 +165,8 @@ spec:
             port: 7700
     route:
       karakeep:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - karakeep.clerici.tech
         parentRefs:

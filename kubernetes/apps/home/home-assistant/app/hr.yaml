@@ -80,6 +80,8 @@ spec:
             port: &port 8123
     route:
       home-assistant:
+        annotations:
+          towonel.io/tunnel: enable
         hostnames:
           - hass.clerici.tech
         parentRefs:
