@@ -38,18 +38,14 @@ spec:
             env:
               RUST_LOG: info
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
                 custom: true
                 spec:
-                  tcpSocket:
+                  httpGet:
                     port: &httpPort 8080
-              readiness:
-                enabled: true
-                custom: true
-                spec:
-                  tcpSocket:
-                    port: *httpPort
+                    path: /healthz
+              readiness: *probes
             resources:
               requests:
                 cpu: 10m
