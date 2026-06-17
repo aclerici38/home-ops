@@ -45,8 +45,8 @@ spec:
           enabled: true
           annotations:
             towonel.io/tunnel: enable
-            towonel.io/tunnel-ref: towonel/main
-            towonel.io/agent-ref: home
+            towonel.io/tunnel-ref: towonel/${CLUSTER_NAME}
+            towonel.io/agent-ref: ${CLUSTER_NAME}
           parentRefs:
             - group: gateway.networking.k8s.io
               kind: Gateway
