@@ -97,7 +97,7 @@ spec:
           relay.toml: |
             enable_quic_addr_discovery = true
             http_bind_addr = "0.0.0.0:8080"
-        
+
             [tls]
             hostname = "vps.clerici.tech"
             cert_mode = "Reloading"
