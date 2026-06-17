@@ -9,25 +9,24 @@ spec:
     kind: OCIRepository
     name: renovate-operator
   interval: 30m
-  # TODO: why is this broken
-  # valuesFrom:
-  #   - kind: Secret
-  #     name: &oidcSecret renovate-operator-oidc-credentials
-  #     valuesKey: issuer_url
-  #     targetPath: auth.oidc.issuerUrl
-  #   - kind: Secret
-  #     name: *oidcSecret
-  #     valuesKey: client_id
-  #     targetPath: auth.oidc.clientId
+  valuesFrom:
+    - kind: Secret
+      name: &oidcSecret renovate-operator-oidc-credentials
+      valuesKey: issuer_url
+      targetPath: auth.oidc.issuerUrl
+    - kind: Secret
+      name: *oidcSecret
+      valuesKey: client_id
+      targetPath: auth.oidc.clientId
   values:
     forceRename: renovate-operator
-    # route:
-    #   enabled: true
-    #   hostnames:
-    #     - renovate.clerici.tech
-    #   parentRefs:
-    #     - name: external
-    #       namespace: kgateway
+    route:
+      enabled: true
+      hostnames:
+        - renovate.clerici.tech
+      parentRefs:
+        - name: external
+          namespace: kgateway
     config:
       logStorage:
         mode: memory
@@ -43,10 +42,10 @@ spec:
         enabled: true
         grafanaDashboard:
           allowCrossNamespaceImport: true
-  #   auth:
-  #     oidc:
-  #       enabled: true
-  #       existingSecret: *oidcSecret
-  #       secretKey: client_secret
-  # dependsOn:
-  #   - name: renovate-operator-resources
+    auth:
+      oidc:
+        enabled: true
+        existingSecret: *oidcSecret
+        secretKey: client_secret
+  dependsOn:
+    - name: renovate-operator-resources
