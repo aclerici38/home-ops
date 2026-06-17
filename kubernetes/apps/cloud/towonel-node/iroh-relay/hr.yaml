@@ -1,0 +1,107 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json?values=app-template/5.0.1
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: iroh-relay
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 3m
+  upgrade:
+    timeout: 3m
+  values:
+    controllers:
+      iroh-relay:
+        strategy: RollingUpdate
+        pod:
+          hostUsers: false
+          # The relay needs a routable address; bind the node's host network so
+          # agents/edges can reach :8443 (TCP) and :7842 (UDP) directly.
+          hostNetwork: true
+          dnsPolicy: ClusterFirstWithHostNet
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile: {type: RuntimeDefault}
+        containers:
+          iroh-relay:
+            image:
+              repository: docker.io/n0computer/iroh-relay
+              tag: v1.0.0@sha256:0124f8c335d9ad6618db13dc580b597ad5f1be0c987b6742696f4c1f5e325720
+            args:
+              - "--config-path"
+              - "/etc/iroh-relay/relay.toml"
+            env:
+              RUST_LOG: info
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: &httpPort 8080
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: *httpPort
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              seccompProfile: {type: RuntimeDefault}
+              capabilities: {drop: ["ALL"]}
+    service:
+      iroh-relay:
+        controller: iroh-relay
+        ports:
+          http:
+            port: *httpPort
+          https:
+            port: 8443
+          quic:
+            port: 7842
+            protocol: UDP
+    persistence:
+      config:
+        type: configMap
+        name: iroh-relay
+        globalMounts:
+          - path: /etc/iroh-relay
+            readOnly: true
+      tls:
+        type: secret
+        name: iroh-relay-tls
+        globalMounts:
+          - path: /tls
+            readOnly: true
+      data:
+        type: emptyDir
+        globalMounts:
+          - path: /data
+    configMaps:
+      config:
+        data:
+          relay.toml: |
+            enable_quic_addr_discovery = true
+            http_bind_addr = "0.0.0.0:8080"
+
+            [tls]
+            hostname = "vps.clerici.tech"
+            cert_mode = "Reloading"
+            manual_cert_path = "/tls/tls.crt"
+            manual_key_path = "/tls/tls.key"
+            https_bind_addr = "0.0.0.0:8443"
+            quic_bind_addr = "0.0.0.0:7842"
