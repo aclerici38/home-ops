@@ -40,7 +40,7 @@ spec:
       - "gateway-httproute"
       - "service"
     txtPrefix: k8s.
-    txtOwnerId: default
+    txtOwnerId: ${CLUSTER_NAME}
     domainFilters:
       - "clerici.tech"
     serviceMonitor:
