@@ -5,7 +5,7 @@ talosVersion: v1.13.4
 kubernetesVersion: v1.36.2
 
 clusterName: cloud
-endpoint: https://oracle.clerici.tech:6443
+endpoint: https://vps.clerici.tech:6443
 
 clusterPodNets:
   - "172.16.0.0/16"
@@ -14,7 +14,7 @@ clusterSvcNets:
 
 additionalApiServerCertSans: &sans
   - "madbum"
-  - "oracle.clerici.tech"
+  - "vps.clerici.tech"
   - "192.9.147.24"
   - "10.40.40.41"
   - "127.0.0.1"
