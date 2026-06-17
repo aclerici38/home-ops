@@ -6,6 +6,8 @@
 # Kustomization-built paths, not the bootstrap entrypoint itself.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+resources:
+  - ./app-template.yaml
 configMapGenerator:
   - name: cluster-settings
     envs:
