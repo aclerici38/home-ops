@@ -41,7 +41,7 @@ spec:
       hostnames:
         - ${CLUSTER_NAME}.grafana.clerici.tech
       parentRefs:
-        - name: internal
+        - name: external
           namespace: kgateway
   deployment:
     spec:

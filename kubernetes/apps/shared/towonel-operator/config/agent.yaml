@@ -7,7 +7,7 @@ metadata:
 spec:
   relayUrl: https://vps.clerici.tech:8444
   tunnelRef:
-    name: main
+    name: ${CLUSTER_NAME}-k8s
     namespace: towonel-operator
   workload:
     replicas: 1
