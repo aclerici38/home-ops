@@ -19,7 +19,6 @@ spec:
       iroh-relay:
         strategy: RollingUpdate
         pod:
-          hostUsers: false
           # The relay needs a routable address; bind the node's host network so
           # agents/edges can reach :8443 (TCP) and :7842 (UDP) directly.
           hostNetwork: true
