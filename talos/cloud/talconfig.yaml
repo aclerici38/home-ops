@@ -5,7 +5,7 @@ talosVersion: v1.13.4
 kubernetesVersion: v1.36.2
 
 clusterName: cloud
-endpoint: https://cloud.clerici.tech:6443
+endpoint: https://oracle.clerici.tech:6443
 
 clusterPodNets:
   - "172.16.0.0/16"
@@ -14,7 +14,7 @@ clusterSvcNets:
 
 additionalApiServerCertSans: &sans
   - "madbum"
-  - "cloud.clerici.tech"
+  - "oracle.clerici.tech"
   - "192.9.147.24"
   - "10.40.40.41"
   - "127.0.0.1"
@@ -31,12 +31,8 @@ nodes:
     machineSpec:
       secureboot: false
       arch: arm64
-      mode: oracle-installer
+      mode: oracle
       useUKI: false
-    kernelModules:
-      - name: nbd
-    nodeLabels:
-      storage.openebs.io/hostpath: "true"
     schematic:
       customization:
         extraKernelArgs:
@@ -48,20 +44,6 @@ nodes:
           - security=none
           - talos.platform=oracle
     controlPlane: true
-    volumes:
-      - name: EPHEMERAL
-        provisioning:
-          diskSelector:
-            match: system_disk
-          maxSize: 100GB
-          grow: false
-    userVolumes:
-      - name: local-path
-        provisioning:
-          diskSelector:
-            match: system_disk
-          minSize: 30GB
-          grow: true
 # Global patches (shared base from ../global, then this cluster's overrides)
 patches:
   - "@../global/machine-kubelet.yaml"
