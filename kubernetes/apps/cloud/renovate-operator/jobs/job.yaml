@@ -44,12 +44,6 @@ spec:
             "password": "$(DOCKERHUB_TOKEN)"
           }
         ]
-    - name: RENOVATE_REDIS_URL
-      value: redis://renovate-operator-dragonfly-db:6379
-    - name: RENOVATE_REPOSITORY_CACHE
-      value: enabled
-    - name: RENOVATE_CACHE_PRIVATE_PACKAGES
-      value: "true"
     - name: RENOVATE_CUSTOM_ENV_VARIABLES
       value: >-
         {"MISE_TRUSTED_CONFIG_PATHS": "/tmp/repos"}
