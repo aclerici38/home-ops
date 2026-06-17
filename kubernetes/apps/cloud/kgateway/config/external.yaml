@@ -6,10 +6,7 @@ kind: Gateway
 metadata:
   name: external
   annotations:
-    towonel.io/enable: "true"
     towonel.io/gateway-service: kgateway/external:443
-    towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
-    towonel.io/agent-ref: ${CLUSTER_NAME}
 spec:
   gatewayClassName: kgateway
   infrastructure:
