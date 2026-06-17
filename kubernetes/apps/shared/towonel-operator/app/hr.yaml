@@ -28,7 +28,7 @@ spec:
     #     serviceMonitor:
     #       enabled: true
     credentials:
-      existingSecret: towonel
-      tokenKey: TOWONEL_API_KEY
+      existingSecret: towonel-operator
+      tokenKey: TOWONEL_OPERATOR_API_KEY
     agentNodeRBAC:
       create: false

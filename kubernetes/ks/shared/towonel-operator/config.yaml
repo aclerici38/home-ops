@@ -5,13 +5,13 @@ metadata:
   name: towonel-config
   namespace: flux-system
 spec:
-  targetNamespace: towonel
+  targetNamespace: towonel-operator
   dependsOn:
-    - name: towonel
+    - name: towonel-operator
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/towonel-operator/config
+  path: ./kubernetes/apps/shared/towonel-operator/config
   commonMetadata:
     labels:
       app.kubernetes.io/name: towonel

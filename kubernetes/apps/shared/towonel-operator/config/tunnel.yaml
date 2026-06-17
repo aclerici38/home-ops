@@ -3,10 +3,8 @@
 apiVersion: towonel.io/v1alpha1
 kind: TowonelTunnel
 metadata:
-  name: main
+  name: ${CLUSTER_NAME}-k8s
 spec:
-  region: CA
-  failoverRegions:
-    - EU
+  region: US-WEST
   deletionPolicy: Delete
   tokenExpiry: 0
