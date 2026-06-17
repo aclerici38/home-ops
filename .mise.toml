@@ -59,7 +59,7 @@ cluster="${1:-}"
 [[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
 case "$cluster" in
   home)  export CLUSTER_NAME=dormammu ;;
-  cloud) export CLUSTER_NAME=madbum ;;
+  cloud) export CLUSTER_NAME=cloud ;;
   *) echo "ERROR: unknown cluster '$cluster' (expected home|cloud)" >&2; exit 1 ;;
 esac
 ctx="admin@${CLUSTER_NAME}"
@@ -102,7 +102,7 @@ cluster="${1:-}"
 [[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
 case "$cluster" in
   home)  export CLUSTER_NAME=dormammu ;;
-  cloud) export CLUSTER_NAME=madbum ;;
+  cloud) export CLUSTER_NAME=cloud ;;
   *) echo "ERROR: unknown cluster '$cluster' (expected home|cloud)" >&2; exit 1 ;;
 esac
 ctx="admin@${CLUSTER_NAME}"
