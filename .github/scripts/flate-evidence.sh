@@ -13,16 +13,18 @@ if ! command -v flate >/dev/null 2>&1; then
 fi
 
 found=0
-for resource in hr ks; do
-  out="$(flate diff "${resource}" --path ./kubernetes/flux 2>/dev/null)" || true
-  if [ -n "${out}" ]; then
-    found=1
-    echo "### Rendered ${resource} diff"
-    echo '```'
-    echo "${out}"
-    echo '```'
-    echo
-  fi
+for cluster in home cloud; do
+  for resource in hr ks; do
+    out="$(flate diff "${resource}" --path "./kubernetes/flux/${cluster}" 2>/dev/null)" || true
+    if [ -n "${out}" ]; then
+      found=1
+      echo "### Rendered ${resource} diff (${cluster})"
+      echo '```'
+      echo "${out}"
+      echo '```'
+      echo
+    fi
+  done
 done
 
 if [ "${found}" -eq 0 ]; then
