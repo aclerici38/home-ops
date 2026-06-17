@@ -24,24 +24,6 @@ spec:
     - kind: ConfigMap
       name: openebs-values
   values:
-    # https://github.com/openebs/zfs-localpv/blob/HEAD/deploy/helm/charts/values.yaml
-    zfs-localpv:
-      enabled: true
-      analytics:
-        enabled: false
-      zfs:
-        bin: /usr/local/sbin/zfs
-      zfsNode:
-        encrKeysDir: /var/openebs/keys
-        nodeSelector:
-          kubernetes.io/hostname: bonds
-      zfsPlugin:
-        image:
-          registry: ghcr.io/
-      crds:
-        csi:
-          volumeSnapshots:
-            enabled: false
     engines:
       local:
         zfs:
