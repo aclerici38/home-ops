@@ -48,11 +48,11 @@ spec:
       value: >-
         {"MISE_TRUSTED_CONFIG_PATHS": "/tmp/repos"}
   image: ghcr.io/renovatebot/renovate:43.227.1@sha256:98174f03b4d8db564ced5948e11f4694112d3bfc512dc8e141421905ea65ecc5
-  parallelism: 5
+  parallelism: 2
   resources:
-    requests:
-      cpu: 100m
-      memory: 128Mi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
   schedule: "${SCHEDULE}"
   githubAppReference:
     secretName: renovate-operator
