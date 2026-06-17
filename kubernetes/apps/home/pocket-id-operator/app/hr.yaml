@@ -26,16 +26,13 @@ spec:
       retries: 1
   dependsOn:
     - name: pocket-id-operator-resources
+  valuesFrom:
+    - kind: ConfigMap
+      name: pocket-id-operator-values
+      valuesKey: values.yaml
+  # home-only: the pocket-id instance, users and groups (base operator/metrics values
+  # come from the shared pocket-id-operator-values ConfigMap).
   values:
-    operator:
-      args:
-        - --zap-log-level=debug
-    metrics:
-      enabled: true
-      serviceMonitor:
-        enabled: true
-      dashboard:
-        enabled: true
     instance:
       enabled: true
       name: pocket-id

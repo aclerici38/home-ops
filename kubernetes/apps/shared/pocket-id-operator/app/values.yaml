@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pocket-id-operator-values
+  namespace: pocket-id-operator
+data:
+  values.yaml: |
+    operator:
+      args:
+        - --zap-log-level=debug
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+      dashboard:
+        enabled: true
