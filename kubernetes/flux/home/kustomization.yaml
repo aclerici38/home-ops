@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - ./app-template.yaml
   - ./apps.yaml
-  - ../shared-apps.yaml
+  - ./shared-apps.yaml
 configMapGenerator:
   - name: cluster-settings
     namespace: flux-system
