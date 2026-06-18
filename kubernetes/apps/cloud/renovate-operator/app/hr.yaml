@@ -27,7 +27,7 @@ spec:
         towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
         towonel.io/agent-ref: ${CLUSTER_NAME}
       hostnames:
-        - renovate.clerici.tech
+        - renovate.cloud.clerici.tech
       parentRefs:
         - name: external
           namespace: kgateway
@@ -51,6 +51,6 @@ spec:
         enabled: true
         existingSecret: *oidcSecret
         secretKey: client_secret
-        redirectUrl: https://renovate.clerici.tech/auth/callback
+        redirectUrl: https://renovate.cloud.clerici.tech/auth/callback
   dependsOn:
     - name: renovate-operator-resources

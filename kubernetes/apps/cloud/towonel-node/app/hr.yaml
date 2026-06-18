@@ -19,7 +19,7 @@ spec:
             env:
               RUST_LOG: info
               TOWONEL_HUB_DB_DRIVER: postgres
-              TOWONEL_HUB_PUBLIC_URL: https://towonel.clerici.tech
+              TOWONEL_HUB_PUBLIC_URL: https://towonel.cloud.clerici.tech
               TOWONEL_HUB_RELAY_URL: &iroh https://vps.clerici.tech:8444
               TOWONEL_EDGE_RELAY_URL: *iroh
               TOWONEL_EDGE_ADVERTISED_ADDRESSES: vps.clerici.tech:443
@@ -56,7 +56,7 @@ spec:
           towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
           towonel.io/agent-ref: ${CLUSTER_NAME}
         hostnames:
-          - towonel.clerici.tech
+          - towonel.cloud.clerici.tech
         parentRefs:
           - name: external
             namespace: kgateway

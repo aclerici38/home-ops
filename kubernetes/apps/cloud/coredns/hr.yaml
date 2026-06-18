@@ -45,8 +45,8 @@ spec:
           - name: rewrite
             parameters: stop
             configBlock: |-
-              name exact towonel.clerici.tech external.kgateway.svc.cluster.local
-              answer name external\.kgateway\.svc\.cluster\.local towonel.clerici.tech
+              name exact towonel.cloud.clerici.tech external.kgateway.svc.cluster.local
+              answer name external\.kgateway\.svc\.cluster\.local towonel.cloud.clerici.tech
           - name: kubernetes
             parameters: cluster.local in-addr.arpa ip6.arpa
             configBlock: |-

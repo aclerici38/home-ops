@@ -1,6 +1,5 @@
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.5.1/gateway_v1.json
-# TODO: figure out oracle loadbalancer thing vs nodeport
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
@@ -25,7 +24,7 @@ spec:
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: "*.clerici.tech"
+      hostname: "*.cloud.clerici.tech"
       allowedRoutes:
         namespaces:
           from: All
