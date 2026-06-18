@@ -11,6 +11,15 @@ pre-commit:
       glob: "nix-config/**/*.nix"
       run: nixfmt --check {staged_files}
       stage_fixed: true
+    yaml:
+      glob: "kubernetes/**/*.{yaml,yml}"
+      exclude:
+        - "**/*.sops.yaml"
+        - "kubernetes/charts/*/templates/**"
+      # Auto-fix formatting first (trailing whitespace, EOF newline, indent),
+      # then lint so anything yamlfmt can't fix blocks here instead of in CI.
+      run: yamlfmt {staged_files} && yamllint {staged_files}
+      stage_fixed: true
     actionlint:
       glob: ".github/{workflows,actions}/**/*.{yaml,yml}"
       run: actionlint {staged_files}

@@ -22,7 +22,7 @@ spec:
     - name: towonel-operator-resources
   values:
     replicas: 1
-    leaderElection: 
+    leaderElection:
       enabled: false
     logLevel: debug
     towonel:
