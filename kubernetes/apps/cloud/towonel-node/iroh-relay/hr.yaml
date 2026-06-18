@@ -17,6 +17,7 @@ spec:
   values:
     controllers:
       iroh-relay:
+        type: daemonset
         pod:
           # The relay needs a routable address; bind the node's host network so
           # agents/edges can reach :8444 (TCP) and :7842 (UDP) directly.
@@ -92,7 +93,7 @@ spec:
     configMaps:
       config:
         data:
-          relay.toml: |
+          relay.toml: |-
             enable_quic_addr_discovery = true
             http_bind_addr = "0.0.0.0:8080"
             metrics_bind_addr = "0.0.0.0:9095"
