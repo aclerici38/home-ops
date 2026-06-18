@@ -31,8 +31,6 @@ spec:
     extraArgs:
       - --cloudflare-dns-records-per-page=1000
       - --gateway-name=external
-      - --default-targets=vps.clerici.tech
-      - --force-default-targets
     policy: sync
     triggerLoopOnEvent: true
     sources:

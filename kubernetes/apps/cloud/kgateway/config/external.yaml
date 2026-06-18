@@ -7,6 +7,7 @@ metadata:
   name: external
   annotations:
     towonel.io/gateway-service: kgateway/external:443
+    external-dns.alpha.kubernetes.io/target: vps.clerici.tech
 spec:
   gatewayClassName: kgateway
   infrastructure:
