@@ -48,7 +48,7 @@ spec:
           allowCrossNamespaceImport: true
     auth:
       oidc:
-        enabled: true
+        enabled: false
         existingSecret: *oidcSecret
         secretKey: client_secret
         redirectUrl: https://renovate.cloud.clerici.tech/auth/callback
