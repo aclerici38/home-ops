@@ -76,7 +76,7 @@ spec:
           towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
           towonel.io/agent-ref: ${CLUSTER_NAME}
         hostnames:
-          - ${CLUSTER_NAME}.echo.clerici.tech
+          - echo.${CLUSTER_NAME}.clerici.tech
         parentRefs:
           - name: external
             namespace: kgateway

@@ -30,11 +30,11 @@ spec:
       angular_support_enabled: "true"
     server:
       enable_gzip: "true"
-      root_url: https://${CLUSTER_NAME}.grafana.clerici.tech
+      root_url: https://grafana.${CLUSTER_NAME}.clerici.tech
   httpRoute:
     spec:
       hostnames:
-        - ${CLUSTER_NAME}.grafana.clerici.tech
+        - grafana.${CLUSTER_NAME}.clerici.tech
       parentRefs:
         - name: internal
           namespace: kgateway

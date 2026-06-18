@@ -8,6 +8,9 @@ spec:
   dnsNames:
     - "clerici.tech"
     - "*.clerici.tech"
+    # Covers cluster-scoped hosts like echo.${CLUSTER_NAME}.clerici.tech; a TLS
+    # wildcard only spans one label, so the apex *.clerici.tech can't cover them.
+    - "*.${CLUSTER_NAME}.clerici.tech"
   duration: 160h
   issuerRef:
     kind: ClusterIssuer
