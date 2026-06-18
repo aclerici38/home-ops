@@ -48,7 +48,7 @@ spec:
       value: >-
         {"MISE_TRUSTED_CONFIG_PATHS": "/tmp/repos"}
   image: ghcr.io/renovatebot/renovate:43.227.1@sha256:98174f03b4d8db564ced5948e11f4694112d3bfc512dc8e141421905ea65ecc5
-  parallelism: 2
+  parallelism: 3
   scratchVolume:
     medium: Memory
     sizeLimit: 2Gi
