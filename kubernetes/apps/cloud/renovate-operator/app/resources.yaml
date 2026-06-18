@@ -22,4 +22,8 @@ spec:
       namespace: external-secrets
   values:
     externalSecret: {}
-    pocketId: {}
+    pocketId:
+      name: renovate
+      url: renovate.clerici.tech
+      callbackPaths:
+        - /auth/callback

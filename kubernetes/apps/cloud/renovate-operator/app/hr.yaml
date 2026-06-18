@@ -51,5 +51,6 @@ spec:
         enabled: true
         existingSecret: *oidcSecret
         secretKey: client_secret
+        redirectUrl: https://renovate.clerici.tech/auth/callback
   dependsOn:
     - name: renovate-operator-resources
