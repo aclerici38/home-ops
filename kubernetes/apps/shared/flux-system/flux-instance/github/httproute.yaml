@@ -17,7 +17,7 @@ spec:
       namespace: kgateway
       sectionName: https
   hostnames:
-    - flux-instance.clerici.tech
+    - flux-instance.${CLUSTER_NAME}.clerici.tech
   rules:
     - matches:
         - path:
