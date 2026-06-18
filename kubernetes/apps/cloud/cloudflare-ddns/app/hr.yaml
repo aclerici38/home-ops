@@ -39,7 +39,7 @@ spec:
               tag: v1.2.6@sha256:049ce1b25bd9dff39c6ca0d768c93092937b524356016d9ca0f4b297f3a0293c
             args:
               - --zone-name=clerici.tech
-              - --record-name=${CLUSTER_NAME}.clerici.tech
+              - --record-name=vps.clerici.tech
               - --proxied=false
               - --create-missing=true
             env:
