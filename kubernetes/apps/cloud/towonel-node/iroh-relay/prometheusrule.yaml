@@ -1,0 +1,75 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: iroh-relay
+spec:
+  groups:
+    - name: iroh-relay.rules
+      rules:
+        # The relay always carries a trickle of bytes for coordination:
+        # QUIC address discovery (relayserver_qad_*) and client keepalives.
+        # Sustained KB/s of forwarded payload means an edge<->agent QUIC path
+        # failed to go direct and fell back to relaying — the thing we want to
+        # avoid. ~25 KB/s for 15m is well above the coordination baseline.
+        - alert: IrohRelayCarryingTraffic
+          expr: |-
+            rate(relayserver_bytes_sent_total[10m]) > 25000
+          for: 15m
+          annotations:
+            summary: >-
+              iroh-relay is forwarding {{ $value | humanize }}B/s — an
+              edge<->agent QUIC path has fallen back to the relay instead of
+              going direct. Check NAT/hole-punching and that UDP 51820 (edge)
+              and UDP 7842 (relay QAD) are reachable.
+          labels:
+            severity: warning
+
+        # No relay = no coordination/fallback channel; new connections can't be
+        # brokered and existing ones can't recover from path changes.
+        - alert: IrohRelayDown
+          expr: |-
+            absent(relayserver_bytes_sent_total)
+          for: 10m
+          annotations:
+            summary: >-
+              iroh-relay metrics absent for 10m — the relay is down or unscraped.
+              Agents lose the coordination/fallback channel for the towonel edge.
+          labels:
+            severity: critical
+
+        - alert: IrohRelayPacketsDropped
+          expr: |-
+            rate(relayserver_send_packets_dropped_total[10m]) > 0
+          for: 15m
+          annotations:
+            summary: >-
+              iroh-relay is dropping {{ $value | humanize }} forwarded packets/s
+              — relay send queues are backing up.
+          labels:
+            severity: warning
+
+        - alert: IrohRelayRateLimiting
+          expr: |-
+            rate(relayserver_bytes_rx_ratelimited_total[10m]) > 0
+            or rate(relayserver_conns_rx_ratelimited_total[10m]) > 0
+          for: 15m
+          annotations:
+            summary: >-
+              iroh-relay is rate-limiting inbound traffic
+              ({{ $value | humanize }}/s) — clients may see degraded relay paths.
+          labels:
+            severity: warning
+
+        - alert: IrohRelayQadErrors
+          expr: |-
+            rate(relayserver_qad_incoming_error_total[15m]) > 0.1
+          for: 15m
+          annotations:
+            summary: >-
+              iroh-relay QUIC address discovery is erroring
+              ({{ $value | humanize }}/s) — nodes may fail to learn their public
+              address, which pushes connections onto the relay.
+          labels:
+            severity: warning

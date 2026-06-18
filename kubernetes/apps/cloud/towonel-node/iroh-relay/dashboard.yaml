@@ -1,0 +1,101 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/grafana-operator/5.24.0/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: iroh-relay
+spec:
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  json: |-
+    {
+      "title": "iroh-relay",
+      "uid": "iroh-relay",
+      "tags": ["towonel", "iroh"],
+      "timezone": "browser",
+      "schemaVersion": 39,
+      "refresh": "30s",
+      "time": {"from": "now-6h", "to": "now"},
+      "templating": {
+        "list": [
+          {
+            "name": "datasource",
+            "label": "Datasource",
+            "type": "datasource",
+            "query": "prometheus",
+            "current": {},
+            "hide": 0
+          }
+        ]
+      },
+      "panels": [
+        {
+          "id": 1,
+          "type": "timeseries",
+          "title": "Relay forwarded throughput (flat near 0 = traffic is going direct)",
+          "description": "Bytes the relay forwards on behalf of clients. A sustained climb means an edge<->agent QUIC path fell back to relaying instead of going direct.",
+          "datasource": {"type": "prometheus", "uid": "${datasource}"},
+          "gridPos": {"h": 9, "w": 24, "x": 0, "y": 0},
+          "fieldConfig": {
+            "defaults": {"unit": "Bps", "custom": {"drawStyle": "line", "fillOpacity": 10}},
+            "overrides": []
+          },
+          "targets": [
+            {"refId": "A", "datasource": {"type": "prometheus", "uid": "${datasource}"}, "expr": "rate(relayserver_bytes_sent_total[5m])", "legendFormat": "sent"},
+            {"refId": "B", "datasource": {"type": "prometheus", "uid": "${datasource}"}, "expr": "rate(relayserver_bytes_recv_total[5m])", "legendFormat": "recv"}
+          ]
+        },
+        {
+          "id": 2,
+          "type": "timeseries",
+          "title": "Forwarded packets/s",
+          "datasource": {"type": "prometheus", "uid": "${datasource}"},
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 9},
+          "fieldConfig": {"defaults": {"unit": "pps", "custom": {"drawStyle": "line", "fillOpacity": 10}}, "overrides": []},
+          "targets": [
+            {"refId": "A", "datasource": {"type": "prometheus", "uid": "${datasource}"}, "expr": "rate(relayserver_send_packets_sent_total[5m])", "legendFormat": "sent"},
+            {"refId": "B", "datasource": {"type": "prometheus", "uid": "${datasource}"}, "expr": "rate(relayserver_send_packets_recv_total[5m])", "legendFormat": "recv"},
+            {"refId": "C", "datasource": {"type": "prometheus", "uid": "${datasource}"}, "expr": "rate(relayserver_send_packets_dropped_total[5m])", "legendFormat": "dropped"}
+          ]
+        },
+        {
+          "id": 3,
+          "type": "timeseries",
+          "title": "Client connections /s",
+          "datasource": {"type": "prometheus", "uid": "${datasource}"},
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 9},
+          "fieldConfig": {"defaults": {"unit": "cps", "custom": {"drawStyle": "line", "fillOpacity": 10}}, "overrides": []},
+          "targets": [
+            {"refId": "A", "datasource": {"type": "prometheus", "uid": "${datasource}"}, "expr": "rate(relayserver_accepts_total[5m])", "legendFormat": "accepts"},
+            {"refId": "B", "datasource": {"type": "prometheus", "uid": "${datasource}"}, "expr": "rate(relayserver_disconnects_total[5m])", "legendFormat": "disconnects"}
+          ]
+        },
+        {
+          "id": 4,
+          "type": "timeseries",
+          "title": "QUIC address discovery /s (hole-punch assist)",
+          "description": "QAD lets nodes learn their public address so they can connect direct. Errors here push connections onto the relay.",
+          "datasource": {"type": "prometheus", "uid": "${datasource}"},
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 17},
+          "fieldConfig": {"defaults": {"unit": "ops", "custom": {"drawStyle": "line", "fillOpacity": 10}}, "overrides": []},
+          "targets": [
+            {"refId": "A", "datasource": {"type": "prometheus", "uid": "${datasource}"}, "expr": "rate(relayserver_qad_connections_total[5m])", "legendFormat": "connections"},
+            {"refId": "B", "datasource": {"type": "prometheus", "uid": "${datasource}"}, "expr": "rate(relayserver_qad_incoming_error_total[5m])", "legendFormat": "errors"}
+          ]
+        },
+        {
+          "id": 5,
+          "type": "timeseries",
+          "title": "Rate-limited inbound /s",
+          "datasource": {"type": "prometheus", "uid": "${datasource}"},
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 17},
+          "fieldConfig": {"defaults": {"custom": {"drawStyle": "line", "fillOpacity": 10}}, "overrides": []},
+          "targets": [
+            {"refId": "A", "datasource": {"type": "prometheus", "uid": "${datasource}"}, "expr": "rate(relayserver_bytes_rx_ratelimited_total[5m])", "legendFormat": "bytes"},
+            {"refId": "B", "datasource": {"type": "prometheus", "uid": "${datasource}"}, "expr": "rate(relayserver_conns_rx_ratelimited_total[5m])", "legendFormat": "conns"}
+          ]
+        }
+      ]
+    }

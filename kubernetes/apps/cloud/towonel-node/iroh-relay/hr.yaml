@@ -37,7 +37,8 @@ spec:
               - "--config-path"
               - "/etc/iroh-relay/relay.toml"
             env:
-              RUST_LOG: info
+              # Quiet iroh logs
+              RUST_LOG: info,iroh_relay::server::client=error,noq_proto::bloom_token_log=error
             probes:
               liveness:
                 enabled: true
@@ -73,6 +74,15 @@ spec:
           quic:
             port: 7842
             protocol: UDP
+          metrics:
+            port: 9095
+    serviceMonitor:
+      iroh-relay:
+        serviceName: iroh-relay
+        endpoints:
+          - port: metrics
+            interval: 1m
+            scrapeTimeout: 10s
     persistence:
       config:
         type: configMap
