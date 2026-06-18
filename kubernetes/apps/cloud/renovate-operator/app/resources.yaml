@@ -20,8 +20,13 @@ spec:
   dependsOn:
     - name: external-secrets
       namespace: external-secrets
+    - name: pocket-id-operator
+      namespace: pocket-id-operator
+    - name: dragonfly-operator
+      namespace: dragonfly-operator
   values:
     externalSecret: {}
+    dragonfly: {}
     pocketId:
       name: renovate
       url: renovate.cloud.clerici.tech
