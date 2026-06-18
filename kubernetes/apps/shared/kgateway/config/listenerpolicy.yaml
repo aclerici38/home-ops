@@ -11,6 +11,10 @@ spec:
       name: external
   # Towonel proxy + LAN
   perPort:
+    - port: 80
+      listener:
+        proxyProtocol:
+          allowRequestsWithoutProxyProtocol: true
     - port: 443
       listener:
         proxyProtocol:
