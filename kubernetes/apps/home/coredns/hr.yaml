@@ -55,6 +55,6 @@ spec:
           - name: forward
             parameters: . ${BLOCKY_CLUSTER_IP}
             configBlock: |-
-              except cluster.local 16.172.in-addr.arpa
+              except cluster.local 16.172.in-addr.arpa 0.1.8.4.7.1.d.f.3.d.6.f.d.f.ip6.arpa 0.0.0.2.8.4.7.1.d.f.3.d.6.f.d.f.ip6.arpa
           - name: loop
           - name: reload

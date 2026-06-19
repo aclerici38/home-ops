@@ -42,10 +42,13 @@ conditional:
     # House
     internal: ${NODE_GATEWAY}:53
     0.10.in-addr.arpa: ${NODE_GATEWAY}:53
+    8.4.7.1.d.f.3.d.6.f.d.f.ip6.arpa: ${NODE_GATEWAY}:53
 
     # kube
     cluster.local: ${COREDNS_CLUSTER_IP}
     16.172.in-addr.arpa: ${COREDNS_CLUSTER_IP}
+    0.1.8.4.7.1.d.f.3.d.6.f.d.f.ip6.arpa: ${COREDNS_CLUSTER_IP}
+    0.0.0.2.8.4.7.1.d.f.3.d.6.f.d.f.ip6.arpa: ${COREDNS_CLUSTER_IP}
 
     # bambi
     bambi.internal: 192.168.8.1:53
@@ -68,6 +71,9 @@ bootstrapDns:
   - 8.8.8.8
   - 1.1.1.1
   - 9.9.9.9
+  - 2620:fe::fe
+  - 2606:4700:4700::1111
+  - 2001:4860:4860::8888
 
 upstreams:
   groups:
@@ -97,8 +103,12 @@ blocking:
     # home
     10.0.20.0/24:
       - ads
+    "fdf6:d3fd:1748:20::/64":
+      - ads
     # cottage
     10.0.40.0/24:
+      - ads
+    "fdf6:d3fd:1748:40::/64":
       - ads
 
 redis:
