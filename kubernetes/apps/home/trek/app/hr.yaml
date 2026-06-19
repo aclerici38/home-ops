@@ -32,6 +32,10 @@ spec:
             image:
               repository: mirror.gcr.io/mauriceboe/trek
               tag: 3.1.1@sha256:67779cdd0e17a494e4c8ab2b408239bd31174fef113fd05fb276437748f09dce
+            args:
+              - sh
+              - -c
+              - cd /app/server && exec node --require tsconfig-paths/register dist/index.js
             env:
               ALLOW_INTERNAL_NETWORK: true
               LOG_LEVEL: debug
