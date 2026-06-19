@@ -50,13 +50,13 @@ spec:
     - name: RENOVATE_REDIS_URL
       value: redis://renovate-operator-dragonfly-db:6379
   image: ghcr.io/renovatebot/renovate:43.232.0@sha256:aa3af52641f0713f9f00afac463cc3bfb2aa31c590fed9b04ef10b8821929a2b
-  parallelism: 3
+  parallelism: 1
   scratchVolume:
     medium: Memory
     sizeLimit: 2Gi
   resources:
     limits:
-      cpu: 750m
+      cpu: 1000m
       memory: 3Gi
   schedule: "${SCHEDULE}"
   githubAppReference:
