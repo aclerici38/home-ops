@@ -51,6 +51,9 @@ spec:
                 secretKeyRef:
                   name: towonel-node
                   key: TOWONEL_HUB_LINK_PSK
+            resources:
+              requests: {}
+              limits: {}
     route:
       towonel-node:
         annotations:
