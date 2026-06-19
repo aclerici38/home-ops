@@ -19,8 +19,19 @@ spec:
     remediation:
       retries: 1
   values:
-    nodeSelector:
-      intel.feature.node.kubernetes.io/gpu: "true"
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: intel.feature.node.kubernetes.io/gpu
+                  operator: In
+                  values:
+                    - "true"
+                - key: kubernetes.io/hostname
+                  operator: NotIn
+                  values:
+                    - belt
     dra:
       enabled: true
       deviceClassName: gpu.intel.com
