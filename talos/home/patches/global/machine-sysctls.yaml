@@ -32,3 +32,8 @@ machine:
     net.ipv4.conf.all.src_valid_mark: 1
     net.ipv4.conf.all.rp_filter: 0
     net.ipv6.conf.bond0.accept_ra: 2
+    # Disable v6 discovery on multus interfaces
+    net.ipv6.conf.bond1.disable_ipv6: 1
+    net.ipv6.conf.bond1/20.disable_ipv6: 1
+    net.ipv6.conf.bond1/40.disable_ipv6: 1
+    net.ipv6.conf.bond1/80.disable_ipv6: 1
