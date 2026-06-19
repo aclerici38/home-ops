@@ -5,7 +5,7 @@ metadata:
   name: cilium-values
   namespace: cilium
 data:
-  values.yaml: |
+  values.yaml: |-
     autoDirectNodeRoutes: true
     namespaceOverride: cilium
     bpf:
@@ -78,6 +78,7 @@ data:
       acceleration: best-effort
       algorithm: maglev
       mode: "dsr"
+      dsrDispatch: geneve
     nodePort:
       enabled: true
     operator:
@@ -96,6 +97,7 @@ data:
         trustCRDsExist: true
     rollOutCiliumPods: true
     routingMode: native
+    tunnelProtocol: geneve
     cni:
       exclusive: false
     socketLB:
