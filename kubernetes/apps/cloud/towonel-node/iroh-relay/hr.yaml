@@ -99,13 +99,13 @@ spec:
         data:
           relay.toml: |-
             enable_quic_addr_discovery = true
-            http_bind_addr = "0.0.0.0:8080"
-            metrics_bind_addr = "0.0.0.0:9095"
+            http_bind_addr = "[::]:8080"
+            metrics_bind_addr = "[::]:9095"
 
             [tls]
             hostname = "vps.clerici.tech"
             cert_mode = "Reloading"
             manual_cert_path = "/tls/tls.crt"
             manual_key_path = "/tls/tls.key"
-            https_bind_addr = "0.0.0.0:8444"
-            quic_bind_addr = "0.0.0.0:7842"
+            https_bind_addr = "[::]:8444"
+            quic_bind_addr = "[::]:7842"
