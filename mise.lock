@@ -27,18 +27,23 @@ checksum = "sha256:3c1bbefb44ec92675c9fc1349a102a41d2568f294fd1fd4e468dc08049440
 url = "https://github.com/homeport/dyff/releases/download/v1.12.0/dyff_1.12.0_darwin_arm64.tar.gz"
 
 [[tools."github:home-operations/flate"]]
-version = "0.4.8"
+version = "0.4.9"
 backend = "github:home-operations/flate"
 
+[tools."github:home-operations/flate"."platforms.linux-arm64"]
+checksum = "sha256:feaed5db74d4e0e5f4ac633184b4cfe3105103ce27c66ef063446439fe631fc0"
+url = "https://github.com/home-operations/flate/releases/download/v0.4.9/flate_0.4.9_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/452517138"
+
 [tools."github:home-operations/flate"."platforms.linux-x64"]
-checksum = "sha256:27fa292dbbe9c57534d5778526d52b07ef6f3d413e7419842c4f43b8a16fea48"
-url = "https://github.com/home-operations/flate/releases/download/v0.4.8/flate_0.4.8_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/449302003"
+checksum = "sha256:41b8ddce287139f8f7d5c49ead65e3d90ee5800adf0e2e10e41093f1cc018eca"
+url = "https://github.com/home-operations/flate/releases/download/v0.4.9/flate_0.4.9_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/452517135"
 
 [tools."github:home-operations/flate"."platforms.macos-arm64"]
-checksum = "sha256:241221cc9ebace135087a629e19132efffcbe0b89c1c876ca9ff75d635bd5bc3"
-url = "https://github.com/home-operations/flate/releases/download/v0.4.8/flate_0.4.8_darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/449302002"
+checksum = "sha256:682b43b4bb2e4818b4c9f2eb2df5f5de79a7c3419ac75510b9b142b0ebcd19ca"
+url = "https://github.com/home-operations/flate/releases/download/v0.4.9/flate_0.4.9_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/452517136"
 
 [[tools.kubeconform]]
 version = "0.8.0"
