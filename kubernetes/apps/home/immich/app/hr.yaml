@@ -24,6 +24,9 @@ spec:
       server:
         forceRename: immich
         strategy: RollingUpdate
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: "bonds"
         containers:
           immich-server:
             image:
