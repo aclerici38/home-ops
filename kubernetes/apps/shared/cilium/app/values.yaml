@@ -5,7 +5,7 @@ metadata:
   name: cilium-values
   namespace: cilium
 data:
-  values.yaml: |
+  values.yaml: |-
     autoDirectNodeRoutes: true
     namespaceOverride: cilium
     bpf:
@@ -17,6 +17,7 @@ data:
     bpfClockProbe: true
     policyEnforcementMode: never
     enableIPv4BIGTCP: true
+    enableIPv6BIGTCP: true
     localRedirectPolicy: true
     bandwidthManager:
       enabled: true
