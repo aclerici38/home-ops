@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: towonel-tunnels
+  namespace: flux-system
+spec:
+  targetNamespace: towonel-operator
+  dependsOn:
+    - name: towonel-operator
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/cloud/towonel-tunnels/tunnels
