@@ -53,7 +53,7 @@
       groupName: "Towonel",
       matchPackagePatterns: ["towonel-agent", "towonel-node"],
       matchDatasources: ["docker"],
-      minimumGroupSize: 2
+      minimumGroupSize: 2,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
