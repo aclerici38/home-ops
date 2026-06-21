@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.91.0/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: haproxy
+spec:
+  groups:
+    - name: haproxy.rules
+      rules:
+        # No HAProxy metrics = the geo-filter is offline. Since it owns public
+        # 443/80, that means all inbound service traffic is being dropped.
+        - alert: HAProxyMetricsAbsent
+          expr: |-
+            absent(haproxy_frontend_current_sessions{proxy="https_in"})
+          for: 10m
+          annotations:
+            summary: >-
+              HAProxy metrics absent for 10m — the geo-filter fronting towonel is
+              down or unscraped, so public 443/80 ingress is offline.
+          labels:
+            severity: critical
+
+        # Connection errors to the edge backend mean HAProxy accepted a client but
+        # could not reach the towonel edge on 127.0.0.1:9443 (edge down, wrong
+        # port, or PROXY-protocol rejected). 443 services are unreachable.
+        - alert: HAProxyEdgeUnreachable
+          expr: |-
+            rate(haproxy_backend_connection_errors_total{proxy="edge"}[5m]) > 0
+          for: 5m
+          annotations:
+            summary: >-
+              HAProxy cannot reach the towonel edge (9443) — {{ $value | humanize }}
+              connection errors/s. Check the towonel-node edge listener and that
+              TOWONEL_EDGE_PROXY_PROTOCOL is honored.
+          labels:
+            severity: critical
+
+        - alert: HAProxyEdgeHttpUnreachable
+          expr: |-
+            rate(haproxy_backend_connection_errors_total{proxy="edge_http"}[5m]) > 0
+          for: 10m
+          annotations:
+            summary: >-
+              HAProxy cannot reach the towonel edge HTTP listener (9080) —
+              {{ $value | humanize }} connection errors/s.
+          labels:
+            severity: warning
+
+        # denied_connections = the geo-filter rejecting non-US/unknown source IPs
+        # at L4 (tcp-request connection reject). A sustained spike is either a scan
+        # from abroad (expected, informational) or a broken/empty geoip map
+        # rejecting legitimate traffic — cross-check against accepted sessions.
+        - alert: HAProxyGeoRejectSpike
+          expr: |-
+            sum(rate(haproxy_frontend_denied_connections_total{proxy=~"https_in|http_in"}[5m])) > 5
+          for: 15m
+          annotations:
+            summary: >-
+              HAProxy is geo-rejecting {{ $value | humanize }} connections/s for 15m
+              — non-US scanning, or verify the geoip map built correctly (a bad map
+              defaults every IP to non-US).
+          labels:
+            severity: warning
