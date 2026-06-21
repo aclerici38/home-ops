@@ -230,7 +230,6 @@ spec:
         forceRename: opencloud
         annotations:
           towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
           towonel.io/agent-ref: ${CLUSTER_NAME}
         hostnames:
           - cloud.clerici.tech
@@ -244,7 +243,6 @@ spec:
       wopi:
         annotations:
           towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
           towonel.io/agent-ref: ${CLUSTER_NAME}
           gatus.home-operations.com/endpoint: |-
             conditions: ["[STATUS] == 404"]
@@ -260,7 +258,6 @@ spec:
       collabora:
         annotations:
           towonel.io/tunnel: enable
-          towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
           towonel.io/agent-ref: ${CLUSTER_NAME}
         hostnames:
           - collabora.clerici.tech
