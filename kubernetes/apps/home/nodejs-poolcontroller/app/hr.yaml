@@ -33,21 +33,39 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: {type: RuntimeDefault}
-        containers:
-          poolcontroller:
+        initContainers:
+          # njspc hardcodes its config path to <cwd>/config.json. Seed it into
+          # the PVC root so the main container can mount it directly as a file
+          # subPath
+          init-config:
             image:
               repository: ghcr.io/tagyoureit/njspc
               tag: 9.1.0@sha256:aa9586c94f0bd838b646a33da16e6c22b281c9b8abdc5f682e7085219e7c56ab
-            # hardcodes config path to <cwd>/config.json but needs <cwd> present to run
             command:
               - "/bin/sh"
               - "-c"
             args:
               - |
                 set -e
-                [ -f /app/data/config.json ] || cp /app/defaultConfig.json /app/data/config.json
-                ln -sf /app/data/config.json /app/config.json
-                exec node dist/app.js
+                if [ ! -f /seed/config.json ]; then
+                  if [ -f /seed/data/config.json ]; then
+                    # migrate from the previous layout where config.json lived under data/
+                    cp /seed/data/config.json /seed/config.json
+                  else
+                    cp /app/defaultConfig.json /seed/config.json
+                  fi
+                fi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+        containers:
+          poolcontroller:
+            image:
+              repository: ghcr.io/tagyoureit/njspc
+              tag: 9.1.0@sha256:aa9586c94f0bd838b646a33da16e6c22b281c9b8abdc5f682e7085219e7c56ab
             env:
               POOL_NET_CONNECT: "true"
               POOL_NET_HOST: ew11.iot.internal
@@ -64,8 +82,7 @@ spec:
                 memory: 128Mi
             securityContext:
               allowPrivilegeEscalation: false
-              # symlink for config
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
@@ -89,12 +106,25 @@ spec:
     persistence:
       data:
         existingClaim: nodejs-poolcontroller
-        globalMounts:
-          - path: /app/data
-            subPath: data
-          - path: /app/logs
-            subPath: logs
-          - path: /app/backups
-            subPath: backups
-          - path: /app/web/bindings/custom
-            subPath: bindings
+        advancedMounts:
+          poolcontroller:
+            # init seeds config.json into the PVC root
+            init-config:
+              - path: /seed
+            # main container mounts config.json as a file plus the writable dirs
+            poolcontroller:
+              - path: /app/config.json
+                subPath: config.json
+              - path: /app/data
+                subPath: data
+              - path: /app/web/bindings/custom
+                subPath: bindings
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          poolcontroller:
+            poolcontroller:
+              - path: /app/logs
+                subPath: logs
+              - path: /app/backups
+                subPath: backups
