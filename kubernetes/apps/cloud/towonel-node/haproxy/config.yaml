@@ -80,7 +80,7 @@ data:
     trap 'rm -rf "$WORK"' EXIT
     cd "$WORK"
 
-    URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country-CSV&license_key=${MAXMIND_LICENSE_KEY}&suffix=zip"
+    URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country-CSV&license_key=$${MAXMIND_LICENSE_KEY}&suffix=zip"
     echo "downloading GeoLite2-Country-CSV..."
     wget -q -O db.zip "$URL"
     unzip -q db.zip
@@ -112,7 +112,7 @@ data:
     #!/bin/sh
     # Periodically rebuild the geoip map and gracefully reload HAProxy.
     set -eu
-    : "${REFRESH_INTERVAL:=604800}"   # weekly
+    : "$${REFRESH_INTERVAL:=604800}"   # weekly
     while true; do
       sleep "$REFRESH_INTERVAL"
       echo "refreshing geoip map..."
