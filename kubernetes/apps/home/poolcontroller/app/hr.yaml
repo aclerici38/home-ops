@@ -1,0 +1,97 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json?values=app-template/5.0.1
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: poolcontroller
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  dependsOn:
+    - name: poolcontroller-resources
+  values:
+    controllers:
+      poolcontroller:
+        strategy: RollingUpdate
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: {type: RuntimeDefault}
+        containers:
+          poolcontroller:
+            image:
+              repository: ghcr.io/tagyoureit/njspc
+              tag: 9.1.0@sha256:aa9586c94f0bd838b646a33da16e6c22b281c9b8abdc5f682e7085219e7c56ab
+            env:
+              POOL_NET_CONNECT: "true"
+              POOL_NET_HOST: ew11.iot.internal
+              POOL_NET_PORT: "9801"
+            probes:
+              liveness: &probes
+                enabled: true
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      poolcontroller:
+        controller: poolcontroller
+        ports:
+          http:
+            port: &port 4200
+    route:
+      poolcontroller:
+        hostnames:
+          - pool.clerici.tech
+        parentRefs:
+          - name: internal
+            namespace: kgateway
+        rules:
+          - backendRefs:
+              - identifier: poolcontroller
+                port: *port
+    persistence:
+      config:
+        existingClaim: poolcontroller
+        globalMounts:
+          - path: /app/config.json
+            subPath: config.json
+          - path: /app/data
+            subPath: data
+          - path: /app/backups
+            subPath: backups
+          - path: /app/logs
+            subPath: logs
+          - path: /app/web/bindings/custom
+            subPath: bindings
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
