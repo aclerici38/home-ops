@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nodejs-poolcontroller-resources
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: kubernetes/charts/resource-bundle
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    timeout: 5m
+  upgrade:
+    timeout: 5m
+  dependsOn:
+    - name: volsync
+      namespace: volsync
+  values:
+    volsync: {}

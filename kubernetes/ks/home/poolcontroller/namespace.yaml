@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.2-standalone-strict/namespace-v1.json
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nodejs-poolcontroller
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
