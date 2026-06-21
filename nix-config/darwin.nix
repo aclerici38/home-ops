@@ -10,14 +10,15 @@
 
     casks = [
       "1password"
+      "android-platform-tools"
       "balenaetcher"
       "discord"
       "docker-desktop"
       "ghostty"
       "istat-menus"
       "opencloud"
+      "protonvpn"
       "spotify"
-      "android-platform-tools"
       "wireshark-app"
       "ultimaker-cura"
       "utm"
