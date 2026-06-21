@@ -37,25 +37,30 @@ data:
 
     # Public TLS ingress (443): SNI passthrough to the edge.
     frontend https_in
-      bind ipv4@:443
-      bind ipv6@:443
+      # Per-family listeners with explicit socket ids. v6only keeps v4-mapped
+      # connections off the IPv6 socket so the receiving family is unambiguous.
+      bind ipv4@:443 id 4
+      bind ipv6@:443 id 6 v6only
       tcp-request connection reject if !{ src,map_ip(/etc/haproxy/maps/geoip-country.map,XX) -m str US }
       # For accepted connections, capture SNI once the ClientHello arrives (logs only).
       tcp-request inspect-delay 5s
       tcp-request content set-var(sess.sni) req.ssl_sni if { req.ssl_hello_type 1 }
       tcp-request content accept if { req.ssl_hello_type 1 }
       log-format "%ci:%cp country=%[src,map_ip(/etc/haproxy/maps/geoip-country.map,XX)] sni=%[var(sess.sni)] term=%ts dur=%Tt"
-      use_backend edge_v6 if { src ::/0 }
+      # Route by receiving socket, not src family ({ src ::/0 } also matches v4):
+      # connections on the v6 socket take the v6 loopback hop so the advertised
+      # source family matches the hop (the edge compares the two strictly).
+      use_backend edge_v6 if { so_id 6 }
       default_backend edge
 
     # Public plain-HTTP ingress (80): same geo-filter, passthrough to the edge's
     # HTTP listener (redirects etc.).
     frontend http_in
-      bind ipv4@:80
-      bind ipv6@:80
+      bind ipv4@:80 id 4
+      bind ipv6@:80 id 6 v6only
       tcp-request connection reject if !{ src,map_ip(/etc/haproxy/maps/geoip-country.map,XX) -m str US }
       log-format "%ci:%cp country=%[src,map_ip(/etc/haproxy/maps/geoip-country.map,XX)] proto=http term=%ts dur=%Tt"
-      use_backend edge_http_v6 if { src ::/0 }
+      use_backend edge_http_v6 if { so_id 6 }
       default_backend edge_http
 
     backend edge
