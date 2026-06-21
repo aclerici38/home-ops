@@ -32,17 +32,15 @@ data:
       http-request use-service prometheus-exporter if { path /metrics }
       no log
 
-    # Geo decision is source-IP only, so non-US is rejected at L4 (connection
-    # phase) before a single byte is read. The map lookup is inlined in the ACL
-
     # Public TLS ingress (443): SNI passthrough to the edge.
     frontend https_in
       bind ipv4@:443
       bind ipv6@:443
-      tcp-request connection reject if !{ src,map_ip(/etc/haproxy/maps/geoip-country.map,XX) -m str US }
-      # For accepted connections, capture SNI once the ClientHello arrives (logs only).
       tcp-request inspect-delay 5s
+      # capture SNI (incl. for rejects, so the log shows what was targeted)
       tcp-request content set-var(sess.sni) req.ssl_sni if { req.ssl_hello_type 1 }
+      # geo reject (logged); term state shows PR for proxy-rejected
+      tcp-request content reject if !{ src,map_ip(/etc/haproxy/maps/geoip-country.map,XX) -m str US }
       tcp-request content accept if { req.ssl_hello_type 1 }
       log-format "%ci:%cp country=%[src,map_ip(/etc/haproxy/maps/geoip-country.map,XX)] sni=%[var(sess.sni)] term=%ts dur=%Tt"
       default_backend edge
@@ -52,7 +50,8 @@ data:
     frontend http_in
       bind ipv4@:80
       bind ipv6@:80
-      tcp-request connection reject if !{ src,map_ip(/etc/haproxy/maps/geoip-country.map,XX) -m str US }
+      tcp-request inspect-delay 5s
+      tcp-request content reject if !{ src,map_ip(/etc/haproxy/maps/geoip-country.map,XX) -m str US }
       log-format "%ci:%cp country=%[src,map_ip(/etc/haproxy/maps/geoip-country.map,XX)] proto=http term=%ts dur=%Tt"
       default_backend edge_http
 
