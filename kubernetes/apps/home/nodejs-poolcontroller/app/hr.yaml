@@ -47,6 +47,11 @@ spec:
             args:
               - |
                 set -e
+                # the kubelet auto-creates a missing file-subPath as a directory;
+                # remove any such stale dir from earlier runs before seeding
+                if [ -e /seed/config.json ] && [ ! -f /seed/config.json ]; then
+                  rm -rf /seed/config.json
+                fi
                 if [ ! -f /seed/config.json ]; then
                   if [ -f /seed/data/config.json ]; then
                     # migrate from the previous layout where config.json lived under data/
