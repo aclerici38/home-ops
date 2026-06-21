@@ -22,7 +22,7 @@ spec:
     reloader:
       autoReloadAll: true
       watchGlobally: true
-      ignoreNamespaces: "cilium,rook-ceph,kube-system"
+      ignoreNamespaces: "cilium,rook-ceph,kube-system,renovate-operator"
       readOnlyRootFileSystem: true
       podMonitor:
         enabled: true
