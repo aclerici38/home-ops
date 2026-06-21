@@ -106,9 +106,10 @@ spec:
               repository: ghcr.io/rstrouse/njspc-dash
               tag: 9.1.0@sha256:078ba688ab2d59e0cf5026827355c958f1bebd59fe4ac8d5f1655a35b3caba1c
             env:
-              POOL_WEB_SERVICES_PROTOCOL: http
+              POOL_WEB_SERVICES_PROTOCOL: http://
               POOL_WEB_SERVICES_IP: nodejs-poolcontroller
               POOL_WEB_SERVICES_PORT: "4200"
+              POOL_WEB_SERVICES_USEPROXY: true
             probes:
               liveness:
                 enabled: true
