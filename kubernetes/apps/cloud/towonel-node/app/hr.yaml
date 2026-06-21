@@ -22,7 +22,7 @@ spec:
           main:
             env:
               # quiet iroh logs
-              RUST_LOG: debug
+              RUST_LOG: info,iroh::net_report=error
               TOWONEL_HUB_DB_DRIVER: postgres
               TOWONEL_HUB_PUBLIC_URL: https://towonel.cloud.clerici.tech
               TOWONEL_HUB_RELAY_URL: &iroh https://vps.clerici.tech:8444
