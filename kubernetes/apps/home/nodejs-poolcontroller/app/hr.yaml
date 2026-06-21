@@ -26,6 +26,7 @@ spec:
       poolcontroller:
         strategy: RollingUpdate
         pod:
+          hostUsers: false
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -33,11 +34,26 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: {type: RuntimeDefault}
-        containers:
-          poolcontroller:
-            image:
+        initContainers:
+          # App needs a writable app/config.json but includes runtime files in /app
+          init-config:
+            image: &image
               repository: ghcr.io/tagyoureit/njspc
               tag: 9.1.0@sha256:aa9586c94f0bd838b646a33da16e6c22b281c9b8abdc5f682e7085219e7c56ab
+            command:
+              - "/bin/sh"
+              - "-c"
+            args:
+              - "[ -f /config/config.json ] || cp /app/defaultConfig.json /config/config.json"
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+        containers:
+          poolcontroller:
+            image: *image
             env:
               POOL_NET_CONNECT: "true"
               POOL_NET_HOST: ew11.iot.internal
@@ -49,15 +65,10 @@ spec:
             resources:
               requests:
                 cpu: 25m
-                memory: 128Mi
+                memory: 56Mi
               limits:
-                memory: 512Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
+                memory: 128Mi
+            securityContext: *securityContext
     service:
       poolcontroller:
         controller: poolcontroller
@@ -78,17 +89,21 @@ spec:
     persistence:
       config:
         existingClaim: nodejs-poolcontroller
-        globalMounts:
-          - path: /app/config.json
-            subPath: config.json
-          - path: /app/data
-            subPath: data
-          - path: /app/backups
-            subPath: backups
-          - path: /app/logs
-            subPath: logs
-          - path: /app/web/bindings/custom
-            subPath: bindings
+        advancedMounts:
+          poolcontroller:
+            init-config:
+              - path: /config
+            poolcontroller:
+              - path: /app/config.json
+                subPath: config.json
+              - path: /app/data
+                subPath: data
+              - path: /app/backups
+                subPath: backups
+              - path: /app/logs
+                subPath: logs
+              - path: /app/web/bindings/custom
+                subPath: bindings
       tmpfs:
         type: emptyDir
         globalMounts:
