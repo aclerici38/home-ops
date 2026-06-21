@@ -35,7 +35,7 @@ spec:
               # HAProxy reaches the edge over both loopback families: v4 clients
               # via 127.0.0.1, v6 clients via [::1], so the transport family
               # matches the PROXY-advertised client family.
-              TOWONEL_EDGE_PROXY_PROTOCOL_TRUSTED: "127.0.0.1/32,::1/128"
+              TOWONEL_EDGE_PROXY_PROTOCOL_TRUSTED: "127.0.0.1/32,::1/128,::ffff:127.0.0.1/128"
               TOWONEL_HUB_TRUSTED_PROXIES: "172.16.0.0/24,10.40.40.41/32"
               TOWONEL_HUB_DB_DSN:
                 secretKeyRef:
