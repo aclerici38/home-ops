@@ -91,12 +91,52 @@ spec:
               capabilities:
                 drop:
                   - ALL
+      dashpanel:
+        strategy: RollingUpdate
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile: {type: RuntimeDefault}
+        containers:
+          dashpanel:
+            image:
+              repository: ghcr.io/rstrouse/njspc-dash
+              tag: 9.1.0@sha256:078ba688ab2d59e0cf5026827355c958f1bebd59fe4ac8d5f1655a35b3caba1c
+            env:
+              POOL_WEB_SERVICES_PROTOCOL: http
+              POOL_WEB_SERVICES_IP: nodejs-poolcontroller
+              POOL_WEB_SERVICES_PORT: "4200"
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
     service:
       poolcontroller:
         controller: poolcontroller
         ports:
           http:
-            port: &port 4200
+            port: 4200
+      dashpanel:
+        controller: dashpanel
+        ports:
+          http:
+            port: &dashport 5150
     route:
       poolcontroller:
         hostnames:
@@ -106,8 +146,8 @@ spec:
             namespace: kgateway
         rules:
           - backendRefs:
-              - identifier: poolcontroller
-                port: *port
+              - identifier: dashpanel
+                port: *dashport
     persistence:
       data:
         existingClaim: nodejs-poolcontroller
