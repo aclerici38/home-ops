@@ -44,7 +44,7 @@ spec:
               - "-c"
             args:
               - "[ -f /config/config.json ] || cp /app/defaultConfig.json /config/config.json"
-            securityContext: &securityContext
+            securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities:
@@ -67,7 +67,12 @@ spec:
                 memory: 56Mi
               limits:
                 memory: 128Mi
-            securityContext: *securityContext
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
     service:
       poolcontroller:
         controller: poolcontroller
