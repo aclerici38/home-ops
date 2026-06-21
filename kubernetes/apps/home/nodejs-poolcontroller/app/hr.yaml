@@ -24,7 +24,6 @@ spec:
   values:
     controllers:
       poolcontroller:
-        strategy: RollingUpdate
         pod:
           hostUsers: false
           securityContext:
