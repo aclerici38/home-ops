@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: haproxy-config
 data:
-  haproxy.cfg: |-
+  haproxy.cfg: |
     global
       log stdout format raw local0 info
       # master CLI + admin stats socket live on the writable emptyDir

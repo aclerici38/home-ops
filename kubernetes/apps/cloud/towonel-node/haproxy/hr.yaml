@@ -51,6 +51,30 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
               seccompProfile: {type: RuntimeDefault}
+          geoip-updater:
+            dependsOn: geoip-init
+            restartPolicy: Always
+            image:
+              repository: mirror.gcr.io/library/alpine
+              tag: latest
+            command:
+              - "/bin/sh"
+              - "/scripts/refresh-loop.sh"
+            env:
+              REFRESH_INTERVAL: "604800" # weekly
+              MAXMIND_LICENSE_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: towonel-node
+                    key: MAXMIND_LICENSE_KEY
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+              seccompProfile: {type: RuntimeDefault}
+            resources:
+              requests: {cpu: 10m, memory: 32Mi}
+              limits: {memory: 128Mi}
         containers:
           haproxy:
             image:
@@ -87,28 +111,6 @@ spec:
             resources:
               requests: {cpu: 50m, memory: 64Mi}
               limits: {memory: 256Mi}
-          geoip-updater:
-            image:
-              repository: mirror.gcr.io/library/alpine
-              tag: latest
-            command:
-              - "/bin/sh"
-              - "/scripts/refresh-loop.sh"
-            env:
-              REFRESH_INTERVAL: "604800" # weekly
-              MAXMIND_LICENSE_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: towonel-node
-                    key: MAXMIND_LICENSE_KEY
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
-              seccompProfile: {type: RuntimeDefault}
-            resources:
-              requests: {cpu: 10m, memory: 32Mi}
-              limits: {memory: 128Mi}
     service:
       haproxy:
         controller: haproxy
