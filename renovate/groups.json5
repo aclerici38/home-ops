@@ -49,6 +49,16 @@
       },
     },
     {
+      description: "Towonel Group",
+      groupName: "Towonel",
+      matchPackagePatterns: ["towonel-agent", "towonel-node"],
+      matchDatasources: ["docker"],
+      minimumGroupSize: 2
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "Kgateway Group",
       groupName: "kgateway",
       matchPackagePatterns: ["kgateway-dev", "^kgateway$"],
