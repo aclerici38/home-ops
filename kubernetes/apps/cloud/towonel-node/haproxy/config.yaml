@@ -45,6 +45,7 @@ data:
       tcp-request content set-var(sess.sni) req.ssl_sni if { req.ssl_hello_type 1 }
       tcp-request content accept if { req.ssl_hello_type 1 }
       log-format "%ci:%cp country=%[src,map_ip(/etc/haproxy/maps/geoip-country.map,XX)] sni=%[var(sess.sni)] term=%ts dur=%Tt"
+      use_backend edge_v6 if { src ::/0 }
       default_backend edge
 
     # Public plain-HTTP ingress (80): same geo-filter, passthrough to the edge's
@@ -54,15 +55,25 @@ data:
       bind ipv6@:80
       tcp-request connection reject if !{ src,map_ip(/etc/haproxy/maps/geoip-country.map,XX) -m str US }
       log-format "%ci:%cp country=%[src,map_ip(/etc/haproxy/maps/geoip-country.map,XX)] proto=http term=%ts dur=%Tt"
+      use_backend edge_http_v6 if { src ::/0 }
       default_backend edge_http
 
     backend edge
       # SNI passthrough to the towonel edge on loopback; hand it the real client
-      # IP via PROXY v2 (edge trusts 127.0.0.1/32).
+      # IP via PROXY v2 (edge trusts 127.0.0.1/32 and ::1/128). v4 clients use the
+      # v4 loopback so the edge accepts them on a matching-family socket.
       server edge 127.0.0.1:9443 send-proxy-v2
+
+    backend edge_v6
+      # v6 clients: reach the edge over v6 loopback so the advertised v6 source
+      # matches the family of the hop the edge accepts.
+      server edge [::1]:9443 send-proxy-v2
 
     backend edge_http
       server edge_http 127.0.0.1:9080 send-proxy-v2
+
+    backend edge_http_v6
+      server edge_http [::1]:9080 send-proxy-v2
 ---
 apiVersion: v1
 kind: ConfigMap
