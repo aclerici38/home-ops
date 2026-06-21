@@ -13,8 +13,7 @@ spec:
     - name: towonel-node-resources
   values:
     edge:
-      # HAproxy fronts public 443/80; the edge listens internally and HAProxy
-      # geo-filters + forwards with PROXY v2.
+      bindAddress: "127.0.0.1"
       httpsPort: 9443
       httpPort: 9080
     controllers:
