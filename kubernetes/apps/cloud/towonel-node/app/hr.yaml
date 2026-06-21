@@ -12,6 +12,11 @@ spec:
   dependsOn:
     - name: towonel-node-resources
   values:
+    edge:
+      # HAproxy fronts public 443/80; the edge listens internally and HAProxy
+      # geo-filters + forwards with PROXY v2.
+      httpsPort: 9443
+      httpPort: 9080
     controllers:
       main:
         containers:
@@ -26,6 +31,9 @@ spec:
               TOWONEL_EDGE_ADVERTISED_ADDRESSES: vps.clerici.tech:443
               TOWONEL_EDGE_PUBLIC_IPS: ${NODE_V4_IP},${NODE_V6_IP}
               TOWONEL_EDGE_REGION: CA
+              # HAproxy in front
+              TOWONEL_EDGE_PROXY_PROTOCOL: "true"
+              TOWONEL_EDGE_PROXY_PROTOCOL_TRUSTED: "127.0.0.1/32"
               TOWONEL_HUB_TRUSTED_PROXIES: "172.16.0.0/24,10.40.40.41/32"
               TOWONEL_HUB_DB_DSN:
                 secretKeyRef:

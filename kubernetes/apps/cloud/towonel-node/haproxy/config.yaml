@@ -1,0 +1,132 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: haproxy-config
+data:
+  haproxy.cfg: |-
+    global
+      log stdout format raw local0 info
+      # master CLI + admin stats socket live on the writable emptyDir
+      stats socket /run/haproxy/admin.sock mode 660 level admin
+      stats timeout 30s
+      maxconn 20000
+
+    defaults
+      log global
+      mode tcp
+      option tcplog
+      timeout connect 10s
+      timeout client 30s
+      timeout server 30s
+      # bounds idle on established passthrough connections (HA websockets etc.) —
+      # raise if any tunneled app holds longer-lived idle connections.
+      timeout tunnel 1h
+
+    # Health + Prometheus metrics. Not geo-filtered; scraped in-cluster on the
+    # node IP. Not exposed publicly (8404 is not in the OCI security list).
+    frontend monitoring
+      bind :8404
+      mode http
+      monitor-uri /healthz
+      http-request use-service prometheus-exporter if { path /metrics }
+      no log
+
+    # Geo decision is source-IP only, so non-US is rejected at L4 (connection
+    # phase) before a single byte is read. XX = unmapped/unknown -> non-US.
+
+    # Public TLS ingress (443): SNI passthrough to the edge.
+    frontend https_in
+      bind ipv4@:443
+      bind ipv6@:443
+      tcp-request connection set-var(txn.cc) src,map_ip(/etc/haproxy/maps/geoip-country.map,XX)
+      tcp-request connection reject if !{ var(txn.cc) -m str US }
+      # For accepted connections, capture SNI once the ClientHello arrives (logs only).
+      tcp-request inspect-delay 5s
+      tcp-request content set-var(txn.sni) req.ssl_sni if { req.ssl_hello_type 1 }
+      tcp-request content accept if { req.ssl_hello_type 1 }
+      log-format "%ci:%cp country=%[var(txn.cc)] sni=%[var(txn.sni)] term=%ts dur=%Tt"
+      default_backend edge
+
+    # Public plain-HTTP ingress (80): same geo-filter, passthrough to the edge's
+    # HTTP listener (redirects etc.).
+    frontend http_in
+      bind ipv4@:80
+      bind ipv6@:80
+      tcp-request connection set-var(txn.cc) src,map_ip(/etc/haproxy/maps/geoip-country.map,XX)
+      tcp-request connection reject if !{ var(txn.cc) -m str US }
+      log-format "%ci:%cp country=%[var(txn.cc)] proto=http term=%ts dur=%Tt"
+      default_backend edge_http
+
+    backend edge
+      # SNI passthrough to the towonel edge on loopback; hand it the real client
+      # IP via PROXY v2 (edge trusts 127.0.0.1/32).
+      server edge 127.0.0.1:9443 send-proxy-v2
+
+    backend edge_http
+      server edge_http 127.0.0.1:9080 send-proxy-v2
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: haproxy-scripts
+data:
+  build-geoip-map.sh: |-
+    #!/bin/sh
+    # Build an HAProxy CIDR->ISO country map from MaxMind GeoLite2-Country-CSV.
+    set -eu
+    MAP=/etc/haproxy/maps/geoip-country.map
+    WORK="$(mktemp -d)"
+    trap 'rm -rf "$WORK"' EXIT
+    cd "$WORK"
+
+    URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country-CSV&license_key=${MAXMIND_LICENSE_KEY}&suffix=zip"
+    echo "downloading GeoLite2-Country-CSV..."
+    wget -q -O db.zip "$URL"
+    unzip -q db.zip
+    cd GeoLite2-Country-CSV_*/
+
+    # Pass 1: Locations CSV -> geoname_id => ISO country code (field 5).
+    # Pass 2+: Blocks CSVs -> emit "<network> <ISO>" using the block's country
+    #          geoname_id (field 2), falling back to registered country (field 3).
+    awk -F, '
+      FNR==NR { if (FNR>1 && $5!="") iso[$1]=$5; next }
+      FNR>1 {
+        gid=$2; if (gid=="") gid=$3
+        if (gid in iso && $1!="") print $1, iso[gid]
+      }
+    ' GeoLite2-Country-Locations-en.csv \
+      GeoLite2-Country-Blocks-IPv4.csv \
+      GeoLite2-Country-Blocks-IPv6.csv > map.new
+
+    # Sanity check before swapping in — never install a truncated/empty map
+    # (which would default everything to XX and reject all traffic).
+    lines="$(wc -l < map.new)"
+    if [ "$lines" -lt 100000 ]; then
+      echo "ERROR: only $lines entries, refusing to install map" >&2
+      exit 1
+    fi
+    mv map.new "$MAP"
+    echo "installed geoip map: $lines entries"
+  refresh-loop.sh: |-
+    #!/bin/sh
+    # Periodically rebuild the geoip map and gracefully reload HAProxy.
+    set -eu
+    : "${REFRESH_INTERVAL:=604800}"   # weekly
+    while true; do
+      sleep "$REFRESH_INTERVAL"
+      echo "refreshing geoip map..."
+      if /bin/sh /scripts/build-geoip-map.sh; then
+        # Lowest-PID haproxy process == the master (workers are forked later and
+        # keep higher PIDs across reloads). SIGUSR2 = graceful reload (-sf),
+        # existing connections drain. Requires shareProcessNamespace + same uid.
+        pid="$(pgrep haproxy | sort -n | head -1 || true)"
+        if [ -n "$pid" ]; then
+          kill -USR2 "$pid" && echo "sent SIGUSR2 to haproxy master pid $pid"
+        else
+          echo "WARN: haproxy master not found; map updated but not reloaded" >&2
+        fi
+      else
+        echo "WARN: geoip refresh failed; keeping existing map" >&2
+      fi
+    done
