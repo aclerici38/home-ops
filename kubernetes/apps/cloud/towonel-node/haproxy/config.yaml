@@ -7,24 +7,24 @@ data:
   haproxy.cfg: |
     global
       log stdout format raw local0 info
-      # master CLI + admin stats socket live on the writable emptyDir
+      # admin / master-worker CLI socket on the writable emptyDir
       stats socket /run/haproxy/admin.sock mode 660 level admin
       stats timeout 30s
       maxconn 20000
+      # bound how long old workers linger after a SIGUSR2 (map refresh) reload
+      hard-stop-after 1h
 
     defaults
       log global
       mode tcp
-      option tcplog
-      timeout connect 10s
+      timeout connect 5s
       timeout client 30s
       timeout server 30s
-      # bounds idle on established passthrough connections (HA websockets etc.) —
-      # raise if any tunneled app holds longer-lived idle connections.
+      # idle bound for established passthrough connections (HA websockets etc.)
       timeout tunnel 1h
 
-    # Health + Prometheus metrics. Not geo-filtered; scraped in-cluster on the
-    # node IP. Not exposed publicly (8404 is not in the OCI security list).
+    # Health + Prometheus metrics. Internal only (8404 is not in the OCI security
+    # list) and not geo-filtered.
     frontend monitoring
       bind :8404
       mode http
@@ -32,53 +32,45 @@ data:
       http-request use-service prometheus-exporter if { path /metrics }
       no log
 
-    # Geo decision is source-IP only, so non-US is rejected at L4 (connection
-    # phase) before a single byte is read. The map lookup is inlined in the ACL
+    # Public TLS (443) and plain-HTTP (80) ingress. The geo decision is source-IP
+    # only, so non-US is rejected at the connection phase before a byte is read.
+    #
+    # The towonel edge sits behind PROXY v2 and matches the advertised client
+    # family against the family of the loopback hop it is accepted on, so each
+    # family must reach it over its own loopback address. v6only keeps v4-mapped
+    # connections off the IPv6 socket; so_id then selects the family-matched backend.
 
-    # Public TLS ingress (443): SNI passthrough to the edge.
     frontend https_in
-      # Per-family listeners with explicit socket ids. v6only keeps v4-mapped
-      # connections off the IPv6 socket so the receiving family is unambiguous.
       bind ipv4@:443 id 4
       bind ipv6@:443 id 6 v6only
-      tcp-request connection reject if !{ src,map_ip(/etc/haproxy/maps/geoip-country.map,XX) -m str US }
-      # For accepted connections, capture SNI once the ClientHello arrives (logs only).
+      tcp-request connection set-var(sess.country) src,map_ip(/etc/haproxy/maps/geoip-country.map,XX)
+      tcp-request connection reject unless { var(sess.country) -m str US }
+      # Sniff SNI for logging once the ClientHello arrives.
       tcp-request inspect-delay 5s
       tcp-request content set-var(sess.sni) req.ssl_sni if { req.ssl_hello_type 1 }
       tcp-request content accept if { req.ssl_hello_type 1 }
-      log-format "%ci:%cp country=%[src,map_ip(/etc/haproxy/maps/geoip-country.map,XX)] sni=%[var(sess.sni)] term=%ts dur=%Tt"
-      # Route by receiving socket, not src family ({ src ::/0 } also matches v4):
-      # connections on the v6 socket take the v6 loopback hop so the advertised
-      # source family matches the hop (the edge compares the two strictly).
-      use_backend edge_v6 if { so_id 6 }
-      default_backend edge
+      log-format "%ci:%cp country=%[var(sess.country)] sni=%[var(sess.sni)] term=%ts dur=%Tt"
+      use_backend edge_https_v6 if { so_id 6 }
+      default_backend edge_https_v4
 
-    # Public plain-HTTP ingress (80): same geo-filter, passthrough to the edge's
-    # HTTP listener (redirects etc.).
     frontend http_in
       bind ipv4@:80 id 4
       bind ipv6@:80 id 6 v6only
-      tcp-request connection reject if !{ src,map_ip(/etc/haproxy/maps/geoip-country.map,XX) -m str US }
-      log-format "%ci:%cp country=%[src,map_ip(/etc/haproxy/maps/geoip-country.map,XX)] proto=http term=%ts dur=%Tt"
+      tcp-request connection set-var(sess.country) src,map_ip(/etc/haproxy/maps/geoip-country.map,XX)
+      tcp-request connection reject unless { var(sess.country) -m str US }
+      log-format "%ci:%cp country=%[var(sess.country)] proto=http term=%ts dur=%Tt"
       use_backend edge_http_v6 if { so_id 6 }
-      default_backend edge_http
+      default_backend edge_http_v4
 
-    backend edge
-      # SNI passthrough to the towonel edge on loopback; hand it the real client
-      # IP via PROXY v2 (edge trusts 127.0.0.1/32 and ::1/128). v4 clients use the
-      # v4 loopback so the edge accepts them on a matching-family socket.
+    # Per-family loopback hops to the edge (see ingress note above).
+    backend edge_https_v4
       server edge 127.0.0.1:9443 send-proxy-v2
-
-    backend edge_v6
-      # v6 clients: reach the edge over v6 loopback so the advertised v6 source
-      # matches the family of the hop the edge accepts.
+    backend edge_https_v6
       server edge [::1]:9443 send-proxy-v2
-
-    backend edge_http
-      server edge_http 127.0.0.1:9080 send-proxy-v2
-
+    backend edge_http_v4
+      server edge 127.0.0.1:9080 send-proxy-v2
     backend edge_http_v6
-      server edge_http [::1]:9080 send-proxy-v2
+      server edge [::1]:9080 send-proxy-v2
 ---
 apiVersion: v1
 kind: ConfigMap
