@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: towonel-node-haproxy
+  namespace: flux-system
+spec:
+  targetNamespace: towonel-node
+  # Wait for the edge to move to :9443 and the towonel-node secret (incl.
+  # MAXMIND_LICENSE_KEY) to exist before HAProxy tries to bind :443 / build the map.
+  dependsOn:
+    - name: towonel-node
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/cloud/towonel-node/haproxy
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: haproxy
