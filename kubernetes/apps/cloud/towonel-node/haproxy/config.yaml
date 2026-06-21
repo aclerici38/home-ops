@@ -33,7 +33,8 @@ data:
       no log
 
     # Public TLS (443) and plain-HTTP (80) ingress. The geo decision is source-IP
-    # only, so non-US is rejected at the connection phase before a byte is read.
+    # only; non-US is rejected at the content phase (so the drop is logged) but
+    # still immediately, since the rule is decided on the source address.
     #
     # The towonel edge sits behind PROXY v2 and matches the advertised client
     # family against the family of the loopback hop it is accepted on, so each
@@ -44,9 +45,12 @@ data:
       bind ipv4@:443 id 4
       bind ipv6@:443 id 6 v6only
       tcp-request connection set-var(sess.country) src,map_ip(/etc/haproxy/maps/geoip-country.map,XX)
-      tcp-request connection reject unless { var(sess.country) -m str US }
-      # Sniff SNI for logging once the ClientHello arrives.
       tcp-request inspect-delay 5s
+      # Reject non-US at the content phase so the drop is logged (a connection-phase
+      # reject fires before a stream exists and is never logged). The rule is decided
+      # on the source IP, so it still rejects immediately, before the ClientHello.
+      tcp-request content reject unless { var(sess.country) -m str US }
+      # Accepted connections only: sniff SNI for logging once the ClientHello arrives.
       tcp-request content set-var(sess.sni) req.ssl_sni if { req.ssl_hello_type 1 }
       tcp-request content accept if { req.ssl_hello_type 1 }
       log-format "%ci:%cp country=%[var(sess.country)] sni=%[var(sess.sni)] term=%ts dur=%Tt"
@@ -57,7 +61,8 @@ data:
       bind ipv4@:80 id 4
       bind ipv6@:80 id 6 v6only
       tcp-request connection set-var(sess.country) src,map_ip(/etc/haproxy/maps/geoip-country.map,XX)
-      tcp-request connection reject unless { var(sess.country) -m str US }
+      # Content-phase reject (logged); decided on source IP, so it fires immediately.
+      tcp-request content reject unless { var(sess.country) -m str US }
       log-format "%ci:%cp country=%[var(sess.country)] proto=http term=%ts dur=%Tt"
       use_backend edge_http_v6 if { so_id 6 }
       default_backend edge_http_v4
