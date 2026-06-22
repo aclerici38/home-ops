@@ -6,14 +6,10 @@ while true; do
   sleep "$REFRESH_INTERVAL"
   echo "refreshing geoip map..."
   if /bin/sh /scripts/build-geoip-map.sh; then
-    # Lowest-PID haproxy process == the master (workers are forked later and
-    # keep higher PIDs across reloads). SIGUSR2 = graceful reload (-sf),
-    # existing connections drain. Requires shareProcessNamespace + same uid.
-    pid="$(pgrep haproxy | sort -n | head -1 || true)"
-    if [ -n "$pid" ]; then
-      kill -USR2 "$pid" && echo "sent SIGUSR2 to haproxy master pid $pid"
+    if echo "reload" | socat -t5 - UNIX-CONNECT:/run/haproxy/master.sock; then
+      echo "requested haproxy reload"
     else
-      echo "WARN: haproxy master not found; map updated but not reloaded" >&2
+      echo "haproxy reload requested (master closed the CLI socket on re-exec)"
     fi
   else
     echo "WARN: geoip refresh failed; keeping existing map" >&2

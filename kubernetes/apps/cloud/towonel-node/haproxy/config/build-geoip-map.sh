@@ -12,14 +12,42 @@
 #       city-approximate); the value carries lat|lon for a coords geomap.
 set -eu
 MAPDIR=/etc/haproxy/maps
+COUNTRY_MIN=100000   # floor for a sane country map (all countries, coarse blocks)
+USCITY_MIN=200000    # floor for a sane US-city map (US networks only)
+
+# --if-missing (init container): the maps live on a persistent volume, so if a
+# valid pair is already present, reuse it and skip the download/build entirely —
+# a pod restart then starts fast and offline. The weekly updater calls this
+# script with no flag and always rebuilds. A persisted-but-truncated map (below
+# the floors above) is treated as missing and rebuilt.
+if [ "${1:-}" = "--if-missing" ] \
+   && [ -f "$MAPDIR/geoip-country.map" ] && [ -f "$MAPDIR/geoip-uscity.map" ]; then
+  have_c="$(wc -l < "$MAPDIR/geoip-country.map")"
+  have_u="$(wc -l < "$MAPDIR/geoip-uscity.map")"
+  if [ "$have_c" -ge "$COUNTRY_MIN" ] && [ "$have_u" -ge "$USCITY_MIN" ]; then
+    echo "existing maps present (country=$have_c uscity=$have_u entries), skipping build"
+    exit 0
+  fi
+  echo "existing maps below floor (country=$have_c uscity=$have_u), rebuilding" >&2
+fi
+
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
 dl() { # <edition_id> -> downloads + unzips into $WORK/<edition>_*/
   cd "$WORK"
   echo "downloading $1..."
-  wget -q -O "$1.zip" \
-    "https://download.maxmind.com/app/geoip_download?edition_id=$1&license_key=$${MAXMIND_LICENSE_KEY}&suffix=zip"
+  i=1
+  while [ "$i" -le 3 ]; do
+    if wget -q -T 30 -O "$1.zip" \
+      "https://download.maxmind.com/app/geoip_download?edition_id=$1&license_key=$${MAXMIND_LICENSE_KEY}&suffix=zip"; then
+      break
+    fi
+    echo "  download of $1 failed (attempt $i/3), retrying..." >&2
+    i=$((i + 1))
+    sleep 5
+  done
+  [ "$i" -le 3 ] || { echo "ERROR: giving up on $1 after 3 attempts" >&2; return 1; }
   unzip -q "$1.zip"
 }
 
@@ -85,11 +113,11 @@ cd "$WORK"
 # map just blanks the geo metric, but a tiny one still signals a broken build.
 clines="$(wc -l < country.new)"
 ulines="$(wc -l < uscity.new)"
-if [ "$clines" -lt 100000 ]; then
+if [ "$clines" -lt "$COUNTRY_MIN" ]; then
   echo "ERROR: country map only $clines entries, refusing to install" >&2
   exit 1
 fi
-if [ "$ulines" -lt 200000 ]; then
+if [ "$ulines" -lt "$USCITY_MIN" ]; then
   echo "ERROR: us-city map only $ulines entries, refusing to install" >&2
   exit 1
 fi

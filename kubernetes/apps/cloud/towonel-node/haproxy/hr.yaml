@@ -21,25 +21,24 @@ spec:
         pod:
           hostNetwork: true
           dnsPolicy: ClusterFirstWithHostNet
-          # Lets the updater sidecar signal the haproxy master (SIGUSR2) for a
-          # graceful, zero-drop reload after a map refresh.
-          shareProcessNamespace: true
           securityContext:
             runAsNonRoot: true
             runAsUser: 10001
             runAsGroup: 10001
             fsGroup: 10001
+            fsGroupChangePolicy: OnRootMismatch
             seccompProfile: {type: RuntimeDefault}
         initContainers:
           # Build the geoip map before haproxy starts (its config references the
           # map file at parse time, so it must exist).
           geoip-init:
             image:
-              repository: mirror.gcr.io/library/alpine
+              repository: mirror.gcr.io/alpine/socat
               tag: latest
             command:
               - "/bin/sh"
               - "/scripts/build-geoip-map.sh"
+              - "--if-missing"
             env:
               MAXMIND_LICENSE_KEY:
                 valueFrom:
@@ -55,7 +54,7 @@ spec:
             dependsOn: geoip-init
             restartPolicy: Always
             image:
-              repository: mirror.gcr.io/library/alpine
+              repository: mirror.gcr.io/alpine/socat
               tag: latest
             command:
               - "/bin/sh"
@@ -147,7 +146,7 @@ spec:
           - path: /etc/haproxy/lua
             readOnly: true
       maps:
-        type: emptyDir
+        existingClaim: haproxy-geoip-maps
         globalMounts:
           - path: /etc/haproxy/maps
       runtime:
