@@ -1,0 +1,9 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/tuppr/0.2.7/kubernetesupgrade_v1alpha1.json
+apiVersion: tuppr.home-operations.com/v1alpha1
+kind: KubernetesUpgrade
+metadata:
+  name: kubernetes
+spec:
+  kubernetes:
+    version: ${KUBE_VERSION}
