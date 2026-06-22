@@ -3,7 +3,7 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: haproxy-geo-blocked
+  name: haproxy-traffic
 spec:
   allowCrossNamespaceImport: true
   instanceSelector:
@@ -12,27 +12,42 @@ spec:
   datasources:
     - datasourceName: prometheus
       inputName: DS_PROMETHEUS
+  # NOTE: Grafana template vars / macros are written $$... so Flux's postBuild
+  # envsubst leaves them as $... for Grafana to resolve.
   json: |-
     {
-      "title": "HAProxy - Geo-blocked Traffic",
-      "uid": "haproxy-geo-blocked",
+      "title": "HAProxy - Inbound Traffic",
+      "uid": "haproxy-traffic",
       "tags": ["haproxy", "geo"],
       "timezone": "browser",
       "schemaVersion": 39,
       "time": {"from": "now-7d", "to": "now"},
       "refresh": "1m",
-      "templating": {"list": []},
+      "templating": {
+        "list": [
+          {
+            "name": "action",
+            "label": "Action",
+            "type": "custom",
+            "query": "allowed,blocked",
+            "includeAll": true,
+            "allValue": ".*",
+            "multi": true,
+            "current": {"text": ["All"], "value": ["$$__all"], "selected": true}
+          }
+        ]
+      },
       "panels": [
         {
           "id": 1,
           "type": "geomap",
-          "title": "Blocked connections by country (7d)",
+          "title": "Connections by country",
           "gridPos": {"h": 14, "w": 16, "x": 0, "y": 0},
           "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
           "targets": [
             {
               "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
-              "expr": "sum by (country) (increase(haproxy_geo_blocked_connections_total[7d]))",
+              "expr": "sum by (country) (increase(haproxy_connections_total{action=~\"$${action}\"}[$$__range]))",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -44,7 +59,7 @@ spec:
             "layers": [
               {
                 "type": "markers",
-                "name": "Blocked",
+                "name": "Connections",
                 "location": {
                   "mode": "lookup",
                   "lookup": "country",
@@ -68,46 +83,50 @@ spec:
         {
           "id": 2,
           "type": "table",
-          "title": "Top source countries (7d)",
+          "title": "Top source countries",
           "gridPos": {"h": 14, "w": 8, "x": 16, "y": 0},
           "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
           "targets": [
             {
               "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
-              "expr": "sort_desc(sum by (country) (increase(haproxy_geo_blocked_connections_total[7d])))",
+              "expr": "sum by (country) (increase(haproxy_connections_total{action=~\"$${action}\"}[$$__range]))",
               "format": "table",
               "instant": true,
               "refId": "A"
             }
           ],
           "transformations": [
-            {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"country": "Country", "Value": "Blocked"}}}
+            {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"country": "Country", "Value": "Connections"}}}
           ],
           "fieldConfig": {
-            "defaults": {"custom": {"align": "auto"}, "unit": "short"},
+            "defaults": {"custom": {"align": "auto", "filterable": true}, "unit": "short"},
             "overrides": []
           },
-          "options": {"sortBy": [{"displayName": "Blocked", "desc": true}]}
+          "options": {"sortBy": [{"displayName": "Connections", "desc": true}]}
         },
         {
           "id": 3,
-          "type": "timeseries",
-          "title": "Blocked connections per country (rate)",
-          "gridPos": {"h": 9, "w": 24, "x": 0, "y": 14},
+          "type": "table",
+          "title": "Connections by country / SNI / action",
+          "gridPos": {"h": 12, "w": 24, "x": 0, "y": 14},
           "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
           "targets": [
             {
               "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
-              "expr": "sum by (country) (rate(haproxy_geo_blocked_connections_total[5m]))",
-              "legendFormat": "{{country}}",
+              "expr": "sum by (country, action, sni) (increase(haproxy_connections_total{action=~\"$${action}\"}[$$__range]))",
+              "format": "table",
+              "instant": true,
               "refId": "A"
             }
           ],
+          "transformations": [
+            {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"country": "Country", "action": "Action", "sni": "SNI", "Value": "Connections"}}}
+          ],
           "fieldConfig": {
-            "defaults": {"custom": {"drawStyle": "line", "fillOpacity": 10, "stacking": {"mode": "normal"}}, "unit": "cps"},
+            "defaults": {"custom": {"align": "auto", "filterable": true}, "unit": "short"},
             "overrides": []
           },
-          "options": {"legend": {"displayMode": "table", "placement": "right", "calcs": ["sum"]}}
+          "options": {"sortBy": [{"displayName": "Connections", "desc": true}]}
         }
       ]
     }
