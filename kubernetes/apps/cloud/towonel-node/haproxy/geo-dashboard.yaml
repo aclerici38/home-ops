@@ -127,6 +127,72 @@ spec:
             "overrides": []
           },
           "options": {"sortBy": [{"displayName": "Connections", "desc": true}]}
+        },
+        {
+          "id": 4,
+          "type": "geomap",
+          "title": "US connections (approx. location)",
+          "description": "Accepted US connections placed at MaxMind GeoLite2-City coordinates. Free-tier city placement is approximate (often the state/ISP centroid).",
+          "gridPos": {"h": 14, "w": 16, "x": 0, "y": 26},
+          "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
+              "expr": "sum by (region, city, lat, lon) (increase(haproxy_geo_connections_total[$$__range]))",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "transformations": [
+            {"id": "convertFieldType", "options": {"conversions": [{"targetField": "lat", "destinationType": "number"}, {"targetField": "lon", "destinationType": "number"}]}}
+          ],
+          "options": {
+            "view": {"id": "coords", "lat": 39, "lon": -98, "zoom": 4},
+            "basemap": {"type": "default", "name": "Basemap"},
+            "layers": [
+              {
+                "type": "markers",
+                "name": "US connections",
+                "location": {"mode": "coords", "latitude": "lat", "longitude": "lon"},
+                "config": {
+                  "style": {
+                    "size": {"field": "Value", "min": 4, "max": 30},
+                    "color": {"field": "Value"},
+                    "opacity": 0.6
+                  }
+                }
+              }
+            ]
+          },
+          "fieldConfig": {
+            "defaults": {"color": {"mode": "continuous-YlRd"}, "unit": "short"},
+            "overrides": []
+          }
+        },
+        {
+          "id": 5,
+          "type": "table",
+          "title": "Top US cities",
+          "gridPos": {"h": 14, "w": 8, "x": 16, "y": 26},
+          "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
+              "expr": "sum by (region, city) (increase(haproxy_geo_connections_total[$$__range]))",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "transformations": [
+            {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"region": "State", "city": "City", "Value": "Connections"}}}
+          ],
+          "fieldConfig": {
+            "defaults": {"custom": {"align": "auto", "filterable": true}, "unit": "short"},
+            "overrides": []
+          },
+          "options": {"sortBy": [{"displayName": "Connections", "desc": true}]}
         }
       ]
     }

@@ -11,9 +11,9 @@ spec:
     name: app-template
     namespace: flux-system
   install:
-    timeout: 3m
+    timeout: 5m
   upgrade:
-    timeout: 3m
+    timeout: 5m
   values:
     controllers:
       haproxy:
@@ -105,8 +105,8 @@ spec:
                   httpGet: {path: /healthz, port: 8404}
                   periodSeconds: 10
             resources:
-              requests: {cpu: 50m, memory: 64Mi}
-              limits: {memory: 1Gi}
+              requests: {cpu: 50m, memory: 128Mi}
+              limits: {memory: 2Gi}
     service:
       haproxy:
         controller: haproxy
