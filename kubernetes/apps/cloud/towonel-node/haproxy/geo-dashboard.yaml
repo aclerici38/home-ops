@@ -193,6 +193,31 @@ spec:
             "overrides": []
           },
           "options": {"sortBy": [{"displayName": "Connections", "desc": true}]}
+        },
+        {
+          "id": 6,
+          "type": "table",
+          "title": "US connections by city / SNI",
+          "description": "Accepted US traffic broken down by approximate city/state and SNI. City placement is free-tier approximate; SNIs beyond the series cap fold into \"other\".",
+          "gridPos": {"h": 12, "w": 24, "x": 0, "y": 40},
+          "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
+              "expr": "sum by (region, city, sni) (increase(haproxy_geo_connections_total[$$__range]))",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "transformations": [
+            {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"region": "State", "city": "City", "sni": "SNI", "Value": "Connections"}}}
+          ],
+          "fieldConfig": {
+            "defaults": {"custom": {"align": "auto", "filterable": true}, "unit": "short"},
+            "overrides": []
+          },
+          "options": {"sortBy": [{"displayName": "Connections", "desc": true}]}
         }
       ]
     }

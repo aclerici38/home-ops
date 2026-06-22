@@ -19,12 +19,14 @@ local distinct = 0
 local MAX_SERIES = 2000
 
 -- Second, independent metric family: approximate geolocation of accepted US
--- connections, keyed by {region, city, lat, lon}. Decoupled from the country/SNI
--- series above so city cardinality can't interact with SNI cardinality; capped
--- on its own (distinct US city centroids are a few thousand at most).
-local geo = {} -- key -> { region=, city=, lat=, lon=, n= }
+-- connections, keyed by {region, city, lat, lon, sni}. Kept separate from the
+-- country/SNI series above so it has its own cap; carries SNI so a city can be
+-- broken down by served hostname. lat/lon are constant per city, so the series
+-- count is really distinct (city, sni) pairs. SNI is attacker-influenced, so the
+-- same "other" fold backstop applies once at the cap.
+local geo = {} -- key -> { region=, city=, lat=, lon=, sni=, n= }
 local geo_distinct = 0
-local MAX_GEO_SERIES = 5000
+local MAX_GEO_SERIES = 10000
 
 local function bump(country, action, sni)
   local key = country .. "|" .. action .. "|" .. sni
@@ -49,20 +51,33 @@ local function bump(country, action, sni)
   s.n = s.n + 1
 end
 
--- Record one accepted US connection at its approximate coordinates. geo_var is
--- the map_ip value "lat|lon|city|state" (empty/nil for an unmapped US IP, which
--- we drop since a point with no coordinates can't be placed on the map).
-local function bump_geo(geo_var)
+-- Record one accepted US connection at its approximate coordinates, broken down
+-- by SNI. geo_var is the map_ip value "lat|lon|city|state" (empty/nil for an
+-- unmapped US IP, which we drop since a point with no coordinates can't be
+-- placed on the map). sni is "" for plain HTTP.
+local function bump_geo(geo_var, sni)
   if geo_var == nil or geo_var == "" then return end
   local lat, lon, city, region = geo_var:match("^([^|]*)|([^|]*)|([^|]*)|(.*)$")
   if lat == nil or lat == "" then return end
-  local key = region .. "|" .. city .. "|" .. lat .. "|" .. lon
+  local prefix = region .. "|" .. city .. "|" .. lat .. "|" .. lon .. "|"
+  local key = prefix .. sni
   local s = geo[key]
   if s == nil then
-    if geo_distinct >= MAX_GEO_SERIES then return end
-    s = { region = region, city = city, lat = lat, lon = lon, n = 0 }
-    geo[key] = s
-    geo_distinct = geo_distinct + 1
+    -- Backstop: once at the cap, fold any new SNI into an "other" bucket.
+    if geo_distinct >= MAX_GEO_SERIES and sni ~= "" then
+      key = prefix .. "other"
+      s = geo[key]
+      if s == nil then
+        if geo_distinct >= MAX_GEO_SERIES then return end
+        s = { region = region, city = city, lat = lat, lon = lon, sni = "other", n = 0 }
+        geo[key] = s
+        geo_distinct = geo_distinct + 1
+      end
+    else
+      s = { region = region, city = city, lat = lat, lon = lon, sni = sni, n = 0 }
+      geo[key] = s
+      geo_distinct = geo_distinct + 1
+    end
   end
   s.n = s.n + 1
 end
@@ -75,7 +90,7 @@ core.register_action("count_conn", { "tcp-req" }, function(txn)
   if country == "US" then
     action = "allowed"
     sni = txn:get_var("sess.sni") or ""
-    bump_geo(txn:get_var("sess.geo"))
+    bump_geo(txn:get_var("sess.geo"), sni)
   else
     action = "blocked"
     sni = ""
@@ -101,12 +116,12 @@ core.register_service("geo_metrics", "http", function(applet)
       s.country, s.action, esc(s.sni), s.n)
   end
   lines[#lines + 1] =
-    "# HELP haproxy_geo_connections_total Accepted US connections by approximate geolocation (free GeoLite2-City; city placement is approximate)."
+    "# HELP haproxy_geo_connections_total Accepted US connections by approximate geolocation and SNI (free GeoLite2-City; city placement is approximate)."
   lines[#lines + 1] = "# TYPE haproxy_geo_connections_total counter"
   for _, s in pairs(geo) do
     lines[#lines + 1] = string.format(
-      'haproxy_geo_connections_total{region="%s",city="%s",lat="%s",lon="%s"} %d',
-      esc(s.region), esc(s.city), esc(s.lat), esc(s.lon), s.n)
+      'haproxy_geo_connections_total{region="%s",city="%s",lat="%s",lon="%s",sni="%s"} %d',
+      esc(s.region), esc(s.city), esc(s.lat), esc(s.lon), esc(s.sni), s.n)
   end
   local body = table.concat(lines, "\n") .. "\n"
   applet:set_status(200)
