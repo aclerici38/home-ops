@@ -35,6 +35,12 @@ endpoints:
     conditions:
       - "[CONNECTED] == true"
 
+  - name: Raphael
+    group: travel
+    url: tcp://raphael.clerici.tech:443
+    conditions:
+      - "[CONNECTED] == true"
+
 metrics: true
 
 security:
