@@ -121,6 +121,11 @@ spec:
             path: /metrics
             interval: 1m
             scrapeTimeout: 10s
+          # Per-country blocked-connection counter rendered by the geo-metrics Lua.
+          - port: metrics
+            path: /geo-metrics
+            interval: 1m
+            scrapeTimeout: 10s
     persistence:
       haproxy-config:
         type: configMap
@@ -134,6 +139,12 @@ spec:
         name: haproxy-scripts
         globalMounts:
           - path: /scripts
+            readOnly: true
+      lua:
+        type: configMap
+        name: haproxy-geo-metrics
+        globalMounts:
+          - path: /etc/haproxy/lua
             readOnly: true
       maps:
         type: emptyDir

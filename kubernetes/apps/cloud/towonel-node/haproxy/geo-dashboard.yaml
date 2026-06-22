@@ -1,0 +1,113 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/grafana-operator/5.24.0/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: haproxy-geo-blocked
+spec:
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  datasources:
+    - datasourceName: prometheus
+      inputName: DS_PROMETHEUS
+  json: |-
+    {
+      "title": "HAProxy - Geo-blocked Traffic",
+      "uid": "haproxy-geo-blocked",
+      "tags": ["haproxy", "geo"],
+      "timezone": "browser",
+      "schemaVersion": 39,
+      "time": {"from": "now-7d", "to": "now"},
+      "refresh": "1m",
+      "templating": {"list": []},
+      "panels": [
+        {
+          "id": 1,
+          "type": "geomap",
+          "title": "Blocked connections by country (7d)",
+          "gridPos": {"h": 14, "w": 16, "x": 0, "y": 0},
+          "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+              "expr": "sum by (country) (increase(haproxy_geo_blocked_connections_total[7d]))",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "options": {
+            "view": {"id": "fit"},
+            "basemap": {"type": "default", "name": "Basemap"},
+            "layers": [
+              {
+                "type": "markers",
+                "name": "Blocked",
+                "location": {
+                  "mode": "lookup",
+                  "lookup": "country",
+                  "gazetteer": "public/gazetteer/countries.json"
+                },
+                "config": {
+                  "style": {
+                    "size": {"field": "Value", "min": 4, "max": 30},
+                    "color": {"field": "Value"},
+                    "opacity": 0.6
+                  }
+                }
+              }
+            ]
+          },
+          "fieldConfig": {
+            "defaults": {"color": {"mode": "continuous-YlRd"}, "unit": "short"},
+            "overrides": []
+          }
+        },
+        {
+          "id": 2,
+          "type": "table",
+          "title": "Top source countries (7d)",
+          "gridPos": {"h": 14, "w": 8, "x": 16, "y": 0},
+          "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+              "expr": "sort_desc(sum by (country) (increase(haproxy_geo_blocked_connections_total[7d])))",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "transformations": [
+            {"id": "organize", "options": {"excludeByName": {"Time": true}, "renameByName": {"country": "Country", "Value": "Blocked"}}}
+          ],
+          "fieldConfig": {
+            "defaults": {"custom": {"align": "auto"}, "unit": "short"},
+            "overrides": []
+          },
+          "options": {"sortBy": [{"displayName": "Blocked", "desc": true}]}
+        },
+        {
+          "id": 3,
+          "type": "timeseries",
+          "title": "Blocked connections per country (rate)",
+          "gridPos": {"h": 9, "w": 24, "x": 0, "y": 14},
+          "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+              "expr": "sum by (country) (rate(haproxy_geo_blocked_connections_total[5m]))",
+              "legendFormat": "{{country}}",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {"custom": {"drawStyle": "line", "fillOpacity": 10, "stacking": {"mode": "normal"}}, "unit": "cps"},
+            "overrides": []
+          },
+          "options": {"legend": {"displayMode": "table", "placement": "right", "calcs": ["sum"]}}
+        }
+      ]
+    }
