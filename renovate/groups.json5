@@ -119,14 +119,14 @@
       },
     },
     {
-      // Cloud cluster Talos version is pinned directly in talos/cloud/talconfig.yaml.
+      // Cloud cluster Talos version separate.
       description: "Talos (cloud)",
       groupName: "Talos (cloud)",
       matchPackageNames: [
         "**/siderolabs/talos",
         "**/siderolabs/talosctl",
       ],
-      matchFileNames: ["talos/cloud/**"],
+      matchFileNames: ["talos/cloud/**", "kubernetes/flux/cloud/**"],
       additionalBranchPrefix: "cloud-",
       separateMinorPatch: false,
       group: {
