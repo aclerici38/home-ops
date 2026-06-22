@@ -20,7 +20,7 @@ USCITY_MIN=200000    # floor for a sane US-city map (US networks only)
 # a pod restart then starts fast and offline. The weekly updater calls this
 # script with no flag and always rebuilds. A persisted-but-truncated map (below
 # the floors above) is treated as missing and rebuilt.
-if [ "${1:-}" = "--if-missing" ] \
+if [ "$${1:-}" = "--if-missing" ] \
    && [ -f "$MAPDIR/geoip-country.map" ] && [ -f "$MAPDIR/geoip-uscity.map" ]; then
   have_c="$(wc -l < "$MAPDIR/geoip-country.map")"
   have_u="$(wc -l < "$MAPDIR/geoip-uscity.map")"
