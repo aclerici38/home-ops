@@ -39,7 +39,7 @@ endpoints:
     group: travel
     url: tcp://raphael.clerici.tech:443
     conditions:
-      - "[CONNECTED] == true"
+      - "[STATUS] == 200"
 
 metrics: true
 
