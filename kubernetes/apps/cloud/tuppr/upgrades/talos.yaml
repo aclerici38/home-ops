@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/tuppr/0.2.7/talosupgrade_v1alpha1.json
+apiVersion: tuppr.home-operations.com/v1alpha1
+kind: TalosUpgrade
+metadata:
+  name: talos
+spec:
+  talos:
+    version: ${TALOS_VERSION}
+  policy:
+    rebootMode: powercycle
