@@ -54,6 +54,13 @@
       matchUpdateTypes: ["major", "minor", "patch", "digest"],
     },
     {
+      description: ["Branch auto-merge digest-only updates from home-operations org"],
+      automerge: true,
+      automergeType: "branch",
+      matchPackageNames: ["ghcr.io/home-operations/**"],
+      matchUpdateTypes: ["digest"],
+    },
+    {
       description: ["Auto-merge k8s-versioned-schemas"],
       automerge: true,
       matchDatasources: ["github-tags"],
