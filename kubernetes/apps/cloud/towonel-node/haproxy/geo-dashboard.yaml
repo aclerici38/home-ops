@@ -28,10 +28,10 @@ spec:
           "type": "geomap",
           "title": "Blocked connections by country (7d)",
           "gridPos": {"h": 14, "w": 16, "x": 0, "y": 0},
-          "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+          "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
           "targets": [
             {
-              "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+              "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
               "expr": "sum by (country) (increase(haproxy_geo_blocked_connections_total[7d]))",
               "format": "table",
               "instant": true,
@@ -70,10 +70,10 @@ spec:
           "type": "table",
           "title": "Top source countries (7d)",
           "gridPos": {"h": 14, "w": 8, "x": 16, "y": 0},
-          "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+          "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
           "targets": [
             {
-              "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+              "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
               "expr": "sort_desc(sum by (country) (increase(haproxy_geo_blocked_connections_total[7d])))",
               "format": "table",
               "instant": true,
@@ -94,10 +94,10 @@ spec:
           "type": "timeseries",
           "title": "Blocked connections per country (rate)",
           "gridPos": {"h": 9, "w": 24, "x": 0, "y": 14},
-          "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+          "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
           "targets": [
             {
-              "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+              "datasource": {"type": "prometheus", "uid": "$${DS_PROMETHEUS}"},
               "expr": "sum by (country) (rate(haproxy_geo_blocked_connections_total[5m]))",
               "legendFormat": "{{country}}",
               "refId": "A"
