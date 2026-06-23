@@ -19,6 +19,8 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  dependsOn:
+    - name: streamystats-resources
   values:
     controllers:
       frontend:
@@ -100,9 +102,6 @@ spec:
             port: *bPort
     route:
       streamystats:
-        annotations:
-          towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
-          towonel.io/agent-ref: ${CLUSTER_NAME}
         hostnames:
           - streamystats.clerici.tech
         parentRefs:
@@ -112,5 +111,3 @@ spec:
           - backendRefs:
               - identifier: frontend
                 port: *fPort
-  dependsOn:
-    - name: streamystats-resources

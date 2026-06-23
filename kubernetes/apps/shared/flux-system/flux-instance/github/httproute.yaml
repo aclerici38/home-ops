@@ -5,8 +5,6 @@ kind: HTTPRoute
 metadata:
   name: flux-webhook
   annotations:
-    towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
-    towonel.io/agent-ref: ${CLUSTER_NAME}
     gatus.home-operations.com/endpoint: |-
       conditions: ["[STATUS] == 404"]
 spec:

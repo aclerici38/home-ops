@@ -19,9 +19,6 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: tesla-pubkey
-  annotations:
-    towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
-    towonel.io/agent-ref: ${CLUSTER_NAME}
 spec:
   hostnames:
     - tesla.clerici.tech

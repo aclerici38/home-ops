@@ -43,9 +43,6 @@ spec:
             hostUsers: false
         route:
           enabled: true
-          annotations:
-            towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
-            towonel.io/agent-ref: ${CLUSTER_NAME}
           parentRefs:
             - group: gateway.networking.k8s.io
               kind: Gateway

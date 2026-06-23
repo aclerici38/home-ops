@@ -133,8 +133,6 @@ spec:
     route:
       blocky-DOH:
         annotations:
-          towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
-          towonel.io/agent-ref: ${CLUSTER_NAME}
           # google.com base64
           gatus.home-operations.com/endpoint: |-
             url: https://dns.clerici.tech/dns-query?dns=AAABAAABAAAAAAAABmdvb2dsZQNjb20AAAEAAQ

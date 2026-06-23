@@ -75,9 +75,6 @@ spec:
         enabled: true
     httpRoute:
       enabled: true
-      annotations:
-        towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
-        towonel.io/agent-ref: ${CLUSTER_NAME}
       hostnames:
         - gatus.clerici.tech
       parentRefs:

@@ -160,9 +160,6 @@ spec:
             scheme: http
     route:
       dawarich:
-        annotations:
-          towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
-          towonel.io/agent-ref: ${CLUSTER_NAME}
         hostnames:
           - dawarich.clerici.tech
         parentRefs:

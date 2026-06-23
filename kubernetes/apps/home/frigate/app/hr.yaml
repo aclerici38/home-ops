@@ -84,9 +84,6 @@ spec:
             port: 8555
     route:
       auth:
-        annotations:
-          towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
-          towonel.io/agent-ref: ${CLUSTER_NAME}
         hostnames:
           - frigate.clerici.tech
         parentRefs:

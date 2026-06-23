@@ -75,9 +75,6 @@ spec:
           - port: http
     route:
       jellyfin:
-        annotations:
-          towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
-          towonel.io/agent-ref: ${CLUSTER_NAME}
         hostnames:
           - jellyfin.clerici.tech
           - tv.clerici.tech

@@ -9,7 +9,7 @@ metadata:
 spec:
   selector:
     app.kubernetes.io/name: towonel-agent
-    app.kubernetes.io/instance: ${CLUSTER_NAME}
+    app.kubernetes.io/part-of: towonel-operator
   ports:
     - name: metrics
       port: 9090

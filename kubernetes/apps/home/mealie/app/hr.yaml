@@ -108,9 +108,6 @@ spec:
             port: *port
     route:
       mealie:
-        annotations:
-          towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
-          towonel.io/agent-ref: ${CLUSTER_NAME}
         hostnames:
           - mealie.clerici.tech
         parentRefs:
