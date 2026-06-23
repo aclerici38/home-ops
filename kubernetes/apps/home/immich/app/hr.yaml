@@ -177,5 +177,13 @@ spec:
                 subPath: matplotlib-config
               - path: /.cache/matplotlib
                 subPath: matplotlib-cache
-      tmp:
+      tmpfs:
         type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
+        advancedMounts:
+          server:
+            immich-server:
+              - path: /data/backups
+                subPath: backups
