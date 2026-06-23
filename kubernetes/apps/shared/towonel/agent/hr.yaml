@@ -26,7 +26,7 @@ spec:
         name: ${CLUSTER_NAME}-k8s-token
         key: token
       services:
-        - hostname: "${EXTERNAL_WILDCARD}"
+        - hostname: "*.${EXTERNAL_DOMAIN}"
           origin: external.kgateway.svc.cluster.local:443
     serviceMonitor:
       enabled: true

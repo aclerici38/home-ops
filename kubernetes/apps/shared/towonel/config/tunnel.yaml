@@ -9,4 +9,4 @@ spec:
   deletionPolicy: Delete
   tokenExpiry: 0
   extraHostnames:
-    - "${EXTERNAL_WILDCARD}"
+    - "*.${EXTERNAL_DOMAIN}"
