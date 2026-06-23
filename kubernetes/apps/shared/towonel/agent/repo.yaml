@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: towonel-agent
+spec:
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 1.0.0
+    digest: sha256:0a036320292fe5ad44a9c7679b5c17c0a7d789b905552fc048cb41348d91b4cb
+  url: oci://codeberg.org/towonel/charts/towonel-agent

@@ -3,16 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: towonel-config
+  name: towonel-agent
   namespace: flux-system
 spec:
-  targetNamespace: towonel-operator
-  dependsOn:
-    - name: towonel-operator
+  targetNamespace: towonel
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/shared/towonel-operator/config
+  path: ./kubernetes/apps/shared/towonel/agent
   commonMetadata:
     labels:
-      app.kubernetes.io/name: towonel
+      app.kubernetes.io/name: towonel-agent
