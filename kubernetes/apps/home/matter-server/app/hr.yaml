@@ -19,6 +19,8 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  dependsOn:
+    - name: matter-server-resources
   values:
     controllers:
       matter-server:
@@ -28,11 +30,11 @@ spec:
           securityContext:
             sysctls:
               # accept RA route-info (Thread OMR prefix) on every multus interface
-              - name: net.ipv6.conf.net1.accept_ra_rt_info_max_plen
+              - name: net.ipv6.conf.iot.accept_ra_rt_info_max_plen
                 value: "64"
-              - name: net.ipv6.conf.net2.accept_ra_rt_info_max_plen
+              - name: net.ipv6.conf.cottage.accept_ra_rt_info_max_plen
                 value: "64"
-              - name: net.ipv6.conf.net3.accept_ra_rt_info_max_plen
+              - name: net.ipv6.conf.house.accept_ra_rt_info_max_plen
                 value: "64"
             runAsUser: 1000
             runAsGroup: 1000
@@ -40,29 +42,30 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
             runAsNonRoot: true
             seccompProfile: {type: RuntimeDefault}
-            supplementalGroups:
-              # Matter?
-              - 34
           annotations:
-            # net1 = iot (wifi matter devices), net2/net3 = trusted VLANs
+            # iot = wifi matter devices; cottage/house = trusted VLANs
             # (Thread OMR routes + operational mDNS from the OTBR backbones)
+            # "interface" pins the in-pod name so --primary-interface is unambiguous
             k8s.v1.cni.cncf.io/networks: |
               [
                 {
                   "name":"iot",
                   "namespace": "multus",
+                  "interface": "iot",
                   "ips": ["10.0.80.23/24"],
                   "mac": "64:16:7F:33:88:AC"
                 },
                 {
                   "name":"cottage",
                   "namespace": "multus",
+                  "interface": "cottage",
                   "ips": ["10.0.40.23/24"],
                   "mac": "64:16:7F:33:88:AD"
                 },
                 {
                   "name":"house",
                   "namespace": "multus",
+                  "interface": "house",
                   "ips": ["10.0.20.23/24"],
                   "mac": "64:16:7F:33:88:AE"
                 }
@@ -70,19 +73,19 @@ spec:
         containers:
           matter-server:
             image:
-              repository: ghcr.io/home-assistant-libs/python-matter-server
-              tag: 8.1.0@sha256:170aa093ce91c76cde4cc390918307590f0f5558fcec93f913af3cb019e6562a
+              repository: ghcr.io/matter-js/matterjs-server
+              tag: 1.1.1@sha256:d0549a1f702a70a0fe1677bd2a541ba8180c128a12f45855a7ede24d3c2ad36e
             args:
               - --storage-path=/data
-              - --paa-root-cert-dir=/data/credentials
               - --ota-provider-dir=/data/ota
-              - --primary-interface=net1
+              - --primary-interface=iot
+              - --production-mode
             resources:
               requests:
                 cpu: 47m
                 memory: 100Mi
               limits:
-                memory: 256Mi
+                memory: 512Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -92,7 +95,7 @@ spec:
         controller: matter-server
         ports:
           http:
-            port: &port 5580
+            port: 5580
     route:
       matter-server:
         hostnames:
@@ -110,5 +113,3 @@ spec:
         globalMounts:
           - path: /tmp
             subPath: tmp
-  dependsOn:
-    - name: matter-server-resources
