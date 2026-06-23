@@ -229,7 +229,6 @@ spec:
       opencloud:
         forceRename: opencloud
         annotations:
-          towonel.io/tunnel: enable
           towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
           towonel.io/agent-ref: ${CLUSTER_NAME}
         hostnames:
@@ -243,7 +242,6 @@ spec:
                 port: *port
       wopi:
         annotations:
-          towonel.io/tunnel: enable
           towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
           towonel.io/agent-ref: ${CLUSTER_NAME}
           gatus.home-operations.com/endpoint: |-
@@ -259,7 +257,6 @@ spec:
                 port: 9300
       collabora:
         annotations:
-          towonel.io/tunnel: enable
           towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
           towonel.io/agent-ref: ${CLUSTER_NAME}
         hostnames:

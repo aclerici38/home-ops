@@ -20,7 +20,6 @@ kind: HTTPRoute
 metadata:
   name: tesla-pubkey
   annotations:
-    towonel.io/tunnel: enable
     towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
     towonel.io/agent-ref: ${CLUSTER_NAME}
 spec:
