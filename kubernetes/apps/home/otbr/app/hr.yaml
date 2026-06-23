@@ -31,6 +31,7 @@ spec:
                 {
                   "name":"cottage",
                   "namespace": "multus",
+                  "interface": "backbone",
                   "ips": ["10.0.40.21/24"],
                   "mac": "64:16:7F:9B:69:70"
                 }
@@ -49,7 +50,7 @@ spec:
                     - -c
                     - for i in $(seq 1 60); do ot-ctl txpower 20 >/dev/null 2>&1 && exit 0; sleep 2; done; exit 0
             env: &env
-              BACKBONE_IF: net1
+              BACKBONE_IF: backbone
               BAUDRATE: "460800"
               FIREWALL: "1"
               NAT64: "1"
@@ -88,6 +89,7 @@ spec:
                 {
                   "name":"house",
                   "namespace": "multus",
+                  "interface": "backbone",
                   "ips": ["10.0.20.21/24"],
                   "mac": "64:16:7F:61:46:5C"
                 }
@@ -103,9 +105,9 @@ spec:
         sysctls:
           - name: net.ipv6.conf.all.forwarding
             value: "1"
-          - name: net.ipv6.conf.net1.accept_ra
+          - name: net.ipv6.conf.backbone.accept_ra
             value: "2"
-          - name: net.ipv6.conf.net1.accept_ra_rt_info_max_plen
+          - name: net.ipv6.conf.backbone.accept_ra_rt_info_max_plen
             value: "64"
         seccompProfile:
           type: RuntimeDefault

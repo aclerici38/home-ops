@@ -39,18 +39,21 @@ spec:
                 {
                   "name":"house",
                   "namespace": "multus",
+                  "interface": "house",
                   "ips": ["10.0.20.25/24"],
                   "mac": "64:16:7F:E9:23:A5"
                 },
                 {
                   "name":"cottage",
                   "namespace": "multus",
+                  "interface": "cottage",
                   "ips": ["10.0.40.25/24"],
                   "mac": "64:16:7F:41:52:65"
                 },
                 {
                   "name":"iot",
                   "namespace": "multus",
+                  "interface": "iot",
                   "ips": ["10.0.80.25/24"],
                   "mac": "64:16:7F:13:97:2A"
                 }
