@@ -24,6 +24,7 @@ spec:
     agent:
       inviteTokenSecret:
         name: ${CLUSTER_NAME}-k8s-token
+        key: token
       services:
         - hostname: "*.clerici.tech"
           origin: external.kgateway.svc.cluster.local:443
