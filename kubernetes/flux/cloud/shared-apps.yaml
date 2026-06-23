@@ -18,7 +18,7 @@ spec:
     - target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-      patch: |
+      patch: |-
         apiVersion: kustomize.toolkit.fluxcd.io/v1
         kind: Kustomization
         metadata:
@@ -28,6 +28,8 @@ spec:
           timeout: 3m
           prune: true
           wait: true
+          dependsOn:
+            - name: cluster-meta
           postBuild:
             substituteFrom:
               - kind: ConfigMap
