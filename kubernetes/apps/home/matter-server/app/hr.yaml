@@ -45,7 +45,6 @@ spec:
           annotations:
             # iot = wifi matter devices; cottage/house = trusted VLANs
             # (Thread OMR routes + operational mDNS from the OTBR backbones)
-            # "interface" pins the in-pod name so --primary-interface is unambiguous
             k8s.v1.cni.cncf.io/networks: |
               [
                 {
@@ -80,6 +79,15 @@ spec:
               - --ota-provider-dir=/data/ota
               - --primary-interface=iot
               - --production-mode
+            probes:
+              liveness: &probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 5580
+              readiness: *probe
             resources:
               requests:
                 cpu: 47m
@@ -99,7 +107,7 @@ spec:
     route:
       matter-server:
         hostnames:
-          - matter-server.clerici.tech
+          - matter.clerici.tech
         parentRefs:
           - name: internal
             namespace: kgateway
