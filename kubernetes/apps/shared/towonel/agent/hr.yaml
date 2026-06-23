@@ -18,8 +18,6 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
-  dependsOn:
-    - name: towonel-agent-resources
   values:
     defaultPodOptions:
       hostUsers: false
