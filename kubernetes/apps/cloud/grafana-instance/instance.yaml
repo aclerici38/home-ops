@@ -32,6 +32,9 @@ spec:
       enable_gzip: "true"
       root_url: https://grafana.${CLUSTER_NAME}.clerici.tech
   httpRoute:
+    metadata:
+      annotations:
+        towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
     spec:
       hostnames:
         - grafana.${CLUSTER_NAME}.clerici.tech

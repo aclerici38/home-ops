@@ -66,6 +66,8 @@ spec:
               limits: {}
     route:
       towonel-node:
+        annotations:
+          towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
         hostnames:
           - towonel.cloud.clerici.tech
         parentRefs:
