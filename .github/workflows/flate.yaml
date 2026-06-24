@@ -55,89 +55,10 @@ jobs:
       - name: Run flate test
         run: flate test all --path ./kubernetes/flux/${{ matrix.cluster }}
 
-  diff:
-    if: ${{ github.event_name == 'pull_request' }}
-    name: Flate Diff (${{ matrix.cluster }}/${{ matrix.resource }})
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    strategy:
-      matrix:
-        cluster:
-          - home
-          - cloud
-        resource:
-          - hr
-          - ks
-      fail-fast: false
-    steps:
-      - name: Checkout Pull Request Branch
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-
-      - name: Setup tools
-        uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
-        env:
-          MISE_NO_HOOKS: "1"
-        with:
-          experimental: true
-          install_args: github:home-operations/flate
-
-      # flate diffs the PR tree against the base checkout directly — no
-      # build-both-sides + dyff needed.
-      - name: Compute diff
-        id: diff
-        env:
-          FLATE_IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
-          RESOURCE: ${{ matrix.resource }}
-          CLUSTER: ${{ matrix.cluster }}
-        run: |-
-          {
-            echo 'diff<<EOF'
-            flate diff "${RESOURCE}" --path "./kubernetes/flux/${CLUSTER}"
-            echo 'EOF'
-          } >> "$GITHUB_OUTPUT"
-
-      - if: ${{ steps.diff.outputs.diff != '' }}
-        name: Generate Token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
-        id: app-token
-        with:
-          client-id: ${{ secrets.BOT_APP_CLIENT_ID }}
-          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
-          permission-pull-requests: write
-
-      - if: ${{ steps.diff.outputs.diff != '' }}
-        name: Add Comment
-        uses: marocchino/sticky-pull-request-comment@0ea0beb66eb9baf113663a64ec522f60e49231c0 # v3.0.4
-        with:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          header: ${{ github.event.pull_request.number }}/kubernetes/${{ matrix.cluster }}/${{ matrix.resource }}
-          message: |-
-            ```
-            ${{ steps.diff.outputs.diff }}
-            ```
-
-      - if: ${{ matrix.resource == 'hr' }}
-        name: Inspect changed images
-        env:
-          FLATE_IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
-          CLUSTER: ${{ matrix.cluster }}
-        run: |-
-          flate diff images "./kubernetes/flux/${CLUSTER}" 2>/dev/null | while IFS= read -r img; do
-            [ -z "${img}" ] && continue
-            echo "::group::${img}"
-            docker buildx imagetools inspect "${img}" || true
-            echo "::endgroup::"
-          done
-
   success:
     if: ${{ !cancelled() && github.event_name == 'pull_request' }}
     needs:
       - test
-      - diff
     name: Flate - Success
     runs-on: ubuntu-latest
     permissions: {}

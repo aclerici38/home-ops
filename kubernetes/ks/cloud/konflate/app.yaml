@@ -1,0 +1,60 @@
+---
+# Shared base for konflate: the chart source (OCIRepository) and credentials
+# (ExternalSecret), applied once and used by every instance below.
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: konflate
+  namespace: flux-system
+spec:
+  targetNamespace: konflate
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/cloud/konflate/config
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: konflate
+---
+# One konflate instance per reviewed cluster, from a single templated
+# HelmRelease. The reviewed cluster is injected via ${KONFLATE_CLUSTER} — not
+# ${CLUSTER_NAME}, which is the deployment cluster (cloud) and is identical for
+# both instances, so it can't distinguish home from cloud.
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: konflate-home
+  namespace: flux-system
+spec:
+  targetNamespace: konflate
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/cloud/konflate/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: konflate
+  postBuild:
+    substitute:
+      KONFLATE_CLUSTER: home
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: konflate-cloud
+  namespace: flux-system
+spec:
+  targetNamespace: konflate
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/cloud/konflate/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: konflate
+  postBuild:
+    substitute:
+      KONFLATE_CLUSTER: cloud
