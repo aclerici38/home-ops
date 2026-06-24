@@ -27,6 +27,7 @@ spec:
       statusCheckName: Konflate (${KONFLATE_CLUSTER})
       publicUrl: https://konflate-${KONFLATE_CLUSTER}.${CLUSTER_NAME}.clerici.tech
       mcp: false
+      restrictEgress: "true"
       extraEnv:
         - name: KONFLATE_APP_CLIENT_ID
           valueFrom:
@@ -57,6 +58,9 @@ spec:
     monitoring:
       serviceMonitor:
         enabled: true
+    networkPolicy:
+      enabled: true
+      type: cilium
     resources:
       requests:
         cpu: 50m
