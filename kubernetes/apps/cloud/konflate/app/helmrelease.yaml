@@ -19,7 +19,6 @@ spec:
     remediation:
       retries: 1
   values:
-    fullnameOverride: konflate-${KONFLATE_CLUSTER}
     config:
       repo: github://aclerici38/home-ops
       clusterPath: ./kubernetes/flux/${KONFLATE_CLUSTER}
