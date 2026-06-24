@@ -27,6 +27,7 @@ spec:
       publicUrl: https://konflate-${KONFLATE_CLUSTER}.${CLUSTER_NAME}.clerici.tech
       mcp: false
       restrictEgress: "true"
+      prFilterExpr: pr.labels.exists(l, l.name == "cluster/${KONFLATE_CLUSTER}")
       extraEnv:
         - name: KONFLATE_APP_CLIENT_ID
           valueFrom:

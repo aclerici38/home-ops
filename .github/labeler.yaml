@@ -12,3 +12,24 @@ area/taskfile:
   - changed-files:
       - any-glob-to-any-file: .taskfiles/**/*
       - any-glob-to-any-file: Taskfile*
+cluster/home:
+  - changed-files:
+      - any-glob-to-any-file:
+          - kubernetes/flux/home/**
+          - kubernetes/ks/home/**
+          - kubernetes/apps/home/**
+          - kubernetes/ks/shared/**
+          - kubernetes/apps/shared/**
+          - kubernetes/components/**
+          - kubernetes/charts/**
+          - globals.env
+cluster/cloud:
+  - changed-files:
+      - any-glob-to-any-file:
+          - kubernetes/flux/cloud/**
+          - kubernetes/ks/cloud/**
+          - kubernetes/apps/cloud/**
+          - kubernetes/ks/shared/**
+          - kubernetes/apps/shared/**
+          - kubernetes/components/**
+          - kubernetes/charts/**
