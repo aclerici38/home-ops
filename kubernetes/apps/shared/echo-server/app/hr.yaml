@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json?values=app-template/5.0.1
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.8.8/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -9,8 +9,7 @@ spec:
   maxHistory: 1
   chartRef:
     kind: OCIRepository
-    name: app-template
-    namespace: flux-system
+    name: echo
   install:
     timeout: 2m
     remediation:
@@ -20,61 +19,20 @@ spec:
     remediation:
       retries: 1
   values:
-    controllers:
-      echo-server:
-        strategy: RollingUpdate
-        pod:
-          hostUsers: false
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            seccompProfile: {type: RuntimeDefault}
-        containers:
-          echo-server:
-            image:
-              repository: ghcr.io/mendhak/http-https-echo
-              tag: 41@sha256:2046be25f4a2c0bdda662ebfb7c2b7b60fc95c31d97987be143645a8a2194a40
-            env:
-              HTTP_PORT: &port 8080
-              LOG_WITHOUT_NEWLINE: true
-              LOG_IGNORE_PATH: /healthz
-              PROMETHEUS_ENABLED: true
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /healthz
-                    port: *port
-              readiness: *probes
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 64Mi
-    service:
-      echo-server:
-        controller: echo-server
-        ports:
-          http:
-            port: *port
-    serviceMonitor:
-      echo-server:
-        serviceName: echo-server
-        endpoints:
-          - port: http
-    route:
-      echo-server:
-        annotations:
-          towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
-        hostnames:
-          - echo.${CLUSTER_NAME}.clerici.tech
-        parentRefs:
-          - name: external
-            namespace: kgateway
+    config:
+      metricsEnabled: true
+    resources:
+      requests:
+        cpu: 10m
+      limits:
+        memory: 64Mi
+    monitoring:
+      serviceMonitor:
+        enabled: true
+    httpRoute:
+      enabled: true
+      parentRefs:
+        - name: external
+          namespace: kgateway
+      hostnames:
+        - echo.${CLUSTER_NAME}.clerici.tech
