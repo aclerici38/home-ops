@@ -22,8 +22,6 @@ spec:
     forceRename: renovate-operator
     route:
       enabled: true
-      annotations:
-        towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
       hostnames:
         - renovate.cloud.clerici.tech
       parentRefs:
