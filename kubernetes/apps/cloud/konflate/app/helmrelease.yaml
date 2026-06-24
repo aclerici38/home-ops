@@ -46,8 +46,6 @@ spec:
               key: KONFLATE_WEBHOOK_SECRET
     httpRoute:
       enabled: true
-      annotations:
-        towonel.io/tunnel-ref: towonel-operator/${CLUSTER_NAME}-k8s
       parentRefs:
         - name: external
           kind: Gateway
