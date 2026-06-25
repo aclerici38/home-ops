@@ -71,6 +71,22 @@ checksum = "sha256:808f8ef81a61e01eb41c1a2951e5639804f2372dc6a484bbeff726406745c
 url = "https://github.com/evilmartians/lefthook/releases/download/v2.1.9/lefthook_2.1.9_MacOS_arm64.gz"
 provenance = "github-attestations"
 
+[[tools.node]]
+version = "26.3.1"
+backend = "core:node"
+
+[tools.node."platforms.linux-x64"]
+checksum = "sha256:e892cd615e637edebcf22f9653d80fba63167ad6754d20881fd52cc37be81441"
+url = "https://nodejs.org/dist/v26.3.1/node-v26.3.1-linux-x64.tar.gz"
+
+[tools.node."platforms.macos-arm64"]
+checksum = "sha256:3f624ab0d774553c0d28b968e141d8c676a35a2811fb0b7b356ba9cbdce15f74"
+url = "https://nodejs.org/dist/v26.3.1/node-v26.3.1-darwin-arm64.tar.gz"
+
+[[tools.oxfmt]]
+version = "0.56.0"
+backend = "npm:oxfmt"
+
 [[tools.yamlfmt]]
 version = "0.21.0"
 backend = "aqua:google/yamlfmt"
