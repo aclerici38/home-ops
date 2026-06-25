@@ -35,6 +35,14 @@ spec:
               - "opencloud init || true; opencloud server"
             env:
               OC_ADMIN_USER_ID: a15f91db-50ff-4b61-aafa-ad5276a4c21e
+              OC_SERVICE_ACCOUNT_ID:
+                secretKeyRef:
+                  name: opencloud
+                  key: OC_SERVICE_ACCOUNT_ID
+              OC_SERVICE_ACCOUNT_SECRET:
+                secretKeyRef:
+                  name: opencloud
+                  key: OC_SERVICE_ACCOUNT_SECRET
               OC_ENABLE_OCM: false
               OC_INSECURE: false
               OC_LOG_LEVEL: info
@@ -137,6 +145,14 @@ spec:
               OC_CACHE_STORE: nats-js-kv
               MICRO_REGISTRY: nats-js-kv
               OC_URL: *url
+              OC_SERVICE_ACCOUNT_ID:
+                secretKeyRef:
+                  name: opencloud
+                  key: OC_SERVICE_ACCOUNT_ID
+              OC_SERVICE_ACCOUNT_SECRET:
+                secretKeyRef:
+                  name: opencloud
+                  key: OC_SERVICE_ACCOUNT_SECRET
             securityContext: *sec
       collabora:
         strategy: RollingUpdate
