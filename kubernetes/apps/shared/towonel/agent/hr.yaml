@@ -28,6 +28,8 @@ spec:
       services:
         - hostname: "*.${EXTERNAL_DOMAIN}"
           origin: external.kgateway.svc.cluster.local:443
+        - hostname: "*.${CLUSTER_NAME}.clerici.tech"
+          origin: external.kgateway.svc.cluster.local:443
     serviceMonitor:
       enabled: true
     monitoring:
