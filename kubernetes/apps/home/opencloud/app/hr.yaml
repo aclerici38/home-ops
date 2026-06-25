@@ -28,7 +28,7 @@ spec:
           opencloud:
             image: &img
               repository: mirror.gcr.io/opencloudeu/opencloud-rolling
-              tag: 7.1.0@sha256:0bb29038affb1b58655bb8d4fd3dc78b26fb7c0c7e994bda72e6e4e58e6e54b3
+              tag: 7.2.0@sha256:324c2e6d5e97f0d8bd2e4f716c491cc32f1054b3f527dbc4290ce4de113333ab
             command:
               - "/bin/sh"
               - "-c"
@@ -298,7 +298,7 @@ spec:
       # Web extensions
       unzip:
         type: image
-        image: mirror.gcr.io/opencloudeu/web-extensions:unzip-2.0.0@sha256:79a2c09696a869da85e6e79516ef78b0a4415db5a1de2179ab198be78f4be8cf
+        image: mirror.gcr.io/opencloudeu/web-extensions:unzip-2.0.1@sha256:221818b9a619d31160369cc4ad9c6254772b8a7cafab8645f7c6920cb0129746
         advancedMounts:
           opencloud:
             opencloud:
