@@ -43,6 +43,7 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
+          fetch-depth: 0
 
       - name: Setup tools
         uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
@@ -54,6 +55,32 @@ jobs:
 
       - name: Run flate test
         run: flate test all --path ./kubernetes/flux/${{ matrix.cluster }}
+
+      - name: Diff new images
+        if: github.event_name == 'pull_request'
+        run: |
+          flate diff images --path ./kubernetes/flux/${{ matrix.cluster }} \
+            --base "${{ github.event.pull_request.base.sha }}" --no-progress \
+            | sort -u | tee "${RUNNER_TEMP}/new-images.txt"
+
+      - name: Verify image architectures
+        if: github.event_name == 'pull_request'
+        run: |
+          if [[ "${{ matrix.cluster }}" == "home" ]]; then want="amd64"; else want="arm64"; fi
+          echo "Verifying new images carry ${want} (${{ matrix.cluster }})"
+          fail=0
+          while IFS= read -r img; do
+            [[ -n "${img}" ]] || continue
+            arches="$(docker buildx imagetools inspect "${img}" \
+              --format '{{range .Manifest.Manifests}}{{.Platform.Architecture}} {{end}}')"
+            if [[ " ${arches} " == *" ${want} "* ]]; then
+              echo "OK ${img} — [${arches# }]"
+            else
+              echo "!! ${img} — ${want} not found (got: ${arches:-none})"
+              fail=1
+            fi
+          done < "${RUNNER_TEMP}/new-images.txt"
+          exit "${fail}"
 
   success:
     if: ${{ !cancelled() && github.event_name == 'pull_request' }}
