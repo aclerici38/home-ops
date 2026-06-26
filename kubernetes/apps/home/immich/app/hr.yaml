@@ -30,10 +30,8 @@ spec:
         containers:
           immich-server:
             image:
-              # repository: ghcr.io/immich-app/immich-server
-              # tag: v3.0.0-rc.2@sha256:fe1d8aa37c0484cade3dd91ed2baaa01eddc72ad5834da4b52f4385aa80ade85
-              repository: docker.io/ant385525/immich-server
-              tag: qsv-target-bitrate
+              repository: ghcr.io/immich-app/immich-server
+              tag: v3.0.0-rc.2@sha256:fe1d8aa37c0484cade3dd91ed2baaa01eddc72ad5834da4b52f4385aa80ade85
             env:
               IMMICH_LOG_LEVEL: verbose
               REDIS_HOSTNAME: immich-dragonfly-db
