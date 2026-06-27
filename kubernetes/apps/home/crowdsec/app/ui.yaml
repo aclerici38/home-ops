@@ -33,7 +33,7 @@ spec:
           crowdsec-ui:
             image:
               repository: ghcr.io/theduffman85/crowdsec-web-ui
-              tag: 2026.6.9@sha256:aa7cf64d1b0167d8dc3b50b5fd3dbda70ed5011773c98e9b1df93fc713fd6c84
+              tag: 2026.6.10@sha256:20fca15fb26a3a46a06f6016e4c87ebad3f308eec0b2d2adf9e5bfde602981be
             env:
               CROWDSEC_URL: http://crowdsec-service:8080
               CROWDSEC_USER: crowdsec-web-ui
