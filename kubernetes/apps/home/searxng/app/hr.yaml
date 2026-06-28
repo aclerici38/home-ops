@@ -36,7 +36,7 @@ spec:
           searxng:
             image:
               repository: ghcr.io/searxng/searxng
-              tag: 2026.6.28-8605230eb@sha256:b88330e89fb0eb7d1d5fa30d4bd8a989cf1914dd679b9d87657dede972ecbe27
+              tag: 2026.6.28-8605230eb@sha256:5df947b34d72f993cf5f72327a6f5c5710c808c57b14ca01f06e21138712d38f
             env:
               SEARXNG_BASE_URL: &url https://search.clerici.tech
               SEARXNG_URL: *url
