@@ -40,7 +40,7 @@ spec:
           init-config:
             image:
               repository: ghcr.io/tagyoureit/njspc
-              tag: 9.1.0@sha256:aa9586c94f0bd838b646a33da16e6c22b281c9b8abdc5f682e7085219e7c56ab
+              tag: 10.0.0@sha256:d2bc73cdbbbdf9e922300e55b150eeb5c7687813fc6822fdf90ed1d69b78b850
             command:
               - "/bin/sh"
               - "-c"
@@ -70,7 +70,7 @@ spec:
           poolcontroller:
             image:
               repository: ghcr.io/tagyoureit/njspc
-              tag: 9.1.0@sha256:aa9586c94f0bd838b646a33da16e6c22b281c9b8abdc5f682e7085219e7c56ab
+              tag: 10.0.0@sha256:d2bc73cdbbbdf9e922300e55b150eeb5c7687813fc6822fdf90ed1d69b78b850
             env:
               POOL_NET_CONNECT: "true"
               POOL_NET_HOST: ew11.iot.internal
