@@ -300,6 +300,16 @@
       },
     },
     {
+      description: "Nodejs-Poolcontroller group",
+      groupName: "nodejs-poolcontroller",
+      matchPackagePatterns: ["tagyoureit/njspc", "rstrouse/njspc-dash"],
+      matchDatasources: ["docker"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      minimumGroupSize: 2,
+    },
+    {
       description: "Kubernetes group",
       groupName: "Kubernetes",
       matchPackageNames: [
