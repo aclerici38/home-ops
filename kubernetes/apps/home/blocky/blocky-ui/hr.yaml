@@ -41,7 +41,7 @@ spec:
               QUERY_LOG_TYPE: postgresql
               QUERY_LOG_TARGET:
                 secretKeyRef:
-                  name: blocky-db-app
+                  name: blocky-postgres
                   key: uri
               BLOCKY_API_URL: http://blocky-k8s.blocky:4000
             probes:

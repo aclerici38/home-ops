@@ -52,27 +52,27 @@ spec:
               PGHOST:
                 valueFrom:
                   secretKeyRef:
-                    name: blocky-db-app
+                    name: blocky-postgres
                     key: host
               PGPORT:
                 valueFrom:
                   secretKeyRef:
-                    name: blocky-db-app
+                    name: blocky-postgres
                     key: port
               PGUSER:
                 valueFrom:
                   secretKeyRef:
-                    name: blocky-db-app
+                    name: blocky-postgres
                     key: username
               PGPASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: blocky-db-app
+                    name: blocky-postgres
                     key: password
               PGDATABASE:
                 valueFrom:
                   secretKeyRef:
-                    name: blocky-db-app
+                    name: blocky-postgres
                     key: dbname
             probes:
               readiness: &probes

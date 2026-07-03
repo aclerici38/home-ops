@@ -28,25 +28,25 @@ spec:
     - targetPath: url
       valueFrom:
         secretKeyRef:
-          name: blocky-db-app
+          name: blocky-postgres
           key: host
     - targetPath: url
       valueFrom:
         secretKeyRef:
-          name: blocky-db-app
+          name: blocky-postgres
           key: port
     - targetPath: user
       valueFrom:
         secretKeyRef:
-          name: blocky-db-app
+          name: blocky-postgres
           key: user
     - targetPath: jsonData.database
       valueFrom:
         secretKeyRef:
-          name: blocky-db-app
+          name: blocky-postgres
           key: dbname
     - targetPath: secureJsonData.password
       valueFrom:
         secretKeyRef:
-          name: blocky-db-app
+          name: blocky-postgres
           key: password

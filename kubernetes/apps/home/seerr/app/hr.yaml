@@ -41,22 +41,22 @@ spec:
               DB_HOST:
                 valueFrom:
                   secretKeyRef:
-                    name: seerr-db-app
+                    name: seerr-postgres
                     key: host
               DB_USER:
                 valueFrom:
                   secretKeyRef:
-                    name: seerr-db-app
+                    name: seerr-postgres
                     key: username
               DB_PASS:
                 valueFrom:
                   secretKeyRef:
-                    name: seerr-db-app
+                    name: seerr-postgres
                     key: password
               DB_NAME:
                 valueFrom:
                   secretKeyRef:
-                    name: seerr-db-app
+                    name: seerr-postgres
                     key: dbname
             resources:
               requests:

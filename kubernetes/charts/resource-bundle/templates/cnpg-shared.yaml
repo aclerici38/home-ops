@@ -86,7 +86,7 @@ spec:
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: {{ $app }}-db-app
+  name: {{ $app }}-postgres
   labels:
     dormammu.internal/component: cnpg
 spec:

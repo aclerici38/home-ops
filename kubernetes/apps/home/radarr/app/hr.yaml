@@ -46,22 +46,22 @@ spec:
               RADARR__POSTGRES__HOST:
                 valueFrom:
                   secretKeyRef:
-                    name: radarr-db-app
+                    name: radarr-postgres
                     key: host
               RADARR__POSTGRES__USER:
                 valueFrom:
                   secretKeyRef:
-                    name: radarr-db-app
+                    name: radarr-postgres
                     key: username
               RADARR__POSTGRES__PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: radarr-db-app
+                    name: radarr-postgres
                     key: password
               RADARR__POSTGRES__MAINDB:
                 valueFrom:
                   secretKeyRef:
-                    name: radarr-db-app
+                    name: radarr-postgres
                     key: dbname
             envFrom:
               - secretRef:

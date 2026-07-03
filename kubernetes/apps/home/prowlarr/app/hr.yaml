@@ -48,22 +48,22 @@ spec:
               PROWLARR__POSTGRES__HOST:
                 valueFrom:
                   secretKeyRef:
-                    name: prowlarr-db-app
+                    name: prowlarr-postgres
                     key: host
               PROWLARR__POSTGRES__USER:
                 valueFrom:
                   secretKeyRef:
-                    name: prowlarr-db-app
+                    name: prowlarr-postgres
                     key: username
               PROWLARR__POSTGRES__PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: prowlarr-db-app
+                    name: prowlarr-postgres
                     key: password
               PROWLARR__POSTGRES__MAINDB:
                 valueFrom:
                   secretKeyRef:
-                    name: prowlarr-db-app
+                    name: prowlarr-postgres
                     key: dbname
             envFrom:
               - secretRef:

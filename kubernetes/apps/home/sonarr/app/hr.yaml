@@ -46,22 +46,22 @@ spec:
               SONARR__POSTGRES__HOST:
                 valueFrom:
                   secretKeyRef:
-                    name: sonarr-db-app
+                    name: sonarr-postgres
                     key: host
               SONARR__POSTGRES__USER:
                 valueFrom:
                   secretKeyRef:
-                    name: sonarr-db-app
+                    name: sonarr-postgres
                     key: username
               SONARR__POSTGRES__PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: sonarr-db-app
+                    name: sonarr-postgres
                     key: password
               SONARR__POSTGRES__MAINDB:
                 valueFrom:
                   secretKeyRef:
-                    name: sonarr-db-app
+                    name: sonarr-postgres
                     key: dbname
             envFrom:
               - secretRef:
