@@ -67,7 +67,7 @@ spec:
               POSTGRES_URL_OVERRIDE:
                 valueFrom:
                   secretKeyRef:
-                    name: mealie-db-app
+                    name: mealie-postgres
                     key: uri
               # SMTP
               SMTP_HOST: smtp-relay.smtp-relay.svc.cluster.local

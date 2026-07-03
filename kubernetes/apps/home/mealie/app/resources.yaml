@@ -28,12 +28,7 @@ spec:
       namespace: volsync
   values:
     cnpg:
-      mode: restore
-      clusterSpec:
-        bootstrap:
-          recovery:
-            recoveryTarget:
-              backupID: 20260608T110001
+      mode: shared
     externalSecret: {}
     pocketId:
       group: all
