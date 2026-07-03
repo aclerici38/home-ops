@@ -46,22 +46,22 @@ spec:
               POSTGRES_HOST:
                 valueFrom:
                   secretKeyRef:
-                    name: bazarr-db-app
+                    name: bazarr-postgres
                     key: host
               POSTGRES_USERNAME:
                 valueFrom:
                   secretKeyRef:
-                    name: bazarr-db-app
+                    name: bazarr-postgres
                     key: username
               POSTGRES_PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: bazarr-db-app
+                    name: bazarr-postgres
                     key: password
               POSTGRES_DATABASE:
                 valueFrom:
                   secretKeyRef:
-                    name: bazarr-db-app
+                    name: bazarr-postgres
                     key: dbname
             probes:
               liveness: &probes
