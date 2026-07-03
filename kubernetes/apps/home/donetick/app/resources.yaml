@@ -26,12 +26,7 @@ spec:
       namespace: pocket-id-operator
   values:
     cnpg:
-      mode: restore
-      clusterSpec:
-        bootstrap:
-          recovery:
-            recoveryTarget:
-              backupID: 20260606T110001
+      mode: shared
     externalSecret: {}
     pocketId:
       group: fam

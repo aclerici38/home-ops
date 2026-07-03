@@ -40,19 +40,19 @@ spec:
               DT_DATABASE_TYPE: postgres
               DT_DATABASE_HOST:
                 secretKeyRef:
-                  name: donetick-db-app
+                  name: donetick-postgres
                   key: host
               DT_DATABASE_USER:
                 secretKeyRef:
-                  name: donetick-db-app
+                  name: donetick-postgres
                   key: user
               DT_DATABASE_PASSWORD:
                 secretKeyRef:
-                  name: donetick-db-app
+                  name: donetick-postgres
                   key: password
               DT_DATABASE_NAME:
                 secretKeyRef:
-                  name: donetick-db-app
+                  name: donetick-postgres
                   key: dbname
               DT_JWT_SECRET:
                 secretKeyRef:
