@@ -1,8 +1,9 @@
-{{- if hasKey .Values "cnpg" }}
+{{- /* Legacy per-app cluster. mode: shared is handled by cnpg-shared.yaml. */}}
+{{- if and (hasKey .Values "cnpg") (ne (dig "mode" "" .Values.cnpg) "shared") }}
 {{- $app := include "resources.app" . -}}
 {{- $ns := include "resources.ns" . -}}
 {{- $c := .Values.cnpg -}}
-{{- if not (hasKey $c "mode") }}{{ fail "cnpg.mode is required (init | restore | no-backup)" }}{{- end -}}
+{{- if not (hasKey $c "mode") }}{{ fail "cnpg.mode is required (init | restore | no-backup | shared)" }}{{- end -}}
 {{- $backup := ne $c.mode "no-backup" -}}
 {{- $restore := eq $c.mode "restore" -}}
 {{- $host := printf "%s-pooler-rw.%s.svc.cluster.local" $app $ns -}}

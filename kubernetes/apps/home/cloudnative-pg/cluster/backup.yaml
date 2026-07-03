@@ -1,0 +1,77 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/plugin-barman-cloud/0.7.0/objectstore_v1.json
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: pg18
+spec:
+  retentionPolicy: 14d
+  configuration:
+    data: {compression: gzip, jobs: 8}
+    wal: {compression: zstd, maxParallel: 12}
+    destinationPath: s3://cnpg
+    endpointURL: http://versitygw.versity.svc.cluster.local:7070
+    historyTags: {keepHistory: "true"}
+    s3Credentials:
+      accessKeyId: {name: cloudnative-pg, key: versity-access-key-id}
+      secretAccessKey: {name: cloudnative-pg, key: versity-secret-access-key}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/scheduledbackup_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: pg18
+spec:
+  schedule: "0 0 4 * * *"
+  immediate: true
+  backupOwnerReference: self
+  cluster:
+    name: pg18
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/monitoring.coreos.com/podmonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: pg18
+  labels:
+    cnpg.io/cluster: pg18
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/cluster: pg18
+      cnpg.io/podRole: instance
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/monitoring.coreos.com/podmonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: pg18-pooler-rw
+  labels:
+    cnpg.io/poolerName: pg18-pooler-rw
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/podRole: pooler
+      cnpg.io/poolerName: pg18-pooler-rw
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/monitoring.coreos.com/podmonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: pg18-pooler-session-rw
+  labels:
+    cnpg.io/poolerName: pg18-pooler-session-rw
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/podRole: pooler
+      cnpg.io/poolerName: pg18-pooler-session-rw
