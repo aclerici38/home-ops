@@ -95,7 +95,10 @@ spec:
     kind: ClusterSecretStore
     name: cnpg-role-secrets
   target:
-    creationPolicy: Orphan
+    # Owner (not Orphan): this secret is a reproducible mirror of the <app>-role
+    # password, so let ESO own + watch it and recreate it immediately if it's
+    # ever deleted (e.g. the legacy secret being cascade-removed during the flip).
+    creationPolicy: Owner
     template:
       engineVersion: v2
       metadata:
