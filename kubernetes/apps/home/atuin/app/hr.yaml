@@ -45,7 +45,7 @@ spec:
               ATUIN_DB_URI:
                 valueFrom:
                   secretKeyRef:
-                    name: atuin-db-app
+                    name: atuin-postgres
                     key: uri
             probes:
               liveness:
