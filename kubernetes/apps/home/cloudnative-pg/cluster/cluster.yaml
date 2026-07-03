@@ -5,7 +5,7 @@ kind: Cluster
 metadata:
   name: pg18
 spec:
-  instances: 2
+  instances: 3
   primaryUpdateStrategy: unsupervised
   primaryUpdateMethod: switchover
   enablePDB: true
