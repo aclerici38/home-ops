@@ -40,7 +40,7 @@ spec:
         - name: PG_URI
           valueFrom:
             secretKeyRef:
-              name: gatus-db-app
+              name: gatus-postgres
               key: uri
         - name: CLIENT_ID
           valueFrom:
