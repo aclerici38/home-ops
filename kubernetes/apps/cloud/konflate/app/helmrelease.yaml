@@ -25,7 +25,10 @@ spec:
       statusChecks: true
       statusCheckName: Konflate (${KONFLATE_CLUSTER})
       publicUrl: https://konflate-${KONFLATE_CLUSTER}.${CLUSTER_NAME}.clerici.tech
+      prComments: true
+
       mcp: false
+      verifyImages: true
       restrictEgress: "true"
       prFilterExpr: pr.labels.exists(l, l.name == "cluster/${KONFLATE_CLUSTER}")
       extraEnv:
