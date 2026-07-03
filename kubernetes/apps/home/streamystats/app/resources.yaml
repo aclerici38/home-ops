@@ -22,12 +22,7 @@ spec:
       namespace: cloudnative-pg
   values:
     cnpg:
-      mode: restore
-      pgExtensions:
-        - pgvector
-        - vchord
-      preload:
-        - "vchord.so"
+      mode: shared
       dbExtensions:
         - {name: vector, ensure: present}
         - name: vchord

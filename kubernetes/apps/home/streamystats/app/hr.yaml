@@ -33,7 +33,7 @@ spec:
               DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
-                    name: streamystats-db-app
+                    name: streamystats-postgres
                     key: uri
               JOB_SERVER_URL: http://streamystats-job-server:3005
             probes:
