@@ -57,7 +57,7 @@ spec:
         databaseUrl:
           valueFrom:
             secretKeyRef:
-              name: pocket-id-db-app
+              name: pocket-id-postgres
               key: uri
         appUrl: https://id.clerici.tech
         hostUsers: false
