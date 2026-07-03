@@ -77,27 +77,27 @@ spec:
         - name: DB_HOST
           valueFrom:
             secretKeyRef:
-              name: crowdsec-db-app
+              name: crowdsec-postgres
               key: host
         - name: DB_PORT
           valueFrom:
             secretKeyRef:
-              name: crowdsec-db-app
+              name: crowdsec-postgres
               key: port
         - name: DB_USER
           valueFrom:
             secretKeyRef:
-              name: crowdsec-db-app
+              name: crowdsec-postgres
               key: username
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: crowdsec-db-app
+              name: crowdsec-postgres
               key: password
         - name: DB_NAME
           valueFrom:
             secretKeyRef:
-              name: crowdsec-db-app
+              name: crowdsec-postgres
               key: dbname
       service:
         type: LoadBalancer
