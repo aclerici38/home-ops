@@ -30,15 +30,8 @@ spec:
       namespace: volsync
   values:
     cnpg:
-      mode: restore
+      mode: shared
       poolMode: session
-      clusterSpec:
-        bootstrap:
-          recovery:
-            recoveryTarget:
-              backupID: 20260610T110009
-      pgExtensions:
-        - postgis
       dbExtensions:
         - {name: postgis}
         - {name: postgis_raster}

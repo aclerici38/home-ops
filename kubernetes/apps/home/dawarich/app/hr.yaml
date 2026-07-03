@@ -80,19 +80,19 @@ spec:
                   key: OTP_ENCRYPTION_KEY_DERIVATION_SALT
               DATABASE_HOST:
                 secretKeyRef:
-                  name: dawarich-db-app
+                  name: dawarich-postgres
                   key: host
               DATABASE_USERNAME:
                 secretKeyRef:
-                  name: dawarich-db-app
+                  name: dawarich-postgres
                   key: user
               DATABASE_PASSWORD:
                 secretKeyRef:
-                  name: dawarich-db-app
+                  name: dawarich-postgres
                   key: password
               DATABASE_NAME:
                 secretKeyRef:
-                  name: dawarich-db-app
+                  name: dawarich-postgres
                   key: dbname
               OIDC_CLIENT_ID:
                 secretKeyRef:
