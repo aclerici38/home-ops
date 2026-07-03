@@ -20,13 +20,3 @@ spec:
       retries: 1
   dependsOn:
     - name: cloudnative-pg
-  # TODO: what is this schema
-  values:
-    image:
-      registry: ghcr.io
-      repository: cloudnative-pg/plugin-barman-cloud
-      tag: v0.13.0@sha256:71589dbac582333442812b07b31f7ea4d00324a8358aac7ca507dabf9f4b6c96
-    sidecarImage:
-      registry: ghcr.io
-      repository: cloudnative-pg/plugin-barman-cloud-sidecar
-      tag: v0.13.0@sha256:990361af3319f9e23aafa0f6d7981f99bf1f69b4e6a85cf1bc7d71d6f09bb288
