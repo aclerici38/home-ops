@@ -30,7 +30,7 @@
     {
       customType: "regex",
       description: "Process yaml-language-server schema versions from GitHub tags URLs",
-      fileMatch: [".yaml"],
+      fileMatch: ["\\.ya?ml$"],
       matchStrings: [
         "\\$schema=https://raw\\.githubusercontent\\.com/(?<depName>[^/]+/[^/]+)/refs/tags/(?<currentValue>[^/]+)/",
       ],
@@ -39,7 +39,7 @@
     {
       customType: "regex",
       description: "Process yannh/kubernetes-json-schema versions",
-      fileMatch: [".yaml"],
+      fileMatch: ["\\.ya?ml$"],
       matchStrings: [
         "\\$schema=https://raw\\.githubusercontent\\.com/yannh/kubernetes-json-schema/master/(?<currentValue>v[^-]+)-standalone-strict/",
       ],
@@ -48,7 +48,7 @@
     },
     {
       customType: "regex",
-      fileMatch: [".yaml"],
+      fileMatch: ["\\.ya?ml$"],
       matchStrings: [
         "k8s-versioned-schemas\\.pages\\.dev/(?<depName>[^/]+)/(?<currentValue>[^/]+)/",
         "\\?values=(?<depName>[^/]+)/(?<currentValue>[^\\s]+)",
