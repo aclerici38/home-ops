@@ -41,7 +41,7 @@ spec:
               DB_URL:
                 valueFrom:
                   secretKeyRef:
-                    name: immich-db-app
+                    name: immich-postgres
                     key: uri
             probes:
               liveness: &probes

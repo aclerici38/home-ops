@@ -28,14 +28,8 @@ spec:
       namespace: pocket-id-operator
   values:
     cnpg:
-      mode: restore
-      capacity: 20Gi
+      mode: shared
       poolMode: session
-      pgExtensions:
-        - pgvector
-        - vchord
-      preload:
-        - vchord.so
       dbExtensions:
         - name: vector
           ensure: present
