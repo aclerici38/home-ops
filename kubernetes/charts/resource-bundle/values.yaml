@@ -10,7 +10,15 @@
 #
 # --- Reference of every knob (all optional) -------------------------------
 # cnpg:
-#   mode: init            # REQUIRED: init (backup, no restore) | restore (backup + restore) | no-backup
+#   mode: init            # REQUIRED: init | restore | no-backup | shared
+#                         #   shared -> no per-app Cluster; instead attach to the
+#                         #   shared "pg18" cluster (home only). Renders a
+#                         #   DatabaseRole + Database + role password into the
+#                         #   cloudnative-pg namespace and the app connection
+#                         #   secret into this namespace. Ignores the cluster-level
+#                         #   knobs below (instances/capacity/pgExtensions/preload/
+#                         #   clusterSpec); honors database/poolMode/dbExtensions.
+#   database: <app>       # shared: postgres db + role name (default = app name)
 #   instances: 3          # 1 = single-node mode: drops PDB, sync replication and
 #                         #     switchover, and relaxes pod anti-affinity
 #   capacity: 2Gi

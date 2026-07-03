@@ -1,0 +1,119 @@
+{{- /*
+  cnpg.mode: shared — attach this app to the shared "pg18" cluster instead of
+  giving it its own Cluster. Renders, into the cloudnative-pg namespace, a
+  DatabaseRole + Database + the role's generated password Secret; and, into the
+  app's own namespace, the connection Secret the app consumes.
+
+  The password is generated once (the <app>-role ExternalSecret in
+  cloudnative-pg, which the DatabaseRole references) and read back into the app
+  namespace via the cnpg-role-secrets Kubernetes ClusterSecretStore, so both
+  copies always match.
+*/}}
+{{- if and (hasKey .Values "cnpg") (eq (dig "mode" "" .Values.cnpg) "shared") }}
+{{- $app := include "resources.app" . -}}
+{{- $c := .Values.cnpg -}}
+{{- $cluster := dig "cluster" "pg18" $c -}}
+{{- $cnpgNs := dig "clusterNamespace" "cloudnative-pg" $c -}}
+{{- $db := dig "database" $app $c -}}
+{{- $role := $app -}}
+{{- $session := eq (dig "poolMode" "transaction" $c) "session" -}}
+{{- /* Session-scoped apps go through the session-mode pooler; everyone else
+       through the transaction pooler. */}}
+{{- $host := $session | ternary (printf "pg18-pooler-session-rw.%s.svc.cluster.local" $cnpgNs) (printf "pg18-pooler-rw.%s.svc.cluster.local" $cnpgNs) -}}
+{{- $pw := "{{ .password }}" -}}
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: DatabaseRole
+metadata:
+  name: {{ $app }}
+  namespace: {{ $cnpgNs }}
+spec:
+  cluster:
+    name: {{ $cluster }}
+  name: {{ $role }}
+  ensure: present
+  login: true
+  databaseRoleReclaimPolicy: retain
+  passwordSecret:
+    name: {{ $app }}-role
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: {{ $app }}
+  namespace: {{ $cnpgNs }}
+spec:
+  name: {{ $db }}
+  owner: {{ $role }}
+  cluster:
+    name: {{ $cluster }}
+  databaseReclaimPolicy: retain
+  {{- with $c.dbExtensions }}
+  extensions: {{ toYaml . | nindent 4 }}
+  {{- end }}
+---
+# Generated role password (basic-auth) — the single source of truth, referenced
+# by the DatabaseRole above and mirrored into the app namespace below.
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: {{ $app }}-role
+  namespace: {{ $cnpgNs }}
+  labels:
+    dormammu.internal/component: cnpg
+spec:
+  refreshPolicy: OnChange
+  target:
+    creationPolicy: Orphan
+    template:
+      engineVersion: v2
+      type: kubernetes.io/basic-auth
+      metadata:
+        labels:
+          cnpg.io/reload: "true"
+      data:
+        username: {{ $role }}
+        password: {{ $pw | quote }}
+  dataFrom:
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: ClusterGenerator
+          name: cnpg-pass-generator
+---
+# App-facing connection secret, in the app's own namespace. Pulls the password
+# from the <app>-role secret in cloudnative-pg via the cross-namespace store.
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: {{ $app }}-db-app
+  labels:
+    dormammu.internal/component: cnpg
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: cnpg-role-secrets
+  target:
+    creationPolicy: Orphan
+    template:
+      engineVersion: v2
+      metadata:
+        labels:
+          cnpg.io/reload: "true"
+      data:
+        user: {{ $role }}
+        username: {{ $role }}
+        dbname: {{ $db }}
+        host: {{ $host | quote }}
+        password: {{ $pw | quote }}
+        port: "5432"
+        pgpass: {{ printf "%s:5432:%s:%s:%s" $host $db $role $pw | quote }}
+        jdbc-uri: {{ printf "jdbc:postgresql://%s:5432/%s?password=%s&user=%s" $host $db $pw $role | quote }}
+        uri: {{ printf "postgresql://%s:%s@%s:5432/%s" $role $pw $host $db | quote }}
+  data:
+    - secretKey: password
+      remoteRef:
+        key: {{ $app }}-role
+        property: password
+{{- end }}

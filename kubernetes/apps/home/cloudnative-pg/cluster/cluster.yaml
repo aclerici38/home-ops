@@ -1,0 +1,118 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/cluster_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg18
+spec:
+  instances: 2
+  primaryUpdateStrategy: unsupervised
+  primaryUpdateMethod: switchover
+  enablePDB: true
+  affinity:
+    podAntiAffinityType: preferred
+    nodeSelector:
+      storage.openebs.io/hostpath: "true"
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    major: 18
+    name: postgresql-minimal-trixie
+  storage:
+    size: 80Gi
+    storageClass: openebs-hostpath
+  superuserSecret:
+    name: cloudnative-pg
+  enableSuperuserAccess: true
+  postgresql:
+    synchronous:
+      method: any
+      number: 1
+      dataDurability: preferred
+      failoverQuorum: true
+    shared_preload_libraries:
+      - vchord.so
+    extensions:
+      - name: pgvector
+      - name: vchord
+      - name: postgis
+    parameters:
+      shared_buffers: 1GB
+      work_mem: 16MB
+      maintenance_work_mem: 256MB
+      effective_cache_size: 3GB
+      wal_buffers: 32MB
+      checkpoint_timeout: 10min
+      max_wal_size: 8GB
+      min_wal_size: 2GB
+      max_slot_wal_keep_size: 20GB
+      checkpoint_completion_target: "0.9"
+      wal_keep_size: 8GB
+      wal_sender_timeout: 60s
+      wal_receiver_timeout: 60s
+      max_connections: "400"
+      log_min_duration_statement: "500"
+      log_checkpoints: "on"
+      log_autovacuum_min_duration: "250"
+      log_temp_files: 128MB
+      log_lock_waits: "on"
+      autovacuum_vacuum_cost_limit: "2000"
+      autovacuum_max_workers: "4"
+      autovacuum_naptime: 20s
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      enabled: true
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: pg18
+        serverName: pg18
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/pooler_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: pg18-pooler-rw
+spec:
+  cluster:
+    name: pg18
+  instances: 2
+  type: rw
+  pgbouncer:
+    poolMode: transaction
+    parameters:
+      default_pool_size: "30"
+      min_pool_size: "5"
+      reserve_pool_size: "10"
+      reserve_pool_timeout: "5"
+      max_client_conn: "1000"
+      listen_backlog: "1024"
+      query_wait_timeout: "120"
+      idle_transaction_timeout: "60"
+      server_idle_timeout: "180"
+      max_prepared_statements: "200"
+---
+# Session-mode pooler for apps that need session semantics (immich, dawarich).
+# Session pooling pins a server connection for the whole client session, so
+# default_pool_size must cover expected concurrent app connections; only a
+# couple of apps use this, so it stays small.
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/pooler_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: pg18-pooler-session-rw
+spec:
+  cluster:
+    name: pg18
+  instances: 2
+  type: rw
+  pgbouncer:
+    poolMode: session
+    parameters:
+      default_pool_size: "25"
+      min_pool_size: "2"
+      reserve_pool_size: "5"
+      reserve_pool_timeout: "5"
+      max_client_conn: "500"
+      listen_backlog: "1024"
+      query_wait_timeout: "120"
+      server_idle_timeout: "180"
