@@ -46,8 +46,10 @@ spec:
       extraArgs:
         - --default_lua_flags=allow-undeclared-keys
     pocketId:
+      spec:
+        secret:
+          storeClientSecret: false
       group: all
-      secretRotation: false
       callbackUrls:
         - app.immich:///oauth-callback
       callbackPaths:
