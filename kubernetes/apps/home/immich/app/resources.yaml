@@ -50,6 +50,7 @@ spec:
         secret:
           storeClientSecret: false
       group: all
+      secretRotation: false
       callbackUrls:
         - app.immich:///oauth-callback
       callbackPaths:
