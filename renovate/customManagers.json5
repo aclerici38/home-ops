@@ -2,6 +2,33 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   customManagers: [
     {
+      description: ["Track oci-container images in raphael nix (tag@digest)"],
+      customType: "regex",
+      fileMatch: ["(^|/)raphael/.*\\.nix$"],
+      matchStrings: [
+        "image\\s*=\\s*\"(?<depName>[^:\"]+):(?<currentValue>[^@\"]+)@(?<currentDigest>sha256:[a-f0-9]+)\"",
+      ],
+      datasourceTemplate: "docker",
+      autoReplaceStringTemplate: "image = \"{{{depName}}}:{{{newValue}}}@{{{newDigest}}}\"",
+    },
+    {
+      // The built-in `nix` manager only refreshes flake.lock *within* the pinned
+      // branch (nix flake update); it never bumps nixos-26.05 -> nixos-26.11.
+      // nixpkgs tags each stable release as a plain `YY.MM` git tag, so track
+      // those and rewrite the branch ref. NB: this bumps flake.nix only — run
+      // `nix flake update nixpkgs` when applying so flake.lock follows.
+      description: ["Track NixOS stable release channel (raphael flake)"],
+      customType: "regex",
+      fileMatch: ["(^|/)raphael/flake\\.nix$"],
+      matchStrings: ["github:NixOS/nixpkgs/nixos-(?<currentValue>\\d+\\.\\d+)"],
+      datasourceTemplate: "github-tags",
+      depNameTemplate: "NixOS/nixpkgs",
+      versioningTemplate: "loose",
+      // stable YY.MM tags only — excludes -pre / -beta prereleases
+      allowedVersions: "/^\\d+\\.\\d+$/",
+      autoReplaceStringTemplate: "github:NixOS/nixpkgs/nixos-{{{newValue}}}",
+    },
+    {
       description: ["Process various other dependencies"],
       customType: "regex",
       fileMatch: [".*"], // process regex from everywhere
