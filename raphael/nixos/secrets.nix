@@ -30,10 +30,10 @@
   };
 
   sops.templates."caddy.env" = {
+    # read by podman (root) at container start; injected into the caddy container.
     content = "CF_API_TOKEN=${config.sops.placeholder.cloudflare-token}";
-    owner = "caddy";
     mode = "0400";
-    restartUnits = [ "caddy.service" ];
+    restartUnits = [ "podman-caddy.service" ];
   };
   sops.templates."towonel.env" = {
     content = "TOWONEL_INVITE_TOKEN=${config.sops.placeholder.towonel-invite-token}";

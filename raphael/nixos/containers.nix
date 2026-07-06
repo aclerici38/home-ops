@@ -14,6 +14,7 @@ in
     "d /data/config/jellyfin      0750 1000 1000 -"
     "d /data/appdata/jellyfin-cache 0750 1000 1000 -"
     "d /data/config/syncthing     0750 1000 1000 -"
+    "d /data/config/caddy         0750 1000 1000 -"
     "d /data/media                0755 1000 1000 -"
   ];
 
@@ -135,6 +136,27 @@ in
         "/data/config/syncthing:/var/syncthing"
         "/data/media:/var/syncthing/media"
       ];
+      environment.TZ = tz;
+    };
+
+    caddy = {
+      image = "ghcr.io/aclerici38/caddy:2.11.4@sha256:b8688b53876239bbd2509372621e4389404f38b8aedd9bdee48ed40cd55af66e";
+      user = "1000:1000";
+      extraOptions = [
+        nnp
+        dropAll
+        "--cap-add=NET_BIND_SERVICE"
+        "--read-only"
+        # TODO: migrate off hostnet for caddy
+        "--network=host"
+        "--tmpfs=/tmp"
+        "--tmpfs=/config"
+      ];
+      volumes = [
+        "${./Caddyfile}:/etc/caddy/Caddyfile:ro"
+        "/data/config/caddy:/data" # ACME certs/account state
+      ];
+      environmentFiles = [ config.sops.templates."caddy.env".path ];
       environment.TZ = tz;
     };
 

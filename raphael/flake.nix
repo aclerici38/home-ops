@@ -38,7 +38,6 @@
           ./nixos/containers.nix
           ./nixos/mosquitto.nix
           ./nixos/comin.nix
-          ./nixos/proxy.nix
           ./nixos/secrets.nix
         ];
       };
