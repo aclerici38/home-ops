@@ -131,7 +131,7 @@ in
       environment = {
         RUST_LOG = "info";
         TOWONEL_AGENT_HEALTH_LISTEN_ADDR = "127.0.0.1:9090";
-        TOWONEL_AGENT_SERVICES = ''[{"hostname":"raphael.clerici.tech","origin":"127.0.0.1:8123"}]'';
+        TOWONEL_AGENT_SERVICES = ''[{"hostname":"raphael.clerici.tech","origin":"127.0.0.1:443"},{"hostname":"frigate.raphael.clerici.tech","origin":"127.0.0.1:443"}]'';
       };
     };
   };

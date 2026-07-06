@@ -9,23 +9,19 @@
     globalConfig = ''
       acme_dns cloudflare {env.CF_API_TOKEN}
     '';
+    virtualHosts."raphael.clerici.tech".extraConfig = ''
+      reverse_proxy 127.0.0.1:8123
+    '';
+
     virtualHosts."*.raphael.clerici.tech".extraConfig = ''
       tls {
         dns cloudflare {env.CF_API_TOKEN}
         resolvers 1.1.1.1
       }
 
-      @ha host ha.raphael.clerici.tech
-      handle @ha {
-        reverse_proxy 127.0.0.1:8123
-      }
       @frigate host frigate.raphael.clerici.tech
       handle @frigate {
-        reverse_proxy https://127.0.0.1:8971 {
-          transport http {
-            tls_insecure_skip_verify
-          }
-        }
+        reverse_proxy https://127.0.0.1:8971
       }
       @jellyfin host jellyfin.raphael.clerici.tech
       handle @jellyfin {
