@@ -11,7 +11,7 @@ let
     connection_messages false
     persistence true
     persistence_location /mosquitto/data
-    autosave_interval 10
+    autosave_interval 300
   '';
 in
 {
@@ -107,7 +107,14 @@ in
     jellyfin = {
       image = "ghcr.io/jellyfin/jellyfin:10.11.11@sha256:45f648c382a0c8b552582fcea40e95cb17c5d475473a891cba0eb7523fb92112";
       user = "1000:1000";
-      extraOptions = [ nnp dropAll "--read-only" "--device=/dev/dri/renderD128" "--tmpfs=/tmp" ];
+      extraOptions = [
+        nnp
+        dropAll
+        "--read-only"
+        "--device=/dev/dri/renderD128"
+        "--tmpfs=/tmp"
+        "--tmpfs=/cache/transcodes:size=6g"
+      ];
       ports = [ "127.0.0.1:8096:8096" ];
       volumes = [
         "/data/config/jellyfin:/config"
@@ -141,7 +148,7 @@ in
       environment = {
         RUST_LOG = "info";
         TOWONEL_AGENT_HEALTH_LISTEN_ADDR = "127.0.0.1:9090";
-        TOWONEL_AGENT_SERVICES = ''[{"hostname":"hass.raphael.clerici.tech","origin":"127.0.0.1:8123"}]'';
+        TOWONEL_AGENT_SERVICES = ''[{"hostname":"raphael.clerici.tech","origin":"127.0.0.1:8123"}]'';
       };
     };
   };

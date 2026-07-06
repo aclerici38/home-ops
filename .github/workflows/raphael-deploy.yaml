@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Raphael Deploy
+
+# comin on raphael polls the `raphael-deploy` branch to reduce network/disk/cpu cycles on the n100
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "raphael/**"
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  fast-forward:
+    name: Fast-forward raphael-deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Fast-forward raphael-deploy to main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh api -X PATCH "repos/{owner}/{repo}/git/refs/heads/raphael-deploy" \
+            -f sha="$GITHUB_SHA" -F force=false ||
+          gh api -X POST "repos/{owner}/{repo}/git/refs" \
+            -f ref="refs/heads/raphael-deploy" -f sha="$GITHUB_SHA"

@@ -23,8 +23,20 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.auto-optimise-store = true;
   nix.gc = { automatic = true; dates = "weekly"; options = "--delete-older-than 14d"; };
-  boot.tmp.cleanOnBoot = true;
-  services.fstrim.enable = true; # NVMe TRIM
+  boot.tmp.useTmpfs = true;
+  services.fstrim.enable = true;
+
+  services.journald.extraConfig = ''
+    Storage=volatile
+    RuntimeMaxUse=256M
+  '';
+  zramSwap.enable = true;
+
+  boot.kernel.sysctl = {
+    "vm.dirty_writeback_centisecs" = 1500;
+    "vm.dirty_expire_centisecs" = 6000;
+    "vm.swappiness" = 180;
+  };
 
   virtualisation.podman = {
     enable = true;
@@ -34,7 +46,12 @@
 
   hardware.bluetooth.enable = true;
   hardware.graphics = { enable = true; extraPackages = with pkgs; [ intel-media-driver vpl-gpu-rt ]; };
-  networking.firewall.enable = false;
+
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 22 80 443 1883 8123 22000 ];
+    allowedUDPPorts = [ 5353 21027 22000 ];
+  };
 
   system.stateVersion = "26.05";
 }
