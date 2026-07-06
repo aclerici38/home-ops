@@ -1,6 +1,14 @@
 {
 	admin off
 	acme_dns cloudflare {env.CF_API_TOKEN}
+	servers {
+		listener_wrappers {
+			proxy_protocol {
+				allow 127.0.0.1/32
+			}
+			tls
+		}
+	}
 }
 
 raphael.clerici.tech {
