@@ -2,6 +2,16 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   customManagers: [
     {
+      description: ["Track oci-container images in raphael nix (tag@digest)"],
+      customType: "regex",
+      fileMatch: ["(^|/)raphael/.*\\.nix$"],
+      matchStrings: [
+        "image\\s*=\\s*\"(?<depName>[^:\"]+):(?<currentValue>[^@\"]+)@(?<currentDigest>sha256:[a-f0-9]+)\"",
+      ],
+      datasourceTemplate: "docker",
+      autoReplaceStringTemplate: "image = \"{{{depName}}}:{{{newValue}}}@{{{newDigest}}}\"",
+    },
+    {
       description: ["Process various other dependencies"],
       customType: "regex",
       fileMatch: [".*"], // process regex from everywhere

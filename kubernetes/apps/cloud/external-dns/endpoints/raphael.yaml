@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-dns/1.20.0/dnsendpoint_v1alpha1.json
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: raphael
+spec:
+  endpoints:
+    - dnsName: raphael.clerici.tech
+      recordType: CNAME
+      targets:
+        - vps.clerici.tech
+    - dnsName: frigate.raphael.clerici.tech
+      recordType: CNAME
+      targets:
+        - vps.clerici.tech

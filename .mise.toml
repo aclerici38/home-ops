@@ -4,6 +4,7 @@ lockfile_platforms = ["linux-x64", "macos-arm64"]
 
 [env]
 _.file = "globals.env"
+SOPS_AGE_KEY_FILE = "{{ config_root }}/age.key"
 FLATE_KUBE_VERSION = "{{ env.KUBE_VERSION }}"
 FLATE_API_VERSIONS = "cert-manager.io/v1,monitoring.coreos.com/v1,monitoring.coreos.com/v1alpha1,gateway.networking.k8s.io/v1,gateway.networking.k8s.io/v1beta1,grafana.integreatly.org/v1beta1,external-secrets.io/v1,volsync.backube/v1alpha1,snapshot.storage.k8s.io/v1"
 FLATE_ALLOW_MISSING_SECRETS = "true"
@@ -11,6 +12,28 @@ FLATE_SKIP_CRDS = "false"
 
 [hooks]
 postinstall = "lefthook install"
+
+[tasks."sops:encrypt"]
+description = "Encrypt <dir>/sops.decrypted.yaml -> <dir>/secrets.sops.yaml: mise run sops:encrypt [raphael|.] (default raphael)"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+dir="${1:-raphael}"
+[[ -f "$dir/sops.decrypted.yaml" ]] || { echo "ERROR: $dir/sops.decrypted.yaml not found" >&2; exit 1; }
+sops encrypt --output "$dir/secrets.sops.yaml" "$dir/sops.decrypted.yaml"
+echo "encrypted $dir/sops.decrypted.yaml -> $dir/secrets.sops.yaml"
+"""
+
+[tasks."sops:decrypt"]
+description = "Decrypt <dir>/secrets.sops.yaml -> <dir>/sops.decrypted.yaml: mise run sops:decrypt [raphael|.] (default raphael)"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+dir="${1:-raphael}"
+[[ -f "$dir/secrets.sops.yaml" ]] || { echo "ERROR: $dir/secrets.sops.yaml not found" >&2; exit 1; }
+sops decrypt --output "$dir/sops.decrypted.yaml" "$dir/secrets.sops.yaml"
+echo "decrypted $dir/secrets.sops.yaml -> $dir/sops.decrypted.yaml"
+"""
 
 [tasks."talos:gen"]
 description = "Regenerate Talos configs for a cluster: mise run talos:gen [home|cloud] (default home)"
