@@ -44,6 +44,14 @@
   };
   virtualisation.oci-containers.backend = "podman";
 
+  users.users.containers = {
+    isSystemUser = true;
+    group = "containers";
+    subUidRanges = [ { startUid = 524288; count = 1048576; } ];
+    subGidRanges = [ { startGid = 524288; count = 1048576; } ];
+  };
+  users.groups.containers = { };
+
   hardware.bluetooth.enable = true;
   hardware.graphics = { enable = true; extraPackages = with pkgs; [ intel-media-driver vpl-gpu-rt ]; };
 

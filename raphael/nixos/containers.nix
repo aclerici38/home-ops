@@ -4,15 +4,6 @@ let
   nnp = "--security-opt=no-new-privileges";
   dropAll = "--cap-drop=ALL";
 
-  mosquittoConf = pkgs.writeText "mosquitto.conf" ''
-    listener 1883 0.0.0.0
-    allow_anonymous true
-    per_listener_settings false
-    connection_messages false
-    persistence true
-    persistence_location /mosquitto/data
-    autosave_interval 300
-  '';
 in
 {
   # Data dirs pre-created with the uid the (non-root) containers run as.
@@ -21,7 +12,6 @@ in
     "d /data/config/frigate       0750 0    0    -"
     "d /data/frigate              0750 0    0    -"
     "d /data/config/zigbee2mqtt   0750 1000 1000 -"
-    "d /data/appdata/mosquitto    0750 1000 1000 -"
     "d /data/config/jellyfin      0750 1000 1000 -"
     "d /data/appdata/jellyfin-cache 0750 1000 1000 -"
     "d /data/config/syncthing     0750 1000 1000 -"
@@ -29,16 +19,6 @@ in
   ];
 
   virtualisation.oci-containers.containers = {
-    mosquitto = {
-      image = "public.ecr.aws/docker/library/eclipse-mosquitto:2.0.22@sha256:212f89e1eaeb2c322d6441b64396e3346026674db8fa9c27beac293405c32b3c";
-      user = "1000:1000";
-      extraOptions = [ nnp dropAll "--read-only" "--network=host" "--tmpfs=/tmp" ];
-      volumes = [
-        "${mosquittoConf}:/mosquitto/config/mosquitto.conf:ro"
-        "/data/appdata/mosquitto:/mosquitto/data"
-      ];
-    };
-
     homeassistant = {
       image = "ghcr.io/home-assistant/home-assistant:2026.7.1@sha256:f73512ba4fe06bb4d57636fe3578d0820cdec46f81e8f837ab59e451662ff3cb";
       extraOptions = [ nnp dropAll "--network=host" ];
@@ -47,8 +27,10 @@ in
         "/run/dbus:/run/dbus:ro"
         "/etc/localtime:/etc/localtime:ro"
       ];
-      environment.TZ = tz;
-      dependsOn = [ "mosquitto" ];
+      environment = {
+        TZ = tz;
+        S6_READ_ONLY_ROOT = "1";
+      };
     };
 
     zigbee2mqtt = {
@@ -56,6 +38,7 @@ in
       user = "1000:1000";
       extraOptions = [ nnp dropAll "--read-only" "--network=host" "--tmpfs=/tmp" ];
       volumes = [ "/data/config/zigbee2mqtt:/data" ];
+      environmentFiles = [ config.sops.templates."z2m.env".path ];
       environment = {
         TZ = tz;
         ZIGBEE2MQTT_DATA = "/data";
@@ -72,7 +55,6 @@ in
         ZIGBEE2MQTT_CONFIG_ADVANCED_LOG_OUTPUT = ''["console"]'';
         ZIGBEE2MQTT_CONFIG_ADVANCED_LAST_SEEN = "ISO_8601";
       };
-      dependsOn = [ "mosquitto" ];
     };
 
     frigate = {
@@ -96,12 +78,13 @@ in
         "/data/frigate:/media/frigate"
         "/etc/localtime:/etc/localtime:ro"
       ];
+      # '{FRIGATE_MQTT_PASSWORD}'
+      environmentFiles = [ config.sops.templates."frigate.env".path ];
       environment = {
         TZ = tz;
         S6_READ_ONLY_ROOT = "1";
         HF_HOME = "/tmp";
       };
-      dependsOn = [ "mosquitto" ];
     };
 
     jellyfin = {
@@ -143,7 +126,7 @@ in
 
     towonel-agent = {
       image = "codeberg.org/towonel/towonel-agent:1.0.1@sha256:bdd7d6cb166bf2f985ebc98b03c866c65300aa0432f0a43b2fe44c3e8e5dad44";
-      extraOptions = [ nnp dropAll "--read-only" "--network=host" "--tmpfs=/tmp" ];
+      extraOptions = [ nnp dropAll "--read-only" "--userns=auto" "--network=host" "--tmpfs=/tmp" ];
       environmentFiles = [ config.sops.templates."towonel.env".path ];
       environment = {
         RUST_LOG = "info";
