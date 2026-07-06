@@ -117,7 +117,7 @@ in
     };
 
     syncthing = {
-      image = "docker.io/syncthing/syncthing:1.30.0@sha256:74eeedb08d4912763055594f8bd98bfc039f3bc504b6cd2c2adc8294111c1251";
+      image = "docker.io/syncthing/syncthing:2.1.1@sha256:775c4aac486263ca8653055bba7d3061799281974b706695e17bc798da3f4e92";
       user = "1000:1000";
       extraOptions = [
         nnp
