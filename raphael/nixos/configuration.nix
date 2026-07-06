@@ -21,7 +21,7 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     hashedPasswordFile = config.sops.secrets.anthony-password-hash.path;
-    openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAA...replace-me... you@laptop" ];
+    openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKqgluvCmCmTP872eVF1gSq4nUozATZPwjVT4BlnuVtM anthony" ];
   };
   services.openssh.enable = true;
   services.openssh.settings = {
