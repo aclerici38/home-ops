@@ -78,11 +78,14 @@ in
         "--cap-add=FOWNER"
         "--cap-add=DAC_OVERRIDE"
         "--cap-add=PERFMON"
-        "--network=host"
         "--device=/dev/dri/renderD128"
         "--shm-size=256m"
         "--tmpfs=/tmp"
         "--tmpfs=/tmp/cache:size=5g"
+      ];
+      ports = [
+        "5000:5000"
+        "8971:8971"
       ];
       volumes = [
         "/data/config/frigate:/config"
