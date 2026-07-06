@@ -11,16 +11,24 @@
   sops.secrets = {
     cloudflare-token = { };
     towonel-invite-token = { };
-    # read by the mosquitto module's preStart (runs as the mosquitto user) to
-    # build its hashed password_file; hass's is also what you type into HA's
-    # MQTT integration UI once
-    mqtt-hass-password = { owner = "mosquitto"; restartUnits = [ "mosquitto.service" ]; };
-    mqtt-z2m-password = { owner = "mosquitto"; restartUnits = [ "mosquitto.service" ]; };
-    mqtt-frigate-password = { owner = "mosquitto"; restartUnits = [ "mosquitto.service" ]; };
+    # plaintext counterpart lives in sops as anthony-password
+    anthony-password-hash = {
+      neededForUsers = true;
+    };
+    mqtt-hass-password = {
+      owner = "mosquitto";
+      restartUnits = [ "mosquitto.service" ];
+    };
+    mqtt-z2m-password = {
+      owner = "mosquitto";
+      restartUnits = [ "mosquitto.service" ];
+    };
+    mqtt-frigate-password = {
+      owner = "mosquitto";
+      restartUnits = [ "mosquitto.service" ];
+    };
   };
 
-  # restartUnits: rotating a secret re-renders the template and bounces the
-  # consuming unit on the next switch, instead of leaving it on stale creds
   sops.templates."caddy.env" = {
     content = "CF_API_TOKEN=${config.sops.placeholder.cloudflare-token}";
     owner = "caddy";

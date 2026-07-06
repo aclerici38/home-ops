@@ -25,7 +25,16 @@
     ];
   };
 
-  systemd.services.podman-homeassistant = { after = [ "mosquitto.service" ]; wants = [ "mosquitto.service" ]; };
-  systemd.services.podman-zigbee2mqtt = { after = [ "mosquitto.service" ]; wants = [ "mosquitto.service" ]; };
-  systemd.services.podman-frigate = { after = [ "mosquitto.service" ]; wants = [ "mosquitto.service" ]; };
+  systemd.services.podman-homeassistant = {
+    after = [ "mosquitto.service" ];
+    wants = [ "mosquitto.service" ];
+  };
+  systemd.services.podman-zigbee2mqtt = {
+    after = [ "mosquitto.service" ];
+    wants = [ "mosquitto.service" ];
+  };
+  systemd.services.podman-frigate = {
+    after = [ "mosquitto.service" ];
+    wants = [ "mosquitto.service" ];
+  };
 }

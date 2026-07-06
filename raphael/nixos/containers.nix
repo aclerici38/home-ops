@@ -1,9 +1,8 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 let
-  tz = "America/Los_Angeles";
+  tz = config.time.timeZone;
   nnp = "--security-opt=no-new-privileges";
   dropAll = "--cap-drop=ALL";
-
 in
 {
   # Data dirs pre-created with the uid the (non-root) containers run as.
@@ -21,11 +20,15 @@ in
   virtualisation.oci-containers.containers = {
     homeassistant = {
       image = "ghcr.io/home-assistant/home-assistant:2026.7.1@sha256:f73512ba4fe06bb4d57636fe3578d0820cdec46f81e8f837ab59e451662ff3cb";
-      extraOptions = [ nnp dropAll "--network=host" ];
+      extraOptions = [
+        nnp
+        dropAll
+        "--network=host"
+        "--tmpfs=/tmp"
+      ];
       volumes = [
         "/data/config/homeassistant:/config"
         "/run/dbus:/run/dbus:ro"
-        "/etc/localtime:/etc/localtime:ro"
       ];
       environment = {
         TZ = tz;
@@ -36,7 +39,13 @@ in
     zigbee2mqtt = {
       image = "ghcr.io/koenkk/zigbee2mqtt:2.12.1@sha256:80f7f04f72a99e4c4ef51ef7e98ee736edba6db0ecbb7abc626d0c4b0f1871f1";
       user = "1000:1000";
-      extraOptions = [ nnp dropAll "--read-only" "--network=host" "--tmpfs=/tmp" ];
+      extraOptions = [
+        nnp
+        dropAll
+        "--read-only"
+        "--network=host"
+        "--tmpfs=/tmp"
+      ];
       volumes = [ "/data/config/zigbee2mqtt:/data" ];
       environmentFiles = [ config.sops.templates."z2m.env".path ];
       environment = {
@@ -71,12 +80,12 @@ in
         "--network=host"
         "--device=/dev/dri/renderD128"
         "--shm-size=256m"
+        "--tmpfs=/tmp"
         "--tmpfs=/tmp/cache:size=5g"
       ];
       volumes = [
         "/data/config/frigate:/config"
         "/data/frigate:/media/frigate"
-        "/etc/localtime:/etc/localtime:ro"
       ];
       # '{FRIGATE_MQTT_PASSWORD}'
       environmentFiles = [ config.sops.templates."frigate.env".path ];
@@ -110,7 +119,12 @@ in
     syncthing = {
       image = "docker.io/syncthing/syncthing:1.30.0@sha256:74eeedb08d4912763055594f8bd98bfc039f3bc504b6cd2c2adc8294111c1251";
       user = "1000:1000";
-      extraOptions = [ nnp dropAll "--read-only" "--tmpfs=/tmp" ];
+      extraOptions = [
+        nnp
+        dropAll
+        "--read-only"
+        "--tmpfs=/tmp"
+      ];
       ports = [
         "127.0.0.1:8384:8384"
         "22000:22000/tcp"
@@ -126,7 +140,14 @@ in
 
     towonel-agent = {
       image = "codeberg.org/towonel/towonel-agent:1.0.1@sha256:bdd7d6cb166bf2f985ebc98b03c866c65300aa0432f0a43b2fe44c3e8e5dad44";
-      extraOptions = [ nnp dropAll "--read-only" "--userns=auto" "--network=host" "--tmpfs=/tmp" ];
+      extraOptions = [
+        nnp
+        dropAll
+        "--read-only"
+        "--userns=auto"
+        "--network=host"
+        "--tmpfs=/tmp"
+      ];
       environmentFiles = [ config.sops.templates."towonel.env".path ];
       environment = {
         RUST_LOG = "info";

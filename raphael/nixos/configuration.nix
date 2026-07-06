@@ -1,8 +1,15 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 {
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "usbhid" ];
+  boot.initrd.availableKernelModules = [
+    "xhci_pci"
+    "nvme"
+    "usb_storage"
+    "sd_mod"
+    "usbhid"
+  ];
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.intel.updateMicrocode = true;
 
@@ -13,18 +20,35 @@
   users.users.anthony = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
+    hashedPasswordFile = config.sops.secrets.anthony-password-hash.path;
     openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAA...replace-me... you@laptop" ];
   };
   services.openssh.enable = true;
-  services.openssh.settings = { PasswordAuthentication = false; PermitRootLogin = "no"; };
-  security.sudo.wheelNeedsPassword = false;
+  services.openssh.settings = {
+    PasswordAuthentication = false;
+    PermitRootLogin = "no";
+    AllowUsers = [ "anthony" ];
+  };
+  services.sshguard.enable = true;
 
-  # Flakes on by default, and keep an appliance's disk from filling silently.
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.settings.auto-optimise-store = true;
-  nix.gc = { automatic = true; dates = "weekly"; options = "--delete-older-than 14d"; };
+  documentation.enable = false;
+
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
+  nix.optimise = {
+    automatic = true;
+    dates = [ "weekly" ];
+  };
   boot.tmp.useTmpfs = true;
   services.fstrim.enable = true;
+  services.thermald.enable = true;
 
   services.journald.extraConfig = ''
     Storage=volatile
@@ -40,25 +64,44 @@
 
   virtualisation.podman = {
     enable = true;
-    autoPrune = { enable = true; dates = "weekly"; };
+    autoPrune = {
+      enable = true;
+      dates = "weekly";
+    };
   };
   virtualisation.oci-containers.backend = "podman";
 
+  # subuid/subgid source for --userns=auto
   users.users.containers = {
     isSystemUser = true;
     group = "containers";
-    subUidRanges = [ { startUid = 524288; count = 1048576; } ];
-    subGidRanges = [ { startGid = 524288; count = 1048576; } ];
+    autoSubUidGidRange = true;
   };
   users.groups.containers = { };
 
   hardware.bluetooth.enable = true;
-  hardware.graphics = { enable = true; extraPackages = with pkgs; [ intel-media-driver vpl-gpu-rt ]; };
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      vpl-gpu-rt
+    ];
+  };
 
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 22 80 443 1883 8123 22000 ];
-    allowedUDPPorts = [ 5353 21027 22000 ];
+    allowedTCPPorts = [
+      22
+      80
+      443
+      8123
+      22000
+    ];
+    allowedUDPPorts = [
+      5353
+      21027
+      22000
+    ];
   };
 
   system.stateVersion = "26.05";

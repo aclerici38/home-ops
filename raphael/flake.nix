@@ -17,22 +17,30 @@
     };
   };
 
-  outputs = { self, nixpkgs, disko, sops-nix, comin, ... }: {
-    # nixos-rebuild switch --flake .#raphael
-    nixosConfigurations.raphael = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        disko.nixosModules.disko
-        sops-nix.nixosModules.sops
-        comin.nixosModules.comin
-        ./nixos/disko.nix
-        ./nixos/configuration.nix
-        ./nixos/containers.nix
-        ./nixos/mosquitto.nix
-        ./nixos/comin.nix
-        ./nixos/proxy.nix
-        ./nixos/secrets.nix
-      ];
+  outputs =
+    {
+      nixpkgs,
+      disko,
+      sops-nix,
+      comin,
+      ...
+    }:
+    {
+      # nixos-rebuild switch --flake .#raphael
+      nixosConfigurations.raphael = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          disko.nixosModules.disko
+          sops-nix.nixosModules.sops
+          comin.nixosModules.comin
+          ./nixos/disko.nix
+          ./nixos/configuration.nix
+          ./nixos/containers.nix
+          ./nixos/mosquitto.nix
+          ./nixos/comin.nix
+          ./nixos/proxy.nix
+          ./nixos/secrets.nix
+        ];
+      };
     };
-  };
 }

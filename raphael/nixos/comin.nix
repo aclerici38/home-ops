@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   services.comin = {
     enable = true;
     repositorySubdir = "raphael";
