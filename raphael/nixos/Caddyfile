@@ -34,4 +34,8 @@ raphael.clerici.tech {
 	handle @syncthing {
 		reverse_proxy 127.0.0.1:8384
 	}
+	@cockpit host cockpit.raphael.clerici.tech
+	handle @cockpit {
+		reverse_proxy 127.0.0.1:9090
+	}
 }

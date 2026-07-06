@@ -73,6 +73,16 @@
   };
   virtualisation.oci-containers.backend = "podman";
 
+  services.cockpit = {
+    enable = true;
+    settings.WebService = {
+      Origins = "https://cockpit.raphael.clerici.tech";
+      ProtocolHeader = "X-Forwarded-Proto";
+      AllowUnencrypted = true;
+    };
+  };
+  environment.systemPackages = [ pkgs.cockpit-podman ];
+
   # subuid/subgid source for --userns=auto
   users.users.containers = {
     isSystemUser = true;
@@ -97,6 +107,7 @@
       80
       443
       8123
+      9090
       22000
     ];
     allowedUDPPorts = [
