@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 {
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 10;
@@ -76,7 +76,7 @@
   services.cockpit = {
     enable = true;
     settings.WebService = {
-      Origins = "https://cockpit.raphael.clerici.tech";
+      Origins = lib.mkForce "https://cockpit.raphael.clerici.tech";
       ProtocolHeader = "X-Forwarded-Proto";
       AllowUnencrypted = true;
     };
