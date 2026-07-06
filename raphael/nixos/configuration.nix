@@ -75,6 +75,7 @@
 
   services.cockpit = {
     enable = true;
+    port = 9091;
     settings.WebService = {
       Origins = lib.mkForce "https://cockpit.raphael.clerici.tech";
       ProtocolHeader = "X-Forwarded-Proto";
@@ -107,7 +108,7 @@
       80
       443
       8123
-      9090
+      9091
       22000
     ];
     allowedUDPPorts = [
