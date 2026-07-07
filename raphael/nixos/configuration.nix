@@ -74,14 +74,6 @@
     };
   };
 
-  # subuid/subgid source for hostUsers
-  users.users.containers = {
-    isSystemUser = true;
-    group = "containers";
-    autoSubUidGidRange = true;
-  };
-  users.groups.containers = { };
-
   hardware.bluetooth.enable = true;
   hardware.graphics = {
     enable = true;

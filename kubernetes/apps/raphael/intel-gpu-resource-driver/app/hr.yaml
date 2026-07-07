@@ -19,9 +19,6 @@ spec:
     remediation:
       retries: 1
   values:
-    cdi:
-      staticPath: /var/cdi/static
-      dynamicPath: /var/cdi/dynamic
     kubeletPlugin:
       privileged: true
       healthMonitoring:

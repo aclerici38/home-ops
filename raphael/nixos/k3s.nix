@@ -40,7 +40,7 @@ in
     ];
   };
 
-  # Firewall: allow the apiserver and never filter Cilium/pod interfaces.
+  # Firewall: allow the apiserver and never filter the flannel bridge.
   networking.firewall = {
     allowedTCPPorts = [ 6443 ];
     trustedInterfaces = [ "cni0" ];
