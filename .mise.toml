@@ -73,6 +73,34 @@ else
 fi
 """
 
+[tasks."bootstrap:secrets"]
+description = "Apply bootstrap namespaces + the 1Password Connect secret to a kube context (shared by bootstrap:resources and bootstrap:raphael)"
+hide = true
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+ctx="${1:?ERROR: kube context required}"
+namespaces="${2:-flux-system onepassword-connect}"
+echo "==> applying namespaces + 1Password secret to $ctx"
+
+op user get --me >/dev/null
+export VAULT="${VAULT:-Kubernetes}"
+export KCTX="$ctx"
+
+for ns in $namespaces; do
+  kubectl --context "$ctx" create namespace "$ns" --dry-run=client --output yaml \
+    | kubectl --context "$ctx" apply --server-side --filename -
+done
+
+op run --env-file kubernetes/bootstrap/.secrets.env --no-masking -- bash -c '
+  set -euo pipefail
+  kubectl --context "$KCTX" create secret generic onepassword-connect --namespace onepassword-connect \
+    --from-literal=1password-credentials.json="$(echo "$ONEPASSWORD_CREDENTIALS" | base64)" \
+    --from-literal=token="$ONEPASSWORD_CONNECT_TOKEN" \
+    --dry-run=client --output yaml | kubectl --context "$KCTX" apply --server-side --filename -
+'
+"""
+
 [tasks."bootstrap:resources"]
 description = "Bootstrap namespaces + secrets: mise run bootstrap:resources <home|cloud>"
 run = """
@@ -89,36 +117,7 @@ ctx="admin@${CLUSTER_NAME}"
 kubectl config get-contexts --output name | grep -qx "$ctx" || {
   echo "ERROR: kube context '$ctx' not found; merge it first (e.g. talosctl kubeconfig)" >&2; exit 1; }
 kubectl config use-context "$ctx" >/dev/null
-echo "==> [$cluster] applying namespaces + secrets to $ctx"
-
-op user get --me >/dev/null
-export VAULT="${VAULT:-Kubernetes}"
-export KCTX="$ctx"
-
-kubectl --context "$ctx" apply --server-side --filename - <<'EOF'
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: flux-system
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: onepassword-connect
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: kgateway
-EOF
-
-op run --env-file kubernetes/bootstrap/.secrets.env --no-masking -- bash -c '
-  set -euo pipefail
-  kubectl --context "$KCTX" create secret generic onepassword-connect --namespace onepassword-connect \
-    --from-literal=1password-credentials.json="$(echo "$ONEPASSWORD_CREDENTIALS" | base64)" \
-    --from-literal=token="$ONEPASSWORD_CONNECT_TOKEN" \
-    --dry-run=client --output yaml | kubectl --context "$KCTX" apply --server-side --filename -
-'
+mise run bootstrap:secrets "$ctx" "flux-system onepassword-connect kgateway"
 """
 
 [tasks."bootstrap:helmfile"]
@@ -161,6 +160,63 @@ cluster="${1:-}"
 [[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
 mise run bootstrap:resources "$cluster"
 mise run bootstrap:helmfile "$cluster"
+"""
+
+[tasks."bootstrap:raphael"]
+description = "Bootstrap the raphael k3s cluster (namespaces + 1Password secret + Flux): mise run bootstrap:raphael [kube-context]"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+# k3s ships flannel + CoreDNS already, so unlike the Talos clusters this only
+# seeds the 1Password secret and installs Flux; Flux does the rest.
+ctx="${1:-raphael}"
+kubectl config get-contexts --output name | grep -qx "$ctx" || {
+  echo "ERROR: kube context '$ctx' not found; merge raphael's k3s kubeconfig first" >&2
+  echo "  (k3s.nix emits a ready-to-use /etc/rancher/k3s/raphael.yaml: scp it over and merge into ~/.kube/config)" >&2
+  exit 1; }
+kubectl config use-context "$ctx" >/dev/null
+echo "==> [raphael] bootstrapping cluster on context $ctx"
+
+# 1) Namespaces + the 1Password Connect secret — the one secret Flux can't
+#    bootstrap itself; everything else flows through external-secrets after.
+mise run bootstrap:secrets "$ctx"
+
+# 2) Flux operator + instance. Once flux-instance is up it reconciles
+#    kubernetes/flux/raphael (synced from main) and pulls in everything else.
+export ROOT_DIR="${MISE_PROJECT_ROOT:-$(git rev-parse --show-toplevel)}"
+helmfile --kube-context "$ctx" --file kubernetes/bootstrap/raphael/helmfile.yaml.gotmpl apply --skip-diff-on-install --suppress-diff
+"""
+
+[tasks."kubeconfig:raphael"]
+description = "Fetch raphael's kubeconfig and merge it into ~/.kube/config: mise run kubeconfig:raphael [user@host]"
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+remote="${1:-anthony@raphael.clerici.tech}"
+# k3s.nix emits /etc/rancher/k3s/raphael.yaml (context "raphael", server at the
+# real API address). It's 0600 root, so stage a readable copy via sudo (prompts
+# once), then pull it over a clean scp channel (no TTY newline mangling).
+staged=/tmp/raphael-kubeconfig.yaml
+local="$(mktemp)"
+trap 'rm -f "$local"' EXIT
+echo "==> staging kubeconfig on $remote (sudo may prompt)"
+ssh -t "$remote" 'sudo install -m600 -o "$(id -un)" /etc/rancher/k3s/raphael.yaml /tmp/raphael-kubeconfig.yaml'
+scp -q "$remote:$staged" "$local"
+ssh "$remote" 'rm -f /tmp/raphael-kubeconfig.yaml'
+
+mkdir -p "$HOME/.kube"
+if [[ -f "$HOME/.kube/config" ]]; then
+  cp "$HOME/.kube/config" "$HOME/.kube/config.bak"
+  KUBECONFIG="$HOME/.kube/config:$local" kubectl config view --flatten > "$HOME/.kube/config.merged"
+  mv "$HOME/.kube/config.merged" "$HOME/.kube/config"
+  echo "==> merged 'raphael' context (backup: ~/.kube/config.bak)"
+else
+  cp "$local" "$HOME/.kube/config"
+  echo "==> wrote ~/.kube/config"
+fi
+chmod 600 "$HOME/.kube/config"
+kubectl config use-context raphael >/dev/null
+echo "==> current context: $(kubectl config current-context)"
 """
 
 [tasks."cleanse-pods"]

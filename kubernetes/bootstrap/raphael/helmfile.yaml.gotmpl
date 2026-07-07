@@ -1,0 +1,50 @@
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
+#
+# Minimal bootstrap helmfile for the raphael k3s cluster.
+#
+# Unlike the Talos clusters, k3s already ships a CNI (flannel) and CoreDNS, so
+# the only thing installed out-of-band is Flux itself (operator + instance).
+# Once flux-instance is up it reconciles kubernetes/flux/raphael and pulls in
+# everything else (cert-manager, external-secrets, kgateway, the apps, ...).
+#
+# Chart url/version + values are read straight from the Flux manifests so this
+# file stays a thin pointer with no duplicated config:
+#   chart   <- OCIRepository .spec.url     (repo.yaml)
+#   version <- OCIRepository .spec.ref.tag (repo.yaml)
+#   values  <- HelmRelease   .spec.values  (hr.yaml)
+#
+# Run via `mise run bootstrap:raphael [kube-context]`.
+{{ $root := requiredEnv "ROOT_DIR" }}
+{{ $base := printf "%s/kubernetes/apps/raphael/flux-system" $root }}
+{{ $apps := list
+  (dict
+    "name" "flux-operator" "dir" "flux-operator"
+    "needs" (list))
+  (dict
+    "name" "flux-instance" "dir" "flux-instance"
+    "needs" (list "flux-system/flux-operator"))
+}}
+
+helmDefaults:
+  timeout: 600
+  wait: true
+  waitForJobs: true
+
+releases:
+{{- range $apps }}
+{{- $repo := printf "%s/%s/repo.yaml" $base .dir }}
+{{- $hr   := printf "%s/%s/hr.yaml" $base .dir }}
+  - name: {{ .name }}
+    namespace: flux-system
+    chart: {{ exec "yq" (list "e" ".spec.url" $repo) | trim }}
+    version: {{ exec "yq" (list "e" ".spec.ref.tag" $repo) | trim | quote }}
+    atomic: true
+    {{- if .needs }}
+    needs:
+      {{- range .needs }}
+      - {{ . }}
+      {{- end }}
+    {{- end }}
+    values:
+      - {{ exec "bash" (list "-c" (printf "yq -o=json -I=0 '.spec.values // {}' %s" $hr)) }}
+{{- end }}
