@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/kgateway/2.3.5/listenerpolicy_v1alpha1.json
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: ListenerPolicy
+metadata:
+  name: proxy-protocol
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: external
+  # Towonel proxy + LAN
+  perPort:
+    - port: 80
+      listener:
+        proxyProtocol:
+          allowRequestsWithoutProxyProtocol: true
+    - port: 443
+      listener:
+        proxyProtocol:
+          allowRequestsWithoutProxyProtocol: true

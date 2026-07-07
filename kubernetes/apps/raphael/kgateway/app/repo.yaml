@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.0/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: kgateway
+spec:
+  interval: 15m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 2.3.5
+    digest: sha256:a44e6e02531d33be45c5bb842dab02d44f593e78ca90e4f58307c5e8c20ce4e5
+  url: oci://ghcr.io/kgateway-dev/charts/kgateway

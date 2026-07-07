@@ -12,6 +12,20 @@
       autoReplaceStringTemplate: "image = \"{{{depName}}}:{{{newValue}}}@{{{newDigest}}}\"",
     },
     {
+      description: ["Track nix k3s version pin in raphael"],
+      customType: "regex",
+      fileMatch: ["(^|/)raphael/nixos/k3s\\.nix$"],
+      matchStrings: [
+        // renovate: datasource=repology depName=nix_unstable/k3s versioning=loose
+        // k3sMinor = "1.34";
+        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+) versioning=(?<versioning>\\S+)\\s+k3sMinor\\s*=\\s*\"(?<currentValue>[^\"]+)\"",
+      ],
+      datasourceTemplate: "{{{datasource}}}",
+      versioningTemplate: "{{{versioning}}}",
+      // Repology reports full patches (1.35.6+k3s1); keep the pin minor-only.
+      extractVersionTemplate: "^(?<version>\\d+\\.\\d+)",
+    },
+    {
       description: ["Process various other dependencies"],
       customType: "regex",
       fileMatch: [".*"], // process regex from everywhere

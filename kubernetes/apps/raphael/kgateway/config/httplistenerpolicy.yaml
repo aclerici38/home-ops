@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/kgateway/2.3.5/httplistenerpolicy_v1alpha1.json
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: HTTPListenerPolicy
+metadata:
+  name: http-listener-policy
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: external
+  streamIdleTimeout: 0s
+  upgradeConfig:
+    enabledUpgrades:
+      - websocket

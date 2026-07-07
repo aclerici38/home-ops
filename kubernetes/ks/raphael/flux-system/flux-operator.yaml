@@ -1,0 +1,16 @@
+---
+# Deploys the apps/flux-system/flux-operator payload from the flux-system GitRepository.
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-operator
+  namespace: flux-system
+spec:
+  targetNamespace: flux-system
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/raphael/flux-system/flux-operator
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: flux-operator

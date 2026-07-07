@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.0/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: apps
+  namespace: flux-system
+spec:
+  interval: 30m
+  timeout: 5m
+  path: ./kubernetes/ks/raphael
+  prune: true
+  wait: false
+  dependsOn:
+    - name: cluster-meta
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  patches:
+    - target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+      patch: |-
+        apiVersion: kustomize.toolkit.fluxcd.io/v1
+        kind: Kustomization
+        metadata:
+          name: not-used
+        spec:
+          interval: 30m
+          timeout: 3m
+          prune: true
+          wait: true
+          dependsOn:
+            - name: cluster-meta
+          postBuild:
+            substituteFrom:
+              - kind: ConfigMap
+                name: cluster-settings
+                optional: false
+          patches:
+            - target:
+                kind: HelmRelease
+              patch: |
+                apiVersion: helm.toolkit.fluxcd.io/v2
+                kind: HelmRelease
+                metadata:
+                  name: not-used
+                spec:
+                  maxHistory: 1
+                  driftDetection:
+                    mode: enabled
+                  install:
+                    crds: CreateReplace
+                    serverSideApply: true
+                    disableTakeOwnership: false
+                    strategy:
+                      name: RetryOnFailure
+                  upgrade:
+                    crds: CreateReplace
+                    serverSideApply: enabled
+                    disableTakeOwnership: true
+                    cleanupOnFail: true
+                    strategy:
+                      name: RemediateOnFailure

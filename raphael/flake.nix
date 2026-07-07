@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    # k3s upgrades from unstable
+    nixpkgs-k3s.url = "github:NixOS/nixpkgs/nixos-unstable";
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -24,11 +26,12 @@
       sops-nix,
       comin,
       ...
-    }:
+    }@inputs:
     {
       # nixos-rebuild switch --flake .#raphael
       nixosConfigurations.raphael = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
         modules = [
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
@@ -37,6 +40,7 @@
           ./nixos/configuration.nix
           ./nixos/comin.nix
           ./nixos/secrets.nix
+          ./nixos/k3s.nix
         ];
       };
     };

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 10;
@@ -73,14 +78,6 @@
       AllowUnencrypted = true;
     };
   };
-
-  # subuid/subgid source for hostUsers
-  users.users.containers = {
-    isSystemUser = true;
-    group = "containers";
-    autoSubUidGidRange = true;
-  };
-  users.groups.containers = { };
 
   hardware.bluetooth.enable = true;
   hardware.graphics = {

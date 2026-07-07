@@ -1,0 +1,106 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.0/helmrelease_v2.json?values=app-template/5.0.1
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: zigbee2mqtt
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      zigbee2mqtt:
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups:
+              - 20
+        containers:
+          zigbee2mqtt:
+            image:
+              repository: ghcr.io/koenkk/zigbee2mqtt
+              tag: 2.12.1@sha256:80f7f04f72a99e4c4ef51ef7e98ee736edba6db0ecbb7abc626d0c4b0f1871f1
+            env:
+              ZIGBEE2MQTT_DATA: /data
+              # Serial / adapter (EFR32 radio of the SLZB-Ultima3 over TCP)
+              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://cottage-slzb-ultima3.iot.internal:6638
+              ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: ember
+              ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE: 115200
+              # MQTT
+              ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://mosquitto.mosquitto.svc.cluster.local
+              ZIGBEE2MQTT_CONFIG_MQTT_VERSION: 5
+              ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: z2m-cottage
+              ZIGBEE2MQTT_CONFIG_MQTT_INCLUDE_DEVICE_INFORMATION: true
+              # Frontend
+              ZIGBEE2MQTT_CONFIG_FRONTEND_PORT: &port 8080
+              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://z2m.raphael.clerici.tech
+              # Advanced
+              ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: 20
+              ZIGBEE2MQTT_CONFIG_ADVANCED_LAST_SEEN: ISO_8601
+              ZIGBEE2MQTT_CONFIG_ADVANCED_LOG_LEVEL: info
+              ZIGBEE2MQTT_CONFIG_ADVANCED_LOG_OUTPUT: '["console"]'
+              # Availability
+              ZIGBEE2MQTT_CONFIG_AVAILABILITY_ENABLED: true
+              ZIGBEE2MQTT_CONFIG_AVAILABILITY_ACTIVE_TIMEOUT: 60
+              ZIGBEE2MQTT_CONFIG_AVAILABILITY_PASSIVE_TIMEOUT: 2000
+              # Home Assistant discovery
+              ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_ENABLED: true
+              ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_EXPERIMENTAL_EVENT_ENTITIES: true
+              # Device defaults
+              ZIGBEE2MQTT_CONFIG_DEVICE_OPTIONS_RETAIN: true
+            resources:
+              requests:
+                cpu: 5m
+                memory: 202Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+              readiness:
+                enabled: true
+                type: HTTP
+    service:
+      zigbee2mqtt:
+        controller: zigbee2mqtt
+        ports:
+          http:
+            primary: true
+            port: *port
+          metrics:
+            port: 9000
+    route:
+      zigbee2mqtt:
+        hostnames:
+          - z2m.raphael.clerici.tech
+        parentRefs:
+          - name: internal
+            namespace: kgateway
+    persistence:
+      data:
+        existingClaim: zigbee2mqtt
+        globalMounts:
+          - path: /data
+            subPath: cottage
