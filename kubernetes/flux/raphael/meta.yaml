@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.0/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-meta
+  namespace: flux-system
+spec:
+  interval: 30m
+  timeout: 5m
+  targetNamespace: flux-system
+  path: ./kubernetes/flux/raphael/meta
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system

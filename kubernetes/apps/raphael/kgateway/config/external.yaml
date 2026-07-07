@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.6.0/gateway_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: external
+  annotations:
+    external-dns.alpha.kubernetes.io/target: vps.clerici.tech
+spec:
+  gatewayClassName: kgateway
+  infrastructure:
+    parametersRef:
+      name: kgateway-params
+      group: gateway.kgateway.dev
+      kind: GatewayParameters
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "*.raphael.clerici.tech"
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: clerici-tech-tls

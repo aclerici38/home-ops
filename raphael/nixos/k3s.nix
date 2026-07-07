@@ -6,7 +6,7 @@
 }:
 let
   # renovate: datasource=repology depName=nix_unstable/k3s versioning=loose
-  k3sMinor = "1.34";
+  k3sMinor = "1.35";
 
   # "1.34" -> attribute name "k3s_1_34"
   k3sSlot = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] k3sMinor;
@@ -22,7 +22,6 @@ in
 
     extraFlags = [
       "--disable=traefik"
-      "--disable=coredns"
       "--flannel-backend=host-gw"
       "--disable-network-policy"
       "--disable-helm-controller"

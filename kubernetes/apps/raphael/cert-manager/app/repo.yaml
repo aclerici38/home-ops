@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.0/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: cert-manager
+spec:
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: v1.20.3
+    digest: sha256:ef5cf71fc9494e8b06b2f7450e9e31fcb6b78bca1af415f6e2149e744e98faa2
+  url: oci://quay.io/jetstack/charts/cert-manager

@@ -1,0 +1,19 @@
+---
+# Cloud-specific kgateway config (policies targeting the external Gateway). The shared
+# common config (external Gateway, cert, params) is applied by kgateway-config in ks/shared.
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: kgateway-config-cluster
+  namespace: flux-system
+spec:
+  targetNamespace: kgateway
+  dependsOn:
+    - name: kgateway-config
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/cloud/kgateway/config
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: kgateway

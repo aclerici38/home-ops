@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.0/gitrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: gateway-api
+spec:
+  interval: 30m
+  ref:
+    tag: v1.6.0
+  url: https://github.com/kubernetes-sigs/gateway-api.git

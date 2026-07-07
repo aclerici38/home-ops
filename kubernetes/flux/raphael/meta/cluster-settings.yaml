@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-settings
+  namespace: flux-system
+data:
+  FLUX_PATH: kubernetes/flux/raphael
+  CLUSTER_NAME: raphael
+  SECRET_DOMAIN: clerici.tech
+  EXTERNAL_DOMAIN: raphael.clerici.tech
+  TZ: America/Los_Angeles
