@@ -64,15 +64,6 @@
     "vm.swappiness" = 180;
   };
 
-  virtualisation.podman = {
-    enable = true;
-    autoPrune = {
-      enable = true;
-      dates = "weekly";
-    };
-  };
-  virtualisation.oci-containers.backend = "podman";
-
   services.cockpit = {
     enable = true;
     port = 9091;
@@ -82,9 +73,8 @@
       AllowUnencrypted = true;
     };
   };
-  environment.systemPackages = [ pkgs.cockpit-podman ];
 
-  # subuid/subgid source for --userns=auto
+  # subuid/subgid source for hostUsers
   users.users.containers = {
     isSystemUser = true;
     group = "containers";
@@ -102,7 +92,8 @@
   };
 
   networking.firewall = {
-    enable = true;
+    # TODO: prob want this enabled
+    enable = false;
     allowedTCPPorts = [
       22
       80

@@ -35,8 +35,6 @@
           comin.nixosModules.comin
           ./nixos/disko.nix
           ./nixos/configuration.nix
-          ./nixos/containers.nix
-          ./nixos/mosquitto.nix
           ./nixos/comin.nix
           ./nixos/secrets.nix
         ];
