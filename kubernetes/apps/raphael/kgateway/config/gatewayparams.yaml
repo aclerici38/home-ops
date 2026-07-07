@@ -16,3 +16,22 @@ spec:
           memory: 512Mi
     service:
       externalTrafficPolicy: Local
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/kgateway/2.3.5/gatewayparameters_v1alpha1.json
+# The external Gateway is reached only in-cluster
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: GatewayParameters
+metadata:
+  name: kgateway-params-external
+spec:
+  kube:
+    deployment:
+      replicas: 1
+    envoyContainer:
+      resources:
+        requests:
+          memory: 64Mi
+        limits:
+          memory: 512Mi
+    service:
+      type: ClusterIP

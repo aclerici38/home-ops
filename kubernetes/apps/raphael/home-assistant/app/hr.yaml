@@ -63,9 +63,11 @@ spec:
     route:
       home-assistant:
         hostnames:
-          - hass.raphael.clerici.tech
+          - raphael.clerici.tech
         parentRefs:
           - name: internal
+            namespace: kgateway
+          - name: external
             namespace: kgateway
     persistence:
       config:
