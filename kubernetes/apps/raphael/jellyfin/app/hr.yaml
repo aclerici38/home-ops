@@ -68,11 +68,6 @@ spec:
         ports:
           http:
             port: *port
-    serviceMonitor:
-      jellyfin:
-        serviceName: jellyfin
-        endpoints:
-          - port: http
     route:
       jellyfin:
         hostnames:
