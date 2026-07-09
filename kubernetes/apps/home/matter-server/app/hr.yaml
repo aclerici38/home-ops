@@ -73,7 +73,7 @@ spec:
           matter-server:
             image:
               repository: ghcr.io/matter-js/matterjs-server
-              tag: 1.1.7@sha256:e52dc38320b53a0611628a8c3ed416a0dbb47c98ff83c9ef815f4184373f27b5
+              tag: 1.2.0@sha256:cd1b38ac590b3d91170f32762ab9af5eb31814b18d7c6e89e12dfaaaf0efc391
             args:
               - --storage-path=/data
               - --ota-provider-dir=/data/ota
