@@ -19,10 +19,12 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  dependsOn:
+    - name: mosquitto-resources
   values:
     controllers:
       mosquitto:
-        strategy: RollingUpdate
+        strategy: Recreate
         pod:
           hostUsers: false
           securityContext:
@@ -31,20 +33,38 @@ spec:
             runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-        containers:
-          mosquitto:
-            image:
+        initContainers:
+          init-passwd:
+            image: &img
               repository: public.ecr.aws/docker/library/eclipse-mosquitto
               tag: 2.0.22@sha256:212f89e1eaeb2c322d6441b64396e3346026674db8fa9c27beac293405c32b3c
-            securityContext:
+            command:
+              - sh
+              - -c
+              - |
+                set -eu
+                umask 077
+                # -c creates/overwrites on the first user, then append the rest
+                mosquitto_passwd -c -b /mosquitto/auth/passwords zigbee2mqtt "$Z2M_MQTT_PASS"
+                mosquitto_passwd    -b /mosquitto/auth/passwords home-assistant "$HASS_MQTT_PASS"
+                mosquitto_passwd    -b /mosquitto/auth/passwords frigate "$FRIGATE_MQTT_PASS"
+            envFrom:
+              - secretRef:
+                  name: mosquitto
+            securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
+        containers:
+          mosquitto:
+            image: *img
+            securityContext: *sec
             resources:
               requests:
                 cpu: 10m
+                memory: 32Mi
               limits:
-                memory: 100Mi
+                memory: 64Mi
             probes:
               liveness:
                 enabled: true
@@ -54,6 +74,7 @@ spec:
                 type: TCP
     service:
       mosquitto:
+        type: LoadBalancer
         ports:
           mqtt:
             port: 1883
@@ -61,36 +82,21 @@ spec:
       config:
         data:
           mosquitto.conf: |-
-            allow_anonymous true
-            autosave_interval 10
+            allow_anonymous false
+            password_file /mosquitto/auth/passwords
             connection_messages false
             listener 1883 0.0.0.0
             per_listener_settings false
-            persistence true
-            persistence_location /data
-
-            # Victron MQTT bridge
-            connection victron
-            address einstein.bambi.internal:1883
-            topic N/# in 0
-            topic R/# out 0
-            topic W/# out 0
-            try_private false
-            cleansession true
-            start_type automatic
-            keepalive_interval 30
-            restart_timeout 5 30
-            bridge_attempt_unsubscribe false
-            notifications true
+            persistence false
     persistence:
-      tmpfs:
-        type: emptyDir
-        medium: Memory
-        globalMounts:
-          - path: /data
       config:
         type: configMap
         name: mosquitto
         globalMounts:
           - path: /mosquitto/config/mosquitto.conf
             subPath: mosquitto.conf
+      # Written by the init-passwd container, read by mosquitto
+      auth:
+        type: emptyDir
+        globalMounts:
+          - path: /mosquitto/auth

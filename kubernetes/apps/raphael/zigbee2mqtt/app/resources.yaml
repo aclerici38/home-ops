@@ -18,4 +18,9 @@ spec:
   upgrade:
     timeout: 5m
   values:
-    externalSecret: {}
+    externalSecret:
+      data:
+        - secretKey: MQTT_PASSWORD
+          remoteRef:
+            key: mosquitto
+            property: Z2M_MQTT_PASS
