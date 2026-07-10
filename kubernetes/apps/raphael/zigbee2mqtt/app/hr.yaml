@@ -30,8 +30,6 @@ spec:
             runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups:
-              - 20
         containers:
           zigbee2mqtt:
             image:
@@ -50,6 +48,12 @@ spec:
               ZIGBEE2MQTT_CONFIG_FRONTEND_PORT: &port 8080
               ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://z2m.raphael.clerici.tech
               # Advanced
+              ZIGBEE2MQTT_CONFIG_ADVANCED_NETWORK_KEY:
+                secretKeyRef:
+                  name: zigbee2mqtt
+                  key: RAPHAEL_NETWORK_KEY
+              ZIGBEE2MQTT_CONFIG_ADVANCED_PAN_ID: 39053
+              ZIGBEE2MQTT_CONFIG_ADVANCED_EXT_PAN_ID: '[168, 123, 95, 194, 134, 136, 229, 82]'
               ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER: 20
               ZIGBEE2MQTT_CONFIG_ADVANCED_LAST_SEEN: ISO_8601
               ZIGBEE2MQTT_CONFIG_ADVANCED_LOG_LEVEL: info
@@ -73,13 +77,13 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
-              # probes:
-              #   liveness:
-              #     enabled: true
-              #     type: HTTP
-              #   readiness:
-              #     enabled: true
-              #     type: HTTP
+              probes:
+                liveness:
+                  enabled: true
+                  type: HTTP
+                readiness:
+                  enabled: true
+                  type: HTTP
     service:
       zigbee2mqtt:
         controller: zigbee2mqtt
@@ -101,4 +105,3 @@ spec:
         existingClaim: zigbee2mqtt
         globalMounts:
           - path: /data
-            subPath: cottage
