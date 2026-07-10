@@ -100,3 +100,10 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /mosquitto/auth
+      tmp:
+        type: emptyDir
+        medium: Memory
+        advancedMounts:
+          mosquitto:
+            init-passwd:
+              - path: /tmp
