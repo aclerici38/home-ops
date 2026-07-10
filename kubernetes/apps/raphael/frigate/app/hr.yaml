@@ -77,7 +77,7 @@ spec:
             port: 5000
           http-auth:
             primary: true
-            port: &auth 8971
+            port: 8971
           rtsp:
             port: 8554
           webrtc:
@@ -92,7 +92,7 @@ spec:
         rules:
           - backendRefs:
               - identifier: frigate
-                port: *auth
+                port: 5000
     persistence:
       config:
         existingClaim: frigate
