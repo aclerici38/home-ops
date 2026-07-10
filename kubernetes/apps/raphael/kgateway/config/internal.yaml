@@ -18,10 +18,17 @@ spec:
       allowedRoutes:
         namespaces:
           from: Same
-    - name: https
+    - name: https-wildcard
       protocol: HTTPS
       port: 443
       hostname: "*.raphael.clerici.tech"
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https-root
+      protocol: HTTPS
+      port: 443
+      hostname: "raphael.clerici.tech"
       allowedRoutes:
         namespaces:
           from: All
