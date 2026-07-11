@@ -19,7 +19,6 @@
       description: "Require an upstream sibling before grouping a schema",
       matchPackageNames: ["aclerici38/k8s-versioned-schemas"],
       groupName: "{{ replace '.+/' '' depName }}",
-      minimumGroupSize: 2,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },

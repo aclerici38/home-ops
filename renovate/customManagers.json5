@@ -2,16 +2,6 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   customManagers: [
     {
-      description: ["Track oci-container images in raphael nix (tag@digest)"],
-      customType: "regex",
-      fileMatch: ["(^|/)raphael/.*\\.nix$"],
-      matchStrings: [
-        "image\\s*=\\s*\"(?<depName>[^:\"]+):(?<currentValue>[^@\"]+)@(?<currentDigest>sha256:[a-f0-9]+)\"",
-      ],
-      datasourceTemplate: "docker",
-      autoReplaceStringTemplate: "image = \"{{{depName}}}:{{{newValue}}}@{{{newDigest}}}\"",
-    },
-    {
       description: ["Track nix k3s version pin in raphael"],
       customType: "regex",
       fileMatch: ["(^|/)raphael/nixos/k3s\\.nix$"],
