@@ -23,7 +23,6 @@
       "ultimaker-cura"
       "utm"
       "vlc"
-      "wireguard"
       "zen"
       "zed"
       "zoom"
