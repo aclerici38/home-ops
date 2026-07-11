@@ -47,6 +47,8 @@ spec:
     externalSecret: {}
     pocketId:
       group: fam
+      callbackPaths:
+        - /users/auth/openid_connect/callback
     volsync:
       cephfs: true
       restoreFrom: home-infra

@@ -41,6 +41,8 @@ spec:
             property: EMAIL
     pocketId:
       group: fam
+      callbackUrls:
+        - https://chat.clerici.tech/oauth/oidc/callback
     volsync:
       cephfs: true
       restoreFrom: tools

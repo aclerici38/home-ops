@@ -29,5 +29,7 @@ spec:
     pocketId:
       group: fam
       pkce: false
+      callbackPaths:
+        - /api/auth/oidc/callback
     volsync:
       restoreFrom: home-infra

@@ -23,6 +23,8 @@ spec:
     - name: volsync
       namespace: volsync
   values:
-    pocketId: {}
+    pocketId:
+      callbackPaths:
+        - /openid/callback
     volsync:
       restoreFrom: home-infra

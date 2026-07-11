@@ -30,3 +30,5 @@ spec:
     externalSecret: {}
     pocketId:
       pkce: false
+      callbackPaths:
+        - /authorization-code/callback

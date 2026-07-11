@@ -28,6 +28,8 @@ spec:
     externalSecret: {}
     pocketId:
       group: fam
+      callbackPaths:
+        - /api/auth/callback/custom
     volsync:
       cephfs: true
       restoreFrom: home-infra

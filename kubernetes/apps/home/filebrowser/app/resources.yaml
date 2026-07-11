@@ -27,5 +27,7 @@ spec:
   values:
     pocketId:
       pkce: false
+      callbackPaths:
+        - /api/auth/oidc/callback
     volsync:
       restoreFrom: tools

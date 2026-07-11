@@ -32,6 +32,8 @@ spec:
     externalSecret: {}
     pocketId:
       group: all
+      callbackPaths:
+        - /login
     volsync:
       cephfs: true
       restoreFrom: home-infra
