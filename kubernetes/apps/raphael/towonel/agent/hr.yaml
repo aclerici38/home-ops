@@ -31,3 +31,7 @@ spec:
           origin: external.kgateway.svc.cluster.local:443
         - hostname: "*.raphael.clerici.tech"
           origin: external.kgateway.svc.cluster.local:443
+      udpServices:
+        - name: wireguard
+          origin: 192.168.71.1:51822
+          listen_port: 51822
