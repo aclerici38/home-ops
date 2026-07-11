@@ -52,5 +52,13 @@
       commitMessageSuffix: "(raphael)",
       addLabels: ["raphael"],
     },
+    {
+      // Override renovate's k3s workaround
+      description: "raphael k3s pin is minor-only; override the built-in k3s full-version workaround",
+      matchDatasources: ["github-releases"],
+      matchPackageNames: ["k3s-io/k3s"],
+      matchFileNames: ["**/raphael/**"],
+      versioning: "loose",
+    },
   ],
 }
