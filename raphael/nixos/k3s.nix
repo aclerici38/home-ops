@@ -6,7 +6,7 @@
 }:
 let
   # renovate: datasource=github-releases depName=k3s-io/k3s versioning=loose
-  k3sMinor = "1.35";
+  k3sMinor = "1.36";
 
   # "1.34" -> attribute name "k3s_1_34"
   k3sSlot = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] k3sMinor;
