@@ -5,7 +5,7 @@
   ...
 }:
 let
-  # renovate: datasource=repology depName=nix_unstable/k3s versioning=loose
+  # renovate: datasource=github-releases depName=k3s-io/k3s versioning=loose
   k3sMinor = "1.35";
 
   # "1.34" -> attribute name "k3s_1_34"
