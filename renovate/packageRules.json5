@@ -47,7 +47,7 @@
     },
     {
       description: "Separate PRs for raphael, so the RV box updates independently of the clusters",
-      matchFileNames: ["raphael/**"],
+      matchFileNames: ["**/raphael/**"],
       additionalBranchPrefix: "raphael-",
       commitMessageSuffix: "(raphael)",
       addLabels: ["raphael"],
