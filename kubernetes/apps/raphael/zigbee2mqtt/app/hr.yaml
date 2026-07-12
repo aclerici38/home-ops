@@ -41,7 +41,7 @@ spec:
             env:
               ZIGBEE2MQTT_DATA: /data
               ZIGBEE2MQTT_CONFIG_SERIAL_PORT: /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_d4f0088f4c1fef119b9450d0639e525b-if00-port0
-              ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack
+              ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: ember
               ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE: 115200
               # MQTT
               ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://mosquitto.mosquitto.svc.cluster.local
