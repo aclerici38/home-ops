@@ -25,13 +25,14 @@ spec:
     controllers:
       zigbee2mqtt:
         pod:
-          hostUsers: false
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
             runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups:
+              - 20
         containers:
           zigbee2mqtt:
             image:
@@ -81,6 +82,7 @@ spec:
                 memory: 202Mi
               limits:
                 memory: 512Mi
+                devic.es/zigbee: 1
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true

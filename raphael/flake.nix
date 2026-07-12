@@ -41,6 +41,7 @@
           ./nixos/comin.nix
           ./nixos/secrets.nix
           ./nixos/k3s.nix
+          ./nixos/zigbee.nix
         ];
       };
     };
