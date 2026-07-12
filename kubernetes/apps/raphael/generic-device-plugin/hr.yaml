@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.1/helmrelease_v2.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.1/helmrelease_v2.json?values=app-template/5.0.1
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -7,12 +7,10 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chart:
-    spec:
-      chart: charts/generic-device-plugin
-      sourceRef:
-        kind: GitRepository
-        name: generic-device-plugin
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
   install:
     timeout: 2m
     remediation:
@@ -22,15 +20,48 @@ spec:
     remediation:
       retries: 1
   values:
-    image:
-      repository: ghcr.io/squat/generic-device-plugin
-      tag: 0.2.0@sha256:66c8d5c270eb2b721f1064c549b9b7898152a6d2f0163380a5d37dc7636c20ff
-      pullPolicy: IfNotPresent
-    args:
-      - --log-level=info
-    devices:
-      - name: zigbee
-        groups:
-          - count: 10
-            paths:
-              - path: /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_d4f0088f4c1fef119b9450d0639e525b-if00-port0
+    controllers:
+      generic-device-plugin:
+        type: daemonset
+        strategy: RollingUpdate
+        pod:
+          priorityClassName: system-node-critical
+        containers:
+          generic-device-plugin:
+            image:
+              repository: ghcr.io/squat/generic-device-plugin
+              tag: 0.2.0@sha256:66c8d5c270eb2b721f1064c549b9b7898152a6d2f0163380a5d37dc7636c20ff
+            args:
+              - --config=/config/config.yaml
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+    persistence:
+      config:
+        type: configMap
+        name: generic-device-plugin-config
+        globalMounts:
+          - path: /config/config.yaml
+            subPath: config.yaml
+            readOnly: true
+      dev:
+        type: hostPath
+        hostPath: /dev
+        globalMounts:
+          - path: /dev
+      device-plugin:
+        type: hostPath
+        hostPath: /var/lib/kubelet/device-plugins
+        globalMounts:
+          - path: /var/lib/kubelet/device-plugins
+    configMaps:
+      config:
+        data:
+          config.yaml: |-
+            devices:
+              - name: zigbee
+                groups:
+                  - count: 10
+                    paths:
+                      - path: /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_d4f0088f4c1fef119b9450d0639e525b-if00-port0
