@@ -38,6 +38,7 @@ spec:
       name: pocket-id
       spec:
         image: ghcr.io/pocket-id/pocket-id:v2.10.0-distroless@sha256:244c5d2613b1b89b18a8fee07e47e9a43907a09009c6280236131fccf1ba5f9f
+        rateLimiting: true
         podTemplate:
           spec:
             hostUsers: false
