@@ -1,7 +1,7 @@
 ---
 # Shared base for konflate: the chart source (OCIRepository) and credentials
 # (ExternalSecret), applied once and used by every instance below.
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.1/kustomization_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.2/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -21,7 +21,7 @@ spec:
 # HelmRelease. The reviewed cluster is injected via ${KONFLATE_CLUSTER} — not
 # ${CLUSTER_NAME}, which is the deployment cluster (cloud) and is identical for
 # both instances, so it can't distinguish home from cloud.
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.1/kustomization_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.2/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -40,7 +40,7 @@ spec:
     substitute:
       KONFLATE_CLUSTER: home
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.1/kustomization_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.2/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -59,7 +59,7 @@ spec:
     substitute:
       KONFLATE_CLUSTER: cloud
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.1/kustomization_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.2/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
