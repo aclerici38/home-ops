@@ -9,6 +9,9 @@ on:
       - "main"
     paths:
       - "raphael/**"
+      - "kubernetes/apps/raphael/**"
+      - "kubernetes/ks/raphael/**"
+      - "kubernetes/flux/raphael/**"
 
 concurrency:
   group: ${{ github.workflow }}
