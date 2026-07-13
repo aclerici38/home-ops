@@ -40,17 +40,21 @@ spec:
             env:
               HOME: /tmp
               HF_HOME: /data
-              # base-int8 loads via huggingface_hub, which probes the network
+              # base.en loads via huggingface_hub, which probes the network
               # even when the model is already on the PVC. Bound that probe so
               # offline boots fall back to the cached model quickly.
               HF_HUB_ETAG_TIMEOUT: "5"
             args:
               - --model
-              - base-int8
+              - base.en
+              - --compute-type
+              - int8
               - --language
               - en
               - --beam-size
-              - "1"
+              - "5"
+              - --initial-prompt
+              - "Alexa, turn on the lights and set the brightness to fifty percent. Dim all the lights to warm white, then change them to blue at one hundred percent. Set the air conditioning to seventy two degrees and turn the AC off. Set a timer for ten minutes."
             probes:
               liveness:
                 enabled: true
