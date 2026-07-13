@@ -38,6 +38,18 @@ spec:
       namespace: kgateway
       sectionName: https
   rules:
+    - matches:
+        - path:
+            type: Exact
+            value: /
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 302
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /login.html
     - backendRefs:
         - name: adguard
           port: 3000
