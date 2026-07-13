@@ -100,6 +100,13 @@ spec:
         parentRefs:
           - name: internal
             namespace: kgateway
+        rules:
+          - timeouts:
+              request: 0s
+              backendRequest: 0s
+            backendRefs:
+              - identifier: immich-pet-tagger
+                port: *port
     persistence:
       data:
         existingClaim: immich-pet-tagger
