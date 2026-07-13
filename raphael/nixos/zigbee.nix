@@ -1,4 +1,4 @@
-{ ... }:
+_:
 {
   # Sonoff Zigbee Dongle Lite (EFR32MG21 / CP2102N) for zigbee2mqtt.
   services.udev.extraRules = ''
