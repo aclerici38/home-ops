@@ -19,6 +19,9 @@ spec:
     remediation:
       retries: 1
   values:
+    controllers:
+      main:
+        replicas: 1
     defaultPodOptions:
       hostUsers: false
     agent:

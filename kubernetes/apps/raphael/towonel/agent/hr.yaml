@@ -21,6 +21,9 @@ spec:
   values:
     defaultPodOptions:
       hostUsers: false
+    controllers:
+      main:
+        replicas: 1
     agent:
       replica: 1
       inviteTokenSecret:
