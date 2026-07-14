@@ -38,101 +38,102 @@ spec:
         repository: ghcr.io/aclerici38/pocket-id-operator
         tag: main
         pullPolicy: Always
-    instance:
-      enabled: true
-      name: pocket-id
-      spec:
-        image: ghcr.io/pocket-id/pocket-id:v2.11.0-distroless@sha256:446624a84743c29f93db2ffbbe19f9059fd9741e0cb2516d31efcc764e131835
-        podTemplate:
-          spec:
-            hostUsers: false
-        route:
-          enabled: true
-          parentRefs:
-            - group: gateway.networking.k8s.io
-              kind: Gateway
-              name: external
-              namespace: kgateway
-              sectionName: https
-        encryptionKey:
-          valueFrom:
-            secretKeyRef:
-              name: pocket-id
-              key: ENCRYPTION_KEY
-        databaseUrl:
-          valueFrom:
-            secretKeyRef:
-              name: pocket-id-postgres
-              key: uri
-        appUrl: https://id.clerici.tech
-        hostUsers: false
-        versionCheckDisabled: true
-        fileBackend: database
-        ui:
-          sessionDuration: 1440
-        smtp:
-          host: smtp-relay.smtp-relay.svc.cluster.local
-          from: bot@clerici.tech
-          port: 25
-          tls: none
-        emailNotifications:
-          loginNotification: true
-          oneTimeAccessAsAdmin: true
-          apiKeyExpiration: true
-          verification: true
-        persistence:
-          enabled: false
-        metrics:
-          enabled: true
-        OIDCClientRotation:
-          minSpacing: 5m
-      serviceMonitor:
+    pocket-id-instance:
+      instance:
         enabled: true
-    users:
-      - name: anthony
+        name: pocket-id
         spec:
-          locale: en
-          admin: true
-          email:
+          image: ghcr.io/pocket-id/pocket-id:v2.11.0-distroless@sha256:446624a84743c29f93db2ffbbe19f9059fd9741e0cb2516d31efcc764e131835
+          podTemplate:
+            spec:
+              hostUsers: false
+          route:
+            enabled: true
+            parentRefs:
+              - group: gateway.networking.k8s.io
+                kind: Gateway
+                name: external
+                namespace: kgateway
+                sectionName: https
+          encryptionKey:
             valueFrom:
-              key: EMAIL
-              name: pocket-id
-          firstName:
-            value: Anthony
-          lastName:
-            value: Clerici
-      - name: steve
-        spec:
-          locale: en
-          userInfoSecretRef:
-            name: pocket-id-steve-info
-    userGroups:
-      - name: admin
-        spec:
-          users:
-            userRefs:
-              - name: anthony
-          customClaims:
-            - key: oc_groups
-              value: opencloud-admins
-            - key: immich_role
-              value: admin
-      - name: fam
-        spec:
-          users: &fam
-            userRefs:
-              - name: anthony
-              - name: steve
-            usernames:
-              - melanie
-      - name: all
-        spec:
-          users:
-            <<: *fam
-            userIDs:
-              - 56f6f365-feb5-464f-bf31-f537d3a34a9e
-          customClaims:
-            - key: oc_groups
-              value: opencloud-users
-            - key: immich_role
-              value: user
+              secretKeyRef:
+                name: pocket-id
+                key: ENCRYPTION_KEY
+          databaseUrl:
+            valueFrom:
+              secretKeyRef:
+                name: pocket-id-postgres
+                key: uri
+          appUrl: https://id.clerici.tech
+          hostUsers: false
+          versionCheckDisabled: true
+          fileBackend: database
+          ui:
+            sessionDuration: 1440
+          smtp:
+            host: smtp-relay.smtp-relay.svc.cluster.local
+            from: bot@clerici.tech
+            port: 25
+            tls: none
+          emailNotifications:
+            loginNotification: true
+            oneTimeAccessAsAdmin: true
+            apiKeyExpiration: true
+            verification: true
+          persistence:
+            enabled: false
+          metrics:
+            enabled: true
+          OIDCClientRotation:
+            minSpacing: 5m
+        serviceMonitor:
+          enabled: true
+      users:
+        - name: anthony
+          spec:
+            locale: en
+            admin: true
+            email:
+              valueFrom:
+                key: EMAIL
+                name: pocket-id
+            firstName:
+              value: Anthony
+            lastName:
+              value: Clerici
+        - name: steve
+          spec:
+            locale: en
+            userInfoSecretRef:
+              name: pocket-id-steve-info
+      userGroups:
+        - name: admin
+          spec:
+            users:
+              userRefs:
+                - name: anthony
+            customClaims:
+              - key: oc_groups
+                value: opencloud-admins
+              - key: immich_role
+                value: admin
+        - name: fam
+          spec:
+            users: &fam
+              userRefs:
+                - name: anthony
+                - name: steve
+              usernames:
+                - melanie
+        - name: all
+          spec:
+            users:
+              <<: *fam
+              userIDs:
+                - 56f6f365-feb5-464f-bf31-f537d3a34a9e
+            customClaims:
+              - key: oc_groups
+                value: opencloud-users
+              - key: immich_role
+                value: user
