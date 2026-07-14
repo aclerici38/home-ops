@@ -38,6 +38,8 @@ spec:
         repository: ghcr.io/aclerici38/pocket-id-operator
         tag: main
         pullPolicy: Always
+    instance:
+      enabled: false
     pocket-id-instance:
       instance:
         enabled: true
