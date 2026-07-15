@@ -13,6 +13,7 @@ spec:
   chart:
     spec:
       chart: charts/pocket-id-operator
+      reconcileStrategy: Revision
       sourceRef:
         kind: GitRepository
         name: pocket-id-operator-main
