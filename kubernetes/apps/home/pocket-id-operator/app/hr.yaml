@@ -88,6 +88,10 @@ spec:
             enabled: true
           OIDCClientRotation:
             minSpacing: 5m
+          trustedProxies:
+            enabled: true
+            cidrs:
+              - "172.16.0.0/16"
       users:
         - name: anthony
           spec:
