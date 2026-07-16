@@ -7,16 +7,16 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  # chartRef:
-  #   kind: OCIRepository
-  #   name: pocket-id-operator
-  chart:
-    spec:
-      chart: charts/pocket-id-operator
-      reconcileStrategy: Revision
-      sourceRef:
-        kind: GitRepository
-        name: pocket-id-operator-main
+  chartRef:
+    kind: OCIRepository
+    name: pocket-id-operator
+  # chart:
+  #   spec:
+  #     chart: charts/pocket-id-operator
+  #     reconcileStrategy: Revision
+  #     sourceRef:
+  #       kind: GitRepository
+  #       name: pocket-id-operator-main
   install:
     timeout: 2m
     remediation:
@@ -34,11 +34,11 @@ spec:
   # home-only: the pocket-id instance, users and groups (base operator/metrics values
   # come from the shared pocket-id-operator-values ConfigMap).
   values:
-    operator:
-      image:
-        repository: ghcr.io/aclerici38/pocket-id-operator
-        tag: main
-        pullPolicy: Always
+    # operator:
+    #   image:
+    #     repository: ghcr.io/aclerici38/pocket-id-operator
+    #     tag: main
+    #     pullPolicy: Always
     pocket-id-instance:
       instance:
         enabled: true
