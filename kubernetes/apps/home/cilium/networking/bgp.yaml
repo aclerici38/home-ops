@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.19.5/ciliumbgpclusterconfig_v2.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.19.6/ciliumbgpclusterconfig_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumBGPClusterConfig
 metadata:
@@ -20,7 +20,7 @@ spec:
           peerConfigRef:
             name: "cilium-peer-v6"
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.19.5/ciliumbgpclusterconfig_v2.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.19.6/ciliumbgpclusterconfig_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumBGPPeerConfig
 metadata:
