@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/kgateway/2.3.5/gatewayparameters_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/kgateway/2.3.6/gatewayparameters_v1alpha1.json
 apiVersion: gateway.kgateway.dev/v1alpha1
 kind: GatewayParameters
 metadata:
@@ -17,7 +17,7 @@ spec:
     service:
       externalTrafficPolicy: Local
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/kgateway/2.3.5/gatewayparameters_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/kgateway/2.3.6/gatewayparameters_v1alpha1.json
 # The external Gateway is reached only in-cluster
 apiVersion: gateway.kgateway.dev/v1alpha1
 kind: GatewayParameters
