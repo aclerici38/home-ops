@@ -36,4 +36,12 @@ spec:
               key: INSTANCE_API_KEY
       userGroups:
         - name: admin
+          spec:
+            customClaims:
+              - key: oc_groups
+                value: opencloud-admins
+              - key: immich_role
+                value: admin
+              - key: frigate_role
+                value: admin
         - name: fam
