@@ -24,6 +24,8 @@ spec:
     replicaCount: 2
     timezone: ${TZ}
     cronJobTimeZone: true
+    injectionStrategy: imageVolume
+    podOwnerLookup: true
     webhook:
       failurePolicy: Fail
       ignoredNamespaces:
