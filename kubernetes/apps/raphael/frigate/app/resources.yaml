@@ -30,3 +30,24 @@ spec:
           remoteRef:
             key: mosquitto
             property: FRIGATE_MQTT_PASS
+    pocketId:
+      clientID: frigate-raphael
+      name: Frigate (Raphael)
+      url: frigate.raphael.clerici.tech
+      group: fam
+      secret:
+        keys:
+          clientID: client-id
+          clientSecret: client-secret
+      callbackPaths:
+        - /oauth2/redirect
+    oidc:
+      route: auth
+      oauth2:
+        jwt:
+          idToken:
+            claimsToHeaders:
+              - name: preferred_username
+                header: x-forwarded-user
+              - name: frigate_role
+                header: x-forwarded-groups

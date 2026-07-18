@@ -2,7 +2,8 @@
 {{- $app := include "resources.app" . -}}
 {{- $o := .Values.oidc -}}
 {{- $route := dig "route" $app $o -}}
-{{- $clientID := dig "clientID" $app $o -}}
+{{/* clientID precedence: oidc.clientID > pocketId.clientID > app name */}}
+{{- $clientID := dig "clientID" (dig "clientID" $app (.Values.pocketId | default dict)) $o -}}
 {{- $host := dig "backendHost" "pocket-id.pocket-id-operator.svc.cluster.local" $o -}}
 {{- $port := dig "backendPort" 1411 $o -}}
 {{/* kgateway oauth2 forward-auth for an HTTPRoute, backed by pocket-id (id.clerici.tech). */}}
@@ -40,6 +41,9 @@ spec:
         name: {{ $app }}-oidc-credentials
     cookies:
       domain: {{ dig "cookieDomain" "clerici.tech" $o | quote }}
+    {{- with $o.oauth2 }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 ---
 apiVersion: gateway.kgateway.dev/v1alpha1
 kind: TrafficPolicy

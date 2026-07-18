@@ -22,8 +22,12 @@ spec:
       namespace: external-secrets
     - name: intel-gpu-resource-driver
       namespace: intel-gpu-resource-driver
+    - name: kgateway
+      namespace: kgateway
     - name: nfs-server
       namespace: nfs-server
+    - name: pocket-id-operator
+      namespace: pocket-id-operator
     - name: volsync
       namespace: volsync
   values:
@@ -32,3 +36,23 @@ spec:
     volsync:
       restoreFrom: home-infra
       capacity: 25Gi
+    pocketId:
+      group: fam
+      clientID: frigate-home
+      name: Frigate (Home)
+      secret:
+        keys:
+          clientID: client-id
+          clientSecret: client-secret
+      callbackPaths:
+        - /oauth2/redirect
+    oidc:
+      route: auth
+      oauth2:
+        jwt:
+          idToken:
+            claimsToHeaders:
+              - name: preferred_username
+                header: x-forwarded-user
+              - name: frigate_role
+                header: x-forwarded-groups

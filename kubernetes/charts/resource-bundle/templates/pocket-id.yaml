@@ -1,6 +1,9 @@
 {{- if hasKey .Values "pocketId" }}
 {{- $app := include "resources.app" . -}}
 {{- $p := .Values.pocketId -}}
+{{- $clientID := dig "clientID" $app $p -}}
+{{/* display name in the pocket-id UI; defaults to clientID so it's distinct whenever clientID is */}}
+{{- $name := dig "name" $clientID $p -}}
 {{- $host := dig "url" (printf "%s.clerici.tech" $app) $p -}}
 {{/* callbackUrls = explicit literal entries + https://<host><path> for each callbackPaths entry */}}
 {{- $cbs := default (list) $p.callbackUrls -}}
@@ -11,9 +14,10 @@ kind: PocketIDOIDCClient
 metadata:
   name: {{ $app }}
 spec:
+  name: {{ $name | quote }}
   logo:
-    nameOverride: {{ $app }}
-  clientID: {{ $app }}
+    nameOverride: {{ $name | quote }}
+  clientID: {{ $clientID }}
   launchUrl: https://{{ $host }}
   pkceEnabled: {{ dig "pkce" true $p }}
   {{- with $p.secret }}
