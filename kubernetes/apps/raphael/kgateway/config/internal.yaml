@@ -21,20 +21,6 @@ spec:
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: "*.raphael.clerici.tech"
-      allowedRoutes:
-        namespaces:
-          from: All
-      tls:
-        certificateRefs:
-          - kind: Secret
-            name: clerici-tech-tls
-    # Apex listener: the wildcard above does NOT match raphael.clerici.tech
-    # itself, so Home Assistant is served on the bare domain here.
-    - name: https-apex
-      protocol: HTTPS
-      port: 443
-      hostname: "raphael.clerici.tech"
       allowedRoutes:
         namespaces:
           from: All
