@@ -88,10 +88,12 @@ spec:
         parentRefs:
           - name: internal
             namespace: kgateway
+          - name: external
+            namespace: kgateway
         rules:
           - backendRefs:
               - identifier: frigate
-                port: 5000
+                port: 8971
     persistence:
       config:
         existingClaim: frigate
