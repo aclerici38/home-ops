@@ -18,11 +18,13 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
-  valuesFrom:
-    - kind: ConfigMap
-      name: pocket-id-operator-values
-      valuesKey: values.yaml
   values:
+    metrics:
+      enabled: false
+      serviceMonitor:
+        enabled: false
+      dashboard:
+        enabled: false
     pocket-id-instance:
       instance:
         enabled: true
