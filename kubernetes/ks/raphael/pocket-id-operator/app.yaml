@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.2/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: pocket-id-operator
+  namespace: flux-system
+spec:
+  targetNamespace: pocket-id-operator
+  dependsOn:
+    - name: external-secrets-stores
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/raphael/pocket-id-operator/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: pocket-id-operator

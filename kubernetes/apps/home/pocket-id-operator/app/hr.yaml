@@ -97,6 +97,13 @@ spec:
           spec:
             locale: en
             admin: true
+            apiKeys:
+              - name: raphael
+                description: raphael cluster pocket-id-operator
+                expiresAt: "2031-01-01T00:00:00Z"
+              - name: cloud
+                description: cloud cluster pocket-id-operator
+                expiresAt: "2031-01-01T00:00:00Z"
             email:
               valueFrom:
                 key: EMAIL
