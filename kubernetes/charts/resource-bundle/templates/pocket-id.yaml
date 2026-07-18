@@ -4,6 +4,8 @@
 {{- $clientID := dig "clientID" $app $p -}}
 {{/* display name in the pocket-id UI; defaults to clientID so it's distinct whenever clientID is */}}
 {{- $name := dig "name" $clientID $p -}}
+{{/* logo passthrough: user-provided pocketId.logo keys win; nameOverride defaults to $name */}}
+{{- $logo := merge (deepCopy (dig "logo" dict $p)) (dict "nameOverride" $name) -}}
 {{- $host := dig "url" (printf "%s.clerici.tech" $app) $p -}}
 {{/* callbackUrls = explicit literal entries + https://<host><path> for each callbackPaths entry */}}
 {{- $cbs := default (list) $p.callbackUrls -}}
@@ -16,7 +18,7 @@ metadata:
 spec:
   name: {{ $name | quote }}
   logo:
-    nameOverride: {{ $name | quote }}
+    {{- toYaml $logo | nindent 4 }}
   clientID: {{ $clientID }}
   launchUrl: https://{{ $host }}
   pkceEnabled: {{ dig "pkce" true $p }}

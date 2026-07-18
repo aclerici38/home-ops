@@ -6,6 +6,9 @@
 {{- $clientID := dig "clientID" (dig "clientID" $app (.Values.pocketId | default dict)) $o -}}
 {{- $host := dig "backendHost" "pocket-id.pocket-id-operator.svc.cluster.local" $o -}}
 {{- $port := dig "backendPort" 1411 $o -}}
+{{/* originate TLS to the IdP when talking to a remote pocket-id (e.g. clusters with no
+     in-cluster instance reaching id.clerici.tech:443); defaults on for port 443 */}}
+{{- $tls := dig "backendTLS" (eq (toString $port) "443") $o -}}
 {{/* kgateway oauth2 forward-auth for an HTTPRoute, backed by pocket-id (id.clerici.tech). */}}
 ---
 apiVersion: gateway.kgateway.dev/v1alpha1
@@ -18,6 +21,21 @@ spec:
     hosts:
       - host: {{ $host }}
         port: {{ $port }}
+{{- if $tls }}
+---
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: BackendConfigPolicy
+metadata:
+  name: {{ $app }}-oauth-backend
+spec:
+  targetRefs:
+    - group: gateway.kgateway.dev
+      kind: Backend
+      name: {{ $app }}-oauth-backend
+  tls:
+    sni: {{ $host | quote }}
+    wellKnownCACertificates: System
+{{- end }}
 ---
 apiVersion: gateway.kgateway.dev/v1alpha1
 kind: GatewayExtension

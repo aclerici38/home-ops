@@ -44,6 +44,8 @@ spec:
       callbackPaths:
         - /oauth2/redirect
     oidc:
+      backendHost: id.clerici.tech
+      backendPort: 443
       oauth2:
         jwt:
           idToken:
