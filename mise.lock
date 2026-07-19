@@ -14,6 +14,22 @@ checksum = "sha256:aba9ced2dee8d27fecca3dc7feb1a7f9a52caefa1eb46f3271ea66b6e0e69
 url = "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_darwin_arm64.tar.gz"
 provenance = "github-attestations"
 
+[[tools."aqua:jdx/mise"]]
+version = "2026.7.7"
+backend = "aqua:jdx/mise"
+
+[tools."aqua:jdx/mise"."platforms.linux-x64"]
+checksum = "sha256:ef8da15b1b3829a51f0169b91673db4517e520e5facd7d10d311ffd12ebfb358"
+url = "https://github.com/jdx/mise/releases/download/v2026.7.7/mise-v2026.7.7-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/478264620"
+provenance = "minisign"
+
+[tools."aqua:jdx/mise"."platforms.macos-arm64"]
+checksum = "sha256:df490dc2fff51c82bf0f64e1fcd0265b145ce80d2d15ce99b95f2adf0b1fe82c"
+url = "https://github.com/jdx/mise/releases/download/v2026.7.7/mise-v2026.7.7-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/478264654"
+provenance = "minisign"
+
 [[tools.dyff]]
 version = "1.12.0"
 backend = "aqua:homeport/dyff"
