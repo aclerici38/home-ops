@@ -57,6 +57,7 @@
 #   snapshotClass: miroir # VolumeSnapshotClass for copyMethod: Snapshot
 #   schedule: "0 3 * * *" # default daily (write-minimised); "0 */12 * * *" etc.
 #   parallelism: 1        # kopia --max-parallel-file-reads (CPU/heat cap)
+#   ignoreIdentical: true # skip recording a snapshot when the source is unchanged
 #   preflight: true       # default: hold the backup Pending when the S3 store is
 #                         # unreachable instead of crashlooping a mover Job.
 #                         # Needs health.probe enabled on the repository.

@@ -25,6 +25,8 @@
        to opt out. */ -}}
 {{- $preflight := dig "preflight" true $k -}}
 {{- $preflightTimeout := dig "preflightTimeout" "0s" $k -}}
+{{- /* Don't record a snapshot when the source is unchanged since the last run. */ -}}
+{{- $ignoreIdentical := dig "ignoreIdentical" true $k -}}
 {{- /* Restore identity. Defaults to this app's own policy@namespace. Override
        restoreFrom (old namespace) / restoreName (old policy name) for a one-time
        cross-namespace seed, then drop them once the PVC is populated — same
@@ -51,6 +53,8 @@ spec:
   volumeSnapshotClassName: {{ $snapClass }}
   upload:
     maxParallelFileReads: {{ $par }}
+  files:
+    ignoreIdenticalSnapshots: {{ $ignoreIdentical }}
   retention:
     {{- range $short, $key := $retainKeys }}
     {{- with (dig $short nil $retain) }}
