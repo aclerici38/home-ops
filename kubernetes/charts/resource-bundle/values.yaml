@@ -61,6 +61,7 @@
 #   storageClass: miroir  # PVC + restore target storageClass (snapshot-capable)
 #   snapshotClass: miroir # VolumeSnapshotClass for copyMethod: Snapshot
 #   schedule: "0 3 * * *" # default daily (write-minimised); "0 */12 * * *" etc.
+#   timezone: America/Los_Angeles # IANA zone the cron is evaluated in (default)
 #   parallelism: 1        # kopia --max-parallel-file-reads (CPU/heat cap)
 #   ignoreIdentical: true # skip recording a snapshot when the source is unchanged
 #   compression: zstd     # kopia compressor; "" for none (already-compressed data)
