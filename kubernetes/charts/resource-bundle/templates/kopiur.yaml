@@ -27,6 +27,8 @@
 {{- $preflightTimeout := dig "preflightTimeout" "0s" $k -}}
 {{- /* Don't record a snapshot when the source is unchanged since the last run. */ -}}
 {{- $ignoreIdentical := dig "ignoreIdentical" true $k -}}
+{{- /* kopia compressor; "" leaves kopia's default (none). */ -}}
+{{- $compressor := dig "compression" "zstd" $k -}}
 {{- /* Restore identity. Defaults to this app's own policy@namespace. Override
        restoreFrom (old namespace) / restoreName (old policy name) for a one-time
        cross-namespace seed, then drop them once the PVC is populated — same
@@ -51,6 +53,10 @@ spec:
         name: {{ $app }}
   copyMethod: Snapshot
   volumeSnapshotClassName: {{ $snapClass }}
+  {{- if $compressor }}
+  compression:
+    compressor: {{ $compressor }}
+  {{- end }}
   upload:
     maxParallelFileReads: {{ $par }}
   files:

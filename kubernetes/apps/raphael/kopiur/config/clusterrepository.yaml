@@ -25,11 +25,26 @@ spec:
     all: true
   credentialProjection:
     allowed: true
+  # Pin the identity derivation (matches kopiur's defaults) so a cross-namespace
+  # restore stays resolvable across alpha operator upgrades.
+  identityDefaults:
+    hostnameExpr: namespace
+    usernameExpr: namespace + '-' + policyName
   moverDefaults:
     cache:
       mode: Ephemeral
       contentCacheSizeMb: 500
       metadataCacheSizeMb: 500
+    # Movers run as 1000 and use fsGroup to read group-owned data off the staged
+    # snapshot (and write restored files); apps on another uid override per-policy.
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    podSecurityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+    # GC finished mover Jobs/pods so they don't linger as API objects.
+    ttlSecondsAfterFinished: 300
   health:
     probe:
       enabled: true
