@@ -20,7 +20,7 @@ spec:
       retries: 1
   values:
     logging:
-      level: warn
+      level: error
     drbd:
       # Every volume is a DRBD device even at replicas: 1. Raising the activity-log
       # extents slashes metadata write-amplification on scattered SQLite writes;
