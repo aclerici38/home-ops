@@ -23,6 +23,8 @@ spec:
     - name: intel-gpu-resource-driver
       namespace: intel-gpu-resource-driver
   values:
+    kopiur:
+      capacity: 5Gi
     gpu: {}
     externalSecret:
       data:
