@@ -18,6 +18,7 @@ spec:
   upgrade:
     timeout: 5m
   values:
+    kopiur: {}
     externalSecret:
       data:
         - secretKey: MQTT_PASSWORD
