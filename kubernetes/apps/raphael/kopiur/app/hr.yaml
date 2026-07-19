@@ -20,6 +20,8 @@ spec:
       retries: 1
   values:
     installScope: cluster
+    leaderElection:
+      enabled: false
     workerThreads: 1
     logging:
       level: warn
