@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.2-standalone-strict/storageclass-storage-v1.json
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: miroir
+provisioner: miroir.home-operations.com
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+parameters:
+  miroir.home-operations.com/replicas: "1"
+  miroir.home-operations.com/pool: default # matches MiroirNode spec.pools[].name
+  csi.storage.k8s.io/fstype: ext4
+mountOptions:
+  - noatime
