@@ -1,0 +1,42 @@
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: ClusterRepository
+metadata:
+  name: versity
+spec:
+  backend:
+    s3:
+      bucket: kopiur
+      prefix: raphael/
+      endpoint: s3.clerici.tech
+      region: us-east-1
+      auth:
+        secretRef:
+          name: kopiur-versity
+          namespace: kopiur
+  encryption:
+    passwordSecretRef:
+      name: kopiur-versity
+      namespace: kopiur
+      key: KOPIA_PASSWORD
+  create:
+    enabled: true
+  allowedNamespaces:
+    all: true
+  credentialProjection:
+    allowed: true
+  moverDefaults:
+    cache:
+      mode: Ephemeral
+      contentCacheSizeMb: 500
+      metadataCacheSizeMb: 500
+  health:
+    probe:
+      enabled: true
+      interval: 1h
+  maintenance:
+    enabled: true
+    namespace: kopiur
+    schedule:
+      quick: {cron: "0 4 * * *", jitter: 30m}
+      full: {cron: "0 3 * * 0", jitter: 1h}

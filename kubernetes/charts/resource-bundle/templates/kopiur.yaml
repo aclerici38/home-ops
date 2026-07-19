@@ -1,0 +1,129 @@
+{{- if hasKey .Values "kopiur" }}
+{{- $app := include "resources.app" . -}}
+{{- $ns := include "resources.ns" . -}}
+{{- $k := .Values.kopiur -}}
+{{- $cap := dig "capacity" "5Gi" $k -}}
+{{- /* Shared ClusterRepository (kopiur ns). Its credential Secret is projected
+       into this namespace by the operator, so — unlike the volsync block — no
+       per-app ExternalSecret is rendered here. */ -}}
+{{- $repo := dig "repository" "versity" $k -}}
+{{- $sc := dig "storageClass" "miroir" $k -}}
+{{- $snapClass := dig "snapshotClass" "miroir" $k -}}
+{{- /* Daily by default (write-minimised: each run is a Snapshot CR + mover Job
+       + VolumeSnapshot). Override per app for hotter data. */ -}}
+{{- $schedule := dig "schedule" "0 3 * * *" $k -}}
+{{- $retain := dig "retain" (dict "daily" 7 "weekly" 4) $k -}}
+{{- /* kopia --max-parallel-file-reads. Defaults to 1 so a backup can't spike a
+       4-core N100 (heat); raise for larger volumes. */ -}}
+{{- $par := dig "parallelism" 1 $k -}}
+{{- /* Gate each scheduled backup on backend reachability: when the RV is away
+       from the home S3 the Snapshot holds Pending (PreflightFailed) instead of
+       spawning a mover Job that crashloops. timeout "0s" holds indefinitely and
+       the schedule's default Forbid concurrency keeps exactly one waiting, so it
+       runs as soon as you're home. Requires health.probe on the repository
+       (backendReachable reads true when the probe is off). Set preflight:false
+       to opt out. */ -}}
+{{- $preflight := dig "preflight" true $k -}}
+{{- $preflightTimeout := dig "preflightTimeout" "0s" $k -}}
+{{- /* Restore identity. Defaults to this app's own policy@namespace. Override
+       restoreFrom (old namespace) / restoreName (old policy name) for a one-time
+       cross-namespace seed, then drop them once the PVC is populated — same
+       ergonomics as the volsync block. */ -}}
+{{- $srcNs := dig "restoreFrom" $ns $k -}}
+{{- $srcName := dig "restoreName" $app $k -}}
+{{- $retainKeys := dict "hourly" "keepHourly" "daily" "keepDaily" "weekly" "keepWeekly" "monthly" "keepMonthly" "annual" "keepAnnual" "latest" "keepLatest" -}}
+---
+# WHAT to back up (the recipe; idempotent, runs nothing on its own).
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: {{ $app }}
+  labels:
+    dormammu.internal/component: kopiur
+spec:
+  repository:
+    kind: ClusterRepository
+    name: {{ $repo }}
+  sources:
+    - pvc:
+        name: {{ $app }}
+  copyMethod: Snapshot
+  volumeSnapshotClassName: {{ $snapClass }}
+  upload:
+    maxParallelFileReads: {{ $par }}
+  retention:
+    {{- range $short, $key := $retainKeys }}
+    {{- with (dig $short nil $retain) }}
+    {{ $key }}: {{ . }}
+    {{- end }}
+    {{- end }}
+  # The shared repo lives in the kopiur namespace; project its creds into this
+  # mover's namespace. Requires credentialProjection.allowed on the repository
+  # and features.credentialProjection on the operator (both set).
+  credentialProjection:
+    enabled: true
+  {{- if $preflight }}
+  preflight:
+    checks:
+      - name: backend-reachable
+        expr: "repository.backendReachable"
+        message: "S3 store unreachable"
+    timeout: {{ $preflightTimeout | quote }}
+  {{- end }}
+---
+# WHEN. Stamps Snapshot CRs on the cron; runOnCreate:false so applying the
+# release does not fire an immediate backup.
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotSchedule
+metadata:
+  name: {{ $app }}
+  labels:
+    dormammu.internal/component: kopiur
+spec:
+  policyRef:
+    name: {{ $app }}
+  schedule:
+    cron: {{ $schedule | quote }}
+    jitter: 30m
+    runOnCreate: false
+---
+# Deploy-or-restore seed. The populator restores the PVC below from the newest
+# snapshot at provision time; onMissingSnapshot:Continue provisions a blank
+# volume on an empty repo instead of failing. Create-time only, so it seeds a
+# fresh/rebuilt cluster but never clobbers a live volume.
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: Restore
+metadata:
+  name: {{ $app }}
+  labels:
+    dormammu.internal/component: kopiur
+spec:
+  source:
+    fromPolicy:
+      name: {{ $srcName }}
+      namespace: {{ $srcNs }}
+      offset: 0
+  target:
+    populator: {}
+  policy:
+    onMissingSnapshot: Continue
+  credentialProjection:
+    enabled: true
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $app }}
+  labels:
+    dormammu.internal/component: kopiur
+spec:
+  accessModes: ["ReadWriteOnce"]
+  dataSourceRef:
+    apiGroup: kopiur.home-operations.com
+    kind: Restore
+    name: {{ $app }}
+  resources:
+    requests:
+      storage: {{ $cap | quote }}
+  storageClassName: {{ $sc }}
+{{- end }}
