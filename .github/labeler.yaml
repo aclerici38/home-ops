@@ -35,4 +35,9 @@ cluster/cloud:
           - kubernetes/charts/**
 raphael:
   - changed-files:
-      - any-glob-to-any-file: raphael/**
+      - any-glob-to-any-file: 
+          - raphael/**
+          - kubernetes/flux/raphael/**
+          - kubernetes/ks/raphael/**
+          - kubernetes/apps/raphael/**
+          - kubernetes/charts/**
