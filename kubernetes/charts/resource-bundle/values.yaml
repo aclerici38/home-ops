@@ -52,6 +52,11 @@
 #                         # on a fresh/rebuilt cluster (deploy-or-restore). No
 #                         # per-app secret: the operator projects the repo creds.
 #   capacity: 5Gi
+#   mover:                # per-policy mover securityContext override. Repo default
+#                         # runs the mover as uid 1000; set this for a root app so
+#                         # the mover can read/own its root:root 0600 files.
+#     securityContext: {runAsUser: 0, runAsGroup: 0}
+#     podSecurityContext: {fsGroup: 0}
 #   repository: versity   # ClusterRepository name (in the kopiur namespace)
 #   storageClass: miroir  # PVC + restore target storageClass (snapshot-capable)
 #   snapshotClass: miroir # VolumeSnapshotClass for copyMethod: Snapshot

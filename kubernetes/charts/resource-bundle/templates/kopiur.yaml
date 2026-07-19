@@ -35,6 +35,12 @@
        ergonomics as the volsync block. */ -}}
 {{- $srcNs := dig "restoreFrom" $ns $k -}}
 {{- $srcName := dig "restoreName" $app $k -}}
+{{- /* Per-policy mover securityContext override. The repo's moverDefaults run
+       the mover as uid 1000; a root app (HA) writes root:root 0600 files the
+       1000 mover can't read on backup (nor own on restore), so point mover at
+       {securityContext:{runAsUser:0,runAsGroup:0},podSecurityContext:{fsGroup:0}}
+       for those. Passed straight through to SnapshotPolicy.spec.mover. */ -}}
+{{- $mover := dig "mover" dict $k -}}
 {{- $retainKeys := dict "hourly" "keepHourly" "daily" "keepDaily" "weekly" "keepWeekly" "monthly" "keepMonthly" "annual" "keepAnnual" "latest" "keepLatest" -}}
 ---
 # WHAT to back up (the recipe; idempotent, runs nothing on its own).
@@ -53,6 +59,10 @@ spec:
         name: {{ $app }}
   copyMethod: Snapshot
   volumeSnapshotClassName: {{ $snapClass }}
+  {{- with $mover }}
+  mover:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   {{- if $compressor }}
   compression:
     compressor: {{ $compressor }}
