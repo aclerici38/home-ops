@@ -45,8 +45,35 @@
 #                         # (kopia identity is <name>@<namespace>). Drop after the
 #                         # PVC is seeded so future restores use this namespace.
 #   restoreName: <name>   # only if the old source name differed from this app
+# kopiur:                 # kopiur equivalent of volsync (raphael cluster): renders
+#                         # PVC + SnapshotPolicy + SnapshotSchedule + Restore.
+#                         # Backs up the app PVC to the shared 'versity'
+#                         # ClusterRepository and seeds it via the volume populator
+#                         # on a fresh/rebuilt cluster (deploy-or-restore). No
+#                         # per-app secret: the operator projects the repo creds.
+#   capacity: 5Gi
+#   repository: versity   # ClusterRepository name (in the kopiur namespace)
+#   storageClass: miroir  # PVC + restore target storageClass (snapshot-capable)
+#   snapshotClass: miroir # VolumeSnapshotClass for copyMethod: Snapshot
+#   schedule: "0 3 * * *" # default daily (write-minimised); "0 */12 * * *" etc.
+#   parallelism: 1        # kopia --max-parallel-file-reads (CPU/heat cap)
+#   ignoreIdentical: true # skip recording a snapshot when the source is unchanged
+#   compression: zstd     # kopia compressor; "" for none (already-compressed data)
+#   preflight: true       # default: hold the backup Pending when the S3 store is
+#                         # unreachable instead of crashlooping a mover Job.
+#                         # Needs health.probe enabled on the repository.
+#   preflightTimeout: 0s  # 0s = hold indefinitely (runs when home); a duration
+#                         # like 15m fails the Snapshot after that, retry next tick
+#   retain:               # any subset; maps to kopia keep* rules
+#     daily: 7
+#     weekly: 4
+#     # hourly / monthly / annual / latest also supported
+#   restoreFrom: <ns>     # one-time cross-namespace seed: old policy namespace.
+#                         # Drop once the PVC is populated.
+#   restoreName: <name>   # only if the old policy name differed from this app
 #
 # cnpg and volsync each also render the supporting credentials secret they
 # reference (cloudnative-pg, volsync-kopia-versity) into the app's namespace —
-# no cluster-wide secret broadcast.
+# no cluster-wide secret broadcast. kopiur renders none: the operator projects
+# the shared repository credentials into the mover namespace.
 # gpu: {}                 # Intel GPU ResourceClaimTemplate (<app>-gpu)

@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.2/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: kopiur-config
+  namespace: flux-system
+spec:
+  targetNamespace: kopiur
+  dependsOn:
+    - name: kopiur
+    - name: onepassword-connect
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/raphael/kopiur/config
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: kopiur-config
