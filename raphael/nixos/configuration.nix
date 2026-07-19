@@ -18,6 +18,9 @@
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.intel.updateMicrocode = true;
 
+  # miroir loopfile backend: losetup needs the loop module present.
+  boot.kernelModules = [ "loop" ];
+
   networking.hostName = "raphael";
   time.timeZone = "America/Los_Angeles";
   networking.useDHCP = true;
