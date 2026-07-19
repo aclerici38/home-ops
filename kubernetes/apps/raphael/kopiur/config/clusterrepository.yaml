@@ -55,8 +55,5 @@ spec:
       enabled: false
       interval: 1h
   maintenance:
-    enabled: true
-    namespace: kopiur
-    schedule:
-      quick: {cron: "0 4 * * *", jitter: 30m}
-      full: {cron: "0 3 * * 0", jitter: 1h}
+    # maintenance jobs run on home cluster
+    enabled: false
