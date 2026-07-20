@@ -1,0 +1,48 @@
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: ClusterRepository
+metadata:
+  name: versity
+spec:
+  backend:
+    s3:
+      bucket: kopiur
+      prefix: home/
+      endpoint: versitygw.versity.svc.cluster.local:7070
+      region: us-east-1
+      tls:
+        disableTls: true
+      auth:
+        secretRef:
+          name: kopiur-versity
+          namespace: kopiur
+  encryption:
+    passwordSecretRef:
+      name: kopiur-versity
+      namespace: kopiur
+      key: KOPIA_PASSWORD
+  create:
+    enabled: true
+  allowedNamespaces:
+    all: true
+  credentialProjection:
+    allowed: true
+  identityDefaults:
+    hostnameExpr: namespace
+    usernameExpr: namespace + '-' + policyName
+  scheduleDefaults:
+    timezone: America/Los_Angeles
+  moverDefaults:
+    cache:
+      mode: Ephemeral
+      contentCacheSizeMb: 2000
+      metadataCacheSizeMb: 2000
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    podSecurityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+    ttlSecondsAfterFinished: 300
+  maintenance:
+    enabled: true

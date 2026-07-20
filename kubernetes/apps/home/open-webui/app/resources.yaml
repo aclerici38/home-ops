@@ -24,8 +24,8 @@ spec:
       namespace: external-secrets
     - name: pocket-id-operator
       namespace: pocket-id-operator
-    - name: volsync
-      namespace: volsync
+    - name: kopiur
+      namespace: kopiur
   values:
     cnpg:
       mode: shared
@@ -43,7 +43,6 @@ spec:
       group: fam
       callbackUrls:
         - https://chat.clerici.tech/oauth/oidc/callback
-    volsync:
+    kopiur:
+      existingClaim: true
       cephfs: true
-      restoreFrom: tools
-      capacity: 25Gi

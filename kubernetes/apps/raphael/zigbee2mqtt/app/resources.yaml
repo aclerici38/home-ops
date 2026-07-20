@@ -18,7 +18,10 @@ spec:
   upgrade:
     timeout: 5m
   values:
-    kopiur: {}
+    kopiur:
+      storageClass: miroir
+      snapshotClass: miroir
+      parallelism: 1
     externalSecret:
       data:
         - secretKey: MQTT_PASSWORD

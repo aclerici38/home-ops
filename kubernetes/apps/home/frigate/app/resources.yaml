@@ -28,14 +28,13 @@ spec:
       namespace: nfs-server
     - name: pocket-id-operator
       namespace: pocket-id-operator
-    - name: volsync
-      namespace: volsync
+    - name: kopiur
+      namespace: kopiur
   values:
     externalSecret: {}
     gpu: {}
-    volsync:
-      restoreFrom: home-infra
-      capacity: 25Gi
+    kopiur:
+      existingClaim: true
     pocketId:
       group: fam
       clientID: frigate-home

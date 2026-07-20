@@ -22,9 +22,9 @@ spec:
       namespace: intel-gpu-resource-driver
     - name: nfs-server
       namespace: nfs-server
-    - name: volsync
-      namespace: volsync
+    - name: kopiur
+      namespace: kopiur
   values:
     gpu: {}
-    volsync:
-      restoreFrom: streaming
+    kopiur:
+      existingClaim: true

@@ -20,8 +20,8 @@ spec:
   dependsOn:
     - name: external-secrets
       namespace: external-secrets
-    - name: volsync
-      namespace: volsync
+    - name: kopiur
+      namespace: kopiur
   values:
     externalSecret:
       data:
@@ -33,7 +33,6 @@ spec:
           remoteRef:
             key: versity
             property: password
-    volsync:
+    kopiur:
+      existingClaim: true
       cephfs: true
-      restoreFrom: home-infra
-      capacity: 25Gi

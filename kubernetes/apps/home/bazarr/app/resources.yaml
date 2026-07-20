@@ -22,10 +22,10 @@ spec:
       namespace: cloudnative-pg
     - name: nfs-server
       namespace: nfs-server
-    - name: volsync
-      namespace: volsync
+    - name: kopiur
+      namespace: kopiur
   values:
     cnpg:
       mode: shared
-    volsync:
-      restoreFrom: media-management
+    kopiur:
+      existingClaim: true

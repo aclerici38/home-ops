@@ -7,8 +7,13 @@
        into this namespace by the operator, so — unlike the volsync block — no
        per-app ExternalSecret is rendered here. */ -}}
 {{- $repo := dig "repository" "versity" $k -}}
-{{- $sc := dig "storageClass" "miroir" $k -}}
-{{- $snapClass := dig "snapshotClass" "miroir" $k -}}
+{{- /* Storage/snapshot classes default to home's Ceph (the cluster carrying the
+       most policies); raphael overrides these to "miroir" per app. cephfs:true
+       flips the volume to RWX CephFS, mirroring the volsync block. */ -}}
+{{- $cephfs := dig "cephfs" false $k -}}
+{{- $sc := dig "storageClass" (ternary "ceph-filesystem" "ceph-block" $cephfs) $k -}}
+{{- $snapClass := dig "snapshotClass" (ternary "csi-ceph-filesystem" "csi-ceph-blockpool" $cephfs) $k -}}
+{{- $access := dig "accessMode" (ternary "ReadWriteMany" "ReadWriteOnce" $cephfs) $k -}}
 {{- /* Daily by default (write-minimised: each run is a Snapshot CR + mover Job
        + VolumeSnapshot). Override per app for hotter data. */ -}}
 {{- $schedule := dig "schedule" "0 3 * * *" $k -}}
@@ -16,9 +21,9 @@
        controller's UTC default) so "0 3" means 3am local across every app. */ -}}
 {{- $tz := dig "timezone" "America/Los_Angeles" $k -}}
 {{- $retain := dig "retain" (dict "daily" 7 "weekly" 4) $k -}}
-{{- /* kopia --max-parallel-file-reads. Defaults to 1 so a backup can't spike a
-       4-core N100 (heat); raise for larger volumes. */ -}}
-{{- $par := dig "parallelism" 1 $k -}}
+{{- /* kopia --max-parallel-file-reads. Defaults to 4 for home's beefy nodes;
+       raphael overrides to 1 so a backup can't spike its 4-core N100 (heat). */ -}}
+{{- $par := dig "parallelism" 4 $k -}}
 {{- /* Gate each scheduled backup on backend reachability: when the RV is away
        from the home S3 the Snapshot holds Pending (PreflightFailed) instead of
        spawning a mover Job that crashloops. timeout "0s" holds indefinitely and
@@ -38,6 +43,12 @@
        ergonomics as the volsync block. */ -}}
 {{- $srcNs := dig "restoreFrom" $ns $k -}}
 {{- $srcName := dig "restoreName" $app $k -}}
+{{- /* Backup-only / adopt mode. When true, render only the SnapshotPolicy +
+       SnapshotSchedule against an already-existing PVC (e.g. one still owned by
+       the volsync block mid-migration) and skip the Restore + populator PVC — so
+       kopiur backs the live volume up to the new bucket without touching it. Flip
+       to false (delete the old PVC first) to recreate the PVC on the populator. */ -}}
+{{- $existingClaim := dig "existingClaim" false $k -}}
 {{- /* Per-policy mover securityContext override. The repo's moverDefaults run
        the mover as uid 1000; a root app (HA) writes root:root 0600 files the
        1000 mover can't read on backup (nor own on restore), so point mover at
@@ -110,6 +121,7 @@ spec:
     timezone: {{ $tz | quote }}
     jitter: 30m
     runOnCreate: false
+{{- if not $existingClaim }}
 ---
 # Deploy-or-restore seed. The populator restores the PVC below from the newest
 # snapshot at provision time; onMissingSnapshot:Continue provisions a blank
@@ -141,7 +153,7 @@ metadata:
   labels:
     dormammu.internal/component: kopiur
 spec:
-  accessModes: ["ReadWriteOnce"]
+  accessModes: [{{ $access | quote }}]
   dataSourceRef:
     apiGroup: kopiur.home-operations.com
     kind: Restore
@@ -150,4 +162,5 @@ spec:
     requests:
       storage: {{ $cap | quote }}
   storageClassName: {{ $sc }}
+{{- end }}
 {{- end }}

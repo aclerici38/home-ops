@@ -22,9 +22,9 @@ spec:
       namespace: external-secrets
     - name: nfs-server
       namespace: nfs-server
-    - name: volsync
-      namespace: volsync
+    - name: kopiur
+      namespace: kopiur
   values:
     externalSecret: {}
-    volsync:
-      restoreFrom: media-management
+    kopiur:
+      existingClaim: true

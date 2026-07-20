@@ -20,11 +20,11 @@ spec:
   dependsOn:
     - name: pocket-id-operator
       namespace: pocket-id-operator
-    - name: volsync
-      namespace: volsync
+    - name: kopiur
+      namespace: kopiur
   values:
     pocketId:
       callbackPaths:
         - /openid/callback
-    volsync:
-      restoreFrom: home-infra
+    kopiur:
+      existingClaim: true
