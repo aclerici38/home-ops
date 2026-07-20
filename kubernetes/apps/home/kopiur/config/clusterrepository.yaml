@@ -51,3 +51,10 @@ spec:
     ttlSecondsAfterFinished: 300
   maintenance:
     enabled: true
+    schedule:
+      quick:
+        cron: "0 * * * *"
+        jitter: 30m
+      full:
+        cron: "0 5 * * *"
+        jitter: 1h
