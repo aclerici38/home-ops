@@ -20,11 +20,21 @@ spec:
       retries: 1
   values:
     installScope: cluster
-    leaderElection:
-      enabled: false
+    replicaCount: 2
     workerThreads: 4
     logging:
       level: info
     features:
       credentialProjection:
         enabled: true
+    monitoring:
+      serviceMonitor:
+        enabled: true
+      prometheusRule:
+        enabled: true
+      dashboards:
+        enabled: true
+        grafanaOperator:
+          enabled: true
+          matchLabels:
+            grafana.internal/instance: grafana
