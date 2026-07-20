@@ -24,3 +24,10 @@ spec:
     kopiur:
       existingClaim: true
       cephfs: true
+      mover:
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+        podSecurityContext:
+          runAsNonRoot: false
+          fsGroup: 0
