@@ -20,8 +20,9 @@ spec:
   dependsOn:
     - name: external-secrets
       namespace: external-secrets
-    - name: volsync
-      namespace: volsync
+    - name: kopiur
+      namespace: kopiur
   values:
     externalSecret: {}
-    volsync: {}
+    kopiur:
+      existingClaim: true

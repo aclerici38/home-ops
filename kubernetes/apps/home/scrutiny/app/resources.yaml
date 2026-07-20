@@ -18,9 +18,9 @@ spec:
   upgrade:
     timeout: 5m
   dependsOn:
-    - name: volsync
-      namespace: volsync
+    - name: kopiur
+      namespace: kopiur
   values:
-    volsync:
+    kopiur:
+      existingClaim: true
       cephfs: true
-      restoreFrom: storage

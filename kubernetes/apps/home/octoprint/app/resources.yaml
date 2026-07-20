@@ -20,10 +20,9 @@ spec:
   dependsOn:
     - name: external-secrets
       namespace: external-secrets
-    - name: volsync
-      namespace: volsync
+    - name: kopiur
+      namespace: kopiur
   values:
     externalSecret: {}
-    volsync:
-      restoreFrom: tools
-      capacity: 25Gi
+    kopiur:
+      existingClaim: true

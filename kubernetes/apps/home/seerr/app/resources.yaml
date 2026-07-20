@@ -20,11 +20,10 @@ spec:
   dependsOn:
     - name: cloudnative-pg
       namespace: cloudnative-pg
-    - name: volsync
-      namespace: volsync
+    - name: kopiur
+      namespace: kopiur
   values:
     cnpg:
       mode: shared
-    volsync:
-      restoreFrom: media-management
-      restoreName: seer
+    kopiur:
+      existingClaim: true

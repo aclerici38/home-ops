@@ -25,6 +25,9 @@ spec:
   values:
     kopiur:
       capacity: 5Gi
+      storageClass: miroir
+      snapshotClass: miroir
+      parallelism: 1
     gpu: {}
     externalSecret:
       data:

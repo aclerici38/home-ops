@@ -20,6 +20,9 @@ spec:
   values:
     kopiur:
       capacity: 10Gi
+      storageClass: miroir
+      snapshotClass: miroir
+      parallelism: 1
       # HA runs as root; its .storage/* files are root:root 0600, so the mover
       # must run as root to read them on backup (and own them on restore).
       mover:

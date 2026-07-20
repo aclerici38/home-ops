@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.2/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: kopiur
+spec:
+  interval: 1h
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 0.8.0
+    digest: sha256:3b7b6238ec6c76d009aab51ab94509ba13bfd9f09df2e449a03f7a6d9be79a85
+  url: oci://ghcr.io/home-operations/charts/kopiur
+  verify:
+    provider: cosign
+    matchOIDCIdentity:
+      - issuer: "^https://token\\.actions\\.githubusercontent\\.com$"
+        subject: "^https://github\\.com/home-operations/.*"

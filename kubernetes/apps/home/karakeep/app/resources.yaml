@@ -22,15 +22,14 @@ spec:
       namespace: external-secrets
     - name: pocket-id-operator
       namespace: pocket-id-operator
-    - name: volsync
-      namespace: volsync
+    - name: kopiur
+      namespace: kopiur
   values:
     externalSecret: {}
     pocketId:
       group: fam
       callbackPaths:
         - /api/auth/callback/custom
-    volsync:
+    kopiur:
+      existingClaim: true
       cephfs: true
-      restoreFrom: home-infra
-      capacity: 25Gi

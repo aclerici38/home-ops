@@ -22,12 +22,12 @@ spec:
       namespace: cloudnative-pg
     - name: external-secrets
       namespace: external-secrets
-    - name: volsync
-      namespace: volsync
+    - name: kopiur
+      namespace: kopiur
   values:
     externalSecret: {}
     cnpg:
       mode: shared
-    volsync:
+    kopiur:
+      existingClaim: true
       cephfs: true
-      restoreFrom: network

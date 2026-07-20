@@ -18,8 +18,8 @@ spec:
   upgrade:
     timeout: 5m
   dependsOn:
-    - name: volsync
-      namespace: volsync
+    - name: kopiur
+      namespace: kopiur
   values:
-    volsync:
-      restoreFrom: storage
+    kopiur:
+      existingClaim: true
