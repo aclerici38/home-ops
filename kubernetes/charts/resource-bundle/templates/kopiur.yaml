@@ -14,6 +14,11 @@
 {{- $sc := dig "storageClass" (ternary "ceph-filesystem" "ceph-block" $cephfs) $k -}}
 {{- $snapClass := dig "snapshotClass" (ternary "csi-ceph-filesystem" "csi-ceph-blockpool" $cephfs) $k -}}
 {{- $access := dig "accessMode" (ternary "ReadWriteMany" "ReadWriteOnce" $cephfs) $k -}}
+{{- /* CephFS: stage the backup's source snapshot on a backingSnapshot (shallow,
+       read-only) class so kopiur mounts the snapshot directly instead of Ceph
+       doing a slow full clone — a 25Gi clone blew past the 10m staging timeout.
+       Block/RBD clones are fast CoW, so default empty (kopiur uses the data SC). */ -}}
+{{- $stagingClass := dig "stagingClass" (ternary "ceph-filesystem-backingsnapshot" "" $cephfs) $k -}}
 {{- /* Daily by default (write-minimised: each run is a Snapshot CR + mover Job
        + VolumeSnapshot). Override per app for hotter data. */ -}}
 {{- $schedule := dig "schedule" "0 3 * * *" $k -}}
@@ -73,6 +78,13 @@ spec:
         name: {{ $app }}
   copyMethod: Snapshot
   volumeSnapshotClassName: {{ $snapClass }}
+  {{- if $stagingClass }}
+  # Stage the CSI snapshot as a read-only shallow mount (no full clone). Only the
+  # mover reads it, so ReadOnlyMany is enough and staging binds near-instantly.
+  staging:
+    storageClassName: {{ $stagingClass }}
+    accessModes: ["ReadOnlyMany"]
+  {{- end }}
   {{- with $mover }}
   mover:
     {{- toYaml . | nindent 4 }}
