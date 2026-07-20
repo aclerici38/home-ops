@@ -1,0 +1,49 @@
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: backups
+  labels:
+    dormammu.internal/component: kopiur
+spec:
+  repository:
+    kind: ClusterRepository
+    name: backblaze
+  sources:
+    - pvc:
+        name: backups
+  copyMethod: Snapshot
+  volumeSnapshotClassName: openebs-zfs
+  mover:
+    cache:
+      mode: Persistent
+      storageClassName: zfs-ssd
+      capacity: 50Gi
+      contentCacheSizeMb: 5000
+      metadataCacheSizeMb: 10000
+  compression:
+    compressor: zstd
+  upload:
+    maxParallelFileReads: 4
+  files:
+    ignoreIdenticalSnapshots: true
+  retention:
+    keepDaily: 7
+    keepWeekly: 4
+  credentialProjection:
+    enabled: true
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotSchedule
+metadata:
+  name: backups
+  labels:
+    dormammu.internal/component: kopiur
+spec:
+  policyRef:
+    name: backups
+  schedule:
+    cron: "0 2,14 * * *"
+    timezone: America/Los_Angeles
+    jitter: 30m
+    runOnCreate: false

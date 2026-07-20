@@ -1,0 +1,58 @@
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: ClusterRepository
+metadata:
+  name: backblaze
+spec:
+  backend:
+    s3:
+      bucket: kopia-k8s
+      prefix: home/
+      endpoint: s3.us-west-004.backblazeb2.com
+      region: us-west-004
+      auth:
+        secretRef:
+          name: kopiur-backblaze
+          namespace: kopiur
+  encryption:
+    passwordSecretRef:
+      name: kopiur-backblaze
+      namespace: kopiur
+      key: KOPIA_PASSWORD
+  create:
+    enabled: true
+  allowedNamespaces:
+    all: true
+  credentialProjection:
+    allowed: true
+  identityDefaults:
+    hostnameExpr: namespace
+    usernameExpr: namespace + '-' + policyName
+  scheduleDefaults:
+    timezone: America/Los_Angeles
+  moverDefaults:
+    cache:
+      mode: Ephemeral
+      contentCacheSizeMb: 2000
+      metadataCacheSizeMb: 2000
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+      seccompProfile:
+        type: RuntimeDefault
+    ttlSecondsAfterFinished: 300
+  maintenance:
+    enabled: true
+    schedule:
+      quick:
+        cron: "0 */12 * * *"
+        jitter: 1h
+      full:
+        cron: "0 6 * * *"
+        jitter: 1h

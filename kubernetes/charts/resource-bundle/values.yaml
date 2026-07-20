@@ -37,49 +37,36 @@
 #   callbackUrls: []
 # externalSecret: {}      # 1Password app secret (key = app name)
 #   data: []              # extra per-key pulls (ExternalSecret spec.data entries)
-# volsync:                # renders PVC + ReplicationDestination + ReplicationSource
-#   capacity: 5Gi
-#   cacheCapacity: <cap>  # kopia cache PVC for both movers; defaults to capacity
-#   cephfs: false         # true -> RWX on ceph-filesystem
-#   restoreFrom: <ns>     # one-time cross-namespace restore: old source namespace
-#                         # (kopia identity is <name>@<namespace>). Drop after the
-#                         # PVC is seeded so future restores use this namespace.
-#   restoreName: <name>   # only if the old source name differed from this app
-# kopiur:                 # kopiur equivalent of volsync (raphael cluster): renders
-#                         # PVC + SnapshotPolicy + SnapshotSchedule + Restore.
-#                         # Backs up the app PVC to the shared 'versity'
-#                         # ClusterRepository and seeds it via the volume populator
-#                         # on a fresh/rebuilt cluster (deploy-or-restore). No
-#                         # per-app secret: the operator projects the repo creds.
-#   capacity: 5Gi
+# kopiur:                 # backs the app PVC up to a shared ClusterRepository via
+#                         # SnapshotPolicy + SnapshotSchedule (+ Restore + populator
+#                         # PVC unless existingClaim). No per-app secret: the
+#                         # operator projects the repo creds into the namespace.
+#   capacity: 5Gi         # populator PVC size (ignored when existingClaim: true)
+#   existingClaim: true   # adopt an existing PVC: render only SnapshotPolicy +
+#                         # SnapshotSchedule, skip the Restore + populator PVC
+#   cephfs: false         # true -> RWX ceph-filesystem + csi-ceph-filesystem +
+#                         # backingSnapshot shallow staging. Home defaults are
+#                         # ceph-block / csi-ceph-blockpool.
 #   mover:                # per-policy mover securityContext override. Repo default
 #                         # runs the mover as uid 1000; set this for a root app so
 #                         # the mover can read/own its root:root 0600 files.
 #     securityContext: {runAsUser: 0, runAsGroup: 0}
-#     podSecurityContext: {fsGroup: 0}
+#     podSecurityContext: {runAsNonRoot: false, fsGroup: 0}
 #   repository: versity   # ClusterRepository name (in the kopiur namespace)
-#   storageClass: miroir  # PVC + restore target storageClass (snapshot-capable)
-#   snapshotClass: miroir # VolumeSnapshotClass for copyMethod: Snapshot
-#   schedule: "0 3 * * *" # default daily (write-minimised); "0 */12 * * *" etc.
-#   timezone: America/Los_Angeles # IANA zone the cron is evaluated in (default)
-#   parallelism: 1        # kopia --max-parallel-file-reads (CPU/heat cap)
+#   storageClass: <sc>    # override PVC/staging class (default ceph-block; raphael
+#                         # sets miroir). snapshotClass / stagingClass likewise.
+#   schedule: "0 3 * * *" # default daily; timezone default America/Los_Angeles
+#   parallelism: 4        # kopia --max-parallel-file-reads (raphael overrides to 1)
 #   ignoreIdentical: true # skip recording a snapshot when the source is unchanged
 #   compression: zstd     # kopia compressor; "" for none (already-compressed data)
-#   preflight: true       # default: hold the backup Pending when the S3 store is
-#                         # unreachable instead of crashlooping a mover Job.
-#                         # Needs health.probe enabled on the repository.
-#   preflightTimeout: 0s  # 0s = hold indefinitely (runs when home); a duration
-#                         # like 15m fails the Snapshot after that, retry next tick
 #   retain:               # any subset; maps to kopia keep* rules
 #     daily: 7
 #     weekly: 4
 #     # hourly / monthly / annual / latest also supported
 #   restoreFrom: <ns>     # one-time cross-namespace seed: old policy namespace.
-#                         # Drop once the PVC is populated.
 #   restoreName: <name>   # only if the old policy name differed from this app
 #
-# cnpg and volsync each also render the supporting credentials secret they
-# reference (cloudnative-pg, volsync-kopia-versity) into the app's namespace —
-# no cluster-wide secret broadcast. kopiur renders none: the operator projects
-# the shared repository credentials into the mover namespace.
+# cnpg renders the supporting credentials secret it references (cloudnative-pg)
+# into the app's namespace. kopiur renders none: the operator projects the shared
+# repository credentials into the mover namespace.
 # gpu: {}                 # Intel GPU ResourceClaimTemplate (<app>-gpu)
