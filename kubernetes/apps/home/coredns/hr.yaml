@@ -27,6 +27,11 @@ spec:
       name: coredns-values
       valuesKey: values.yaml
   values:
+    service:
+      ipFamilyPolicy: RequireDualStack
+      clusterIPs:
+        - ${COREDNS_CLUSTER_IP}
+        - ${COREDNS_CLUSTER_IP_V6}
     servers:
       - zones:
           - zone: .
