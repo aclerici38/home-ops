@@ -101,10 +101,7 @@ spec:
           - name: internal
             namespace: kgateway
         rules:
-          - timeouts:
-              request: 0s
-              backendRequest: 0s
-            backendRefs:
+          - backendRefs:
               - identifier: immich-pet-tagger
                 port: *port
     persistence:
