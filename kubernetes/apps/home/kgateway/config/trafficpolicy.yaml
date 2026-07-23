@@ -12,8 +12,19 @@ spec:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: external
+  timeouts:
+    request: 0s
+    backendRequest: 0s
   buffer:
     disable: {}
   compression:
-    requestDecompression: {}
-    responseCompression: {}
+    requestDecompression:
+      libraries:
+        - Zstd
+        - Brotli
+        - Gzip
+    responseCompression:
+      libraries:
+        - Zstd
+        - Brotli
+        - Gzip
