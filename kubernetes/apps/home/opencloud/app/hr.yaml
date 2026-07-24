@@ -48,8 +48,10 @@ spec:
               OC_LOG_LEVEL: info
               OC_URL: &url https://cloud.clerici.tech
               OC_OIDC_ISSUER: https://id.clerici.tech
-              OC_EXCLUDE_RUN_SERVICES: idp,ocm,nats
+              OC_EXCLUDE_RUN_SERVICES: idp,ocm,nats,search,idm
               OC_ADD_RUN_SERVICES: notifications
+              OC_LDAP_URI: ldaps://opencloud-idm.opencloud.svc.cluster.local:9235
+              OC_LDAP_CACERT: /etc/ldap-cert/ca.crt
               OC_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD: true
               OC_OIDC_CLIENT_ID: opencloud-web
               WEBFINGER_WEB_OIDC_CLIENT_ID: opencloud-web
@@ -126,6 +128,91 @@ spec:
                     port: &port 9200
                     path: /health
               readiness: *probes
+      idm:
+        strategy: Recreate
+        containers:
+          idm:
+            image: *img
+            command:
+              - "opencloud"
+              - "idm"
+              - "server"
+            env:
+              OC_LOG_LEVEL: info
+              MICRO_REGISTRY: nats-js-kv
+              MICRO_REGISTRY_ADDRESS: *nats
+              IDM_LDAPS_ADDR: 0.0.0.0:9235
+              IDM_DEBUG_ADDR: 0.0.0.0:9239
+              IDM_LDAPS_CERT: /etc/ldap-cert/tls.crt
+              IDM_LDAPS_KEY: /etc/ldap-cert/tls.key
+            securityContext: *sec
+            resources:
+              requests:
+                cpu: 25m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: {port: 9239, path: /healthz}
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: {port: 9239, path: /readyz}
+      search:
+        strategy: Recreate
+        containers:
+          search:
+            image: *img
+            command:
+              - "opencloud"
+              - "search"
+              - "server"
+            env:
+              OC_LOG_LEVEL: info
+              MICRO_REGISTRY: nats-js-kv
+              MICRO_REGISTRY_ADDRESS: *nats
+              OC_EVENTS_ENDPOINT: *nats
+              OC_EVENTS_CLUSTER: opencloud-cluster
+              OC_CACHE_STORE: nats-js-kv
+              OC_CACHE_STORE_NODES: *nats
+              OC_PERSISTENT_STORE: nats-js-kv
+              OC_PERSISTENT_STORE_NODES: *nats
+              OC_ASYNC_UPLOADS: "true"
+              SEARCH_GRPC_ADDR: 0.0.0.0:9220
+              SEARCH_DEBUG_ADDR: 0.0.0.0:9224
+              SEARCH_EXTRACTOR_TYPE: tika
+              SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://tika.tika:9998
+              OC_SERVICE_ACCOUNT_ID:
+                secretKeyRef:
+                  name: opencloud
+                  key: OC_SERVICE_ACCOUNT_ID
+              OC_SERVICE_ACCOUNT_SECRET:
+                secretKeyRef:
+                  name: opencloud
+                  key: OC_SERVICE_ACCOUNT_SECRET
+            securityContext: *sec
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: {port: 9224, path: /healthz}
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: {port: 9224, path: /readyz}
       wopi:
         strategy: RollingUpdate
         containers:
@@ -162,56 +249,6 @@ spec:
                   name: opencloud
                   key: OC_SERVICE_ACCOUNT_SECRET
             securityContext: *sec
-      collabora:
-        strategy: RollingUpdate
-        pod:
-          hostUsers: false
-          securityContext:
-            # Upstream 'cool' group
-            runAsUser: 1001
-            runAsGroup: 1001
-            seccompProfile:
-              type: Unconfined # This seems necessary
-        containers:
-          collabora:
-            image:
-              repository: mirror.gcr.io/collabora/code
-              tag: 26.04.2.4.1@sha256:1f864ce3f0c49e867787b6dd303bd6ba989542d3023f6809df558eafd04c1b97
-            env:
-              aliasgroup1: http://opencloud-wopi:9300
-              DONT_GEN_SSL_CERT: "YES"
-              extra_params: |
-                --o:ssl.enable=false \
-                --o:ssl.ssl_verification=false \
-                --o:ssl.termination=true \
-                --o:welcome.enable=false \
-                --o:net.frame_ancestors=cloud.clerici.tech
-              username:
-                valueFrom:
-                  secretKeyRef:
-                    name: opencloud
-                    key: COLLABORA_ADMIN_USER
-              password:
-                valueFrom:
-                  secretKeyRef:
-                    name: opencloud
-                    key: COLLABORA_ADMIN_PASS
-            securityContext:
-              <<: *sec
-              capabilities:
-                add:
-                  - MKNOD
-                drop:
-                  - ALL
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    port: 9980
-                    path: /hosting/discovery
-              readiness: *probes
     defaultPodOptionsStrategy: merge
     defaultPodOptions:
       securityContext:
@@ -232,6 +269,11 @@ spec:
             port: 9142
           debug:
             port: 9205
+      idm:
+        controller: idm
+        ports:
+          ldaps:
+            port: 9235
       wopi:
         controller: wopi
         ports:
@@ -239,11 +281,6 @@ spec:
             port: 9300
           grpc:
             port: 9301
-      collabora:
-        controller: collabora
-        ports:
-          http:
-            port: 9980
     serviceMonitor:
       opencloud:
         serviceName: opencloud
@@ -274,16 +311,6 @@ spec:
           - backendRefs:
               - identifier: wopi
                 port: 9300
-      collabora:
-        hostnames:
-          - collabora.clerici.tech
-        parentRefs:
-          - name: external
-            namespace: kgateway
-        rules:
-          - backendRefs:
-              - identifier: collabora
-                port: 9980
     persistence:
       config:
         type: configMap
@@ -308,17 +335,31 @@ spec:
             wopi:
               - path: /etc/opencloud
                 subPath: config
-      tmpfs:
-        type: emptyDir
+          idm:
+            idm:
+              - path: /var/lib/opencloud
+                subPath: data
+              - path: /etc/opencloud
+                subPath: config
+          search:
+            search:
+              - path: /var/lib/opencloud
+                subPath: data
+              - path: /etc/opencloud
+                subPath: config
+      ldap-cert:
+        type: secret
+        name: opencloud-idm-ldaps
         advancedMounts:
-          collabora:
-            collabora:
-              - path: /tmp
-                subPath: tmp
-              - path: /opt/cool/cache
-                subPath: cache
-              - path: /opt/cool/child-roots
-                subPath: roots
+          idm:
+            idm:
+              - path: /etc/ldap-cert
+                readOnly: true
+          opencloud:
+            opencloud:
+              - path: /etc/ldap-cert/ca.crt
+                subPath: ca.crt
+                readOnly: true
       # Web extensions
       unzip:
         type: image
