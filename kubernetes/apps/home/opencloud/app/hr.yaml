@@ -188,6 +188,12 @@ spec:
               SEARCH_DEBUG_ADDR: 0.0.0.0:9224
               SEARCH_EXTRACTOR_TYPE: tika
               SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://tika.tika:9998
+              # defaults to 1, which serializes extraction onto a single
+              # keep-alive conn and pins every request to one tika replica
+              SEARCH_EVENTS_NUM_CONSUMERS: 4
+              # must stay above tika's taskTimeoutMillis (30m)
+              SEARCH_EVENTS_ACK_WAIT: 45m
+              SEARCH_CONTENT_EXTRACTION_SIZE_LIMIT: "262144000" # 250Mi, default 20Mi
               OC_SERVICE_ACCOUNT_ID:
                 secretKeyRef:
                   name: opencloud
@@ -199,10 +205,10 @@ spec:
             securityContext: *sec
             resources:
               requests:
-                cpu: 100m
+                cpu: 250m
                 memory: 256Mi
               limits:
-                memory: 1Gi
+                memory: 2Gi
             probes:
               liveness:
                 enabled: true

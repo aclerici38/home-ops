@@ -25,6 +25,16 @@ spec:
         strategy: RollingUpdate
         replicas: 2
         pod:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                          - bonds
+                          - cain
           hostUsers: false
           securityContext:
             runAsNonRoot: true
@@ -38,6 +48,9 @@ spec:
             image:
               repository: mirror.gcr.io/apache/tika
               tag: 3.3.1.0-full@sha256:d8e6ed96260ad89307a93195a1b856102987a818ac648502f8efbaf313d32470
+            args:
+              - "-c"
+              - "/etc/tika/tika-config.xml"
             env:
               JAVA_OPTS: "-Xmx3g"
             probes:
@@ -70,3 +83,27 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
+      config:
+        type: configMap
+        name: tika
+        globalMounts:
+          - path: /etc/tika/tika-config.xml
+            subPath: tika-config.xml
+            readOnly: true
+    configMaps:
+      config:
+        data:
+          # No <parsers> element, so the default parser set (incl. the
+          # Tesseract OCR parser and PDFParser ocrStrategy=AUTO) is kept.
+          tika-config.xml: |-
+            <?xml version="1.0" encoding="UTF-8"?>
+            <properties>
+              <server>
+                <params>
+                  <!-- default is 300000 (5m). A task exceeding this sets the
+                       server status to TIMEOUT, which shuts down the whole
+                       forked JVM and kills every concurrent request on this pod. -->
+                  <taskTimeoutMillis>1800000</taskTimeoutMillis>
+                </params>
+              </server>
+            </properties>
