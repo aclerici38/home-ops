@@ -51,14 +51,9 @@ spec:
     # GC finished mover Jobs/pods so they don't linger as API objects.
     ttlSecondsAfterFinished: 300
   health:
-    # NOTE: probe.enabled deadlocks in kopiur 0.7.5 on object-store repos — the
-    # first probe's lastProbeAt is only written by finalize_cluster_bootstrap,
-    # which is unreachable while probe_due is true (and probe_due stays true until
-    # lastProbeAt is written). Result: the bootstrap Job recycles every few
-    # seconds forever. Re-enable once upstream fixes the bootstrap-order deadlock.
     probe:
-      enabled: false
-      interval: 1h
+      enabled: true
+      interval: 15m
   maintenance:
     # maintenance jobs run on home cluster
     enabled: false

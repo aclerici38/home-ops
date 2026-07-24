@@ -49,6 +49,10 @@ spec:
       seccompProfile:
         type: RuntimeDefault
     ttlSecondsAfterFinished: 300
+  health:
+    probe:
+      enabled: true
+      interval: 15m
   maintenance:
     enabled: true
     schedule:
