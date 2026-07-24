@@ -43,30 +43,14 @@ spec:
               args:
                 - |
                   set -u
-                  # Streams/KVs that hold durable state (events, service discovery,
-                  # storage metadata, locks, logs). Pure caches (KV_cache-*,
-                  # KV_settings-cache) are intentionally left at R=1
-                  STREAMS="main-queue
-                  KV_service-registry
-                  KV_storage-users
-                  KV_ids-storage-users
-                  KV_storage-system
-                  KV_graph
-                  KV_userlog
-                  KV_activitylog
-                  KV_eventhistory"
-
+                  # Bump every stream/KV to R=3. opencloud creates them at R=1
                   if ! nats stream ls -n >/dev/null 2>&1; then
                     echo "FATAL: cannot reach NATS at ${NATS_URL}"
                     exit 1
                   fi
 
                   rc=0
-                  for s in $STREAMS; do
-                    if ! nats stream info "$s" >/dev/null 2>&1; then
-                      echo "skip (not created yet): $s"
-                      continue
-                    fi
+                  for s in $(nats stream ls -n); do
                     if nats stream edit "$s" --replicas 3 -f >/dev/null 2>&1; then
                       echo "ok: $s -> R=3"
                     else
