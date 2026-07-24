@@ -15,22 +15,16 @@ url = "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "2026.7.12"
+version = "2026.7.13"
 backend = "aqua:jdx/mise"
 
 [tools."aqua:jdx/mise"."platforms.linux-arm64"]
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.linux-x64"]
-checksum = "sha256:d8939817192d8c9158b92cec49cf39be54d258ead5057b9d0a44e16da5f4afa4"
-url = "https://github.com/jdx/mise/releases/download/v2026.7.12/mise-v2026.7.12-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/486637412"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.macos-arm64"]
-checksum = "sha256:a73e15eb4974abf7c5c9445365e89cf2d8ec18afc97d4e161b317e65a404f261"
-url = "https://github.com/jdx/mise/releases/download/v2026.7.12/mise-v2026.7.12-macos-arm64.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/486637460"
 provenance = "minisign"
 
 [[tools.dyff]]
