@@ -6,11 +6,11 @@ metadata:
   name: nats-opencloud
   namespace: flux-system
 spec:
-  targetNamespace: nats-opencloud
+  targetNamespace: opencloud
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/nats-opencloud/app
+  path: ./kubernetes/apps/home/opencloud/nats
   commonMetadata:
     labels:
       app.kubernetes.io/name: nats-opencloud

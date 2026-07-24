@@ -71,9 +71,11 @@ spec:
               PROXY_DEBUG_ADDR: 0.0.0.0:9205
               # For collaboration to connect
               GATEWAY_GRPC_ADDR: 0.0.0.0:9142
-              MICRO_REGISTRY_ADDRESS: &nats nats-opencloud.nats-opencloud.svc.cluster.local:4222
+              MICRO_REGISTRY_ADDRESS: &nats nats-opencloud.opencloud.svc.cluster.local:4222
               MICRO_REGISTRY: nats-js-kv
+              OC_CACHE_STORE: nats-js-kv
               OC_CACHE_STORE_NODES: *nats
+              OC_PERSISTENT_STORE: nats-js-kv
               OC_PERSISTENT_STORE_NODES: *nats
               OC_EVENTS_ENDPOINT: *nats
               OC_EVENTS_CLUSTER: opencloud-cluster
@@ -101,6 +103,7 @@ spec:
                   name: opencloud
                   key: DECOMPOSEDS3_SECRET_KEY
               STORAGE_USERS_ID_CACHE_STORE: nats-js-kv
+              STORAGE_USERS_FILEMETADATA_CACHE_STORE: nats-js-kv
               SEARCH_EXTRACTOR_TYPE: tika
               SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://tika.tika:9998
               FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
@@ -145,6 +148,8 @@ spec:
               COLLABORATION_HTTP_ADDR: 0.0.0.0:9300
               MICRO_REGISTRY_ADDRESS: *nats
               OC_PERSISTENT_STORE_NODES: *nats
+              OC_EVENTS_ENDPOINT: *nats
+              OC_EVENTS_CLUSTER: opencloud-cluster
               OC_CACHE_STORE: nats-js-kv
               MICRO_REGISTRY: nats-js-kv
               OC_URL: *url
