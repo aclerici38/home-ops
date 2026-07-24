@@ -27,7 +27,7 @@ spec:
               type: RuntimeDefault
           containers:
             - name: stream-replicas
-              image: mirror.gcr.io/natsio/nats-box:0.19.7@sha256:ffce8bd103383f179f8c7f11cf645726acf5d17280706c530c3b342dbe16334c
+              image: mirror.gcr.io/natsio/nats-box:0.19.7-nonroot@sha256:e86b9681f330ab1aa45744dd5cb367d44205b28fac2519a2f74ca0255803161a
               env:
                 - name: HOME
                   value: /tmp
@@ -43,20 +43,14 @@ spec:
               args:
                 - |
                   set -u
-                  # Bump every stream/KV to R=3. opencloud creates them at R=1
-                  if ! nats stream ls -n >/dev/null 2>&1; then
-                    echo "FATAL: cannot reach NATS at $${NATS_URL}"
-                    exit 1
-                  fi
+                  # Bump every stream/KV to R=3. opencloud creates them at R=1.
+                  streams=$(nats stream ls -n) || exit 1
+                  test -n "$streams" || { echo "no streams returned"; exit 1; }
 
                   rc=0
-                  for s in $(nats stream ls -n); do
-                    if nats stream edit "$s" --replicas 3 -f >/dev/null 2>&1; then
-                      echo "ok: $s -> R=3"
-                    else
-                      echo "ERROR: failed to set replicas on $s"
-                      rc=1
-                    fi
+                  for s in $streams; do
+                    echo "=== $s"
+                    nats stream edit "$s" --replicas 3 -f || rc=1
                   done
                   exit $rc
               securityContext:
