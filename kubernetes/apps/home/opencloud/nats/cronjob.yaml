@@ -45,7 +45,7 @@ spec:
                   set -u
                   # Bump every stream/KV to R=3. opencloud creates them at R=1
                   if ! nats stream ls -n >/dev/null 2>&1; then
-                    echo "FATAL: cannot reach NATS at ${NATS_URL}"
+                    echo "FATAL: cannot reach NATS at $${NATS_URL}"
                     exit 1
                   fi
 
