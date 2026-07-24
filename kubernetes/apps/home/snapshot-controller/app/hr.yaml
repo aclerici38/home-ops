@@ -19,10 +19,6 @@ spec:
     remediation:
       retries: 1
   values:
-    controller:
-      # openebs zfs-localpv snapshots are taken by the per-node CSI driver
-      extraArgs:
-        - --enable-distributed-snapshotting=true
     monitoring:
       serviceMonitor:
         enabled: true
