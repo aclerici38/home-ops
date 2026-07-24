@@ -6,9 +6,20 @@
 {{- $clientID := dig "clientID" (dig "clientID" $app (.Values.pocketId | default dict)) $o -}}
 {{- $host := dig "backendHost" "pocket-id.pocket-id-operator.svc.cluster.local" $o -}}
 {{- $port := dig "backendPort" 1411 $o -}}
+{{- $issuer := dig "issuerURI" "https://id.clerici.tech" $o -}}
 {{/* originate TLS to the IdP when talking to a remote pocket-id (e.g. clusters with no
      in-cluster instance reaching id.clerici.tech:443); defaults on for port 443 */}}
 {{- $tls := dig "backendTLS" (eq (toString $port) "443") $o -}}
+{{/* Every endpoint below is set explicitly and issuerURI is deliberately NOT set, so the
+     control plane never runs OIDC discovery. Discovery resolves the issuer back through the
+     very Gateway kgateway is configuring: if the control plane starts before pocket-id is
+     serving it gets a 503, caches that failure indefinitely, and replaces every route
+     carrying this policy with a 500 direct response until the GatewayExtension spec changes.
+     Paths are pocket-id's; jwksURI is required once discovery is off and a token is parsed. */}}
+{{- $oauth2 := $o.oauth2 | default dict -}}
+{{- $jwt := mergeOverwrite
+      (dict "jwksURI" (dig "jwksURI" (printf "%s/.well-known/jwks.json" $issuer) $o))
+      (deepCopy (dig "jwt" dict $oauth2)) -}}
 {{/* kgateway oauth2 forward-auth for an HTTPRoute, backed by pocket-id (id.clerici.tech). */}}
 ---
 apiVersion: gateway.kgateway.dev/v1alpha1
@@ -47,7 +58,9 @@ spec:
       group: gateway.kgateway.dev
       kind: Backend
       name: {{ $app }}-oauth-backend
-    issuerURI: {{ dig "issuerURI" "https://id.clerici.tech" $o | quote }}
+    authorizationEndpoint: {{ dig "authorizationEndpoint" (printf "%s/authorize" $issuer) $o | quote }}
+    tokenEndpoint: {{ dig "tokenEndpoint" (printf "%s/api/oidc/token" $issuer) $o | quote }}
+    endSessionEndpoint: {{ dig "endSessionEndpoint" (printf "%s/api/oidc/end-session" $issuer) $o | quote }}
     scopes:
       - openid
       - profile
@@ -59,7 +72,9 @@ spec:
         name: {{ $app }}-oidc-credentials
     cookies:
       domain: {{ dig "cookieDomain" "clerici.tech" $o | quote }}
-    {{- with $o.oauth2 }}
+    jwt:
+      {{- toYaml $jwt | nindent 6 }}
+    {{- with omit $oauth2 "jwt" }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 ---
@@ -75,7 +90,7 @@ spec:
   csrf:
     percentageEnabled: 100
     additionalOrigins:
-      - exact: {{ dig "issuerURI" "https://id.clerici.tech" $o | quote }}
+      - exact: {{ $issuer | quote }}
   oauth2:
     extensionRef:
       name: {{ $app }}-oauth

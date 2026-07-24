@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/kgateway/2.4.0/trafficpolicy_v1alpha1.json
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: TrafficPolicy
+metadata:
+  name: crowdsec-ext-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: external
+  extAuth:
+    extensionRef:
+      name: crowdsec-bouncer
+      namespace: envoy-proxy-crowdsec-bouncer
