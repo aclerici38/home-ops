@@ -39,6 +39,9 @@ spec:
             image:
               repository: ghcr.io/sjtrny/wyoming-whisper-intel
               tag: release@sha256:518e804b7464856b9506e48260047aad68732cb1e19b4331067be0414e455def
+            args:
+              - --initial-prompt
+              - "Alexa, turn on the lights and set the brightness to fifty percent. Dim all the lights to warm white, then change them to blue at one hundred percent. Set the air conditioning to seventy two degrees and turn the AC off. Set a timer for ten minutes."
             env:
               ONEAPI_DEVICE_SELECTOR: "level_zero:gpu"
               ZE_ENABLE_PCI_ID_DEVICE_ORDER: "1"
