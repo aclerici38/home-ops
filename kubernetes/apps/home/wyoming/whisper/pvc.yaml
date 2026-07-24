@@ -3,11 +3,11 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: wyoming-whisper-cache
+  name: whisper-data
 spec:
   storageClassName: ceph-filesystem
-  resources:
-    requests:
-      storage: 5Gi
   accessModes:
     - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi

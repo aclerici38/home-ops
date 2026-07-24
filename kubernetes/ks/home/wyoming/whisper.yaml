@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: wyoming-piper
+  name: whisper
   namespace: flux-system
 spec:
-  targetNamespace: wyoming-piper
+  targetNamespace: wyoming
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/wyoming-piper/app
+  path: ./kubernetes/apps/home/wyoming/whisper
   commonMetadata:
     labels:
-      app.kubernetes.io/name: wyoming-piper
+      app.kubernetes.io/name: whisper
