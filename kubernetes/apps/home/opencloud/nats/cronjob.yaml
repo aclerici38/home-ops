@@ -53,7 +53,7 @@ spec:
                     case "$s" in
                       # `nats stream edit` always prompts on KV-backed streams,
                       # and -f does not suppress that prompt, so use `nats kv edit`
-                      KV_*) nats kv edit "${s#KV_}" --replicas 3 || rc=1 ;;
+                      KV_*) nats kv edit "$${s#KV_}" --replicas 3 || rc=1 ;;
                       *) nats stream edit "$s" --replicas 3 -f || rc=1 ;;
                     esac
                   done
