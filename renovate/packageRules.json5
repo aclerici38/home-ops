@@ -49,7 +49,10 @@
       description: "Separate PRs for raphael, so the RV box updates independently of the clusters",
       matchFileNames: ["**/raphael/**"],
       // Keep specific groups in sync
-      excludePackagePatterns: ["towonel-agent"],
+      excludePackagePatterns: [
+        "towonel-agent",
+        "siderolabs/kubelet",
+      ],
       additionalBranchPrefix: "raphael-",
       commitMessageSuffix: "(raphael)",
       addLabels: ["raphael"],
