@@ -1,0 +1,79 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.2-standalone-strict/cronjob-batch-v1.json
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nats-opencloud-stream-replicas
+spec:
+  # opencloud creates its JetStream streams/KVs at R=1
+  schedule: "*/15 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 120
+      template:
+        spec:
+          restartPolicy: Never
+          automountServiceAccountToken: false
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: stream-replicas
+              image: mirror.gcr.io/natsio/nats-box:0.19.7@sha256:ffce8bd103383f179f8c7f11cf645726acf5d17280706c530c3b342dbe16334c
+              env:
+                - name: HOME
+                  value: /tmp
+                - name: XDG_CONFIG_HOME
+                  value: /tmp
+                - name: XDG_DATA_HOME
+                  value: /tmp
+                - name: NATS_URL
+                  value: nats://nats-opencloud.opencloud.svc.cluster.local:4222
+              command:
+                - "sh"
+                - "-c"
+              args:
+                - |
+                  set -u
+                  # Bump every stream/KV to R=3. opencloud creates them at R=1
+                  if ! nats stream ls -n >/dev/null 2>&1; then
+                    echo "FATAL: cannot reach NATS at ${NATS_URL}"
+                    exit 1
+                  fi
+
+                  rc=0
+                  for s in $(nats stream ls -n); do
+                    if nats stream edit "$s" --replicas 3 -f >/dev/null 2>&1; then
+                      echo "ok: $s -> R=3"
+                    else
+                      echo "ERROR: failed to set replicas on $s"
+                      rc=1
+                    fi
+                  done
+                  exit $rc
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop:
+                    - ALL
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 32Mi
+                limits:
+                  memory: 64Mi
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
+          volumes:
+            - name: tmp
+              emptyDir: {}

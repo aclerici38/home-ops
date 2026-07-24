@@ -1,0 +1,56 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.21.0/issuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: opencloud-ldap-selfsign
+spec:
+  selfSigned: {}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.21.0/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: opencloud-ldap-ca
+spec:
+  secretName: opencloud-ldap-ca
+  isCA: true
+  commonName: opencloud-ldap-ca
+  duration: 43800h # 5y
+  issuerRef:
+    name: opencloud-ldap-selfsign
+    kind: Issuer
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.21.0/issuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: opencloud-ldap-ca
+spec:
+  ca:
+    secretName: opencloud-ldap-ca
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.21.0/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: opencloud-idm-ldaps
+spec:
+  secretName: opencloud-idm-ldaps
+  duration: 8760h # 1y
+  renewBefore: 720h # 30d
+  issuerRef:
+    name: opencloud-ldap-ca
+    kind: Issuer
+  commonName: opencloud-idm
+  dnsNames:
+    - opencloud-idm
+    - opencloud-idm.opencloud.svc
+    - opencloud-idm.opencloud.svc.cluster.local
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+    rotationPolicy: Always
