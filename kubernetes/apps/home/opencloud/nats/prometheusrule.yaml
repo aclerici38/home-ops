@@ -1,0 +1,223 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.92.1/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: nats-opencloud-rules
+spec:
+  groups:
+    # Scraped via the chart's PodMonitor, one prometheus-nats-exporter sidecar per
+    # NATS pod. Two different label scopes live in here and they must be handled
+    # differently:
+    #
+    #   nats_varz_*     - per-server, one series per exporter (label: server_id).
+    #                     Aggregating hides which node is unhealthy; do not dedupe.
+    #   nats_consumer_* - cluster-wide. The chart runs the exporter with -jsz=all,
+    #   nats_stream_*     so all 3 exporters report every stream and consumer,
+    #   nats_account_*    each labelled with its own server_name. Every expression
+    #                     over these MUST dedupe with max by (...) or it triples.
+    - name: nats-opencloud.jetstream.rules
+      rules:
+        # Per-consumer backlog on the shared event bus. This is the authoritative
+        # version of the opencloud-side postprocessing/search gauges, and it is
+        # strictly better because it names which consumer is stuck —
+        # postprocessing-pull, search-pull, storage-users, dcfs, etc.
+        - alert: NatsConsumerBacklog
+          expr: |-
+            max by (stream_name, consumer_name) (
+              nats_consumer_num_pending{stream_name="main-queue"}
+            ) > 0
+          for: 15m
+          annotations:
+            summary: >-
+              NATS consumer {{ $labels.consumer_name }} on {{ $labels.stream_name }}
+              has {{ $value }} undelivered messages for 15m.
+          labels:
+            severity: warning
+
+        # Delivered but never acked. For postprocessing-pull this is precisely the
+        # stranded-upload state, seen from the broker rather than the app.
+        - alert: NatsConsumerAckPending
+          expr: |-
+            max by (stream_name, consumer_name) (
+              nats_consumer_num_ack_pending{stream_name="main-queue"}
+            ) > 0
+          for: 30m
+          annotations:
+            summary: >-
+              NATS consumer {{ $labels.consumer_name }} has {{ $value }} messages
+              delivered but un-acked for 30m — the subscriber took the work and
+              never finished it.
+          labels:
+            severity: critical
+
+        - alert: NatsConsumerRedelivering
+          expr: |-
+            max by (stream_name, consumer_name) (
+              nats_consumer_num_redelivered{stream_name="main-queue"}
+            ) > 0
+          for: 15m
+          annotations:
+            summary: >-
+              NATS is redelivering {{ $value }} messages to {{ $labels.consumer_name }}
+              — the subscriber keeps failing before ack.
+          labels:
+            severity: warning
+
+        # main-queue is a fan-out bus: every consumer receives every event, so all
+        # of them ack in lockstep off ambient traffic. last_ack_seconds therefore
+        # climbs whenever the cluster is simply quiet (measured drifting 4s -> 18s
+        # -> reset on an idle system), which makes a bare threshold on it a
+        # guaranteed overnight false positive. The num_pending guard is what makes
+        # this sound: work is waiting AND nothing has been acked in 15m.
+        - alert: NatsConsumerStalled
+          expr: |-
+            (
+              max by (stream_name, consumer_name) (
+                nats_consumer_num_pending{stream_name="main-queue"}
+              ) > 0
+            )
+            and
+            (
+              max by (stream_name, consumer_name) (
+                nats_consumer_last_ack_seconds{stream_name="main-queue"}
+              ) > 900
+            )
+          for: 5m
+          annotations:
+            summary: >-
+              NATS consumer {{ $labels.consumer_name }} has pending messages but has
+              not acked anything in over 15m — the subscriber is wedged, not idle.
+          labels:
+            severity: critical
+
+        - alert: NatsJetStreamApiErrors
+          expr: |-
+            sum(rate(nats_varz_jetstream_stats_api_errors[15m])) > 0
+          for: 15m
+          annotations:
+            summary: >-
+              NATS JetStream is returning API errors ({{ $value | humanize }}/s) —
+              stream or consumer operations are failing.
+          labels:
+            severity: warning
+
+        # Raft entries accepted by the meta layer but not yet applied. Sustained
+        # non-zero means the metadata raft group is not keeping up.
+        - alert: NatsJetStreamMetaPending
+          expr: |-
+            max(nats_varz_jetstream_meta_pending) > 0
+          for: 15m
+          annotations:
+            summary: >-
+              NATS JetStream meta layer has {{ $value }} unapplied raft entries for
+              15m — cluster metadata is lagging.
+          labels:
+            severity: warning
+
+    - name: nats-opencloud.cluster.rules
+      rules:
+        # One nats_varz_* series per exporter, so this counts live NATS servers.
+        # Quorum is 2 of 3; losing one is degraded, losing two stops JetStream.
+        - alert: NatsServerDown
+          expr: |-
+            count(nats_varz_connections) < 3
+          for: 10m
+          annotations:
+            summary: >-
+              Only {{ $value }} of 3 NATS servers are reporting — JetStream quorum
+              for the opencloud event bus is at risk.
+          labels:
+            severity: critical
+
+        - alert: NatsClusterQuorumLost
+          expr: |-
+            count(nats_varz_connections) < 2
+          for: 5m
+          annotations:
+            summary: >-
+              Fewer than 2 NATS servers are up — JetStream has lost quorum and all
+              opencloud uploads/events are stalled.
+          labels:
+            severity: critical
+
+        # Every server carries the meta leader's name in a `value` label. If the
+        # servers disagree on who the leader is, the cluster is partitioned.
+        - alert: NatsJetStreamLeaderSplit
+          expr: |-
+            count(count by (value) (nats_varz_jetstream_meta_leader)) > 1
+          for: 10m
+          annotations:
+            summary: >-
+              NATS servers disagree on the JetStream meta leader — the cluster is
+              partitioned.
+          labels:
+            severity: critical
+
+        # Note: the empty-value form is inferred from how the exporter builds this
+        # label, not observed — verifying it would have meant forcing an election.
+        # The absent() arm is the reliable half.
+        - alert: NatsJetStreamNoLeader
+          expr: |-
+            absent(nats_varz_jetstream_meta_leader)
+            or count(nats_varz_jetstream_meta_leader{value=""}) > 0
+          for: 10m
+          annotations:
+            summary: >-
+              NATS JetStream has no meta leader — stream and consumer operations
+              will fail until an election completes.
+          labels:
+            severity: critical
+
+        # Cumulative count of clients the server could not write to fast enough.
+        # NATS drops messages to a slow consumer, so this is silent data loss.
+        - alert: NatsSlowConsumers
+          expr: |-
+            sum(rate(nats_varz_slow_consumers[15m])) > 0
+          for: 10m
+          annotations:
+            summary: >-
+              NATS is dropping messages to slow consumers ({{ $value | humanize }}/s)
+              — opencloud subscribers cannot keep up and events are being lost.
+          labels:
+            severity: critical
+
+        - alert: NatsMetricsAbsent
+          expr: |-
+            absent(nats_varz_connections)
+          for: 10m
+          annotations:
+            summary: >-
+              No NATS exporter metrics for 10m — the cluster is down or the
+              PodMonitor stopped matching.
+          labels:
+            severity: critical
+
+    - name: nats-opencloud.capacity.rules
+      rules:
+        # nats_account_max_storage / max_memory report uint64 max (~1.8e19) because
+        # no account quota is set — the real ceilings are the 10Gi fileStore PVC and
+        # the 256Mi memoryStore. Ratio alerts against those sentinels would never
+        # fire, so these are absolute thresholds tied to the configured sizes.
+        # Keep in sync with config.jetstream in hr.yaml.
+        - alert: NatsJetStreamStorageHigh
+          expr: |-
+            max(nats_varz_jetstream_stats_storage) > 8589934592
+          for: 30m
+          annotations:
+            summary: >-
+              NATS JetStream file store is at {{ $value | humanize1024 }}B of the
+              10Gi PVC — uploads will fail once the stream cannot be written.
+          labels:
+            severity: warning
+
+        - alert: NatsJetStreamMemoryHigh
+          expr: |-
+            max(nats_varz_jetstream_stats_memory) > 214748364
+          for: 30m
+          annotations:
+            summary: >-
+              NATS JetStream memory store is at {{ $value | humanize1024 }}B of the
+              configured 256Mi.
+          labels:
+            severity: warning

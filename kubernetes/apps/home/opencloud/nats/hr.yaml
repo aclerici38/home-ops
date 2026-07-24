@@ -61,6 +61,33 @@ spec:
     reloader:
       merge:
         securityContext: *sec
+    promExporter:
+      enabled: true
+      merge:
+        securityContext: *sec
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            memory: 64Mi
+      podMonitor:
+        enabled: true
+        merge:
+          spec:
+            podMetricsEndpoints:
+              - port: prom-metrics
+                metricRelabelings:
+                  - sourceLabels:
+                      - "__name__"
+                      - "stream_name"
+                    regex: "nats_consumer_.*;KV_.*"
+                    action: drop
+                  - sourceLabels:
+                      - "__name__"
+                      - "consumer_name"
+                    regex: "nats_consumer_.*;sse-.*"
+                    action: drop
     serviceAccount:
       enabled: true
     podTemplate:

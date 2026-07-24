@@ -1,0 +1,192 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.92.1/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: opencloud-rules
+spec:
+  groups:
+    # Both ServiceMonitors carry job="opencloud" (jobLabel is app.kubernetes.io/name,
+    # which app-template sets to the release name for every service). The scrape
+    # target is therefore discriminated by the `service` label:
+    #   service="opencloud"        -> the 2 main server replicas, port 9205
+    #   service="opencloud-search" -> the search service, port 9224
+    # This matters beyond cosmetics: the reva_* and opencloud_postprocessing_*
+    # collectors are registered process-wide by shared packages, so the search
+    # pod (and idm/wopi, if ever scraped) export them as permanent zeros. Every
+    # expression below is scoped to the service that actually populates them.
+    - name: opencloud.postprocessing.rules
+      rules:
+        # Uploads land in NATS as postprocessing events. A non-empty stream means
+        # bytes were accepted from the client but the file is not yet visible /
+        # finalized — the "half-processed upload" state.
+        - alert: OpenCloudPostprocessingBacklog
+          expr: |-
+            max(opencloud_postprocessing_events_unprocessed{service="opencloud"}) > 0
+          for: 15m
+          annotations:
+            summary: >-
+              OpenCloud has {{ $value }} unprocessed postprocessing events for 15m —
+              uploads are accepted but not being finalized. Check the postprocessing
+              consumer against the opencloud-cluster JetStream stream.
+          labels:
+            severity: warning
+
+        # Outstanding acks are events a worker claimed and never acknowledged. This
+        # is the failure mode that strands an upload indefinitely: the stream looks
+        # drained but the file never finalizes. Slower threshold than the backlog
+        # alert because a large upload can legitimately hold an ack for a while.
+        - alert: OpenCloudPostprocessingStuckAcks
+          expr: |-
+            max(opencloud_postprocessing_events_outstanding_acks{service="opencloud"}) > 0
+          for: 30m
+          annotations:
+            summary: >-
+              OpenCloud has {{ $value }} postprocessing events delivered but un-acked
+              for 30m — an upload is stranded mid-postprocessing.
+          labels:
+            severity: critical
+
+        # NATS redelivering events means a worker keeps taking the event and dying
+        # or timing out before acking. Usually a crashlooping/OOM server replica.
+        - alert: OpenCloudPostprocessingRedeliveries
+          expr: |-
+            max(opencloud_postprocessing_events_redelivered{service="opencloud"}) > 0
+          for: 15m
+          annotations:
+            summary: >-
+              OpenCloud is redelivering {{ $value }} postprocessing events — a worker
+              is repeatedly failing before ack. Check server replica restarts/OOMs.
+          labels:
+            severity: warning
+
+        - alert: OpenCloudPostprocessingFailures
+          expr: |-
+            sum(rate(opencloud_postprocessing_finished{service="opencloud", status!="succeeded"}[15m])) > 0
+          annotations:
+            summary: >-
+              OpenCloud postprocessing is finishing events with status
+              {{ $labels.status }} — uploads are failing rather than completing.
+          labels:
+            severity: critical
+
+        # Buckets run out to 1200s. p95 above 2m means postprocessing (virus scan,
+        # tika extraction) is backing up even if nothing has failed outright.
+        - alert: OpenCloudPostprocessingSlow
+          expr: |-
+            histogram_quantile(0.95, sum by (le) (
+              rate(opencloud_postprocessing_duration_seconds_bucket{service="opencloud"}[30m])
+            )) > 120
+          for: 30m
+          annotations:
+            summary: >-
+              OpenCloud postprocessing p95 is {{ $value | humanizeDuration }} —
+              check tika and the versitygw/S3 backend for latency.
+          labels:
+            severity: warning
+
+        # reva restarts an upload session when postprocessing could not complete it.
+        # This counter was already non-zero when these rules were written, so treat
+        # any sustained rate as a regression rather than background noise.
+        #
+        # Deliberately NOT alerting on reva_upload_processing: it is a per-process
+        # gauge incremented at start and decremented at finish, so with 2 replicas an
+        # upload that starts on one pod and finishes on the other permanently skews
+        # it. Both replicas currently report negative values, which makes any
+        # threshold on it silently under-fire.
+        - alert: OpenCloudUploadSessionsRestarting
+          expr: |-
+            sum(rate(reva_upload_sessions_restarted{service="opencloud"}[15m])) > 0
+          for: 15m
+          annotations:
+            summary: >-
+              OpenCloud is restarting upload sessions ({{ $value | humanize }}/s) —
+              postprocessing is failing to carry uploads to completion.
+          labels:
+            severity: warning
+
+        - alert: OpenCloudUploadSessionsAborted
+          expr: |-
+            sum(rate(reva_upload_sessions_aborted{service="opencloud"}[15m])) > 0
+          annotations:
+            summary: >-
+              OpenCloud postprocessing aborted an upload session — the client's file
+              was discarded. Check antivirus/policy rejections.
+          labels:
+            severity: warning
+
+    - name: opencloud.search.rules
+      rules:
+        # Search consumes the same event bus. A backlog here does not lose data but
+        # leaves newly uploaded files unfindable, which reads to users as a lost upload.
+        - alert: OpenCloudSearchIndexBacklog
+          expr: |-
+            max(opencloud_search_events_unprocessed{service="opencloud-search"}) > 0
+          for: 30m
+          annotations:
+            summary: >-
+              OpenCloud search has {{ $value }} unindexed events for 30m — recently
+              uploaded files will not appear in search results.
+          labels:
+            severity: warning
+
+        - alert: OpenCloudSearchIndexFailures
+          expr: |-
+            sum(rate(opencloud_search_index_duration_seconds_count{service="opencloud-search", status!="success"}[15m])) > 0
+          annotations:
+            summary: >-
+              OpenCloud search indexing is failing (status {{ $labels.status }}) —
+              check the tika extractor at tika.tika:9998.
+          labels:
+            severity: warning
+
+    - name: opencloud.availability.rules
+      rules:
+        # The server deployment runs 2 replicas. Dropping to 1 is survivable but is
+        # the precondition for the cross-replica state problems this app has hit.
+        - alert: OpenCloudServerDegraded
+          expr: |-
+            count(up{job="opencloud", service="opencloud"} == 1) < 2
+          for: 15m
+          annotations:
+            summary: >-
+              Only {{ $value }} of 2 OpenCloud server replicas are up.
+          labels:
+            severity: warning
+
+        # count() over an empty vector returns nothing, so the degraded alert above
+        # cannot fire when every target disappears. Cover that case explicitly.
+        - alert: OpenCloudMetricsAbsent
+          expr: |-
+            absent(up{job="opencloud", service="opencloud"})
+          for: 10m
+          annotations:
+            summary: >-
+              No OpenCloud server scrape targets for 10m — the deployment is down or
+              the ServiceMonitor stopped matching.
+          labels:
+            severity: critical
+
+        - alert: OpenCloudSearchMetricsAbsent
+          expr: |-
+            absent(up{job="opencloud", service="opencloud-search"})
+          for: 10m
+          annotations:
+            summary: >-
+              No OpenCloud search scrape target for 10m — indexing is offline.
+          labels:
+            severity: warning
+
+        # A rollout that only half-lands leaves replicas on different builds sharing
+        # one JetStream stream and one S3 bucket. Fires on a stuck rollout, not a
+        # normal one, hence the 30m window.
+        - alert: OpenCloudVersionSkew
+          expr: |-
+            count(count by (version) (opencloud_proxy_build_info{service="opencloud"})) > 1
+          for: 30m
+          annotations:
+            summary: >-
+              OpenCloud replicas are running mismatched versions for 30m — a rollout
+              is stuck partially applied.
+          labels:
+            severity: warning

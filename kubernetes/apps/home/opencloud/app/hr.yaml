@@ -276,6 +276,11 @@ spec:
         ports:
           ldaps:
             port: 9235
+      search:
+        controller: search
+        ports:
+          debug:
+            port: 9224
       wopi:
         controller: wopi
         ports:
@@ -286,6 +291,11 @@ spec:
     serviceMonitor:
       opencloud:
         serviceName: opencloud
+        endpoints:
+          - port: debug
+      search:
+        service:
+          identifier: search
         endpoints:
           - port: debug
     route:
