@@ -22,6 +22,7 @@ spec:
   values:
     controllers:
       opencloud:
+        replicas: 2
         strategy: RollingUpdate
         forceRename: opencloud
         containers:
@@ -214,6 +215,7 @@ spec:
                 spec:
                   httpGet: {port: 9224, path: /readyz}
       wopi:
+        replicas: 2
         strategy: RollingUpdate
         containers:
           wopi:
