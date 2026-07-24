@@ -6,14 +6,37 @@ metadata:
   name: omada-exporter-rules
 spec:
   groups:
-    - name: omada.rules
+    # The 14d lookback is the expensive half, and the set of known MACs barely
+    # moves, so it is recorded on a slow cadence. 2m stays well inside the 5m
+    # staleness window, so the recorded series never lapses between evaluations.
+    - name: omada.known-clients
+      interval: 2m
       rules:
+        # Every MAC seen anywhere in the 14d ending 1h ago. A device that is
+        # merely powered off, asleep, or roaming between APs still counts as
+        # "seen" and stays quiet. The 1h lag is what lets a fired alert resolve:
+        # once a new device's own samples age into the window, it becomes known.
+        - record: omada:client_seen_14d:mac
+          expr: max by (mac) (present_over_time(omada_client_download_activity_bytes[14d] offset 1h))
+
+    - name: omada.rules
+      interval: 30s
+      rules:
+        # Cheap enough to run every 30s (matching the exporter scrape), so an
+        # unknown MAC alerts within ~1min of associating. No `for` on purpose:
+        # a device that is not supposed to be here is worth knowing about even
+        # if it only stays associated for one scrape.
         - alert: OmadaNewClient
           expr: |-
-            max by (mac, host_name, vendor, site, connection_mode, ssid, ap_name, switch_port, vlan_id, ip) (omada_client_download_activity_bytes)
-            unless on (mac)
-            max by (mac) (omada_client_download_activity_bytes offset 24h)
-          for: 10m
+            (
+              max by (mac, host_name, vendor, site, connection_mode, ssid, ap_name, switch_port, vlan_id, ip) (omada_client_download_activity_bytes)
+              unless on (mac)
+              omada:client_seen_14d:mac
+            )
+            # Suppress while the known-MAC set is absent (fresh deploy, restart,
+            # WAL replay) — without this, every client on the network looks new
+            # at once. count() over a missing series is empty, not 0.
+            and on () (count(omada:client_seen_14d:mac) > 0)
           annotations:
             summary: >-
               New device on Omada: {{ $labels.host_name }} via {{ $labels.connection_mode }}

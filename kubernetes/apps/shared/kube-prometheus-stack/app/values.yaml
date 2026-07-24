@@ -5,7 +5,7 @@ metadata:
   name: kube-prometheus-stack-values
   namespace: kube-prometheus-stack
 data:
-  values.yaml: |
+  values.yaml: |-
     crds:
       enabled: true
       upgradeJob:
@@ -45,12 +45,12 @@ data:
         scrapeConfigSelectorNilUsesHelmValues: false
         serviceMonitorSelectorNilUsesHelmValues: false
         retention: 14d
-        retentionSize: 10GB
+        retentionSize: 35GB
         resources:
           requests:
             cpu: 100m
           limits:
-            memory: 2000Mi
+            memory: 3Gi
     prometheus-node-exporter:
       fullnameOverride: node-exporter
       prometheus:

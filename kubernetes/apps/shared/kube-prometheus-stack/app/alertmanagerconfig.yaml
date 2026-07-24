@@ -20,6 +20,13 @@ spec:
             value: InfoInhibitor
             matchType: =
       - receiver: discord
+        groupWait: 0s
+        groupInterval: 5m
+        matchers:
+          - name: alertname
+            value: OmadaNewClient
+            matchType: =
+      - receiver: discord
         matchers:
           - name: severity
             value: critical
