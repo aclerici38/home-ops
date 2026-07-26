@@ -35,6 +35,13 @@ spec:
       runAsUser: 1000
       seccompProfile:
         type: RuntimeDefault
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        cpu: null
+        memory: 128Mi
     config:
       server:
         grpcPort: 8080
@@ -65,11 +72,5 @@ spec:
         enabled: true
         serviceMonitor:
           enabled: true
-      resources:
-        requests:
-          cpu: 10m
-          memory: 64Mi
-        limits:
-          memory: 128Mi
   dependsOn:
     - name: envoy-proxy-crowdsec-bouncer-resources
