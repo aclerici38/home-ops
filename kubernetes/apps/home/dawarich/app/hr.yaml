@@ -173,6 +173,12 @@ spec:
               password:
                 name: dawarich-metrics
                 key: password
+            relabelings:
+              # Rails host authorization only exempts /api/v1/health and matches
+              # APPLICATION_HOSTS verbatim, so scraping the pod IP gets a 403.
+              # Prometheus derives Host from __address__, so pin it to the FQDN.
+              - targetLabel: __address__
+                replacement: dawarich.dawarich.svc.cluster.local:3000
     route:
       dawarich:
         hostnames:
