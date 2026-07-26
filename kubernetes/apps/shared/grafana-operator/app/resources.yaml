@@ -20,5 +20,15 @@ spec:
   dependsOn:
     - name: external-secrets
       namespace: external-secrets
+    - name: pocket-id-operator
+      namespace: pocket-id-operator
   values:
     externalSecret: {}
+    pocketId:
+      name: grafana
+      clientID: grafana-${CLUSTER_NAME}
+      url: grafana.${CLUSTER_NAME}.clerici.tech
+      logo:
+        nameOverride: grafana
+      callbackPaths:
+        - /login/generic_oauth

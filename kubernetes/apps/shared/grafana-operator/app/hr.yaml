@@ -19,6 +19,9 @@ spec:
       retries: 1
   values:
     hostUsers: false
+    env:
+      - name: DEFAULT_RESYNC_PERIOD
+        value: ${GRAFANA_RESYNC_PERIOD}
     crds:
       immutable: false
     dashboard:

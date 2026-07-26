@@ -40,6 +40,8 @@ spec:
           namespace: kgateway
   deployment:
     spec:
+      strategy:
+        type: Recreate
       template:
         spec:
           containers:

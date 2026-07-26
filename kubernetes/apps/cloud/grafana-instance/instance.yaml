@@ -15,9 +15,17 @@ spec:
       feedback_links_enabled: "false"
       reporting_enabled: "false"
     auth:
-      disable_login_form: "false"
+      disable_login_form: "true"
     auth.anonymous:
+      enabled: "false"
+    auth.generic_oauth:
       enabled: "true"
+      name: Pocket ID
+      allow_sign_up: "true"
+      auto_login: "true"
+      use_pkce: "true"
+      scopes: openid email profile groups
+      role_attribute_path: "'Admin'"
     log:
       mode: console
     metrics:
@@ -50,6 +58,36 @@ spec:
                     secretKeyRef:
                       name: grafana-operator
                       key: password
+                - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-operator-oidc-credentials
+                      key: client_id
+                - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-operator-oidc-credentials
+                      key: client_secret
+                - name: GF_AUTH_GENERIC_OAUTH_AUTH_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-operator-oidc-credentials
+                      key: authorization_url
+                - name: GF_AUTH_GENERIC_OAUTH_TOKEN_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-operator-oidc-credentials
+                      key: token_url
+                - name: GF_AUTH_GENERIC_OAUTH_API_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-operator-oidc-credentials
+                      key: userinfo_url
+                - name: GF_AUTH_SIGNOUT_REDIRECT_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-operator-oidc-credentials
+                      key: end_session_url
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
@@ -60,16 +98,4 @@ spec:
             runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-          volumes:
-            - name: grafana-data
-              persistentVolumeClaim:
-                claimName: grafana-pvc
-  persistentVolumeClaim:
-    spec:
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 10Gi
-      storageClassName: openebs-hostpath
   disableDefaultSecurityContext: All
