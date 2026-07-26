@@ -19,6 +19,8 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  dependsOn:
+    - name: home-assistant-resources
   values:
     controllers:
       home-assistant:
@@ -71,16 +73,56 @@ spec:
                 cpu: 47m
               limits:
                 memory: 2Gi
-            securityContext:
+            securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: [ALL]}
+          code-server:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.130.0@sha256:fa367e7eddd303a95c736f7aede351cdee9036a7383cecfd8786bb5bbe78c13b
+            command:
+              - "/usr/bin/dumb-init"
+              - "--"
+              - "/usr/bin/code-server"
+            args:
+              - "--bind-addr=127.0.0.1:8080"
+              - "--auth=none"
+              - "--app-name=Home Assistant"
+              - "--disable-telemetry"
+              - "--disable-update-check"
+              - "--disable-getting-started-override"
+              - "--disable-workspace-trust"
+              - "/config"
+            env:
+              HOME: /home/coder
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - "curl"
+                      - "-fsS"
+                      - "http://127.0.0.1:8080/healthz"
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
+            resources:
+              requests:
+                cpu: 25m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            securityContext: *sec
     service:
       home-assistant:
         controller: home-assistant
         ports:
           http:
-            port: &port 8123
+            port: 8123
     route:
       home-assistant:
         hostnames:
@@ -91,6 +133,13 @@ spec:
     persistence:
       config:
         existingClaim: home-assistant
+        globalMounts:
+          - path: /config
+        advancedMounts:
+          home-assistant:
+            code-server:
+              - path: /home/coder
+                subPath: .code-server
       hass-cache:
         existingClaim: hass-cache
         globalMounts:
@@ -107,5 +156,3 @@ spec:
             subPath: tts
           - path: /tmp
             subPath: tmp
-  dependsOn:
-    - name: home-assistant-resources
