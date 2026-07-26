@@ -41,6 +41,11 @@ spec:
         logLevel: info
       trustedProxies:
         - ${CLUSTER_POD_CIDR}
+      exemptIPs:
+        - "10.0.0.0/16"
+        - "${CLUSTER_POD_CIDR}"
+        - ${CLOUD_NODE_V4_CIDR}
+        - ${CLOUD_NODE_V6_CIDR}
       bouncer:
         enabled: true
         metrics: true

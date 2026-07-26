@@ -35,12 +35,14 @@ spec:
         s01-whitelist:
           01-whitelist-home.yaml: |-
             name: crowdsec/whitelist-home
-            description: "Whitelist home IP ranges"
+            description: "Whitelist own infrastructure IP ranges"
             whitelist:
-              reason: "Home networks"
+              reason: "Own infrastructure"
               cidr:
                 - "10.0.0.0/16"
                 - "${CLUSTER_POD_CIDR}"
+                - "${CLOUD_NODE_V4_CIDR}"
+                - "${CLOUD_NODE_V6_CIDR}"
       config.yaml.local: |-
         api:
           server:
