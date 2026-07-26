@@ -24,6 +24,7 @@ spec:
       namespace: pocket-id-operator
   values:
     pocketId:
+      url: crowdsec.clerici.tech
       pkce: false
       callbackPaths:
         - /api/auth/oidc/callback
