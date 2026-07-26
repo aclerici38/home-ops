@@ -54,9 +54,24 @@
       matchUpdateTypes: ["major", "minor", "patch", "digest"],
     },
     {
-      description: ["Branch auto-merge digest-only updates from home-operations org"],
+      description: ["Auto-merge specific patch updates"],
       automerge: true,
-      matchPackageNames: ["ghcr.io/home-operations/**"],
+      matchPackageNames: [
+        "**/echo",
+        "**/gatus-sidecar",
+        "**/konflate",
+        "**/drm-exporter",
+      ],
+      matchUpdateTypes: ["patch", "digest"],
+    },
+    {
+      description: ["Auto-merge specific digest-only updates"],
+      automerge: true,
+      matchPackageNames: [
+        "ghcr.io/home-operations/**",
+        "**/mbentley/omada-controller",
+        "**/cloudnative-pg/charts/plugin-barman-cloud",
+      ],
       matchUpdateTypes: ["digest"],
     },
     {
