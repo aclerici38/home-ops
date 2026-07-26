@@ -165,6 +165,18 @@ spec:
             csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
             csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
             csi.storage.k8s.io/fstype: ext4
+      # devicehealth stores its sqlite DB here. Without this pool the mgr raises
+      # MgrDBNotReady and diskprediction_local crashes it daily at 00:00.
+      - name: builtin-mgr
+        spec:
+          name: .mgr
+          failureDomain: host
+          replicated:
+            size: 2
+          parameters:
+            min_size: "1"
+        storageClass:
+          enabled: false
     cephBlockPoolsVolumeSnapshotClass:
       enabled: true
       name: csi-ceph-blockpool
