@@ -52,6 +52,15 @@ spec:
               TIME_ZONE: ${TZ}
               PROMETHEUS_EXPORTER_ENABLED: true
               SIDEKIQ_METRICS_URL: http://127.0.0.1:9395/metrics
+              # metrics auth required
+              METRICS_USERNAME:
+                secretKeyRef:
+                  name: dawarich-metrics
+                  key: username
+              METRICS_PASSWORD:
+                secretKeyRef:
+                  name: dawarich-metrics
+                  key: password
               APPLICATION_HOSTS: dawarich.clerici.tech,dawarich.dawarich.svc.cluster.local
               DISTANCE_UNIT: mi
               STORE_GEODATA: true
@@ -150,14 +159,20 @@ spec:
         ports:
           http:
             port: *port
-          metrics:
-            port: 9394
     serviceMonitor:
       dawarich:
         serviceName: dawarich
         endpoints:
-          - port: metrics
+          - port: http
             scheme: http
+            path: /metrics
+            basicAuth:
+              username:
+                name: dawarich-metrics
+                key: username
+              password:
+                name: dawarich-metrics
+                key: password
     route:
       dawarich:
         hostnames:
