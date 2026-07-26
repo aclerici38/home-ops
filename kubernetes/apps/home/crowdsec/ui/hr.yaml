@@ -19,6 +19,9 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  dependsOn:
+    - name: crowdsec-ui-resources
+    - name: crowdsec
   values:
     controllers:
       crowdsec-ui:
@@ -90,11 +93,6 @@ spec:
             namespace: kgateway
     persistence:
       data:
-        storageClass: ceph-block
-        accessMode: ReadWriteOnce
-        size: 1Gi
+        existingClaim: crowdsec-ui
         globalMounts:
           - path: /app/data
-  dependsOn:
-    - name: crowdsec-resources
-    - name: crowdsec
