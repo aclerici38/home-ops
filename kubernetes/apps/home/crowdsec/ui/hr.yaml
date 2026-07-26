@@ -49,15 +49,15 @@ spec:
                   key: WEBUI_PASS
               CONFIG_AUTH_OIDC_ISSUER_URL:
                 secretKeyRef:
-                  name: crowdsec-oidc-credentials
+                  name: crowdsec-ui-oidc-credentials
                   key: issuer_url
               CONFIG_AUTH_OIDC_CLIENT_ID:
                 secretKeyRef:
-                  name: crowdsec-oidc-credentials
+                  name: crowdsec-ui-oidc-credentials
                   key: client_id
               CONFIG_AUTH_OIDC_CLIENT_SECRET:
                 secretKeyRef:
-                  name: crowdsec-oidc-credentials
+                  name: crowdsec-ui-oidc-credentials
                   key: client_secret
               CONFIG_AUTH_OIDC_SCOPE: "openid profile email groups"
               CONFIG_AUTH_OIDC_GROUPS_CLAIM: groups
