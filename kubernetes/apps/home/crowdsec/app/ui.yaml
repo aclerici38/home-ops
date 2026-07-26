@@ -37,13 +37,29 @@ spec:
               repository: ghcr.io/theduffman85/crowdsec-web-ui
               tag: 2026.7.20@sha256:e83d1514f8ea5afea133370bfb6d7e2232bd6d3a5f7bd8421858c27f847f7ee6
             env:
-              CROWDSEC_URL: http://crowdsec-service:8080
-              CROWDSEC_USER: crowdsec-web-ui
-              CROWDSEC_PASSWORD:
+              CONFIG_UI_TIME_ZONE: ${TZ}
+              CONFIG_INSTANCE_LAPI_URL: http://crowdsec-service:8080
+              CONFIG_INSTANCE_LAPI_AUTH_USERNAME: crowdsec-web-ui
+              CONFIG_INSTANCE_LAPI_AUTH_PASSWORD:
                 secretKeyRef:
                   name: crowdsec
                   key: WEBUI_PASS
-              CROWDSEC_REFRESH_INTERVAL: 30s
+              CONFIG_AUTH_OIDC_ISSUER_URL:
+                secretKeyRef:
+                  name: crowdsec-oidc-credentials
+                  key: issuer_url
+              CONFIG_AUTH_OIDC_CLIENT_ID:
+                secretKeyRef:
+                  name: crowdsec-oidc-credentials
+                  key: client_id
+              CONFIG_AUTH_OIDC_CLIENT_SECRET:
+                secretKeyRef:
+                  name: crowdsec-oidc-credentials
+                  key: client_secret
+              CONFIG_AUTH_OIDC_SCOPE: "openid profile email groups"
+              CONFIG_AUTH_OIDC_GROUPS_CLAIM: groups
+              CONFIG_AUTH_OIDC_ADMIN_GROUPS_0: admin
+              CONFIG_AUTH_OIDC_UNMATCHED_ROLE: deny
             probes:
               liveness: &probe
                 enabled: true

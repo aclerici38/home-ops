@@ -26,6 +26,10 @@ spec:
       namespace: kopiur
   values:
     externalSecret: {}
+    pocketId:
+      pkce: false
+      callbackPaths:
+        - /api/auth/oidc/callback
     cnpg:
       mode: shared
     kopiur:
