@@ -32,5 +32,17 @@
       semanticCommitScope: "grafana-dashboards",
       semanticCommitType: "chore",
     },
+    // Last so nothing above can re-enable these. 19366 (OPNsense) moved to the
+    // dashboard.grafana.app/v2 schema at revision 8, and grafana-operator 5.24
+    // cannot import v2 dashboards: it always stamps a root "id" onto the model
+    // it resolves, which Grafana rejects for v2 payloads. Since these updates
+    // automerge, an unpinned bump silently breaks the dashboard. Drop this once
+    // the operator handles v2.
+    {
+      description: "Hold dashboards whose newer revisions use the v2 schema",
+      matchDatasources: ["custom.grafana-dashboards"],
+      matchPackageNames: ["19366"],
+      enabled: false,
+    },
   ],
 }

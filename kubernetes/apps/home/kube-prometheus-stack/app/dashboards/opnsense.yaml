@@ -12,4 +12,9 @@ spec:
   datasources:
     - datasourceName: prometheus
       inputName: DS_PROMETHEUS
-  url: https://grafana.com/api/dashboards/19366/revisions/8/download
+  # Held at revision 7, the last one published in the classic dashboard schema.
+  # Revision 8 is dashboard.grafana.app/v2, and grafana-operator unconditionally
+  # sets a root "id" key on every model it resolves (content/resolver.go), which
+  # Grafana rejects for v2 payloads: "The k8s style dashboard must not include an
+  # id on the root element". Renovate is pinned to match in renovate/grafanaDashboards.json5.
+  url: https://grafana.com/api/dashboards/19366/revisions/7/download

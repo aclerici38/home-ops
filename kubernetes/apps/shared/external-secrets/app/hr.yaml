@@ -20,6 +20,8 @@ spec:
       retries: 1
   values:
     installCRDs: true
+    grafanaDashboard:
+      enabled: true
     replicaCount: 2
     leaderElect: true
     hostUsers: false
