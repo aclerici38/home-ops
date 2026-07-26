@@ -13,7 +13,8 @@ spec:
   jobTemplate:
     spec:
       backoffLimit: 0
-      activeDeadlineSeconds: 120
+      activeDeadlineSeconds: 600
+      ttlSecondsAfterFinished: 7200
       template:
         spec:
           restartPolicy: Never
