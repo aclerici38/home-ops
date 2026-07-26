@@ -72,10 +72,11 @@ spec:
             namespace: kgateway
     persistence:
       data:
-        existingClaim: crowdsec
+        storageClass: ceph-block
+        accessMode: ReadWriteOnce
+        size: 1Gi
         globalMounts:
           - path: /app/data
-            subPath: ui
   dependsOn:
     - name: crowdsec-resources
     - name: crowdsec
