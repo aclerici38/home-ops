@@ -49,7 +49,7 @@ spec:
         {"MISE_TRUSTED_CONFIG_PATHS": "/tmp/repos"}
     - name: RENOVATE_REDIS_URL
       value: redis://renovate-operator-dragonfly-db:6379
-  image: ghcr.io/renovatebot/renovate:43.281.1@sha256:2a4e6df0330b0aa42b21f40589666b678bbd19bcd9a14c3c24ce0492c237c2ff
+  image: ghcr.io/renovatebot/renovate:43.283.0@sha256:db02a747c25e2e3a2fa3ccac92c4ce5bd5b91244ca9ac014e6fb5939bca9b4f2
   parallelism: 1
   scratchVolume:
     medium: Memory
