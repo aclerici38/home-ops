@@ -4,25 +4,25 @@
     {
       description: ["Loose versioning for non-semver containers"],
       matchDatasources: ["docker"],
-      matchPackagePatterns: ["searxng"],
+      matchPackageNames: ["/searxng/"],
       versioning: "loose",
     },
     {
       description: ["Custom versioning for calibre-web-automated (V)"],
       matchDatasources: ["docker"],
-      matchPackagePatterns: ["calibre-web-automated"],
+      matchPackageNames: ["/calibre-web-automated/"],
       versioning: "regex:^V(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
     },
     {
       description: "Opencloud unzip web extension",
       matchDatasources: ["docker"],
-      matchPackagePatterns: ["opencloudeu/web-extensions"],
+      matchPackageNames: ["/opencloudeu/web-extensions/"],
       versioning: "regex:^unzip-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
     },
     {
       description: "Vectorchord imageVolume pg extension (immich versioned)",
       matchDatasources: ["docker"],
-      matchPackagePatterns: ["tensorchord/vchord-scratch"],
+      matchPackageNames: ["/tensorchord/vchord-scratch/"],
       matchFileNames: ["**/immich/**"],
       versioning: "regex:^pg18-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
       // https://github.com/immich-app/immich/blob/main/server/src/constants.ts
@@ -31,14 +31,14 @@
     {
       description: "VectorChord CNPG extension (immich versioned)",
       matchDatasources: ["github-releases"],
-      matchPackagePatterns: ["tensorchord/VectorChord"],
+      matchPackageNames: ["/tensorchord/VectorChord/"],
       matchFileNames: ["**/immich/**"],
       allowedVersions: "/^1\\.\\d+\\.\\d+$/",
     },
     {
       description: "Frigate beta and RC",
       matchDatasources: ["docker"],
-      matchPackagePatterns: ["blakeblackshear/frigate"],
+      matchPackageNames: ["/blakeblackshear/frigate/"],
       ignoreUnstable: false,
       respectLatest: false,
       versioning: "semver",
@@ -49,9 +49,9 @@
       description: "Separate PRs for raphael, so the RV box updates independently of the clusters",
       matchFileNames: ["**/raphael/**"],
       // Keep specific groups in sync
-      excludePackagePatterns: [
-        "towonel-agent",
-        "siderolabs/kubelet",
+      matchPackageNames: [
+        "!/towonel-agent/",
+        "!/siderolabs/kubelet/",
       ],
       additionalBranchPrefix: "raphael-",
       commitMessageSuffix: "(raphael)",

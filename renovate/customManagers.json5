@@ -4,7 +4,7 @@
     {
       description: ["Track nix k3s version pin in raphael"],
       customType: "regex",
-      fileMatch: ["(^|/)raphael/nixos/k3s\\.nix$"],
+      managerFilePatterns: ["/(^|/)raphael/nixos/k3s\\.nix$/"],
       matchStrings: [
         // renovate: datasource=github-releases depName=k3s-io/k3s versioning=loose
         // k3sMinor = "1.34";
@@ -19,7 +19,7 @@
     {
       description: ["Process various other dependencies"],
       customType: "regex",
-      fileMatch: [".*"], // process regex from everywhere
+      managerFilePatterns: ["/.*/"], // process regex from everywhere
       matchStrings: [
         // Example: `k3s_release_version: "v1.27.3+k3s1"` (general regex matcher)
         'datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\n.*?"(?<currentValue>.*)"\n',
@@ -35,7 +35,7 @@
     {
       customType: "regex",
       description: "Process Grafana CRD version field",
-      fileMatch: ["grafana-instance/.*\\.ya?ml$"],
+      managerFilePatterns: ["/grafana-instance/.*\\.ya?ml$/"],
       matchStrings: [
         "version:\\s*(?<depName>[^:]+):(?<currentValue>[^@\\s]+)@(?<currentDigest>sha256:[a-f0-9]+)",
       ],
@@ -45,7 +45,7 @@
     {
       customType: "regex",
       description: "Process yaml-language-server schema versions from GitHub tags URLs",
-      fileMatch: ["\\.ya?ml$"],
+      managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
         "\\$schema=https://raw\\.githubusercontent\\.com/(?<depName>[^/]+/[^/]+)/refs/tags/(?<currentValue>[^/]+)/",
       ],
@@ -54,7 +54,7 @@
     {
       customType: "regex",
       description: "Process yannh/kubernetes-json-schema versions",
-      fileMatch: ["\\.ya?ml$"],
+      managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
         "\\$schema=https://raw\\.githubusercontent\\.com/yannh/kubernetes-json-schema/master/(?<currentValue>v[^-]+)-standalone-strict/",
       ],
@@ -63,7 +63,7 @@
     },
     {
       customType: "regex",
-      fileMatch: ["\\.ya?ml$"],
+      managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
         "k8s-versioned-schemas\\.pages\\.dev/(?<depName>[^/]+)/(?<currentValue>[^/]+)/",
         "\\?values=(?<depName>[^/]+)/(?<currentValue>[^\\s]+)",

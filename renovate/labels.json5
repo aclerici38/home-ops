@@ -1,5 +1,8 @@
 {
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  // Applies to every PR. Lives at the top level rather than as a selector-less
+  // packageRule, which Renovate rejects as a config error.
+  addLabels: ["upgrade"],
   packageRules: [
     {
       matchUpdateTypes: ["major"],
@@ -36,9 +39,6 @@
     {
       matchManagers: ["nix"],
       addLabels: ["renovate/nix"]
-    },
-    {
-      addLabels: ["upgrade"]
     }
   ]
 }

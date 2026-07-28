@@ -27,11 +27,11 @@
       description: "Mise tools group",
       groupName: "Mise tools",
       matchManagers: ["mise"],
-      excludeDepNames: [
-        "kubectl",
-        "talosctl",
-        "talhelper",
-        "github:cloudnative-pg/cloudnative-pg",
+      matchDepNames: [
+        "!kubectl",
+        "!talosctl",
+        "!talhelper",
+        "!github:cloudnative-pg/cloudnative-pg",
       ],
       separateMinorPatch: true,
       group: {
@@ -41,7 +41,7 @@
     {
       description: "Omada-Controller Group",
       groupName: "Omada-Controller",
-      matchPackagePatterns: ["omada-controller", "omada-controller-helm"],
+      matchPackageNames: ["/omada-controller/", "/omada-controller-helm/"],
       matchDatasources: ["docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -50,7 +50,7 @@
     {
       description: "Towonel Group",
       groupName: "Towonel",
-      matchPackagePatterns: ["towonel-agent", "towonel-node"],
+      matchPackageNames: ["/towonel-agent/", "/towonel-node/"],
       matchDatasources: ["docker"],
       minimumGroupSize: 2,
       group: {
@@ -60,7 +60,7 @@
     {
       description: "Kgateway Group",
       groupName: "kgateway",
-      matchPackagePatterns: ["kgateway-dev", "^kgateway$"],
+      matchPackageNames: ["/kgateway-dev/", "/^kgateway$/"],
       matchDatasources: ["docker", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -70,7 +70,7 @@
     {
       description: "Opencloud Group",
       groupName: "Opencloud",
-      matchPackagePatterns: ["opencloudeu"],
+      matchPackageNames: ["/opencloudeu/"],
       matchDatasources: ["docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -79,11 +79,11 @@
     {
       description: "Flux Operator Group",
       groupName: "Flux Operator",
-      matchPackagePatterns: [
-        "flux-operator",
-        "flux-instance",
-        "controlplaneio-fluxcd/charts",
-        "^flux$",
+      matchPackageNames: [
+        "/flux-operator/",
+        "/flux-instance/",
+        "/controlplaneio-fluxcd/charts/",
+        "/^flux$/",
       ],
       matchDatasources: ["docker", "github-tags"],
       group: {
@@ -94,7 +94,7 @@
     {
       description: "Intel-Device-Plugins Group",
       groupName: "Intel Device Plugins",
-      matchPackagePatterns: ["intel-device-plugins"],
+      matchPackageNames: ["/intel-device-plugins/"],
       matchDatasources: ["docker", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -135,7 +135,7 @@
     {
       description: "Immich Group",
       groupName: "Immich",
-      matchPackagePatterns: ["immich-app"],
+      matchPackageNames: ["/immich-app/"],
       matchDatasources: ["docker", "github-releases"],
       // Allow rc prereleases and openvino
       versioning: "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:-(?<prerelease>rc\\.\\d+))?(?:-(?<compatibility>openvino))?$",
@@ -149,7 +149,7 @@
     {
       description: "Coredns group",
       groupName: "Coredns",
-      matchPackagePatterns: ["coredns"],
+      matchPackageNames: ["/coredns/"],
       matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -158,7 +158,7 @@
     {
       description: "1Pass group",
       groupName: "1Pass",
-      matchPackagePatterns: ["1password"],
+      matchPackageNames: ["/1password/"],
       matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -168,7 +168,7 @@
     {
       description: "Rook-Ceph group",
       groupName: "Rook-Ceph",
-      matchPackagePatterns: ["rook"],
+      matchPackageNames: ["/rook/"],
       matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -178,7 +178,7 @@
     {
       description: "CNPG Postgres Containers group",
       groupName: "CNPG-postgres-containers",
-      matchPackagePatterns: ["cloudnative-pg/postgresql"],
+      matchPackageNames: ["/cloudnative-pg/postgresql/"],
       matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -187,9 +187,9 @@
     {
       description: "Streamystats group",
       groupName: "Streamystats",
-      matchPackagePatterns: [
-        "streamystats-nextjs",
-        "streamystats-job-server",
+      matchPackageNames: [
+        "/streamystats-nextjs/",
+        "/streamystats-job-server/",
       ],
       matchDatasources: ["docker", "github-releases"],
       group: {
@@ -200,7 +200,7 @@
     {
       description: "Vectorchord Group",
       groupName: "Vectorchord",
-      matchPackagePatterns: ["VectorChord", "vchord-scratch"],
+      matchPackageNames: ["/VectorChord/", "/vchord-scratch/"],
       matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -210,7 +210,7 @@
     {
       description: "Pocket-ID group",
       groupName: "Pocket-ID",
-      matchPackagePatterns: ["pocket-id"],
+      matchPackageNames: ["/pocket-id/"],
       matchDatasources: ["docker", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -219,7 +219,7 @@
     {
       description: "Kube-Prometheus-Stack group",
       groupName: "Kube-Prometheus-Stack",
-      matchPackagePatterns: ["kube-prometheus-stack"],
+      matchPackageNames: ["/kube-prometheus-stack/"],
       matchDatasources: ["docker", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -228,7 +228,7 @@
     {
       description: "Snapshot-Controller group",
       groupName: "Snapshot-Controller",
-      matchPackagePatterns: ["snapshot-controller"],
+      matchPackageNames: ["/snapshot-controller/"],
       matchDatasources: ["docker", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -237,7 +237,7 @@
     {
       description: "Dragonfly-Operator group",
       groupName: "Dragonfly-Operator",
-      matchPackagePatterns: ["dragonfly-operator"],
+      matchPackageNames: ["/dragonfly-operator/"],
       matchDatasources: ["docker", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -246,7 +246,7 @@
     {
       description: "KEDA group",
       groupName: "KEDA",
-      matchPackagePatterns: ["keda"],
+      matchPackageNames: ["/keda/"],
       matchDatasources: ["docker", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -255,7 +255,7 @@
     {
       description: "Volsync group",
       groupName: "Volsync",
-      matchPackagePatterns: ["perfectra1n-volsync", "perfectra1n/volsync"],
+      matchPackageNames: ["/perfectra1n-volsync/", "/perfectra1n/volsync/"],
       matchDatasources: ["docker", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -264,7 +264,7 @@
     {
       description: "Flate group",
       groupName: "Flate",
-      matchPackagePatterns: ["home-operations/flate"],
+      matchPackageNames: ["/home-operations/flate/"],
       matchDatasources: ["github-releases", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -290,7 +290,7 @@
     {
       description: "Nodejs-Poolcontroller group",
       groupName: "nodejs-poolcontroller",
-      matchPackagePatterns: ["tagyoureit/njspc", "rstrouse/njspc-dash"],
+      matchPackageNames: ["/tagyoureit/njspc/", "/rstrouse/njspc-dash/"],
       matchDatasources: ["docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
