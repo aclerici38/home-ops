@@ -38,7 +38,7 @@ spec:
           crowdsec-ui:
             image:
               repository: ghcr.io/theduffman85/crowdsec-web-ui
-              tag: 2026.7.23@sha256:c183c120bdb15d496bf292f6f8d00f573f7cd4b93b7a295e0cd528d8a4dded50
+              tag: 2026.7.24@sha256:9f22aef2a1b4e1b400098049f960ff33a05d60b2f938c4a7f97f57087aeef2cc
             env:
               CONFIG_UI_TIME_ZONE: ${TZ}
               CONFIG_INSTANCE_LAPI_URL: http://crowdsec-service:8080
