@@ -272,19 +272,36 @@
     },
     {
       description: "Nix flake inputs",
-      groupName: "Nix Flake",
       matchManagers: ["nix"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
     },
     {
+      description: "nix-config flake",
+      groupName: "Nix Flake",
+      groupSlug: "nix-config",
       matchManagers: ["nix"],
       matchFileNames: ["nix-config/**"],
       lockFileMaintenance: {
         automerge: true,
         automergeType: "pr",
         platformAutomerge: false,
+        commitMessageAction: "Refresh",
+        commitMessageTopic: "nix flake inputs (nix-config)",
+      },
+    },
+    {
+      description: "raphael flake",
+      groupName: "Nix Flake (raphael)",
+      groupSlug: "raphael",
+      matchManagers: ["nix"],
+      matchFileNames: ["raphael/**"],
+      addLabels: ["raphael"],
+      lockFileMaintenance: {
+        automerge: false,
+        commitMessageAction: "Refresh",
+        commitMessageTopic: "nix flake inputs (raphael)",
       },
     },
     {
