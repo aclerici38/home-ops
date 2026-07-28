@@ -274,14 +274,17 @@
       description: "Nix flake inputs",
       groupName: "Nix Flake",
       matchManagers: ["nix"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
+      matchManagers: ["nix"],
+      matchFileNames: ["nix-config/**"],
       lockFileMaintenance: {
-        enabled: true,
         automerge: true,
         automergeType: "pr",
         platformAutomerge: false,
-      },
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
       },
     },
     {

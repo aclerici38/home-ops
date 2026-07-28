@@ -21,5 +21,10 @@
   ],
   nix: {
     enabled: true,
+    lockFileMaintenance: {
+      enabled: true,
+      schedule: ['* 3-4 * * 1'],
+      rebaseWhen: 'conflicted',
+    },
   },
 }
