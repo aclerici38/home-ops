@@ -5,7 +5,7 @@ kind: StorageClass
 metadata:
   name: miroir
 provisioner: miroir.home-operations.com
-volumeBindingMode: WaitForFirstConsumer
+volumeBindingMode: Immediate
 allowVolumeExpansion: true
 parameters:
   miroir.home-operations.com/replicas: "1"
