@@ -22,9 +22,6 @@ spec:
     - name: rook-ceph
     - name: ceph-csi-drivers
   values:
-    cephImage:
-      repository: quay.io/ceph/ceph
-      tag: v19.2.3
     monitoring:
       enabled: true
       createPrometheusRules: true
