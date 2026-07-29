@@ -24,7 +24,7 @@ spec:
       namespace: intel-gpu-resource-driver
   values:
     kopiur:
-      capacity: 5Gi
+      capacity: 10Gi
       storageClass: miroir
       snapshotClass: miroir
       parallelism: 1
@@ -35,27 +35,3 @@ spec:
           remoteRef:
             key: mosquitto
             property: FRIGATE_MQTT_PASS
-    pocketId:
-      clientID: frigate-raphael
-      name: Frigate (Raphael)
-      url: frigate.raphael.clerici.tech
-      group: fam
-      logo:
-        nameOverride: frigate
-      secret:
-        keys:
-          clientID: client-id
-          clientSecret: client-secret
-      callbackPaths:
-        - /oauth2/redirect
-    oidc:
-      backendHost: id.clerici.tech
-      backendPort: 443
-      oauth2:
-        jwt:
-          idToken:
-            claimsToHeaders:
-              - name: preferred_username
-                header: x-forwarded-user
-              - name: frigate_role
-                header: x-forwarded-groups

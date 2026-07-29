@@ -81,19 +81,6 @@ spec:
             port: 8554
           webrtc:
             port: 8555
-    route:
-      frigate:
-        hostnames:
-          - frigate.raphael.clerici.tech
-        parentRefs:
-          - name: internal
-            namespace: kgateway
-          - name: external
-            namespace: kgateway
-        rules:
-          - backendRefs:
-              - identifier: frigate
-                port: 8971
     persistence:
       config:
         existingClaim: frigate
