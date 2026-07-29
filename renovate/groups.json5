@@ -168,12 +168,12 @@
     {
       description: "Rook-Ceph group",
       groupName: "Rook-Ceph",
-      matchPackageNames: ["/rook/"],
-      matchDatasources: ["docker", "github-releases"],
+      matchPackageNames: ["/rook/", "ceph-csi-drivers"],
+      matchDatasources: ["docker", "github-releases", "helm"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
-      minimumGroupSize: 2,
+      minimumGroupSize: 3,
     },
     {
       description: "CNPG Postgres Containers group",

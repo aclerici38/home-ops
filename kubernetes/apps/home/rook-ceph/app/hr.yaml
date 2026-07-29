@@ -11,24 +11,20 @@ spec:
     kind: OCIRepository
     name: rook-ceph
   install:
-    timeout: 2m
+    timeout: 5m
     remediation:
       retries: 1
   upgrade:
-    timeout: 2m
+    timeout: 5m
     remediation:
       retries: 1
   values:
     currentNamespaceOnly: true
     csi:
-      cephFSKernelMountOptions: ms_mode=crc
-      enableCephfsDriver: true
-      enableCephfsSnapshotter: true
-      enableLiveness: true
-      provisionerReplicas: 2
+      installCsiOperator: true
       serviceMonitor:
-        enabled: true
-    enableDiscoveryDaemon: true
+        enabled: false
+    enableDiscoveryDaemon: false
     image:
       repository: ghcr.io/rook/ceph
     monitoring:
