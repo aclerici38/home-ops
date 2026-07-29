@@ -11,19 +11,43 @@ spec:
     kind: OCIRepository
     name: rook-ceph-cluster
   install:
-    timeout: 2m
+    timeout: 10m
     remediation:
       retries: 1
   upgrade:
-    timeout: 2m
+    timeout: 10m
     remediation:
       retries: 1
   dependsOn:
     - name: rook-ceph
+    - name: ceph-csi-drivers
   values:
+    cephImage:
+      repository: quay.io/ceph/ceph
+      tag: v19.2.3
     monitoring:
       enabled: true
       createPrometheusRules: true
+      prometheusRuleOverrides:
+        CephNodeDiskspaceWarning:
+          disabled: true
+        CephNodeNetworkPacketDrops:
+          for: 15m
+          expr: |
+            (
+              rate(node_network_receive_drop_total{device!~"lo|bond1[.].*"}[1m]) +
+              rate(node_network_transmit_drop_total{device!~"lo|bond1[.].*"}[1m])
+            ) / (
+              rate(node_network_receive_packets_total{device!~"lo|bond1[.].*"}[1m]) +
+              rate(node_network_transmit_packets_total{device!~"lo|bond1[.].*"}[1m])
+            ) >= 0.005 and (
+              rate(node_network_receive_drop_total{device!~"lo|bond1[.].*"}[1m]) +
+              rate(node_network_transmit_drop_total{device!~"lo|bond1[.].*"}[1m])
+            ) >= 10
+        CephNodeNetworkBondDegraded:
+          for: 15m
+        CephMonClockSkew:
+          for: 15m
     toolbox:
       enabled: true
     route:
@@ -37,6 +61,10 @@ spec:
             namespace: kgateway
             sectionName: https
     cephClusterSpec:
+      upgradeOSDRequiresHealthyPGs: true
+      csi:
+        cephfs:
+          kernelMountOptions: ms_mode=crc
       mon:
         count: 3
       cephConfig:
@@ -44,8 +72,10 @@ spec:
           bdev_enable_discard: "true" # quote
           bdev_async_discard_threads: "1" # quote
           osd_class_update_on_start: "false" # quote
-          device_failure_prediction_mode: local # requires mgr module
+          device_failure_prediction_mode: none
           osd_pool_default_size: "2" # quote; 2 OSDs, every pool is size 2
+        mgr:
+          log_max_recent: "100" # quote; bounds rook/rook#17786 mgr heap growth on ceph v20.2.2
       cleanupPolicy:
         wipeDevicesFromOtherClusters: true
       crashCollector:
@@ -58,7 +88,7 @@ spec:
       mgr:
         modules:
           - name: diskprediction_local
-            enabled: true
+            enabled: false
           - name: insights
             enabled: true
           - name: pg_autoscaler
