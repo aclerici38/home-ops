@@ -111,5 +111,8 @@ spec:
             subPath: shm
           - path: /etc/letsencrypt
             subPath: letsencrypt
+          # memray dumps are huge
+          - path: /config/memray_reports
+            subPath: memray
   dependsOn:
     - name: frigate-resources
