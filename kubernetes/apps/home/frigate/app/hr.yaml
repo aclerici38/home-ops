@@ -40,7 +40,7 @@ spec:
             env:
               YOLO_MODELS: yolov7x-320
               HF_HOME: /tmp
-              FRIGATE_MEMRAY_MODULES: frigate.embeddings
+              FRIGATE_MEMRAY_MODULES: frigate.embeddings_manager
               S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
               S6_READ_ONLY_ROOT: 1
             envFrom:
