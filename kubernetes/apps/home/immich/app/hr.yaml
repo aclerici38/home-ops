@@ -167,10 +167,6 @@ spec:
             immich-ml:
               - path: /cache
                 subPath: cache
-              - path: /.config/matplotlib
-                subPath: matplotlib-config
-              - path: /.cache/matplotlib
-                subPath: matplotlib-cache
       tmpfs:
         type: emptyDir
         globalMounts:
