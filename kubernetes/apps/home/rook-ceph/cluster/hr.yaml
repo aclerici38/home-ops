@@ -89,6 +89,9 @@ spec:
         modules:
           - name: diskprediction_local
             enabled: false
+          # Removed in Tentacle (v20)
+          - name: restful
+            enabled: false
           - name: insights
             enabled: true
           - name: pg_autoscaler
