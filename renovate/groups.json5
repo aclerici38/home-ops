@@ -28,12 +28,22 @@
       groupName: "Mise tools",
       matchManagers: ["mise"],
       matchDepNames: [
+        "!cilium-cli",
         "!kubectl",
         "!talosctl",
         "!talhelper",
         "!github:cloudnative-pg/cloudnative-pg",
       ],
       separateMinorPatch: true,
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
+      description: "Cilium group",
+      groupName: "cilium",
+      matchPackageNames: ["/cilium/"],
+      minimumGroupSize: 2,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },

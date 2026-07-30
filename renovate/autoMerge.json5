@@ -11,6 +11,7 @@
       matchDatasources: ["github-tags"],
       automerge: true,
       matchUpdateTypes: ["minor", "patch"],
+      schedule: ["* 2-6 * * *"],
     },
     {
       description: ["Auto-merge specific apps' minor versions"],
@@ -45,13 +46,15 @@
         "**/zfs-scrubber",
       ],
       matchUpdateTypes: ["minor", "patch", "digest"],
+      schedule: ["* 2-6 * * *"],
     },
     {
       description: ["Auto-merge specific apps' major versions"],
       automerge: true,
       matchDatasources: ["docker", "helm"],
-      matchPackageNames: ["**/firefox", "**/http-https-echo"],
+      matchPackageNames: ["**/firefox"],
       matchUpdateTypes: ["major", "minor", "patch", "digest"],
+      schedule: ["* 2-6 * * *"],
     },
     {
       description: ["Auto-merge specific patch updates"],
@@ -65,6 +68,7 @@
         "**/cert-manager"
       ],
       matchUpdateTypes: ["patch", "digest"],
+      schedule: ["* 2-6 * * *"],
     },
     {
       description: ["Auto-merge specific digest-only updates"],
@@ -76,6 +80,16 @@
         "**/coredns",
       ],
       matchUpdateTypes: ["digest"],
+      schedule: ["* 2-6 * * *"],
+    },
+    {
+      description: ["Auto-merge haproxy, but only after a week"],
+      automerge: true,
+      matchDatasources: ["docker"],
+      matchPackageNames: ["**/haproxy"],
+      matchUpdateTypes: ["minor", "patch", "digest"],
+      minimumReleaseAge: "7 days",
+      schedule: ["* 2-6 * * *"],
     },
     {
       description: ["Auto-merge k8s-versioned-schemas"],
@@ -89,15 +103,18 @@
       matchManagers: ["mise"],
       automerge: true,
       matchUpdateTypes: ["major", "minor", "patch", "digest"],
+      schedule: ["* 2-6 * * *"],
     },
     {
       description: ["Exclude specific mise tools from auto-merge"],
       matchManagers: ["mise"],
       matchDepNames: [
+        "cilium-cli",
         "kubectl",
         "github:cloudnative-pg/cloudnative-pg",
       ],
       automerge: false,
+      schedule: ["at any time"],
     },
   ],
 }
