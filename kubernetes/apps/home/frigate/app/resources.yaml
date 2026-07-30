@@ -31,7 +31,12 @@ spec:
     - name: kopiur
       namespace: kopiur
   values:
-    externalSecret: {}
+    externalSecret:
+      data:
+        - secretKey: FRIGATE_MQTT_PASS
+          remoteRef:
+            key: home-mosquitto
+            property: FRIGATE_MQTT_PASS
     gpu: {}
     kopiur:
       existingClaim: true

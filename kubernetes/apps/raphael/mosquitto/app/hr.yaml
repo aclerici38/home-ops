@@ -99,6 +99,7 @@ spec:
       # Written by the init-passwd container, read by mosquitto
       auth:
         type: emptyDir
+        medium: Memory
         globalMounts:
           - path: /mosquitto/auth
       tmp:
