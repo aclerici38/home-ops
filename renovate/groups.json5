@@ -34,7 +34,8 @@
         "!talhelper",
         "!github:cloudnative-pg/cloudnative-pg",
       ],
-      separateMinorPatch: true,
+      separateMajorMinor: false,
+      separateMinorPatch: false,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
