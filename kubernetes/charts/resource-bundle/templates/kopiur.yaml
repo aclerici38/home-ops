@@ -40,6 +40,12 @@
 {{- $preflightTimeout := dig "preflightTimeout" "0s" $k -}}
 {{- /* Don't record a snapshot when the source is unchanged since the last run. */ -}}
 {{- $ignoreIdentical := dig "ignoreIdentical" true $k -}}
+{{- /* Path globs kopia skips. Use it to keep churny, rebuildable state out of the
+       repo (frigate's 1.5G sqlite: recompresses badly, uploads a fat delta nightly,
+       and restoring it against absent media only yields broken thumbnails).
+       CAUTION: an explicit list REPLACES the operator default wholesale, so
+       /lost+found is re-added here — every app on this chart is on an ext4 volume. */ -}}
+{{- $ignoreRules := dig "ignoreRules" list $k -}}
 {{- /* kopia compressor; "" leaves kopia's default (none). */ -}}
 {{- $compressor := dig "compression" "zstd" $k -}}
 {{- /* Restore identity. Defaults to this app's own policy@namespace. Override
@@ -97,6 +103,14 @@ spec:
     maxParallelFileReads: {{ $par }}
   files:
     ignoreIdenticalSnapshots: {{ $ignoreIdentical }}
+    {{- with $ignoreRules }}
+    # /lost+found is prepended so an app-supplied list can't silently drop it:
+    # the operator's default set is replaced, not merged. The rest of that set
+    # (System Volume Information, $RECYCLE.BIN, @eaDir, .snapshot) is Windows/NAS
+    # junk that never appears on these Ceph/miroir volumes.
+    ignoreRules:
+      {{- prepend . "/lost+found" | uniq | toYaml | nindent 6 }}
+    {{- end }}
   retention:
     {{- range $short, $key := $retainKeys }}
     {{- with (dig $short nil $retain) }}

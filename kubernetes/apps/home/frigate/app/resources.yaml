@@ -40,6 +40,16 @@ spec:
     gpu: {}
     kopiur:
       existingClaim: true
+      # Back up config.yaml + model_cache (the custom classification models are
+      # trained artifacts, not re-downloadable) and skip the sqlite DB. Restoring
+      # the DB is only ever useful alongside the media it indexes, which lives on
+      # nfs-tank and isn't backed up — so a restored DB just yields dead thumbnails.
+      # An empty DB is the correct post-restore state; retention re-indexes from
+      # scratch. backup.db is frigate's pre-migration copy, dead weight after an
+      # upgrade settles.
+      ignoreRules:
+        - /frigate.db*
+        - /backup.db
     pocketId:
       group: fam
       clientID: frigate-home

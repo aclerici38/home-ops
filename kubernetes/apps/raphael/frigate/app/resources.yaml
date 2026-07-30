@@ -28,6 +28,13 @@ spec:
       storageClass: miroir
       snapshotClass: miroir
       parallelism: 1
+      # See the home release: config.yaml + model_cache are worth keeping, the
+      # sqlite DB isn't (its media lives on the local-path frigate-media PVC and
+      # isn't backed up either). Doubly worth skipping here — miroir is QLC, so
+      # not rewriting a churny DB into every snapshot is the point.
+      ignoreRules:
+        - /frigate.db*
+        - /backup.db
     gpu: {}
     externalSecret:
       data:

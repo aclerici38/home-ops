@@ -58,6 +58,9 @@
 #   schedule: "0 3 * * *" # default daily; timezone default America/Los_Angeles
 #   parallelism: 4        # kopia --max-parallel-file-reads (raphael overrides to 1)
 #   ignoreIdentical: true # skip recording a snapshot when the source is unchanged
+#   ignoreRules: []       # path globs kopia skips, for churny/rebuildable state
+#                         # living in an otherwise-worth-backing-up PVC (frigate's
+#                         # sqlite). /lost+found is prepended automatically.
 #   compression: zstd     # kopia compressor; "" for none (already-compressed data)
 #   retain:               # any subset; maps to kopia keep* rules
 #     daily: 7
