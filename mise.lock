@@ -15,22 +15,25 @@ url = "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "2026.7.17"
+version = "2026.7.18"
 backend = "aqua:jdx/mise"
 
 [tools."aqua:jdx/mise"."platforms.linux-arm64"]
+checksum = "sha256:3271bd3c99383247961adddee9f88c593012c1d66c3ecfcc5bc6d0bc119629a7"
+url = "https://github.com/jdx/mise/releases/download/v2026.7.18/mise-v2026.7.18-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/495917680"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.linux-x64"]
-checksum = "sha256:71b4a7720cf8f1e22adbc31fed6f0094e84b16d6e365a19c4afae354f1493b3a"
-url = "https://github.com/jdx/mise/releases/download/v2026.7.17/mise-v2026.7.17-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/494778701"
+checksum = "sha256:2a454ff10c52ba40a6a6ed266006511cd90ee7538f0c79f4c4c6537149708d9d"
+url = "https://github.com/jdx/mise/releases/download/v2026.7.18/mise-v2026.7.18-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/495917773"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.macos-arm64"]
-checksum = "sha512:1937b1514600809523a412fd4c80e5b7b42db51e40712ce48ec4bc4935d06446b433568f3ca864ae613618c93c092fe63310aa5e2d798df9f559e2d582fa7938"
-url = "https://github.com/jdx/mise/releases/download/v2026.7.17/mise-v2026.7.17-macos-arm64.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/494778749"
+checksum = "sha256:06472a4cf89fb5b698bb24b55e1405e1e241e609e051cdf6da72ac7953b374ef"
+url = "https://github.com/jdx/mise/releases/download/v2026.7.18/mise-v2026.7.18-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/495917829"
 provenance = "minisign"
 
 [[tools.dyff]]
