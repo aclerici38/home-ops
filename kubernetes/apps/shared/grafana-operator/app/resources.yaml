@@ -32,3 +32,6 @@ spec:
         nameOverride: grafana
       callbackPaths:
         - /login/generic_oauth
+      spec:
+        allowedUserGroups:
+          - groupName: admin

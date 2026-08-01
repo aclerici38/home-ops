@@ -33,3 +33,6 @@ spec:
       secretRotation: false
       callbackPaths:
         - /auth/callback
+      spec:
+        allowedUserGroups:
+          - groupName: admin

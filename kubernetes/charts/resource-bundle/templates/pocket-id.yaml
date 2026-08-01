@@ -1,6 +1,7 @@
 {{- if hasKey .Values "pocketId" }}
 {{- $app := include "resources.app" . -}}
 {{- $p := .Values.pocketId -}}
+{{- $spec := default dict $p.spec -}}
 {{- $clientID := dig "clientID" $app $p -}}
 {{/* display name in the pocket-id UI; defaults to clientID so it's distinct whenever clientID is */}}
 {{- $name := dig "name" $clientID $p -}}
@@ -31,13 +32,18 @@ spec:
     window:
       opens: "0 0 * * *"
       closesAfter: 4h
+  {{- /* default: the PocketIDUserGroup CR of that name in the operator namespace.
+         spec.allowedUserGroups wins outright, for groups managed outside this
+         cluster (groupName / groupID entries). */}}
+  {{- if not (hasKey $spec "allowedUserGroups") }}
   allowedUserGroups:
     - name: {{ dig "group" "admin" $p }}
       namespace: pocket-id-operator
+  {{- end }}
   {{- with $cbs }}
   callbackUrls: {{ toYaml . | nindent 4 }}
   {{- end }}
-  {{- with $p.spec }}
+  {{- with $spec }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
 {{- end }}
