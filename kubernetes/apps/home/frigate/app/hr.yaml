@@ -38,7 +38,6 @@ spec:
               repository: ghcr.io/blakeblackshear/frigate
               tag: 0.18.0-beta2@sha256:17be6d3fa24843cd0285e920b0aa5e9a19939df27997dc88559de8d4ada17e36
             env:
-              YOLO_MODELS: yolov7x-320
               HF_HOME: /tmp
               # FRIGATE_MEMRAY_MODULES: frigate.detector:openvino
               S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
