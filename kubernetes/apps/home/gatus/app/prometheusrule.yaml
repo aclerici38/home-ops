@@ -10,10 +10,20 @@ spec:
       rules:
         - alert: GatusEndpointDown
           expr: |-
-            gatus_results_endpoint_success{group=~"external|services"} == 0
+            gatus_results_endpoint_success == 0
           for: 5m
           annotations:
             summary: >-
               The {{ $labels.name }} endpoint is down
+          labels:
+            severity: critical
+        - alert: GatusDown
+          expr: |-
+            absent(gatus_results_endpoint_success)
+          for: 10m
+          annotations:
+            summary: >-
+              gatus is not reporting any endpoint results — every service check
+              is blind, not passing
           labels:
             severity: critical
