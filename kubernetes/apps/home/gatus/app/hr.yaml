@@ -20,6 +20,24 @@ spec:
       retries: 1
   dependsOn:
     - name: gatus-resources
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: gatus-gatus-sidecar
+            patch: |-
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: gatus-gatus-sidecar
+              spec:
+                template:
+                  spec:
+                    volumes:
+                      - name: config
+                        emptyDir:
+                          medium: Memory
   values:
     podSecurityContext:
       seccompProfile:
@@ -64,11 +82,6 @@ spec:
       items:
         - key: config.yaml
           path: config.yaml
-    persistence:
-      enabled: true
-      storageClass: ceph-filesystem
-      accessMode: ReadWriteMany
-      size: 1Gi
     monitoring:
       serviceMonitor:
         enabled: true

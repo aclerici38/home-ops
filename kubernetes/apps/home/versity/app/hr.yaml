@@ -40,6 +40,9 @@ spec:
       claimName: backups
     httpRoute:
       enabled: true
+      annotations:
+        gatus.home-operations.com/endpoint: |-
+          path: /_/health
       parentRefs: &gateway
         - name: internal
           namespace: kgateway

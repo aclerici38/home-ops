@@ -37,9 +37,32 @@ endpoints:
 
   - name: Raphael
     group: travel
-    url: tcp://raphael.clerici.tech:443
+    url: https://raphael.clerici.tech/manifest.json
     conditions:
       - "[STATUS] == 200"
+      - "[BODY].name == Home Assistant"
+
+  - name: Hub-API
+    group: towonel
+    url: https://towonel.cloud.clerici.tech/v1/health
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].status == ok"
+
+  - name: Edge-HTTP
+    group: towonel
+    url: http://vps.clerici.tech
+    client:
+      ignore-redirect: true
+    conditions:
+      - "[STATUS] == 301"
+
+  - name: Iroh-Relay
+    group: towonel
+    url: https://vps.clerici.tech:8444/healthz
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].status == ok"
 
 metrics: true
 

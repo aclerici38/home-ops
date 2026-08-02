@@ -83,6 +83,12 @@ spec:
             port: 8555
     route:
       auth:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            client:
+              ignore-redirect: true
+            conditions:
+              - "[STATUS] == 302"
         hostnames:
           - frigate.clerici.tech
         parentRefs:

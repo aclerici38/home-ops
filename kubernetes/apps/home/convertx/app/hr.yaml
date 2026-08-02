@@ -76,6 +76,12 @@ spec:
             port: *port
     route:
       convertx:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            client:
+              ignore-redirect: true
+            conditions:
+              - "[STATUS] == 302"
         hostnames:
           - convertx.clerici.tech
         parentRefs:
