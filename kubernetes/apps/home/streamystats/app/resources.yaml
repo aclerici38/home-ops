@@ -21,6 +21,7 @@ spec:
     - name: cloudnative-pg
       namespace: cloudnative-pg
   values:
+    externalSecret: {}
     cnpg:
       mode: shared
       dbExtensions:

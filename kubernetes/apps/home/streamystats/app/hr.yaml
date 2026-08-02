@@ -29,22 +29,38 @@ spec:
             image:
               repository: ghcr.io/fredrikburmester/streamystats-nextjs
               tag: v2.18.1@sha256:5560e0a936617a56e70f1951700d202b440072dcd2d7ebffd35e7999c388be8b
-            env: &env
-              DATABASE_URL:
+            env:
+              DATABASE_URL: &dbUri
                 valueFrom:
                   secretKeyRef:
                     name: streamystats-postgres
                     key: uri
-              JOB_SERVER_URL: http://streamystats-job-server:3005
+              JOB_SERVER_URL: &jobUrl http://streamystats-job-server:3005
+              SESSION_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: streamystats
+                    key: SESSION_SECRET
+              NEXT_SERVER_ACTIONS_ENCRYPTION_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: streamystats
+                    key: NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
             probes:
-              liveness: &probes
+              liveness:
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
                     path: /api/health
                     port: &fPort 3000
-              readiness: *probes
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: *fPort
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -62,7 +78,8 @@ spec:
               repository: ghcr.io/fredrikburmester/streamystats-job-server
               tag: v2.18.1@sha256:fba43363b72e1418418e881aca05a8f85652fde5461ff7d71cda209f5d50ab4a
             env:
-              <<: *env
+              DATABASE_URL: *dbUri
+              JOB_SERVER_URL: *jobUrl
               HOST: 0.0.0.0
             probes:
               liveness: &probes
