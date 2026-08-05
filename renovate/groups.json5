@@ -113,7 +113,6 @@
       minimumGroupSize: 2,
     },
     {
-
       description: "Talos (home)",
       groupName: "Talos (home)",
       matchPackageNames: [
@@ -124,8 +123,9 @@
       additionalBranchPrefix: "home-",
       // Override separateMinorPatch inherited from the Mise tools group
       separateMinorPatch: false,
+      commitMessageSuffix: "(home)",
       group: {
-        commitMessageTopic: "{{{groupName}}} group",
+        commitMessageTopic: "Talos group",
       },
     },
     {
@@ -139,8 +139,9 @@
       matchFileNames: ["talos/cloud/**", "kubernetes/flux/cloud/**"],
       additionalBranchPrefix: "cloud-",
       separateMinorPatch: false,
+      commitMessageSuffix: "(cloud)",
       group: {
-        commitMessageTopic: "{{{groupName}}} group",
+        commitMessageTopic: "Talos group",
       },
     },
     {
