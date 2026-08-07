@@ -26,6 +26,8 @@ spec:
     app: pocket-id
     cnpg:
       mode: shared
+      # Migrations get upset
+      poolMode: session
     externalSecret:
       data:
         - secretKey: EMAIL

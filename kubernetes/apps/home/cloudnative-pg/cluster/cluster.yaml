@@ -91,7 +91,7 @@ spec:
       server_idle_timeout: "180"
       max_prepared_statements: "200"
 ---
-# Session-mode pooler for apps that need session semantics (immich, dawarich).
+# Session-mode pooler for apps that need session semantics (immich, dawarich, pocket-id).
 # Session pooling pins a server connection for the whole client session, so
 # default_pool_size must cover expected concurrent app connections; only a
 # couple of apps use this, so it stays small.
