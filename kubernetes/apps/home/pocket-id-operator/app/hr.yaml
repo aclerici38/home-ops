@@ -108,6 +108,13 @@ spec:
               value: Anthony
             lastName:
               value: Clerici
+            customClaims:
+              - key: oc_groups
+                value: opencloud-admins
+              - key: immich_role
+                value: admin
+              - key: frigate_role
+                value: admin
         - name: steve
           spec:
             locale: en
@@ -119,13 +126,6 @@ spec:
             users:
               userRefs:
                 - name: anthony
-            customClaims:
-              - key: oc_groups
-                value: opencloud-admins
-              - key: immich_role
-                value: admin
-              - key: frigate_role
-                value: admin
         - name: fam
           spec:
             users: &fam
