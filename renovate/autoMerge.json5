@@ -4,6 +4,7 @@
   // Override the preset bundle's :automergeBranch back to PR-style automerge.
   automergeType: "pr",
   assignAutomerge: false,
+  rebaseWhen: "conflicted",
   packageRules: [
     {
       description: ["Auto-merge GitHub Actions for minor and patch"],
