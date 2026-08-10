@@ -10,6 +10,7 @@ spec:
   dependsOn:
     - name: sonarr
     - name: radarr
+    - name: external-secrets-stores
   sourceRef:
     kind: GitRepository
     name: flux-system
