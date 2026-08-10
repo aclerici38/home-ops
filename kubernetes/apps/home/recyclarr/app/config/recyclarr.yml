@@ -57,6 +57,64 @@ sonarr:
 
     quality_definition:
       type: series
+      # The guide's "series" sizes are effectively uncapped (max 1000 MB/min,
+      # preferred 995) - which also means Sonarr actively chases the LARGEST
+      # release in every quality. Both are overridden here with a flat ceiling.
+      #
+      # 90 MB/min ~= 4 GB for a 45-minute episode, ~2 GB for a 22-minute one.
+      # preferred sits just under max, so within that budget the best release
+      # still wins; the cap is the only brake. (It has to be set explicitly -
+      # preferred_ratio does not apply on top of a per-quality max, and leaving
+      # it at the guide's 995 makes Sonarr reject the whole definition.) In
+      # practice this means a 1080p library, with 2160p landing only when the
+      # encode is efficient - which the x265 bonus already pushes toward.
+      qualities:
+        - name: HDTV-720p
+          max: 90
+          preferred: 85
+        - name: WEBRip-720p
+          max: 90
+          preferred: 85
+        - name: WEBDL-720p
+          max: 90
+          preferred: 85
+        - name: Bluray-720p
+          max: 90
+          preferred: 85
+        - name: HDTV-1080p
+          max: 90
+          preferred: 85
+        - name: WEBRip-1080p
+          max: 90
+          preferred: 85
+        - name: WEBDL-1080p
+          max: 90
+          preferred: 85
+        - name: Bluray-1080p
+          max: 90
+          preferred: 85
+        - name: Bluray-1080p Remux
+          max: 90
+          preferred: 85
+        - name: HDTV-2160p
+          max: 90
+          preferred: 85
+        - name: WEBRip-2160p
+          max: 90
+          preferred: 85
+        - name: WEBDL-2160p
+          max: 90
+          preferred: 85
+        # The guide's floor for these two (94.6 and 187.4) sits above our
+        # ceiling, so min has to come down or nothing in them is ever valid.
+        - name: Bluray-2160p
+          min: 25
+          max: 90
+          preferred: 85
+        - name: Bluray-2160p Remux
+          min: 25
+          max: 90
+          preferred: 85
 
     quality_profiles:
       - name: English Preferred (720p+)
@@ -203,6 +261,60 @@ radarr:
 
     quality_definition:
       type: movie
+      # Same story as Sonarr: the guide's "movie" sizes are uncapped (max 2000
+      # MB/min, preferred 1999), so Radarr would chase the biggest file it can
+      # find - which for Remux-2160p means 55-85 GB.
+      #
+      # 130 MB/min ~= 15 GB for a 115-minute movie. That keeps good 1080p and
+      # the leaner 2160p WEB-DLs, and structurally excludes remuxes: a real
+      # Remux-2160p runs 480-740 MB/min, so it can never fit.
+      qualities:
+        - name: HDTV-720p
+          max: 130
+          preferred: 125
+        - name: WEBRip-720p
+          max: 130
+          preferred: 125
+        - name: WEBDL-720p
+          max: 130
+          preferred: 125
+        - name: Bluray-720p
+          max: 130
+          preferred: 125
+        - name: HDTV-1080p
+          max: 130
+          preferred: 125
+        - name: WEBRip-1080p
+          max: 130
+          preferred: 125
+        - name: WEBDL-1080p
+          max: 130
+          preferred: 125
+        - name: Bluray-1080p
+          max: 130
+          preferred: 125
+        - name: Remux-1080p
+          max: 130
+          preferred: 125
+        - name: HDTV-2160p
+          max: 130
+          preferred: 125
+        - name: WEBRip-2160p
+          max: 130
+          preferred: 125
+        - name: WEBDL-2160p
+          max: 130
+          preferred: 125
+        - name: Bluray-2160p
+          min: 34.5
+          max: 130
+          preferred: 125
+        # Guide floor is 187.4, above our ceiling - lower it so the quality is
+        # at least valid, even though real remuxes will never fit the cap.
+        - name: Remux-2160p
+          min: 34.5
+          max: 130
+          preferred: 125
 
     quality_profiles:
       - name: English Preferred (720p+)
