@@ -6,14 +6,117 @@ metadata:
   name: renovate-operator-rules
 spec:
   groups:
-    - name: renovate-operator.rules
+    - name: renovate-operator.runs.rules
       rules:
-        - alert: RenovateDependencyIssues
+        - alert: RenovateRunFailed
           expr: |-
-            renovate_operator_dependency_issues == 1
+            renovate_operator_run_failed == 1
           for: 1h
           annotations:
             summary: >-
-              Renovate dependency issues detected for {{ $labels.project }}
+              Renovate has been failing for {{ $labels.project }}
+              ({{ $labels.renovate_job }}) for 1h — dependency updates for this
+              repo have stopped. Check the last Job's logs in the
+              renovate-operator namespace.
+          labels:
+            severity: warning
+        - alert: RenovateRunDegraded
+          expr: |-
+            (renovate_operator_log_issues{level="error"} > 0)
+              unless on (project) (renovate_operator_run_failed == 1)
+          for: 2h
+          annotations:
+            summary: >-
+              Renovate logged {{ $value }} error(s) for {{ $labels.project }} while
+              still reporting success — a datasource or manager is partially
+              broken and some updates are being skipped silently.
+          labels:
+            severity: warning
+        - alert: RenovateJobRetriesExhausted
+          expr: |-
+            increase(renovate_operator_job_failures_total[1h]) > 0
+          for: 15m
+          annotations:
+            summary: >-
+              renovate-operator gave up dispatching {{ $labels.renovate_job }}
+              ({{ $labels.kind }}, reason={{ $labels.reason }}) —
+              {{ $value | humanize }} failures in the last hour. The Job is not
+              running at all; check pod events for scheduling or resource errors.
+          labels:
+            severity: critical
+
+    - name: renovate-operator.scheduler.rules
+      rules:
+        - alert: RenovateScheduleStalled
+          expr: |-
+            time() - renovate_operator_schedule_next_run_timestamp_seconds > 600
+          for: 15m
+          annotations:
+            summary: >-
+              renovate-operator schedule {{ $labels.renovate_job }} is
+              {{ $value | humanizeDuration }} overdue — the scheduler is wedged and
+              no repo in this job is being updated.
+          labels:
+            severity: critical
+
+        - alert: RenovateQueueStalled
+          expr: |-
+            renovate_operator_projects_scheduled > 0
+          for: 1h
+          annotations:
+            summary: >-
+              {{ $value }} project(s) have been queued on
+              {{ $labels.renovate_job }} for 1h without dispatching — check
+              parallelism and whether executor pods can schedule on the node.
+          labels:
+            severity: warning
+
+        - alert: RenovateDiscoveryFailing
+          expr: |-
+            increase(renovate_operator_discovery_jobs_total{status!="completed"}[1h]) > 0
+          for: 15m
+          annotations:
+            summary: >-
+              Discovery for {{ $labels.renovate_job }} is failing
+              (status={{ $labels.status }}) — the repo list cannot be rebuilt, so
+              no projects will be executed.
+          labels:
+            severity: warning
+
+    - name: renovate-operator.availability.rules
+      rules:
+        - alert: RenovateOperatorDown
+          expr: |-
+            up{job="renovate-operator", namespace="renovate-operator"} == 0
+          for: 10m
+          annotations:
+            summary: >-
+              renovate-operator scrape target has been down for 10m — no schedules
+              are being evaluated.
+          labels:
+            severity: critical
+
+        - alert: RenovateOperatorMetricsAbsent
+          expr: |-
+            absent(up{job="renovate-operator", namespace="renovate-operator"})
+          for: 10m
+          annotations:
+            summary: >-
+              No renovate-operator scrape target for 10m — the operator is gone or
+              the ServiceMonitor no longer matches. All other Renovate alerts are
+              blind while this fires.
+          labels:
+            severity: critical
+
+    - name: renovate-operator.backlog.rules
+      rules:
+        - alert: RenovateApprovalsNeeded
+          expr: |-
+            renovate_operator_approvals_needed > 0
+          for: 24h
+          annotations:
+            summary: >-
+              {{ $value }} Renovate update(s) for {{ $labels.project }} have been
+              awaiting approval for 24h — check the Dependency Dashboard.
           labels:
             severity: warning
