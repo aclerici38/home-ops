@@ -53,11 +53,13 @@ spec:
   parallelism: 1
   scratchVolume:
     medium: Memory
-    sizeLimit: 2Gi
+    sizeLimit: 4Gi
   resources:
+    requests:
+      memory: 2Gi
     limits:
       cpu: 1000m
-      memory: 3Gi
+      memory: 5Gi
   schedule: "${SCHEDULE}"
   githubAppReference:
     secretName: renovate-operator
