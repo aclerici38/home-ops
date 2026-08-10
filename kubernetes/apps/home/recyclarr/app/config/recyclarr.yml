@@ -20,18 +20,33 @@
 ## the only thing that ranks releases, which is what lets a 720p English release
 ## replace a 1080p non-English one.
 ##
-## Score budget (keep the gaps intact if you tune this):
-##   Language: Not English  -1000   reverse-scored; only fires when NO English
-##   2160p / 1080p / 720p    +300 / +200 / +100
-##   Anime Dual Audio         +150   English + original audio (implies subs)
-##   Dual Audio Asian         +150
-##   Dubs Only                 +40   English audio, usually no original/subs
-##   x265                      +50
-##   AV1                       -50   accepted, just last in line
-##   Unwanted formats       -10000   hard reject (min_format_score is -2000)
-## The -1000 language penalty is larger than the widest possible resolution +
-## codec spread (300 + 50), so English always wins. Everything non-English still
-## lands well above min_format_score, so it still gets grabbed.
+## Two score layers, deliberately on different scales:
+##
+##   OURS (overridden below) - the hard constraints:
+##     Unwanted formats     -100000   hard reject
+##     Language: Not English -40000   reverse-scored; fires only when NO English
+##     2160p / 1080p / 720p  +12000 / +8000 / +4000
+##     Anime/Asian Dual Audio +6000   English + original audio (implies subs)
+##     x265                   +2000
+##     AV1                    -2000   accepted, just last in line
+##     Dubs Only              +1600   English audio, usually no original/subs
+##
+##   THEIRS (custom_format_groups, guide scores untouched) - the tiebreakers:
+##     Remux/Bluray/WEB group tiers   1600-1950
+##     Anime BD/Web group tiers        100-1400
+##     HDR                                 500
+##     Streaming services               0-  75
+##     Season packs / repacks / anime versions  4-10
+##
+## The scales are chosen so the guide can never overturn a hard constraint:
+##   * Worst-case guide stack is 1950 + 1400 + 500 + 75 + 10 + 7 = 3942, which
+##     is under the 4000 resolution step - so release-group tiering reorders
+##     releases WITHIN a resolution but never promotes 1080p over 2160p.
+##   * 40000 dwarfs any achievable positive total, so an English release always
+##     outranks a non-English one no matter how good the latter's groups are.
+##   * min_format_score -60000 sits between the two: non-English still gets
+##     grabbed (worst case 4000 - 40000 = -36000), unwanted never does.
+## If you retune, keep those three inequalities true and everything else follows.
 ################################################################################
 
 sonarr:
@@ -119,13 +134,13 @@ sonarr:
     quality_profiles:
       - name: English Preferred (720p+)
         # Accept anything that clears the garbage floor. Non-English bottoms out
-        # around -900, unwanted formats at -9800 or worse.
-        min_format_score: -2000
+        # around -36000; anything carrying an unwanted format lands below -88000.
+        min_format_score: -60000
         upgrade:
           allowed: true
           until_quality: Any (720p-2160p)
           # Effectively "never stop looking for something better".
-          until_score: 10000
+          until_score: 100000
         reset_unmatched_scores:
           enabled: true
         quality_sort: top
@@ -152,11 +167,11 @@ sonarr:
     custom_formats:
       # --- Language: the dominant term ----------------------------------------
       # Reverse-scored: this only matches releases with NO English audio, so
-      # English (including dubs and dual-audio) effectively scores +1000 relative
-      # to everything else. Big enough to outrank any resolution difference.
+      # English (including dubs and dual-audio) effectively scores +40000 over
+      # everything else - more than resolution and every guide tier combined.
       - trash_ids:
           - 69aa1e159f97d860440b04cd6d590c4f # Language: Not English
-        score: -1000
+        score: -40000
         assign_scores_to:
           - name: English Preferred (720p+)
 
@@ -166,7 +181,7 @@ sonarr:
       - trash_ids:
           - 418f50b10f1907201b6cfdf881f467b7 # Anime Dual Audio
           - ceb6ca558f4a3d47a00ebbdcb7fa7922 # Dual Audio Asian
-        score: 150
+        score: 6000
         assign_scores_to:
           - name: English Preferred (720p+)
 
@@ -174,26 +189,26 @@ sonarr:
       # preferred over a non-English release - just the least good way to get it.
       - trash_ids:
           - 9c14d194486c4014d422adc64092d794 # Dubs Only
-        score: 40
+        score: 1600
         assign_scores_to:
           - name: English Preferred (720p+)
 
       # --- Resolution ---------------------------------------------------------
       - trash_ids:
           - 1bef6c151fa35093015b0bfef18279e5 # 2160p
-        score: 300
+        score: 12000
         assign_scores_to:
           - name: English Preferred (720p+)
 
       - trash_ids:
           - 290078c8b266272a5cc8e251b5e2eb0b # 1080p
-        score: 200
+        score: 8000
         assign_scores_to:
           - name: English Preferred (720p+)
 
       - trash_ids:
           - c99279ee27a154c2f20d1d505cc99e25 # 720p
-        score: 100
+        score: 4000
         assign_scores_to:
           - name: English Preferred (720p+)
 
@@ -203,7 +218,7 @@ sonarr:
       # any-resolution HEVC format, scored positive.
       - trash_ids:
           - c9eafd50846d299b862ca9bb6ea91950 # x265
-        score: 50
+        score: 2000
         assign_scores_to:
           - name: English Preferred (720p+)
 
@@ -211,7 +226,7 @@ sonarr:
       # softened to a nudge so it still gets grabbed when it's all there is.
       - trash_ids:
           - 15a05bc7c1a36e2b57fd628f8977e2fc # AV1
-        score: -50
+        score: -2000
         assign_scores_to:
           - name: English Preferred (720p+)
 
@@ -224,24 +239,61 @@ sonarr:
           - 9c11cd3f07101cdba90a2d81cf0e56b4 # LQ
           - e2315f990da2e2cbfc9fa5b7a6fcfe48 # LQ (Release Title)
           - 23297a736ca77c0fc8e70f8edd7ee56c # Upscaled
-        score: -10000
+        score: -100000
         assign_scores_to:
           - name: English Preferred (720p+)
 
-      # --- Small tiebreakers --------------------------------------------------
-      # Guide default scores (+5/+6/+7 and the anime v0-v4 ladder). Only matter
-      # when two releases are otherwise identical.
-      - trash_ids:
-          - ec8fa7296b64e8cd390a1600981f3923 # Repack/Proper
-          - eb3d5cc0a2be0db205fb823640db6a3c # Repack2
-          - 44e7c4de10ae50265753082e5dc76047 # Repack3
-          - d2d7b8a9d39413da5f44054080e028a3 # v0
-          - 273bd326df95955e1b6c26527d1df89b # v1
-          - 228b8ee9aa0a609463efca874524a6b8 # v2
-          - 0e5833d3af2cc5fa96a0c29cd4477feb # v3
-          - 4fc15eeb8f2f9a749f918217d4234ad8 # v4
-        assign_scores_to:
-          - name: English Preferred (720p+)
+    # --- The guide's own judgement, scores untouched ---------------------------
+    # Everything above is ours. Everything here is TRaSH's, at their scores, and
+    # is what makes this more than a hand-rolled config: the release-group tier
+    # lists are the part of the guide that actually changes over time, and using
+    # groups (rather than pinned trash_ids) means new groups and re-tierings
+    # arrive on the next sync without an edit here.
+    #
+    # assign_scores_to is required: auto-sync of default groups only happens for
+    # guide-backed (trash_id) profiles, and ours is user-defined by name.
+    #
+    # Deliberately NOT added: [Audio] Audio Formats. Its 750-5000 range would
+    # rival the resolution ladder, and it fights the size caps above - TrueHD
+    # and Atmos tracks are exactly what push a file past 90 MB/min, so it would
+    # score +5000 for releases the cap then rejects.
+    custom_format_groups:
+      add:
+        # select_all is REQUIRED for the two release-group sets: every tier CF
+        # in them is opt-in (default: false), so without it the group resolves
+        # to nothing at all and you silently get no tiering.
+        - trash_id: b4a4353e3b3e6789dbef07677ff23686 # [Release Groups] HQ
+          select_all: true
+          assign_scores_to:
+            - name: English Preferred (720p+)
+
+        # Also brings Anime Raws / Anime LQ Groups at the guide's -10000. That
+        # is far softer than our -100000 rejects, so those stay grabbable as a
+        # last resort rather than being banned outright - deliberate.
+        - trash_id: f206572b1147d0221bb1c96765b349e8 # [Release Groups] Anime
+          select_all: true
+          assign_scores_to:
+            - name: English Preferred (720p+)
+
+        - trash_id: 7e1724c5da59e7474803ad25be98f6a3 # [HDR Formats] HDR
+          assign_scores_to:
+            - name: English Preferred (720p+)
+
+        - trash_id: abe720fab2d27682adc2a735136cec02 # [Streaming Services] General
+          assign_scores_to:
+            - name: English Preferred (720p+)
+
+        - trash_id: d920fd959d220306888f40b6f38e1578 # [Optional] Season Packs
+          assign_scores_to:
+            - name: English Preferred (720p+)
+
+        - trash_id: 22256473b656e195eabc2798e326fbb7 # [Required] Repack/Proper
+          assign_scores_to:
+            - name: English Preferred (720p+)
+
+        - trash_id: 4b196eed652c65ea98d615212040ebe2 # [Required] Anime Versions
+          assign_scores_to:
+            - name: English Preferred (720p+)
 
 radarr:
   radarr:
@@ -318,11 +370,11 @@ radarr:
 
     quality_profiles:
       - name: English Preferred (720p+)
-        min_format_score: -2000
+        min_format_score: -60000
         upgrade:
           allowed: true
           until_quality: Any (720p-2160p)
-          until_score: 10000
+          until_score: 100000
         reset_unmatched_scores:
           enabled: true
         quality_sort: top
@@ -348,52 +400,52 @@ radarr:
       # --- Language: the dominant term ----------------------------------------
       - trash_ids:
           - 0dc8aec3bd1c47cd6c40c46ecd27e846 # Language: Not English
-        score: -1000
+        score: -40000
         assign_scores_to:
           - name: English Preferred (720p+)
 
       - trash_ids:
           - 4a3b087eea2ce012fcc1ce319259a3be # Anime Dual Audio
           - 67084559197ea10b6022e2650c594866 # Dual Audio Asian
-        score: 150
+        score: 6000
         assign_scores_to:
           - name: English Preferred (720p+)
 
       - trash_ids:
           - b23eae459cc960816f2d6ba84af45055 # Dubs Only
-        score: 40
+        score: 1600
         assign_scores_to:
           - name: English Preferred (720p+)
 
       # --- Resolution ---------------------------------------------------------
       - trash_ids:
           - fb392fb0d61a010ae38e49ceaa24a1ef # 2160p
-        score: 300
+        score: 12000
         assign_scores_to:
           - name: English Preferred (720p+)
 
       - trash_ids:
           - 820b09bb9acbfde9c35c71e0e565dad8 # 1080p
-        score: 200
+        score: 8000
         assign_scores_to:
           - name: English Preferred (720p+)
 
       - trash_ids:
           - b2be17d608fc88818940cd1833b0b24c # 720p
-        score: 100
+        score: 4000
         assign_scores_to:
           - name: English Preferred (720p+)
 
       # --- Codec --------------------------------------------------------------
       - trash_ids:
           - 9170d55c319f4fe40da8711ba9d8050d # x265
-        score: 50
+        score: 2000
         assign_scores_to:
           - name: English Preferred (720p+)
 
       - trash_ids:
           - cae4ca30163749b891686f95532519bd # AV1
-        score: -50
+        score: -2000
         assign_scores_to:
           - name: English Preferred (720p+)
 
@@ -410,19 +462,47 @@ radarr:
           - e204b80c87be9497a8a6eaff48f72905 # LQ (Release Title)
           - 712d74cd88bceb883ee32f773656b1f5 # Sing-Along Versions
           - bfd8eb01832d646a0a89c4deb46f8564 # Upscaled
-        score: -10000
+        score: -100000
         assign_scores_to:
           - name: English Preferred (720p+)
 
-      # --- Small tiebreakers --------------------------------------------------
-      - trash_ids:
-          - e7718d7a3ce595f289bfee26adc178f5 # Repack/Proper
-          - ae43b294509409a6a13919dedd4764c4 # Repack2
-          - 5caaaa1c08c1742aa4342d8c4cc463f2 # Repack3
-          - c259005cbaeb5ab44c06eddb4751e70c # v0
-          - 5f400539421b8fcf71d51e6384434573 # v1
-          - 3df5e6dfef4b09bb6002f732bed5b774 # v2
-          - db92c27ba606996b146b57fbe6d09186 # v3
-          - d4e5e842fad129a3c097bdb2d20d31a0 # v4
-        assign_scores_to:
-          - name: English Preferred (720p+)
+    # --- The guide's own judgement, scores untouched ---------------------------
+    # Same split as Sonarr. Radarr's HQ tiers reach 1950 (it has UHD Bluray
+    # tiers Sonarr lacks), which is what sets the 4000 resolution step above.
+    # Also not added: [Audio] Audio Formats (see Sonarr); no season-pack group
+    # exists for Radarr.
+    custom_format_groups:
+      add:
+        - trash_id: b2f2af430f73f3ad1f9948f33e0f0cf8 # [Release Groups] HQ
+          select_all: true
+          assign_scores_to:
+            - name: English Preferred (720p+)
+
+        # Radarr's copy of this group also contains Anime Dual Audio, which we
+        # already score at 6000 above - excluded here so there is exactly one
+        # source of truth for it.
+        - trash_id: 1f8404f7f72c7edc8901f2f3589d1a91 # [Release Groups] Anime
+          select_all: true
+          exclude:
+            - 4a3b087eea2ce012fcc1ce319259a3be # Anime Dual Audio
+          assign_scores_to:
+            - name: English Preferred (720p+)
+
+        - trash_id: ef20e67b95a381fb3bc6d1f06ea24f46 # [HDR Formats] HDR
+          assign_scores_to:
+            - name: English Preferred (720p+)
+
+        # Mostly unscored in the guide for Radarr (only BCORE/CRiT/MA carry
+        # 15-20), so this is close to a no-op - included for symmetry and so it
+        # picks up scores if the guide ever adds them.
+        - trash_id: d9cc9a504e5ede6294c8b973aad4f028 # [Streaming Services] General
+          assign_scores_to:
+            - name: English Preferred (720p+)
+
+        - trash_id: d688ff99733a9bc626c37eb61ea74704 # [Required] Repack/Proper
+          assign_scores_to:
+            - name: English Preferred (720p+)
+
+        - trash_id: 6ebc4bfba9721581d3e9e8994456e6f7 # [Required] Anime Versions
+          assign_scores_to:
+            - name: English Preferred (720p+)
