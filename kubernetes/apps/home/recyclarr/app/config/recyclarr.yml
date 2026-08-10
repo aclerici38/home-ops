@@ -23,13 +23,14 @@
 ## Two score layers, deliberately on different scales:
 ##
 ##   OURS (overridden below) - the hard constraints:
-##     Unwanted formats     -100000   hard reject
+##     Unwanted formats     -200000   hard reject
 ##     Language: Not English -40000   reverse-scored; fires only when NO English
 ##     2160p / 1080p / 720p  +12000 / +8000 / +4000
-##     Anime/Asian Dual Audio +6000   English + original audio (implies subs)
+##     Anime Dual Audio      +40000   exactly cancels the penalty above; see the
+##                                    note at the CF for why this is not a bonus
 ##     x265                   +2000
 ##     AV1                    -2000   accepted, just last in line
-##     Dubs Only              +1600   English audio, usually no original/subs
+##     Dubs Only                  0   already parses as English, so no penalty
 ##
 ##   THEIRS (custom_format_groups, guide scores untouched) - the tiebreakers:
 ##     Remux/Bluray/WEB group tiers   1600-1950
@@ -45,7 +46,10 @@
 ##   * 40000 dwarfs any achievable positive total, so an English release always
 ##     outranks a non-English one no matter how good the latter's groups are.
 ##   * min_format_score -60000 sits between the two: non-English still gets
-##     grabbed (worst case 4000 - 40000 = -36000), unwanted never does.
+##     grabbed (worst case 4000 - 2000 - 40000 = -38000), unwanted never does.
+##     Note the reject penalty has to clear the BEST possible positive total
+##     (12000 + 2000 + 40000 + 3942 = 57942), not zero - at -100000 an LQ
+##     dual-audio release scored -52000 and would have been accepted.
 ## If you retune, keep those three inequalities true and everything else follows.
 ################################################################################
 
@@ -134,7 +138,7 @@ sonarr:
     quality_profiles:
       - name: English Preferred (720p+)
         # Accept anything that clears the garbage floor. Non-English bottoms out
-        # around -36000; anything carrying an unwanted format lands below -88000.
+        # around -38000; anything carrying an unwanted format lands below -142000.
         min_format_score: -60000
         upgrade:
           allowed: true
@@ -175,21 +179,34 @@ sonarr:
         assign_scores_to:
           - name: English Preferred (720p+)
 
-      # Dual audio ships English *and* the original track, and in practice always
-      # carries subtitles - the closest thing to a "has subs" signal that exists
-      # at grab time. Ranked above a dub-only release.
+      # Exactly cancels the -40000 above, and only for Asian-language content:
+      # this CF requires a Japanese/Chinese/Korean language spec alongside the
+      # dual-audio title match, so it can never fire on ordinary English TV.
+      #
+      # Why it is needed: Sonarr does NOT read "Dual Audio" in a title as
+      # "contains English". It parses such a release as Japanese only, so the
+      # language penalty fires even though the release demonstrably has an
+      # English track. Netting to zero puts dual-audio anime on exactly the same
+      # footing as an English release, which is the point - it hands the
+      # decision back to the guide's release-group tiers.
+      #
+      # "Dual Audio Asian" is deliberately NOT listed with it: its regex is a
+      # subset of this one, so the two nearly always co-fire, and that would
+      # double the offset to +80000 and massively overshoot.
       - trash_ids:
           - 418f50b10f1907201b6cfdf881f467b7 # Anime Dual Audio
-          - ceb6ca558f4a3d47a00ebbdcb7fa7922 # Dual Audio Asian
-        score: 6000
+        score: 40000
         assign_scores_to:
           - name: English Preferred (720p+)
 
-      # English dub with the original track dropped. Still English, so still
-      # preferred over a non-English release - just the least good way to get it.
+      # A dub-only release has English audio but no original track and usually no
+      # subtitles. Sonarr parses these as English, so they take no penalty and
+      # already sit at parity with native English - no bonus needed. Left at 0
+      # explicitly so it is clear this is a decision, not an omission: dubs and
+      # dual audio now tie, and the guide's tiers break it.
       - trash_ids:
           - 9c14d194486c4014d422adc64092d794 # Dubs Only
-        score: 1600
+        score: 0
         assign_scores_to:
           - name: English Preferred (720p+)
 
@@ -239,7 +256,7 @@ sonarr:
           - 9c11cd3f07101cdba90a2d81cf0e56b4 # LQ
           - e2315f990da2e2cbfc9fa5b7a6fcfe48 # LQ (Release Title)
           - 23297a736ca77c0fc8e70f8edd7ee56c # Upscaled
-        score: -100000
+        score: -200000
         assign_scores_to:
           - name: English Preferred (720p+)
 
@@ -404,16 +421,17 @@ radarr:
         assign_scores_to:
           - name: English Preferred (720p+)
 
+      # See the Sonarr block: exact cancellation of the language penalty for
+      # dual-audio Asian content, "Dual Audio Asian" left out to avoid doubling.
       - trash_ids:
           - 4a3b087eea2ce012fcc1ce319259a3be # Anime Dual Audio
-          - 67084559197ea10b6022e2650c594866 # Dual Audio Asian
-        score: 6000
+        score: 40000
         assign_scores_to:
           - name: English Preferred (720p+)
 
       - trash_ids:
           - b23eae459cc960816f2d6ba84af45055 # Dubs Only
-        score: 1600
+        score: 0
         assign_scores_to:
           - name: English Preferred (720p+)
 
@@ -462,7 +480,7 @@ radarr:
           - e204b80c87be9497a8a6eaff48f72905 # LQ (Release Title)
           - 712d74cd88bceb883ee32f773656b1f5 # Sing-Along Versions
           - bfd8eb01832d646a0a89c4deb46f8564 # Upscaled
-        score: -100000
+        score: -200000
         assign_scores_to:
           - name: English Preferred (720p+)
 
@@ -479,8 +497,8 @@ radarr:
             - name: English Preferred (720p+)
 
         # Radarr's copy of this group also contains Anime Dual Audio, which we
-        # already score at 6000 above - excluded here so there is exactly one
-        # source of truth for it.
+        # score explicitly above - excluded here so there is exactly one source
+        # of truth for it.
         - trash_id: 1f8404f7f72c7edc8901f2f3589d1a91 # [Release Groups] Anime
           select_all: true
           exclude:
