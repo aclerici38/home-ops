@@ -330,6 +330,19 @@ sonarr:
     media_management:
       propers_and_repacks: do_not_prefer
 
+    quality_definition:
+      type: series
+      qualities:
+        - name: WEBDL-1080p
+          max: 45
+          preferred: 40
+        - name: WEBRip-1080p
+          max: 45
+          preferred: 40
+
+    quality_profiles:
+      - trash_id: 72dae194fc92bf828f32cde7744e51a1 # WEB-1080p
+
 radarr:
   radarr:
     base_url: http://radarr.radarr.svc.cluster.local:7878
@@ -557,3 +570,16 @@ radarr:
 
     media_management:
       propers_and_repacks: do_not_prefer
+
+    quality_definition:
+      type: movie
+      qualities:
+        - name: WEBDL-1080p
+          max: 45
+          preferred: 40
+        - name: WEBRip-1080p
+          max: 45
+          preferred: 40
+
+    quality_profiles:
+      - trash_id: e8c5acb741363a0dbda67d3978f4912f # WEB 1080p
