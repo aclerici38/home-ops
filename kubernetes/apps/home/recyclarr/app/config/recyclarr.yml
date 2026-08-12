@@ -136,7 +136,8 @@ sonarr:
           preferred: 85
 
     quality_profiles:
-      - name: English Preferred (720p+)
+      - &sonarrProfile
+        name: English Preferred (720p+)
         # Accept anything that clears the garbage floor. Non-English bottoms out
         # around -38000; anything carrying an unwanted format lands below -142000.
         min_format_score: -60000
@@ -168,6 +169,15 @@ sonarr:
               - WEBRip-720p
               - HDTV-720p
 
+      # Byte-identical to the profile above - it exists only as a marker. The
+      # raphael import list filters on the source profile, so a series carrying
+      # this one is never mirrored to the RV. Seerr override rules decide who
+      # lands here, so "stays home" is a property of the requester, not of the
+      # release. The merge key keeps the two in lockstep - edit the anchor and
+      # both move together.
+      - <<: *sonarrProfile
+        name: English Preferred (720p+) [Home Only]
+
     custom_formats:
       # --- Language: the dominant term ----------------------------------------
       # Reverse-scored: this only matches releases with NO English audio, so
@@ -176,8 +186,9 @@ sonarr:
       - trash_ids:
           - 69aa1e159f97d860440b04cd6d590c4f # Language: Not English
         score: -40000
-        assign_scores_to:
+        assign_scores_to: &sonarrScores
           - name: English Preferred (720p+)
+          - name: English Preferred (720p+) [Home Only]
 
       # Exactly cancels the -40000 above, and only for Asian-language content:
       # this CF requires a Japanese/Chinese/Korean language spec alongside the
@@ -196,8 +207,7 @@ sonarr:
       - trash_ids:
           - 418f50b10f1907201b6cfdf881f467b7 # Anime Dual Audio
         score: 40000
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *sonarrScores
 
       # A dub-only release has English audio but no original track and usually no
       # subtitles. Sonarr parses these as English, so they take no penalty and
@@ -207,27 +217,23 @@ sonarr:
       - trash_ids:
           - 9c14d194486c4014d422adc64092d794 # Dubs Only
         score: 0
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *sonarrScores
 
       # --- Resolution ---------------------------------------------------------
       - trash_ids:
           - 1bef6c151fa35093015b0bfef18279e5 # 2160p
         score: 12000
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *sonarrScores
 
       - trash_ids:
           - 290078c8b266272a5cc8e251b5e2eb0b # 1080p
         score: 8000
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *sonarrScores
 
       - trash_ids:
           - c99279ee27a154c2f20d1d505cc99e25 # 720p
         score: 4000
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *sonarrScores
 
       # --- Codec --------------------------------------------------------------
       # Deliberately NOT using "x265 (HD)" / "x265 (no HDR/DV)" - those are the
@@ -236,16 +242,14 @@ sonarr:
       - trash_ids:
           - c9eafd50846d299b862ca9bb6ea91950 # x265
         score: 2000
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *sonarrScores
 
       # Accepted, just ranked last. The guide rejects AV1 outright (-10000);
       # softened to a nudge so it still gets grabbed when it's all there is.
       - trash_ids:
           - 15a05bc7c1a36e2b57fd628f8977e2fc # AV1
         score: -2000
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *sonarrScores
 
       # --- Hard rejects -------------------------------------------------------
       # Below min_format_score, so these are never grabbed.
@@ -257,8 +261,7 @@ sonarr:
           - e2315f990da2e2cbfc9fa5b7a6fcfe48 # LQ (Release Title)
           - 23297a736ca77c0fc8e70f8edd7ee56c # Upscaled
         score: -200000
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *sonarrScores
 
     # --- The guide's own judgement, scores untouched ---------------------------
     # Everything above is ours. Everything here is TRaSH's, at their scores, and
@@ -281,36 +284,29 @@ sonarr:
         # to nothing at all and you silently get no tiering.
         - trash_id: b4a4353e3b3e6789dbef07677ff23686 # [Release Groups] HQ
           select_all: true
-          assign_scores_to:
-            - name: English Preferred (720p+)
+          assign_scores_to: *sonarrScores
 
         # Also brings Anime Raws / Anime LQ Groups at the guide's -10000. That
         # is far softer than our -100000 rejects, so those stay grabbable as a
         # last resort rather than being banned outright - deliberate.
         - trash_id: f206572b1147d0221bb1c96765b349e8 # [Release Groups] Anime
           select_all: true
-          assign_scores_to:
-            - name: English Preferred (720p+)
+          assign_scores_to: *sonarrScores
 
         - trash_id: 7e1724c5da59e7474803ad25be98f6a3 # [HDR Formats] HDR
-          assign_scores_to:
-            - name: English Preferred (720p+)
+          assign_scores_to: *sonarrScores
 
         - trash_id: abe720fab2d27682adc2a735136cec02 # [Streaming Services] General
-          assign_scores_to:
-            - name: English Preferred (720p+)
+          assign_scores_to: *sonarrScores
 
         - trash_id: d920fd959d220306888f40b6f38e1578 # [Optional] Season Packs
-          assign_scores_to:
-            - name: English Preferred (720p+)
+          assign_scores_to: *sonarrScores
 
         - trash_id: 22256473b656e195eabc2798e326fbb7 # [Required] Repack/Proper
-          assign_scores_to:
-            - name: English Preferred (720p+)
+          assign_scores_to: *sonarrScores
 
         - trash_id: 4b196eed652c65ea98d615212040ebe2 # [Required] Anime Versions
-          assign_scores_to:
-            - name: English Preferred (720p+)
+          assign_scores_to: *sonarrScores
 
   sonarr-raphael:
     base_url: http://sonarr-raphael.sonarr.svc.cluster.local:8989
@@ -417,7 +413,8 @@ radarr:
           preferred: 125
 
     quality_profiles:
-      - name: English Preferred (720p+)
+      - &radarrProfile
+        name: English Preferred (720p+)
         min_format_score: -60000
         upgrade:
           allowed: true
@@ -444,59 +441,58 @@ radarr:
               - WEBRip-720p
               - HDTV-720p
 
+      # See the Sonarr block: identical marker profile, excluded from the
+      # raphael import list so these stay home-only.
+      - <<: *radarrProfile
+        name: English Preferred (720p+) [Home Only]
+
     custom_formats:
       # --- Language: the dominant term ----------------------------------------
       - trash_ids:
           - 0dc8aec3bd1c47cd6c40c46ecd27e846 # Language: Not English
         score: -40000
-        assign_scores_to:
+        assign_scores_to: &radarrScores
           - name: English Preferred (720p+)
+          - name: English Preferred (720p+) [Home Only]
 
       # See the Sonarr block: exact cancellation of the language penalty for
       # dual-audio Asian content, "Dual Audio Asian" left out to avoid doubling.
       - trash_ids:
           - 4a3b087eea2ce012fcc1ce319259a3be # Anime Dual Audio
         score: 40000
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *radarrScores
 
       - trash_ids:
           - b23eae459cc960816f2d6ba84af45055 # Dubs Only
         score: 0
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *radarrScores
 
       # --- Resolution ---------------------------------------------------------
       - trash_ids:
           - fb392fb0d61a010ae38e49ceaa24a1ef # 2160p
         score: 12000
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *radarrScores
 
       - trash_ids:
           - 820b09bb9acbfde9c35c71e0e565dad8 # 1080p
         score: 8000
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *radarrScores
 
       - trash_ids:
           - b2be17d608fc88818940cd1833b0b24c # 720p
         score: 4000
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *radarrScores
 
       # --- Codec --------------------------------------------------------------
       - trash_ids:
           - 9170d55c319f4fe40da8711ba9d8050d # x265
         score: 2000
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *radarrScores
 
       - trash_ids:
           - cae4ca30163749b891686f95532519bd # AV1
         score: -2000
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *radarrScores
 
       # --- Hard rejects -------------------------------------------------------
       - trash_ids:
@@ -512,8 +508,7 @@ radarr:
           - 712d74cd88bceb883ee32f773656b1f5 # Sing-Along Versions
           - bfd8eb01832d646a0a89c4deb46f8564 # Upscaled
         score: -200000
-        assign_scores_to:
-          - name: English Preferred (720p+)
+        assign_scores_to: *radarrScores
 
     # --- The guide's own judgement, scores untouched ---------------------------
     # Same split as Sonarr. Radarr's HQ tiers reach 1950 (it has UHD Bluray
@@ -524,8 +519,7 @@ radarr:
       add:
         - trash_id: b2f2af430f73f3ad1f9948f33e0f0cf8 # [Release Groups] HQ
           select_all: true
-          assign_scores_to:
-            - name: English Preferred (720p+)
+          assign_scores_to: *radarrScores
 
         # Radarr's copy of this group also contains Anime Dual Audio, which we
         # score explicitly above - excluded here so there is exactly one source
@@ -534,27 +528,22 @@ radarr:
           select_all: true
           exclude:
             - 4a3b087eea2ce012fcc1ce319259a3be # Anime Dual Audio
-          assign_scores_to:
-            - name: English Preferred (720p+)
+          assign_scores_to: *radarrScores
 
         - trash_id: ef20e67b95a381fb3bc6d1f06ea24f46 # [HDR Formats] HDR
-          assign_scores_to:
-            - name: English Preferred (720p+)
+          assign_scores_to: *radarrScores
 
         # Mostly unscored in the guide for Radarr (only BCORE/CRiT/MA carry
         # 15-20), so this is close to a no-op - included for symmetry and so it
         # picks up scores if the guide ever adds them.
         - trash_id: d9cc9a504e5ede6294c8b973aad4f028 # [Streaming Services] General
-          assign_scores_to:
-            - name: English Preferred (720p+)
+          assign_scores_to: *radarrScores
 
         - trash_id: d688ff99733a9bc626c37eb61ea74704 # [Required] Repack/Proper
-          assign_scores_to:
-            - name: English Preferred (720p+)
+          assign_scores_to: *radarrScores
 
         - trash_id: 6ebc4bfba9721581d3e9e8994456e6f7 # [Required] Anime Versions
-          assign_scores_to:
-            - name: English Preferred (720p+)
+          assign_scores_to: *radarrScores
 
   radarr-raphael:
     base_url: http://radarr-raphael.radarr.svc.cluster.local:7878
