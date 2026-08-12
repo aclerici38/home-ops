@@ -56,6 +56,11 @@
     automatic = true;
     dates = [ "weekly" ];
   };
+  systemd.tmpfiles.rules = [
+    "d /data 0755 root root -"
+    "d /data/media 0775 1000 1000 -"
+  ];
+
   boot.tmp.useTmpfs = true;
   services.fstrim.enable = true;
   services.thermald.enable = true;
