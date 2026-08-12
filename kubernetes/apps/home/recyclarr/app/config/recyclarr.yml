@@ -312,6 +312,37 @@ sonarr:
           assign_scores_to:
             - name: English Preferred (720p+)
 
+  sonarr-raphael:
+    base_url: http://sonarr-raphael.sonarr.svc.cluster.local:8989
+    api_key: !env_var SONARR_RAPHAEL__AUTH__APIKEY
+
+    delete_old_custom_formats: true
+
+    media_naming:
+      season: default
+      series: jellyfin-tvdb
+      episodes:
+        rename: true
+        standard: default
+        daily: default
+        anime: default
+
+    media_management:
+      propers_and_repacks: do_not_prefer
+
+    quality_definition:
+      type: series
+      qualities:
+        - name: WEBDL-1080p
+          max: 45
+          preferred: 40
+        - name: WEBRip-1080p
+          max: 45
+          preferred: 40
+
+    quality_profiles:
+      - trash_id: 72dae194fc92bf828f32cde7744e51a1 # WEB-1080p
+
 radarr:
   radarr:
     base_url: http://radarr.radarr.svc.cluster.local:7878
@@ -524,3 +555,31 @@ radarr:
         - trash_id: 6ebc4bfba9721581d3e9e8994456e6f7 # [Required] Anime Versions
           assign_scores_to:
             - name: English Preferred (720p+)
+
+  radarr-raphael:
+    base_url: http://radarr-raphael.radarr.svc.cluster.local:7878
+    api_key: !env_var RADARR_RAPHAEL__AUTH__APIKEY
+
+    delete_old_custom_formats: true
+
+    media_naming:
+      folder: jellyfin-tmdb
+      movie:
+        rename: true
+        standard: jellyfin-tmdb
+
+    media_management:
+      propers_and_repacks: do_not_prefer
+
+    quality_definition:
+      type: movie
+      qualities:
+        - name: WEBDL-1080p
+          max: 45
+          preferred: 40
+        - name: WEBRip-1080p
+          max: 45
+          preferred: 40
+
+    quality_profiles:
+      - trash_id: e8c5acb741363a0dbda67d3978f4912f # WEB 1080p

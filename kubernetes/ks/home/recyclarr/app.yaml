@@ -10,6 +10,8 @@ spec:
   dependsOn:
     - name: sonarr
     - name: radarr
+    - name: sonarr-raphael
+    - name: radarr-raphael
     - name: external-secrets-stores
   sourceRef:
     kind: GitRepository
