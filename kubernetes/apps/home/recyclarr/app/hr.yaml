@@ -24,7 +24,7 @@ spec:
       recyclarr:
         type: cronjob
         cronjob:
-          schedule: "@daily"
+          schedule: "@hourly"
           timeZone: America/Los_Angeles
           concurrencyPolicy: Forbid
           startingDeadlineSeconds: 300
