@@ -3,20 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: recyclarr
+  name: sonarr-raphael
   namespace: flux-system
 spec:
-  targetNamespace: recyclarr
-  dependsOn:
-    - name: sonarr
-    - name: radarr
-    - name: sonarr-raphael
-    - name: radarr-raphael
-    - name: external-secrets-stores
+  targetNamespace: sonarr
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/recyclarr/app
+  path: ./kubernetes/apps/home/sonarr/raphael
   commonMetadata:
     labels:
-      app.kubernetes.io/name: recyclarr
+      app.kubernetes.io/name: sonarr-raphael

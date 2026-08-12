@@ -1,0 +1,116 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.4/helmrelease_v2.json?values=app-template/5.0.1
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: radarr-raphael
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      radarr-raphael:
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: {type: RuntimeDefault}
+        containers:
+          radarr-raphael:
+            image:
+              repository: ghcr.io/home-operations/radarr
+              tag: 6.4.1.10545@sha256:260469d707617f4b5be1cd11a40be7e4889c63c5e7cdbc6a429626dc05863b6b
+            env:
+              RADARR__APP__INSTANCENAME: Radarr Raphael
+              RADARR__APP__THEME: dark
+              RADARR__AUTH__METHOD: External
+              RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              RADARR__LOG__DBENABLED: "False"
+              RADARR__LOG__LEVEL: info
+              RADARR__SERVER__PORT: &port 7878
+              RADARR__POSTGRES__HOST:
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr-raphael-postgres
+                    key: host
+              RADARR__POSTGRES__USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr-raphael-postgres
+                    key: username
+              RADARR__POSTGRES__PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr-raphael-postgres
+                    key: password
+              RADARR__POSTGRES__MAINDB:
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr-raphael-postgres
+                    key: dbname
+            envFrom:
+              - secretRef:
+                  name: radarr-raphael
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: *port
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+              limits:
+                memory: 4Gi
+    service:
+      radarr-raphael:
+        controller: radarr-raphael
+        ports:
+          http:
+            port: *port
+    route:
+      radarr-raphael:
+        hostnames:
+          - radarr-raphael.clerici.tech
+        parentRefs:
+          - name: internal
+            namespace: kgateway
+    persistence:
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
+          - path: /config
+            subPath: config
+      media:
+        type: nfs
+        server: nfs.clerici.tech
+        path: /media
+        globalMounts:
+          - path: /allMedia
+  dependsOn:
+    - name: radarr-raphael-resources
