@@ -13,8 +13,8 @@ spec:
     - name: towonel-node-resources
   values:
     hub:
-      rateLimitPerSecond: 30
-      rateLimitBurst: 300
+      rateLimitPerSecond: 200
+      rateLimitBurst: 2000
     edge:
       bindAddress: "[::]"
       httpsPort: 9443
