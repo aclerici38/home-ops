@@ -65,6 +65,7 @@ spec:
     service:
       jellyfin:
         controller: jellyfin
+        type: LoadBalancer
         ports:
           http:
             port: *port
