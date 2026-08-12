@@ -326,18 +326,67 @@ sonarr:
     media_management:
       propers_and_repacks: do_not_prefer
 
+    # The playback target is an XGIMI MoGo 4 Laser: MediaTek MT9630, native
+    # 1080p, hardware HEVC decode. So the release we actually want is a 1080p
+    # x265 encode - it direct-plays and costs a quarter of the bytes. Both
+    # blocks below exist to make that the outcome; see the note on x265 (HD).
     quality_definition:
       type: series
+      # Both bounds are set from observed releases, not from the guide.
+      #
+      # min: the leanest release actually worth having is a full-season HEVC
+      # WEBRip - measured at 6.3 MB/min (2.91 GB for a 470 min season). Season
+      # packs are the binding case because they average across an entire show
+      # and land well below single-episode encodes, which sit at 8-13. All of
+      # that is UNDER the guide's 15 MB/min floor, so min has to come down or
+      # none of it is even a valid release, regardless of score. 4 leaves ~35%
+      # headroom under that 6.3 reference for leaner shows; below it you are
+      # into encodes that are small because they are bad.
+      #
+      # max is a ceiling, not a budget: plenty of shows have no 1080p HEVC
+      # encode at all, and a native WEB-DL is ~78 MB/min (Apple TV+ runs
+      # 3.6-4.7 GB for a 50-60 min episode). The original 45 rejected every one
+      # of those, which is what left this instance grabbing nothing. 100 clears
+      # the fattest observed native release (87.6 MB/min for a multi-audio
+      # season pack) instead of sitting a hair under it like 90 did.
+      #
+      # preferred sits low on purpose - Sonarr ranks toward preferred, so among
+      # otherwise-equal releases it takes the leaner file. 25 is above a good
+      # HEVC pack (11-14) and far below a native WEB-DL, so it pulls toward
+      # HEVC. Disk on the RV is finite even though the ceiling is generous.
       qualities:
         - name: WEBDL-1080p
-          max: 45
-          preferred: 40
+          min: 4
+          max: 100
+          preferred: 25
         - name: WEBRip-1080p
-          max: 45
-          preferred: 40
+          min: 4
+          max: 100
+          preferred: 25
 
     quality_profiles:
       - trash_id: 72dae194fc92bf828f32cde7744e51a1 # WEB-1080p
+
+    custom_formats:
+      # The one override on an otherwise stock guide profile, and the reason
+      # nothing was being grabbed: the guide scores x265 (HD) at -10000 against
+      # a profile minimum of 0, so every HEVC release was hard rejected. That
+      # penalty is aimed at HD re-encodes of h264 sources for people who want
+      # the original - the opposite of what this instance is for.
+      #
+      # Inverted to a strong positive rather than just zeroed. The profile's
+      # best possible guide stack is WEB Tier 01 (1700) + streaming service
+      # (75) + repack (7) = 1782, so +2000 clears it and an HEVC release
+      # outranks every h264 one instead of merely being permitted.
+      #
+      # Note this leaves min_format_score at the guide's 0, which is the point:
+      # LQ, Upscaled, BR-DISK and friends stay at -10000 and stay rejected.
+      # Only the HEVC gate moved.
+      - trash_ids:
+          - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
+        score: 2000
+        assign_scores_to:
+          - name: WEB-1080p
 
 radarr:
   radarr:
@@ -560,15 +609,34 @@ radarr:
     media_management:
       propers_and_repacks: do_not_prefer
 
+    # Same reasoning as sonarr-raphael above - HEVC direct-plays on the MoGo 4
+    # Laser, so prefer it and size the definition around it.
     quality_definition:
       type: movie
+      # Guide floor here is 12.5 MB/min; lean x265 movie encodes go below it.
+      # Same 4 as the Sonarr side - a movie has no season-pack averaging effect
+      # so the floor is less likely to bind, but there is no reason to be
+      # tighter. max 100 is ~12 GB for a two-hour film, a ceiling for the h264
+      # fallback rather than a target - preferred 25 (~3 GB) is the target.
       qualities:
         - name: WEBDL-1080p
-          max: 45
-          preferred: 40
+          min: 4
+          max: 100
+          preferred: 25
         - name: WEBRip-1080p
-          max: 45
-          preferred: 40
+          min: 4
+          max: 100
+          preferred: 25
 
     quality_profiles:
       - trash_id: e8c5acb741363a0dbda67d3978f4912f # WEB 1080p
+
+    custom_formats:
+      # See sonarr-raphael. Radarr's profile is named "WEB 1080p" (space, not
+      # hyphen) and its x265 (HD) carries a different trash_id - both differ
+      # from the Sonarr side, so this cannot be copy-pasted between them.
+      - trash_ids:
+          - dc98083864ea246d05a42df0d05f81cc # x265 (HD)
+        score: 2000
+        assign_scores_to:
+          - name: WEB 1080p
