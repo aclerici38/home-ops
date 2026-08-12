@@ -24,10 +24,11 @@
 ##
 ##   OURS (overridden below) - the hard constraints:
 ##     Unwanted formats     -200000   hard reject
-##     Language: Not English -40000   reverse-scored; fires only when NO English
-##     2160p / 1080p / 720p  +12000 / +8000 / +4000
-##     Anime Dual Audio      +40000   exactly cancels the penalty above; see the
+##     Language: Not English -50000   reverse-scored; fires only when NO English
+##     2160p / 1080p / 720p  +30000 / +20000 / +10000
+##     Anime Dual Audio      +50000   exactly cancels the penalty above; see the
 ##                                    note at the CF for why this is not a bonus
+##     Season Pack            +3000   whole seasons beat better-group singles
 ##     x265                   +2000
 ##     AV1                    -2000   accepted, just last in line
 ##     Dubs Only                  0   already parses as English, so no penalty
@@ -37,19 +38,27 @@
 ##     Anime BD/Web group tiers        100-1400
 ##     HDR                                 500
 ##     Streaming services               0-  75
-##     Season packs / repacks / anime versions  4-10
+##     Repacks / anime versions          4-10
+##
+## The Sonarr ladder is deliberately 2.5x the Radarr one. Radarr keeps the
+## original 12000/8000/4000 steps because movies have no season packs and so
+## need no room between the guide tiers and the resolution step; Sonarr had to
+## grow to open that slot. The two profiles are independent, so they do not
+## have to agree - only the inequalities below have to hold within each.
 ##
 ## The scales are chosen so the guide can never overturn a hard constraint:
-##   * Worst-case guide stack is 1950 + 1400 + 500 + 75 + 10 + 7 = 3942, which
-##     is under the 4000 resolution step - so release-group tiering reorders
-##     releases WITHIN a resolution but never promotes 1080p over 2160p.
-##   * 40000 dwarfs any achievable positive total, so an English release always
-##     outranks a non-English one no matter how good the latter's groups are.
+##   * Worst-case guide stack is 1950 + 1400 + 500 + 75 + 7 = 3932. Adding the
+##     season pack (3000) and x265 (2000) bonuses gives 8932, which is under
+##     the 10000 resolution step - so tiering and season packs reorder releases
+##     WITHIN a resolution but never promote 1080p over 2160p.
+##   * 50000 dwarfs any achievable positive total (30000 + 3000 + 2000 + 3932
+##     = 38932), so an English release always outranks a non-English one no
+##     matter how good the latter's groups are.
 ##   * min_format_score -60000 sits between the two: non-English still gets
-##     grabbed (worst case 4000 - 2000 - 40000 = -38000), unwanted never does.
+##     grabbed (worst case 10000 - 2000 - 50000 = -42000), unwanted never does.
 ##     Note the reject penalty has to clear the BEST possible positive total
-##     (12000 + 2000 + 40000 + 3942 = 57942), not zero - at -100000 an LQ
-##     dual-audio release scored -52000 and would have been accepted.
+##     (30000 + 3000 + 2000 + 50000 + 3932 = 88932), not zero - at -100000 an
+##     LQ dual-audio release scored -11068 and would have been accepted.
 ## If you retune, keep those three inequalities true and everything else follows.
 ################################################################################
 
@@ -175,7 +184,7 @@ sonarr:
       # everything else - more than resolution and every guide tier combined.
       - trash_ids:
           - 69aa1e159f97d860440b04cd6d590c4f # Language: Not English
-        score: -40000
+        score: -50000
         assign_scores_to:
           - name: English Preferred (720p+)
 
@@ -195,7 +204,7 @@ sonarr:
       # double the offset to +80000 and massively overshoot.
       - trash_ids:
           - 418f50b10f1907201b6cfdf881f467b7 # Anime Dual Audio
-        score: 40000
+        score: 50000
         assign_scores_to:
           - name: English Preferred (720p+)
 
@@ -213,19 +222,35 @@ sonarr:
       # --- Resolution ---------------------------------------------------------
       - trash_ids:
           - 1bef6c151fa35093015b0bfef18279e5 # 2160p
-        score: 12000
+        score: 30000
         assign_scores_to:
           - name: English Preferred (720p+)
 
       - trash_ids:
           - 290078c8b266272a5cc8e251b5e2eb0b # 1080p
-        score: 8000
+        score: 20000
         assign_scores_to:
           - name: English Preferred (720p+)
 
       - trash_ids:
           - c99279ee27a154c2f20d1d505cc99e25 # 720p
-        score: 4000
+        score: 10000
+        assign_scores_to:
+          - name: English Preferred (720p+)
+
+      # --- Season packs -------------------------------------------------------
+      # Scored here rather than via the guide's [Optional] Season Packs group,
+      # which carries +10 - far too small to ever change an outcome. The group
+      # holds exactly this one CF, so pinning the trash_id loses nothing.
+      #
+      # 3000 is sized to sit ABOVE the entire guide tier stack (max 3932 when
+      # every category fires at once) in practical terms while staying below
+      # the 10000 resolution step. Net effect: a season pack outranks a
+      # single-episode release from a better release group, but never promotes
+      # a lower resolution. That is the same slot x265 occupies, one rung down.
+      - trash_ids:
+          - 3bc5f395426614e155e585a2f056cdf1 # Season Pack
+        score: 3000
         assign_scores_to:
           - name: English Preferred (720p+)
 
@@ -300,9 +325,10 @@ sonarr:
           assign_scores_to:
             - name: English Preferred (720p+)
 
-        - trash_id: d920fd959d220306888f40b6f38e1578 # [Optional] Season Packs
-          assign_scores_to:
-            - name: English Preferred (720p+)
+        # [Optional] Season Packs (d920fd959d220306888f40b6f38e1578) is NOT
+        # listed here on purpose - its single CF is scored explicitly above at
+        # 3000 instead of the guide's +10. Keeping both would give the same CF
+        # two sources of truth and log a score conflict on every sync.
 
         - trash_id: 22256473b656e195eabc2798e326fbb7 # [Required] Repack/Proper
           assign_scores_to:
@@ -380,15 +406,32 @@ sonarr:
       #
       # Inverted to a strong positive rather than just zeroed. The profile's
       # best possible guide stack is WEB Tier 01 (1700) + streaming service
-      # (75) + repack (7) = 1782, so +2000 clears it and an HEVC release
-      # outranks every h264 one instead of merely being permitted.
+      # (75) + repack (7) = 1782, so any value clearing that makes an HEVC
+      # release outrank every h264 one instead of merely being permitted.
+      #
+      # 5000 rather than 2000 because the season-pack bonus below has to fit
+      # underneath it: HEVC stays the top axis on this instance (it is the
+      # whole reason the instance exists), so the requirement is
+      #   x265 > season_pack + guide_stack  ->  5000 > 2500 + 1782 = 4282
+      # which keeps a single HEVC episode ahead of an h264 season pack.
       #
       # Note this leaves min_format_score at the guide's 0, which is the point:
       # LQ, Upscaled, BR-DISK and friends stay at -10000 and stay rejected.
       # Only the HEVC gate moved.
       - trash_ids:
           - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
-        score: 2000
+        score: 5000
+        assign_scores_to:
+          - name: WEB-1080p
+
+      # Season packs, same intent as the home profile: comfortably above the
+      # guide's release-group tiering (1782 max here) so a pack beats a
+      # better-group single episode, but below the x265 bonus so it never
+      # costs us hardware decode. Resulting order, best to worst:
+      #   HEVC pack 7500 > HEVC single 5000 > h264 pack <=4282 > h264 single
+      - trash_ids:
+          - 3bc5f395426614e155e585a2f056cdf1 # Season Pack
+        score: 2500
         assign_scores_to:
           - name: WEB-1080p
 
