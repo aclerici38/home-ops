@@ -40,6 +40,11 @@ spec:
             env:
               S6_READ_ONLY_ROOT: true
               S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
+              CODE_SERVER_COOKIE:
+                valueFrom:
+                  secretKeyRef:
+                    name: home-assistant
+                    key: CODE_SERVER_COOKIE
             resources:
               requests:
                 cpu: 47m
@@ -54,6 +59,58 @@ spec:
                 add:
                   - NET_RAW
                   - NET_ADMIN
+          code-server:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.132.0@sha256:b88ed46a6ace76a0294a17a24f39aa88032ed0a3692c3d8ab5433b47ab57ccbf
+            command:
+              - "/usr/bin/dumb-init"
+              - "--"
+              - "/usr/bin/code-server"
+            args:
+              # Accessed through https://github.com/lovelylain/hass_ingress
+              - "--bind-addr=127.0.0.1:24601"
+              - "--auth=password"
+              - "--app-name=Home Assistant"
+              - "--disable-telemetry"
+              - "--disable-update-check"
+              - "--disable-getting-started-override"
+              - "--disable-workspace-trust"
+              - "/config"
+            env:
+              HOME: /home/coder
+              HASHED_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: home-assistant
+                    key: HASHED_PASSWORD
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - "curl"
+                      - "-fsS"
+                      - "http://127.0.0.1:24601/healthz"
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
+            resources:
+              requests:
+                cpu: 25m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+              seccompProfile: {type: RuntimeDefault}
     service:
       home-assistant:
         controller: home-assistant
@@ -72,12 +129,21 @@ spec:
     persistence:
       config:
         existingClaim: home-assistant
+        globalMounts:
+          - path: /config
+        advancedMounts:
+          home-assistant:
+            code-server:
+              - path: /home/coder
+                subPath: .code-server
       dbus:
         type: hostPath
         hostPath: /run/dbus
-        globalMounts:
-          - path: /run/dbus
-            readOnly: true
+        advancedMounts:
+          home-assistant:
+            home-assistant:
+              - path: /run/dbus
+                readOnly: true
       tmpfs:
         type: emptyDir
         medium: Memory
