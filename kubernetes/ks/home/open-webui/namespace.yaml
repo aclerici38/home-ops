@@ -5,7 +5,6 @@ kind: Namespace
 metadata:
   name: open-webui
   labels:
-    kustomize.toolkit.fluxcd.io/prune: disabled
     pod-security.kubernetes.io/enforce: restricted
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/warn: restricted
