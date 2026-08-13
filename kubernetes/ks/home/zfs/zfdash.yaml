@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: immich-kiosk
+  name: zfdash
   namespace: flux-system
 spec:
-  targetNamespace: immich-kiosk
+  targetNamespace: zfs
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/immich-kiosk/app
+  path: ./kubernetes/apps/home/zfs/zfdash
   commonMetadata:
     labels:
-      app.kubernetes.io/name: immich-kiosk
+      app.kubernetes.io/name: zfdash

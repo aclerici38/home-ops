@@ -3,18 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: zfs-scrubber-tank
+  name: immich-kiosk
   namespace: flux-system
 spec:
-  targetNamespace: zfs-scrubber
+  targetNamespace: immich
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/zfs-scrubber/app
+  path: ./kubernetes/apps/home/immich/kiosk
   commonMetadata:
     labels:
-      app.kubernetes.io/name: zfs-scrubber
-  postBuild:
-    substitute:
-      POOL: tank
-      SCRUB_SCHEDULE: "0 3 1 * *"
+      app.kubernetes.io/name: immich-kiosk

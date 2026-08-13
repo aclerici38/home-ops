@@ -22,4 +22,6 @@ spec:
       namespace: kopiur
   values:
     kopiur:
-      existingClaim: true
+      # One-time cross-namespace seed from the pre-merge zfdash namespace.
+      # Drop once the PVC is bound and populated.
+      restoreFrom: zfdash

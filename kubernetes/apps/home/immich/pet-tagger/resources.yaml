@@ -25,4 +25,6 @@ spec:
   values:
     externalSecret: {}
     kopiur:
-      existingClaim: true
+      # One-time cross-namespace seed from the pre-merge immich-pet-tagger namespace.
+      # Drop once the PVC is bound and populated.
+      restoreFrom: immich-pet-tagger
