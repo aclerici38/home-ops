@@ -64,7 +64,7 @@
 
 sonarr:
   sonarr:
-    base_url: http://sonarr.sonarr.svc.cluster.local:8989
+    base_url: http://sonarr.media.svc.cluster.local:8989
     api_key: !env_var SONARR__AUTH__APIKEY
 
     delete_old_custom_formats: true
@@ -339,7 +339,7 @@ sonarr:
             - name: English Preferred (720p+)
 
   sonarr-raphael:
-    base_url: http://sonarr-raphael.sonarr.svc.cluster.local:8989
+    base_url: http://sonarr-raphael.media.svc.cluster.local:8989
     api_key: !env_var SONARR_RAPHAEL__AUTH__APIKEY
 
     delete_old_custom_formats: true
@@ -437,7 +437,7 @@ sonarr:
 
 radarr:
   radarr:
-    base_url: http://radarr.radarr.svc.cluster.local:7878
+    base_url: http://radarr.media.svc.cluster.local:7878
     api_key: !env_var RADARR__AUTH__APIKEY
 
     delete_old_custom_formats: true
@@ -649,7 +649,7 @@ radarr:
             - name: English Preferred (720p+)
 
   radarr-raphael:
-    base_url: http://radarr-raphael.radarr.svc.cluster.local:7878
+    base_url: http://radarr-raphael.media.svc.cluster.local:7878
     api_key: !env_var RADARR_RAPHAEL__AUTH__APIKEY
 
     delete_old_custom_formats: true

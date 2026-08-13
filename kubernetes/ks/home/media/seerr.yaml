@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: bazarr
+  name: seerr
   namespace: flux-system
 spec:
-  targetNamespace: bazarr
+  targetNamespace: media
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/bazarr/app
+  path: ./kubernetes/apps/home/media/seerr
   commonMetadata:
     labels:
-      app.kubernetes.io/name: bazarr
+      app.kubernetes.io/name: seerr

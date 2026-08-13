@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: sonarr
+  name: sonarr-raphael
   namespace: flux-system
 spec:
-  targetNamespace: sonarr
+  targetNamespace: media
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/sonarr/home
+  path: ./kubernetes/apps/home/media/sonarr-raphael
   commonMetadata:
     labels:
-      app.kubernetes.io/name: sonarr
+      app.kubernetes.io/name: sonarr-raphael
