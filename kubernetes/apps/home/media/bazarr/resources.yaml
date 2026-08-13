@@ -27,7 +27,4 @@ spec:
   values:
     cnpg:
       mode: shared
-    kopiur:
-      # One-time cross-namespace seed from the pre-merge bazarr namespace.
-      # Drop once the PVC is bound and populated.
-      restoreFrom: bazarr
+    kopiur: {}
