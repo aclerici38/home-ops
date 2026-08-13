@@ -71,7 +71,8 @@ spec:
         externalTrafficPolicy: Local
         annotations:
           lbipam.cilium.io/ips: "${SYNCTHING_LB_IP}"
-          coredns.io/hostname: sync.clerici.tech
+          external-dns.alpha.kubernetes.io/hostname: sync.clerici.tech
+          external-dns.alpha.kubernetes.io/target: vps.clerici.tech
         ports:
           sync-tcp:
             port: &syncPort 22000
