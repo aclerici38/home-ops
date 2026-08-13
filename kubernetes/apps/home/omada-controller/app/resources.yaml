@@ -41,6 +41,11 @@ spec:
         - {name: documentdb_core, ensure: present}
         - {name: documentdb, ensure: present}
       clusterSpec:
+        imageCatalogRef:
+          apiGroup: postgresql.cnpg.io
+          kind: ClusterImageCatalog
+          major: 18
+          name: postgresql-minimal-trixie-documentdb
         managed:
           roles:
             - name: app
