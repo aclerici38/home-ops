@@ -35,7 +35,7 @@
     {
       customType: "regex",
       description: "Process Grafana CRD version field",
-      managerFilePatterns: ["/grafana-instance/.*\\.ya?ml$/"],
+      managerFilePatterns: ["/grafana-operator/grafana/.*\\.ya?ml$/"],
       matchStrings: [
         "version:\\s*(?<depName>[^:]+):(?<currentValue>[^@\\s]+)@(?<currentDigest>sha256:[a-f0-9]+)",
       ],

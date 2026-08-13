@@ -5,7 +5,6 @@ kind: Namespace
 metadata:
   name: firefox
   labels:
-    kustomize.toolkit.fluxcd.io/prune: disabled
     pod-security.kubernetes.io/enforce: baseline
     pod-security.kubernetes.io/audit: baseline
     pod-security.kubernetes.io/warn: baseline

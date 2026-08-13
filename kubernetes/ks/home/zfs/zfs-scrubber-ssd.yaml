@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.4/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: zfs-scrubber-ssd
+  namespace: flux-system
+spec:
+  targetNamespace: zfs
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/home/zfs/zfs-scrubber
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: zfs-scrubber
+  postBuild:
+    substitute:
+      POOL: ssd
+      SCRUB_SCHEDULE: "0 0 1,15 * *"
