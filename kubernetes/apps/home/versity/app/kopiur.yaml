@@ -28,8 +28,9 @@ spec:
   files:
     ignoreIdenticalSnapshots: true
   retention:
-    keepDaily: 7
-    keepWeekly: 4
+    keepDaily: 14
+    keepWeekly: 8
+    keepMonthly: 6
   credentialProjection:
     enabled: true
 ---
