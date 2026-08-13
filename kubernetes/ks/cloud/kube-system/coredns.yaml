@@ -3,16 +3,16 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: grafana-instance
+  name: coredns
   namespace: flux-system
 spec:
-  targetNamespace: grafana-operator
+  targetNamespace: kube-system
   dependsOn:
-    - name: grafana-operator
+    - name: coredns-base
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/cloud/grafana-instance
+  path: ./kubernetes/apps/cloud/kube-system/coredns
   commonMetadata:
     labels:
-      app.kubernetes.io/name: grafana-instance
+      app.kubernetes.io/name: coredns

@@ -3,16 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: coredns
+  name: jellyplex-watched
   namespace: flux-system
 spec:
-  targetNamespace: kube-system
-  dependsOn:
-    - name: coredns-base
+  targetNamespace: jellyfin
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/cloud/coredns
+  path: ./kubernetes/apps/raphael/jellyfin/jellyplex-watched
   commonMetadata:
     labels:
-      app.kubernetes.io/name: coredns
+      app.kubernetes.io/name: jellyplex-watched
