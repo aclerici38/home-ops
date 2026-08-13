@@ -50,6 +50,21 @@ spec:
         type: RuntimeDefault
     # GC finished mover Jobs/pods so they don't linger as API objects.
     ttlSecondsAfterFinished: 300
+  server:
+    namespace: kopiur
+    auth:
+      generate:
+        username: kopia
+    readOnly: false
+    service:
+      type: ClusterIP
+      port: 51515
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        memory: 512Mi
   health:
     probe:
       enabled: true
