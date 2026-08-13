@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: k8s-gateway
+  name: smartctl-exporter
   namespace: flux-system
 spec:
-  targetNamespace: k8s-gateway
+  targetNamespace: disk-health
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/k8s-gateway/app
+  path: ./kubernetes/apps/home/disk-health/smartctl-exporter
   commonMetadata:
     labels:
-      app.kubernetes.io/name: k8s-gateway
+      app.kubernetes.io/name: smartctl-exporter

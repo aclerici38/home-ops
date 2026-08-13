@@ -6,11 +6,11 @@ metadata:
   name: csi-driver-nfs
   namespace: flux-system
 spec:
-  targetNamespace: csi-driver-nfs
+  targetNamespace: nfs-server
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/csi-driver-nfs/app
+  path: ./kubernetes/apps/home/nfs-server/csi-driver
   commonMetadata:
     labels:
       app.kubernetes.io/name: csi-driver-nfs

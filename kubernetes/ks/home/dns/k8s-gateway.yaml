@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: vuetorrent
+  name: k8s-gateway
   namespace: flux-system
 spec:
-  targetNamespace: vuetorrent
+  targetNamespace: dns
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/vuetorrent/app
+  path: ./kubernetes/apps/home/dns/k8s-gateway
   commonMetadata:
     labels:
-      app.kubernetes.io/name: vuetorrent
+      app.kubernetes.io/name: k8s-gateway

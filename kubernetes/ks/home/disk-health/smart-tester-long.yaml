@@ -3,14 +3,18 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: blocky-ui
+  name: long-smart-tester
   namespace: flux-system
 spec:
-  targetNamespace: blocky
+  targetNamespace: disk-health
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/blocky/blocky-ui
+  path: ./kubernetes/apps/home/disk-health/smart-tester
   commonMetadata:
     labels:
-      app.kubernetes.io/name: blocky
+      app.kubernetes.io/name: smart-tester
+  postBuild:
+    substitute:
+      TEST_TYPE: long
+      TEST_SCHEDULE: "0 2 3 * *"

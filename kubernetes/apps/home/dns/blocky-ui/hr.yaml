@@ -43,7 +43,7 @@ spec:
                 secretKeyRef:
                   name: blocky-postgres
                   key: uri
-              BLOCKY_API_URL: http://blocky-k8s.blocky:4000
+              BLOCKY_API_URL: http://blocky-k8s:4000
             probes:
               liveness:
                 enabled: true

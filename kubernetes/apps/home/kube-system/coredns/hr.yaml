@@ -9,7 +9,7 @@ spec:
   maxHistory: 1
   dependsOn:
     - name: blocky
-      namespace: blocky
+      namespace: dns
   chartRef:
     kind: OCIRepository
     name: coredns

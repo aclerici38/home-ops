@@ -23,9 +23,9 @@
     "needs" (list))
   (dict
     "name" "coredns" "namespace" "kube-system" "atomic" true
-    "repo"  "kubernetes/apps/shared/coredns/repo.yaml"
-    "base"  "kubernetes/apps/shared/coredns/values.yaml"
-    "hr"    (printf "kubernetes/apps/%s/coredns/hr.yaml" $cluster)
+    "repo"  "kubernetes/apps/shared/kube-system/coredns/repo.yaml"
+    "base"  "kubernetes/apps/shared/kube-system/coredns/values.yaml"
+    "hr"    (printf "kubernetes/apps/%s/kube-system/coredns/hr.yaml" $cluster)
     "needs" (list))
   (dict
     "name" "flux-operator" "namespace" "flux-system" "atomic" true
