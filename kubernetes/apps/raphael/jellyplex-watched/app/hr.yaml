@@ -1,0 +1,88 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.4/helmrelease_v2.json?values=app-template/5.0.1
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: jellyplex-watched
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      jellyplex-watched:
+        type: cronjob
+        cronjob:
+          schedule: "@hourly"
+          timeZone: America/Los_Angeles
+          concurrencyPolicy: Forbid
+          startingDeadlineSeconds: 300
+          activeDeadlineSeconds: 1800
+          successfulJobsHistory: 1
+          failedJobsHistory: 3
+          backoffLimit: 2
+        pod:
+          restartPolicy: Never
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile: {type: RuntimeDefault}
+        containers:
+          jellyplex-watched:
+            image:
+              repository: ghcr.io/luigi311/jellyplex-watched
+              tag: 8.5.3@sha256:e23a0d3dc686e4bbc9eeb655aeb96a2a1352bd2a26297ec77e06ef6f8eb2d5e1
+            env:
+              DRYRUN: "true"
+              DEBUG_LEVEL: DEBUG
+              RUN_ONLY_ONCE: "true"
+              # RO root fs
+              LOG_FILE: /tmp/jellyplex/log.log
+              MARK_FILE: /tmp/jellyplex/mark.log
+              REQUEST_TIMEOUT: "300"
+              MAX_THREADS: "1"
+              # Raphael's copies are separate arr grabs, so filenames never match
+              GENERATE_GUIDS: "true"
+              GENERATE_LOCATIONS: "false"
+              # Order here must match the token order in the jellyplex-watched secret.
+              JELLYFIN_BASEURL: "http://jellyfin:8096, https://jellyfin.clerici.tech"
+              SYNC_FROM_JELLYFIN_TO_JELLYFIN: "true"
+              SYNC_FROM_JELLYFIN_TO_PLEX: "false"
+              SYNC_FROM_JELLYFIN_TO_EMBY: "false"
+              WHITELIST_USERS: "Anthony,Melanie,Steve"
+              WHITELIST_LIBRARY: "Movies,TV Shows"
+
+              JELLYFIN_TOKEN:
+                secretKeyRef:
+                  name: jellyplex-watched
+                  key: JELLYFIN_TOKEN
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+    persistence:
+      tmpfs:
+        type: emptyDir
+        medium: Memory
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
