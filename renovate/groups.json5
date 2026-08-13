@@ -338,5 +338,23 @@
         commitMessageTopic: "{{{groupName}}} group",
       },
     },
+    {
+      // code-server is a sidecar in both home-assistant pods, so bumping it
+      // alone restarts Home Assistant for a change HA doesn't care about.
+      // Overriding the basename default puts it in the "home-assistant" group,
+      // and minimumGroupSize is set ONLY here: the branch value is the max
+      // across the upgrades actually in that branch, so a code-server-only
+      // branch resolves to 2 and is skipped, while a home-assistant-only
+      // branch resolves to 1 and opens as usual. Skipped branches are listed
+      // under "Group Size Not Met" on the dashboard if one is worth forcing.
+      description: "Tie code-server to its home-assistant sidecar host",
+      groupName: "home-assistant",
+      matchPackageNames: ["**/code-server"],
+      matchDatasources: ["docker"],
+      minimumGroupSize: 2,
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
   ],
 }
