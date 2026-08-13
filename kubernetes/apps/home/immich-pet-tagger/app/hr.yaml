@@ -109,3 +109,7 @@ spec:
         existingClaim: immich-pet-tagger
         globalMounts:
           - path: /data
+      cache:
+        existingClaim: immich-pet-tagger-cache
+        globalMounts:
+          - path: /data/.cache

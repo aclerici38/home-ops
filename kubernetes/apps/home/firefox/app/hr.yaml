@@ -79,6 +79,12 @@ spec:
     persistence:
       config:
         existingClaim: firefox
+      cache:
+        type: emptyDir
+        sizeLimit: 4Gi
+        globalMounts:
+          - path: /config/.cache
+            subPath: cache
       data:
         type: nfs
         server: nfs.clerici.tech
