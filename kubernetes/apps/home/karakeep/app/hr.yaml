@@ -118,6 +118,7 @@ spec:
               - /bin/meilisearch
             env:
               MEILI_NO_ANALYTICS: true
+              MEILI_UPGRADE_DB: true
               MEILI_MASTER_KEY:
                 secretKeyRef:
                   name: karakeep
