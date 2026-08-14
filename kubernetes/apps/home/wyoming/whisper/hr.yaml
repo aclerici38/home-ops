@@ -47,10 +47,15 @@ spec:
           whisper:
             image:
               repository: mirror.gcr.io/rhasspy/wyoming-whisper
-              tag: 3.5.0@sha256:308b7959a925d0cca381c3e6e77292fed87822695635db39c24199d6b7a9e610
+              tag: 3.6.0@sha256:b7da5869ac9caba5f8db1c0dec373fb46a58d31f4aee1855faa7b49b7c0d4b49
             env:
               HOME: /tmp
               HF_HOME: /data
+              HASS_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: whisper
+                    key: HOME_HASS_TOKEN
             args:
               - --model
               - base.en
@@ -61,7 +66,13 @@ spec:
               - --beam-size
               - "5"
               - --initial-prompt
-              - "Alexa, turn on the lights and set the brightness to fifty percent. Outdoor lights off. Landscape lights on. All lights off. Set the air conditioning to seventy two degrees and turn the AC off. Set a timer for ten minutes."
+              - "Alexa, turn on the lights and set the brightness to fifty percent. Set the air conditioning to seventy two degrees."
+              - --hass-token
+              - $(HASS_TOKEN)
+              - --hass-api
+              - http://home-assistant.home-assistant:8123/api
+              - --hass-refresh-seconds
+              - "900"
             probes:
               liveness:
                 enabled: true
@@ -102,6 +113,5 @@ spec:
           - path: /data
       tmp:
         type: emptyDir
-        medium: Memory
         globalMounts:
           - path: /tmp
