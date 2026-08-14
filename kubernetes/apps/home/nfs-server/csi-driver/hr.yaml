@@ -52,3 +52,20 @@ spec:
         mountOptions: *opt
         reclaimPolicy: Retain
         volumeBindingMode: Immediate
+      # reclaimPolicy MUST stay
+      - name: nfs-media
+        parameters:
+          server: "nfs.clerici.tech"
+          share: "/"
+          subDir: /media
+        mountOptions: *opt
+        reclaimPolicy: Retain
+        volumeBindingMode: Immediate
+      - name: nfs-immich
+        parameters:
+          server: "nfs.clerici.tech"
+          share: "/"
+          subDir: /immich
+        mountOptions: *opt
+        reclaimPolicy: Retain
+        volumeBindingMode: Immediate

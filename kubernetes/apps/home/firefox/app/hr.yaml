@@ -86,9 +86,12 @@ spec:
           - path: /config/.cache
             subPath: cache
       data:
-        type: nfs
-        server: nfs.clerici.tech
-        path: /media
+        type: persistentVolumeClaim
+        storageClass: nfs-media
+        accessMode: ReadWriteMany
+        # Ignored
+        size: 1Gi
+        suffix: media
         globalMounts:
           - path: /allMedia
   dependsOn:

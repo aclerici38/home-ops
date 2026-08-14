@@ -93,9 +93,12 @@ spec:
           - path: /home/filebrowser/data/config.yaml
             subPath: config.yaml
       media:
-        type: nfs
-        server: nfs.clerici.tech
-        path: /media
+        type: persistentVolumeClaim
+        storageClass: nfs-media
+        accessMode: ReadWriteMany
+        # Ignored
+        size: 1Gi
+        suffix: media
         globalMounts:
           - path: /mnt/media
     configMaps:

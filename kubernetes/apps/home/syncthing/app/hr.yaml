@@ -97,9 +97,12 @@ spec:
         globalMounts:
           - path: /var/syncthing
       media:
-        type: nfs
-        server: nfs.clerici.tech
-        path: /media
+        type: persistentVolumeClaim
+        storageClass: nfs-media
+        accessMode: ReadWriteMany
+        # Ignored
+        size: 1Gi
+        suffix: media
         globalMounts:
           - path: /allMedia
       tmpfs:
