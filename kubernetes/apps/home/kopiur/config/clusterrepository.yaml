@@ -81,9 +81,10 @@ spec:
   maintenance:
     enabled: true
     schedule:
+      timezone: America/Los_Angeles
       quick:
         cron: "0 * * * *"
         jitter: 30m
       full:
         cron: "0 5 * * *"
-        jitter: 1h
+        jitter: 30m
