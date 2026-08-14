@@ -71,8 +71,6 @@ spec:
               - $(HASS_TOKEN)
               - --hass-api
               - http://home-assistant.home-assistant:8123/api
-              - --hass-refresh-seconds
-              - "900"
             probes:
               liveness:
                 enabled: true
