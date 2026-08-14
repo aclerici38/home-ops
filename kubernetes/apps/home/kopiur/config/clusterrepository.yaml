@@ -34,7 +34,9 @@ spec:
     timezone: America/Los_Angeles
   moverDefaults:
     cache:
-      mode: Ephemeral
+      mode: Persistent
+      storageClassName: zfs-ssd
+      capacity: 5Gi
       contentCacheSizeMb: 2000
       metadataCacheSizeMb: 2000
     securityContext:

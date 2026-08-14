@@ -21,6 +21,9 @@ spec:
       key: KOPIA_PASSWORD
   create:
     enabled: true
+  bootstrap:
+    failurePolicy:
+      activeDeadlineSeconds: 900
   allowedNamespaces:
     all: true
   credentialProjection:
