@@ -51,6 +51,11 @@ spec:
             env:
               HOME: /tmp
               HF_HOME: /data
+              HASS_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: whisper
+                    key: HOME_HASS_TOKEN
             args:
               - --model
               - base.en
@@ -61,7 +66,13 @@ spec:
               - --beam-size
               - "5"
               - --initial-prompt
-              - "Alexa, turn on the lights and set the brightness to fifty percent. Outdoor lights off. Landscape lights on. All lights off. Set the air conditioning to seventy two degrees and turn the AC off. Set a timer for ten minutes."
+              - "Alexa, turn on the lights and set the brightness to fifty percent. Set the air conditioning to seventy two degrees."
+              - --hass-token
+              - $(HASS_TOKEN)
+              - --hass-api
+              - http://home-assistant.home-assistant:8123/api
+              - --hass-refresh-seconds
+              - "900"
             probes:
               liveness:
                 enabled: true
@@ -102,6 +113,5 @@ spec:
           - path: /data
       tmp:
         type: emptyDir
-        medium: Memory
         globalMounts:
           - path: /tmp
