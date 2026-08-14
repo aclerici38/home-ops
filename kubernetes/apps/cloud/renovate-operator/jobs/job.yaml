@@ -9,21 +9,24 @@ spec:
     name: github
   discoveryFilters:
     - /aclerici38\/(${REPOS})/
+  renovateConfig:
+    inline: |
+      module.exports = {
+        allowedCommands: ['pnpm run bundle'],
+        allowedUnsafeExecutions: ['mise'],
+        customEnvVariables: {MISE_TRUSTED_CONFIG_PATHS: '/tmp/repos'},
+        hostRules: [
+          {
+            hostType: 'docker',
+            matchHost: 'docker.io',
+            username: process.env.DOCKERHUB_USERNAME,
+            password: process.env.DOCKERHUB_TOKEN,
+          },
+        ],
+        platformCommit: 'enabled',
+        redisUrl: 'redis://renovate-operator-dragonfly-db:6379',
+      };
   extraEnv:
-    - name: LOG_LEVEL
-      value: debug
-    - name: RENOVATE_ALLOWED_COMMANDS
-      value: >-
-        [
-          "pnpm run bundle"
-        ]
-    - name: RENOVATE_ALLOWED_UNSAFE_EXECUTIONS
-      value: >-
-        [
-          "mise"
-        ]
-    - name: RENOVATE_PLATFORM_COMMIT
-      value: enabled
     - name: DOCKERHUB_USERNAME
       valueFrom:
         secretKeyRef:
@@ -34,21 +37,6 @@ spec:
         secretKeyRef:
           name: renovate-operator
           key: DOCKERHUB_TOKEN
-    - name: RENOVATE_HOST_RULES
-      value: >-
-        [
-          {
-            "hostType": "docker",
-            "matchHost": "docker.io",
-            "username": "$(DOCKERHUB_USERNAME)",
-            "password": "$(DOCKERHUB_TOKEN)"
-          }
-        ]
-    - name: RENOVATE_CUSTOM_ENV_VARIABLES
-      value: >-
-        {"MISE_TRUSTED_CONFIG_PATHS": "/tmp/repos"}
-    - name: RENOVATE_REDIS_URL
-      value: redis://renovate-operator-dragonfly-db:6379
   image: ghcr.io/renovatebot/renovate:44.30.0@sha256:36e4288212613b19dd54b97767b5dd55f5ddea6e9e07e628f99b25edc47159b4
   parallelism: 1
   scratchVolume:
