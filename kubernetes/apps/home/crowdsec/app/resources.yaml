@@ -22,12 +22,7 @@ spec:
       namespace: cloudnative-pg
     - name: external-secrets
       namespace: external-secrets
-    - name: kopiur
-      namespace: kopiur
   values:
     externalSecret: {}
     cnpg:
       mode: shared
-    kopiur:
-      existingClaim: true
-      cephfs: true
