@@ -35,7 +35,7 @@ spec:
           immich-pet-tagger:
             image:
               repository: ghcr.io/tedornitier/immich-pet-tagger
-              tag: v1.6.1-cpu@sha256:51cb5338245b01d4971be9c3c28cef24f77e23a3e6eaff80632e13259c6ec185
+              tag: v1.7.3-cpu@sha256:b95322966c30c46eaa397b27f6d63663114ed19328b76a0b213aad751347c701
             env:
               IMMICH_URL: http://immich-server.immich:2283
               IMMICH_EXTERNAL_URL: https://immich.clerici.tech
@@ -43,18 +43,22 @@ spec:
                 secretKeyRef:
                   name: immich-pet-tagger
                   key: IMMICH_API_KEY
-              POLL_INTERVAL: "300"
-              # 1280 detects smaller/farther dogs and yields tighter, higher-res crops feeding CLIP.
+              POLL_INTERVAL: "900"
+              TAG_NAME: Pets/Review
+              YOLO_MODEL_NAME: yolov8s.pt
+              CLIP_MODEL_NAME: ViT-L-14
+              CLIP_PRETRAINED: openai
               YOLO_INPUT_SIZE: "1280"
-              # 32 threads
+              YOLO_CONF: "0.2"
+              IOU_THRESHOLD: "0.5"
+              THRESHOLD: "0.8"
+              THRESHOLD_FALLBACK: "0.9"
+              # 2 workers x 8 threads = 16 of the node's 32.
               GPU_WORKERS: "2"
               OMP_NUM_THREADS: "8"
               MKL_NUM_THREADS: "8"
-              # Moderate batches: on CPU large batches add latency/memory without
-              # the throughput win they give a GPU.
               YOLO_BATCH_SIZE: "16"
               CLIP_BATCH_SIZE: "16"
-              # Keep the inference pipeline fed with parallel thumbnail fetches.
               SCAN_WORKERS: "32"
               EMBED_CACHE_SIZE: "20000"
             probes:
@@ -79,7 +83,7 @@ spec:
             resources:
               requests:
                 cpu: "2"
-                memory: 4Gi
+                memory: 6Gi
               limits:
                 memory: 16Gi
             securityContext:
