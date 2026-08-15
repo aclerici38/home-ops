@@ -77,7 +77,7 @@ spec:
         containers:
           haproxy:
             image:
-              repository: mirror.gcr.io/library/haproxy
+              repository: docker.io/library/haproxy
               tag: 3.4.3-alpine@sha256:fe709fdaf6f2db6f9c2f0bea51a63920cba7ba44bea1a97961611adfa19ac096
             args:
               - "-W"
