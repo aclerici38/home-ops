@@ -180,12 +180,32 @@
     {
       description: "Rook-Ceph group",
       groupName: "Rook-Ceph",
-      matchPackageNames: ["/rook/", "ceph-csi-drivers"],
-      matchDatasources: ["docker", "github-releases", "helm"],
+      matchPackageNames: ["/rook/"],
+      matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
+      minimumGroupSize: 2,
+    },
+    {
+      // ceph-csi-drivers is CRs/RBAC for the ceph-csi-operator that the
+      // rook-ceph chart vendors as a subchart, so it must never run ahead of
+      // the version pinned in that chart's Chart.yaml. Joining the Rook-Ceph
+      // group with minimumGroupSize set ONLY here makes the gate asymmetric:
+      // the branch value is the max across the upgrades actually in it, so a
+      // csi-drivers-only branch resolves to 3 and is skipped, while a
+      // rook-only branch resolves to 2 and opens as usual. Still verify the
+      // vendored version on the grouped PR:
+      //   helm show chart oci://ghcr.io/rook/rook-ceph --version <new> \
+      //     | yq '.dependencies[] | select(.name=="ceph-csi-operator").version'
+      description: "Tie ceph-csi-drivers to its rook chart",
+      groupName: "Rook-Ceph",
+      matchPackageNames: ["ceph-csi-drivers"],
+      matchDatasources: ["helm"],
       minimumGroupSize: 3,
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
     },
     {
       description: "CNPG Postgres Containers group",
