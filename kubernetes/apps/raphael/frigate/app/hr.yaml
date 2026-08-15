@@ -60,10 +60,10 @@ spec:
                   - DAC_OVERRIDE
             resources:
               requests:
-                cpu: 2000m
-                memory: 2Gi
+                cpu: 1000m
+                memory: 3500Mi
               limits:
-                memory: 4Gi
+                memory: 5Gi
               claims:
                 - name: gpu
     service:
