@@ -5,7 +5,7 @@
       // Default grouping: bundle any deps that share a package "basename"
       // (the last path segment of depName) across managers/datasources. This
       // auto-groups a k8s-versioned-schemas CRD (depName e.g. "multus") with
-      // its upstream chart/image (e.g. ghcr.io/bjw-s-labs/helm/multus) without
+      // its upstream chart/image (e.g. ghcr.io/home-operations/charts/multus) without
       // an explicit per-app rule. Explicit groups below override this where a
       // bundle must span differently-named packages (e.g. Talos, Kgateway).
       description: "Group by package basename (schema <-> upstream)",
