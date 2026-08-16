@@ -160,5 +160,25 @@ spec:
                   url: http://prowlarr.media.svc.cluster.local:9696
                   access_url: https://prowlarr.clerici.tech
                   apikey: $${PROWLARR_API_KEY}
+              bazarr:
+                - name: Bazarr
+                  url: http://bazarr.media.svc.cluster.local:6767
+                  access_url: https://bazarr.clerici.tech
+                  apikey: $${BAZARR_API_KEY}
+              jellyfin:
+                - name: Jellyfin
+                  url: http://jellyfin.jellyfin.svc.cluster.local:8096
+                  access_url: https://jellyfin.clerici.tech
+                  apikey: $${JELLYFIN_API_KEY}
+              overseerr:
+                - name: Seerr
+                  url: http://seerr.media.svc.cluster.local:5055
+                  access_url: https://seerr.clerici.tech
+                  apikey: $${SEERR_API_KEY}
+              # No qbittorrent type upstream
+              general:
+                - name: qBittorrent
+                  url: http://qbittorrent.qbittorrent.svc.cluster.local:8080/api/v2/transfer/info
+                  access_url: https://qbit.clerici.tech
   dependsOn:
     - name: dashbrr-resources
