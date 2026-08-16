@@ -29,6 +29,7 @@ spec:
         rollingUpdate:
           surge: 1
           unavailable: 1
+        pod:
           affinity:
             podAntiAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
