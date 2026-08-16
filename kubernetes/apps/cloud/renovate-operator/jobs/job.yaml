@@ -15,6 +15,8 @@ spec:
         allowedCommands: ['pnpm run bundle'],
         allowedUnsafeExecutions: ['mise'],
         customEnvVariables: {MISE_TRUSTED_CONFIG_PATHS: '/tmp/repos'},
+        // Docker Hub 403s past page 10
+        dockerMaxPages: 10,
         hostRules: [
           {
             hostType: 'docker',
