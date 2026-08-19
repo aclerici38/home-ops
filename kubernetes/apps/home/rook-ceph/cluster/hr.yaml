@@ -59,6 +59,20 @@ spec:
             sectionName: https
     cephClusterSpec:
       upgradeOSDRequiresHealthyPGs: true
+      security:
+        cephx:
+          daemon:
+            keyRotationPolicy: KeyGeneration
+            keyGeneration: 2
+      healthCheck:
+        muteHealthWarning:
+          # Unresolvable until every node runs Linux 7.0+ and CSI keys move to aes256k.
+          AUTH_INSECURE_CLIENT_KEY_TYPE:
+            policy: mute
+          AUTH_INSECURE_KEYS_ALLOWED:
+            policy: mute
+          AUTH_INSECURE_KEYS_CREATABLE:
+            policy: mute
       csi:
         cephfs:
           kernelMountOptions: ms_mode=crc
@@ -93,8 +107,9 @@ spec:
             enabled: true
           - name: pg_autoscaler
             enabled: true
+          # https://github.com/rook/rook/issues/18124
           - name: rook
-            enabled: true
+            enabled: false
       resources:
         mgr:
           limits:
