@@ -19,6 +19,15 @@
   ignorePaths: [
     '**/*.sops.*'
   ],
+  // The home-operations preset aims both `flux` and `helm-values` at every
+  // *.yaml, so images under a HelmRelease's values: get extracted twice. The
+  // duplicate upgrades inflate branch upgrade counts and defeat
+  // minimumGroupSize. Every dep helm-values finds here is already covered by
+  // flux (HelmRelease values), kubernetes (job/cronjob) or the annotated
+  // regex manager (CNPG image catalogs).
+  'helm-values': {
+    enabled: false,
+  },
   nix: {
     enabled: true,
     lockFileMaintenance: {
