@@ -15,16 +15,25 @@ url = "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "2026.8.8"
+version = "2026.8.9"
 backend = "aqua:jdx/mise"
 
 [tools."aqua:jdx/mise"."platforms.linux-arm64"]
+checksum = "sha256:2a732f53e71d35b1488ae0bc4a975a4cb82d46e4db263891fd84246eaf63db51"
+url = "https://github.com/jdx/mise/releases/download/v2026.8.9/mise-v2026.8.9-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/521354168"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.linux-x64"]
+checksum = "sha256:b47e02d984db3ea2b120cf5eb3617fc2e09e4ccf975e47fbad066c87501c8e87"
+url = "https://github.com/jdx/mise/releases/download/v2026.8.9/mise-v2026.8.9-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/521354308"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.macos-arm64"]
+checksum = "sha256:cab126b8b1b41b444a0dc1ebca54a9b1da5a529368b47faf0e6e4a1d272f183f"
+url = "https://github.com/jdx/mise/releases/download/v2026.8.9/mise-v2026.8.9-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/521354366"
 provenance = "minisign"
 
 [[tools.dyff]]
