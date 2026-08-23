@@ -7,13 +7,16 @@ redactions = ["ONEPASSWORD_*", "GITHUB_TOKEN"]
 experimental = true
 lockfile_platforms = ["linux-x64", "macos-arm64"]
 
-# This file is both the project config and MISE_GLOBAL_CONFIG_FILE, so paths
-# must be absolute: as the global config, {{ config_root }} is $HOME.
+# This file is both the project config and MISE_GLOBAL_CONFIG_FILE. mise loads
+# it once, so {{ config_root }} is $HOME on this machine but the checkout in CI
+# (which clones to a path unrelated to $HOME). globals.env is therefore listed
+# under both; mise skips the one that does not exist without complaining.
 [env]
 # SOPS_AGE_KEY_FILE must precede _.file: mise resolves [env] in order, and the
 # encrypted secrets.env.json cannot be decrypted before the key is known.
 SOPS_AGE_KEY_FILE = "{{ env.HOME }}/home-ops/age.key"
 _.file = [
+  "{{ config_root }}/globals.env",
   "{{ env.HOME }}/home-ops/globals.env",
   "{{ env.HOME }}/home-ops/secrets.env.json",
 ]
