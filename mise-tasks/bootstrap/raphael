@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#MISE description="Bootstrap the raphael k3s cluster (namespaces + 1Password secret + Flux)"
+#USAGE arg "[context]" help="kube context" default="raphael"
+set -euo pipefail
+# k3s ships flannel + CoreDNS already, so unlike the Talos clusters this only
+# seeds the 1Password secret and installs Flux; Flux does the rest.
+source "${MISE_PROJECT_ROOT}/mise-tasks/lib/cluster.sh"
+ctx="$usage_context"
+require_context "$ctx" || {
+  echo "  (k3s.nix emits a ready-to-use /etc/rancher/k3s/raphael.yaml: scp it over and merge into ~/.kube/config)" >&2
+  exit 1; }
+echo "==> [raphael] bootstrapping cluster on context $ctx"
+
+# 1) Namespaces + the 1Password Connect secret — the one secret Flux can't
+#    bootstrap itself; everything else flows through external-secrets after.
+mise run bootstrap:secrets "$ctx"
+
+# 2) Flux operator + instance. Once flux-instance is up it reconciles
+#    kubernetes/flux/raphael (synced from main) and pulls in everything else.
+export ROOT_DIR="${MISE_PROJECT_ROOT:-$(git rev-parse --show-toplevel)}"
+helmfile --kube-context "$ctx" --file kubernetes/bootstrap/raphael/helmfile.yaml.gotmpl apply --skip-diff-on-install --suppress-diff

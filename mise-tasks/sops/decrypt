@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#MISE description="Decrypt <dir>/secrets.sops.yaml -> <dir>/sops.decrypted.yaml"
+#USAGE arg "[dir]" help="directory holding secrets.sops.yaml" default="raphael"
+set -euo pipefail
+dir="$usage_dir"
+[[ -f "$dir/secrets.sops.yaml" ]] || { echo "ERROR: $dir/secrets.sops.yaml not found" >&2; exit 1; }
+sops decrypt --output "$dir/sops.decrypted.yaml" "$dir/secrets.sops.yaml"
+echo "decrypted $dir/secrets.sops.yaml -> $dir/sops.decrypted.yaml"

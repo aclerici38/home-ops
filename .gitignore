@@ -30,3 +30,6 @@ wiki
 *.gz
 # testing
 test/
+
+# Local secrets (regenerate with `mise run secrets:sync`)
+secrets.env.json
