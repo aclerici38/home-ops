@@ -92,6 +92,7 @@ spec:
             readOnly: true
       data:
         type: emptyDir
+        medium: Memory
         globalMounts:
           - path: /data
     configMaps:
