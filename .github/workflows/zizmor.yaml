@@ -9,18 +9,42 @@ on:
     paths:
       - ".github/workflows/**"
       - ".github/actions/**"
+      - ".mise.toml"
   pull_request:
     paths:
       - ".github/workflows/**"
       - ".github/actions/**"
+      - ".mise.toml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
-  security-events: write
 
 jobs:
   zizmor:
-    uses: aclerici38/workflows/.github/workflows/zizmor.yaml@812a0ac85f6264fef2c88842473423f72e251dca # main
+    name: Audit workflows
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
       contents: read
-      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup mise
+        uses: jdx/mise-action@3c2e0cf82a5b2e5249f0d3635a4d83d0ae861518 # v4.2.5
+        env:
+          MISE_NO_HOOKS: "1"
+        with:
+          experimental: true
+          install_args: zizmor
+
+      - name: zizmor
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: zizmor .
