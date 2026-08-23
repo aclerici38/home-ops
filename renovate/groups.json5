@@ -115,10 +115,7 @@
     {
       description: "Talos (home)",
       groupName: "Talos (home)",
-      matchPackageNames: [
-        "**/siderolabs/talos",
-        "**/siderolabs/talosctl",
-      ],
+      matchPackageNames: ["**/siderolabs/talos", "**/siderolabs/talosctl"],
       matchFileNames: ["globals.env"],
       additionalBranchPrefix: "home-",
       // Override separateMinorPatch inherited from the Mise tools group
@@ -132,10 +129,7 @@
       // Cloud cluster Talos version separate.
       description: "Talos (cloud)",
       groupName: "Talos (cloud)",
-      matchPackageNames: [
-        "**/siderolabs/talos",
-        "**/siderolabs/talosctl",
-      ],
+      matchPackageNames: ["**/siderolabs/talos", "**/siderolabs/talosctl"],
       matchFileNames: ["talos/cloud/**", "kubernetes/flux/cloud/**"],
       additionalBranchPrefix: "cloud-",
       separateMinorPatch: false,
@@ -219,10 +213,7 @@
     {
       description: "Streamystats group",
       groupName: "Streamystats",
-      matchPackageNames: [
-        "/streamystats-nextjs/",
-        "/streamystats-job-server/",
-      ],
+      matchPackageNames: ["/streamystats-nextjs/", "/streamystats-job-server/"],
       matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
@@ -335,10 +326,7 @@
     {
       description: "Kubernetes group",
       groupName: "Kubernetes",
-      matchPackageNames: [
-        "kubernetes/kubernetes",
-        "ghcr.io/siderolabs/kubelet",
-      ],
+      matchPackageNames: ["kubernetes/kubernetes", "ghcr.io/siderolabs/kubelet"],
       minimumGroupSize: 2,
       group: {
         commitMessageTopic: "{{{groupName}}} group",

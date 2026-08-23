@@ -1,39 +1,34 @@
 {
-  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: [
-    'github>home-operations/renovate-presets#8.1.0',
-    ':semanticCommits',
-    ':timezone(America/Los_Angeles)',
-    'github>aclerici38/home-ops//renovate/autoMerge.json5',
-    'github>aclerici38/home-ops//renovate/customManagers.json5',
-    'github>aclerici38/home-ops//renovate/grafanaDashboards.json5',
-    'github>aclerici38/home-ops//renovate/groups.json5',
-    'github>aclerici38/home-ops//renovate/labels.json5',
-    'github>aclerici38/home-ops//renovate/packageRules.json5',
+    "github>home-operations/renovate-presets#8.1.0",
+    ":semanticCommits",
+    ":timezone(America/Los_Angeles)",
+    "github>aclerici38/home-ops//renovate/autoMerge.json5",
+    "github>aclerici38/home-ops//renovate/customManagers.json5",
+    "github>aclerici38/home-ops//renovate/grafanaDashboards.json5",
+    "github>aclerici38/home-ops//renovate/groups.json5",
+    "github>aclerici38/home-ops//renovate/labels.json5",
+    "github>aclerici38/home-ops//renovate/packageRules.json5",
   ],
-  assignees: ['aclerici38'],
-  suppressNotifications: [
-    'prEditedNotification',
-    'prIgnoreNotification',
-  ],
-  ignorePaths: [
-    '**/*.sops.*'
-  ],
+  assignees: ["aclerici38"],
+  suppressNotifications: ["prEditedNotification", "prIgnoreNotification"],
+  ignorePaths: ["**/*.sops.*"],
   // The home-operations preset aims both `flux` and `helm-values` at every
   // *.yaml, so images under a HelmRelease's values: get extracted twice. The
   // duplicate upgrades inflate branch upgrade counts and defeat
   // minimumGroupSize. Every dep helm-values finds here is already covered by
   // flux (HelmRelease values), kubernetes (job/cronjob) or the annotated
   // regex manager (CNPG image catalogs).
-  'helm-values': {
+  "helm-values": {
     enabled: false,
   },
   nix: {
     enabled: true,
     lockFileMaintenance: {
       enabled: true,
-      schedule: ['* 3-4 * * 1'],
-      rebaseWhen: 'conflicted',
+      schedule: ["* 3-4 * * 1"],
+      rebaseWhen: "conflicted",
     },
   },
 }

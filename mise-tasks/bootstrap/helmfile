@@ -12,6 +12,8 @@ echo "==> [$CLUSTER] applying helmfile to $KUBE_CONTEXT"
 # settings on top so ${VARS} in the Flux manifests resolve per-cluster.
 settings="$ROOT_DIR/kubernetes/flux/$CLUSTER/cluster-settings.yaml"
 if [[ -f "$settings" ]]; then
+  # kv is "KEY=value", so `export "$kv"` assigns rather than exporting a name.
+  # shellcheck disable=SC2163
   while IFS= read -r kv; do export "$kv"; done \
     < <(yq -r '.data | to_entries[] | .key + "=" + .value' "$settings")
 fi

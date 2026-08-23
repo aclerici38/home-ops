@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+#MISE description="Health-check the mise config: TOML schema, task headers, lockfile drift"
+set -uo pipefail
+
+# auto_install is on, so any mise invocation below would install and lock a
+# newly added tool before check 3 could notice it was unlocked.
+export MISE_AUTO_INSTALL=0
+
+fail=0
+
+# Print a heading and an indented list; returns 1 when the list is non-empty so
+# callers can fold it straight into the failure flag.
+report() {
+  local heading=$1 items=$2
+  [[ -n "$items" ]] || return 0
+  echo "$heading"
+  while IFS= read -r item; do echo "  $item"; done <<< "$items"
+  return 1
+}
+
+# 1. TOML syntax + the official mise schema, which .mise.toml declares with a
+#    #:schema directive. Catches wrong types; the schema does not set
+#    additionalProperties:false, so misspelled keys are not caught here.
+echo "==> schema"
+if ! taplo_out=$(taplo lint .mise.toml 2>&1); then
+  echo "$taplo_out"
+  fail=1
+fi
+
+# 2. mise reports a malformed #MISE/#USAGE header on stderr and still exits 0,
+#    silently dropping the setting or the whole argument spec. Promote to error.
+echo "==> task headers"
+report "malformed task headers:" "$(mise tasks ls 2>&1 > /dev/null)" || fail=1
+
+# 3. [tools] and mise.lock must list the same tools. Both files are TOML, so
+#    read them as TOML rather than pattern-matching the text.
+echo "==> lockfile"
+tool_names() { yq -p toml -o yaml '.tools | keys | .[]' "$1" | sort; }
+configured=$(tool_names .mise.toml)
+locked=$(tool_names mise.lock)
+
+drift=0
+report "missing from mise.lock:" "$(comm -23 <(echo "$configured") <(echo "$locked"))" || drift=1
+report "in mise.lock but not [tools]:" "$(comm -13 <(echo "$configured") <(echo "$locked"))" || drift=1
+if [[ $drift -eq 1 ]]; then
+  echo "ERROR: run 'mise install && mise lock', then commit mise.lock"
+  fail=1
+fi
+
+# 4. Informational only: doctor exits 0 even when it lists problems, so it can
+#    never gate. Skipped in CI, where every macOS bootstrap package is missing.
+if [[ -z "${CI:-}" ]]; then
+  echo "==> doctor"
+  mise doctor 2>&1 | sed -n '/warnings found/,$p'
+fi
+
+exit $fail

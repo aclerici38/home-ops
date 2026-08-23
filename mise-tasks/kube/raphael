@@ -25,5 +25,5 @@ else
   echo "==> wrote ~/.kube/config"
 fi
 chmod 600 "$HOME/.kube/config"
-kubectl config use-context raphael >/dev/null
+kubectl config use-context raphael > /dev/null
 echo "==> current context: $(kubectl config current-context)"

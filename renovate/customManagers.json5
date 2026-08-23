@@ -8,7 +8,7 @@
       matchStrings: [
         // renovate: datasource=github-releases depName=k3s-io/k3s versioning=loose
         // k3sMinor = "1.34";
-        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+) versioning=(?<versioning>\\S+)\\s+k3sMinor\\s*=\\s*\"(?<currentValue>[^\"]+)\"",
+        'datasource=(?<datasource>\\S+) depName=(?<depName>\\S+) versioning=(?<versioning>\\S+)\\s+k3sMinor\\s*=\\s*"(?<currentValue>[^"]+)"',
       ],
       datasourceTemplate: "{{{datasource}}}",
       versioningTemplate: "{{{versioning}}}",

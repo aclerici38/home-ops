@@ -8,7 +8,8 @@ source "${MISE_PROJECT_ROOT}/mise-tasks/lib/cluster.sh"
 ctx="$usage_context"
 require_context "$ctx" || {
   echo "  (k3s.nix emits a ready-to-use /etc/rancher/k3s/raphael.yaml: scp it over and merge into ~/.kube/config)" >&2
-  exit 1; }
+  exit 1
+}
 echo "==> [raphael] bootstrapping cluster on context $ctx"
 
 # 1) Namespaces + the 1Password Connect secret — the one secret Flux can't
