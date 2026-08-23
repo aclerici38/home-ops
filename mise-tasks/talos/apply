@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+#MISE description="Apply Talos config to a cluster, or a single node"
+#MISE dir="talos"
+#MISE confirm="Apply Talos machine config? This can roll nodes."
+#USAGE arg "<cluster>" help="which Talos cluster" {
+#USAGE   choices "home" "cloud"
+#USAGE }
+#USAGE arg "[node]" help="limit to one node (default: all)"
+set -euo pipefail
+cd "$usage_cluster"
+
+diff=$(talhelper genconfig --dry-run 2>&1 | grep -v "^no changes found" || true)
+if [[ -n "$diff" ]]; then
+  echo "ERROR: $usage_cluster clusterconfig is out of sync with talconfig.yaml. Run 'mise run talos:gen $usage_cluster' first and review the changes."
+  echo ""
+  echo "$diff"
+  exit 1
+fi
+
+if [[ -n "${usage_node:-}" ]]; then
+  talhelper gencommand apply --node "$usage_node" | bash
+else
+  talhelper gencommand apply | bash
+fi

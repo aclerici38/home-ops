@@ -8,7 +8,7 @@ pre-commit:
   parallel: true
   commands:
     nixfmt:
-      glob: "nix-config/**/*.nix"
+      glob: "raphael/**/*.nix"
       run: nixfmt --check {staged_files}
       stage_fixed: true
     yaml:
@@ -33,3 +33,12 @@ pre-commit:
           [ -e "$f" ] || continue
           talhelper validate nodeconfig "$f" || exit 1
         done
+    shell:
+      glob: "mise-tasks/**"
+      # Format first so shellcheck lints what will actually be committed.
+      run: shfmt -w -i 2 -ci -sr {staged_files} && shellcheck -x {staged_files}
+      stage_fixed: true
+    oxfmt:
+      glob: "**/*.{json,json5,md}"
+      run: oxfmt --write {staged_files}
+      stage_fixed: true

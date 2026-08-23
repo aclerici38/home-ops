@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#MISE description="Bootstrap helmfile (cilium, coredns, cert-manager, 1p-connect, external-secrets, flux)"
+#USAGE arg "<cluster>" help="which Talos cluster" {
+#USAGE   choices "home" "cloud"
+#USAGE }
+set -euo pipefail
+source "${MISE_PROJECT_ROOT}/mise-tasks/lib/cluster.sh"
+select_cluster "$usage_cluster"
+echo "==> [$CLUSTER] applying helmfile to $KUBE_CONTEXT"
+
+# globals.env (loaded by mise) holds the home defaults; overlay this cluster's
+# settings on top so ${VARS} in the Flux manifests resolve per-cluster.
+settings="$ROOT_DIR/kubernetes/flux/$CLUSTER/cluster-settings.yaml"
+if [[ -f "$settings" ]]; then
+  # kv is "KEY=value", so `export "$kv"` assigns rather than exporting a name.
+  # shellcheck disable=SC2163
+  while IFS= read -r kv; do export "$kv"; done \
+    < <(yq -r '.data | to_entries[] | .key + "=" + .value' "$settings")
+fi
+
+helmfile --kube-context "$KUBE_CONTEXT" --file kubernetes/bootstrap/apps/helmfile.yaml.gotmpl apply --skip-diff-on-install --suppress-diff

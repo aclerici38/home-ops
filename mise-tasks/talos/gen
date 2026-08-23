@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#MISE description="Regenerate Talos configs for a cluster"
+#MISE dir="talos"
+#USAGE arg "<cluster>" help="which Talos cluster" {
+#USAGE   choices "home" "cloud"
+#USAGE }
+set -euo pipefail
+cd "$usage_cluster"
+talhelper genconfig

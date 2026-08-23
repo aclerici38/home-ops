@@ -7,14 +7,12 @@ on:
     branches:
       - "main"
     paths:
-      - "nix-config/**"
       - "raphael/**"
       - ".github/workflows/nix.yaml"
   pull_request:
     branches:
       - "main"
     paths:
-      - "nix-config/**"
       - "raphael/**"
       - ".github/workflows/nix.yaml"
 
@@ -44,15 +42,14 @@ jobs:
           determinate: false
 
       - name: nixfmt
-        run: nix shell nixpkgs#nixfmt --command nixfmt --check nix-config/*.nix raphael/*.nix raphael/nixos/*.nix
+        run: nix shell nixpkgs#nixfmt --command nixfmt --check raphael/*.nix raphael/nixos/*.nix
 
       - name: statix
         run: |
-          nix shell nixpkgs#statix --command statix check -c nix-config nix-config
-          nix shell nixpkgs#statix --command statix check -c nix-config raphael
+          nix shell nixpkgs#statix --command statix check -c raphael raphael
 
       - name: deadnix
-        run: nix shell nixpkgs#deadnix --command deadnix --fail nix-config raphael
+        run: nix shell nixpkgs#deadnix --command deadnix --fail raphael
 
   flake-checker:
     name: Flake Health
@@ -67,12 +64,6 @@ jobs:
           persist-credentials: false
 
       - name: Flake Checker
-        uses: DeterminateSystems/flake-checker-action@3164002371bc90729c68af0e24d5aacf20d7c9f6 # v12
-        with:
-          flake-lock-path: nix-config/flake.lock
-          fail-mode: true
-
-      - name: Flake Checker (raphael)
         uses: DeterminateSystems/flake-checker-action@3164002371bc90729c68af0e24d5aacf20d7c9f6 # v12
         with:
           flake-lock-path: raphael/flake.lock

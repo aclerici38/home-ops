@@ -1,10 +1,28 @@
+#:schema https://mise.jdx.dev/schema/mise.json
+# Keep 1Password values out of task output; bootstrap:secrets needs
+# `op run --no-masking` so the real values still reach kubectl.
+redactions = ["ONEPASSWORD_*", "GITHUB_TOKEN"]
+
 [settings]
 experimental = true
 lockfile_platforms = ["linux-x64", "macos-arm64"]
 
+# This file is both the project config and MISE_GLOBAL_CONFIG_FILE. mise loads
+# it once, so {{ config_root }} is $HOME on this machine but the checkout in CI
+# (which clones to a path unrelated to $HOME). globals.env is therefore listed
+# under both; mise skips the one that does not exist without complaining.
 [env]
-_.file = "globals.env"
-SOPS_AGE_KEY_FILE = "{{ config_root }}/age.key"
+# SOPS_AGE_KEY_FILE must precede _.file: mise resolves [env] in order, and the
+# encrypted secrets.env.json cannot be decrypted before the key is known.
+SOPS_AGE_KEY_FILE = "{{ env.HOME }}/home-ops/age.key"
+_.file = [
+  "{{ config_root }}/globals.env",
+  "{{ env.HOME }}/home-ops/globals.env",
+  "{{ env.HOME }}/home-ops/secrets.env.json",
+]
+EDITOR = "nvim"
+TALOSCONFIG = "{{ env.HOME }}/home-ops/talos/home/clusterconfig/talosconfig"
+ATUIN_SYNC_ADDRESS = "https://atuin.clerici.tech"
 FLATE_KUBE_VERSION = "{{ env.KUBE_VERSION }}"
 FLATE_API_VERSIONS = "cert-manager.io/v1,monitoring.coreos.com/v1,monitoring.coreos.com/v1alpha1,gateway.networking.k8s.io/v1,gateway.networking.k8s.io/v1beta1,grafana.integreatly.org/v1beta1,external-secrets.io/v1,volsync.backube/v1alpha1,snapshot.storage.k8s.io/v1"
 FLATE_ALLOW_MISSING_SECRETS = "true"
@@ -13,230 +31,110 @@ FLATE_SKIP_CRDS = "false"
 [hooks]
 postinstall = "lefthook install"
 
-[tasks."sops:encrypt"]
-description = "Encrypt <dir>/sops.decrypted.yaml -> <dir>/secrets.sops.yaml: mise run sops:encrypt [raphael|.] (default raphael)"
-run = """
-#!/usr/bin/env bash
-set -euo pipefail
-dir="${1:-raphael}"
-[[ -f "$dir/sops.decrypted.yaml" ]] || { echo "ERROR: $dir/sops.decrypted.yaml not found" >&2; exit 1; }
-sops encrypt --output "$dir/secrets.sops.yaml" "$dir/sops.decrypted.yaml"
-echo "encrypted $dir/sops.decrypted.yaml -> $dir/secrets.sops.yaml"
-"""
-
-[tasks."sops:decrypt"]
-description = "Decrypt <dir>/secrets.sops.yaml -> <dir>/sops.decrypted.yaml: mise run sops:decrypt [raphael|.] (default raphael)"
-run = """
-#!/usr/bin/env bash
-set -euo pipefail
-dir="${1:-raphael}"
-[[ -f "$dir/secrets.sops.yaml" ]] || { echo "ERROR: $dir/secrets.sops.yaml not found" >&2; exit 1; }
-sops decrypt --output "$dir/sops.decrypted.yaml" "$dir/secrets.sops.yaml"
-echo "decrypted $dir/secrets.sops.yaml -> $dir/sops.decrypted.yaml"
-"""
-
-[tasks."talos:gen"]
-description = "Regenerate Talos configs for a cluster: mise run talos:gen [home|cloud] (default home)"
-dir = "talos"
-run = """
-#!/usr/bin/env bash
-set -euo pipefail
-cluster="${1:-}"
-[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
-cd "$cluster"
-talhelper genconfig
-"""
-
-[tasks."talos:apply"]
-description = "Apply Talos config: mise run talos:apply [home|cloud] [node] (cluster default home)"
-dir = "talos"
-run = """
-#!/usr/bin/env bash
-set -euo pipefail
-cluster="${1:-}"
-[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
-cd "$cluster"
-
-diff=$(talhelper genconfig --dry-run 2>&1 | grep -v "^no changes found" || true)
-if [[ -n "$diff" ]]; then
-  echo "ERROR: $cluster clusterconfig is out of sync with talconfig.yaml. Run 'mise run talos:gen $cluster' first and review the changes."
-  echo ""
-  echo "$diff"
-  exit 1
-fi
-
-node="${2:-}"
-if [[ -n "$node" ]]; then
-  talhelper gencommand apply --node "$node" | bash
-else
-  talhelper gencommand apply | bash
-fi
-"""
-
-[tasks."bootstrap:secrets"]
-description = "Apply bootstrap namespaces + the 1Password Connect secret to a kube context (shared by bootstrap:resources and bootstrap:raphael)"
-hide = true
-run = """
-#!/usr/bin/env bash
-set -euo pipefail
-ctx="${1:?ERROR: kube context required}"
-namespaces="${2:-flux-system onepassword-connect}"
-echo "==> applying namespaces + 1Password secret to $ctx"
-
-op user get --me >/dev/null
-export VAULT="${VAULT:-Kubernetes}"
-export KCTX="$ctx"
-
-for ns in $namespaces; do
-  kubectl --context "$ctx" create namespace "$ns" --dry-run=client --output yaml \
-    | kubectl --context "$ctx" apply --server-side --filename -
-done
-
-op run --env-file kubernetes/bootstrap/.secrets.env --no-masking -- bash -c '
-  set -euo pipefail
-  kubectl --context "$KCTX" create secret generic onepassword-connect --namespace onepassword-connect \
-    --from-literal=1password-credentials.json="$(echo "$ONEPASSWORD_CREDENTIALS" | base64)" \
-    --from-literal=token="$ONEPASSWORD_CONNECT_TOKEN" \
-    --dry-run=client --output yaml | kubectl --context "$KCTX" apply --server-side --filename -
-'
-"""
-
-[tasks."bootstrap:resources"]
-description = "Bootstrap namespaces + secrets: mise run bootstrap:resources <home|cloud>"
-run = """
-#!/usr/bin/env bash
-set -euo pipefail
-cluster="${1:-}"
-[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
-case "$cluster" in
-  home)  export CLUSTER_NAME=dormammu ;;
-  cloud) export CLUSTER_NAME=cloud ;;
-  *) echo "ERROR: unknown cluster '$cluster' (expected home|cloud)" >&2; exit 1 ;;
-esac
-ctx="admin@${CLUSTER_NAME}"
-kubectl config get-contexts --output name | grep -qx "$ctx" || {
-  echo "ERROR: kube context '$ctx' not found; merge it first (e.g. talosctl kubeconfig)" >&2; exit 1; }
-kubectl config use-context "$ctx" >/dev/null
-mise run bootstrap:secrets "$ctx" "flux-system onepassword-connect kgateway"
-"""
-
-[tasks."bootstrap:helmfile"]
-description = "Bootstrap helmfile (cilium, coredns, cert-manager, 1p-connect, external-secrets, flux): mise run bootstrap:helmfile <home|cloud>"
-run = """
-#!/usr/bin/env bash
-set -euo pipefail
-cluster="${1:-}"
-[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
-case "$cluster" in
-  home)  export CLUSTER_NAME=dormammu ;;
-  cloud) export CLUSTER_NAME=cloud ;;
-  *) echo "ERROR: unknown cluster '$cluster' (expected home|cloud)" >&2; exit 1 ;;
-esac
-ctx="admin@${CLUSTER_NAME}"
-kubectl config get-contexts --output name | grep -qx "$ctx" || {
-  echo "ERROR: kube context '$ctx' not found; merge it first (e.g. talosctl kubeconfig)" >&2; exit 1; }
-kubectl config use-context "$ctx" >/dev/null
-echo "==> [$cluster] applying helmfile to $ctx"
-
-# globals.env (loaded by mise) holds the home defaults; overlay this cluster's
-# settings on top so ${VARS} in the Flux manifests resolve per-cluster.
-export ROOT_DIR="${MISE_PROJECT_ROOT:-$(git rev-parse --show-toplevel)}"
-export CLUSTER="$cluster"
-settings="$ROOT_DIR/kubernetes/flux/$cluster/cluster-settings.yaml"
-if [[ -f "$settings" ]]; then
-  while IFS= read -r kv; do export "$kv"; done \
-    < <(yq -r '.data | to_entries[] | .key + "=" + .value' "$settings")
-fi
-
-helmfile --kube-context "$ctx" --file kubernetes/bootstrap/apps/helmfile.yaml.gotmpl apply --skip-diff-on-install --suppress-diff
-"""
-
-[tasks."bootstrap:apps"]
-description = "Full bootstrap (namespaces + secrets, then helmfile): mise run bootstrap:apps <home|cloud>"
-run = """
-#!/usr/bin/env bash
-set -euo pipefail
-cluster="${1:-}"
-[[ -n "$cluster" ]] || { echo "ERROR: specify a cluster: home|cloud" >&2; exit 1; }
-mise run bootstrap:resources "$cluster"
-mise run bootstrap:helmfile "$cluster"
-"""
-
-[tasks."bootstrap:raphael"]
-description = "Bootstrap the raphael k3s cluster (namespaces + 1Password secret + Flux): mise run bootstrap:raphael [kube-context]"
-run = """
-#!/usr/bin/env bash
-set -euo pipefail
-# k3s ships flannel + CoreDNS already, so unlike the Talos clusters this only
-# seeds the 1Password secret and installs Flux; Flux does the rest.
-ctx="${1:-raphael}"
-kubectl config get-contexts --output name | grep -qx "$ctx" || {
-  echo "ERROR: kube context '$ctx' not found; merge raphael's k3s kubeconfig first" >&2
-  echo "  (k3s.nix emits a ready-to-use /etc/rancher/k3s/raphael.yaml: scp it over and merge into ~/.kube/config)" >&2
-  exit 1; }
-kubectl config use-context "$ctx" >/dev/null
-echo "==> [raphael] bootstrapping cluster on context $ctx"
-
-# 1) Namespaces + the 1Password Connect secret — the one secret Flux can't
-#    bootstrap itself; everything else flows through external-secrets after.
-mise run bootstrap:secrets "$ctx"
-
-# 2) Flux operator + instance. Once flux-instance is up it reconciles
-#    kubernetes/flux/raphael (synced from main) and pulls in everything else.
-export ROOT_DIR="${MISE_PROJECT_ROOT:-$(git rev-parse --show-toplevel)}"
-helmfile --kube-context "$ctx" --file kubernetes/bootstrap/raphael/helmfile.yaml.gotmpl apply --skip-diff-on-install --suppress-diff
-"""
-
-[tasks."kubeconfig:raphael"]
-description = "Fetch raphael's kubeconfig and merge it into ~/.kube/config: mise run kubeconfig:raphael [user@host]"
-run = """
-#!/usr/bin/env bash
-set -euo pipefail
-remote="${1:-anthony@raphael.clerici.tech}"
-# k3s.nix emits /etc/rancher/k3s/raphael.yaml (context "raphael", server at the
-# real API address). It's 0600 root, so stage a readable copy via sudo (prompts
-# once), then pull it over a clean scp channel (no TTY newline mangling).
-staged=/tmp/raphael-kubeconfig.yaml
-local="$(mktemp)"
-trap 'rm -f "$local"' EXIT
-echo "==> staging kubeconfig on $remote (sudo may prompt)"
-ssh -t "$remote" 'sudo install -m600 -o "$(id -un)" /etc/rancher/k3s/raphael.yaml /tmp/raphael-kubeconfig.yaml'
-scp -q "$remote:$staged" "$local"
-ssh "$remote" 'rm -f /tmp/raphael-kubeconfig.yaml'
-
-mkdir -p "$HOME/.kube"
-if [[ -f "$HOME/.kube/config" ]]; then
-  cp "$HOME/.kube/config" "$HOME/.kube/config.bak"
-  KUBECONFIG="$HOME/.kube/config:$local" kubectl config view --flatten > "$HOME/.kube/config.merged"
-  mv "$HOME/.kube/config.merged" "$HOME/.kube/config"
-  echo "==> merged 'raphael' context (backup: ~/.kube/config.bak)"
-else
-  cp "$local" "$HOME/.kube/config"
-  echo "==> wrote ~/.kube/config"
-fi
-chmod 600 "$HOME/.kube/config"
-kubectl config use-context raphael >/dev/null
-echo "==> current context: $(kubectl config current-context)"
-"""
-
-[tasks."cleanse-pods"]
-description = "Cleanse pods with a Failed/Pending/Succeeded phase"
-run = """
-#!/usr/bin/env bash
-set -euo pipefail
-for phase in Failed Pending Succeeded; do
-  kubectl delete pods --all-namespaces --field-selector "status.phase=${phase}" --ignore-not-found=true
-done
-"""
-
 [tools]
-actionlint = "1.7.12"
-dyff = "1.12.0"
+"aqua:jdx/mise" = "2026.8.10"
+
+# k8s
+kubectl = "1.36.4"
+helm = "4.2.4"
+kustomize = "5.8.1"
+flux2 = "2.9.4"
+k9s = "0.51.0"
+kind = "0.32.0"
+kubebuilder = "4.15.0"
+helmfile = "1.7.4"
+helm-docs = "1.14.2"
+cilium-cli = "0.19.7"
 kubeconform = "0.8.0"
+
+# Talos
+talosctl = "1.13.9"
+talhelper = "3.1.16"
+
+# Tools
+actionlint = "1.7.12"
+age = "1.3.1"
+atuin = "18.19.0"
+claude-code = "2.1.241"
+crane = "0.21.9"
+direnv = "2.37.1"
+dyff = "1.12.0"
+envsubst = "1.4.3"
+ffmpeg = "8.1.1"
+gh = "2.98.0"
+go = "1.27.0"
+jq = "1.8.2"
 lefthook = "2.1.11"
+mas = "7.0.0"
+mc = "latest"
+neovim = "0.12.4"
+node = "26.3.1"
+oci = "3.90.3"
+oxfmt = "0.64.0"
+shellcheck = "0.11.0"
+shfmt = "3.13.1"
+sops = "3.13.3"
+taplo = "0.10.0"
+uv = "0.12.5"
 yamlfmt = "0.21.0"
 yamllint = "1.38.0"
+yq = "4.53.6"
+zizmor = "1.29.0"
+
+"github:cloudnative-pg/cloudnative-pg" = { version = "1.30.0", exe = "kubectl-cnpg" }
+"github:home-operations/yayamlls" = "0.2.0"
 "github:home-operations/flate" = "v0.6.0"
-node = "latest"
-oxfmt = "0.64.0"
-"aqua:jdx/mise" = "2026.8.10"
+
+[bootstrap.brew]
+# Take over apps already on disk instead of replacing the bundle, so macOS
+# Privacy & Security grants survive.
+adopt = true
+
+[bootstrap.packages]
+"brew:fish" = "latest"
+"brew:git" = "latest"
+"brew:skopeo" = "latest"
+
+"brew-cask:1password" = "latest"
+"brew-cask:1password-cli" = "latest"
+"brew-cask:android-platform-tools" = "latest"
+"brew-cask:balenaetcher" = "latest"
+"brew-cask:discord" = "latest"
+"brew-cask:docker-desktop" = "latest"
+"brew-cask:ghostty" = "latest"
+"brew-cask:opencloud" = "latest"
+"brew-cask:protonvpn" = "latest"
+"brew-cask:spotify" = "latest"
+"brew-cask:ultimaker-cura" = "latest"
+"brew-cask:utm" = "latest"
+"brew-cask:vlc" = "latest"
+"brew-cask:whatcable" = "latest"
+"brew-cask:wireshark-app" = "latest"
+"brew-cask:zed" = "latest"
+"brew-cask:zen" = "latest"
+"brew-cask:zoom" = "latest"
+
+"mas:1381004916" = "latest" # Discovery
+"mas:441258766" = "latest"  # Magnet
+"mas:1451685025" = "latest" # WireGuard
+
+[bootstrap.macos.defaults]
+NSGlobalDomain = { AppleShowAllExtensions = true, InitialKeyRepeat = 15, KeyRepeat = 2 }
+"com.apple.finder" = { AppleShowAllFiles = true, FXDefaultSearchScope = "SCcf", FXPreferredViewStyle = "Nlsv", ShowPathbar = true, ShowStatusBar = true }
+"com.apple.dock" = { autohide = false, "show-recents" = false }
+
+# Touch ID for sudo
+[bootstrap.files."/etc/pam.d/sudo_local"]
+content = "auth       sufficient     pam_tid.so\n"
+owner = "root"
+group = "wheel"
+mode = "0444"
+
+[bootstrap.user]
+login_shell = "/opt/homebrew/bin/fish"
+
+[dotfiles]
+"~/.config/fish/config.fish" = "dotfiles/fish/config.fish"
+"~/.config/zed/settings.json" = "dotfiles/zed/settings.json"
+"~/.gitconfig" = "dotfiles/gitconfig"
+"~/.ssh/config" = "dotfiles/ssh_config"
