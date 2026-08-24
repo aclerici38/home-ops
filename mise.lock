@@ -933,25 +933,25 @@ url_api = "https://api.github.com/repos/FiloSottile/age/releases/assets/33375266
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "2026.8.10"
+version = "2026.8.12"
 backend = "aqua:jdx/mise"
 
 [tools."aqua:jdx/mise"."platforms.linux-arm64"]
-checksum = "sha256:deb354c98b1ea741cafa6d85642b05c050453b8550cc1d0ebb7f9187dc5b473d"
-url = "https://github.com/jdx/mise/releases/download/v2026.8.10/mise-v2026.8.10-linux-arm64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/522537459"
+checksum = "sha256:ca536cb34d746a1caa1ad43d37c548e0f45c1d4192b2eaac38dc400d23940c7d"
+url = "https://github.com/jdx/mise/releases/download/v2026.8.12/mise-v2026.8.12-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/527316223"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.linux-x64"]
-checksum = "sha256:5f669876c77e43e68c04d4f457a0db17d6529bbf3173429d80dac27763474055"
-url = "https://github.com/jdx/mise/releases/download/v2026.8.10/mise-v2026.8.10-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/522537618"
+checksum = "sha256:28027bc9b245b7c2e669cbfbc61cdfa1b8d4ecdd103d09070c75c8a85304d3be"
+url = "https://github.com/jdx/mise/releases/download/v2026.8.12/mise-v2026.8.12-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/527316371"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.macos-arm64"]
-checksum = "sha256:ac6ed53215e70abfb220524aed121bf02dbd3fbd4a19355032dd1c5a108fb212"
-url = "https://github.com/jdx/mise/releases/download/v2026.8.10/mise-v2026.8.10-macos-arm64.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/522537761"
+checksum = "sha256:399c35fa79008e41dda22bbe7796f72e33f99174bc80bc4ff1881c2999bfca47"
+url = "https://github.com/jdx/mise/releases/download/v2026.8.12/mise-v2026.8.12-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/527316464"
 provenance = "minisign"
 
 [[tools.atuin]]
@@ -1584,26 +1584,33 @@ url = "https://dl.min.io/client/mc/release/darwin-arm64/archive/mc.RELEASE.2025-
 provenance = "minisign"
 
 [[tools.neovim]]
-version = "0.12.4"
+version = "0.12.5"
 backend = "vfox:mise-plugins/vfox-neovim"
 
+[tools.neovim."platforms.linux-arm64"]
+url = "https://github.com/neovim/neovim/releases/download/v0.12.5/nvim-linux-arm64.tar.gz"
+
 [tools.neovim."platforms.linux-x64"]
-url = "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-linux-x86_64.tar.gz"
+url = "https://github.com/neovim/neovim/releases/download/v0.12.5/nvim-linux-x86_64.tar.gz"
 
 [tools.neovim."platforms.macos-arm64"]
-url = "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-macos-arm64.tar.gz"
+url = "https://github.com/neovim/neovim/releases/download/v0.12.5/nvim-macos-arm64.tar.gz"
 
 [[tools.node]]
-version = "26.3.1"
+version = "26.7.0"
 backend = "core:node"
 
+[tools.node."platforms.linux-arm64"]
+checksum = "sha256:925aa6157dd37542d0d7f2e28b7bf61e7b39284411210b0498bc3788db4aef68"
+url = "https://nodejs.org/dist/v26.7.0/node-v26.7.0-linux-arm64.tar.gz"
+
 [tools.node."platforms.linux-x64"]
-checksum = "sha256:e892cd615e637edebcf22f9653d80fba63167ad6754d20881fd52cc37be81441"
-url = "https://nodejs.org/dist/v26.3.1/node-v26.3.1-linux-x64.tar.gz"
+checksum = "sha256:bd6b6c31e377bad9ad579bed72e5bc11f4c879ac9452ad51d30e646ea3d828df"
+url = "https://nodejs.org/dist/v26.7.0/node-v26.7.0-linux-x64.tar.gz"
 
 [tools.node."platforms.macos-arm64"]
-checksum = "sha256:3f624ab0d774553c0d28b968e141d8c676a35a2811fb0b7b356ba9cbdce15f74"
-url = "https://nodejs.org/dist/v26.3.1/node-v26.3.1-darwin-arm64.tar.gz"
+checksum = "sha256:7ee659a7768e641bbfd5360940660b8e8fd0052f77488f365562bac522fc15d4"
+url = "https://nodejs.org/dist/v26.7.0/node-v26.7.0-darwin-arm64.tar.gz"
 
 [[tools.oci]]
 version = "3.90.3"
