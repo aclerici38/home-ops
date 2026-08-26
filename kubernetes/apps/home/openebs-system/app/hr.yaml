@@ -20,24 +20,6 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
-  # https://github.com/openebs/zfs-localpv/issues/736
-  postRenderers:
-    - kustomize:
-        patches:
-          - target:
-              kind: Deployment
-              name: openebs-zfs-localpv-controller
-            patch: |-
-              apiVersion: apps/v1
-              kind: Deployment
-              metadata:
-                name: openebs-zfs-localpv-controller
-              spec:
-                template:
-                  spec:
-                    containers:
-                      - name: snapshot-controller
-                        $patch: delete
   valuesFrom:
     - kind: ConfigMap
       name: openebs-values
@@ -56,6 +38,9 @@ spec:
       zfsPlugin:
         image:
           registry: ghcr.io/
+      zfsController:
+        snapshotController:
+          enabled: false
       crds:
         csi:
           volumeSnapshots:
