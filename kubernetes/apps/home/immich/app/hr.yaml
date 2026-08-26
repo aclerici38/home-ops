@@ -37,6 +37,7 @@ spec:
               REDIS_HOSTNAME: immich-dragonfly-db
               IMMICH_TELEMETRY_INCLUDE: all
               IMMICH_IGNORE_MOUNT_CHECK_ERRORS: true
+              IMMICH_TRUSTED_PROXIES: ${CLUSTER_POD_CIDR}
               IMMICH_PROCESS_INVALID_IMAGES: true
               DB_URL:
                 valueFrom:
