@@ -1674,18 +1674,23 @@ url_api = "https://api.github.com/repos/getsops/sops/releases/assets/486808198"
 url = "https://github.com/getsops/sops/releases/download/v3.13.3/sops-v3.13.3.intoto.jsonl"
 
 [[tools.talhelper]]
-version = "3.1.16"
+version = "3.1.17"
 backend = "aqua:budimanjojo/talhelper"
 
+[tools.talhelper."platforms.linux-arm64"]
+checksum = "sha256:1841915ec6f533ef653baedc5f1cbf68683e0ca9a72f240ac2f257d94f68798b"
+url = "https://github.com/budimanjojo/talhelper/releases/download/v3.1.17/talhelper_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/budimanjojo/talhelper/releases/assets/530086688"
+
 [tools.talhelper."platforms.linux-x64"]
-checksum = "sha256:07d564dbace1841afd8c619210bf213f6bcf08ba81105583d2781d873633343f"
-url = "https://github.com/budimanjojo/talhelper/releases/download/v3.1.16/talhelper_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/budimanjojo/talhelper/releases/assets/503622646"
+checksum = "sha256:dff9162569004637b6a842c4020d909b0ffbc7fbbe2fca23a754708db95be204"
+url = "https://github.com/budimanjojo/talhelper/releases/download/v3.1.17/talhelper_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/budimanjojo/talhelper/releases/assets/530086690"
 
 [tools.talhelper."platforms.macos-arm64"]
-checksum = "sha256:740ee9143aed9964811ce027276f2e382c1add4baa7f38bcf142099c919aed37"
-url = "https://github.com/budimanjojo/talhelper/releases/download/v3.1.16/talhelper_darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/budimanjojo/talhelper/releases/assets/503622662"
+checksum = "sha256:cf86526d730010193d3e858f13242e5f0c94fdcefe5e001716c552211b1e95b0"
+url = "https://github.com/budimanjojo/talhelper/releases/download/v3.1.17/talhelper_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/budimanjojo/talhelper/releases/assets/530086691"
 
 [[tools.talosctl]]
 version = "1.13.9"
