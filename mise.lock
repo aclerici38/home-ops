@@ -1010,18 +1010,23 @@ url = "https://github.com/anthropics/claude-code/releases/download/v2.1.246/clau
 url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/529654633"
 
 [[tools.crane]]
-version = "0.21.9"
+version = "0.22.0"
 backend = "aqua:google/go-containerregistry"
 
+[tools.crane."platforms.linux-arm64"]
+checksum = "sha256:971e8e2de7e09172330527a9dfb10689e344b160fd81bac7fb91adcb109bad37"
+url = "https://github.com/google/go-containerregistry/releases/download/v0.22.0/go-containerregistry_Linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/google/go-containerregistry/releases/assets/529609757"
+
 [tools.crane."platforms.linux-x64"]
-checksum = "sha256:5c16d8ddb971cb1d5e6ed8b1e743da8224414eeba2c2762d8f1a61b2f095699e"
-url = "https://github.com/google/go-containerregistry/releases/download/v0.21.9/go-containerregistry_Linux_x86_64.tar.gz"
-url_api = "https://api.github.com/repos/google/go-containerregistry/releases/assets/503108053"
+checksum = "sha256:edb74d53fad9a596860f59d1c5d04a43dfb5f441dc71f57060dd0bf39483c833"
+url = "https://github.com/google/go-containerregistry/releases/download/v0.22.0/go-containerregistry_Linux_x86_64.tar.gz"
+url_api = "https://api.github.com/repos/google/go-containerregistry/releases/assets/529609828"
 
 [tools.crane."platforms.macos-arm64"]
-checksum = "sha256:11cc3640e53473eb0d8c501068573e52a259f4d82177e6dd11b7bacb8955459e"
-url = "https://github.com/google/go-containerregistry/releases/download/v0.21.9/go-containerregistry_Darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/google/go-containerregistry/releases/assets/503108022"
+checksum = "sha256:0d6955caf5168b163824317b3b0caed699b3ca3ca9523dd4442e3227e83dd1ef"
+url = "https://github.com/google/go-containerregistry/releases/download/v0.22.0/go-containerregistry_Darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/google/go-containerregistry/releases/assets/529609793"
 
 [[tools.direnv]]
 version = "2.37.1"
