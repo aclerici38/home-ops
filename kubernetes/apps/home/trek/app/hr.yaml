@@ -42,6 +42,7 @@ spec:
               APP_URL: https://trek.clerici.tech
               ALLOWED_ORIGINS: https://trek.clerici.tech
               TRUST_PROXY: 1
+              DEFAULT_LANGUAGE: en
               ADMIN_EMAIL: anthony@clerici.me
               ADMIN_PASSWORD:
                 secretKeyRef:
@@ -55,7 +56,7 @@ spec:
               OIDC_ADMIN_CLAIM: groups
               OIDC_ADMIN_VALUE: admin
               OIDC_SCOPE: openid email profile groups
-              OIDC_DISPLAY_NAME: Pocket ID
+              OIDC_DISPLAY_NAME: Pocket-ID
               OIDC_ISSUER:
                 secretKeyRef:
                   name: trek-oidc-credentials
