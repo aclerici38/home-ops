@@ -1,0 +1,242 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.93.1/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kgateway-rules
+spec:
+  groups:
+    # Control-plane metrics come from the chart's ServiceMonitor on :9092.
+    # Cardinality note: the controller runs 2 replicas but leader election means
+    # only ONE of them emits kgateway_controller_*, kgateway_status_syncer_* and
+    # kgateway_resources_status_sync*. The follower emits the remaining families
+    # with its own values. Every expression over a control-plane metric must
+    # therefore aggregate (max/sum) rather than alerting per series, or the
+    # follower's idle copy will either mask or duplicate the leader's.
+    - name: kgateway.controlplane.rules
+      rules:
+        - alert: KgatewayControlPlaneMetricsMissing
+          expr: absent(kgateway_resources_managed)
+          for: 15m
+          annotations:
+            summary: >-
+              No kgateway control-plane metrics for 15m; the controller is down
+              or its ServiceMonitor stopped matching.
+          labels:
+            severity: critical
+
+        # Leader-only family. Present on exactly one replica in a healthy
+        # cluster, so absence means leader election never settled and no
+        # resource statuses are being written back.
+        - alert: KgatewayNoLeader
+          expr: absent(kgateway_status_syncer_status_syncs_total)
+          for: 15m
+          annotations:
+            summary: >-
+              No kgateway controller is acting as leader; HTTPRoute and policy
+              statuses are not being reconciled.
+          labels:
+            severity: critical
+
+        # A failed translation means the affected route/policy silently did not
+        # make it into the xDS snapshot -- the resource exists in git and in the
+        # API server but is not serving.
+        - alert: KgatewayTranslationFailing
+          expr: |-
+            sum by (translator, namespace, name) (
+              increase(kgateway_translator_translations_total{result!="success"}[10m])
+            ) > 0
+          for: 10m
+          annotations:
+            summary: >-
+              kgateway {{ $labels.translator }} failed to translate
+              {{ $labels.namespace }}/{{ $labels.name }}; that config is not being served.
+          labels:
+            severity: critical
+
+        # Envoy replaces an invalid route with a direct 500 responder rather
+        # than rejecting the whole snapshot. Without this alert a broken route
+        # looks like a healthy gateway that happens to return 500s.
+        - alert: KgatewayRouteReplaced
+          expr: |-
+            sum by (gateway, gateway_namespace, error_type) (
+              increase(kgateway_routing_replacements_total[15m])
+            ) > 0
+          for: 5m
+          annotations:
+            summary: >-
+              kgateway replaced a route on gateway {{ $labels.gateway }}
+              ({{ $labels.error_type }}); requests to it will fail.
+          labels:
+            severity: warning
+
+        # Dropped updates mean the xDS snapshot is behind the API server: the
+        # gateway is serving stale config and will not self-correct.
+        - alert: KgatewayUpdatesDropped
+          expr: max(increase(kgateway_resources_updates_dropped_total[15m])) > 0
+          for: 5m
+          annotations:
+            summary: >-
+              kgateway dropped {{ $value | printf "%.0f" }} resource updates in 15m;
+              proxy config is stale.
+          labels:
+            severity: warning
+
+        - alert: KgatewayXdsSnapshotSyncSlow
+          expr: |-
+            histogram_quantile(0.99,
+              sum by (le) (rate(kgateway_xds_snapshot_sync_duration_seconds_bucket[10m]))
+            ) > 1
+          for: 15m
+          annotations:
+            summary: >-
+              kgateway xDS snapshot sync p99 is {{ $value | printf "%.2f" }}s;
+              config changes are slow to reach Envoy.
+          labels:
+            severity: warning
+
+        # Both counters carry identical labels, so the subtraction matches
+        # element-wise per replica before max() picks the worst.
+        - alert: KgatewayXdsAuthFailures
+          expr: |-
+            max(
+              increase(kgateway_xds_auth_rq_total[10m])
+              - increase(kgateway_xds_auth_rq_success_total[10m])
+            ) > 0
+          for: 10m
+          annotations:
+            summary: >-
+              kgateway rejected {{ $value | printf "%.0f" }} xDS auth requests in 10m;
+              a proxy cannot fetch its config.
+          labels:
+            severity: warning
+
+    # Envoy dataplane metrics come from the kgateway-proxy PodMonitor on :9091.
+    # The `gateway` label is attached by that PodMonitor's relabeling, so these
+    # alerts name the offending gateway (external/internal) rather than a pod hash.
+    - name: kgateway.envoy.rules
+      rules:
+        - alert: KgatewayEnvoyNotLive
+          expr: envoy_server_live == 0
+          for: 5m
+          annotations:
+            summary: Envoy proxy {{ $labels.pod }} ({{ $labels.gateway }}) is not live.
+          labels:
+            severity: critical
+
+        # Envoy serves certs from the xDS snapshot, so this catches a cert-manager
+        # renewal that succeeded in the Secret but never propagated to the proxy.
+        - alert: KgatewayEnvoyCertExpiringSoon
+          expr: min by (gateway) (envoy_server_days_until_first_cert_expiring) < 14
+          for: 1h
+          annotations:
+            summary: >-
+              Envoy on gateway {{ $labels.gateway }} is serving a certificate that
+              expires in {{ $value | printf "%.0f" }} days.
+          labels:
+            severity: warning
+
+        # CDS/LDS rejections mean Envoy refused a snapshot the control plane
+        # thought it accepted -- config drift between the two.
+        - alert: KgatewayEnvoyXdsUpdateFailing
+          expr: |-
+            sum by (gateway, pod) (
+              increase(envoy_cluster_manager_cds_update_failure[15m])
+              + increase(envoy_listener_manager_lds_update_failure[15m])
+            ) > 0
+          for: 10m
+          annotations:
+            summary: >-
+              Envoy {{ $labels.pod }} ({{ $labels.gateway }}) rejected xDS updates;
+              it is running stale listener/cluster config.
+          labels:
+            severity: warning
+
+        # membership_total > 0 excludes clusters that legitimately have no
+        # endpoints configured; this fires when endpoints exist but all are
+        # failing health checks or outlier detection.
+        - alert: KgatewayUpstreamNoHealthyHosts
+          expr: |-
+            (
+              max by (gateway, envoy_cluster_name) (envoy_cluster_membership_healthy) == 0
+            )
+            and
+            (
+              max by (gateway, envoy_cluster_name) (envoy_cluster_membership_total) > 0
+            )
+          for: 10m
+          annotations:
+            summary: >-
+              Backend {{ $labels.envoy_cluster_name }} on {{ $labels.gateway }} has no
+              healthy endpoints; requests to it are failing.
+          labels:
+            severity: critical
+
+        # Rate floor keeps a single 5xx on an idle backend from paging.
+        - alert: KgatewayUpstream5xx
+          expr: |-
+            (
+              sum by (gateway, envoy_cluster_name) (
+                rate(envoy_cluster_upstream_rq_xx{envoy_response_code_class="5"}[10m])
+              )
+              /
+              sum by (gateway, envoy_cluster_name) (
+                rate(envoy_cluster_upstream_rq_xx[10m])
+              )
+            ) > 0.05
+            and
+            sum by (gateway, envoy_cluster_name) (
+              rate(envoy_cluster_upstream_rq_xx[10m])
+            ) > 0.1
+          for: 15m
+          annotations:
+            summary: >-
+              {{ $labels.envoy_cluster_name }} on {{ $labels.gateway }} is returning
+              {{ $value | humanizePercentage }} 5xx.
+          labels:
+            severity: warning
+
+        - alert: KgatewayUpstreamConnectFailures
+          expr: |-
+            sum by (gateway, envoy_cluster_name) (
+              rate(envoy_cluster_upstream_cx_connect_fail[10m])
+            ) > 0.1
+          for: 15m
+          annotations:
+            summary: >-
+              Envoy cannot connect to {{ $labels.envoy_cluster_name }} on
+              {{ $labels.gateway }} ({{ $value | printf "%.2f" }} failures/s).
+          labels:
+            severity: warning
+
+        # Envoy emits rq_time buckets in milliseconds.
+        - alert: KgatewayUpstreamLatencyHigh
+          expr: |-
+            histogram_quantile(0.99,
+              sum by (le, gateway, envoy_cluster_name) (
+                rate(envoy_cluster_upstream_rq_time_bucket[10m])
+              )
+            ) > 5000
+          for: 20m
+          annotations:
+            summary: >-
+              {{ $labels.envoy_cluster_name }} on {{ $labels.gateway }} p99 latency is
+              {{ $value | printf "%.0f" }}ms.
+          labels:
+            severity: warning
+
+        # Listener-level view: catches 5xx generated by Envoy itself (no route,
+        # upstream unreachable, replaced route) which never reach an upstream
+        # cluster and so are invisible to the per-backend alerts above.
+        - alert: KgatewayDownstream5xx
+          expr: |-
+            sum by (gateway) (
+              rate(envoy_http_downstream_rq_xx{envoy_response_code_class="5",envoy_http_conn_manager_prefix="http"}[10m])
+            ) > 0.2
+          for: 15m
+          annotations:
+            summary: >-
+              Gateway {{ $labels.gateway }} is emitting {{ $value | printf "%.2f" }}
+              5xx/s to clients.
+          labels:
+            severity: warning
