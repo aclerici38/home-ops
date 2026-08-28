@@ -28,6 +28,7 @@ spec:
     cnpg:
       mode: shared
     pocketId:
-      pkce: false
+      spec:
+        pkceEnabled: false
       callbackPaths:
         - /api/auth/oidc/callback

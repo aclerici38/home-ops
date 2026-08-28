@@ -28,12 +28,13 @@ spec:
       group: admin
       clientID: kopia-versity-home
       name: Kopia (versity)
-      logo:
-        nameOverride: kopia
-      secret:
-        keys:
-          clientID: client-id
-          clientSecret: client-secret
+      spec:
+        logo:
+          nameOverride: kopia
+        secret:
+          keys:
+            clientID: client-id
+            clientSecret: client-secret
       callbackPaths:
         - /oauth2/redirect
     oidc: {}
@@ -66,12 +67,13 @@ spec:
       group: admin
       clientID: kopia-backblaze-home
       name: Kopia (backblaze)
-      logo:
-        nameOverride: kopia
-      secret:
-        keys:
-          clientID: client-id
-          clientSecret: client-secret
+      spec:
+        logo:
+          nameOverride: kopia
+        secret:
+          keys:
+            clientID: client-id
+            clientSecret: client-secret
       callbackPaths:
         - /oauth2/redirect
     oidc: {}

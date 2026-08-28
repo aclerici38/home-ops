@@ -28,7 +28,8 @@ spec:
     externalSecret: {}
     pocketId:
       group: fam
-      pkce: false
+      spec:
+        pkceEnabled: false
       callbackPaths:
         - /api/auth/oidc/callback
     kopiur:

@@ -32,15 +32,17 @@ spec:
     cnpg:
       mode: shared
       poolMode: session
-      dbExtensions:
-        - {name: postgis}
-        - {name: postgis_raster}
-        - {name: postgis_sfcgal}
-        - {name: fuzzystrmatch}
-        - {name: address_standardizer}
-        - {name: address_standardizer_data_us}
-        - {name: postgis_tiger_geocoder}
-        - {name: postgis_topology}
+      spec:
+        database:
+          extensions:
+            - {name: postgis}
+            - {name: postgis_raster}
+            - {name: postgis_sfcgal}
+            - {name: fuzzystrmatch}
+            - {name: address_standardizer}
+            - {name: address_standardizer_data_us}
+            - {name: postgis_tiger_geocoder}
+            - {name: postgis_topology}
     dragonfly:
       extraArgs:
         - --default_lua_flags=allow-undeclared-keys

@@ -20,11 +20,15 @@ spec:
   values:
     kopiur:
       storageClass: miroir
-      snapshotClass: miroir
-      parallelism: 1
+      spec:
+        policy:
+          volumeSnapshotClassName: miroir
+          upload:
+            maxParallelFileReads: 1
     externalSecret:
-      data:
-        - secretKey: MQTT_PASSWORD
-          remoteRef:
-            key: raphael-mosquitto
-            property: Z2M_MQTT_PASS
+      spec:
+        data:
+          - secretKey: MQTT_PASSWORD
+            remoteRef:
+              key: raphael-mosquitto
+              property: Z2M_MQTT_PASS

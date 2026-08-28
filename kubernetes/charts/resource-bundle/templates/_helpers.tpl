@@ -103,3 +103,11 @@ externalClusters:
         serverName: {{ $app }}-db
 {{- end }}
 {{- end -}}
+
+{{/* Deep-merge a user override dict onto a base spec authored as YAML.
+     Usage: include "resources.mergeSpec" (list (include "<base>" .) (dig "spec" dict $k))
+     Lists REPLACE wholesale (mergo semantics) — anything needing append/prepend
+     stays a named knob instead. */}}
+{{- define "resources.mergeSpec" -}}
+{{- toYaml (mergeOverwrite (fromYaml (index . 0)) (deepCopy (index . 1))) -}}
+{{- end -}}

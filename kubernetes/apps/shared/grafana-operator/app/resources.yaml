@@ -28,10 +28,10 @@ spec:
       name: grafana
       clientID: grafana-${CLUSTER_NAME}
       url: grafana.${CLUSTER_NAME}.clerici.tech
-      logo:
-        nameOverride: grafana
       callbackPaths:
         - /login/generic_oauth
       spec:
         allowedUserGroups:
           - groupName: admin
+        logo:
+          nameOverride: grafana

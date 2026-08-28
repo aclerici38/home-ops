@@ -25,8 +25,9 @@ spec:
       existingClaim: true
       cephfs: true
     externalSecret:
-      data:
-        - secretKey: MQTT_PASSWORD
-          remoteRef:
-            key: home-mosquitto
-            property: Z2M_MQTT_PASS
+      spec:
+        data:
+          - secretKey: MQTT_PASSWORD
+            remoteRef:
+              key: home-mosquitto
+              property: Z2M_MQTT_PASS

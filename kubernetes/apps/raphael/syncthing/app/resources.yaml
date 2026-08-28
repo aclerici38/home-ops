@@ -23,8 +23,11 @@ spec:
   values:
     kopiur:
       storageClass: miroir
-      snapshotClass: miroir
-      parallelism: 1
+      spec:
+        policy:
+          volumeSnapshotClassName: miroir
+          upload:
+            maxParallelFileReads: 1
       ignoreRules:
         - /config/index-v2
         - /config/*.log

@@ -27,47 +27,49 @@ spec:
     cnpg:
       mode: restore
       poolMode: session
-      pgExtensions:
-        - documentdb
-      preload:
-        - pg_cron
-        - pg_documentdb_core
-        - pg_documentdb
-      dbExtensions:
-        - {name: pg_cron, ensure: present}
-        - {name: tsm_system_rows, ensure: present}
-        - {name: vector, ensure: present}
-        - {name: postgis, ensure: present}
-        - {name: documentdb_core, ensure: present}
-        - {name: documentdb, ensure: present}
-      clusterSpec:
-        imageCatalogRef:
-          apiGroup: postgresql.cnpg.io
-          kind: ClusterImageCatalog
-          major: 18
-          name: postgresql-minimal-trixie-documentdb
-        managed:
-          roles:
-            - name: app
-              login: true
-              inRoles:
-                - documentdb_admin_role
-        postgresql:
-          pg_hba:
-            - host app postgres localhost trust
-            - host app app localhost trust
-            - host app documentdb_bg_worker_role localhost trust
-          parameters:
-            max_connections: "200"
-            cron.database_name: app
-            documentdb.bg_worker_database_name: app
-            documentdb.enableBackgroundWorker: "true"
-            documentdb.enableBackgroundWorkerJobs: "true"
-            documentdb.enableCompact: "true"
-            documentdb.enableLetAndCollationForQueryMatch: "true"
-            documentdb.enableNowSystemVariable: "true"
-            documentdb.enableSortbyIdPushDownToPrimaryKey: "true"
-            documentdb.enableSchemaValidation: "true"
-            documentdb.enableBypassDocumentValidation: "true"
-            documentdb.enableUserCrud: "true"
-            documentdb.maxUserLimit: "100"
+      spec:
+        cluster:
+          imageCatalogRef:
+            apiGroup: postgresql.cnpg.io
+            kind: ClusterImageCatalog
+            major: 18
+            name: postgresql-minimal-trixie-documentdb
+          managed:
+            roles:
+              - name: app
+                login: true
+                inRoles:
+                  - documentdb_admin_role
+          postgresql:
+            extensions:
+              - {name: documentdb}
+            shared_preload_libraries:
+              - pg_cron
+              - pg_documentdb_core
+              - pg_documentdb
+            pg_hba:
+              - host app postgres localhost trust
+              - host app app localhost trust
+              - host app documentdb_bg_worker_role localhost trust
+            parameters:
+              max_connections: "200"
+              cron.database_name: app
+              documentdb.bg_worker_database_name: app
+              documentdb.enableBackgroundWorker: "true"
+              documentdb.enableBackgroundWorkerJobs: "true"
+              documentdb.enableCompact: "true"
+              documentdb.enableLetAndCollationForQueryMatch: "true"
+              documentdb.enableNowSystemVariable: "true"
+              documentdb.enableSortbyIdPushDownToPrimaryKey: "true"
+              documentdb.enableSchemaValidation: "true"
+              documentdb.enableBypassDocumentValidation: "true"
+              documentdb.enableUserCrud: "true"
+              documentdb.maxUserLimit: "100"
+        database:
+          extensions:
+            - {name: pg_cron, ensure: present}
+            - {name: tsm_system_rows, ensure: present}
+            - {name: vector, ensure: present}
+            - {name: postgis, ensure: present}
+            - {name: documentdb_core, ensure: present}
+            - {name: documentdb, ensure: present}

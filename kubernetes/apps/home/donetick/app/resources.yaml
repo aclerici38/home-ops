@@ -30,6 +30,7 @@ spec:
     externalSecret: {}
     pocketId:
       group: fam
-      pkce: false
+      spec:
+        pkceEnabled: false
       callbackPaths:
         - /auth/oauth2

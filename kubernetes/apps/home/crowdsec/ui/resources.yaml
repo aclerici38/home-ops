@@ -25,7 +25,8 @@ spec:
   values:
     pocketId:
       url: crowdsec.clerici.tech
-      pkce: false
+      spec:
+        pkceEnabled: false
       callbackPaths:
         - /api/auth/oidc/callback
     kopiur: {}

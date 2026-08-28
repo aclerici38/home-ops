@@ -31,10 +31,11 @@ spec:
     gpu: {}
     pocketId:
       group: all
-      secret:
-        keys:
-          clientID: client-id
-          clientSecret: client-secret
       callbackPaths:
         - /oauth2/redirect
+      spec:
+        secret:
+          keys:
+            clientID: client-id
+            clientSecret: client-secret
     oidc: {}

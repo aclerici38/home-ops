@@ -30,27 +30,30 @@ spec:
     cnpg:
       mode: shared
       poolMode: session
-      dbExtensions:
-        - name: vector
-          ensure: present
-        - name: vchord
-          ensure: present
-          # renovate: datasource=github-releases depName=tensorchord/VectorChord
-          version: 1.1.1
-        - name: earthdistance
-          ensure: present
-        - name: cube
-          ensure: present
+      spec:
+        database:
+          extensions:
+            - name: vector
+              ensure: present
+            - name: vchord
+              ensure: present
+              # renovate: datasource=github-releases depName=tensorchord/VectorChord
+              version: 1.1.1
+            - name: earthdistance
+              ensure: present
+            - name: cube
+              ensure: present
     externalSecret: {}
     dragonfly:
       extraArgs:
         - --default_lua_flags=allow-undeclared-keys
     pocketId:
+      group: all
       spec:
         secret:
           storeClientSecret: false
-      group: all
-      secretRotation: false
+        clientSecretRotation:
+          enabled: false
       callbackUrls:
         - app.immich:///oauth-callback
       callbackPaths:

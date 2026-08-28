@@ -26,7 +26,8 @@ spec:
       namespace: kopiur
   values:
     pocketId:
-      pkce: false
+      spec:
+        pkceEnabled: false
       callbackPaths:
         - /api/auth/oidc/callback
     kopiur:

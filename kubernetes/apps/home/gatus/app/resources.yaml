@@ -29,6 +29,7 @@ spec:
       mode: shared
     externalSecret: {}
     pocketId:
-      pkce: false
+      spec:
+        pkceEnabled: false
       callbackPaths:
         - /authorization-code/callback

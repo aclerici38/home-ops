@@ -24,15 +24,16 @@ spec:
       namespace: kopiur
   values:
     externalSecret:
-      data:
-        - secretKey: DECOMPOSEDS3_ACCESS_KEY
-          remoteRef:
-            key: versity
-            property: username
-        - secretKey: DECOMPOSEDS3_SECRET_KEY
-          remoteRef:
-            key: versity
-            property: password
+      spec:
+        data:
+          - secretKey: DECOMPOSEDS3_ACCESS_KEY
+            remoteRef:
+              key: versity
+              property: username
+          - secretKey: DECOMPOSEDS3_SECRET_KEY
+            remoteRef:
+              key: versity
+              property: password
     kopiur:
       existingClaim: true
       cephfs: true

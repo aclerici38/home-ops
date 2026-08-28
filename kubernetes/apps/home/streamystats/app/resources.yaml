@@ -24,9 +24,11 @@ spec:
     externalSecret: {}
     cnpg:
       mode: shared
-      dbExtensions:
-        - {name: vector, ensure: present}
-        - name: vchord
-          ensure: present
-          # renovate: datasource=github-releases depName=tensorchord/VectorChord
-          version: 1.1.1
+      spec:
+        database:
+          extensions:
+            - {name: vector, ensure: present}
+            - name: vchord
+              ensure: present
+              # renovate: datasource=github-releases depName=tensorchord/VectorChord
+              version: 1.1.1

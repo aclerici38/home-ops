@@ -29,8 +29,9 @@ spec:
       # Migrations get upset
       poolMode: session
     externalSecret:
-      data:
-        - secretKey: EMAIL
-          remoteRef:
-            key: cluster-secrets
-            property: EMAIL
+      spec:
+        data:
+          - secretKey: EMAIL
+            remoteRef:
+              key: cluster-secrets
+              property: EMAIL

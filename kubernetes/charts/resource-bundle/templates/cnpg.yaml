@@ -1,15 +1,15 @@
 {{- /* Legacy per-app cluster. mode: shared is handled by cnpg-shared.yaml. */}}
 {{- if and (hasKey .Values "cnpg") (ne (dig "mode" "" .Values.cnpg) "shared") }}
 {{- $app := include "resources.app" . -}}
-{{- $ns := include "resources.ns" . -}}
 {{- $c := .Values.cnpg -}}
+{{- /* Per-resource overrides, deep-merged onto each rendered .spec. */ -}}
+{{- $spec := dig "spec" dict $c -}}
 {{- if not (hasKey $c "mode") }}{{ fail "cnpg.mode is required (init | restore | no-backup | shared)" }}{{- end -}}
+{{- /* mode gates the ObjectStore + ScheduledBackup documents, the WAL-archiver
+       plugin, the recovery bootstrap, and a metadata annotation — none of which
+       a spec merge can reach, so it stays a knob. */ -}}
 {{- $backup := ne $c.mode "no-backup" -}}
 {{- $restore := eq $c.mode "restore" -}}
-{{- $host := printf "%s-pooler-rw.%s.svc.cluster.local" $app $ns -}}
-{{- $pw := "{{ .password }}" -}}
-{{- $spec := fromYaml (include "resources.cnpg.clusterSpec" .) -}}
-{{- $spec = mergeOverwrite $spec (deepCopy (dig "clusterSpec" dict $c)) -}}
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
@@ -20,46 +20,21 @@ metadata:
     cnpg.io/skipEmptyWalArchiveCheck: enabled
   {{- end }}
 spec:
-  {{- toYaml $spec | nindent 2 }}
+  {{- include "resources.mergeSpec" (list (include "resources.cnpg.clusterSpec" .) (dig "cluster" dict $spec)) | nindent 2 }}
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Pooler
 metadata:
   name: {{ $app }}-pooler-rw
 spec:
-  cluster:
-    name: {{ $app }}-db
-  instances: 1
-  type: rw
-  {{- with $c.poolerService }}
-  serviceTemplate: {{ toYaml . | nindent 4 }}
-  {{- end }}
-  pgbouncer:
-    poolMode: {{ dig "poolMode" "transaction" $c | quote }}
-    parameters:
-      default_pool_size: "30"
-      min_pool_size: "5"
-      reserve_pool_size: "10"
-      reserve_pool_timeout: "5"
-      max_client_conn: "500"
-      listen_backlog: "1024"
-      query_wait_timeout: "120"
-      idle_transaction_timeout: "60"
-      server_idle_timeout: "180"
-      max_prepared_statements: "200"
+  {{- include "resources.mergeSpec" (list (include "resources.cnpg.poolerSpec" .) (dig "pooler" dict $spec)) | nindent 2 }}
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
   name: {{ $app }}
 spec:
-  name: app
-  owner: app
-  cluster:
-    name: {{ $app }}-db
-  {{- with $c.dbExtensions }}
-  extensions: {{ toYaml . | nindent 4 }}
-  {{- end }}
+  {{- include "resources.mergeSpec" (list (include "resources.cnpg.databaseSpec" .) (dig "database" dict $spec)) | nindent 2 }}
 ---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
@@ -68,32 +43,7 @@ metadata:
   labels:
     dormammu.internal/component: cnpg
 spec:
-  refreshPolicy: OnChange
-  target:
-    creationPolicy: Orphan
-    template:
-      engineVersion: v2
-      metadata:
-        labels:
-          cnpg.io/cluster: {{ $app }}-db
-          cnpg.io/userType: app
-          cnpg.io/reload: "true"
-      data:
-        user: app
-        username: app
-        dbname: app
-        host: {{ $host | quote }}
-        password: {{ $pw | quote }}
-        port: "5432"
-        pgpass: {{ printf "%s:5432:app:app:%s" $host $pw | quote }}
-        jdbc-uri: {{ printf "jdbc:postgresql://%s:5432/app?password=%s&user=app" $host $pw | quote }}
-        uri: {{ printf "postgresql://app:%s@%s:5432/app" $pw $host | quote }}
-  dataFrom:
-    - sourceRef:
-        generatorRef:
-          apiVersion: generators.external-secrets.io/v1alpha1
-          kind: ClusterGenerator
-          name: cnpg-pass-generator
+  {{- include "resources.cnpg.appSecretSpec" . | nindent 2 }}
 ---
 # Superuser credentials + versity object-store keys, pulled per-namespace
 # (referenced by the Cluster's superuserSecret and the ObjectStore's s3Credentials).
@@ -127,30 +77,14 @@ kind: ObjectStore
 metadata:
   name: {{ $app }}
 spec:
-  retentionPolicy: 14d
-  configuration:
-    data: {compression: gzip, jobs: 8}
-    wal: {compression: zstd, maxParallel: 12}
-    destinationPath: s3://cnpg
-    endpointURL: http://versitygw.versity.svc.cluster.local:7070
-    historyTags: {keepHistory: "true"}
-    s3Credentials:
-      accessKeyId: {name: cloudnative-pg, key: versity-access-key-id}
-      secretAccessKey: {name: cloudnative-pg, key: versity-secret-access-key}
+  {{- include "resources.mergeSpec" (list (include "resources.cnpg.objectStoreSpec" .) (dig "objectStore" dict $spec)) | nindent 2 }}
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
 metadata:
   name: {{ $app }}
 spec:
-  schedule: "0 0 4 * * *"
-  immediate: true
-  backupOwnerReference: self
-  cluster:
-    name: {{ $app }}-db
-  method: plugin
-  pluginConfiguration:
-    name: barman-cloud.cloudnative-pg.io
+  {{- include "resources.mergeSpec" (list (include "resources.cnpg.scheduledBackupSpec" .) (dig "scheduledBackup" dict $spec)) | nindent 2 }}
 {{- end }}
 ---
 apiVersion: monitoring.coreos.com/v1
