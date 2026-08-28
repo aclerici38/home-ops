@@ -20,6 +20,7 @@ spec:
   values:
     controllers:
       immich-pet-tagger:
+        replicas: 0
         pod:
           hostUsers: false
           nodeSelector:
