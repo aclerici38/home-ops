@@ -1,5 +1,3 @@
-{{/* kgateway oauth2 forward-auth for an HTTPRoute, backed by pocket-id. */}}
-
 {{- define "resources.oidc.backendSpec" -}}
 {{- $o := .Values.oidc -}}
 type: Static
@@ -10,31 +8,26 @@ static:
 {{- end -}}
 
 {{- define "resources.oidc.backendConfigSpec" -}}
-{{- $app := include "resources.app" . -}}
 targetRefs:
   - group: gateway.kgateway.dev
     kind: Backend
-    name: {{ $app }}-oauth-backend
+    name: {{ include "resources.app" . }}-oauth-backend
 tls:
   sni: {{ dig "backendHost" "pocket-id.pocket-id-operator.svc.cluster.local" .Values.oidc | quote }}
   wellKnownCACertificates: System
 {{- end -}}
 
-{{/* Every endpoint below is set explicitly and issuerURI is deliberately NOT set,
-     so the control plane never runs OIDC discovery. Discovery resolves the issuer
-     back through the very Gateway kgateway is configuring: if the control plane
-     starts before pocket-id is serving it gets a 503, caches that failure
-     indefinitely, and replaces every route carrying this policy with a 500 direct
-     response until the GatewayExtension spec changes. Paths are pocket-id's;
-     jwksURI is required once discovery is off and a token is parsed. */}}
+{{/* Endpoints are set explicitly and issuerURI deliberately is NOT, so the control
+     plane never runs OIDC discovery. Discovery resolves the issuer back through the
+     very Gateway kgateway is configuring: start before pocket-id is serving and it
+     caches the 503 indefinitely, replacing every route on this policy with a 500
+     until the GatewayExtension spec changes. jwksURI is required once discovery is
+     off and a token is parsed. */}}
 {{- define "resources.oidc.extensionSpec" -}}
 {{- $app := include "resources.app" . -}}
 {{- $o := .Values.oidc -}}
-{{- /* Shared by the four endpoints here and the csrf origin in the TrafficPolicy.
-       A chart constant rather than a knob: override the endpoints themselves via
-       extensionSpec if you ever point an app at a different IdP. */ -}}
 {{- $issuer := "https://id.clerici.tech" -}}
-{{- /* clientID precedence: oidc.clientID > pocketId.clientID > app name. */ -}}
+{{- /* oidc.clientID > pocketId.clientID > app name. */ -}}
 {{- $clientID := dig "clientID" (dig "clientID" $app (.Values.pocketId | default dict)) $o -}}
 oauth2:
   backendRef:

@@ -1,11 +1,8 @@
 {{- define "resources.cnpg.clusterSpec" -}}
 {{- $app := include "resources.app" . -}}
 {{- $c := .Values.cnpg -}}
-{{- /* One instance flips four correlated fields, so it stays a knob: nothing to
-       anti-affine, no replica to promote, no second pod for a PDB to protect,
-       and no standby for synchronous replication (durability is the primary's
-       PVC). "preferred" also keeps the pod schedulable on a single-node cluster
-       and during its own restart. */ -}}
+{{- /* One instance: nothing to anti-affine, no replica to promote, no second
+       pod for a PDB, no standby for sync replication. */ -}}
 {{- $single := eq (int (dig "instances" 3 $c)) 1 -}}
 {{- $backup := ne $c.mode "no-backup" -}}
 affinity:
@@ -87,8 +84,7 @@ cluster:
 instances: 1
 type: rw
 pgbouncer:
-  {{- /* Also selects the shared-cluster pooler service in cnpg-shared.yaml, so
-         one knob spans both modes. */}}
+  {{- /* Also selects the shared-cluster pooler service in cnpg-shared.yaml. */}}
   poolMode: {{ dig "poolMode" "transaction" .Values.cnpg | quote }}
   parameters:
     default_pool_size: "30"
@@ -136,8 +132,6 @@ pluginConfiguration:
   name: barman-cloud.cloudnative-pg.io
 {{- end -}}
 
-{{/* App connection secret. Fully derived from the app name and pooler host —
-     closed, so it has no merge key. */}}
 {{- define "resources.cnpg.appSecretSpec" -}}
 {{- $app := include "resources.app" . -}}
 {{- $host := printf "%s-pooler-rw.%s.svc.cluster.local" $app (include "resources.ns" .) -}}

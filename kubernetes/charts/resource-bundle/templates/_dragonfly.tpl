@@ -1,6 +1,5 @@
 {{- define "resources.dragonfly.spec" -}}
-{{- /* Appended to args below. Stays a knob because a merge REPLACES a list, so
-       spec.args would mean restating all eight defaults to add one flag. */ -}}
+{{- /* Appended to args below; a merge would replace the whole list. */ -}}
 {{- $extraArgs := dig "extraArgs" list .Values.dragonfly -}}
 image: ghcr.io/dragonflydb/dragonfly:v1.40.1@sha256:ebf3c6c213e82fb51b4521660cca13f06f3421dc5b1ed14f2f474c50b5e29986
 replicas: 3

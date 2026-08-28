@@ -2,121 +2,75 @@
 # A feature renders only if its key is present in the HelmRelease values.
 # `dragonfly: {}` enables it with defaults; omit the key to disable.
 #
-# Optional: override the app name. Defaults to the release name minus "-resources",
-# so a release named "immich-resources" yields app=immich automatically.
-# app: immich
+# app: immich          # override the name derived from <release>-resources
 #
-# ---------------------------------------------------------------------------
-# Every feature follows the same shape:
-#
+# Shape:
 #   <feature>:
-#     <knob>: ...        # a handful of named knobs (see each block below)
-#     spec:
-#       <kind>: {}       # deep-merged onto that resource's rendered .spec
+#     <knob>: ...      # named knobs, listed per feature below
+#     spec: {}         # deep-merged onto the rendered .spec
+#     spec:            # ...or keyed by kind when a feature renders several
+#       <kind>: {}
 #
-# The base spec for each resource is authored as plain YAML in templates/_*.tpl
-# — read those to see what you are overriding. A <kind>Spec merge is recursive
-# for maps, so you set only the field you care about.
-#
-# LISTS REPLACE, they do not append. Anything needing append, prepend, or a
-# computed entry is a named knob instead; each one says why below.
-#
-# Naming: a template emitting one resource takes the override at `spec:`
-# directly; one emitting several keys it by kind under `spec:` — spec.cluster,
-# spec.pooler, spec.database, spec.policy, spec.pvc, ...
-# Resources that are fully derived (credential plumbing, PodMonitors) have no
-# merge key on purpose — they are not meant to vary.
-# ---------------------------------------------------------------------------
+# Base specs are plain YAML in templates/_*.tpl — read those to see what you are
+# overriding. Merges are recursive for maps; LISTS REPLACE. Anything needing
+# append/prepend or a computed value is a named knob instead. Fully derived
+# resources (credential plumbing, PodMonitors) have no merge key by design.
 
 # cnpg:
 #   mode: init            # REQUIRED: init | restore | no-backup | shared
-#                         #   shared -> no per-app Cluster; attach to the shared
-#                         #   "pg18" cluster (home only), rendering a DatabaseRole
-#                         #   + Database + role password into cloudnative-pg and
-#                         #   the connection secret here. Gates documents, the WAL
-#                         #   archiver, the recovery bootstrap and an annotation.
-#   instances: 3          # 1 flips four correlated fields: drops the PDB, sync
-#                         #   replication and switchover, relaxes anti-affinity.
-#   poolMode: transaction # transaction | session. Also picks the shared-cluster
-#                         #   pooler service, so it spans both modes.
-#   database: <app>       # shared mode: db + role name. Feeds the connection URIs.
-#   cluster: pg18         # shared mode: target Cluster.
-#   clusterNamespace: cloudnative-pg   # shared mode: sets metadata.namespace on
-#                         #   three documents.
-#
+#   instances: 3          # 1 drops the PDB, sync replication and switchover
+#   poolMode: transaction # transaction | session (also picks the shared pooler)
+#   database: <app>       # shared: db + role name
+#   cluster: pg18         # shared: target Cluster
+#   clusterNamespace: cloudnative-pg
 #   spec:
-#     cluster: {}         # Cluster.spec         (storage.size, postgresql.*,
-#                         #   managed.roles, pg_hba, parameters, ...)
-#     pooler: {}          # Pooler.spec          (pgbouncer.parameters, serviceTemplate)
-#     database: {}        # Database.spec        (extensions, ...)
-#     objectStore: {}     # ObjectStore.spec     (retentionPolicy, compression)
-#     scheduledBackup: {} # ScheduledBackup.spec (schedule)
-#     role: {}            # shared mode: DatabaseRole.spec
-#                         # In shared mode `database` is the Database in the
-#                         # cloudnative-pg namespace; both ExternalSecrets are
-#                         # derived and have no merge key.
+#     cluster: {}         # Cluster
+#     pooler: {}          # Pooler
+#     database: {}        # Database
+#     objectStore: {}     # ObjectStore
+#     scheduledBackup: {} # ScheduledBackup
+#     role: {}            # shared: DatabaseRole
 
 # dragonfly:
-#   extraArgs: []         # APPENDED to the default args. A knob because
-#                         #   spec.args would replace all eight defaults.
-#   spec: {}              # Dragonfly.spec (replicas, resources, image, ...)
+#   extraArgs: []         # appended to the default args
+#   spec: {}              # Dragonfly
 
 # pocketId:
-#   clientID: <app>       # feeds spec.clientID, the display-name default, and
-#                         #   oidc.yaml's credentials — three places, two templates.
-#   name: <clientID>      # display name; also the logo nameOverride default.
-#   url: <app>.clerici.tech   # feeds launchUrl and every callbackPaths entry.
-#   group: admin          # PocketIDUserGroup CR (operator namespace) to allow.
-#                         #   For a group managed outside this cluster, set
-#                         #   spec.allowedUserGroups instead ([{groupName: admin}]
-#                         #   or [{groupID: <id>}]) — the merge replaces the list.
-#   callbackPaths: []     # each becomes https://<url><path>. Computed, not merged.
-#   callbackUrls: []      # literal entries, combined with the above.
-#   spec: {}              # PocketIDOIDCClient.spec (pkceEnabled, clientSecretRotation,
-#                         #   logo, secret, scim, apiAccess, ...)
+#   clientID: <app>       # also feeds the name default and oidc credentials
+#   name: <clientID>      # display name; also the logo nameOverride default
+#   url: <app>.clerici.tech
+#   group: admin          # PocketIDUserGroup in the operator namespace
+#   callbackPaths: []     # each becomes https://<url><path>
+#   callbackUrls: []      # literal entries, combined with the above
+#   spec: {}              # PocketIDOIDCClient
 
-# externalSecret:         # 1Password app secret
-#   key: <app>            # item to extract. A knob because dataFrom is a list and
-#                         #   a merge would replace the entry, not retarget it.
-#   spec: {}              # ExternalSecret.spec (data, refreshInterval, target, ...)
+# externalSecret:
+#   key: <app>            # 1Password item to extract
+#   spec: {}              # ExternalSecret
 
 # oidc:                   # kgateway oauth2 forward-auth for an HTTPRoute
 #   backendHost: pocket-id.pocket-id-operator.svc.cluster.local
-#   backendPort: 1411     # host+port feed the Backend, the sni, and the TLS gate.
-#   backendTLS: <port==443>  # originate TLS to a remote pocket-id. Gates a document.
-#   route: <app>          # HTTPRoute the TrafficPolicy targets.
+#   backendPort: 1411
+#   backendTLS: <port==443>
+#   route: <app>          # HTTPRoute the TrafficPolicy targets
 #   clientID: <pocketId.clientID | app>
-#
 #   spec:
-#     backend: {}         # Backend.spec
-#     backendConfig: {}   # BackendConfigPolicy.spec (only when backendTLS)
-#     extension: {}       # GatewayExtension.spec (oauth2.*: endpoints, scopes,
-#                         #   cookies, jwt.idToken.claimsToHeaders, ...)
-#     trafficPolicy: {}   # TrafficPolicy.spec (csrf, ...)
+#     backend: {}         # Backend
+#     backendConfig: {}   # BackendConfigPolicy (only when backendTLS)
+#     extension: {}       # GatewayExtension
+#     trafficPolicy: {}   # TrafficPolicy
 
-# kopiur:                 # backs the app PVC up to a shared ClusterRepository via
-#                         # SnapshotPolicy + SnapshotSchedule (+ Restore + populator
-#                         # PVC unless existingClaim). No per-app secret: the
-#                         # operator projects the repo creds into the namespace.
-#   existingClaim: true   # adopt an existing PVC: skip the Restore + populator
-#                         #   PVC. Gates whole documents.
-#   cephfs: false         # true -> RWX ceph-filesystem + csi-ceph-filesystem +
-#                         #   backingSnapshot shallow staging. Four correlated
-#                         #   fields. Home defaults are ceph-block/csi-ceph-blockpool.
-#   storageClass: <sc>    # PVC + staging class (raphael sets miroir). Two resources.
-#   capacity: 5Gi         # populator PVC size (ignored when existingClaim).
-#   ignoreRules: []       # path globs kopia skips, for churny/rebuildable state in
-#                         #   an otherwise-worth-backing-up PVC (frigate's sqlite).
-#                         #   /lost+found is PREPENDED automatically — a plain merge
-#                         #   would replace the list and silently drop it.
-#
+# kopiur:                 # PVC -> shared ClusterRepository
+#   existingClaim: true   # adopt an existing PVC; skip Restore + populator PVC
+#   cephfs: false         # RWX ceph-filesystem + backingSnapshot staging
+#   storageClass: <sc>    # PVC + staging class (raphael sets miroir)
+#   capacity: 5Gi         # populator PVC size (ignored when existingClaim)
+#   ignoreRules: []       # globs kopia skips; /lost+found is prepended
 #   spec:
-#     policy: {}          # SnapshotPolicy.spec (repository, retention, upload,
-#                         #   compression, mover, preflight, volumeSnapshotClassName)
-#     schedule: {}        # SnapshotSchedule.spec (schedule.cron/.timezone/jitter)
-#     restore: {}         # Restore.spec (source.fromPolicy.name/.namespace for a
-#                         #   one-time cross-namespace seed)
-#     pvc: {}             # PersistentVolumeClaim.spec
+#     policy: {}          # SnapshotPolicy
+#     schedule: {}        # SnapshotSchedule
+#     restore: {}         # Restore
+#     pvc: {}             # PersistentVolumeClaim
 
 # gpu:
-#   spec: {}              # ResourceClaimTemplate.spec (Intel GPU, <app>-gpu)
+#   spec: {}              # ResourceClaimTemplate (Intel GPU, <app>-gpu)

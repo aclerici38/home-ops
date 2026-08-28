@@ -5,9 +5,8 @@
 {{- /* Per-resource overrides, deep-merged onto each rendered .spec. */ -}}
 {{- $spec := dig "spec" dict $c -}}
 {{- if not (hasKey $c "mode") }}{{ fail "cnpg.mode is required (init | restore | no-backup | shared)" }}{{- end -}}
-{{- /* mode gates the ObjectStore + ScheduledBackup documents, the WAL-archiver
-       plugin, the recovery bootstrap, and a metadata annotation — none of which
-       a spec merge can reach, so it stays a knob. */ -}}
+{{- /* mode gates the ObjectStore + ScheduledBackup docs, the WAL archiver,
+       the recovery bootstrap and an annotation. */ -}}
 {{- $backup := ne $c.mode "no-backup" -}}
 {{- $restore := eq $c.mode "restore" -}}
 ---
@@ -45,8 +44,7 @@ metadata:
 spec:
   {{- include "resources.cnpg.appSecretSpec" . | nindent 2 }}
 ---
-# Superuser credentials + versity object-store keys, pulled per-namespace
-# (referenced by the Cluster's superuserSecret and the ObjectStore's s3Credentials).
+# Referenced by the Cluster's superuserSecret and the ObjectStore's s3Credentials.
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:

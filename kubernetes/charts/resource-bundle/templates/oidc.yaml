@@ -1,16 +1,9 @@
 {{- if hasKey .Values "oidc" }}
 {{- $app := include "resources.app" . -}}
 {{- $o := .Values.oidc -}}
-{{- /* Per-resource overrides, deep-merged onto each rendered .spec. */ -}}
 {{- $spec := dig "spec" dict $o -}}
-{{- /* Where the control plane reaches pocket-id. Feeds the Backend host, the
-       BackendConfigPolicy sni, and the TLS decision below — three fields across
-       two documents, so these stay knobs. */ -}}
-{{- $host := dig "backendHost" "pocket-id.pocket-id-operator.svc.cluster.local" $o -}}
 {{- $port := dig "backendPort" 1411 $o -}}
-{{- /* Originate TLS to the IdP when talking to a remote pocket-id (clusters with
-       no in-cluster instance reaching id.clerici.tech:443). Gates a whole
-       document, so it cannot be a spec merge. Defaults on for port 443. */ -}}
+{{- /* Originate TLS to a remote pocket-id (id.clerici.tech:443). Gates a document. */ -}}
 {{- $tls := dig "backendTLS" (eq (toString $port) "443") $o -}}
 ---
 apiVersion: gateway.kgateway.dev/v1alpha1

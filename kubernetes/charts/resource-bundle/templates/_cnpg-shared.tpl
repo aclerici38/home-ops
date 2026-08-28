@@ -1,5 +1,4 @@
-{{/* Shared-cluster identity. Each of these feeds two or more documents (or the
-     connection strings), which is why they stay knobs rather than merge fields. */}}
+{{/* Shared-cluster identity — each feeds two or more documents. */}}
 {{- define "resources.cnpgShared.ident" -}}
 {{- $app := include "resources.app" . -}}
 {{- $c := .Values.cnpg -}}
@@ -9,8 +8,7 @@ cluster: {{ dig "cluster" "pg18" $c }}
 namespace: {{ $cnpgNs }}
 database: {{ dig "database" $app $c }}
 role: {{ $app }}
-{{- /* Session-scoped apps go through the session-mode pooler; everyone else
-       through the transaction pooler. */}}
+{{- /* Session-scoped apps use the session pooler, everyone else transaction. */}}
 host: {{ $session | ternary (printf "pg18-pooler-session-rw.%s.svc.cluster.local" $cnpgNs) (printf "pg18-pooler-rw.%s.svc.cluster.local" $cnpgNs) }}
 {{- end -}}
 
@@ -68,9 +66,7 @@ secretStoreRef:
   kind: ClusterSecretStore
   name: cnpg-role-secrets
 target:
-  # Owner (not Orphan): this secret is a reproducible mirror of the <app>-role
-  # password, so let ESO own + watch it and recreate it immediately if it's
-  # ever deleted (e.g. the legacy secret being cascade-removed during the flip).
+  # Owner (not Orphan): a reproducible mirror, so let ESO recreate it if deleted.
   creationPolicy: Owner
   template:
     engineVersion: v2

@@ -1,15 +1,10 @@
 {{- if hasKey .Values "kopiur" }}
 {{- $app := include "resources.app" . -}}
 {{- $k := .Values.kopiur -}}
-{{- /* Per-resource overrides, deep-merged onto each rendered .spec. */ -}}
 {{- $spec := dig "spec" dict $k -}}
-{{- /* Backup-only / adopt mode. When true, render only the SnapshotPolicy +
-       SnapshotSchedule against an already-existing PVC and skip the Restore +
-       populator PVC — so kopiur backs the live volume up without touching it.
-       Gates whole documents, so it cannot be expressed as a spec merge. */ -}}
+{{- /* Adopt mode: back up an existing PVC without provisioning one. */ -}}
 {{- $existingClaim := dig "existingClaim" false $k -}}
 ---
-# WHAT to back up (the recipe; idempotent, runs nothing on its own).
 apiVersion: kopiur.home-operations.com/v1alpha1
 kind: SnapshotPolicy
 metadata:
@@ -19,8 +14,6 @@ metadata:
 spec:
   {{- include "resources.mergeSpec" (list (include "resources.kopiur.policySpec" .) (dig "policy" dict $spec)) | nindent 2 }}
 ---
-# WHEN. Stamps Snapshot CRs on the cron; runOnCreate:false so applying the
-# release does not fire an immediate backup.
 apiVersion: kopiur.home-operations.com/v1alpha1
 kind: SnapshotSchedule
 metadata:
@@ -31,10 +24,7 @@ spec:
   {{- include "resources.mergeSpec" (list (include "resources.kopiur.scheduleSpec" .) (dig "schedule" dict $spec)) | nindent 2 }}
 {{- if not $existingClaim }}
 ---
-# Deploy-or-restore seed. The populator restores the PVC below from the newest
-# snapshot at provision time; onMissingSnapshot:Continue provisions a blank
-# volume on an empty repo instead of failing. Create-time only, so it seeds a
-# fresh/rebuilt cluster but never clobbers a live volume.
+{{- /* Create-time only: seeds a fresh cluster, never clobbers a live volume. */}}
 apiVersion: kopiur.home-operations.com/v1alpha1
 kind: Restore
 metadata:
