@@ -48,7 +48,6 @@ spec:
                 mosquitto_passwd -c -b /mosquitto/auth/passwords zigbee2mqtt "$Z2M_MQTT_PASS"
                 mosquitto_passwd    -b /mosquitto/auth/passwords home-assistant "$HASS_MQTT_PASS"
                 mosquitto_passwd    -b /mosquitto/auth/passwords frigate "$FRIGATE_MQTT_PASS"
-                mosquitto_passwd    -b /mosquitto/auth/passwords kiosk_satellite "$KIOSK_SATELLITE_MQTT_PASS"
             envFrom:
               - secretRef:
                   name: mosquitto
