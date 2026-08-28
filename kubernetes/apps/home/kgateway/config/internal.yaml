@@ -34,20 +34,3 @@ spec:
         certificateRefs:
           - kind: Secret
             name: clerici-tech-tls
----
-apiVersion: monitoring.coreos.com/v1
-kind: PodMonitor
-metadata:
-  name: kgateway-internal
-spec:
-  jobLabel: kgateway-internal
-  namespaceSelector:
-    matchNames:
-      - kgateway
-  podMetricsEndpoints:
-    - port: http-monitoring
-      path: /metrics
-      honorLabels: true
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: internal
