@@ -15,9 +15,9 @@ spec:
         name: nats
       version: 2.14.6
   install:
-    timeout: 2m
+    timeout: 10m
   upgrade:
-    timeout: 2m
+    timeout: 10m
   values:
     global:
       image:
