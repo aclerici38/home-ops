@@ -1,17 +1,12 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: Raphael Deploy
+name: Resource Bundle Chart
 
-# comin on raphael polls the `raphael-deploy` branch to reduce network/disk/cpu cycles on the n100
 on:
   push:
     branches:
       - "main"
     paths:
-      - "raphael/**"
-      - "kubernetes/apps/raphael/**"
-      - "kubernetes/ks/raphael/**"
-      - "kubernetes/flux/raphael/**"
       - "kubernetes/charts/**"
 
 concurrency:
@@ -23,18 +18,18 @@ permissions:
 
 jobs:
   fast-forward:
-    name: Fast-forward raphael-deploy
+    name: Fast-forward resource-bundle-chart
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
       contents: write
     steps:
-      - name: Fast-forward raphael-deploy to main
+      - name: Fast-forward resource-bundle-chart to main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
         run: |
-          gh api -X PATCH "repos/{owner}/{repo}/git/refs/heads/raphael-deploy" \
+          gh api -X PATCH "repos/{owner}/{repo}/git/refs/heads/resource-bundle-chart" \
             -f sha="$GITHUB_SHA" -F force=false ||
           gh api -X POST "repos/{owner}/{repo}/git/refs" \
-            -f ref="refs/heads/raphael-deploy" -f sha="$GITHUB_SHA"
+            -f ref="refs/heads/resource-bundle-chart" -f sha="$GITHUB_SHA"

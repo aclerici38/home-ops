@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.4/gitrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: resource-bundle-chart
+  namespace: flux-system
+spec:
+  interval: 5m
+  url: "https://github.com/aclerici38/home-ops.git"
+  ref:
+    branch: resource-bundle-chart
+  ignore: |-
+    /*
+    !/kubernetes
+    /kubernetes/*
+    !/kubernetes/charts
+    /kubernetes/charts/*
+    !/kubernetes/charts/resource-bundle
