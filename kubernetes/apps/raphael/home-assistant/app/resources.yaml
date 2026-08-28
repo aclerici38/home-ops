@@ -9,9 +9,10 @@ spec:
   chart:
     spec:
       chart: kubernetes/charts/resource-bundle
+      reconcileStrategy: Revision
       sourceRef:
         kind: GitRepository
-        name: flux-system
+        name: resource-bundle-chart
         namespace: flux-system
   install:
     timeout: 5m
@@ -21,14 +22,17 @@ spec:
     kopiur:
       capacity: 10Gi
       storageClass: miroir
-      snapshotClass: miroir
-      parallelism: 1
-      # HA runs as root; its .storage/* files are root:root 0600, so the mover
-      # must run as root to read them on backup (and own them on restore).
-      mover:
-        securityContext:
-          runAsUser: 0
-          runAsGroup: 0
-        podSecurityContext:
-          runAsNonRoot: false
-          fsGroup: 0
+      spec:
+        policy:
+          volumeSnapshotClassName: miroir
+          upload:
+            maxParallelFileReads: 1
+          # HA runs as root; its .storage/* files are root:root 0600, so the mover
+          # must run as root to read them on backup (and own them on restore).
+          mover:
+            securityContext:
+              runAsUser: 0
+              runAsGroup: 0
+            podSecurityContext:
+              runAsNonRoot: false
+              fsGroup: 0

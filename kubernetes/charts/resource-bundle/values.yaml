@@ -1,80 +1,76 @@
 ---
 # A feature renders only if its key is present in the HelmRelease values.
 # `dragonfly: {}` enables it with defaults; omit the key to disable.
-# Sub-knobs all have in-template defaults — only override what actually varies.
-# To change anything else, edit the template directly; that's the point.
 #
-# Optional: override the app name. Defaults to the release name minus "-resources",
-# so a release named "immich-resources" yields app=immich automatically.
-# app: immich
+# app: immich          # override the name derived from <release>-resources
 #
-# --- Reference of every knob (all optional) -------------------------------
+# Shape:
+#   <feature>:
+#     <knob>: ...      # named knobs, listed per feature below
+#     spec: {}         # deep-merged onto the rendered .spec
+#     spec:            # ...or keyed by kind when a feature renders several
+#       <kind>: {}
+#
+# Base specs are plain YAML in templates/_*.tpl — read those to see what you are
+# overriding. Merges are recursive for maps; LISTS REPLACE. Anything needing
+# append/prepend or a computed value is a named knob instead. Fully derived
+# resources (credential plumbing, PodMonitors) have no merge key by design.
+
 # cnpg:
 #   mode: init            # REQUIRED: init | restore | no-backup | shared
-#                         #   shared -> no per-app Cluster; instead attach to the
-#                         #   shared "pg18" cluster (home only). Renders a
-#                         #   DatabaseRole + Database + role password into the
-#                         #   cloudnative-pg namespace and the app connection
-#                         #   secret into this namespace. Ignores the cluster-level
-#                         #   knobs below (instances/capacity/pgExtensions/preload/
-#                         #   clusterSpec); honors database/poolMode/dbExtensions.
-#   database: <app>       # shared: postgres db + role name (default = app name)
-#   instances: 3          # 1 = single-node mode: drops PDB, sync replication and
-#                         #     switchover, and relaxes pod anti-affinity
-#   capacity: 2Gi
-#   poolMode: transaction # transaction | session
-#   backup: true          # false drops object-store backups (old "no-backup")
-#   pgExtensions: []      # spec.postgresql.extensions (image-mounted)
-#   preload: []           # spec.postgresql.shared_preload_libraries
-#   dbExtensions: []      # Database CR extensions (CREATE EXTENSION)
-#   clusterSpec: {}       # deep-merged onto Cluster .spec (roles, pg_hba, params, ...)
+#   instances: 3          # 1 drops the PDB, sync replication and switchover
+#   poolMode: transaction # transaction | session (also picks the shared pooler)
+#   database: <app>       # shared: db + role name
+#   cluster: pg18         # shared: target Cluster
+#   clusterNamespace: cloudnative-pg
+#   spec:
+#     cluster: {}         # Cluster
+#     pooler: {}          # Pooler
+#     database: {}        # Database
+#     objectStore: {}     # ObjectStore
+#     scheduledBackup: {} # ScheduledBackup
+#     role: {}            # shared: DatabaseRole
+
 # dragonfly:
-#   extraArgs: []
+#   extraArgs: []         # appended to the default args
+#   spec: {}              # Dragonfly
+
 # pocketId:
-#   group: admin            # PocketIDUserGroup CR (operator namespace) to allow.
-#                           # For a group managed outside this cluster, set
-#                           # spec.allowedUserGroups instead ([{groupName: admin}]
-#                           # or [{groupID: <id>}]) — it replaces this default.
-#   secretRotation: true
-#   url: <app>.clerici.tech   # default; override per app
-#   callbackUrls: []
-#   spec: {}                # merged onto PocketIDOIDCClient .spec (scim, apiAccess,
-#                           # allowedUserGroups, ...)
-# externalSecret: {}      # 1Password app secret (key = app name)
-#   data: []              # extra per-key pulls (ExternalSecret spec.data entries)
-# kopiur:                 # backs the app PVC up to a shared ClusterRepository via
-#                         # SnapshotPolicy + SnapshotSchedule (+ Restore + populator
-#                         # PVC unless existingClaim). No per-app secret: the
-#                         # operator projects the repo creds into the namespace.
-#   capacity: 5Gi         # populator PVC size (ignored when existingClaim: true)
-#   existingClaim: true   # adopt an existing PVC: render only SnapshotPolicy +
-#                         # SnapshotSchedule, skip the Restore + populator PVC
-#   cephfs: false         # true -> RWX ceph-filesystem + csi-ceph-filesystem +
-#                         # backingSnapshot shallow staging. Home defaults are
-#                         # ceph-block / csi-ceph-blockpool.
-#   mover:                # per-policy mover securityContext override. Repo default
-#                         # runs the mover as uid 1000; set this for a root app so
-#                         # the mover can read/own its root:root 0600 files.
-#     securityContext: {runAsUser: 0, runAsGroup: 0}
-#     podSecurityContext: {runAsNonRoot: false, fsGroup: 0}
-#   repository: versity   # ClusterRepository name (in the kopiur namespace)
-#   storageClass: <sc>    # override PVC/staging class (default ceph-block; raphael
-#                         # sets miroir). snapshotClass / stagingClass likewise.
-#   schedule: "0 3 * * *" # default daily; timezone default America/Los_Angeles
-#   parallelism: 4        # kopia --max-parallel-file-reads (raphael overrides to 1)
-#   ignoreIdentical: true # skip recording a snapshot when the source is unchanged
-#   ignoreRules: []       # path globs kopia skips, for churny/rebuildable state
-#                         # living in an otherwise-worth-backing-up PVC (frigate's
-#                         # sqlite). /lost+found is prepended automatically.
-#   compression: zstd     # kopia compressor; "" for none (already-compressed data)
-#   retain:               # any subset; maps to kopia keep* rules
-#     daily: 7
-#     weekly: 4
-#     # hourly / monthly / annual / latest also supported
-#   restoreFrom: <ns>     # one-time cross-namespace seed: old policy namespace.
-#   restoreName: <name>   # only if the old policy name differed from this app
-#
-# cnpg renders the supporting credentials secret it references (cloudnative-pg)
-# into the app's namespace. kopiur renders none: the operator projects the shared
-# repository credentials into the mover namespace.
-# gpu: {}                 # Intel GPU ResourceClaimTemplate (<app>-gpu)
+#   clientID: <app>       # also feeds the name default and oidc credentials
+#   name: <clientID>      # display name; also the logo nameOverride default
+#   url: <app>.clerici.tech
+#   group: admin          # PocketIDUserGroup in the operator namespace
+#   callbackPaths: []     # each becomes https://<url><path>
+#   callbackUrls: []      # literal entries, combined with the above
+#   spec: {}              # PocketIDOIDCClient
+
+# externalSecret:
+#   key: <app>            # 1Password item to extract
+#   spec: {}              # ExternalSecret
+
+# oidc:                   # kgateway oauth2 forward-auth for an HTTPRoute
+#   backendHost: pocket-id.pocket-id-operator.svc.cluster.local
+#   backendPort: 1411
+#   backendTLS: <port==443>
+#   route: <app>          # HTTPRoute the TrafficPolicy targets
+#   clientID: <pocketId.clientID | app>
+#   spec:
+#     backend: {}         # Backend
+#     backendConfig: {}   # BackendConfigPolicy (only when backendTLS)
+#     extension: {}       # GatewayExtension
+#     trafficPolicy: {}   # TrafficPolicy
+
+# kopiur:                 # PVC -> shared ClusterRepository
+#   existingClaim: true   # adopt an existing PVC; skip Restore + populator PVC
+#   cephfs: false         # RWX ceph-filesystem + backingSnapshot staging
+#   storageClass: <sc>    # PVC + staging class (raphael sets miroir)
+#   capacity: 5Gi         # populator PVC size (ignored when existingClaim)
+#   ignoreRules: []       # globs kopia skips; /lost+found is prepended
+#   spec:
+#     policy: {}          # SnapshotPolicy
+#     schedule: {}        # SnapshotSchedule
+#     restore: {}         # Restore
+#     pvc: {}             # PersistentVolumeClaim
+
+# gpu:
+#   spec: {}              # ResourceClaimTemplate (Intel GPU, <app>-gpu)

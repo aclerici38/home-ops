@@ -9,9 +9,10 @@ spec:
   chart:
     spec:
       chart: kubernetes/charts/resource-bundle
+      reconcileStrategy: Revision
       sourceRef:
         kind: GitRepository
-        name: flux-system
+        name: resource-bundle-chart
         namespace: flux-system
   install:
     timeout: 5m
@@ -26,8 +27,11 @@ spec:
     kopiur:
       capacity: 10Gi
       storageClass: miroir
-      snapshotClass: miroir
-      parallelism: 1
+      spec:
+        policy:
+          volumeSnapshotClassName: miroir
+          upload:
+            maxParallelFileReads: 1
       # See the home release: config.yaml + model_cache are worth keeping, the
       # sqlite DB isn't (its media lives on the local-path frigate-media PVC and
       # isn't backed up either). Doubly worth skipping here — miroir is QLC, so
@@ -37,8 +41,9 @@ spec:
         - /backup.db
     gpu: {}
     externalSecret:
-      data:
-        - secretKey: FRIGATE_MQTT_PASS
-          remoteRef:
-            key: raphael-mosquitto
-            property: FRIGATE_MQTT_PASS
+      spec:
+        data:
+          - secretKey: FRIGATE_MQTT_PASS
+            remoteRef:
+              key: raphael-mosquitto
+              property: FRIGATE_MQTT_PASS

@@ -9,9 +9,10 @@ spec:
   chart:
     spec:
       chart: kubernetes/charts/resource-bundle
+      reconcileStrategy: Revision
       sourceRef:
         kind: GitRepository
-        name: flux-system
+        name: resource-bundle-chart
         namespace: flux-system
   install:
     timeout: 5m
@@ -32,11 +33,12 @@ spec:
       namespace: kopiur
   values:
     externalSecret:
-      data:
-        - secretKey: FRIGATE_MQTT_PASS
-          remoteRef:
-            key: home-mosquitto
-            property: FRIGATE_MQTT_PASS
+      spec:
+        data:
+          - secretKey: FRIGATE_MQTT_PASS
+            remoteRef:
+              key: home-mosquitto
+              property: FRIGATE_MQTT_PASS
     gpu: {}
     kopiur:
       existingClaim: true
@@ -54,20 +56,23 @@ spec:
       group: fam
       clientID: frigate-home
       name: Frigate (Home)
-      logo:
-        nameOverride: frigate
-      secret:
-        keys:
-          clientID: client-id
-          clientSecret: client-secret
       callbackPaths:
         - /oauth2/redirect
+      spec:
+        logo:
+          nameOverride: frigate
+        secret:
+          keys:
+            clientID: client-id
+            clientSecret: client-secret
     oidc:
-      oauth2:
-        jwt:
-          idToken:
-            claimsToHeaders:
-              - name: preferred_username
-                header: x-forwarded-user
-              - name: frigate_role
-                header: x-forwarded-groups
+      spec:
+        extension:
+          oauth2:
+            jwt:
+              idToken:
+                claimsToHeaders:
+                  - name: preferred_username
+                    header: x-forwarded-user
+                  - name: frigate_role
+                    header: x-forwarded-groups

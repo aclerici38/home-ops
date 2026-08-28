@@ -6,12 +6,5 @@ kind: ResourceClaimTemplate
 metadata:
   name: {{ $app }}-gpu
 spec:
-  spec:
-    devices:
-      requests:
-        - name: gpu
-          exactly:
-            deviceClassName: gpu.intel.com
-            adminAccess: true
-            allocationMode: All
+  {{- include "resources.mergeSpec" (list (include "resources.gpu.spec" .) (dig "spec" dict .Values.gpu)) | nindent 2 }}
 {{- end }}

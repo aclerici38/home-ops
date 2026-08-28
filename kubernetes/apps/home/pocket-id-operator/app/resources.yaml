@@ -9,9 +9,10 @@ spec:
   chart:
     spec:
       chart: kubernetes/charts/resource-bundle
+      reconcileStrategy: Revision
       sourceRef:
         kind: GitRepository
-        name: flux-system
+        name: resource-bundle-chart
         namespace: flux-system
   install:
     timeout: 5m
@@ -29,8 +30,9 @@ spec:
       # Migrations get upset
       poolMode: session
     externalSecret:
-      data:
-        - secretKey: EMAIL
-          remoteRef:
-            key: cluster-secrets
-            property: EMAIL
+      spec:
+        data:
+          - secretKey: EMAIL
+            remoteRef:
+              key: cluster-secrets
+              property: EMAIL

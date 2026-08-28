@@ -1,49 +1,10 @@
 {{- if hasKey .Values "pocketId" }}
 {{- $app := include "resources.app" . -}}
-{{- $p := .Values.pocketId -}}
-{{- $spec := default dict $p.spec -}}
-{{- $clientID := dig "clientID" $app $p -}}
-{{/* display name in the pocket-id UI; defaults to clientID so it's distinct whenever clientID is */}}
-{{- $name := dig "name" $clientID $p -}}
-{{/* logo passthrough: user-provided pocketId.logo keys win; nameOverride defaults to $name */}}
-{{- $logo := merge (deepCopy (dig "logo" dict $p)) (dict "nameOverride" $name) -}}
-{{- $host := dig "url" (printf "%s.clerici.tech" $app) $p -}}
-{{/* callbackUrls = explicit literal entries + https://<host><path> for each callbackPaths entry */}}
-{{- $cbs := default (list) $p.callbackUrls -}}
-{{- range (default (list) $p.callbackPaths) }}{{ $cbs = append $cbs (printf "https://%s%s" $host .) }}{{- end -}}
 ---
 apiVersion: pocketid.internal/v1alpha1
 kind: PocketIDOIDCClient
 metadata:
   name: {{ $app }}
 spec:
-  name: {{ $name | quote }}
-  logo:
-    {{- toYaml $logo | nindent 4 }}
-  clientID: {{ $clientID }}
-  launchUrl: https://{{ $host }}
-  pkceEnabled: {{ dig "pkce" true $p }}
-  {{- with $p.secret }}
-  secret: {{ toYaml . | nindent 4 }}
-  {{- end }}
-  clientSecretRotation:
-    enabled: {{ dig "secretRotation" true $p }}
-    interval: 6h
-    window:
-      opens: "0 0 * * *"
-      closesAfter: 4h
-  {{- /* default: the PocketIDUserGroup CR of that name in the operator namespace.
-         spec.allowedUserGroups wins outright, for groups managed outside this
-         cluster (groupName / groupID entries). */}}
-  {{- if not (hasKey $spec "allowedUserGroups") }}
-  allowedUserGroups:
-    - name: {{ dig "group" "admin" $p }}
-      namespace: pocket-id-operator
-  {{- end }}
-  {{- with $cbs }}
-  callbackUrls: {{ toYaml . | nindent 4 }}
-  {{- end }}
-  {{- with $spec }}
-  {{- toYaml . | nindent 2 }}
-  {{- end }}
+  {{- include "resources.mergeSpec" (list (include "resources.pocketId.spec" .) (dig "spec" dict .Values.pocketId)) | nindent 2 }}
 {{- end }}

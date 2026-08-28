@@ -9,9 +9,10 @@ spec:
   chart:
     spec:
       chart: kubernetes/charts/resource-bundle
+      reconcileStrategy: Revision
       sourceRef:
         kind: GitRepository
-        name: flux-system
+        name: resource-bundle-chart
         namespace: flux-system
   install:
     timeout: 5m
@@ -28,12 +29,13 @@ spec:
       group: admin
       clientID: kopia-versity-home
       name: Kopia (versity)
-      logo:
-        nameOverride: kopia
-      secret:
-        keys:
-          clientID: client-id
-          clientSecret: client-secret
+      spec:
+        logo:
+          nameOverride: kopia
+        secret:
+          keys:
+            clientID: client-id
+            clientSecret: client-secret
       callbackPaths:
         - /oauth2/redirect
     oidc: {}
@@ -48,9 +50,10 @@ spec:
   chart:
     spec:
       chart: kubernetes/charts/resource-bundle
+      reconcileStrategy: Revision
       sourceRef:
         kind: GitRepository
-        name: flux-system
+        name: resource-bundle-chart
         namespace: flux-system
   install:
     timeout: 5m
@@ -66,12 +69,13 @@ spec:
       group: admin
       clientID: kopia-backblaze-home
       name: Kopia (backblaze)
-      logo:
-        nameOverride: kopia
-      secret:
-        keys:
-          clientID: client-id
-          clientSecret: client-secret
+      spec:
+        logo:
+          nameOverride: kopia
+        secret:
+          keys:
+            clientID: client-id
+            clientSecret: client-secret
       callbackPaths:
         - /oauth2/redirect
     oidc: {}

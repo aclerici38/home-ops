@@ -1,0 +1,35 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Resource Bundle Chart
+
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "kubernetes/charts/**"
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  fast-forward:
+    name: Fast-forward resource-bundle-chart
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Fast-forward resource-bundle-chart to main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh api -X PATCH "repos/{owner}/{repo}/git/refs/heads/resource-bundle-chart" \
+            -f sha="$GITHUB_SHA" -F force=false ||
+          gh api -X POST "repos/{owner}/{repo}/git/refs" \
+            -f ref="refs/heads/resource-bundle-chart" -f sha="$GITHUB_SHA"

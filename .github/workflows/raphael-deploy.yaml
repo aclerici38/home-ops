@@ -12,6 +12,7 @@ on:
       - "kubernetes/apps/raphael/**"
       - "kubernetes/ks/raphael/**"
       - "kubernetes/flux/raphael/**"
+      - "kubernetes/charts/**"
 
 concurrency:
   group: ${{ github.workflow }}

@@ -1,26 +1,16 @@
 {{- /*
-  cnpg.mode: shared — attach this app to the shared "pg18" cluster instead of
-  giving it its own Cluster. Renders, into the cloudnative-pg namespace, a
-  DatabaseRole + Database + the role's generated password Secret; and, into the
-  app's own namespace, the connection Secret the app consumes.
-
-  The password is generated once (the <app>-role ExternalSecret in
-  cloudnative-pg, which the DatabaseRole references) and read back into the app
-  namespace via the cnpg-role-secrets Kubernetes ClusterSecretStore, so both
-  copies always match.
+  cnpg.mode: shared — attach to the shared "pg18" cluster instead of getting a
+  Cluster of its own. The role password is generated once (the <app>-role
+  ExternalSecret in cloudnative-pg, which the DatabaseRole references) and read
+  back into the app namespace via the cnpg-role-secrets ClusterSecretStore, so
+  both copies always match.
 */}}
 {{- if and (hasKey .Values "cnpg") (eq (dig "mode" "" .Values.cnpg) "shared") }}
 {{- $app := include "resources.app" . -}}
 {{- $c := .Values.cnpg -}}
-{{- $cluster := dig "cluster" "pg18" $c -}}
+{{- /* Per-resource overrides, deep-merged onto each rendered .spec. */ -}}
+{{- $spec := dig "spec" dict $c -}}
 {{- $cnpgNs := dig "clusterNamespace" "cloudnative-pg" $c -}}
-{{- $db := dig "database" $app $c -}}
-{{- $role := $app -}}
-{{- $session := eq (dig "poolMode" "transaction" $c) "session" -}}
-{{- /* Session-scoped apps go through the session-mode pooler; everyone else
-       through the transaction pooler. */}}
-{{- $host := $session | ternary (printf "pg18-pooler-session-rw.%s.svc.cluster.local" $cnpgNs) (printf "pg18-pooler-rw.%s.svc.cluster.local" $cnpgNs) -}}
-{{- $pw := "{{ .password }}" -}}
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: DatabaseRole
@@ -28,14 +18,7 @@ metadata:
   name: {{ $app }}
   namespace: {{ $cnpgNs }}
 spec:
-  cluster:
-    name: {{ $cluster }}
-  name: {{ $role }}
-  ensure: present
-  login: true
-  databaseRoleReclaimPolicy: retain
-  passwordSecret:
-    name: {{ $app }}-role
+  {{- include "resources.mergeSpec" (list (include "resources.cnpgShared.roleSpec" .) (dig "role" dict $spec)) | nindent 2 }}
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
@@ -43,17 +26,9 @@ metadata:
   name: {{ $app }}
   namespace: {{ $cnpgNs }}
 spec:
-  name: {{ $db }}
-  owner: {{ $role }}
-  cluster:
-    name: {{ $cluster }}
-  databaseReclaimPolicy: retain
-  {{- with $c.dbExtensions }}
-  extensions: {{ toYaml . | nindent 4 }}
-  {{- end }}
+  {{- include "resources.mergeSpec" (list (include "resources.cnpgShared.databaseSpec" .) (dig "database" dict $spec)) | nindent 2 }}
 ---
-# Generated role password (basic-auth) — the single source of truth, referenced
-# by the DatabaseRole above and mirrored into the app namespace below.
+# Generated role password — source of truth, mirrored into the app namespace below.
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
@@ -62,27 +37,9 @@ metadata:
   labels:
     dormammu.internal/component: cnpg
 spec:
-  refreshPolicy: OnChange
-  target:
-    creationPolicy: Orphan
-    template:
-      engineVersion: v2
-      type: kubernetes.io/basic-auth
-      metadata:
-        labels:
-          cnpg.io/reload: "true"
-      data:
-        username: {{ $role }}
-        password: {{ $pw | quote }}
-  dataFrom:
-    - sourceRef:
-        generatorRef:
-          apiVersion: generators.external-secrets.io/v1alpha1
-          kind: ClusterGenerator
-          name: cnpg-pass-generator
+  {{- include "resources.cnpgShared.roleSecretSpec" . | nindent 2 }}
 ---
-# App-facing connection secret, in the app's own namespace. Pulls the password
-# from the <app>-role secret in cloudnative-pg via the cross-namespace store.
+# App-facing connection secret, in the app's own namespace.
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
@@ -90,33 +47,5 @@ metadata:
   labels:
     dormammu.internal/component: cnpg
 spec:
-  refreshInterval: "1h"
-  secretStoreRef:
-    kind: ClusterSecretStore
-    name: cnpg-role-secrets
-  target:
-    # Owner (not Orphan): this secret is a reproducible mirror of the <app>-role
-    # password, so let ESO own + watch it and recreate it immediately if it's
-    # ever deleted (e.g. the legacy secret being cascade-removed during the flip).
-    creationPolicy: Owner
-    template:
-      engineVersion: v2
-      metadata:
-        labels:
-          cnpg.io/reload: "true"
-      data:
-        user: {{ $role }}
-        username: {{ $role }}
-        dbname: {{ $db }}
-        host: {{ $host | quote }}
-        password: {{ $pw | quote }}
-        port: "5432"
-        pgpass: {{ printf "%s:5432:%s:%s:%s" $host $db $role $pw | quote }}
-        jdbc-uri: {{ printf "jdbc:postgresql://%s:5432/%s?password=%s&user=%s" $host $db $pw $role | quote }}
-        uri: {{ printf "postgresql://%s:%s@%s:5432/%s" $role $pw $host $db | quote }}
-  data:
-    - secretKey: password
-      remoteRef:
-        key: {{ $app }}-role
-        property: password
+  {{- include "resources.cnpgShared.appSecretSpec" . | nindent 2 }}
 {{- end }}
