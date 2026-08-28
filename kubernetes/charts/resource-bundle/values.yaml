@@ -42,6 +42,7 @@
 #   group: admin          # PocketIDUserGroup in the operator namespace
 #   callbackPaths: []     # each becomes https://<url><path>
 #   callbackUrls: []      # literal entries, combined with the above
+#   skipConsent: true     # skip the initial authorization consent screen
 #   spec: {}              # PocketIDOIDCClient
 
 # externalSecret:

@@ -12,6 +12,7 @@ logo:
 clientID: {{ $clientID }}
 launchUrl: https://{{ $host }}
 pkceEnabled: true
+skipConsent: {{ dig "skipConsent" true $p }}
 clientSecretRotation:
   enabled: true
   interval: 6h
