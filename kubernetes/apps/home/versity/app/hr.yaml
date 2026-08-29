@@ -18,6 +18,8 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  dependsOn:
+    - name: versity-resources
   values:
     image:
       repository: ghcr.io/versity/versitygw
@@ -54,24 +56,25 @@ spec:
     gateway:
       backend:
         type: posix
-        # chart mounts at /mnt/data, need to use s3 subPath
-        args: /mnt/data/s3
-      debug: false
+        # kopia doesn't support xattrs so we must store metadata separately.
+        sidecarDir: /mnt/metadata
+        versioningDir: /mnt/versioning
+      corsAllowOrigin: https://versity.clerici.tech
+    admin:
+      enabled: true
+      httpRoute:
+        enabled: true
+        parentRefs: *gateway
+        hostnames:
+          - s3-admin.clerici.tech
     webui:
       enabled: true
       apiGateways:
         - https://s3.clerici.tech
+      adminGateways:
+        - https://s3-admin.clerici.tech
       httpRoute:
         enabled: true
         parentRefs: *gateway
         hostnames:
           - versity.clerici.tech
-    extraEnv:
-      - name: VGW_VERSIONING_DIR
-        value: /mnt/data/versioning
-      # kopia doesn't support xattrs so we must store metadata separately
-      # this prob doesn't matter with no acls but why not
-      - name: VGW_META_SIDECAR
-        value: /mnt/data/sidecar
-  dependsOn:
-    - name: versity-resources
