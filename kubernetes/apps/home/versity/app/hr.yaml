@@ -64,6 +64,8 @@ spec:
       enabled: true
       httpRoute:
         enabled: true
+        annotations:
+          gatus.home-operations.com/enabled: "false"
         parentRefs: *gateway
         hostnames:
           - s3-admin.clerici.tech
@@ -75,8 +77,6 @@ spec:
         - https://s3-admin.clerici.tech
       httpRoute:
         enabled: true
-        annotations:
-          gatus.home-operations.com/enabled: "false"
         parentRefs: *gateway
         hostnames:
           - versity.clerici.tech
