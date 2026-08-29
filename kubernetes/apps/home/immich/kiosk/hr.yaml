@@ -99,5 +99,14 @@ spec:
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml
+      # Kiosk resolves both `./iframes/*.html` and `./custom.css` relative to its working directory
+      web:
+        type: configMap
+        name: immich-kiosk-web
+        globalMounts:
+          - path: /iframes/birdseye.html
+            subPath: birdseye.html
+          - path: /custom.css
+            subPath: custom.css
   dependsOn:
     - name: immich-kiosk-resources

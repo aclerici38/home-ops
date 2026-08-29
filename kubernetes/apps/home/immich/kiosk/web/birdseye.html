@@ -1,0 +1,40 @@
+<!doctype html>
+<meta charset="utf-8">
+<!--
+  Frigate birdseye tile for the Kiosk slideshow.
+
+  Kiosk reads local iframe files at render time and inlines them with srcdoc, so
+  this runs on the Kiosk origin and the snapshot below is a cross-origin GET
+  against the birdseye route (frigate port 5000, exact path, internal gateway).
+
+  Frigate serves birdseye at its configured dimensions and ignores `h`, so
+  scaling is the tile's job. Pausing while hidden keeps a backgrounded tab from
+  polling frigate forever.
+-->
+<style>
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+  img { display: block; width: 100%; height: 100%; object-fit: contain; }
+</style>
+
+<img id="frame" alt="">
+
+<script>
+  const SRC = "https://birdseye.clerici.tech/api/birdseye/latest.jpg";
+  const INTERVAL_MS = 2000;
+  const frame = document.getElementById("frame");
+  let inflight = false;
+
+  function tick() {
+    if (inflight || document.hidden) return;
+    inflight = true;
+    const next = new Image();
+    // Swap only once decoded, so a slow or failed fetch leaves the last good
+    // frame up instead of blanking the tile.
+    next.onload = () => { frame.src = next.src; inflight = false; };
+    next.onerror = () => { inflight = false; };
+    next.src = SRC + "?t=" + Date.now();
+  }
+
+  tick();
+  setInterval(tick, INTERVAL_MS);
+</script>

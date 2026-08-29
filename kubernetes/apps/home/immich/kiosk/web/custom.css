@@ -1,0 +1,18 @@
+/*
+ * Kiosk styles every iframe as a full-screen overlay at z-index 50, which would
+ * bury the slideshow entirely. Pin it to the bottom-right instead; the
+ * clock/weather row is top-anchored, so the two never collide.
+ *
+ * Applies to every device unless one opts out with `custom_css=false`.
+ */
+iframe {
+  top: auto;
+  left: auto;
+  right: 2rem;
+  bottom: 2rem;
+  width: 26vw;
+  height: calc(26vw * 9 / 16);
+  overflow: hidden;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 1.5rem rgb(0 0 0 / 60%);
+}

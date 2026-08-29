@@ -83,6 +83,7 @@ spec:
             port: 8555
     route:
       auth:
+        forceRename: frigate
         annotations:
           gatus.home-operations.com/endpoint: |-
             client:
@@ -98,6 +99,21 @@ spec:
           - backendRefs:
               - identifier: frigate
                 port: *auth
+      # Birdseye snapshot
+      birdseye:
+        hostnames:
+          - birdseye.clerici.tech
+        parentRefs:
+          - name: internal
+            namespace: kgateway
+        rules:
+          - matches:
+              - path:
+                  type: Exact
+                  value: /api/birdseye/latest.jpg
+            backendRefs:
+              - identifier: frigate
+                port: 5000
     persistence:
       config:
         existingClaim: frigate
