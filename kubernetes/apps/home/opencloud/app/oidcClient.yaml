@@ -10,6 +10,7 @@ spec:
   clientID: opencloud-web
   isPublic: true
   pkceEnabled: true
+  skipConsent: true
   callbackUrls:
     - https://cloud.clerici.tech
     - https://cloud.clerici.tech/oidc-callback.html
@@ -29,6 +30,7 @@ spec:
   clientID: OpenCloudIOS
   isPublic: true
   pkceEnabled: true
+  skipConsent: true
   callbackUrls:
     - oc://ios.opencloud.eu
   logoutCallbackUrls:
@@ -48,6 +50,7 @@ spec:
   clientID: OpenCloudDesktop
   isPublic: true
   pkceEnabled: true
+  skipConsent: true
   callbackUrls:
     - http://127.0.0.1
     - http://localhost
