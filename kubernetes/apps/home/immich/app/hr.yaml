@@ -25,6 +25,7 @@ spec:
         forceRename: immich
         strategy: RollingUpdate
         pod:
+          # keep at 1 replica until https://github.com/immich-app/immich/pull/28410
           nodeSelector:
             kubernetes.io/hostname: "bonds"
         containers:
