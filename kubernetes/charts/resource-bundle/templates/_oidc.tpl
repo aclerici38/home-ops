@@ -48,7 +48,17 @@ oauth2:
       name: {{ $app }}-oidc-credentials
   cookies:
     domain: "clerici.tech"
+{{/* cookies.domain is the parent domain, so every app's session cookie is sent
+     to every other app on it, under the same default cookie names. Without an
+     audience check the only gates left are signature and issuer, which every
+     token from this issuer passes — so a session minted for one client would
+     authenticate against another, and Pocket-ID's per-client allowedUserGroups
+     (enforced at /authorize) would no longer bind. Pinning aud to this client
+     is what keeps that restriction meaningful. */}}
   jwt:
+    idToken:
+      audiences:
+        - {{ $clientID | quote }}
     jwksURI: {{ printf "%s/.well-known/jwks.json" $issuer | quote }}
 {{- end -}}
 
