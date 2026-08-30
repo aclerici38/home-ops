@@ -2,6 +2,15 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
+      // The built-in managers apply the preset's `registryAliases`
+      // (mirror.gcr.io -> docker.io) at extract time, but custom regex managers
+      // do not, so their deps are looked up against mirror.gcr.io itself.
+      description: "Resolve mirror.gcr.io at Docker Hub for deps the custom managers extract",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/^mirror\\.gcr\\.io\\//"],
+      overridePackageName: "{{{replace 'mirror\\.gcr\\.io' 'docker.io' packageName}}}",
+    },
+    {
       description: ["Loose versioning for non-semver containers"],
       matchDatasources: ["docker"],
       matchPackageNames: ["/searxng/"],
