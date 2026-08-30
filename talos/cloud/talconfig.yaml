@@ -33,8 +33,14 @@ nodes:
       arch: arm64
       mode: oracle
       useUKI: false
+    # miroir
+    kernelModules:
+      - name: drbd
     schematic:
       customization:
+        systemExtensions:
+          officialExtensions:
+            - siderolabs/drbd
         extraKernelArgs:
           - -selinux
           - apparmor=0
@@ -44,8 +50,6 @@ nodes:
           - security=none
           - talos.platform=oracle
     controlPlane: true
-    nodeLabels:
-      storage.openebs.io/hostpath: "true"
 # Global patches (shared base from ../global, then this cluster's overrides)
 patches:
   - "@../global/machine-kubelet.yaml"

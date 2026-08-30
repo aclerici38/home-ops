@@ -3,28 +3,29 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: openebs
+  name: snapshot-controller
 spec:
   interval: 1h
   maxHistory: 1
   chartRef:
     kind: OCIRepository
-    name: openebs
+    name: snapshot-controller
   install:
-    disableHooks: true
     timeout: 2m
     remediation:
       retries: 1
   upgrade:
-    disableHooks: true
     timeout: 2m
     remediation:
       retries: 1
-  valuesFrom:
-    - kind: ConfigMap
-      name: openebs-values
   values:
-    engines:
-      local:
-        zfs:
-          enabled: false
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        memory: 128Mi
+    monitoring:
+      serviceMonitor:
+        enabled: true

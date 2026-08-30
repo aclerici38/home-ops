@@ -5,7 +5,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: haproxy-geoip-maps
 spec:
-  storageClassName: openebs-hostpath
+  storageClassName: miroir
   resources:
     requests:
       storage: 1Gi

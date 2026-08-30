@@ -1,0 +1,8 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-snapshotter/8.6.0/volumesnapshotclass_v1.json
+kind: VolumeSnapshotClass
+apiVersion: snapshot.storage.k8s.io/v1
+metadata:
+  name: miroir
+driver: miroir.home-operations.com
+deletionPolicy: Delete
