@@ -26,7 +26,6 @@ spec:
             env:
               # quiet iroh logs
               RUST_LOG: debug
-              TOWONEL_HUB_DB_DRIVER: postgres
               TOWONEL_HUB_PUBLIC_URL: https://towonel.cloud.clerici.tech
               TOWONEL_HUB_RELAY_URL: &iroh https://vps.clerici.tech:8444
               TOWONEL_EDGE_RELAY_URL: *iroh
@@ -40,10 +39,8 @@ spec:
               # matches the PROXY-advertised client family.
               TOWONEL_EDGE_PROXY_PROTOCOL_TRUSTED: "127.0.0.1/32,::1/128,::ffff:127.0.0.1/128"
               TOWONEL_HUB_TRUSTED_PROXIES: "172.16.0.0/24,10.40.40.41/32"
-              TOWONEL_HUB_DB_DSN:
-                secretKeyRef:
-                  name: towonel-node-db-app
-                  key: uri
+              TOWONEL_HUB_DB_DRIVER: sqlite
+              TOWONEL_HUB_DB_DSN: sqlite:///data/towonel.db?mode=rwc
               TOWONEL_IDENTITY_KEY:
                 secretKeyRef:
                   name: towonel-node
@@ -67,6 +64,10 @@ spec:
             resources:
               requests: {}
               limits: {}
+    persistence:
+      data:
+        type: persistentVolumeClaim
+        existingClaim: towonel-node
     route:
       towonel-node:
         hostnames:

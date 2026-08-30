@@ -21,12 +21,31 @@ spec:
   dependsOn:
     - name: external-secrets
       namespace: external-secrets
-    - name: cloudnative-pg
-      namespace: cloudnative-pg
+    - name: kopiur
+      namespace: kopiur
+    - name: miroir
+      namespace: miroir
     - name: pocket-id-operator
       namespace: pocket-id-operator
   values:
     externalSecret: {}
-    cnpg:
-      mode: no-backup
-      instances: 1
+    kopiur:
+      capacity: 1Gi
+      storageClass: miroir
+      spec:
+        policy:
+          repository:
+            name: backblaze
+          volumeSnapshotClassName: miroir
+          # towonel writes node.key/hub_kek.key 0600 as uid 10001, so a mover
+          # running as the repository-default 1000 could not read them. The pod
+          # pins runAsUser, so the mover can inherit it from the PVC's consumer.
+          mover:
+            inheritSecurityContextFrom:
+              pvcConsumer: {}
+          upload:
+            maxParallelFileReads: 1
+        restore:
+          mover:
+            inheritSecurityContextFrom:
+              snapshot: {}
