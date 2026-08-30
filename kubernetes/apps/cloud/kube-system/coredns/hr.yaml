@@ -47,6 +47,11 @@ spec:
             configBlock: |-
               name exact towonel.cloud.clerici.tech external.kgateway.svc.cluster.local
               answer name external\.kgateway\.svc\.cluster\.local towonel.cloud.clerici.tech
+          # Disable v6 here
+          - name: template
+            parameters: ANY AAAA
+            configBlock: |-
+              rcode NOERROR
           - name: kubernetes
             parameters: cluster.local in-addr.arpa ip6.arpa
             configBlock: |-

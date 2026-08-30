@@ -20,7 +20,7 @@ spec:
         type: daemonset
         pod:
           hostNetwork: true
-          dnsPolicy: ClusterFirstWithHostNet
+          dnsPolicy: Default
           securityContext:
             runAsNonRoot: true
             runAsUser: 10001

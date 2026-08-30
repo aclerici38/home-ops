@@ -12,6 +12,8 @@ spec:
   dependsOn:
     - name: towonel-node-resources
   values:
+    defaultPodOptions:
+      dnsPolicy: Default
     hub:
       rateLimitPerSecond: 200
       rateLimitBurst: 2000

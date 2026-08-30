@@ -22,7 +22,7 @@ spec:
           # The relay needs a routable address; bind the node's host network so
           # agents/edges can reach :8444 (TCP) and :7842 (UDP) directly.
           hostNetwork: true
-          dnsPolicy: ClusterFirstWithHostNet
+          dnsPolicy: Default
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
