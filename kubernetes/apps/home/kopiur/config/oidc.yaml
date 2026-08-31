@@ -30,6 +30,7 @@ spec:
       clientID: kopia-versity-home
       name: Kopia (versity)
       spec:
+        requiresReauthentication: true
         logo:
           nameOverride: kopia
         secret:
@@ -70,6 +71,7 @@ spec:
       clientID: kopia-backblaze-home
       name: Kopia (backblaze)
       spec:
+        requiresReauthentication: true
         logo:
           nameOverride: kopia
         secret:
