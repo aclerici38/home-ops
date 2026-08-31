@@ -5,10 +5,12 @@ metadata:
   name: pocket-id-operator-values
   namespace: pocket-id-operator
 data:
-  values.yaml: |
+  values.yaml: |-
     operator:
       args:
         - --zap-log-level=debug
+      defaultLogoUrl: https://cdn.jsdelivr.net/gh/selfhst/icons/png/{{name}}.png
+      defaultDarkLogoUrl: https://cdn.jsdelivr.net/gh/selfhst/icons/png/{{name}}-light.png
     metrics:
       enabled: true
       serviceMonitor:
