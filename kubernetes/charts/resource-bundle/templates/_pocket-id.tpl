@@ -19,6 +19,7 @@ clientSecretRotation:
   window:
     opens: "0 0 * * *"
     closesAfter: 4h
+clientSecretOverlap: 15m
 {{- /* A group managed outside this cluster overrides spec.allowedUserGroups
        instead ([{groupName: admin}] / [{groupID: <id>}]). */}}
 allowedUserGroups:
