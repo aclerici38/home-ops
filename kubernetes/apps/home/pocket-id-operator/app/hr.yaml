@@ -34,10 +34,10 @@ spec:
   # home-only: the pocket-id instance, users and groups (base operator/metrics values
   # come from the shared pocket-id-operator-values ConfigMap).
   values:
-    operator:
-      image:
-        repository: ghcr.io/aclerici38/pocket-id-operator
-        tag: pr-605@sha256:e41dcfaa7400976efe19cc9d85acec31f46dc850c7423bc89bf5e638ecc4abb0
+    # operator:
+    #   image:
+    #     repository: ghcr.io/aclerici38/pocket-id-operator
+    #     tag: pr-605@sha256:e41dcfaa7400976efe19cc9d85acec31f46dc850c7423bc89bf5e638ecc4abb0
     pocket-id-instance:
       instance:
         enabled: true
