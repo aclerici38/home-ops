@@ -34,10 +34,10 @@ spec:
   # home-only: the pocket-id instance, users and groups (base operator/metrics values
   # come from the shared pocket-id-operator-values ConfigMap).
   values:
-    # operator:
-    #   image:
-    #     repository: ghcr.io/aclerici38/pocket-id-operator
-    #     tag: cacf8db-main
+    operator:
+      image:
+        repository: ghcr.io/aclerici38/pocket-id-operator
+        tag: pr-605
     pocket-id-instance:
       instance:
         enabled: true
