@@ -9,8 +9,8 @@ data:
     operator:
       args:
         - --zap-log-level=debug
-      defaultLogoTemplate: "https://cdn.jsdelivr.net/gh/selfhst/icons/webp/{{name}}.webp"
-      defaultDarkLogoTemplate: "https://cdn.jsdelivr.net/gh/selfhst/icons/webp/{{name}}-light.webp"
+      defaultLogoUrl: "https://cdn.jsdelivr.net/gh/selfhst/icons/webp/{{name}}.webp"
+      defaultDarkLogoUrl: "https://cdn.jsdelivr.net/gh/selfhst/icons/webp/{{name}}-light.webp"
     metrics:
       enabled: true
       serviceMonitor:
