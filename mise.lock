@@ -1453,25 +1453,25 @@ url_api = "https://api.github.com/repos/FiloSottile/age/releases/assets/53554189
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "2026.8.14"
+version = "2026.8.15"
 backend = "aqua:jdx/mise"
 
 [tools."aqua:jdx/mise"."platforms.linux-arm64"]
-checksum = "sha256:06186cfbfe947049b21d58575fb0ea800cc26ed1375f20f4b678cb3a9d679437"
-url = "https://github.com/jdx/mise/releases/download/v2026.8.14/mise-v2026.8.14-linux-arm64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/530039119"
+checksum = "sha256:f77556632e02002c16112e9bb2c1d862d59ae657eaa0963f2e5ef310c3759dce"
+url = "https://github.com/jdx/mise/releases/download/v2026.8.15/mise-v2026.8.15-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/537191251"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.linux-x64"]
-checksum = "sha256:3832f39c325e343f81fe3d92b2447c5d1a5eea1bc85092bb7b6c25806222647e"
-url = "https://github.com/jdx/mise/releases/download/v2026.8.14/mise-v2026.8.14-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/530039292"
+checksum = "sha256:6b39aba4c1cccb6c02802196a5bb3fe8b7f30d3f9d46870cc78819ed79d673c2"
+url = "https://github.com/jdx/mise/releases/download/v2026.8.15/mise-v2026.8.15-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/537191335"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.macos-arm64"]
-checksum = "sha256:e3ba526b629c41fa7b0918f78e746ca71a7a4b0c78dbfaca9fb25676a318762e"
-url = "https://github.com/jdx/mise/releases/download/v2026.8.14/mise-v2026.8.14-macos-arm64.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/530039363"
+checksum = "sha256:8b7729dc761e3118dd2910fe42fc74f720ca218a8131c1cc98dcd66ca111c2d5"
+url = "https://github.com/jdx/mise/releases/download/v2026.8.15/mise-v2026.8.15-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/537191377"
 provenance = "minisign"
 
 [[tools.atuin]]
@@ -2563,17 +2563,23 @@ url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/522028033"
 provenance = "cosign"
 
 [[tools.zizmor]]
-version = "1.29.0"
+version = "1.30.0"
 backend = "aqua:zizmorcore/zizmor"
 
+[tools.zizmor."platforms.linux-arm64"]
+checksum = "sha256:018a024d6b6d09733b07f6ef42838d984c23ec04bc9b2acd55f7d67826aeafe5"
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.30.0/zizmor-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/zizmorcore/zizmor/releases/assets/537081734"
+provenance = "github-attestations"
+
 [tools.zizmor."platforms.linux-x64"]
-checksum = "sha256:dd96df044a6e8538d5f423790f453bdd03d49e5b2bcc38214acc41a2f1297839"
-url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/zizmorcore/zizmor/releases/assets/498263145"
+checksum = "sha256:ec8c95cd800845abb9bbc5f377ec7c57d2eb8e2386a00a201d3a74ee4092e5ed"
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.30.0/zizmor-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/zizmorcore/zizmor/releases/assets/537081732"
 provenance = "github-attestations"
 
 [tools.zizmor."platforms.macos-arm64"]
-checksum = "sha256:720322fade9e83a9c7953944c438f2ba942636b86b96a8f0e6b15ce94c8a6b6f"
-url = "https://github.com/zizmorcore/zizmor/releases/download/v1.29.0/zizmor-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/zizmorcore/zizmor/releases/assets/498263141"
+checksum = "sha256:c9c5d83730efb86f2cd71b487605c00a4d63903e4f9458485ed5eac3b1924ab1"
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.30.0/zizmor-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/zizmorcore/zizmor/releases/assets/537081737"
 provenance = "github-attestations"
