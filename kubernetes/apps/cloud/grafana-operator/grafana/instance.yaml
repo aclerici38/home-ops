@@ -45,7 +45,7 @@ spec:
         - grafana.${CLUSTER_NAME}.clerici.tech
       parentRefs:
         - name: external
-          namespace: kgateway
+          namespace: envoy-gateway
   deployment:
     spec:
       template:

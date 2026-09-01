@@ -41,12 +41,12 @@ spec:
               class error
           - name: prometheus
             parameters: 0.0.0.0:9153
-          # towonel -> kgateway for the agent pre-bootstrap
+          # towonel -> envoy-gateway for the agent pre-bootstrap
           - name: rewrite
             parameters: stop
             configBlock: |-
-              name exact towonel.cloud.clerici.tech external.kgateway.svc.cluster.local
-              answer name external\.kgateway\.svc\.cluster\.local towonel.cloud.clerici.tech
+              name exact towonel.cloud.clerici.tech external.envoy-gateway.svc.cluster.local
+              answer name external\.envoy-gateway\.svc\.cluster\.local towonel.cloud.clerici.tech
           # Disable v6 here
           - name: template
             parameters: ANY AAAA

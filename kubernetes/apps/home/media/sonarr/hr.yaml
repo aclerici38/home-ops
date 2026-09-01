@@ -97,7 +97,7 @@ spec:
           - sonarr.clerici.tech
         parentRefs:
           - name: internal
-            namespace: kgateway
+            namespace: envoy-gateway
     persistence:
       tmpfs:
         type: emptyDir

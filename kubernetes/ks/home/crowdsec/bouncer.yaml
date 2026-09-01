@@ -8,7 +8,7 @@ metadata:
 spec:
   targetNamespace: crowdsec
   dependsOn:
-    - name: kgateway
+    - name: envoy-gateway
   sourceRef:
     kind: GitRepository
     name: flux-system

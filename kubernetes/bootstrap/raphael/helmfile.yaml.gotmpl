@@ -5,7 +5,7 @@
 # Unlike the Talos clusters, k3s already ships a CNI (flannel) and CoreDNS, so
 # the only thing installed out-of-band is Flux itself (operator + instance).
 # Once flux-instance is up it reconciles kubernetes/flux/raphael and pulls in
-# everything else (cert-manager, external-secrets, kgateway, the apps, ...).
+# everything else (cert-manager, external-secrets, envoy-gateway, the apps, ...).
 #
 # Chart url/version + values are read straight from the Flux manifests so this
 # file stays a thin pointer with no duplicated config:

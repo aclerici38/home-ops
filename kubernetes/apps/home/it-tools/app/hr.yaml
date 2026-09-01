@@ -63,7 +63,7 @@ spec:
           - it-tools.clerici.tech
         parentRefs:
           - name: internal
-            namespace: kgateway
+            namespace: envoy-gateway
     persistence:
       tmp:
         type: emptyDir

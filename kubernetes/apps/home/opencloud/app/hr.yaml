@@ -311,7 +311,7 @@ spec:
           - cloud.clerici.tech
         parentRefs:
           - name: external
-            namespace: kgateway
+            namespace: envoy-gateway
         rules:
           - backendRefs:
               - identifier: opencloud
@@ -324,7 +324,7 @@ spec:
           - wopi.clerici.tech
         parentRefs:
           - name: external
-            namespace: kgateway
+            namespace: envoy-gateway
         rules:
           - backendRefs:
               - identifier: wopi

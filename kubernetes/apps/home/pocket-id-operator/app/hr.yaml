@@ -53,7 +53,7 @@ spec:
               - group: gateway.networking.k8s.io
                 kind: Gateway
                 name: external
-                namespace: kgateway
+                namespace: envoy-gateway
                 sectionName: https
           encryptionKey:
             valueFrom:

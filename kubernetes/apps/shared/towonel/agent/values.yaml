@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.4-standalone-strict/configmap-v1.json
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -17,9 +18,9 @@ data:
         key: token
       services:
         - hostname: "*.${EXTERNAL_DOMAIN}"
-          origin: external.kgateway.svc.cluster.local:443
+          origin: external.envoy-gateway.svc.cluster.local:443
         - hostname: "*.${CLUSTER_NAME}.clerici.tech"
-          origin: external.kgateway.svc.cluster.local:443
+          origin: external.envoy-gateway.svc.cluster.local:443
     serviceMonitor:
       enabled: true
     monitoring:

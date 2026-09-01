@@ -130,7 +130,7 @@ spec:
           - hass.clerici.tech
         parentRefs:
           - name: external
-            namespace: kgateway
+            namespace: envoy-gateway
     persistence:
       config:
         existingClaim: home-assistant

@@ -49,17 +49,15 @@
 #   key: <app>            # 1Password item to extract
 #   spec: {}              # ExternalSecret
 
-# oidc:                   # kgateway oauth2 forward-auth for an HTTPRoute
+# oidc:                   # Envoy Gateway OIDC forward-auth for an HTTPRoute
 #   backendHost: pocket-id.pocket-id-operator.svc.cluster.local
 #   backendPort: 1411
 #   backendTLS: <port==443>
-#   route: <app>          # HTTPRoute the TrafficPolicy targets
+#   route: <app>          # HTTPRoute the SecurityPolicy targets
 #   clientID: <pocketId.clientID | app>
 #   spec:
-#     backend: {}         # Backend
-#     backendConfig: {}   # BackendConfigPolicy (only when backendTLS)
-#     extension: {}       # GatewayExtension
-#     trafficPolicy: {}   # TrafficPolicy
+#     backend: {}         # Backend (only when backendHost != the issuer host)
+#     securityPolicy: {}  # SecurityPolicy
 
 # kopiur:                 # PVC -> shared ClusterRepository
 #   existingClaim: true   # adopt an existing PVC; skip Restore + populator PVC

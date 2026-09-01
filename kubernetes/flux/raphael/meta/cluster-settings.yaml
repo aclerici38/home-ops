@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.4-standalone-strict/configmap-v1.json
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -7,6 +8,8 @@ metadata:
 data:
   FLUX_PATH: kubernetes/flux/raphael
   CLUSTER_NAME: raphael
+  # k3s default; no --cluster-cidr override in raphael/nixos/k3s.nix
+  CLUSTER_POD_CIDR: 10.42.0.0/16
   SECRET_DOMAIN: clerici.tech
   EXTERNAL_DOMAIN: raphael.clerici.tech
   TZ: America/Los_Angeles

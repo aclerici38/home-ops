@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/securitypolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: crowdsec-ext-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: external
+  extAuth:
+    failOpen: true
+    grpc:
+      backendRefs:
+        - name: crowdsec-bouncer
+          namespace: crowdsec
+          port: 8080

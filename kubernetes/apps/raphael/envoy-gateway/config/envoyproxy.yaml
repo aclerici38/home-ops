@@ -1,0 +1,63 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/envoyproxy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: envoy-proxy-params
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyDeployment:
+        replicas: 2
+        container:
+          # Default tag, so the Envoy version stays the one this control plane
+          # was released against; only the registry changes.
+          imageRepository: mirror.gcr.io/envoyproxy/envoy
+          resources:
+            requests:
+              memory: 64Mi
+            limits:
+              memory: 512Mi
+      envoyService:
+        externalTrafficPolicy: Local
+  shutdown:
+    drainTimeout: 300s
+    minDrainDuration: 15s
+  telemetry:
+    # No Prometheus here, and every logged request is a write to the QLC drive.
+    accessLog:
+      disable: true
+    metrics:
+      prometheus:
+        disable: true
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/envoyproxy_v1alpha1.json
+# The external Gateway is reached only in-cluster.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: external
+spec:
+  mergeType: StrategicMerge
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyDeployment:
+        replicas: 1
+      envoyService:
+        name: external
+        type: ClusterIP
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/envoyproxy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: internal
+spec:
+  mergeType: StrategicMerge
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        name: internal

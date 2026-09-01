@@ -144,7 +144,7 @@ spec:
           - pool.clerici.tech
         parentRefs:
           - name: internal
-            namespace: kgateway
+            namespace: envoy-gateway
         rules:
           - backendRefs:
               - identifier: dashpanel

@@ -94,7 +94,7 @@ spec:
           - frigate.clerici.tech
         parentRefs:
           - name: external
-            namespace: kgateway
+            namespace: envoy-gateway
         rules:
           - backendRefs:
               - identifier: frigate
@@ -105,7 +105,7 @@ spec:
           - birdseye.clerici.tech
         parentRefs:
           - name: internal
-            namespace: kgateway
+            namespace: envoy-gateway
         rules:
           - matches:
               - path:

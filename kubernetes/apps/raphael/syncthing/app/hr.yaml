@@ -71,7 +71,7 @@ spec:
           - syncthing.raphael.clerici.tech
         parentRefs:
           - name: internal
-            namespace: kgateway
+            namespace: envoy-gateway
     persistence:
       config:
         existingClaim: syncthing

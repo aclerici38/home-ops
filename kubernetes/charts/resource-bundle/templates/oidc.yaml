@@ -1,38 +1,20 @@
 {{- if hasKey .Values "oidc" }}
 {{- $app := include "resources.app" . -}}
-{{- $o := .Values.oidc -}}
-{{- $spec := dig "spec" dict $o -}}
-{{- $port := dig "backendPort" 1411 $o -}}
-{{- /* Originate TLS to a remote pocket-id (id.clerici.tech:443). Gates a document. */ -}}
-{{- $tls := dig "backendTLS" (eq (toString $port) "443") $o -}}
+{{- $spec := dig "spec" dict .Values.oidc -}}
+{{- if include "resources.oidc.needsBackend" . }}
 ---
-apiVersion: gateway.kgateway.dev/v1alpha1
+apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: Backend
 metadata:
-  name: {{ $app }}-oauth-backend
+  name: {{ $app }}-oidc-backend
 spec:
   {{- include "resources.mergeSpec" (list (include "resources.oidc.backendSpec" .) (dig "backend" dict $spec)) | nindent 2 }}
-{{- if $tls }}
----
-apiVersion: gateway.kgateway.dev/v1alpha1
-kind: BackendConfigPolicy
-metadata:
-  name: {{ $app }}-oauth-backend
-spec:
-  {{- include "resources.mergeSpec" (list (include "resources.oidc.backendConfigSpec" .) (dig "backendConfig" dict $spec)) | nindent 2 }}
 {{- end }}
 ---
-apiVersion: gateway.kgateway.dev/v1alpha1
-kind: GatewayExtension
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
 metadata:
-  name: {{ $app }}-oauth
+  name: {{ $app }}-oidc
 spec:
-  {{- include "resources.mergeSpec" (list (include "resources.oidc.extensionSpec" .) (dig "extension" dict $spec)) | nindent 2 }}
----
-apiVersion: gateway.kgateway.dev/v1alpha1
-kind: TrafficPolicy
-metadata:
-  name: {{ $app }}-oauth
-spec:
-  {{- include "resources.mergeSpec" (list (include "resources.oidc.trafficPolicySpec" .) (dig "trafficPolicy" dict $spec)) | nindent 2 }}
+  {{- include "resources.mergeSpec" (list (include "resources.oidc.securityPolicySpec" .) (dig "securityPolicy" dict $spec)) | nindent 2 }}
 {{- end }}

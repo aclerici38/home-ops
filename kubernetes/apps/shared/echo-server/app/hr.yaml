@@ -33,6 +33,6 @@ spec:
       enabled: true
       parentRefs:
         - name: external
-          namespace: kgateway
+          namespace: envoy-gateway
       hostnames:
         - echo.${CLUSTER_NAME}.clerici.tech
