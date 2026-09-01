@@ -30,8 +30,6 @@ spec:
           timeout: 3m
           prune: true
           wait: true
-          dependsOn:
-            - name: cluster-meta
           postBuild:
             substituteFrom:
               - kind: ConfigMap

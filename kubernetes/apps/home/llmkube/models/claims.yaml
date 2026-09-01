@@ -1,0 +1,41 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.4-standalone-strict/resourceclaimtemplate-resource-v1.json
+apiVersion: resource.k8s.io/v1
+kind: ResourceClaimTemplate
+metadata:
+  name: llmkube-a770
+spec:
+  spec:
+    devices:
+      requests:
+        - name: gpu
+          exactly:
+            deviceClassName: gpu.intel.com
+            allocationMode: ExactCount
+            count: 1
+            # Pin to the discrete Arc A770 on bonds.
+            selectors:
+              - cel:
+                  expression: device.attributes["gpu.intel.com"].model == "A770"
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.4-standalone-strict/resourceclaim-resource-v1.json
+apiVersion: resource.k8s.io/v1
+# A shared claim, not a template: the embedder and reranker both want cain's
+# single iGPU, and a template mints one claim per pod, so the second would never
+# schedule. One ResourceClaim can be reserved by both.
+kind: ResourceClaim
+metadata:
+  name: llmkube-cain-igpu
+spec:
+  devices:
+    requests:
+      - name: gpu
+        exactly:
+          deviceClassName: gpu.intel.com
+          allocationMode: ExactCount
+          count: 1
+          # cain's Alder Lake iGPU reports model and family as "Unknown", so
+          # pciId is the only stable selector.
+          selectors:
+            - cel:
+                expression: device.attributes["gpu.intel.com"].pciId == "0x46a6"

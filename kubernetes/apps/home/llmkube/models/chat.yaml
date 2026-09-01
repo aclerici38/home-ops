@@ -1,0 +1,114 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.9.24/model_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: Model
+metadata:
+  name: qwen3-8b
+spec:
+  source: https://huggingface.co/bartowski/Qwen_Qwen3-8B-GGUF/resolve/main/Qwen_Qwen3-8B-Q4_K_M.gguf
+  format: gguf
+  quantization: Q4_K_M
+  hardware:
+    accelerator: intel
+    gpu:
+      enabled: true
+      vendor: intel
+      layers: -1 # -1 resolves to --n-gpu-layers 99, i.e. full offload
+      # DRA claim instead of an extended resource.
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: llmkube-a770
+  resources:
+    cpu: "2"
+    memory: 6Gi
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.9.24/inferenceservice_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: InferenceService
+metadata:
+  name: qwen3-8b
+spec:
+  modelRef: qwen3-8b
+  runtime: llamacpp
+  mode: chat
+  replicas: 1
+  # Vulkan rather than the :server-intel SYCL build: smaller image, and it is
+  # the variant with working flash-attention plus quantized KV on Arc, which
+  # is what makes the VRAM budget below fit. Swapping to
+  # server-intel-b10711@sha256:d46028d074393c12d3734269cb9be77b1d38121f1dc1f6e1d51235f7eee8b835
+  # is a one-line change if a benchmark says SYCL wins on this card.
+  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b10711@sha256:be8d64a2a05b11ddaf5799c544b0d96f8d9a09fb065e8d117cafa7f03e533896
+
+  # VRAM budget. The A770 has 15.9 GiB and is shared with frigate, jellyfin and
+  # immich-machine-learning, whose combined 7-day peak is 6.9 GiB (p95 6.6).
+  # This service is sized to sit inside the remainder with margin:
+  #   weights   Q4_K_M                        ~5.0 GiB
+  #   KV cache  16384 tok x ~76 KiB/tok q8_0  ~1.2 GiB
+  #   compute buffers / graph                 ~0.7 GiB
+  #                                           ~6.9 GiB
+  # 6.9 + 6.9 = 13.8 of 15.9, leaving ~2.1 GiB of headroom.
+  #
+  # To grow the context, the arithmetic is 76 KiB per token at q8_0 (144 KiB at
+  # f16): Qwen3-8B is 36 layers x 8 KV heads x 128 head_dim. 32768 would add
+  # another ~1.2 GiB and eat most of the remaining margin.
+  contextSize: 16384
+  # Context is divided across slots, so this is 8k each: one for HA voice, one
+  # for open-webui, so a long chat cannot block a voice command behind it.
+  parallelSlots: 2
+  flashAttention: true
+  cacheTypeK: q8_0
+  cacheTypeV: q8_0
+
+  # Required for HA's Assist API: it drives entity control through tool calls,
+  # which need the model's real chat template for both rendering and tool-call
+  # parsing.
+  jinja: true
+  # Qwen3-8B is a hybrid thinking model and emits <think> blocks by default.
+  # For a voice assistant that is latency spent on tokens nobody hears, so
+  # visible reasoning is off; the model still reasons internally.
+  reasoningBudget: 0
+
+  batchSize: 2048
+  uBatchSize: 512
+
+  resources:
+    cpu: "2"
+    memory: 6Gi
+
+  env:
+    - name: HOME
+      value: /tmp
+    - name: XDG_CACHE_HOME
+      value: /tmp/cache
+
+  extraArgs:
+    # The name clients send as "model".
+    - --alias
+    - qwen3-8b
+    - --threads
+    - "4"
+    # Cap the host-RAM prompt cache. Left at its 8192 MiB default it would
+    # dominate the pod's memory profile; 2 GiB is enough to keep HA's system
+    # prompt (the exposed-entity list) warm across turns, which is the single
+    # biggest time-to-first-token win for voice.
+    - --cache-ram
+    - "2048"
+
+  extraVolumes:
+    - name: tmp
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: tmp
+      mountPath: /tmp
+
+  podSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile: {type: RuntimeDefault}
+  securityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities: {drop: ["ALL"]}
