@@ -34,7 +34,6 @@ spec:
             env:
               HOME: /app/backend
               ENABLE_PERSISTENT_CONFIG: false # always read env vars
-              OLLAMA_BASE_URL: http://mac-mini.cottage.internal:11434
               ENABLE_WEB_SEARCH: true
               WEB_SEARCH_ENGINE: tavily
               WEB_SEARCH_RESULT_COUNT: 5
