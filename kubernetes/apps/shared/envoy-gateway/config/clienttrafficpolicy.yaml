@@ -19,8 +19,6 @@ spec:
         - ${CLUSTER_POD_CIDR}
   http2:
     onInvalidMessage: TerminateStream
-  # Envoy Gateway adds the matching UDP ServicePort itself.
-  http3: {}
   # Collabora carries the WOPI source as an encoded path segment, so %2F has to
   # survive to the backend. Removing either of these breaks the editor.
   path:
