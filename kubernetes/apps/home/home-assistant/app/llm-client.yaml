@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/pocket-id-operator/0.14.2/pocketidoidcclient_v1alpha1.json
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: home-assistant-llm
+spec:
+  name: Home Assistant (LLM)
+  clientID: home-assistant-llm
+  accessTokenDurationMinutes: 525600
+  apiAccess:
+    - apiRef:
+        name: llm
+        namespace: llmkube
+      clientPermissions:
+        - inference:local

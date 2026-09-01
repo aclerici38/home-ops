@@ -1,0 +1,70 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/securitypolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: llm
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: llm
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: rerank
+  jwt:
+    providers:
+      - name: pocket-id
+        issuer: https://id.clerici.tech
+        # Only tokens minted for this API are accepted, so the grant in
+        # PocketIDAPI/apiAccess is what actually gates access.
+        audiences:
+          - https://llm.clerici.tech
+        remoteJWKS:
+          uri: http://id.clerici.tech/.well-known/jwks.json
+          backendRefs:
+            - group: gateway.envoyproxy.io
+              kind: Backend
+              name: pocket-id
+        claimToHeaders:
+          - claim: sub
+            header: x-llm-client
+  authorization:
+    defaultAction: Deny
+    rules:
+      - name: local-models
+        action: Allow
+        principal:
+          jwt:
+            provider: pocket-id
+            scopes:
+              - inference:local
+          headers:
+            - name: x-ai-eg-model
+              values:
+                - qwen3-8b
+                - qwen3-embedding-0.6b
+      - name: cloud-models
+        action: Allow
+        principal:
+          jwt:
+            provider: pocket-id
+            scopes:
+              - inference:cloud
+          headers:
+            - name: x-ai-eg-model
+              values:
+                - gpt-5.2
+      # Rerank is a plain HTTPRoute, so no ext_proc runs and there is no
+      # x-ai-eg-model header to match. Scoped by path instead.
+      - name: rerank
+        action: Allow
+        principal:
+          jwt:
+            provider: pocket-id
+            scopes:
+              - inference:local
+        operation:
+          path:
+            type: Exact
+            value: /v1/rerank
