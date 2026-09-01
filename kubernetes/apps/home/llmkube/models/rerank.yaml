@@ -1,0 +1,78 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.9.24/model_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: Model
+metadata:
+  name: bge-reranker-v2-m3
+spec:
+  source: https://huggingface.co/gpustack/bge-reranker-v2-m3-GGUF/resolve/main/bge-reranker-v2-m3-Q8_0.gguf
+  format: gguf
+  quantization: Q8_0
+  hardware:
+    # cain's iGPU, shared with the embedder — see claims.yaml.
+    accelerator: intel
+    gpu:
+      enabled: true
+      vendor: intel
+      layers: -1
+      resourceClaims:
+        - name: gpu
+          resourceClaimName: llmkube-cain-igpu
+  resources:
+    cpu: "1"
+    memory: 4Gi
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.9.24/inferenceservice_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: InferenceService
+metadata:
+  name: bge-reranker-v2-m3
+spec:
+  modelRef: bge-reranker-v2-m3
+  runtime: llamacpp
+  mode: rerank
+  replicas: 1
+  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b10711@sha256:be8d64a2a05b11ddaf5799c544b0d96f8d9a09fb065e8d117cafa7f03e533896
+
+  # This one is a BERT-style encoder with non-causal attention, so the whole
+  # sequence has to fit in a single micro-batch — uBatchSize is a hard ceiling
+  # on document length, not a throughput knob. Equal to contextSize for that
+  # reason.
+  contextSize: 4096
+  batchSize: 4096
+  uBatchSize: 4096
+
+  resources:
+    cpu: "1"
+    memory: 4Gi
+
+  env:
+    - name: HOME
+      value: /tmp
+    - name: XDG_CACHE_HOME
+      value: /tmp/cache
+
+  extraArgs:
+    - --alias
+    - bge-reranker-v2-m3
+    - --threads
+    - "2"
+
+  extraVolumes:
+    - name: tmp
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: tmp
+      mountPath: /tmp
+
+  podSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile: {type: RuntimeDefault}
+  securityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities: {drop: ["ALL"]}

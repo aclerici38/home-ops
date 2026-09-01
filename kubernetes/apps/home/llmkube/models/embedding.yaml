@@ -1,0 +1,78 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.9.24/model_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: Model
+metadata:
+  name: qwen3-embedding-0-6b
+spec:
+  source: https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF/resolve/main/Qwen3-Embedding-0.6B-Q8_0.gguf
+  format: gguf
+  quantization: Q8_0
+  hardware:
+    # cain's iGPU, not the A770: keeps the chat model's VRAM budget intact.
+    accelerator: intel
+    gpu:
+      enabled: true
+      vendor: intel
+      layers: -1
+      resourceClaims:
+        - name: gpu
+          resourceClaimName: llmkube-cain-igpu
+  resources:
+    cpu: "1"
+    memory: 4Gi
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.9.24/inferenceservice_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: InferenceService
+metadata:
+  name: qwen3-embedding-0-6b
+spec:
+  modelRef: qwen3-embedding-0-6b
+  runtime: llamacpp
+  mode: embedding
+  replicas: 1
+  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b10711@sha256:be8d64a2a05b11ddaf5799c544b0d96f8d9a09fb065e8d117cafa7f03e533896
+
+  # batch and ubatch are held equal to contextSize: llama.cpp will not split a
+  # sequence across micro-batches when embedding, so a chunk longer than
+  # uBatchSize fails the request rather than degrading.
+  contextSize: 4096
+  batchSize: 4096
+  uBatchSize: 4096
+
+  resources:
+    cpu: "1"
+    memory: 4Gi
+
+  env:
+    - name: HOME
+      value: /tmp
+    - name: XDG_CACHE_HOME
+      value: /tmp/cache
+
+  extraArgs:
+    - --alias
+    - qwen3-embedding-0.6b
+    # llama.cpp sizes its pool from hardware_concurrency, not the cgroup quota.
+    - --threads
+    - "2"
+
+  extraVolumes:
+    - name: tmp
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: tmp
+      mountPath: /tmp
+
+  podSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile: {type: RuntimeDefault}
+  securityContext:
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities: {drop: ["ALL"]}

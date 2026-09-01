@@ -3,14 +3,16 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: openebs
+  name: llmkube-models
   namespace: flux-system
 spec:
-  targetNamespace: openebs-system
+  targetNamespace: llmkube
+  dependsOn:
+    - name: llmkube
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/openebs-system/app
+  path: ./kubernetes/apps/home/llmkube/models
   commonMetadata:
     labels:
-      app.kubernetes.io/name: openebs
+      app.kubernetes.io/name: llmkube

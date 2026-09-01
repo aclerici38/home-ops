@@ -39,9 +39,11 @@ spec:
               WEB_SEARCH_ENGINE: tavily
               WEB_SEARCH_RESULT_COUNT: 5
               WEB_SEARCH_CONCURRENT_REQUESTS: 3
-              BYPASS_EMBEDDING_AND_RETRIEVAL: true
+              BYPASS_EMBEDDING_AND_RETRIEVAL: false
               RAG_FULL_CONTEXT: false
               TASK_MODEL: llama3.2:3b
+              # Title/tag/query generation for OpenAI-type connections.
+              TASK_MODEL_EXTERNAL: qwen3-8b
               ENABLE_RAG_WEB_SEARCH: true
               ENABLE_SEARCH_QUERY: true
               RAG_WEB_SEARCH_ENGINE: tavily
@@ -78,8 +80,21 @@ spec:
               DATABASE_ENABLE_SESSION_SHARING: true
               CONTENT_EXTRACTION_ENGINE: tika
               TIKA_SERVER_URL: http://tika.tika:9998
-              RAG_EMBEDDING_ENGINE: ollama
-              RAG_EMBEDDING_MODEL: "mxbai-embed-large"
+              RAG_EMBEDDING_ENGINE: openai
+              RAG_EMBEDDING_MODEL: qwen3-embedding-0.6b
+              RAG_OPENAI_API_BASE_URL: http://qwen3-embedding-0-6b.llmkube.svc.cluster.local:8080/v1
+              # RAG_OPENAI_API_KEY defaults to OPENAI_API_KEY
+              RAG_OPENAI_API_KEY: sk-no-key-required
+              # Qwen3-Embedding is asymmetric and was trained with an
+              # instruction prefix on the query side only, so documents get
+              # none. With RAG_EMBEDDING_PREFIX_FIELD_NAME unset this is a
+              # plain string prepend, which is exactly the documented format.
+              RAG_EMBEDDING_QUERY_PREFIX: "Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery: "
+              # Reranking needs hybrid search: the reranker only ever sees the candidates BM25 + vector search hand it.
+              ENABLE_RAG_HYBRID_SEARCH: true
+              RAG_RERANKING_ENGINE: external
+              RAG_RERANKING_MODEL: bge-reranker-v2-m3
+              RAG_EXTERNAL_RERANKER_URL: http://bge-reranker-v2-m3.llmkube.svc.cluster.local:8080/v1/rerank
               ENABLE_OAUTH_SIGNUP: true
               OAUTH_MERGE_ACCOUNTS_BY_EMAIL: true
               OAUTH_PROVIDER_NAME: Pocket ID
@@ -91,6 +106,8 @@ spec:
               WEBUI_SESSION_COOKIE_SAME_SITE: lax
               WEBUI_SESSION_COOKIE_SECURE: true
               ENABLE_OPENAI_API: true
+              # First one uses the api key
+              OPENAI_API_BASE_URLS: https://api.openai.com/v1;http://qwen3-8b.llmkube.svc.cluster.local:8080/v1
               USER_PERMISSIONS_FEATURES_DIRECT_TOOL_SERVERS: true
               ENABLE_FORWARD_USER_INFO_HEADERS: true
               TOOL_SERVER_CONNECTIONS: |
