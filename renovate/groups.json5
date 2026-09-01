@@ -69,6 +69,16 @@
       },
     },
     {
+      description: "Envoy AI Gateway Group",
+      groupName: "Envoy AI Gateway",
+      matchPackageNames: ["/ai-gateway-helm/", "/ai-gateway-crds-helm/"],
+      matchDatasources: ["docker"],
+      minimumGroupSize: 2,
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "Kgateway Group",
       groupName: "kgateway",
       matchPackageNames: ["/kgateway-dev/", "/^kgateway$/"],
