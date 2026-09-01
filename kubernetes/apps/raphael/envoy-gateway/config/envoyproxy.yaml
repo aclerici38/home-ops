@@ -11,6 +11,7 @@ spec:
       envoyDeployment:
         replicas: 2
         container:
+          imageRepository: mirror.gcr.io/envoyproxy/envoy
           resources:
             requests:
               memory: 64Mi

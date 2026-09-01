@@ -21,6 +21,8 @@ spec:
   values:
     crds:
       enabled: true
+    global:
+      imageRegistry: mirror.gcr.io
     deployment:
       replicas: 1
       envoyGateway:
