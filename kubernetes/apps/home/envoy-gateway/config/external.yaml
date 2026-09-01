@@ -8,9 +8,6 @@ metadata:
     external-dns.kubernetes.io/target: vps.clerici.tech
 spec:
   gatewayClassName: envoy-gateway
-  addresses:
-    - type: IPAddress
-      value: ${ENVOY_EXTERNAL_LB_IP}
   infrastructure:
     annotations:
       lbipam.cilium.io/ips: ${ENVOY_EXTERNAL_LB_IP}

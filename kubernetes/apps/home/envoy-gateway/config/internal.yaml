@@ -6,9 +6,6 @@ metadata:
   name: internal
 spec:
   gatewayClassName: envoy-gateway
-  addresses:
-    - type: IPAddress
-      value: ${ENVOY_INTERNAL_LB_IP}
   infrastructure:
     annotations:
       lbipam.cilium.io/ips: ${ENVOY_INTERNAL_LB_IP}
