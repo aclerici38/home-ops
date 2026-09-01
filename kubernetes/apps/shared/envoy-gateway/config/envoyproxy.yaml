@@ -49,7 +49,7 @@ spec:
           type: Zstd
     accessLog:
       settings:
-        - type: Listener
+        - type: Route
           # Drop kubelet probe noise.
           matches:
             - "!(request.useragent.startsWith('kube-probe/'))"
@@ -78,6 +78,13 @@ spec:
               upstream_host: "%UPSTREAM_HOST%"
               requested_server_name: "%REQUESTED_SERVER_NAME%"
               tls_version: "%DOWNSTREAM_TLS_VERSION%"
+              # Set by the AI Gateway ext_proc and the route's llmRequestCosts.
+              model: "%REQ(X-AI-EG-MODEL)%"
+              response_model: "%DYNAMIC_METADATA(io.envoy.ai_gateway:response_model)%"
+              backend: "%DYNAMIC_METADATA(io.envoy.ai_gateway:backend_name)%"
+              llm_input_tokens: "%DYNAMIC_METADATA(io.envoy.ai_gateway:llm_input_token)%"
+              llm_output_tokens: "%DYNAMIC_METADATA(io.envoy.ai_gateway:llm_output_token)%"
+              llm_total_tokens: "%DYNAMIC_METADATA(io.envoy.ai_gateway:llm_total_token)%"
           sinks:
             - type: File
               file:
