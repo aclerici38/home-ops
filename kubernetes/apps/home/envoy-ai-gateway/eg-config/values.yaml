@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.4-standalone-strict/configmap-v1.json
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: envoy-gateway-ai-values
+data:
+  values.yaml: |-
+    config:
+      envoyGateway:
+        # AI Gateway fine-tunes the xDS Envoy Gateway generates; without these
+        # hooks its AIGatewayRoutes program nothing. enableEnvoyPatchPolicy is
+        # upstream-recommended alongside this and deliberately still off.
+        extensionManager:
+          hooks:
+            xdsTranslator:
+              translation:
+                listener: {includeAll: true}
+                route: {includeAll: true}
+                cluster: {includeAll: true}
+                secret: {includeAll: true}
+              post: [Translation, Cluster, Route]
+          service:
+            fqdn:
+              hostname: ai-gateway-controller.envoy-ai-gateway.svc.cluster.local
+              port: 1063

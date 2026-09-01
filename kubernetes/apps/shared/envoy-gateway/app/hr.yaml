@@ -18,6 +18,11 @@ spec:
     timeout: 3m
     remediation:
       retries: 1
+  valuesFrom:
+    - kind: ConfigMap
+      name: envoy-gateway-ai-values
+      valuesKey: values.yaml
+      optional: true
   values:
     crds:
       enabled: true
