@@ -19,6 +19,16 @@ spec:
               memory: 64Mi
             limits:
               memory: 512Mi
+        pod:
+          # k8tz injects an init container that sets every restricted control
+          # except runAsNonRoot, which it expects from the pod. Envoy Gateway
+          # leaves the pod securityContext empty, so PodSecurity rejects it.
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+            runAsGroup: 65532
+            fsGroup: 65532
+            seccompProfile: {type: RuntimeDefault}
       envoyService:
         externalTrafficPolicy: Local
   shutdown:
