@@ -27,6 +27,13 @@ spec:
               value: qwen3-embedding-0.6b
       backendRefs:
         - name: qwen3-embedding-0-6b
+    - name: openai
+      matches:
+        - headers:
+            - name: x-ai-eg-model
+              value: gpt-5.2
+      backendRefs:
+        - name: openai
 
   # Charged at response completion, into the metadata keys the llmkube chart's
   # gateway audit EnvoyProxy already reads.

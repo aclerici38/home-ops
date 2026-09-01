@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/pocket-id-operator/0.14.2/pocketidoidcclient_v1alpha1.json
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: open-webui-llm
+spec:
+  name: open-webui (LLM)
+  clientID: open-webui-llm
+  # A year, the pocket-id maximum.
+  accessTokenDurationMinutes: 525600
+  secret:
+    additionalLabels:
+      # ESO refuses to read a Secret for a Webhook generator without it.
+      external-secrets.io/type: webhook
+  apiAccess:
+    - apiRef:
+        name: llm
+        namespace: llmkube
+      clientPermissions:
+        - inference:local
+        - inference:cloud

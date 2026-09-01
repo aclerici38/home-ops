@@ -1,0 +1,59 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.10.0/externalsecret_v1.json
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: openai
+spec:
+  refreshInterval: "1m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  data:
+    # BackendSecurityPolicy reads the fixed key "apiKey".
+    - secretKey: apiKey
+      remoteRef:
+        key: openai
+        property: OPENAI_API_KEY
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/backend_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
+metadata:
+  name: openai
+spec:
+  endpoints:
+    - fqdn:
+        hostname: api.openai.com
+        port: 443
+  tls:
+    sni: api.openai.com
+    wellKnownCACertificates: System
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-ai-gateway/1.1.0/aiservicebackend_v1beta1.json
+apiVersion: aigateway.envoyproxy.io/v1beta1
+kind: AIServiceBackend
+metadata:
+  name: openai
+spec:
+  schema:
+    name: OpenAI
+  backendRef:
+    group: gateway.envoyproxy.io
+    kind: Backend
+    name: openai
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-ai-gateway/1.1.0/backendsecuritypolicy_v1beta1.json
+apiVersion: aigateway.envoyproxy.io/v1beta1
+kind: BackendSecurityPolicy
+metadata:
+  name: openai
+spec:
+  type: APIKey
+  apiKey:
+    secretRef:
+      name: openai
+  targetRefs:
+    - group: aigateway.envoyproxy.io
+      kind: AIServiceBackend
+      name: openai
