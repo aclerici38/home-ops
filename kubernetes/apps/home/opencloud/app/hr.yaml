@@ -107,6 +107,8 @@ spec:
                   key: DECOMPOSEDS3_SECRET_KEY
               STORAGE_USERS_ID_CACHE_STORE: nats-js-kv
               STORAGE_USERS_FILEMETADATA_CACHE_STORE: nats-js-kv
+              STORAGE_USERS_HTTP_ADDR: 0.0.0.0:9158
+              STORAGE_USERS_DATA_SERVER_URL: http://opencloud.opencloud.svc.cluster.local:9158/data
               SEARCH_EXTRACTOR_TYPE: tika
               SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://tika.tika:9998
               FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
@@ -275,6 +277,8 @@ spec:
             port: *port
           grpc:
             port: 9142
+          data:
+            port: 9158
           debug:
             port: 9205
       idm:
