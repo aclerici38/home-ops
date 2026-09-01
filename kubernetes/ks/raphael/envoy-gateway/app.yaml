@@ -7,8 +7,6 @@ metadata:
   namespace: flux-system
 spec:
   targetNamespace: envoy-gateway
-  dependsOn:
-    - name: envoy-gateway-crds
   sourceRef:
     kind: GitRepository
     name: flux-system
