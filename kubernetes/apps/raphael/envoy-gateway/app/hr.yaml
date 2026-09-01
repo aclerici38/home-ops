@@ -19,10 +19,6 @@ spec:
     remediation:
       retries: 1
   values:
-    # CRDs live in the chart's crds/ directory, so Helm installs them without
-    # writing 3.7MB of CustomResourceDefinition into the release Secret -- which
-    # is what the separate gateway-crds-helm chart does, and it exceeds the 1MiB
-    # Secret limit. Bundle is the Gateway API experimental channel.
     crds:
       enabled: true
     deployment:

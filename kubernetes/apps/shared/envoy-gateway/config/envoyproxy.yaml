@@ -11,8 +11,6 @@ spec:
       envoyDeployment:
         replicas: 2
         container:
-          # Repository, not image: keeps the tag the control plane pins.
-          imageRepository: mirror.gcr.io/envoyproxy/envoy
           resources:
             requests:
               memory: 64Mi

@@ -11,9 +11,6 @@ spec:
       envoyDeployment:
         replicas: 2
         container:
-          # Default tag, so the Envoy version stays the one this control plane
-          # was released against; only the registry changes.
-          imageRepository: mirror.gcr.io/envoyproxy/envoy
           resources:
             requests:
               memory: 64Mi
