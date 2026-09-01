@@ -44,6 +44,24 @@ spec:
   scratchVolume:
     medium: Memory
     sizeLimit: 4Gi
+  extraVolumes:
+    - name: containerbase-tools
+      emptyDir: {medium: Memory, sizeLimit: 1Gi}
+    - name: home-bin
+      emptyDir: {medium: Memory, sizeLimit: 16Mi}
+    - name: home-envd
+      emptyDir: {medium: Memory, sizeLimit: 16Mi}
+    - name: var-tmp
+      emptyDir: {medium: Memory, sizeLimit: 256Mi}
+  extraVolumeMounts:
+    - name: containerbase-tools
+      mountPath: /opt/containerbase/tools
+    - name: home-bin
+      mountPath: /home/ubuntu/bin
+    - name: home-envd
+      mountPath: /home/ubuntu/env.d
+    - name: var-tmp
+      mountPath: /var/tmp
   resources:
     requests:
       memory: 2Gi
