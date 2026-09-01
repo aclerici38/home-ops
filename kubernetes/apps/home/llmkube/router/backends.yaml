@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/backend_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
+metadata:
+  name: qwen3-8b
+spec:
+  endpoints:
+    - fqdn:
+        hostname: qwen3-8b.llmkube.svc.cluster.local
+        port: 8080
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/backend_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
+metadata:
+  name: qwen3-embedding-0-6b
+spec:
+  endpoints:
+    - fqdn:
+        hostname: qwen3-embedding-0-6b.llmkube.svc.cluster.local
+        port: 8080
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-ai-gateway/1.1.0/aiservicebackend_v1beta1.json
+apiVersion: aigateway.envoyproxy.io/v1beta1
+kind: AIServiceBackend
+metadata:
+  name: qwen3-8b
+spec:
+  # llama.cpp
+  schema:
+    name: OpenAI
+  backendRef:
+    group: gateway.envoyproxy.io
+    kind: Backend
+    name: qwen3-8b
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-ai-gateway/1.1.0/aiservicebackend_v1beta1.json
+apiVersion: aigateway.envoyproxy.io/v1beta1
+kind: AIServiceBackend
+metadata:
+  name: qwen3-embedding-0-6b
+spec:
+  schema:
+    name: OpenAI
+  backendRef:
+    group: gateway.envoyproxy.io
+    kind: Backend
+    name: qwen3-embedding-0-6b

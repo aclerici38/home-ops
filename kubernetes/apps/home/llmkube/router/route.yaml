@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-ai-gateway/1.1.0/aigatewayroute_v1beta1.json
+apiVersion: aigateway.envoyproxy.io/v1beta1
+kind: AIGatewayRoute
+metadata:
+  name: llm
+spec:
+  parentRefs:
+    - name: internal
+      namespace: envoy-gateway
+  hostnames:
+    - llm.clerici.tech
+
+  rules:
+    - name: chat
+      matches:
+        - headers:
+            - name: x-ai-eg-model
+              value: qwen3-8b
+      backendRefs:
+        - name: qwen3-8b
+    - name: embeddings
+      matches:
+        - headers:
+            - name: x-ai-eg-model
+              # The --alias llama.cpp serves under, so no modelNameOverride.
+              value: qwen3-embedding-0.6b
+      backendRefs:
+        - name: qwen3-embedding-0-6b
+
+  # Charged at response completion, into the metadata keys the llmkube chart's
+  # gateway audit EnvoyProxy already reads.
+  llmRequestCosts:
+    - metadataKey: llm_input_token
+      type: InputToken
+    - metadataKey: llm_output_token
+      type: OutputToken
+    - metadataKey: llm_total_token
+      type: TotalToken
