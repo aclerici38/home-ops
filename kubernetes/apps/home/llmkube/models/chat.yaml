@@ -32,32 +32,28 @@ spec:
   runtime: llamacpp
   mode: chat
   replicas: 1
-  # Vulkan rather than the :server-intel SYCL build: smaller image, and it is
-  # the variant with working flash-attention plus quantized KV on Arc, which
-  # is what makes the VRAM budget below fit. Swapping to
-  # server-intel-b10711@sha256:d46028d074393c12d3734269cb9be77b1d38121f1dc1f6e1d51235f7eee8b835
-  # is a one-line change if a benchmark says SYCL wins on this card.
+  # Benchmarked against :server-intel (SYCL) on this A770, identical flags.
+  # SYCL wins prompt processing 1458 vs 663 tok/s, but loses generation 26.0 vs
+  # 38.5. Prompts cache across turns here (HA reuses one entity-list system
+  # prompt), so generation dominates and Vulkan wins the real workload.
+  # SYCL only pays off above ~15 prompt tokens per generated token on a cache
+  # miss — bulk document summarisation, not chat or voice.
+  # SYCL image: server-intel-b10711@sha256:d46028d074393c12d3734269cb9be77b1d38121f1dc1f6e1d51235f7eee8b835
   image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b10711@sha256:be8d64a2a05b11ddaf5799c544b0d96f8d9a09fb065e8d117cafa7f03e533896
 
-  # VRAM budget. The A770 has 15.9 GiB and is shared with frigate, jellyfin and
-  # immich-machine-learning, whose combined 7-day peak is 6.9 GiB (p95 6.6).
-  # This service is sized to sit inside the remainder with margin:
-  #   weights   Q4_K_M                        ~5.0 GiB
-  #   KV cache  16384 tok x ~76 KiB/tok q8_0  ~1.2 GiB
-  #   compute buffers / graph                 ~0.7 GiB
-  #                                           ~6.9 GiB
-  # 6.9 + 6.9 = 13.8 of 15.9, leaving ~2.1 GiB of headroom.
-  #
-  # To grow the context, the arithmetic is 76 KiB per token at q8_0 (144 KiB at
-  # f16): Qwen3-8B is 36 layers x 8 KV heads x 128 head_dim. 32768 would add
-  # another ~1.2 GiB and eat most of the remaining margin.
+  # Measured VRAM: this service holds ~7.15 GiB, device total sits at 12.84 of
+  # 15.9 with the media stack idle and ~14.0 at its 7-day peak. KV is 144 KiB
+  # per token at f16 (36 layers x 8 KV heads x 128 head_dim), so 32768 context
+  # would add 2.25 GiB and overrun that margin.
   contextSize: 16384
   # Context is divided across slots, so this is 8k each: one for HA voice, one
   # for open-webui, so a long chat cannot block a voice command behind it.
   parallelSlots: 2
   flashAttention: true
-  cacheTypeK: q8_0
-  cacheTypeV: q8_0
+  # f16, not q8_0. Quantised KV dequantises in the attention inner loop every
+  # token: measured 33.0 tok/s at q8_0 vs 38.8 at f16, for 1.1 GiB of VRAM.
+  cacheTypeK: f16
+  cacheTypeV: f16
 
   # Required for HA's Assist API: it drives entity control through tool calls,
   # which need the model's real chat template for both rendering and tool-call
@@ -69,7 +65,9 @@ spec:
   reasoningBudget: 0
 
   batchSize: 2048
-  uBatchSize: 512
+  # 2048 over the 512 default: +8% prompt processing (663 vs 612 tok/s) for
+  # ~0.3 GiB. Matters on RAG requests, where retrieved chunks miss the cache.
+  uBatchSize: 2048
 
   resources:
     cpu: "2"
