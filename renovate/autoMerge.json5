@@ -55,7 +55,7 @@
       description: ["Auto-merge specific apps' major versions"],
       automerge: true,
       matchDatasources: ["docker", "helm"],
-      matchPackageNames: ["**/firefox"],
+      matchPackageNames: ["**/llama.cpp", "**/firefox"],
       matchUpdateTypes: ["major", "minor", "patch", "digest"],
       schedule: ["* 2-6 * * *"],
     },
