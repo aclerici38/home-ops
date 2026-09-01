@@ -65,7 +65,7 @@ spec:
           - zfdash.clerici.tech
         parentRefs:
           - name: internal
-            namespace: kgateway
+            namespace: envoy-gateway
     persistence:
       config:
         existingClaim: zfdash

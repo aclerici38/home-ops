@@ -109,7 +109,7 @@ spec:
           - matter.clerici.tech
         parentRefs:
           - name: internal
-            namespace: kgateway
+            namespace: envoy-gateway
     persistence:
       data:
         existingClaim: matter-server

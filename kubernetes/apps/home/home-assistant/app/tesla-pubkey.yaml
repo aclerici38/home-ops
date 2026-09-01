@@ -1,18 +1,22 @@
 ---
 # Expose Tesla Fleet API public key for oauth
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/kgateway/2.4.4/directresponse_v1alpha1.json
-apiVersion: gateway.kgateway.dev/v1alpha1
-kind: DirectResponse
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/httproutefilter_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: HTTPRouteFilter
 metadata:
   name: tesla-pubkey
 spec:
-  status: 200
-  body: |
-    -----BEGIN PUBLIC KEY-----
-    MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEffMfD1y6NlM81/x2I544iMsSavTO
-    vJhjUoPOK+Kxnwa/BQAcZIZnm2q1t3WP2e30c4R2jNuOqvglRci5D68o3A==
-    -----END PUBLIC KEY-----
+  directResponse:
+    statusCode: 200
+    body:
+      # Defaulted, but the schema marks it required.
+      type: Inline
+      inline: |
+        -----BEGIN PUBLIC KEY-----
+        MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEffMfD1y6NlM81/x2I544iMsSavTO
+        vJhjUoPOK+Kxnwa/BQAcZIZnm2q1t3WP2e30c4R2jNuOqvglRci5D68o3A==
+        -----END PUBLIC KEY-----
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.6.1/httproute_v1.json
 apiVersion: gateway.networking.k8s.io/v1
@@ -24,7 +28,7 @@ spec:
     - tesla.clerici.tech
   parentRefs:
     - name: external
-      namespace: kgateway
+      namespace: envoy-gateway
       sectionName: https
   rules:
     - matches:
@@ -34,6 +38,6 @@ spec:
       filters:
         - type: ExtensionRef
           extensionRef:
-            group: gateway.kgateway.dev
-            kind: DirectResponse
+            group: gateway.envoyproxy.io
+            kind: HTTPRouteFilter
             name: tesla-pubkey

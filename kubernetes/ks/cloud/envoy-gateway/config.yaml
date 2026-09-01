@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.5/kustomization_v1.json
+# cloud-only config; GatewayClass, EnvoyProxy and policies come from ks/shared.
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: envoy-gateway-config-cluster
+  namespace: flux-system
+spec:
+  targetNamespace: envoy-gateway
+  dependsOn:
+    - name: envoy-gateway-config
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/cloud/envoy-gateway/config
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: envoy-gateway

@@ -1,0 +1,76 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/envoyproxy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: envoy-proxy-params
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyDeployment:
+        replicas: 2
+        container:
+          # Repository, not image: keeps the tag the control plane pins.
+          imageRepository: mirror.gcr.io/envoyproxy/envoy
+          resources:
+            requests:
+              memory: 64Mi
+            limits:
+              memory: 1Gi
+        pod:
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: ScheduleAnyway
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: envoy
+                  app.kubernetes.io/component: proxy
+      envoyService:
+        externalTrafficPolicy: Local
+  shutdown:
+    # Long enough for Jellyfin streams and websockets to finish on a rollout.
+    drainTimeout: 300s
+    minDrainDuration: 15s
+  telemetry:
+    metrics:
+      enableVirtualHostStats: true
+      prometheus:
+        compression:
+          type: Zstd
+    accessLog:
+      settings:
+        - type: Listener
+          # Drop kubelet probe noise.
+          matches:
+            - "!(request.useragent.startsWith('kube-probe/'))"
+          format:
+            type: JSON
+            json:
+              start_time: "%START_TIME%"
+              authority: "%REQ(:AUTHORITY)%"
+              method: "%REQ(:METHOD)%"
+              path: "%REQ(X-ENVOY-ORIGINAL-PATH?:PATH)%"
+              protocol: "%PROTOCOL%"
+              response_code: "%RESPONSE_CODE%"
+              response_code_details: "%RESPONSE_CODE_DETAILS%"
+              response_flags: "%RESPONSE_FLAGS%"
+              duration_ms: "%DURATION%"
+              upstream_service_time_ms: "%RESP(X-ENVOY-UPSTREAM-SERVICE-TIME)%"
+              bytes_received: "%BYTES_RECEIVED%"
+              bytes_sent: "%BYTES_SENT%"
+              x_forwarded_for: "%REQ(X-FORWARDED-FOR)%"
+              downstream_remote_address: "%DOWNSTREAM_REMOTE_ADDRESS%"
+              downstream_local_address: "%DOWNSTREAM_LOCAL_ADDRESS%"
+              user_agent: "%REQ(USER-AGENT)%"
+              request_id: "%REQ(X-REQUEST-ID)%"
+              route_name: "%ROUTE_NAME%"
+              upstream_cluster: "%UPSTREAM_CLUSTER%"
+              upstream_host: "%UPSTREAM_HOST%"
+              requested_server_name: "%REQUESTED_SERVER_NAME%"
+              tls_version: "%DOWNSTREAM_TLS_VERSION%"
+          sinks:
+            - type: File
+              file:
+                path: /dev/stdout

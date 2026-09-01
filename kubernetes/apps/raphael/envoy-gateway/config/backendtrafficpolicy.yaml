@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/backendtrafficpolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: backend-traffic-policy
+spec:
+  targetSelectors:
+    - kind: Gateway
+  timeout:
+    http:
+      requestTimeout: 0s
+  compressor:
+    - type: Zstd
+      minContentLength: 1Ki
+    - type: Brotli
+      minContentLength: 1Ki
+    - type: Gzip
+      minContentLength: 1Ki
+  retry:
+    numRetries: 2
+    retryOn:
+      # Connection-level only: these fire before the request reaches the
+      # backend, so a retry cannot double-apply a non-idempotent write.
+      triggers:
+        - connect-failure
+        - refused-stream
+    perRetry:
+      backOff:
+        baseInterval: 100ms
+        maxInterval: 1s
+  healthCheck:
+    passive:
+      consecutive5XxErrors: 5
+      consecutiveGatewayErrors: 3
+      interval: 10s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50

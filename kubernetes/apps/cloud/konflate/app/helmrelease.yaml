@@ -52,7 +52,7 @@ spec:
       parentRefs:
         - name: external
           kind: Gateway
-          namespace: kgateway
+          namespace: envoy-gateway
           sectionName: https
       hostnames:
         - konflate-${KONFLATE_CLUSTER}.${CLUSTER_NAME}.clerici.tech

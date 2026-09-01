@@ -86,7 +86,7 @@ spec:
           - syncthing.clerici.tech
         parentRefs:
           - name: internal
-            namespace: kgateway
+            namespace: envoy-gateway
         rules:
           - backendRefs:
               - identifier: syncthing

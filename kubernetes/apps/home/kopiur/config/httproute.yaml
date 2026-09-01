@@ -8,7 +8,7 @@ spec:
   parentRefs:
     - name: internal
       kind: Gateway
-      namespace: kgateway
+      namespace: envoy-gateway
       sectionName: https
   hostnames:
     - kopia-versity.clerici.tech
@@ -30,7 +30,7 @@ spec:
   parentRefs:
     - name: internal
       kind: Gateway
-      namespace: kgateway
+      namespace: envoy-gateway
       sectionName: https
   hostnames:
     - kopia-backblaze.clerici.tech

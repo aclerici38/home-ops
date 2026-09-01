@@ -1,78 +1,69 @@
-{{- define "resources.oidc.backendSpec" -}}
-{{- $o := .Values.oidc -}}
-type: Static
-static:
-  hosts:
-    - host: {{ dig "backendHost" "pocket-id.pocket-id-operator.svc.cluster.local" $o }}
-      port: {{ dig "backendPort" 1411 $o }}
-{{- end -}}
+{{/* Endpoints are explicit so discovery never runs: it would resolve the issuer
+     back through the very Gateway this policy guards, and a cold start would
+     leave the policy unprogrammed.
 
-{{- define "resources.oidc.backendConfigSpec" -}}
-targetRefs:
-  - group: gateway.kgateway.dev
-    kind: Backend
-    name: {{ include "resources.app" . }}-oauth-backend
-tls:
-  sni: {{ dig "backendHost" "pocket-id.pocket-id-operator.svc.cluster.local" .Values.oidc | quote }}
-  wellKnownCACertificates: System
-{{- end -}}
-
-{{/* Endpoints are set explicitly and issuerURI deliberately is NOT, so the control
-     plane never runs OIDC discovery. Discovery resolves the issuer back through the
-     very Gateway kgateway is configuring: start before pocket-id is serving and it
-     caches the 503 indefinitely, replacing every route on this policy with a 500
-     until the GatewayExtension spec changes. jwksURI is required once discovery is
-     off and a token is parsed. */}}
-{{- define "resources.oidc.extensionSpec" -}}
+     An HTTPRoute accepts only one SecurityPolicy, so csrf lives here too. */}}
+{{- define "resources.oidc.securityPolicySpec" -}}
 {{- $app := include "resources.app" . -}}
 {{- $o := .Values.oidc -}}
-{{- $issuer := "https://id.clerici.tech" -}}
+{{- $issuerHost := "id.clerici.tech" -}}
+{{- $issuer := printf "https://%s" $issuerHost -}}
 {{- /* oidc.clientID > pocketId.clientID > app name. */ -}}
 {{- $clientID := dig "clientID" (dig "clientID" $app (.Values.pocketId | default dict)) $o -}}
-oauth2:
-  backendRef:
-    group: gateway.kgateway.dev
-    kind: Backend
-    name: {{ $app }}-oauth-backend
-  authorizationEndpoint: {{ printf "%s/authorize" $issuer | quote }}
-  tokenEndpoint: {{ printf "%s/api/oidc/token" $issuer | quote }}
-  endSessionEndpoint: {{ printf "%s/api/oidc/end-session" $issuer | quote }}
-  scopes:
-    - openid
-    - profile
-    - email
-    - groups
-  credentials:
-    clientID: {{ $clientID | quote }}
-    clientSecretRef:
-      name: {{ $app }}-oidc-credentials
-  cookies:
-    domain: "clerici.tech"
-{{/* cookies.domain is the parent domain, so every app's session cookie is sent
-     to every other app on it, under the same default cookie names. Without an
-     audience check the only gates left are signature and issuer, which every
-     token from this issuer passes — so a session minted for one client would
-     authenticate against another, and Pocket-ID's per-client allowedUserGroups
-     (enforced at /authorize) would no longer bind. Pinning aud to this client
-     is what keeps that restriction meaningful. */}}
-  jwt:
-    idToken:
-      audiences:
-        - {{ $clientID | quote }}
-    jwksURI: {{ printf "%s/.well-known/jwks.json" $issuer | quote }}
-{{- end -}}
-
-{{- define "resources.oidc.trafficPolicySpec" -}}
-{{- $app := include "resources.app" . -}}
 targetRefs:
   - group: gateway.networking.k8s.io
     kind: HTTPRoute
-    name: {{ dig "route" $app .Values.oidc }}
+    name: {{ dig "route" $app $o }}
+oidc:
+  provider:
+    issuer: {{ $issuer | quote }}
+    authorizationEndpoint: {{ printf "%s/authorize" $issuer | quote }}
+    tokenEndpoint: {{ printf "%s/api/oidc/token" $issuer | quote }}
+    endSessionEndpoint: {{ printf "%s/api/oidc/end-session" $issuer | quote }}
+{{- if ne (dig "backendHost" "pocket-id.pocket-id-operator.svc.cluster.local" $o) $issuerHost }}
+    {{- /* Only when short-circuiting the issuer host. Left unset, Envoy Gateway
+           builds a STRICT_DNS cluster from the token endpoint itself and
+           originates TLS with the system trust bundle. */}}
+    backendRefs:
+      - group: gateway.envoyproxy.io
+        kind: Backend
+        name: {{ $app }}-oidc-backend
+{{- end }}
+  clientID: {{ $clientID | quote }}
+  {{- /* Envoy Gateway reads the fixed key "client-secret"; there is no key field. */}}
+  clientSecret:
+    name: {{ $app }}-oidc-credentials
+  scopes:
+    - profile
+    - email
+    - groups
+  {{- /* Parent domain: one session across every app. Safe because the ID token
+         is validated against this policy's own clientID, so pocket-id's
+         per-client allowedUserGroups still binds. */}}
+  cookieDomain: "clerici.tech"
+  refreshToken: true
 csrf:
-  percentageEnabled: 100
   additionalOrigins:
-    - exact: "https://id.clerici.tech"
-oauth2:
-  extensionRef:
-    name: {{ $app }}-oauth
+    - "https://id.clerici.tech"
+{{- end -}}
+
+{{- define "resources.oidc.needsBackend" -}}
+{{- $o := .Values.oidc -}}
+{{- if ne (dig "backendHost" "pocket-id.pocket-id-operator.svc.cluster.local" $o) "id.clerici.tech" }}true{{ end }}
+{{- end -}}
+
+{{- define "resources.oidc.backendSpec" -}}
+{{- $o := .Values.oidc -}}
+{{- $host := dig "backendHost" "pocket-id.pocket-id-operator.svc.cluster.local" $o -}}
+{{- $port := dig "backendPort" 1411 $o -}}
+endpoints:
+  - fqdn:
+      hostname: {{ $host | quote }}
+      port: {{ $port }}
+{{- /* Originate TLS to a remote pocket-id (id.clerici.tech:443). */}}
+{{- if dig "backendTLS" (eq (toString $port) "443") $o }}
+tls:
+  sni: {{ $host | quote }}
+  wellKnownCACertificates: System
+{{- end }}
 {{- end -}}

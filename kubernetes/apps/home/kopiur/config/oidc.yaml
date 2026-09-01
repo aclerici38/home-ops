@@ -19,8 +19,8 @@ spec:
   upgrade:
     timeout: 5m
   dependsOn:
-    - name: kgateway
-      namespace: kgateway
+    - name: envoy-gateway
+      namespace: envoy-gateway
     - name: pocket-id-operator
       namespace: pocket-id-operator
   values:
@@ -61,8 +61,8 @@ spec:
   upgrade:
     timeout: 5m
   dependsOn:
-    - name: kgateway
-      namespace: kgateway
+    - name: envoy-gateway
+      namespace: envoy-gateway
     - name: pocket-id-operator
       namespace: pocket-id-operator
   values:

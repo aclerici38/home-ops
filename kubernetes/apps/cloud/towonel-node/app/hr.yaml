@@ -75,7 +75,7 @@ spec:
           - towonel.cloud.clerici.tech
         parentRefs:
           - name: external
-            namespace: kgateway
+            namespace: envoy-gateway
             sectionName: https
         rules:
           - backendRefs:

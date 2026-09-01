@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.6.1/gateway_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: external
+  annotations:
+    external-dns.kubernetes.io/target: vps.clerici.tech
+spec:
+  gatewayClassName: envoy-gateway
+  addresses:
+    - type: IPAddress
+      value: ${ENVOY_EXTERNAL_LB_IP}
+  infrastructure:
+    annotations:
+      lbipam.cilium.io/ips: ${ENVOY_EXTERNAL_LB_IP}
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: external
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "*.clerici.tech"
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: clerici-tech-tls

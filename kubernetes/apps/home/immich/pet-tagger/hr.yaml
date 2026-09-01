@@ -104,7 +104,7 @@ spec:
           - pets.clerici.tech
         parentRefs:
           - name: internal
-            namespace: kgateway
+            namespace: envoy-gateway
         rules:
           - backendRefs:
               - identifier: immich-pet-tagger

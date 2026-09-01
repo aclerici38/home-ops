@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/envoyproxy_v1alpha1.json
+# Envoy Gateway would name the Service envoy-<ns>-<gateway>-<hash>; towonel and
+# coredns need a stable name. StrategicMerge keeps envoy-proxy-params underneath.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: external
+spec:
+  mergeType: StrategicMerge
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        name: external

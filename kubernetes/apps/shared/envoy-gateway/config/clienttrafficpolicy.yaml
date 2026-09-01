@@ -1,0 +1,35 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/clienttrafficpolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: ClientTrafficPolicy
+metadata:
+  name: client-traffic-policy
+spec:
+  # A Gateway accepts only one ClientTrafficPolicy; a second is marked
+  # Conflicted, so every downstream setting belongs in this one.
+  targetSelectors:
+    - kind: Gateway
+  proxyProtocol:
+    # Towonel sends PROXY, LAN clients do not.
+    optional: true
+  clientIPDetection:
+    xForwardedFor:
+      # The towonel agent is a pod, so the immediate peer is never the client.
+      trustedCIDRs:
+        - ${CLUSTER_POD_CIDR}
+  http2:
+    onInvalidMessage: TerminateStream
+  # Envoy Gateway adds the matching UDP ServicePort itself.
+  http3: {}
+  # Collabora carries the WOPI source as an encoded path segment, so %2F has to
+  # survive to the backend. Removing either of these breaks the editor.
+  path:
+    disableMergeSlashes: true
+    escapedSlashesAction: KeepUnchanged
+  timeout:
+    http:
+      streamIdleTimeout: 0s
+  tcpKeepalive:
+    idleTime: 5m
+    interval: 60s
+    probes: 3

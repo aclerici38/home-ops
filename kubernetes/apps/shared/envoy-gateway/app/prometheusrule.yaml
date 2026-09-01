@@ -1,0 +1,151 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.93.1/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: envoy-gateway-rules
+spec:
+  groups:
+    - name: envoygateway.controlplane.rules
+      rules:
+        # Watched via the scrape target, not an EG metric family: both replicas
+        # are scraped but only the leader does the work, so this aggregates.
+        - alert: EnvoyGatewayControlPlaneDown
+          expr: absent(up{job="envoy-gateway"}) or max(up{job="envoy-gateway"}) == 0
+          for: 15m
+          annotations:
+            summary: >-
+              No Envoy Gateway control-plane replica is scrapeable; Gateway,
+              route and policy translation has stopped.
+          labels:
+            severity: critical
+
+    # Envoy dataplane metrics come from the kgateway-proxy PodMonitor on :9091.
+    # The `gateway` label is attached by that PodMonitor's relabeling, so these
+    # alerts name the offending gateway (external/internal) rather than a pod hash.
+    - name: envoygateway.dataplane.rules
+      rules:
+        - alert: EnvoyProxyNotLive
+          expr: envoy_server_live == 0
+          for: 5m
+          annotations:
+            summary: Envoy proxy {{ $labels.pod }} ({{ $labels.gateway }}) is not live.
+          labels:
+            severity: critical
+
+        # Envoy serves certs from the xDS snapshot, so this catches a cert-manager
+        # renewal that succeeded in the Secret but never propagated to the proxy.
+        - alert: EnvoyProxyCertExpiringSoon
+          expr: min by (gateway) (envoy_server_days_until_first_cert_expiring) < 14
+          for: 1h
+          annotations:
+            summary: >-
+              Envoy on gateway {{ $labels.gateway }} is serving a certificate that
+              expires in {{ $value | printf "%.0f" }} days.
+          labels:
+            severity: warning
+
+        # CDS/LDS rejections mean Envoy refused a snapshot the control plane
+        # thought it accepted -- config drift between the two.
+        - alert: EnvoyProxyXdsUpdateFailing
+          expr: |-
+            sum by (gateway, pod) (
+              increase(envoy_cluster_manager_cds_update_failure[15m])
+              + increase(envoy_listener_manager_lds_update_failure[15m])
+            ) > 0
+          for: 10m
+          annotations:
+            summary: >-
+              Envoy {{ $labels.pod }} ({{ $labels.gateway }}) rejected xDS updates;
+              it is running stale listener/cluster config.
+          labels:
+            severity: warning
+
+        # membership_total > 0 excludes clusters that legitimately have no
+        # endpoints configured; this fires when endpoints exist but all are
+        # failing health checks or outlier detection.
+        - alert: EnvoyUpstreamNoHealthyHosts
+          expr: |-
+            (
+              max by (gateway, envoy_cluster_name) (envoy_cluster_membership_healthy) == 0
+            )
+            and
+            (
+              max by (gateway, envoy_cluster_name) (envoy_cluster_membership_total) > 0
+            )
+          for: 10m
+          annotations:
+            summary: >-
+              Backend {{ $labels.envoy_cluster_name }} on {{ $labels.gateway }} has no
+              healthy endpoints; requests to it are failing.
+          labels:
+            severity: critical
+
+        # Rate floor keeps a single 5xx on an idle backend from paging.
+        - alert: EnvoyUpstream5xx
+          expr: |-
+            (
+              sum by (gateway, envoy_cluster_name) (
+                rate(envoy_cluster_upstream_rq_xx{envoy_response_code_class="5"}[10m])
+              )
+              /
+              sum by (gateway, envoy_cluster_name) (
+                rate(envoy_cluster_upstream_rq_xx[10m])
+              )
+            ) > 0.05
+            and
+            sum by (gateway, envoy_cluster_name) (
+              rate(envoy_cluster_upstream_rq_xx[10m])
+            ) > 0.1
+          for: 15m
+          annotations:
+            summary: >-
+              {{ $labels.envoy_cluster_name }} on {{ $labels.gateway }} is returning
+              {{ $value | humanizePercentage }} 5xx.
+          labels:
+            severity: warning
+
+        - alert: EnvoyUpstreamConnectFailures
+          expr: |-
+            sum by (gateway, envoy_cluster_name) (
+              rate(envoy_cluster_upstream_cx_connect_fail[10m])
+            ) > 0.1
+          for: 15m
+          annotations:
+            summary: >-
+              Envoy cannot connect to {{ $labels.envoy_cluster_name }} on
+              {{ $labels.gateway }} ({{ $value | printf "%.2f" }} failures/s).
+          labels:
+            severity: warning
+
+        # Envoy emits rq_time buckets in milliseconds.
+        - alert: EnvoyUpstreamLatencyHigh
+          expr: |-
+            histogram_quantile(0.99,
+              sum by (le, gateway, envoy_cluster_name) (
+                rate(envoy_cluster_upstream_rq_time_bucket[10m])
+              )
+            ) > 5000
+          for: 20m
+          annotations:
+            summary: >-
+              {{ $labels.envoy_cluster_name }} on {{ $labels.gateway }} p99 latency is
+              {{ $value | printf "%.0f" }}ms.
+          labels:
+            severity: warning
+
+        # Listener-level view: catches 5xx generated by Envoy itself (no route,
+        # upstream unreachable, replaced route) which never reach an upstream
+        # cluster and so are invisible to the per-backend alerts above.
+        - alert: EnvoyDownstream5xx
+          expr: |-
+            sum by (gateway) (
+              rate(envoy_http_downstream_rq_xx{envoy_response_code_class="5",envoy_http_conn_manager_prefix="http"}[10m])
+            ) > 0.2
+          for: 15m
+          annotations:
+            summary: >-
+              Gateway {{ $labels.gateway }} is emitting {{ $value | printf "%.2f" }}
+              5xx/s to clients.
+          labels:
+            severity: warning
