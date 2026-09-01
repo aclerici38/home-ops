@@ -8,6 +8,10 @@ spec:
   name: Home Assistant (LLM)
   clientID: home-assistant-llm
   accessTokenDurationMinutes: 525600
+  secret:
+    additionalLabels:
+      # ESO refuses to read a Secret for a Webhook generator without it.
+      external-secrets.io/type: webhook
   apiAccess:
     - apiRef:
         name: llm

@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.10.0/webhook_v1alpha1.json
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: Webhook
+metadata:
+  name: llm-token
+spec:
+  url: http://pocket-id.pocket-id-operator.svc.cluster.local:1411/api/oidc/token
+  method: POST
+  headers:
+    Content-Type: application/x-www-form-urlencoded
+    Authorization: Basic {{ print .creds.client_id ":" .creds.client_secret | b64enc }}
+  body: grant_type=client_credentials&resource=https://llm.clerici.tech&scope=inference:local
+  result:
+    jsonPath: "$"
+  secrets:
+    - name: creds
+      secretRef:
+        name: home-assistant-llm-oidc-credentials
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.10.0/externalsecret_v1.json
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: llm-token
+spec:
+  # Need to re-copy/paste the token into hass
+  refreshInterval: 8030h
+  target:
+    name: llm-token
+    template:
+      data:
+        LLM_GATEWAY_TOKEN: "{{ .access_token }}"
+  dataFrom:
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: Webhook
+          name: llm-token
