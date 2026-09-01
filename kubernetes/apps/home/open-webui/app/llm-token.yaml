@@ -26,9 +26,8 @@ kind: ExternalSecret
 metadata:
   name: llm-token
 spec:
-  # Tokens live a year, so a re-mint is not urgent and no restart is forced:
-  # a pod picks up the fresher token whenever it next starts.
-  refreshInterval: 720h
+  # Weekly
+  refreshInterval: 168h
   target:
     name: llm-token
     template:

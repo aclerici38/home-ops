@@ -7,8 +7,8 @@ metadata:
 spec:
   name: mealie (LLM)
   clientID: mealie-llm
-  # A year, the pocket-id maximum.
-  accessTokenDurationMinutes: 525600
+  # 30 days
+  accessTokenDurationMinutes: 43200
   secret:
     additionalLabels:
       # ESO refuses to read a Secret for a Webhook generator without it.
