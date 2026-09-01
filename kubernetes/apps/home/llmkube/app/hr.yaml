@@ -81,10 +81,6 @@ spec:
             - inputName: DS_PROMETHEUS
               datasourceName: prometheus
 
-    # Nothing sets spec.priority, so skip the five cluster-scoped PriorityClasses.
-    priorityClasses:
-      enabled: false
-
     modelSource:
       allowedHostPathRoots: []
       allowedRemoteHosts: []
