@@ -3,14 +3,14 @@
 apiVersion: pocketid.internal/v1alpha1
 kind: PocketIDOIDCClient
 metadata:
-  name: open-webui-home
+  name: open-webui-home-assistant
 spec:
-  name: open-webui (Home)
+  name: open-webui (Home Assistant)
   # Must equal this backend's tool server info.id
-  clientID: open-webui-home
+  clientID: open-webui-home-assistant
   pkceEnabled: true
   callbackUrls:
-    - https://chat.clerici.tech/oauth/clients/mcp:open-webui-home/callback
+    - https://chat.clerici.tech/oauth/clients/mcp:open-webui-home-assistant/callback
   secret:
     additionalLabels:
       external-secrets.io/type: webhook
@@ -19,5 +19,4 @@ spec:
         name: mcp
         namespace: envoy-gateway
       delegatedPermissions:
-        - hass
-        - hass:write
+        - home-assistant

@@ -1460,9 +1460,15 @@ backend = "aqua:jdx/mise"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.linux-x64"]
+checksum = "sha256:b13bcd8bc516773fd9b600688ce6e6c01b62071ae57f6aae44be0713a6d834f1"
+url = "https://github.com/jdx/mise/releases/download/v2026.9.1/mise-v2026.9.1-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/541240200"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.macos-arm64"]
+checksum = "sha512:80aa2f127d7921a9064bc39ea48ed0b60adcb10a7a18f017dabb95c9f1e16f1d20e3cbecc9bf0e1b1d8a12452fb402b9e587e0630a222fcadcde9d372c9f7def"
+url = "https://github.com/jdx/mise/releases/download/v2026.9.1/mise-v2026.9.1-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/541240301"
 provenance = "minisign"
 
 [[tools.atuin]]
