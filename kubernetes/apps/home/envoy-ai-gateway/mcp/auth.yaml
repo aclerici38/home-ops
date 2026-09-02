@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/pocket-id-operator/0.14.3/pocketidapi_v1alpha1.json
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDAPI
+metadata:
+  name: mcp
+spec:
+  resource: https://mcp.clerici.tech
+  cimdAccess: true
+  permissions:
+    - key: hass
+      name: Home Assistant
+      description: Reach the Home Assistant MCP backend
+      cimdAccess: true
+    - key: mcp:write
+      name: Write
+      description: Permit mutating tools on any granted backend
+      cimdAccess: true
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/backend_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
+metadata:
+  name: pocket-id
+spec:
+  endpoints:
+    - fqdn:
+        hostname: pocket-id.pocket-id-operator.svc.cluster.local
+        port: 1411

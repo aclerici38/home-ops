@@ -113,22 +113,10 @@ spec:
               OPENAI_API_KEY: *llmtoken
               USER_PERMISSIONS_FEATURES_DIRECT_TOOL_SERVERS: true
               ENABLE_FORWARD_USER_INFO_HEADERS: true
-              TOOL_SERVER_CONNECTIONS: |
-                [
-                  {
-                    "type": "mcp",
-                    "url": "https://trek.clerici.tech/mcp",
-                    "path": "",
-                    "auth_type": "oauth_2.1",
-                    "key": "",
-                    "config": { "enable": true },
-                    "info": {
-                      "id": "trek",
-                      "name": "TREK",
-                      "description": "TREK travel planner"
-                    }
-                  }
-                ]
+              TOOL_SERVER_CONNECTIONS:
+                secretKeyRef:
+                  name: open-webui-mcp-token
+                  key: TOOL_SERVER_CONNECTIONS
               WEBUI_SECRET_KEY:
                 secretKeyRef:
                   name: open-webui

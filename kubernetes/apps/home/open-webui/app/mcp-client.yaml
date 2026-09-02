@@ -1,0 +1,80 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/pocket-id-operator/0.14.3/pocketidoidcclient_v1alpha1.json
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: open-webui-mcp
+spec:
+  name: open-webui (MCP)
+  clientID: open-webui-mcp
+  accessTokenDurationMinutes: 43200
+  secret:
+    additionalLabels:
+      external-secrets.io/type: webhook
+  apiAccess:
+    - apiRef:
+        name: mcp
+        namespace: envoy-gateway
+      # client_credentials, not delegated: open-webui only reaches an MCP tool
+      # server with a static bearer, so every user shares this identity.
+      clientPermissions:
+        - hass
+        - mcp:write
+---
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: Webhook
+metadata:
+  name: open-webui-mcp-token
+spec:
+  url: http://pocket-id.pocket-id-operator.svc.cluster.local:1411/api/oidc/token
+  method: POST
+  headers:
+    Content-Type: application/x-www-form-urlencoded
+    Authorization: Basic {{ print .creds.client_id ":" .creds.client_secret | b64enc }}
+  body: grant_type=client_credentials&resource={{ urlquery .creds.resource }}&scope={{ urlquery .creds.scopes }}
+  result:
+    jsonPath: "$"
+  secrets:
+    - name: creds
+      secretRef:
+        name: open-webui-mcp-oidc-credentials
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.10.0/externalsecret_v1.json
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: open-webui-mcp-token
+spec:
+  refreshInterval: 168h
+  target:
+    # The whole tool server list lives here because TOOL_SERVER_CONNECTIONS is a
+    # single JSON env var and open-webui interpolates no env into it.
+    template:
+      data:
+        TOOL_SERVER_CONNECTIONS: |
+          [
+            {
+              "type": "mcp",
+              "url": "https://trek.clerici.tech/mcp",
+              "path": "",
+              "auth_type": "oauth_2.1",
+              "key": "",
+              "config": {"enable": true},
+              "info": {"id": "trek", "name": "TREK", "description": "TREK travel planner"}
+            },
+            {
+              "type": "mcp",
+              "url": "https://mcp.clerici.tech/mcp",
+              "path": "",
+              "auth_type": "bearer",
+              "key": "{{ .access_token }}",
+              "config": {"enable": true},
+              "info": {"id": "home", "name": "Home", "description": "Home Assistant via the MCP gateway"}
+            }
+          ]
+  dataFrom:
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: Webhook
+          name: open-webui-mcp-token
