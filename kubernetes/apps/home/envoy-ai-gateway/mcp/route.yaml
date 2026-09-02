@@ -1,0 +1,65 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-ai-gateway/1.1.0/mcproute_v1beta1.json
+apiVersion: aigateway.envoyproxy.io/v1beta1
+kind: MCPRoute
+metadata:
+  name: mcp
+spec:
+  parentRefs:
+    - name: internal
+      sectionName: https
+  hostnames:
+    - mcp.clerici.tech
+  path: /mcp
+  backendRefs:
+    - name: home-assistant
+      group: gateway.envoyproxy.io
+      kind: Backend
+      path: /api/mcp
+      securityPolicy:
+        apiKey:
+          secretRef:
+            name: hass-mcp-token
+  securityPolicy:
+    oauth:
+      issuer: https://id.clerici.tech
+      audiences:
+        - &resource https://mcp.clerici.tech/mcp
+      protectedResourceMetadata:
+        resource: *resource
+        resourceName: clerici.tech MCP
+        scopesSupported:
+          - hass
+          - hass:write
+      # backendRefs keeps this lookup inside the cluster.
+      jwks:
+        remoteJWKS:
+          uri: http://id.clerici.tech/.well-known/jwks.json
+          backendRefs:
+            - group: gateway.envoyproxy.io
+              kind: Backend
+              name: pocket-id
+      claimToHeaders:
+        - claim: sub
+          header: x-mcp-client
+    # Rules gate tools/call and also filter tools/list, so a caller only sees
+    # what it may invoke. The list-filter path populates only backend, tool and
+    # headers, so CEL must stay off request.path, request.method and
+    # request.mcp.params or listing and calling will disagree.
+    authorization:
+      defaultAction: Deny
+      rules:
+        - action: Allow
+          source:
+            jwt:
+              scopes:
+                - "hass"
+          cel: request.mcp.backend == "home-assistant" && request.mcp.tool.startsWith("Get")
+        # Scopes within a rule are ANDed, so this needs both.
+        - action: Allow
+          source:
+            jwt:
+              scopes:
+                - "hass"
+                - "hass:write"
+          cel: request.mcp.backend == "home-assistant"

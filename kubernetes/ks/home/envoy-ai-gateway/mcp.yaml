@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.5/kustomization_v1.json
+# MCPRoute cannot reference a Gateway or backend across namespaces
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: envoy-ai-gateway-mcp
+  namespace: flux-system
+spec:
+  targetNamespace: envoy-gateway
+  dependsOn:
+    - name: envoy-ai-gateway
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/home/envoy-ai-gateway/mcp
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: envoy-ai-gateway

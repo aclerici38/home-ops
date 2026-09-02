@@ -1,0 +1,29 @@
+{{- if hasKey .Values "machineTokens" }}
+{{- $ctx := . -}}
+{{- range $key, $cfg := .Values.machineTokens }}
+{{- $cfg = default dict $cfg -}}
+{{- /* <app>-<key> matches the hand-written PocketIDOIDCClient; the Webhook and
+       ExternalSecret both hang off it as <app>-<key>-token. */ -}}
+{{- $name := printf "%s-%s" (include "resources.app" $ctx) $key -}}
+{{- $args := dict "name" $name "cfg" $cfg -}}
+{{- $spec := dig "spec" dict $cfg -}}
+---
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: Webhook
+metadata:
+  name: {{ $name }}-token
+  labels:
+    dormammu.internal/component: machine-token
+spec:
+  {{- include "resources.mergeSpec" (list (include "resources.machineToken.webhookSpec" $args) (dig "webhook" dict $spec)) | nindent 2 }}
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: {{ $name }}-token
+  labels:
+    dormammu.internal/component: machine-token
+spec:
+  {{- include "resources.mergeSpec" (list (include "resources.machineToken.externalSecretSpec" $args) (dig "externalSecret" dict $spec)) | nindent 2 }}
+{{ end }}
+{{- end }}
