@@ -44,3 +44,8 @@ spec:
       type: OutputToken
     - metadataKey: llm_total_token
       type: TotalToken
+    # Spend on the openai rule, denominated in gpt-5.2 input tokens: output
+    # bills at $7.00/Mtok against input's $0.875/Mtok, which is exactly 8x.
+    - metadataKey: openai_cost_units
+      type: CEL
+      cel: input_tokens + 8 * output_tokens

@@ -24,3 +24,34 @@ data:
             fqdn:
               hostname: ai-gateway-controller.envoy-ai-gateway.svc.cluster.local
               port: 1063
+        # Token-cost budgets
+        rateLimit:
+          backend:
+            type: Redis
+            redis:
+              url: envoy-ratelimit-dragonfly-db.envoy-gateway.svc.cluster.local:6379
+        provider:
+          type: Kubernetes
+          kubernetes:
+            rateLimitDeployment:
+              replicas: 2
+              pod:
+                securityContext:
+                  runAsNonRoot: true
+                  runAsUser: 65534
+                  runAsGroup: 65534
+                  seccompProfile: {type: RuntimeDefault}
+              container:
+                # Upserted onto the env Envoy Gateway generates
+                env:
+                  # Without this MONTH is a fixed 30-day window counted from the
+                  # Unix epoch, so the budget resets on a date that drifts
+                  # backwards through the month instead of on the 1st.
+                  - name: USE_CALENDAR_MONTH_RATE_LIMIT
+                    value: "true"
+                resources:
+                  requests:
+                    cpu: 10m
+                    memory: 64Mi
+                  limits:
+                    memory: 256Mi
