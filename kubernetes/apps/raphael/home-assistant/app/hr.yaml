@@ -36,7 +36,7 @@ spec:
           home-assistant:
             image:
               repository: ghcr.io/home-assistant/home-assistant
-              tag: 2026.8.3@sha256:14931c6b13756317849f46da1d01b45937a1150db66c081cfe529d48215943fe
+              tag: 2026.9.0@sha256:372d991e58882a1d8c68c07e9aa3f3b509276e695355f73ccdb03baa70407293
             env:
               S6_READ_ONLY_ROOT: true
               S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
@@ -62,7 +62,7 @@ spec:
           code-server:
             image:
               repository: ghcr.io/coder/code-server
-              tag: 4.133.0@sha256:e073a441c61c85821a7f16b64cf93b4e77b4092899bb1f3bed906fbd558afd62
+              tag: 4.135.0@sha256:ccd326184d71efc5ebb94155eda7bb30153902342a35dbc8525450d81aa55012
             command:
               - "/usr/bin/dumb-init"
               - "--"
