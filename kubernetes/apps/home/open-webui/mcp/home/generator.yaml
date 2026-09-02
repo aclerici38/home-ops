@@ -23,6 +23,6 @@ spec:
     - name: creds
       secretRef:
         name: open-webui-home-oidc-credentials
-    - name: apikey
+    - name: secret
       secretRef:
-        name: open-webui-admin-api-key
+        name: open-webui
