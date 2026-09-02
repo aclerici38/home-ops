@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.10.0/webhook_v1alpha1.json
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: Webhook
+metadata:
+  name: open-webui-home-assistant-client-info
+spec:
+  # open-webui will not register an OAuth tool server unless
+  # info.oauth_client_info already decrypts
+  url: http://open-webui.open-webui.svc.cluster.local:8080/api/v1/configs/oauth/clients/register?type=mcp
+  method: POST
+  headers:
+    Content-Type: application/json
+    Authorization: Bearer {{ .apikey.api_key }}
+  # Without oauth_scope open-webui asks for every scope in the route's
+  # protected-resource metadata, which is both backends.
+  body: >-
+    {"url": "https://mcp.clerici.tech/mcp",
+     "client_id": "{{ .creds.client_id }}",
+     "client_secret": "{{ .creds.client_secret }}",
+     "oauth_scope": "home-assistant"}
+  result:
+    # The whole reply ({status, oauth_client_info}).
+    jsonPath: "$"
+  secrets:
+    - name: creds
+      secretRef:
+        name: open-webui-home-assistant-oidc-credentials
+    - name: apikey
+      secretRef:
+        name: open-webui-admin-api-key

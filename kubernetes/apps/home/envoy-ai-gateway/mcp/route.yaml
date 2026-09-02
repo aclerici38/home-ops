@@ -42,8 +42,7 @@ spec:
         resource: *resource
         resourceName: clerici.tech MCP
         scopesSupported:
-          - hass
-          - hass:write
+          - home-assistant
           - grafana
       # backendRefs keeps this lookup inside the cluster.
       jwks:
@@ -67,15 +66,7 @@ spec:
           source:
             jwt:
               scopes:
-                - "hass"
-          cel: request.mcp.backend == "home-assistant" && request.mcp.tool.startsWith("Get")
-        # Scopes within a rule are ANDed, so this needs both.
-        - action: Allow
-          source:
-            jwt:
-              scopes:
-                - "hass"
-                - "hass:write"
+                - "home-assistant"
           cel: request.mcp.backend == "home-assistant"
         - action: Allow
           source:

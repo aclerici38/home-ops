@@ -5,11 +5,13 @@ kind: ExternalSecret
 metadata:
   name: open-webui-tool-servers
 spec:
-  refreshInterval: "0"
+  # The webhook re-registers on every call
+  refreshPolicy: OnChange
   target:
     template:
       engineVersion: v2
       data:
+        # One entry per backend on the same gateway URL
         TOOL_SERVER_CONNECTIONS: |-
           [
             {
@@ -20,10 +22,24 @@ spec:
               "key": "",
               "config": {"enable": true},
               "info": {
-                "id": "open-webui-home",
-                "name": "Home",
+                "id": "open-webui-home-assistant",
+                "name": "Home Assistant",
                 "description": "Home Assistant via the MCP gateway",
-                "oauth_client_info": "{{ .home_oauth_client_info }}"
+                "oauth_client_info": "{{ .home_assistant_oauth_client_info }}"
+              }
+            },
+            {
+              "type": "mcp",
+              "url": "https://mcp.clerici.tech/mcp",
+              "path": "",
+              "auth_type": "oauth_2.1_static",
+              "key": "",
+              "config": {"enable": true},
+              "info": {
+                "id": "open-webui-grafana",
+                "name": "Grafana",
+                "description": "Grafana via the MCP gateway",
+                "oauth_client_info": "{{ .grafana_oauth_client_info }}"
               }
             }
           ]
@@ -32,8 +48,17 @@ spec:
         generatorRef:
           apiVersion: generators.external-secrets.io/v1alpha1
           kind: Webhook
-          name: open-webui-home-client-info
+          name: open-webui-home-assistant-client-info
       rewrite:
         - regexp:
             source: "^(.*)$"
-            target: "home_$1"
+            target: "home_assistant_$1"
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: Webhook
+          name: open-webui-grafana-client-info
+      rewrite:
+        - regexp:
+            source: "^(.*)$"
+            target: "grafana_$1"

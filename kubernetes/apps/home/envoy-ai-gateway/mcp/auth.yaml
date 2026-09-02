@@ -8,13 +8,9 @@ spec:
   resource: https://mcp.clerici.tech/mcp
   cimdAccess: true
   permissions:
-    - key: hass
+    - key: home-assistant
       name: Home Assistant
-      description: Read-only tools on the Home Assistant MCP backend
-      cimdAccess: true
-    - key: hass:write
-      name: Home Assistant (write)
-      description: Mutating tools on the Home Assistant MCP backend
+      description: Tools on the Home Assistant MCP backend
       cimdAccess: true
     - key: grafana
       name: Grafana
