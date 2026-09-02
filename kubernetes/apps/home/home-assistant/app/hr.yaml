@@ -126,12 +126,19 @@ spec:
             port: 8123
     route:
       home-assistant:
+        annotations:
+          # Override gatus path until https://github.com/envoyproxy/ai-gateway/pull/2587/changes or https://github.com/envoyproxy/ai-gateway/pull/2306/changes
+          gatus.home-operations.com/endpoint: |-
+            path: /
         hostnames:
           - hass.clerici.tech
         parentRefs:
           - name: external
             namespace: envoy-gateway
         rules:
+          - backendRefs:
+              - identifier: home-assistant
+                port: 8123
           # Fixes mcp until https://github.com/envoyproxy/ai-gateway/pull/2587/changes or https://github.com/envoyproxy/ai-gateway/pull/2306/changes
           - matches:
               - path:
@@ -144,9 +151,6 @@ spec:
                     - name: Content-Type
                       value: application/json
             backendRefs:
-              - identifier: home-assistant
-                port: 8123
-          - backendRefs:
               - identifier: home-assistant
                 port: 8123
     persistence:
