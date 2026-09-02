@@ -25,6 +25,14 @@ spec:
         apiKey:
           secretRef:
             name: hass-mcp-token
+    - name: grafana
+      group: gateway.envoyproxy.io
+      kind: Backend
+      path: /mcp
+      securityPolicy:
+        apiKey:
+          secretRef:
+            name: grafana-mcp-token
   securityPolicy:
     oauth:
       issuer: https://id.clerici.tech
@@ -36,6 +44,7 @@ spec:
         scopesSupported:
           - hass
           - hass:write
+          - grafana
       # backendRefs keeps this lookup inside the cluster.
       jwks:
         remoteJWKS:
@@ -68,3 +77,9 @@ spec:
                 - "hass"
                 - "hass:write"
           cel: request.mcp.backend == "home-assistant"
+        - action: Allow
+          source:
+            jwt:
+              scopes:
+                - "grafana"
+          cel: request.mcp.backend == "grafana"

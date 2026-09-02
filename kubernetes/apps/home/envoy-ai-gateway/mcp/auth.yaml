@@ -16,6 +16,10 @@ spec:
       name: Home Assistant (write)
       description: Mutating tools on the Home Assistant MCP backend
       cimdAccess: true
+    - key: grafana
+      name: Grafana
+      description: Tools on the Grafana MCP backend
+      cimdAccess: true
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/backend_v1alpha1.json
 apiVersion: gateway.envoyproxy.io/v1alpha1
