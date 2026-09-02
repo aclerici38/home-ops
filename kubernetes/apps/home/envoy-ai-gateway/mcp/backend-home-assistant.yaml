@@ -16,7 +16,7 @@ kind: ExternalSecret
 metadata:
   name: hass-mcp-token
 spec:
-  refreshInterval: "1m"
+  refreshInterval: "1h"
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword-connect
@@ -25,4 +25,4 @@ spec:
     - secretKey: apiKey
       remoteRef:
         key: mcp
-        property: HASS_TOKEN
+        property: password

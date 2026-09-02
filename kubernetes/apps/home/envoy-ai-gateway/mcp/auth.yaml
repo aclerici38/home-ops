@@ -10,11 +10,11 @@ spec:
   permissions:
     - key: hass
       name: Home Assistant
-      description: Reach the Home Assistant MCP backend
+      description: Read-only tools on the Home Assistant MCP backend
       cimdAccess: true
-    - key: mcp:write
-      name: Write
-      description: Permit mutating tools on any granted backend
+    - key: hass:write
+      name: Home Assistant (write)
+      description: Mutating tools on the Home Assistant MCP backend
       cimdAccess: true
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/backend_v1alpha1.json

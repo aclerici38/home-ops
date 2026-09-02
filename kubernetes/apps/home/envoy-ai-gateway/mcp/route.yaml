@@ -29,7 +29,7 @@ spec:
         resourceName: clerici.tech MCP
         scopesSupported:
           - hass
-          - mcp:write
+          - hass:write
       jwks:
         remoteJWKS:
           uri: http://id.clerici.tech/.well-known/jwks.json
@@ -53,10 +53,11 @@ spec:
               scopes:
                 - "hass"
           cel: request.mcp.backend == "home-assistant" && request.mcp.tool.startsWith("Get")
+        # Scopes within a rule are ANDed, so this needs both.
         - action: Allow
           source:
             jwt:
               scopes:
                 - "hass"
-                - "mcp:write"
+                - "hass:write"
           cel: request.mcp.backend == "home-assistant"

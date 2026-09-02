@@ -19,7 +19,7 @@ spec:
       # server with a static bearer, so every user shares this identity.
       clientPermissions:
         - hass
-        - mcp:write
+        - hass:write
 ---
 apiVersion: generators.external-secrets.io/v1alpha1
 kind: Webhook
