@@ -23,7 +23,12 @@ spec:
       namespace: dragonfly-operator
   values:
     dragonfly:
+      # Dragonfly needs 256MiB of maxmemory per proactor thread or it refuses to start
+      extraArgs:
+        - "--proactor_threads=1"
       spec:
+        # MAX_MEMORY tracks limits.memory, which is what that floor is checked
+        # against.
         resources:
           requests: {cpu: 50m}
           limits: {memory: 256Mi}
