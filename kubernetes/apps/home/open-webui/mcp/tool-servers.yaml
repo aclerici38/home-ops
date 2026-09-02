@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.10.0/externalsecret_v1.json
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: open-webui-tool-servers
+spec:
+  refreshInterval: "0"
+  target:
+    template:
+      engineVersion: v2
+      data:
+        TOOL_SERVER_CONNECTIONS: |-
+          [
+            {
+              "type": "mcp",
+              "url": "https://mcp.clerici.tech/mcp",
+              "path": "",
+              "auth_type": "oauth_2.1_static",
+              "key": "",
+              "config": {"enable": true},
+              "info": {
+                "id": "open-webui-home",
+                "name": "Home",
+                "description": "Home Assistant via the MCP gateway",
+                "oauth_client_info": "{{ .home_oauth_client_info }}"
+              }
+            }
+          ]
+  dataFrom:
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: Webhook
+          name: open-webui-home-client-info
+      rewrite:
+        - regexp:
+            source: "^(.*)$"
+            target: "home_$1"

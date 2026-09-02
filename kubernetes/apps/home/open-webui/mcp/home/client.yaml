@@ -3,21 +3,21 @@
 apiVersion: pocketid.internal/v1alpha1
 kind: PocketIDOIDCClient
 metadata:
-  name: open-webui-mcp
+  name: open-webui-home
 spec:
-  name: open-webui (MCP)
-  clientID: open-webui-mcp
-  accessTokenDurationMinutes: 43200
+  name: open-webui (Home)
+  # Must equal this backend's tool server info.id
+  clientID: open-webui-home
+  pkceEnabled: true
+  callbackUrls:
+    - https://chat.clerici.tech/oauth/clients/mcp:open-webui-home/callback
   secret:
     additionalLabels:
-      # ESO refuses to read a Secret for a Webhook generator without it.
       external-secrets.io/type: webhook
   apiAccess:
     - apiRef:
         name: mcp
         namespace: envoy-gateway
-      # client_credentials, not delegated: open-webui only reaches an MCP tool
-      # server with a static bearer, so every user shares this identity.
-      clientPermissions:
+      delegatedPermissions:
         - hass
         - hass:write

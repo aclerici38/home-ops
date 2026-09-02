@@ -113,10 +113,9 @@ spec:
               OPENAI_API_KEY: *llmtoken
               USER_PERMISSIONS_FEATURES_DIRECT_TOOL_SERVERS: true
               ENABLE_FORWARD_USER_INFO_HEADERS: true
-              TOOL_SERVER_CONNECTIONS:
-                secretKeyRef:
-                  name: open-webui-mcp-token
-                  key: TOOL_SERVER_CONNECTIONS
+              ENABLE_API_KEYS: true
+              ENABLE_API_KEYS_ENDPOINT_RESTRICTIONS: true
+              API_KEYS_ALLOWED_ENDPOINTS: /api/v1/configs/oauth/clients/register
               WEBUI_SECRET_KEY:
                 secretKeyRef:
                   name: open-webui
@@ -141,6 +140,13 @@ spec:
                 secretKeyRef:
                   name: open-webui-postgres
                   key: uri
+            # Needs optional true because the secret is created by ESO,
+            # and the generator that fills it has to call open-webui,
+            # so the first boot must come up without it.
+            envFrom:
+              - secretRef:
+                  name: open-webui-tool-servers
+                  optional: true
             probes:
               liveness: &probes
                 enabled: true

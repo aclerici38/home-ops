@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.5/kustomization_v1.json
+# Separate from the app so it can depend on it: the client-info generator calls
+# open-webui's own API, so the app has to be serving before any of this syncs.
+# Each backend lives in its own directory below and needs no Kustomization of
+# its own — this path is applied recursively.
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: open-webui-mcp
+  namespace: flux-system
+spec:
+  targetNamespace: open-webui
+  dependsOn:
+    - name: open-webui
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/home/open-webui/mcp
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: open-webui
