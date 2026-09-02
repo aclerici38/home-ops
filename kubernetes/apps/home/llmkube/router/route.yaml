@@ -48,4 +48,4 @@ spec:
     # bills at $7.00/Mtok against input's $0.875/Mtok, which is exactly 8x.
     - metadataKey: openai_cost_units
       type: CEL
-      cel: input_tokens + 8 * output_tokens
+      cel: input_tokens + 8u * output_tokens
