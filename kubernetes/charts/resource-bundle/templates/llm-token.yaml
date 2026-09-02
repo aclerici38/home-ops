@@ -1,0 +1,22 @@
+{{- if hasKey .Values "llmToken" }}
+{{- $name := printf "%s-token" (include "resources.llmToken.client" .) -}}
+{{- $spec := dig "spec" dict .Values.llmToken -}}
+---
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: Webhook
+metadata:
+  name: {{ $name }}
+  labels:
+    dormammu.internal/component: llm-token
+spec:
+  {{- include "resources.mergeSpec" (list (include "resources.llmToken.webhookSpec" .) (dig "webhook" dict $spec)) | nindent 2 }}
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: {{ $name }}
+  labels:
+    dormammu.internal/component: llm-token
+spec:
+  {{- include "resources.mergeSpec" (list (include "resources.llmToken.externalSecretSpec" .) (dig "externalSecret" dict $spec)) | nindent 2 }}
+{{- end }}

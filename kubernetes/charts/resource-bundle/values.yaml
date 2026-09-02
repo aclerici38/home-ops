@@ -59,6 +59,11 @@
 #     backend: {}         # Backend (only when backendHost != the issuer host)
 #     securityPolicy: {}  # SecurityPolicy
 
+# llmToken:               # client_credentials bearer token for the LLM gateway
+#   spec:                 # named <app>-llm-token, off the <app>-llm client
+#     webhook: {}         # Webhook generator
+#     externalSecret: {}  # ExternalSecret
+
 # kopiur:                 # PVC -> shared ClusterRepository
 #   existingClaim: true   # adopt an existing PVC; skip Restore + populator PVC
 #   cephfs: false         # RWX ceph-filesystem + backingSnapshot staging

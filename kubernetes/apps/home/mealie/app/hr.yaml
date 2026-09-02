@@ -67,7 +67,7 @@ spec:
               # pocket-id access token, not an OpenAI key.
               OPENAI_API_KEY:
                 secretKeyRef:
-                  name: llm-token
+                  name: mealie-llm-token
                   key: LLM_GATEWAY_TOKEN
               # postgres
               DB_ENGINE: postgres

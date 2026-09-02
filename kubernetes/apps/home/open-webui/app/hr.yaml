@@ -85,7 +85,7 @@ spec:
               # The pocket-id access token, not an OpenAI key
               RAG_OPENAI_API_KEY: &llmtoken
                 secretKeyRef:
-                  name: llm-token
+                  name: open-webui-llm-token
                   key: LLM_GATEWAY_TOKEN
               # Qwen3-Embedding is asymmetric and was trained with an
               # instruction prefix on the query side only, so documents get

@@ -19,6 +19,10 @@ spec:
   upgrade:
     timeout: 5m
   dependsOn:
+    - name: external-secrets
+      namespace: external-secrets
+    - name: pocket-id-operator
+      namespace: pocket-id-operator
     - name: kopiur
       namespace: kopiur
   values:
@@ -26,3 +30,9 @@ spec:
       existingClaim: true
       ignoreRules:
         - /home-assistant_v2.db.corrupt.*
+    llmToken:
+      spec:
+        externalSecret:
+          # The token has to be re-copied into hass by hand, so mint one that
+          # outlives the refresh rather than churning a Secret nothing reads.
+          refreshInterval: 8030h
