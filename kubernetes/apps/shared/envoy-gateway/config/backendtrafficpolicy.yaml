@@ -10,6 +10,8 @@ spec:
   timeout:
     http:
       requestTimeout: 0s
+  connection:
+    bufferLimit: 1Mi
   compressor:
     - type: Zstd
       minContentLength: 1Ki
