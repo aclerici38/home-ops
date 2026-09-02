@@ -10,7 +10,7 @@ spec:
   headers:
     Content-Type: application/x-www-form-urlencoded
     Authorization: Basic {{ print .creds.client_id ":" .creds.client_secret | b64enc }}
-  body: grant_type=client_credentials&resource=https://llm.clerici.tech&scope=inference:local
+  body: grant_type=client_credentials&resource={{ urlquery .creds.resource_llm }}&scope={{ urlquery .creds.scopes_llm }}
   result:
     jsonPath: "$"
   secrets:
