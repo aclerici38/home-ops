@@ -56,4 +56,30 @@ spec:
     kopiur:
       existingClaim: true
       cephfs: true
-    llmToken: {}
+    machineTokens:
+      llm:
+        data:
+          LLM_GATEWAY_TOKEN: "{{ .access_token }}"
+      mcp:
+        data:
+          TOOL_SERVER_CONNECTIONS: |-
+            [
+              {
+                "type": "mcp",
+                "url": "https://trek.clerici.tech/mcp",
+                "path": "",
+                "auth_type": "oauth_2.1",
+                "key": "",
+                "config": {"enable": true},
+                "info": {"id": "trek", "name": "TREK", "description": "TREK travel planner"}
+              },
+              {
+                "type": "mcp",
+                "url": "https://mcp.clerici.tech/mcp",
+                "path": "",
+                "auth_type": "bearer",
+                "key": "{{ .access_token }}",
+                "config": {"enable": true},
+                "info": {"id": "home", "name": "Home", "description": "Home Assistant via the MCP gateway"}
+              }
+            ]

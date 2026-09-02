@@ -37,4 +37,7 @@ spec:
     kopiur:
       existingClaim: true
       cephfs: true
-    llmToken: {}
+    machineTokens:
+      llm:
+        data:
+          LLM_GATEWAY_TOKEN: "{{ .access_token }}"

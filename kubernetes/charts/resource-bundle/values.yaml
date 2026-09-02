@@ -59,10 +59,15 @@
 #     backend: {}         # Backend (only when backendHost != the issuer host)
 #     securityPolicy: {}  # SecurityPolicy
 
-# llmToken:               # client_credentials bearer token for the LLM gateway
-#   spec:                 # named <app>-llm-token, off the <app>-llm client
-#     webhook: {}         # Webhook generator
-#     externalSecret: {}  # ExternalSecret
+# machineTokens:          # client_credentials bearer tokens minted by pocket-id
+#   <key>:                # renders <app>-<key>-token off the <app>-<key> client,
+#                         # whose PocketIDOIDCClient is hand-written by the app
+#     refreshInterval: 168h
+#     data:               # Secret keys -> ESO templates; {{ .access_token }} is
+#                         # the minted token. Default: {ACCESS_TOKEN: <token>}
+#     spec:
+#       webhook: {}       # Webhook generator
+#       externalSecret: {}# ExternalSecret
 
 # kopiur:                 # PVC -> shared ClusterRepository
 #   existingClaim: true   # adopt an existing PVC; skip Restore + populator PVC

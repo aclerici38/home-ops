@@ -30,9 +30,8 @@ spec:
       existingClaim: true
       ignoreRules:
         - /home-assistant_v2.db.corrupt.*
-    llmToken:
-      spec:
-        externalSecret:
-          # The token has to be re-copied into hass by hand, so mint one that
-          # outlives the refresh rather than churning a Secret nothing reads.
-          refreshInterval: 8030h
+    machineTokens:
+      llm:
+        refreshInterval: 8030h
+        data:
+          LLM_GATEWAY_TOKEN: "{{ .access_token }}"

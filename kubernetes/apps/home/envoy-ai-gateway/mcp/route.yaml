@@ -7,6 +7,7 @@ metadata:
 spec:
   parentRefs:
     - name: internal
+      sectionName: https
   hostnames:
     - mcp.clerici.tech
   path: /mcp
@@ -23,13 +24,14 @@ spec:
     oauth:
       issuer: https://id.clerici.tech
       audiences:
-        - https://mcp.clerici.tech
+        - &resource https://mcp.clerici.tech/mcp
       protectedResourceMetadata:
-        resource: https://mcp.clerici.tech
+        resource: *resource
         resourceName: clerici.tech MCP
         scopesSupported:
           - hass
           - hass:write
+      # backendRefs keeps this lookup inside the cluster.
       jwks:
         remoteJWKS:
           uri: http://id.clerici.tech/.well-known/jwks.json
