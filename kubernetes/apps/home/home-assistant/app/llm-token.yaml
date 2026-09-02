@@ -10,7 +10,7 @@ spec:
   headers:
     Content-Type: application/x-www-form-urlencoded
     Authorization: Basic {{ print .creds.client_id ":" .creds.client_secret | b64enc }}
-  body: grant_type=client_credentials&resource={{ urlquery .creds.resource_llm }}&scope={{ urlquery .creds.scopes_llm }}
+  body: grant_type=client_credentials&resource={{ urlquery .creds.resource }}&scope={{ urlquery .creds.scopes }}
   result:
     jsonPath: "$"
   secrets:
@@ -27,7 +27,6 @@ spec:
   # Need to re-copy/paste the token into hass
   refreshInterval: 8030h
   target:
-    name: llm-token
     template:
       data:
         LLM_GATEWAY_TOKEN: "{{ .access_token }}"
