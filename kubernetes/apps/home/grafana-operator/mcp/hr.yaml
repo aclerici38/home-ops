@@ -43,7 +43,8 @@ spec:
       # Host validation covers /healthz and /metrics too, and both arrive on
       # the pod IP.
       - "--allowed-hosts=*"
-      - --enabled-tools=search,datasource,prometheus,alerting,dashboard,folder,annotations,navigation
+      - --disable-write
+      - --enabled-tools=search,datasource,prometheus,alerting,dashboard,folder,navigation
 
     readinessProbe: &probes
       httpGet:
