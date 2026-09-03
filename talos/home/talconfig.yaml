@@ -49,6 +49,7 @@ nodes:
     kernelModules:
       - name: zfs
       - name: nbd
+      - name: nfsd
     nodeLabels:
       storage.openebs.io/hostpath: "true"
       network.dormammu/multus: "true"
