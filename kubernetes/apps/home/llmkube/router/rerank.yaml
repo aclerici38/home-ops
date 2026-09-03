@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.6.1/httproute_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.6.2/httproute_v1.json
 # AI Gateway only reranks under the Cohere schema at /cohere/v2/rerank, and llama.cpp serves /v1/rerank and
 # /rerank but 404s on /v2/rerank, with no supported way to retarget it
 apiVersion: gateway.networking.k8s.io/v1
