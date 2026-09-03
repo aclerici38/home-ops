@@ -32,7 +32,7 @@ spec:
   runtime: llamacpp
   mode: rerank
   replicas: 1
-  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b10752@sha256:a07daf5557d88b5eacfa0b5f2f067bad5fb0e7ad1d68956c06e7c2c732249020
+  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b10775@sha256:c2bca483108ecef319dea68533e1af25f0156108476d6ae662efe5c6d4be7f05
 
   # This one is a BERT-style encoder with non-causal attention, so the whole
   # sequence has to fit in a single micro-batch — uBatchSize is a hard ceiling
