@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.4-standalone-strict/resourceclaimtemplate-resource-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.0-standalone-strict/resourceclaimtemplate-resource-v1.json
 apiVersion: resource.k8s.io/v1
 kind: ResourceClaimTemplate
 metadata:
@@ -18,7 +18,7 @@ spec:
               - cel:
                   expression: device.attributes["gpu.intel.com"].model == "A770"
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.4-standalone-strict/resourceclaim-resource-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.0-standalone-strict/resourceclaim-resource-v1.json
 apiVersion: resource.k8s.io/v1
 # A shared claim, not a template: the embedder and reranker both want cain's
 # single iGPU, and a template mints one claim per pod, so the second would never
