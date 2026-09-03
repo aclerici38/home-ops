@@ -33,6 +33,10 @@ spec:
         apiKey:
           secretRef:
             name: grafana-mcp-token
+    - name: flux
+      group: gateway.envoyproxy.io
+      kind: Backend
+      path: /mcp
   securityPolicy:
     oauth:
       issuer: https://id.clerici.tech
@@ -44,6 +48,8 @@ spec:
         scopesSupported:
           - home-assistant
           - grafana
+          - flux
+          - flux:write
       # backendRefs keeps this lookup inside the cluster.
       jwks:
         remoteJWKS:
@@ -74,3 +80,17 @@ spec:
               scopes:
                 - "grafana"
           cel: request.mcp.backend == "grafana"
+        # apply/patch/delete/install take arbitrary manifests, so no scope
+        # grants them and they never reach tools/list.
+        - action: Allow
+          source:
+            jwt:
+              scopes:
+                - "flux"
+          cel: request.mcp.backend == "flux" && request.mcp.tool in ["get_flux_instance", "get_kubernetes_resources", "get_kubernetes_logs", "get_kubernetes_events", "get_kubernetes_metrics", "get_kubernetes_api_versions", "diff_kubernetes_manifest", "search_flux_docs", "read_flux_doc"]
+        - action: Allow
+          source:
+            jwt:
+              scopes:
+                - "flux:write"
+          cel: request.mcp.backend == "flux" && request.mcp.tool in ["reconcile_flux_resource", "suspend_flux_reconciliation", "resume_flux_reconciliation"]

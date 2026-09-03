@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.10.0/webhook_v1alpha1.json
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: Webhook
+metadata:
+  name: open-webui-flux-client-info
+spec:
+  url: http://open-webui.open-webui.svc.cluster.local:8080/api/v1/configs/oauth/clients/register?type=mcp
+  method: POST
+  headers:
+    Content-Type: application/json
+    Authorization: Bearer {{ .apikey.api_key }}
+  body: >-
+    {"url": "https://mcp.clerici.tech/mcp",
+     "client_id": "{{ .creds.client_id }}",
+     "client_secret": "{{ .creds.client_secret }}",
+     "oauth_scope": "flux flux:write"}
+  result:
+    jsonPath: "$"
+  secrets:
+    - name: creds
+      secretRef:
+        name: open-webui-flux-oidc-credentials
+    - name: apikey
+      secretRef:
+        name: open-webui-admin-api-key

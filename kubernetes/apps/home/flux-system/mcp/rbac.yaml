@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.4-standalone-strict/clusterrole-rbac-v1.json
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: mcp-flux
+rules:
+  - apiGroups:
+      - "*"
+    resources:
+      - "*"
+    verbs:
+      - get
+      - list
+      - watch
+  # reconcile/suspend/resume patch Flux objects; apply/patch/delete of anything
+  # else is denied here as well as at the gateway.
+  - apiGroups:
+      - fluxcd.controlplane.io
+      - source.toolkit.fluxcd.io
+      - kustomize.toolkit.fluxcd.io
+      - helm.toolkit.fluxcd.io
+      - notification.toolkit.fluxcd.io
+      - image.toolkit.fluxcd.io
+    resources:
+      - "*"
+    verbs:
+      - patch
+      - update
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.36.4-standalone-strict/clusterrolebinding-rbac-v1.json
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: mcp-flux
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: mcp-flux
+subjects:
+  - kind: ServiceAccount
+    name: mcp-flux
+    namespace: flux-system

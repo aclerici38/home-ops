@@ -16,6 +16,14 @@ spec:
       name: Grafana
       description: Tools on the Grafana MCP backend
       cimdAccess: true
+    - key: flux
+      name: Flux
+      description: Read-only tools on the Flux MCP backend
+      cimdAccess: true
+    - key: flux:write
+      name: Flux (write)
+      description: Reconcile, suspend and resume tools on the Flux MCP backend
+      cimdAccess: false
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/backend_v1alpha1.json
 apiVersion: gateway.envoyproxy.io/v1alpha1

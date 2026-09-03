@@ -41,6 +41,20 @@ spec:
                 "description": "Grafana via the MCP gateway",
                 "oauth_client_info": "{{ .grafana_oauth_client_info }}"
               }
+            },
+            {
+              "type": "mcp",
+              "url": "https://mcp.clerici.tech/mcp",
+              "path": "",
+              "auth_type": "oauth_2.1_static",
+              "key": "",
+              "config": {"enable": true},
+              "info": {
+                "id": "open-webui-flux",
+                "name": "Flux",
+                "description": "Flux via the MCP gateway",
+                "oauth_client_info": "{{ .flux_oauth_client_info }}"
+              }
             }
           ]
   dataFrom:
@@ -62,3 +76,12 @@ spec:
         - regexp:
             source: "^(.*)$"
             target: "grafana_$1"
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: Webhook
+          name: open-webui-flux-client-info
+      rewrite:
+        - regexp:
+            source: "^(.*)$"
+            target: "flux_$1"
