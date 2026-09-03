@@ -66,6 +66,8 @@ spec:
                 name: pocket-id-postgres
                 key: uri
           appUrl: https://id.clerici.tech
+          cimdUrlAllowlist:
+            - https://claude.ai/oauth/claude-code-client-metadata
           hostUsers: false
           versionCheckDisabled: true
           fileBackend: database

@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/pocket-id-operator/0.14.3/pocketidoidcclient_v1alpha1.json
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: claude-code
+spec:
+  # Pocket-ID materializes this client on the first authorization request; the
+  # operator only adopts it.
+  clientID: https://claude.ai/oauth/claude-code-client-metadata
+  secret:
+    enabled: false
+  allowedUserGroups:
+    - name: admin
+      namespace: pocket-id-operator
+  apiAccess:
+    - apiRef:
+        name: mcp
+      delegatedPermissions:
+        - home-assistant
+        - grafana
+        - flux
+        - flux:write
