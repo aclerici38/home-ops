@@ -67,12 +67,42 @@ spec:
             clientSecret: client-secret
     oidc:
       spec:
-        extension:
-          oauth2:
-            jwt:
-              idToken:
-                claimsToHeaders:
-                  - name: preferred_username
+        securityPolicy:
+          # Frigate reads identity off headers (proxy.header_map in the on-PVC
+          # config.yml). Envoy Gateway has no claim-to-header under oidc, so the
+          # ID token is forwarded on a header and a jwt provider maps its claims.
+          # The oauth2 filter is order 9 and jwt_authn order 10, so the token is
+          # on the request by the time the provider reads it. Envoy strips
+          # x-oidc-id-token off inbound requests, so it can't be spoofed.
+          oidc:
+            forwardIDToken:
+              header: x-oidc-id-token
+          jwt:
+            # optional => Envoy's allow_missing, NOT allow_missing_or_failed: a
+            # session that got past oauth2 carrying no ID token falls through to
+            # proxy.default_role (viewer), but a malformed or wrong-audience
+            # token is still a 401. oauth2, not this, is what enforces authn.
+            optional: true
+            providers:
+              - name: frigate
+                issuer: https://id.clerici.tech
+                # Binds the token to frigate's own client, so an ID token minted
+                # for another clerici.tech app can't be replayed here.
+                audiences:
+                  - frigate-home
+                extractFrom:
+                  headers:
+                    - name: x-oidc-id-token
+                remoteJWKS:
+                  uri: https://id.clerici.tech/.well-known/jwks.json
+                  # Same issuer short-circuit the chart applies to the token
+                  # endpoint: discovery through this very Gateway would deadlock.
+                  backendRefs:
+                    - group: gateway.envoyproxy.io
+                      kind: Backend
+                      name: frigate-oidc-backend
+                claimToHeaders:
+                  - claim: preferred_username
                     header: x-forwarded-user
-                  - name: frigate_role
+                  - claim: frigate_role
                     header: x-forwarded-groups

@@ -17,6 +17,12 @@ spec:
       # The towonel agent is a pod, so the immediate peer is never the client.
       trustedCIDRs:
         - ${CLUSTER_POD_CIDR}
+  headers:
+    # Headers are output by the gateway for auth and could be spoofed
+    earlyRequestHeaders:
+      remove:
+        - x-forwarded-user
+        - x-forwarded-groups
   http2:
     onInvalidMessage: TerminateStream
   connection:
