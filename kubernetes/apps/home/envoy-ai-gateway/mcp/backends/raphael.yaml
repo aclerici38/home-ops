@@ -1,0 +1,41 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.1/backend_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: Backend
+metadata:
+  name: raphael
+spec:
+  endpoints:
+    - fqdn:
+        hostname: raphael.clerici.tech
+        port: 443
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.6.2/backendtlspolicy_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+  name: raphael
+spec:
+  targetRefs:
+    - group: gateway.envoyproxy.io
+      kind: Backend
+      name: raphael
+  validation:
+    wellKnownCACertificates: System
+    hostname: raphael.clerici.tech
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.10.0/externalsecret_v1.json
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: raphael-mcp-token
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  data:
+    - secretKey: apiKey
+      remoteRef:
+        key: raphael-home-assistant
+        property: MCP_TOKEN

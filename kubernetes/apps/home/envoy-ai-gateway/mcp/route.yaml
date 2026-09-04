@@ -25,6 +25,14 @@ spec:
         apiKey:
           secretRef:
             name: hass-mcp-token
+    - name: raphael
+      group: gateway.envoyproxy.io
+      kind: Backend
+      path: /api/mcp
+      securityPolicy:
+        apiKey:
+          secretRef:
+            name: raphael-mcp-token
     - name: grafana
       group: gateway.envoyproxy.io
       kind: Backend
@@ -47,6 +55,7 @@ spec:
         resourceName: clerici.tech MCP
         scopesSupported:
           - home-assistant
+          - raphael
           - grafana
           - flux
           - flux:write
@@ -74,6 +83,12 @@ spec:
               scopes:
                 - "home-assistant"
           cel: request.mcp.backend == "home-assistant"
+        - action: Allow
+          source:
+            jwt:
+              scopes:
+                - "raphael"
+          cel: request.mcp.backend == "raphael"
         - action: Allow
           source:
             jwt:
