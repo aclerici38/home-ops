@@ -37,10 +37,6 @@ oidc:
     - profile
     - email
     - groups
-  {{- /* Parent domain: one session across every app. Safe because the ID token
-         is validated against this policy's own clientID, so pocket-id's
-         per-client allowedUserGroups still binds. */}}
-  cookieDomain: "clerici.tech"
   refreshToken: true
 csrf:
   additionalOrigins:

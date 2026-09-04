@@ -86,8 +86,8 @@ spec:
             providers:
               - name: frigate
                 issuer: https://id.clerici.tech
-                # Binds the token to frigate's own client, so an ID token minted
-                # for another clerici.tech app can't be replayed here.
+                # The claims below are only trusted off a token pocket-id
+                # actually minted for frigate.
                 audiences:
                   - frigate-home
                 extractFrom:
