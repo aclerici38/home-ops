@@ -32,7 +32,7 @@ spec:
           immich-server:
             image:
               repository: ghcr.io/immich-app/immich-server
-              tag: v3.2.0-rc.2@sha256:720c5abb8063843e62c351f6f8354c6b83649964a182b79df5cc638d71f370e7
+              tag: v3.2.0-rc.3@sha256:ab108fdf1c1a28c3f9d0a007398f181b9a4b772a6517a66c850abe3dba38e468
             env:
               IMMICH_LOG_LEVEL: verbose
               REDIS_HOSTNAME: immich-dragonfly-db
@@ -83,7 +83,7 @@ spec:
           immich-ml:
             image:
               repository: ghcr.io/immich-app/immich-machine-learning
-              tag: v3.2.0-rc.2-openvino@sha256:d7178531aad34d56d59731cb24d8af46bc953025835a036739300c105ea8aed6
+              tag: v3.2.0-rc.3-openvino@sha256:20b05343bee0c12f73e2d21e5f19b8f75933d210a471dc36138ba2e411ccffa1
             env:
               HF_HOME: /cache/hf
               IMMICH_LOG_LEVEL: verbose
