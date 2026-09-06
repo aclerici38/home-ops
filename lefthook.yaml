@@ -8,7 +8,7 @@ pre-commit:
   parallel: true
   commands:
     nixfmt:
-      glob: "raphael/**/*.nix"
+      glob: "{nix-config,raphael}/**/*.nix"
       run: nixfmt --check {staged_files}
       stage_fixed: true
     yaml:

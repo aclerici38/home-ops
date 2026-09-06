@@ -1471,28 +1471,6 @@ url = "https://github.com/jdx/mise/releases/download/v2026.9.1/mise-v2026.9.1-ma
 url_api = "https://api.github.com/repos/jdx/mise/releases/assets/541240301"
 provenance = "minisign"
 
-[[tools.atuin]]
-version = "18.21.0"
-backend = "aqua:atuinsh/atuin"
-
-[tools.atuin."platforms.linux-arm64"]
-checksum = "sha256:dbdee27f7fc67b92e770d1af89d3b421051499a058cd3e4698d123e0117fa950"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.21.0/atuin-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/538647911"
-provenance = "github-attestations"
-
-[tools.atuin."platforms.linux-x64"]
-checksum = "sha256:434d82b4c5f691b6f0423f30a4b931df4afded19b05a795a280192fdf8a61a2d"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.21.0/atuin-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/538647975"
-provenance = "github-attestations"
-
-[tools.atuin."platforms.macos-arm64"]
-checksum = "sha256:c78ac159c89c38ee0b56eb6a11d9c0a7340de3a03b98fbbccd44f8e2d91e6e6e"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.21.0/atuin-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/538647916"
-provenance = "github-attestations"
-
 [[tools.cilium-cli]]
 version = "0.20.0"
 backend = "aqua:cilium/cilium-cli"
@@ -1549,25 +1527,6 @@ url_api = "https://api.github.com/repos/google/go-containerregistry/releases/ass
 checksum = "sha256:2231fc8df8806d20d680ff1225db44e095a55dd6ac1ae8eced4faf4b278b78fb"
 url = "https://github.com/google/go-containerregistry/releases/download/v0.22.1/go-containerregistry_Darwin_arm64.tar.gz"
 url_api = "https://api.github.com/repos/google/go-containerregistry/releases/assets/543544436"
-
-[[tools.direnv]]
-version = "2.37.1"
-backend = "aqua:direnv/direnv"
-
-[tools.direnv."platforms.linux-arm64"]
-checksum = "sha256:2a9cef8d73521d6a3ec3f2871c4b747b8c4cc038628c1b57a7efa42b393a2d82"
-url = "https://github.com/direnv/direnv/releases/download/v2.37.1/direnv.linux-arm64"
-url_api = "https://api.github.com/repos/direnv/direnv/releases/assets/274610549"
-
-[tools.direnv."platforms.linux-x64"]
-checksum = "sha256:1f1b93dd6f38523fde26dfac96151ef9d31a374e3005cd3345fb93555ae0c9b5"
-url = "https://github.com/direnv/direnv/releases/download/v2.37.1/direnv.linux-amd64"
-url_api = "https://api.github.com/repos/direnv/direnv/releases/assets/274610548"
-
-[tools.direnv."platforms.macos-arm64"]
-checksum = "sha256:4f569f3a36732bfd8b8fea7bfcc6ad87a59745c109022164d0ca4832451d5369"
-url = "https://github.com/direnv/direnv/releases/download/v2.37.1/direnv.darwin-arm64"
-url_api = "https://api.github.com/repos/direnv/direnv/releases/assets/274610544"
 
 [[tools.dyff]]
 version = "1.12.0"
@@ -2333,15 +2292,6 @@ checksum = "sha256:f23eac328ca50c7b775dc24dc275cdeacb65e16cf8bd1745d18e3c563f704
 url = "https://github.com/evilmartians/lefthook/releases/download/v2.1.12/lefthook_2.1.12_MacOS_arm64.gz"
 url_api = "https://api.github.com/repos/evilmartians/lefthook/releases/assets/533627758"
 provenance = "github-attestations"
-
-[[tools.mas]]
-version = "7.0.0"
-backend = "aqua:mas-cli/mas"
-
-[tools.mas."platforms.macos-arm64"]
-checksum = "sha256:bc218a854c85d9e1c95496a96b26287bb66056b95688b90f91d04fa62ed21b75"
-url = "https://github.com/mas-cli/mas/releases/download/v7.0.0/mas-7.0.0-arm64.pkg"
-url_api = "https://api.github.com/repos/mas-cli/mas/releases/assets/411752346"
 
 [[tools.mc]]
 version = "RELEASE.2025-08-13T08-35-41Z"
