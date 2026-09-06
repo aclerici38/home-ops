@@ -55,6 +55,14 @@
       allowedVersions: "/^\\d+\\.\\d+\\.\\d+(?:-(?:beta\\d*|rc\\d*))?$/i",
     },
     {
+      description: "Track talstomize prereleases for now",
+      matchDatasources: ["github-releases"],
+      matchPackageNames: ["mirceanton/talstomize"],
+      versioning: "semver",
+      ignoreUnstable: false,
+      respectLatest: false,
+    },
+    {
       description: "Separate PRs for raphael, so the RV box updates independently of the clusters",
       matchFileNames: ["**/raphael/**"],
       // Keep specific groups in sync
