@@ -1,0 +1,85 @@
+---
+apiVersion: config.talstomize.dev/v1alpha1
+kind: Talstomize
+
+clusterName: cloud
+controlPlaneEndpoint: https://vps.clerici.tech:6443
+kubernetesVersion: ${KUBE_VERSION}
+secrets: ./talsecret.sops.yaml
+
+# Replaces talhelper's additionalApiServerCertSans + additionalMachineCertSans
+additionalSubjectAltNames:
+  - "madbum"
+  - "vps.clerici.tech"
+  - "192.9.147.24"
+  - "10.40.40.41"
+  - "127.0.0.1"
+
+installer:
+  talosVersion: ${TALOS_VERSION}
+
+nodes:
+  madbum:
+    ip: 192.9.147.24
+    kind: controlplane
+    installer:
+      # madbum runs the `oracle` platform, but talstomize only ever builds
+      # `metal-installer` URLs from installer.schematic, so the image is pinned
+      # literally here. The schematic ID is platform-independent -- only the URL
+      # path differs -- so this is the same schematic talhelper resolved from:
+      #
+      #   customization:
+      #     systemExtensions:
+      #       officialExtensions: [siderolabs/drbd]   # miroir
+      #     extraKernelArgs:
+      #       - -selinux
+      #       - apparmor=0
+      #       - init_on_alloc=0
+      #       - init_on_free=0
+      #       - mitigations=off
+      #       - security=none
+      #       - talos.platform=oracle
+      #
+      # Re-resolve with:
+      #   curl -X POST --data-binary @schematic.yaml https://factory.talos.dev/schematics
+      image: factory.talos.dev/oracle-installer/401a03eed7fbb8010232cf8e80c4c785b3c8f5f74be1860e8550b11af2f3f431:${TALOS_VERSION}
+    patches:
+      - machine:
+          install:
+            diskSelector:
+              wwid: naa.608a262117364966b0e79854d296a06a
+            wipe: false
+            grubUseUKICmdline: true
+          kernel:
+            modules:
+              - name: drbd
+
+# Applied to every node. Order matters: shared base from ../global, then this
+# cluster's overrides.
+patches:
+  - apiVersion: v1alpha1
+    kind: KubeNetworkConfig
+    podSubnets:
+      - "${CLUSTER_POD_CIDR}"
+    serviceSubnets:
+      - "${CLUSTER_SVC_CIDR}"
+  # Disabling Flannel for Cilium means deleting it.
+  - apiVersion: v1alpha1
+    kind: KubeFlannelCNIConfig
+    $patch: delete
+  - "../global/machine-kubelet.yaml"
+  - "./patches/global/machine-kubelet.yaml"
+  - "../global/machine-network.yaml"
+  - "./patches/global/machine-network.yaml"
+  - "./patches/global/machine-sysctls.yaml"
+  - "./patches/global/machine-time.yaml"
+  - "../global/machine-kernel.yaml"
+  - "../global/machine-features.yaml"
+
+controlplanePatches:
+  - "../global/cluster.yaml"
+  - "../global/cluster-k8s.yaml"
+  - "./patches/controller/etcd.yaml"
+  - "../global/controller-machine-features.yaml"
+
+workerPatches: []

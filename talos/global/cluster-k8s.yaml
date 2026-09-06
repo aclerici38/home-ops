@@ -1,0 +1,46 @@
+---
+# Talos 1.14 control-plane component documents. These replace the v1alpha1
+# .cluster.{apiServer,controllerManager,scheduler,proxy,discovery} blocks that
+# used to live in ./cluster.yaml -- setting both is rejected by validation.
+#
+# Discovery needs no document here: in the 1.14 document model the service
+# registry is the only registry, and Talos generates a default
+# `DiscoveryServiceConfig` (endpoint https://discovery.talos.dev/). That is
+# exactly the old `discovery: {enabled: true, registries: {kubernetes:
+# {disabled: true}, service: {}}}`.
+apiVersion: v1alpha1
+kind: KubeAPIServerConfig
+extraArgs:
+  runtime-config: admissionregistration.k8s.io/v1beta1=true
+  feature-gates: ImageVolume=true
+---
+apiVersion: v1alpha1
+kind: KubeControllerManagerConfig
+extraArgs:
+  bind-address: 0.0.0.0
+---
+apiVersion: v1alpha1
+kind: KubeSchedulerConfig
+extraArgs:
+  bind-address: 0.0.0.0
+config:
+  apiVersion: kubescheduler.config.k8s.io/v1
+  kind: KubeSchedulerConfiguration
+  profiles:
+    - schedulerName: default-scheduler
+      plugins:
+        score:
+          disabled:
+            - name: ImageLocality
+      pluginConfig:
+        - name: PodTopologySpread
+          args:
+            defaultingType: List
+            defaultConstraints:
+              - maxSkew: 1
+                topologyKey: kubernetes.io/hostname
+                whenUnsatisfiable: ScheduleAnyway
+---
+apiVersion: v1alpha1
+kind: KubeProxyConfig
+enabled: false

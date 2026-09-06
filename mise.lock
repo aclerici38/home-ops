@@ -2101,6 +2101,23 @@ checksum = "sha256:4e32db68d1b0f998856330cc15ee7ff54814a430ba605eb5577f65cab4197
 url = "https://github.com/home-operations/yayamlls/releases/download/0.3.0/yayamlls_0.3.0_darwin_arm64.tar.gz"
 url_api = "https://api.github.com/repos/home-operations/yayamlls/releases/assets/537946195"
 
+[[tools."github:mirceanton/talstomize"]]
+version = "0.1.0-rc.2"
+backend = "github:mirceanton/talstomize"
+
+[tools."github:mirceanton/talstomize"."platforms.linux-x64"]
+checksum = "sha256:6ba8916f8d24e7fa58b879e51f54fd611410c893f82b77b04623ff76e1186f16"
+url = "https://github.com/mirceanton/talstomize/releases/download/v0.1.0-rc.2/talstomize_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/mirceanton/talstomize/releases/assets/546076604"
+provenance = "github-attestations"
+
+[tools."github:mirceanton/talstomize"."platforms.macos-arm64"]
+checksum = "sha256:95be94b1d6e61478a717df37b9d6b7554ef856cc8838f0723e383bfb5e883e63"
+url = "https://github.com/mirceanton/talstomize/releases/download/v0.1.0-rc.2/talstomize_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/mirceanton/talstomize/releases/assets/546076623"
+provenance = "github-attestations"
+provenance_verified = true
+
 [[tools.go]]
 version = "1.27.1"
 backend = "core:go"

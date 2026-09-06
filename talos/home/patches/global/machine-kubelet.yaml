@@ -1,8 +1,7 @@
 ---
-# Overrides ../../global/machine-kubelet.yaml with this cluster's node subnets.
-machine:
-  kubelet:
-    nodeIP:
-      validSubnets:
-        - "${NODE_V4_SUBNET}"
-        - "${NODE_V6_SUBNET}"
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+nodeIP:
+  validSubnets:
+    - "${NODE_V4_SUBNET}"
+    - "${NODE_V6_SUBNET}"

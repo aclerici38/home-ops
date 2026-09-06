@@ -6,4 +6,16 @@
 #USAGE }
 set -euo pipefail
 cd "$usage_cluster"
-talhelper genconfig
+
+talstomize build . -o clusterconfig
+
+# talstomize writes whatever machinery renders without validating it, unlike
+# talhelper, so validate explicitly -- a bad patch otherwise only surfaces on
+# apply. Node kind is per-cluster: madbum is an Oracle VM, the rest are metal.
+mode="metal"
+[[ "$usage_cluster" == "cloud" ]] && mode="cloud"
+
+for f in clusterconfig/*.yaml; do
+  [[ "$(basename "$f")" == "talosconfig" ]] && continue
+  talosctl validate --config "$f" --mode "$mode"
+done

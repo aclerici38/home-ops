@@ -1,6 +1,6 @@
 ---
-# Overrides ../../global/machine-network.yaml with this cluster's nameservers.
-machine:
-  network:
-    nameservers:
-      - ${NODE_NAMESERVER}
+# Talos 1.14: .machine.network.nameservers moved to the ResolverConfig document.
+apiVersion: v1alpha1
+kind: ResolverConfig
+nameservers:
+  - address: ${NODE_NAMESERVER}
