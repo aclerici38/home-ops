@@ -1,0 +1,9 @@
+---
+apiVersion: v1alpha1
+kind: SysctlConfig
+params:
+  # Disable v6 discovery on the multus interfaces
+  net.ipv6.conf.bond1.disable_ipv6: 1
+  net.ipv6.conf.bond1/20.disable_ipv6: 1
+  net.ipv6.conf.bond1/40.disable_ipv6: 1
+  net.ipv6.conf.bond1/80.disable_ipv6: 1

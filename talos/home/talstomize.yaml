@@ -208,6 +208,7 @@ controlplanePatches:
   - "../global/cluster-k8s.yaml"
   - "./patches/controller/etcd.yaml"
   - "../global/controller-machine-features.yaml"
+  - "./patches/controller/sysctls.yaml"
   - "./patches/controller/node-labels.yaml"
   - "./patches/controller/volumes.yaml"
 
