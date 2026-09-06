@@ -5,12 +5,14 @@
     "github>home-operations/renovate-presets//apps/llamacpp.json5#8.1.0",
     ":semanticCommits",
     ":timezone(America/Los_Angeles)",
-    "github>aclerici38/home-ops//renovate/autoMerge.json5",
     "github>aclerici38/home-ops//renovate/customManagers.json5",
     "github>aclerici38/home-ops//renovate/grafanaDashboards.json5",
     "github>aclerici38/home-ops//renovate/groups.json5",
     "github>aclerici38/home-ops//renovate/labels.json5",
     "github>aclerici38/home-ops//renovate/packageRules.json5",
+    // After groups.json5 so the `automerge` bundle's groupName wins over the
+    // per-app groups
+    "github>aclerici38/home-ops//renovate/autoMerge.json5",
   ],
   assignees: ["aclerici38"],
   suppressNotifications: ["prEditedNotification", "prIgnoreNotification"],

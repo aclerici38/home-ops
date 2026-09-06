@@ -5,14 +5,75 @@
   automergeType: "pr",
   assignAutomerge: false,
   rebaseWhen: "conflicted",
+  // Every rule below that sets `automerge: true` also joins the "automerge"
+  // group, so a night's worth of auto-merges lands as ONE PR and ONE commit
+  // instead of one per dependency. Renovate has no `matchAutomerge:`, so the
+  // bundle has to be declared rule by rule. Every knob below is load-bearing
+  // for keeping the bundle on a single, mergeable branch:
+  //
+  //   groupName              the bundle itself. This file is extended after
+  //                          groups.json5, so it overrides the per-app groups.
+  //   separateMajorMinor     false, else majors split onto `major-automerge`.
+  //                          It is a pre-lookup option, so the validator
+  //                          rejects it on any rule that also uses
+  //                          matchUpdateTypes; it lives in its own two rules
+  //                          below, covering the sets whose majors auto-merge.
+  //   additionalBranchPrefix "", to undo the preset's zer0ver rule, which
+  //                          routes 0.x minors onto a `major-` branch.
+  //                          packageRules.json5 is extended after this file and
+  //                          re-sets `raphael-`, so raphael keeps its own PR.
+  //   minimumGroupSize       1, defensively: no member inherits a group gate
+  //                          today, but generateBranchConfig() takes the MAX
+  //                          across a branch's upgrades, so if one ever did
+  //                          (Flux Operator is 3) it would silently hold back
+  //                          the entire bundle on a quiet night.
+  //   schedule               must be identical on every member: branch-level
+  //                          config is taken from upgrades[0] after sorting by
+  //                          depName, so a member without it would randomly
+  //                          decide the whole bundle's window.
+  //   group                  same reason. `group` is only merged in when the
+  //                          branch really holds >1 dep, so a one-dep night
+  //                          still gets its normal descriptive title, while a
+  //                          real bundle gets a stable scope instead of
+  //                          inheriting upgrades[0]'s (e.g. "github-action").
+  //
+  // The window is one hour, not 2-6. The RenovateJob runs every 30m, and a new
+  // PR can only be opened while in schedule, so a 4-hour window meant up to 8
+  // chances to open a fresh PR after the previous one merged. Merging is gated
+  // by `automergeSchedule` (default: any time), not `schedule`, so a PR opened
+  // at 3:00 still merges whenever CI goes green.
   packageRules: [
+    {
+      // Pre-lookup options cannot share a rule with matchUpdateTypes, so the
+      // three sets whose majors auto-merge get separateMajorMinor here instead.
+      // Without it a major lands on `renovate/major-automerge` as a second PR.
+      description: ["Keep auto-merged majors on the bundle branch"],
+      matchPackageNames: ["**/llama.cpp", "**/firefox", "aclerici38/k8s-versioned-schemas"],
+      separateMajorMinor: false,
+    },
+    {
+      description: ["Same, for the mise tools that are outside the Mise tools group"],
+      matchManagers: ["mise"],
+      matchDepNames: ["!cilium-cli", "!kubectl", "!github:cloudnative-pg/cloudnative-pg"],
+      separateMajorMinor: false,
+    },
     {
       description: ["Auto-merge GitHub Actions for minor and patch"],
       matchManagers: ["github-actions"],
       matchDatasources: ["github-tags"],
       automerge: true,
       matchUpdateTypes: ["minor", "patch"],
-      schedule: ["* 2-6 * * *"],
+      groupName: "automerge",
+      additionalBranchPrefix: "",
+      minimumGroupSize: 1,
+      schedule: ["* 3 * * *"],
+      group: {
+        semanticCommitType: "chore",
+        semanticCommitScope: "automerge",
+        commitMessagePrefix: "chore(automerge):",
+        commitMessageAction: "",
+        commitMessageTopic: "nightly automerge bundle",
+      },
     },
     {
       description: ["Auto-merge specific apps' minor versions"],
@@ -47,7 +108,17 @@
         "**/zfs-scrubber",
       ],
       matchUpdateTypes: ["minor", "patch", "digest"],
-      schedule: ["* 2-6 * * *"],
+      groupName: "automerge",
+      additionalBranchPrefix: "",
+      minimumGroupSize: 1,
+      schedule: ["* 3 * * *"],
+      group: {
+        semanticCommitType: "chore",
+        semanticCommitScope: "automerge",
+        commitMessagePrefix: "chore(automerge):",
+        commitMessageAction: "",
+        commitMessageTopic: "nightly automerge bundle",
+      },
     },
     {
       description: ["Auto-merge specific apps' major versions"],
@@ -55,7 +126,17 @@
       matchDatasources: ["docker", "helm"],
       matchPackageNames: ["**/llama.cpp", "**/firefox"],
       matchUpdateTypes: ["major", "minor", "patch", "digest"],
-      schedule: ["* 2-6 * * *"],
+      groupName: "automerge",
+      additionalBranchPrefix: "",
+      minimumGroupSize: 1,
+      schedule: ["* 3 * * *"],
+      group: {
+        semanticCommitType: "chore",
+        semanticCommitScope: "automerge",
+        commitMessagePrefix: "chore(automerge):",
+        commitMessageAction: "",
+        commitMessageTopic: "nightly automerge bundle",
+      },
     },
     {
       description: ["Auto-merge specific patch updates"],
@@ -71,7 +152,17 @@
         "**/cert-manager",
       ],
       matchUpdateTypes: ["patch", "digest"],
-      schedule: ["* 2-6 * * *"],
+      groupName: "automerge",
+      additionalBranchPrefix: "",
+      minimumGroupSize: 1,
+      schedule: ["* 3 * * *"],
+      group: {
+        semanticCommitType: "chore",
+        semanticCommitScope: "automerge",
+        commitMessagePrefix: "chore(automerge):",
+        commitMessageAction: "",
+        commitMessageTopic: "nightly automerge bundle",
+      },
     },
     {
       description: ["Auto-merge specific digest-only updates"],
@@ -82,7 +173,17 @@
         "**/cloudnative-pg/charts/plugin-barman-cloud",
       ],
       matchUpdateTypes: ["digest"],
-      schedule: ["* 2-6 * * *"],
+      groupName: "automerge",
+      additionalBranchPrefix: "",
+      minimumGroupSize: 1,
+      schedule: ["* 3 * * *"],
+      group: {
+        semanticCommitType: "chore",
+        semanticCommitScope: "automerge",
+        commitMessagePrefix: "chore(automerge):",
+        commitMessageAction: "",
+        commitMessageTopic: "nightly automerge bundle",
+      },
     },
     {
       description: ["Auto-merge haproxy, but only after a week"],
@@ -91,7 +192,17 @@
       matchPackageNames: ["**/haproxy"],
       matchUpdateTypes: ["minor", "patch", "digest"],
       minimumReleaseAge: "7 days",
-      schedule: ["* 2-6 * * *"],
+      groupName: "automerge",
+      additionalBranchPrefix: "",
+      minimumGroupSize: 1,
+      schedule: ["* 3 * * *"],
+      group: {
+        semanticCommitType: "chore",
+        semanticCommitScope: "automerge",
+        commitMessagePrefix: "chore(automerge):",
+        commitMessageAction: "",
+        commitMessageTopic: "nightly automerge bundle",
+      },
     },
     {
       description: ["Auto-merge k8s-versioned-schemas"],
@@ -99,20 +210,46 @@
       matchDatasources: ["github-tags"],
       matchPackageNames: ["aclerici38/k8s-versioned-schemas"],
       matchUpdateTypes: ["major", "minor", "patch"],
+      groupName: "automerge",
+      additionalBranchPrefix: "",
+      minimumGroupSize: 1,
+      schedule: ["* 3 * * *"],
+      group: {
+        semanticCommitType: "chore",
+        semanticCommitScope: "automerge",
+        commitMessagePrefix: "chore(automerge):",
+        commitMessageAction: "",
+        commitMessageTopic: "nightly automerge bundle",
+      },
     },
     {
       description: ["Auto-merge mise updates by default"],
       matchManagers: ["mise"],
       automerge: true,
       matchUpdateTypes: ["major", "minor", "patch", "digest"],
-      schedule: ["* 2-6 * * *"],
+      groupName: "automerge",
+      additionalBranchPrefix: "",
+      minimumGroupSize: 1,
+      schedule: ["* 3 * * *"],
+      group: {
+        semanticCommitType: "chore",
+        semanticCommitScope: "automerge",
+        commitMessagePrefix: "chore(automerge):",
+        commitMessageAction: "",
+        commitMessageTopic: "nightly automerge bundle",
+      },
     },
     {
+      // Must restore a groupName as well as clearing automerge
       description: ["Exclude specific mise tools from auto-merge"],
       matchManagers: ["mise"],
       matchDepNames: ["cilium-cli", "kubectl", "github:cloudnative-pg/cloudnative-pg"],
       automerge: false,
       schedule: ["at any time"],
+      groupName: "{{ replace '.+/' '' depName }}",
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
     },
   ],
 }
