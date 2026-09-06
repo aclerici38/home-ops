@@ -2,6 +2,6 @@
 cluster:
   etcd:
     advertisedSubnets:
-      - "10.40.40.0/24"
+      - "${CLOUD_NODE_PRIVATE_SUBNET}"
     listenSubnets:
-      - "10.40.40.0/24"
+      - "${CLOUD_NODE_PRIVATE_SUBNET}"

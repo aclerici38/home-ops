@@ -23,15 +23,17 @@ pre-commit:
     actionlint:
       glob: ".github/{workflows,actions}/**/*.{yaml,yml}"
       run: actionlint {staged_files}
-    talhelper-talconfig:
-      glob: "talos/talconfig.yaml"
-      run: talhelper validate talconfig talos/talconfig.yaml
-    talhelper-nodeconfig:
-      glob: "talos/{talconfig.yaml,patches/**}"
+    talos-nodeconfig:
+      glob: "talos/**"
+      # talstomize does not validate what it renders, so check the generated
+      # configs here. madbum is an Oracle VM; every other node is metal.
       run: |-
-        for f in talos/clusterconfig/*.yaml; do
+        for f in talos/home/clusterconfig/*.yaml talos/cloud/clusterconfig/*.yaml; do
           [ -e "$f" ] || continue
-          talhelper validate nodeconfig "$f" || exit 1
+          case "$f" in */talosconfig) continue ;; esac
+          mode=metal
+          case "$f" in talos/cloud/*) mode=cloud ;; esac
+          talosctl validate --config "$f" --mode "$mode" || exit 1
         done
     shell:
       glob: "mise-tasks/**"

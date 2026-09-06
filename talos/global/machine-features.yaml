@@ -1,11 +1,14 @@
 ---
 machine:
   features:
-    hostDNS:
-      enabled: false
-      resolveMemberNames: true
-      forwardKubeDNSToHost: false
     rbac: true
     stableHostname: false
     apidCheckExtKeyUsage: true
     diskQuotaSupport: true
+---
+apiVersion: v1alpha1
+kind: ResolverConfig
+hostDNS:
+  enabled: false
+  forwardKubeDNSToHost: false
+  resolveMemberNames: false

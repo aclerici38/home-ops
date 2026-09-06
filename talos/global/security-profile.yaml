@@ -1,0 +1,6 @@
+---
+# On by default i v1.14 UNLESS on upgrade, applied itself when switching to talstomize
+# Fixed by a reboot
+apiVersion: v1alpha1
+kind: SecurityProfileConfig
+workloadIsolation: true

@@ -1,9 +1,7 @@
 ---
-machine:
-  features:
-    kubernetesTalosAPIAccess:
-      allowedKubernetesNamespaces:
-        - tuppr
-      allowedRoles:
-        - os:admin
-      enabled: true
+apiVersion: v1alpha1
+kind: KubeTalosAPIAccessConfig
+allowedRoles:
+  - os:admin
+allowedKubernetesNamespaces:
+  - tuppr

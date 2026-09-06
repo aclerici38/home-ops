@@ -1,9 +1,13 @@
 ---
-# Shared network config. Per-cluster nameservers are layered on via each
-# cluster's patches/global/machine-network.yaml (applied after this patch).
-machine:
-  network:
-    kubespan:
-      enabled: false
-      advertiseKubernetesNetworks: false
-    disableSearchDomain: true
+apiVersion: v1alpha1
+kind: KubeSpanConfig
+enabled: false
+advertiseKubernetesNetworks: false
+---
+# Shared resolver config. Per-cluster nameservers are layered on via each
+# cluster's patches/global/machine-network.yaml (applied after this patch);
+# ResolverConfig is a singleton document, so the two merge.
+apiVersion: v1alpha1
+kind: ResolverConfig
+searchDomains:
+  disableDefault: true

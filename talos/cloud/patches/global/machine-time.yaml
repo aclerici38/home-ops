@@ -1,7 +1,8 @@
 ---
-machine:
-  time:
-    disabled: false
-    # Oracle Cloud metadata service provides NTP.
-    servers:
-      - 169.254.169.254
+apiVersion: v1alpha1
+kind: TimeSyncConfig
+enabled: true
+ntp:
+  # Oracle Cloud metadata service provides NTP.
+  servers:
+    - 169.254.169.254

@@ -1,0 +1,217 @@
+---
+apiVersion: config.talstomize.dev/v1alpha1
+kind: Talstomize
+
+clusterName: ${CLUSTER_NAME}
+controlPlaneEndpoint: ${CLUSTER_ENDPOINT_URL}
+kubernetesVersion: ${KUBE_VERSION}
+secrets: ./talsecret.sops.yaml
+
+additionalSubjectAltNames:
+  - "bonds"
+  - "cain"
+  - "posey"
+  - "belt"
+  - "k8s.lab.internal"
+  - "bonds.lab.internal"
+  - "cain.lab.internal"
+  - "posey.lab.internal"
+  - "belt.lab.internal"
+  - "${CLUSTER_ENDPOINT_VIP}"
+  - "${BONDS_IP}"
+  - "${CAIN_IP}"
+  - "${POSEY_IP}"
+  - "${BELT_IP}"
+  - "127.0.0.1"
+  - "${CLUSTER_SVC_GATEWAY}"
+
+installer:
+  talosVersion: ${TALOS_VERSION}
+
+nodes:
+  bonds:
+    ip: "${BONDS_IP}"
+    kind: controlplane
+    installer:
+      schematic:
+        customization:
+          extraKernelArgs:
+            - amd_pstate=active
+            - cpufreq.default_governor=performance
+            - apparmor=0
+            - iommu.passthrough=1
+            - init_on_alloc=0
+            - init_on_free=0
+            - mitigations=off
+            - security=none
+            - enforcing=0
+            - -selinux
+            - zfs.zfs_arc_max=42949672960 # 25Gi
+            - zfs.zfs_arc_shrinker_limit=0
+            - i915.enable_guc=3
+            - i915.force_probe=!a7a0
+            - xe.force_probe=a7a0
+            - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
+          systemExtensions:
+            officialExtensions:
+              - siderolabs/i915
+              - siderolabs/xe
+              - siderolabs/zfs
+              - siderolabs/amd-ucode
+              - siderolabs/nfsd
+              - siderolabs/mei
+              - siderolabs/nfsrahead
+    patches:
+      - machine:
+          install:
+            diskSelector:
+              wwid: eui.00253841414031f0
+      - apiVersion: v1alpha1
+        kind: KernelModuleConfig
+        name: zfs
+      - apiVersion: v1alpha1
+        kind: KernelModuleConfig
+        name: nfsd
+      - "./patches/networking/bonds.yaml"
+  cain:
+    ip: "${CAIN_IP}"
+    kind: controlplane
+    installer:
+      schematic:
+        customization:
+          extraKernelArgs:
+            - -init_on_alloc
+            - -init_on_free
+            - -selinux
+            - apparmor=0
+            - init_on_alloc=0
+            - init_on_free=0
+            - intel_iommu=on
+            - iommu=pt
+            - mitigations=off
+            - security=none
+            - sysctl.kernel.kexec_load_disabled=1
+            - talos.auditd.disabled=1
+            - i915.enable_guc=3
+            - i915.force_probe=!a7a0
+            - xe.force_probe=a7a0
+            - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
+          systemExtensions:
+            officialExtensions:
+              - siderolabs/i915
+              - siderolabs/xe
+              - siderolabs/mei
+              - siderolabs/intel-ucode
+              - siderolabs/nfsrahead
+    patches:
+      - machine:
+          install:
+            diskSelector:
+              wwid: eui.6479a79d30000001
+      - "./patches/networking/cain.yaml"
+  posey:
+    ip: "${POSEY_IP}"
+    kind: controlplane
+    installer:
+      schematic:
+        customization:
+          extraKernelArgs:
+            - amd_pstate=active
+            - cpufreq.default_governor=performance
+            - apparmor=0
+            - iommu.passthrough=1
+            - init_on_alloc=0
+            - init_on_free=0
+            - mitigations=off
+            - security=none
+            - enforcing=0
+            - -selinux
+            - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
+          systemExtensions:
+            officialExtensions:
+              - siderolabs/amd-ucode
+              - siderolabs/nfsrahead
+    patches:
+      - machine:
+          install:
+            diskSelector:
+              wwid: eui.00000000000000000026b7686e946425
+      - "./patches/networking/posey.yaml"
+  belt:
+    ip: "${BELT_IP}"
+    kind: worker
+    installer:
+      schematic:
+        customization:
+          extraKernelArgs:
+            - -init_on_alloc
+            - -init_on_free
+            - -selinux
+            - apparmor=0
+            - init_on_alloc=0
+            - init_on_free=0
+            - intel_iommu=on
+            - iommu=pt
+            - mitigations=off
+            - security=none
+            - sysctl.kernel.kexec_load_disabled=1
+            - talos.auditd.disabled=1
+            - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
+          systemExtensions:
+            officialExtensions:
+              - siderolabs/intel-ucode
+              - siderolabs/nfsrahead
+    patches:
+      - machine:
+          install:
+            diskSelector:
+              wwid: naa.500a07511fc61629
+      - "./patches/networking/belt.yaml"
+      # 3d printer. UdevRulesConfig is a singleton and `rules` is a slice, so
+      # this concatenates onto ../global's rules rather than replacing them.
+      - apiVersion: v1alpha1
+        kind: UdevRulesConfig
+        rules:
+          - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
+
+# Applied to every node. Order matters: shared base from ../global, then this
+# cluster's overrides.
+patches:
+  - apiVersion: v1alpha1
+    kind: KubeNetworkConfig
+    podSubnets:
+      - "${CLUSTER_POD_CIDR}"
+      - "${CLUSTER_POD_CIDR_V6}"
+    serviceSubnets:
+      - "${CLUSTER_SVC_CIDR}"
+      - "${CLUSTER_SVC_CIDR_V6}"
+
+  - apiVersion: v1alpha1
+    kind: KubeFlannelCNIConfig
+    $patch: delete
+  - "../global/machine-install.yaml"
+  - "./patches/global/machine-files.yaml"
+  - "../global/machine-kubelet.yaml"
+  - "./patches/global/machine-kubelet.yaml"
+  - "../global/machine-network.yaml"
+  - "./patches/global/machine-network.yaml"
+  - "./patches/global/machine-sysctls.yaml"
+  - "./patches/global/machine-time.yaml"
+  - "../global/machine-kernel.yaml"
+  - "./patches/global/machine-kernel.yaml"
+  - "../global/machine-features.yaml"
+  - "../global/security-profile.yaml"
+  - "./patches/global/uart.yaml"
+
+controlplanePatches:
+  - "../global/cluster.yaml"
+  - "../global/cluster-k8s.yaml"
+  - "./patches/controller/etcd.yaml"
+  - "../global/controller-machine-features.yaml"
+  - "./patches/controller/sysctls.yaml"
+  - "./patches/controller/node-labels.yaml"
+  - "./patches/controller/volumes.yaml"
+
+workerPatches:
+  - "./patches/worker/node-labels.yaml"
+  - "./patches/worker/volumes.yaml"

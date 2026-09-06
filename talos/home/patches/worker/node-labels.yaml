@@ -1,0 +1,6 @@
+---
+# belt has no local-path storage and is not a multus node.
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+labels:
+  network.dormammu/multus: "false"

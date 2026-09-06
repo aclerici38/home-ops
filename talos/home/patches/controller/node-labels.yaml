@@ -1,0 +1,6 @@
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+labels:
+  storage.openebs.io/hostpath: "true"
+  network.dormammu/multus: "true"

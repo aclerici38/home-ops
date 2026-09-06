@@ -9,16 +9,21 @@
 set -euo pipefail
 cd "$usage_cluster"
 
-diff=$(talhelper genconfig --dry-run 2>&1 | grep -v "^no changes found" || true)
-if [[ -n "$diff" ]]; then
-  echo "ERROR: $usage_cluster clusterconfig is out of sync with talconfig.yaml. Run 'mise run talos:gen $usage_cluster' first and review the changes."
-  echo ""
-  echo "$diff"
+# talstomize shells out to a bare `talosctl`, so it inherits TALOSCONFIG from the environment
+export TALOSCONFIG="$PWD/clusterconfig/talosconfig"
+
+if [[ ! -f "$TALOSCONFIG" ]]; then
+  echo "ERROR: $TALOSCONFIG missing. Run 'mise run talos:gen $usage_cluster' first."
   exit 1
 fi
 
+# `talstomize diff` compares the rendered config against live cluster state --
+# running machine config, booted Talos version, installed extensions and kernel
+# args -- and exits 1 on any drift. Show it before touching anything.
 if [[ -n "${usage_node:-}" ]]; then
-  talhelper gencommand apply --node "$usage_node" | bash
+  talstomize diff -f . --node "$usage_node" || true
+  talstomize apply -f . --node "$usage_node"
 else
-  talhelper gencommand apply | bash
+  talstomize diff -f . || true
+  talstomize apply -f .
 fi

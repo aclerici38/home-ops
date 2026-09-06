@@ -1,0 +1,10 @@
+---
+# Smaller than the control planes' 400GB, and no local-path user volume.
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+provisioning:
+  diskSelector:
+    match: system_disk
+  maxSize: 200GB
+  grow: false
