@@ -1,6 +1,7 @@
 ---
-machine:
-  time:
-    disabled: false
-    servers:
-      - time.apple.com
+apiVersion: v1alpha1
+kind: TimeSyncConfig
+enabled: true
+ntp:
+  servers:
+    - time.apple.com

@@ -69,11 +69,15 @@ nodes:
               wwid: eui.00253841414031f0
             wipe: false
             grubUseUKICmdline: true
-          kernel:
-            modules:
-              - name: zfs
-              - name: nbd
-              - name: nfsd
+      - apiVersion: v1alpha1
+        kind: KernelModuleConfig
+        name: zfs
+      - apiVersion: v1alpha1
+        kind: KernelModuleConfig
+        name: nbd
+      - apiVersion: v1alpha1
+        kind: KernelModuleConfig
+        name: nfsd
       # talconfig: nodeLabels -> KubeNodeConfig.labels
       - apiVersion: v1alpha1
         kind: KubeNodeConfig
@@ -137,9 +141,9 @@ nodes:
               wwid: eui.6479a79d30000001
             wipe: false
             grubUseUKICmdline: true
-          kernel:
-            modules:
-              - name: nbd
+      - apiVersion: v1alpha1
+        kind: KernelModuleConfig
+        name: nbd
       # talconfig: nodeLabels -> KubeNodeConfig.labels
       - apiVersion: v1alpha1
         kind: KubeNodeConfig
@@ -195,9 +199,9 @@ nodes:
               wwid: eui.00000000000000000026b7686e946425
             wipe: false
             grubUseUKICmdline: true
-          kernel:
-            modules:
-              - name: nbd
+      - apiVersion: v1alpha1
+        kind: KernelModuleConfig
+        name: nbd
       # talconfig: nodeLabels -> KubeNodeConfig.labels
       - apiVersion: v1alpha1
         kind: KubeNodeConfig
@@ -255,9 +259,9 @@ nodes:
               wwid: naa.500a07511fc61629
             wipe: false
             grubUseUKICmdline: true
-          kernel:
-            modules:
-              - name: nbd
+      - apiVersion: v1alpha1
+        kind: KernelModuleConfig
+        name: nbd
       # talconfig: nodeLabels -> KubeNodeConfig.labels
       - apiVersion: v1alpha1
         kind: KubeNodeConfig
@@ -273,10 +277,12 @@ nodes:
           maxSize: 200GB
           grow: false
       - "./patches/networking/belt.yaml"
-      - machine:
-          udev:
-            rules:
-              - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
+      # 3d printer. UdevRulesConfig is a singleton and `rules` is a slice, so
+      # this concatenates onto ../global's rules rather than replacing them.
+      - apiVersion: v1alpha1
+        kind: UdevRulesConfig
+        rules:
+          - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
 # Applied to every node. Order matters: shared base from ../global, then this
 # cluster's overrides.
 patches:

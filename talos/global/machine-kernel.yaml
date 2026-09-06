@@ -1,5 +1,4 @@
 ---
-machine:
-  kernel:
-    modules:
-      - name: xt_socket
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: xt_socket

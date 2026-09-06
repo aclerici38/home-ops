@@ -50,9 +50,9 @@ nodes:
               wwid: naa.608a262117364966b0e79854d296a06a
             wipe: false
             grubUseUKICmdline: true
-          kernel:
-            modules:
-              - name: drbd
+      - apiVersion: v1alpha1
+        kind: KernelModuleConfig
+        name: drbd
 
 # Applied to every node. Order matters: shared base from ../global, then this
 # cluster's overrides.
