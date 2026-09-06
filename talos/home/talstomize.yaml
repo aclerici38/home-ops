@@ -62,46 +62,16 @@ nodes:
               - siderolabs/mei
               - siderolabs/nfsrahead
     patches:
-      # talconfig: installDiskSelector + machineSpec-derived install flags
       - machine:
           install:
             diskSelector:
               wwid: eui.00253841414031f0
-            wipe: false
-            grubUseUKICmdline: true
       - apiVersion: v1alpha1
         kind: KernelModuleConfig
         name: zfs
       - apiVersion: v1alpha1
         kind: KernelModuleConfig
-        name: nbd
-      - apiVersion: v1alpha1
-        kind: KernelModuleConfig
         name: nfsd
-      # talconfig: nodeLabels -> KubeNodeConfig.labels
-      - apiVersion: v1alpha1
-        kind: KubeNodeConfig
-        labels:
-          storage.openebs.io/hostpath: "true"
-          network.dormammu/multus: "true"
-      # talconfig: volumes
-      - apiVersion: v1alpha1
-        kind: VolumeConfig
-        name: EPHEMERAL
-        provisioning:
-          diskSelector:
-            match: system_disk
-          maxSize: 400GB
-          grow: false
-      # talconfig: userVolumes
-      - apiVersion: v1alpha1
-        kind: UserVolumeConfig
-        name: local-path
-        provisioning:
-          diskSelector:
-            match: system_disk
-          minSize: 500GB
-          grow: true
       - "./patches/networking/bonds.yaml"
   cain:
     ip: "${CAIN_IP}"
@@ -134,40 +104,10 @@ nodes:
               - siderolabs/intel-ucode
               - siderolabs/nfsrahead
     patches:
-      # talconfig: installDiskSelector + machineSpec-derived install flags
       - machine:
           install:
             diskSelector:
               wwid: eui.6479a79d30000001
-            wipe: false
-            grubUseUKICmdline: true
-      - apiVersion: v1alpha1
-        kind: KernelModuleConfig
-        name: nbd
-      # talconfig: nodeLabels -> KubeNodeConfig.labels
-      - apiVersion: v1alpha1
-        kind: KubeNodeConfig
-        labels:
-          storage.openebs.io/hostpath: "true"
-          network.dormammu/multus: "true"
-      # talconfig: volumes
-      - apiVersion: v1alpha1
-        kind: VolumeConfig
-        name: EPHEMERAL
-        provisioning:
-          diskSelector:
-            match: system_disk
-          maxSize: 400GB
-          grow: false
-      # talconfig: userVolumes
-      - apiVersion: v1alpha1
-        kind: UserVolumeConfig
-        name: local-path
-        provisioning:
-          diskSelector:
-            match: system_disk
-          minSize: 500GB
-          grow: true
       - "./patches/networking/cain.yaml"
   posey:
     ip: "${POSEY_IP}"
@@ -192,40 +132,10 @@ nodes:
               - siderolabs/amd-ucode
               - siderolabs/nfsrahead
     patches:
-      # talconfig: installDiskSelector + machineSpec-derived install flags
       - machine:
           install:
             diskSelector:
               wwid: eui.00000000000000000026b7686e946425
-            wipe: false
-            grubUseUKICmdline: true
-      - apiVersion: v1alpha1
-        kind: KernelModuleConfig
-        name: nbd
-      # talconfig: nodeLabels -> KubeNodeConfig.labels
-      - apiVersion: v1alpha1
-        kind: KubeNodeConfig
-        labels:
-          storage.openebs.io/hostpath: "true"
-          network.dormammu/multus: "true"
-      # talconfig: volumes
-      - apiVersion: v1alpha1
-        kind: VolumeConfig
-        name: EPHEMERAL
-        provisioning:
-          diskSelector:
-            match: system_disk
-          maxSize: 400GB
-          grow: false
-      # talconfig: userVolumes
-      - apiVersion: v1alpha1
-        kind: UserVolumeConfig
-        name: local-path
-        provisioning:
-          diskSelector:
-            match: system_disk
-          minSize: 500GB
-          grow: true
       - "./patches/networking/posey.yaml"
   belt:
     ip: "${BELT_IP}"
@@ -252,30 +162,10 @@ nodes:
               - siderolabs/intel-ucode
               - siderolabs/nfsrahead
     patches:
-      # talconfig: installDiskSelector + machineSpec-derived install flags
       - machine:
           install:
             diskSelector:
               wwid: naa.500a07511fc61629
-            wipe: false
-            grubUseUKICmdline: true
-      - apiVersion: v1alpha1
-        kind: KernelModuleConfig
-        name: nbd
-      # talconfig: nodeLabels -> KubeNodeConfig.labels
-      - apiVersion: v1alpha1
-        kind: KubeNodeConfig
-        labels:
-          network.dormammu/multus: "false"
-      # talconfig: volumes
-      - apiVersion: v1alpha1
-        kind: VolumeConfig
-        name: EPHEMERAL
-        provisioning:
-          diskSelector:
-            match: system_disk
-          maxSize: 200GB
-          grow: false
       - "./patches/networking/belt.yaml"
       # 3d printer. UdevRulesConfig is a singleton and `rules` is a slice, so
       # this concatenates onto ../global's rules rather than replacing them.
@@ -283,6 +173,7 @@ nodes:
         kind: UdevRulesConfig
         rules:
           - SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", GROUP="20", MODE="0660", TAG+="uaccess"
+
 # Applied to every node. Order matters: shared base from ../global, then this
 # cluster's overrides.
 patches:
@@ -298,6 +189,7 @@ patches:
   - apiVersion: v1alpha1
     kind: KubeFlannelCNIConfig
     $patch: delete
+  - "../global/machine-install.yaml"
   - "./patches/global/machine-files.yaml"
   - "../global/machine-kubelet.yaml"
   - "./patches/global/machine-kubelet.yaml"
@@ -306,6 +198,7 @@ patches:
   - "./patches/global/machine-sysctls.yaml"
   - "./patches/global/machine-time.yaml"
   - "../global/machine-kernel.yaml"
+  - "./patches/global/machine-kernel.yaml"
   - "../global/machine-features.yaml"
   - "./patches/global/uart.yaml"
 
@@ -314,5 +207,9 @@ controlplanePatches:
   - "../global/cluster-k8s.yaml"
   - "./patches/controller/etcd.yaml"
   - "../global/controller-machine-features.yaml"
+  - "./patches/controller/node-labels.yaml"
+  - "./patches/controller/volumes.yaml"
 
-workerPatches: []
+workerPatches:
+  - "./patches/worker/node-labels.yaml"
+  - "./patches/worker/volumes.yaml"

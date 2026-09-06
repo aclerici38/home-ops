@@ -48,8 +48,6 @@ nodes:
           install:
             diskSelector:
               wwid: naa.608a262117364966b0e79854d296a06a
-            wipe: false
-            grubUseUKICmdline: true
       - apiVersion: v1alpha1
         kind: KernelModuleConfig
         name: drbd
@@ -67,6 +65,7 @@ patches:
   - apiVersion: v1alpha1
     kind: KubeFlannelCNIConfig
     $patch: delete
+  - "../global/machine-install.yaml"
   - "../global/machine-kubelet.yaml"
   - "./patches/global/machine-kubelet.yaml"
   - "../global/machine-network.yaml"

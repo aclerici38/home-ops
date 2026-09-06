@@ -1,0 +1,19 @@
+---
+# EPHEMERAL is capped so the rest of the system disk is free for local-path.
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+provisioning:
+  diskSelector:
+    match: system_disk
+  maxSize: 400GB
+  grow: false
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: local-path
+provisioning:
+  diskSelector:
+    match: system_disk
+  minSize: 500GB
+  grow: true
