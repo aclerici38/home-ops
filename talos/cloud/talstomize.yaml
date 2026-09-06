@@ -3,24 +3,24 @@ apiVersion: config.talstomize.dev/v1alpha1
 kind: Talstomize
 
 clusterName: cloud
-controlPlaneEndpoint: https://vps.clerici.tech:6443
-kubernetesVersion: ${KUBE_VERSION}
+controlPlaneEndpoint: https://vps.${SECRET_DOMAIN}:6443
+kubernetesVersion: ${CLOUD_KUBE_VERSION}
 secrets: ./talsecret.sops.yaml
 
 # Replaces talhelper's additionalApiServerCertSans + additionalMachineCertSans
 additionalSubjectAltNames:
   - "madbum"
-  - "vps.clerici.tech"
-  - "192.9.147.24"
-  - "10.40.40.41"
+  - "vps.${SECRET_DOMAIN}"
+  - "${CLOUD_NODE_IP}"
+  - "${CLOUD_NODE_PRIVATE_IP}"
   - "127.0.0.1"
 
 installer:
-  talosVersion: ${TALOS_VERSION}
+  talosVersion: ${CLOUD_TALOS_VERSION}
 
 nodes:
   madbum:
-    ip: 192.9.147.24
+    ip: "${CLOUD_NODE_IP}"
     kind: controlplane
     installer:
       # madbum runs the `oracle` platform, but talstomize only ever builds
@@ -42,7 +42,7 @@ nodes:
       #
       # Re-resolve with:
       #   curl -X POST --data-binary @schematic.yaml https://factory.talos.dev/schematics
-      image: factory.talos.dev/oracle-installer/401a03eed7fbb8010232cf8e80c4c785b3c8f5f74be1860e8550b11af2f3f431:${TALOS_VERSION}
+      image: factory.talos.dev/oracle-installer/401a03eed7fbb8010232cf8e80c4c785b3c8f5f74be1860e8550b11af2f3f431:${CLOUD_TALOS_VERSION}
     patches:
       - machine:
           install:
@@ -60,9 +60,9 @@ patches:
   - apiVersion: v1alpha1
     kind: KubeNetworkConfig
     podSubnets:
-      - "${CLUSTER_POD_CIDR}"
+      - "${CLOUD_POD_CIDR}"
     serviceSubnets:
-      - "${CLUSTER_SVC_CIDR}"
+      - "${CLOUD_SVC_CIDR}"
   # Disabling Flannel for Cilium means deleting it.
   - apiVersion: v1alpha1
     kind: KubeFlannelCNIConfig

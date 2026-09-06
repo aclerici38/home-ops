@@ -3,4 +3,4 @@ apiVersion: v1alpha1
 kind: KubeNodeConfig
 nodeIP:
   validSubnets:
-    - "10.40.40.0/24"
+    - "${CLOUD_NODE_PRIVATE_SUBNET}"

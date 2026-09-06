@@ -2,4 +2,4 @@
 apiVersion: v1alpha1
 kind: ResolverConfig
 nameservers:
-  - address: 1.1.1.1
+  - address: ${CLOUD_NAMESERVER}
