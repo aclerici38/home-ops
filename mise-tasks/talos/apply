@@ -9,6 +9,14 @@
 set -euo pipefail
 cd "$usage_cluster"
 
+# talstomize shells out to a bare `talosctl`, so it inherits TALOSCONFIG from the environment
+export TALOSCONFIG="$PWD/clusterconfig/talosconfig"
+
+if [[ ! -f "$TALOSCONFIG" ]]; then
+  echo "ERROR: $TALOSCONFIG missing. Run 'mise run talos:gen $usage_cluster' first."
+  exit 1
+fi
+
 # `talstomize diff` compares the rendered config against live cluster state --
 # running machine config, booted Talos version, installed extensions and kernel
 # args -- and exits 1 on any drift. Show it before touching anything.
