@@ -1,0 +1,11 @@
+creation_rules:
+  - path_regex: secrets\.sops\.yaml$
+    key_groups:
+      - age:
+          # Admin key
+          - age13azafagpe0l7unvutqcm699w4jukxsdvn8a9mc3njd0lcx7pkfxqpnz643
+          # Each Mac's own SSH host key, converted with `ssh-to-age`. Add a
+          # machine here and re-run `sops updatekeys` before it can decrypt:
+          #   ssh-to-age -i /etc/ssh/ssh_host_ed25519_key.pub
+          # Anthonys-Mac-mini:
+          # office-imac:

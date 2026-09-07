@@ -1,0 +1,97 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.0-standalone-strict/serviceaccount-v1.json
+# One identity per Mac
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: metal-agent-anthony-mac-mini
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.0-standalone-strict/serviceaccount-v1.json
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: metal-agent-office-mac-mini
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.0-standalone-strict/role-rbac-v1.json
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: metal-agent
+rules:
+  - apiGroups:
+      - "inference.llmkube.dev"
+    resources:
+      - "inferenceservices"
+      - "models"
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
+
+  - apiGroups:
+      - "inference.llmkube.dev"
+    resources:
+      - "inferenceservices/status"
+    verbs:
+      - "get"
+      - "update"
+      - "patch"
+
+  - apiGroups:
+      - ""
+    resources:
+      - "services"
+    verbs:
+      - "get"
+      - "create"
+      - "update"
+      - "patch"
+      - "delete"
+  - apiGroups:
+      - "discovery.k8s.io"
+    resources:
+      - "endpointslices"
+    verbs:
+      - "get"
+      - "create"
+      - "update"
+      - "patch"
+      - "delete"
+
+  # Legacy reap only (registry.go ReconcileOrphanEndpoints): pre-EndpointSlice
+  # agent versions left core Endpoints behind, and Kubernetes' own
+  # EndpointSliceMirroring controller keeps regenerating a stale mirror from
+  # them. No create/update — the agent only ever deletes these.
+  - apiGroups:
+      - ""
+    resources:
+      - "endpoints"
+    verbs:
+      - "get"
+      - "delete"
+
+  # Process start/stop/restart events, surfaced by `kubectl describe isvc`.
+  - apiGroups:
+      - ""
+    resources:
+      - "events"
+    verbs:
+      - "create"
+      - "patch"
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.0-standalone-strict/rolebinding-rbac-v1.json
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: metal-agent
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: metal-agent
+subjects:
+  - kind: ServiceAccount
+    name: metal-agent-mac-mini
+    namespace: llmkube
+  - kind: ServiceAccount
+    name: metal-agent-office-imac
+    namespace: llmkube

@@ -19,6 +19,21 @@ spec:
               value: qwen3-8b
       backendRefs:
         - name: qwen3-8b
+    # Metal-backed chat models, served natively on the Macs.
+    - name: chat-metal-14b
+      matches:
+        - headers:
+            - name: x-ai-eg-model
+              value: qwen3-14b-metal
+      backendRefs:
+        - name: qwen3-14b-metal
+    - name: chat-metal-8b
+      matches:
+        - headers:
+            - name: x-ai-eg-model
+              value: qwen3-8b-metal
+      backendRefs:
+        - name: qwen3-8b-metal
     - name: embeddings
       matches:
         - headers:

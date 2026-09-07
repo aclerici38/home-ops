@@ -1,0 +1,87 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.9.25/model_v1alpha1.json
+# Served by the metal-agent LaunchDaemon on office-mac-mini
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: Model
+metadata:
+  name: qwen3-14b-metal
+spec:
+  source: https://huggingface.co/bartowski/Qwen_Qwen3-14B-GGUF/resolve/main/Qwen_Qwen3-14B-Q4_K_M.gguf
+  format: gguf
+  quantization: Q4_K_M
+  hardware:
+    accelerator: metal
+    gpu:
+      enabled: true
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.9.25/inferenceservice_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: InferenceService
+metadata:
+  name: qwen3-14b-metal
+spec:
+  modelRef: qwen3-14b-metal
+  runtime: llamacpp
+  mode: chat
+  replicas: 1
+
+  # 24 GB unified memory at --memory-fraction 0.85 is a ~20.4 GB budget.
+  # Q4_K_M weights are ~9 GB; KV at f16 is ~160 KiB/token (40 layers, 8 KV
+  # heads, 128 head_dim), so 16384 adds ~2.5 GiB. Comfortable inside budget —
+  # the agent refuses to start a model it estimates will not fit, rather than
+  # letting macOS swap it.
+  contextSize: 16384
+  parallelSlots: 2
+  cacheTypeK: f16
+  cacheTypeV: f16
+  batchSize: 2048
+  uBatchSize: 2048
+  # Required for HA's Assist API
+  jinja: true
+  reasoningBudget: 0
+
+  extraArgs:
+    # The name clients send as "model"
+    - --alias
+    - qwen3-14b-metal
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.9.25/model_v1alpha1.json
+# Served by the metal-agent on Anthonys-Mac-mini
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: Model
+metadata:
+  name: qwen3-8b-metal
+spec:
+  source: https://huggingface.co/bartowski/Qwen_Qwen3-8B-GGUF/resolve/main/Qwen_Qwen3-8B-Q4_K_M.gguf
+  format: gguf
+  quantization: Q4_K_M
+  hardware:
+    accelerator: metal
+    gpu:
+      enabled: true
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.9.25/inferenceservice_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: InferenceService
+metadata:
+  name: qwen3-8b-metal
+spec:
+  modelRef: qwen3-8b-metal
+  runtime: llamacpp
+  mode: chat
+  replicas: 1
+
+  # ~5 GB weights + ~2.25 GiB KV at 16384, against a ~16.1 GB auto budget.
+  contextSize: 16384
+  parallelSlots: 2
+  cacheTypeK: f16
+  cacheTypeV: f16
+  batchSize: 2048
+  uBatchSize: 2048
+
+  jinja: true
+  reasoningBudget: 0
+
+  extraArgs:
+    - --alias
+    - qwen3-8b-metal

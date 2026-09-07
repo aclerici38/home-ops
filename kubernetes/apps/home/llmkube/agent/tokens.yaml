@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.0-standalone-strict/secret-v1.json
+apiVersion: v1
+kind: Secret
+metadata:
+  name: metal-agent-mac-mini-token
+  annotations:
+    kubernetes.io/service-account.name: metal-agent-mac-mini
+type: kubernetes.io/service-account-token
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.0-standalone-strict/secret-v1.json
+apiVersion: v1
+kind: Secret
+metadata:
+  name: metal-agent-office-imac-token
+  annotations:
+    kubernetes.io/service-account.name: metal-agent-office-imac
+type: kubernetes.io/service-account-token

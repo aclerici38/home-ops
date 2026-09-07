@@ -44,7 +44,9 @@ jobs:
           determinate: false
 
       - name: nixfmt
-        run: nix shell nixpkgs#nixfmt --command nixfmt --check nix-config/*.nix raphael/*.nix raphael/nixos/*.nix
+        run: |
+          find nix-config raphael -name '*.nix' -print0 |
+            xargs -0 nix shell nixpkgs#nixfmt --command nixfmt --check
 
       - name: statix
         run: |

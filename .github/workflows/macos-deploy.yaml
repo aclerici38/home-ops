@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: macOS Deploy
+
+# comin on the inference Macs polls `macos-deploy` rather than main, so
+# unrelated cluster commits do not trigger a rebuild on either machine.
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "nix-config/**"
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  fast-forward:
+    name: Fast-forward macos-deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Fast-forward macos-deploy to main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh api -X PATCH "repos/{owner}/{repo}/git/refs/heads/macos-deploy" \
+            -f sha="$GITHUB_SHA" -F force=false ||
+          gh api -X POST "repos/{owner}/{repo}/git/refs" \
+            -f ref="refs/heads/macos-deploy" -f sha="$GITHUB_SHA"
