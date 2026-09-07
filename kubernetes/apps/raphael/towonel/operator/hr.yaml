@@ -11,13 +11,9 @@ spec:
     kind: OCIRepository
     name: towonel-operator
   install:
-    timeout: 5m
-    remediation:
-      retries: 1
+    timeout: 10m
   upgrade:
-    timeout: 5m
-    remediation:
-      retries: 1
+    timeout: 10m
   dependsOn:
     - name: towonel-operator-resources
   values:

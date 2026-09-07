@@ -27,7 +27,7 @@ spec:
           name: not-used
         spec:
           interval: 30m
-          timeout: 3m
+          timeout: 15m
           prune: true
           wait: true
           postBuild:
@@ -53,10 +53,12 @@ spec:
                     disableTakeOwnership: false
                     strategy:
                       name: RetryOnFailure
+                      retryInterval: 30m
                   upgrade:
                     crds: CreateReplace
                     serverSideApply: enabled
                     disableTakeOwnership: true
                     cleanupOnFail: true
                     strategy:
-                      name: RemediateOnFailure
+                      name: RetryOnFailure
+                      retryInterval: 30m

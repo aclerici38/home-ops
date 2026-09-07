@@ -11,13 +11,9 @@ spec:
     kind: OCIRepository
     name: cert-manager
   install:
-    timeout: 2m
-    remediation:
-      retries: 1
+    timeout: 10m
   upgrade:
-    timeout: 2m
-    remediation:
-      retries: 1
+    timeout: 10m
   values:
     crds:
       enabled: true

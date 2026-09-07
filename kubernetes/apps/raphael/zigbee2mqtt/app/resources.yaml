@@ -15,9 +15,9 @@ spec:
         name: resource-bundle-chart
         namespace: flux-system
   install:
-    timeout: 5m
+    timeout: 10m
   upgrade:
-    timeout: 5m
+    timeout: 10m
   values:
     kopiur:
       storageClass: miroir

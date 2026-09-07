@@ -12,13 +12,9 @@ spec:
     name: app-template
     namespace: flux-system
   install:
-    timeout: 5m
-    remediation:
-      retries: 1
+    timeout: 10m
   upgrade:
-    timeout: 5m
-    remediation:
-      retries: 1
+    timeout: 10m
   dependsOn:
     - name: speech-to-phrase-resources
   values:

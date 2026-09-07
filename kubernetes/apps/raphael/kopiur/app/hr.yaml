@@ -11,13 +11,9 @@ spec:
     kind: OCIRepository
     name: kopiur
   install:
-    timeout: 5m
-    remediation:
-      retries: 1
+    timeout: 10m
   upgrade:
-    timeout: 5m
-    remediation:
-      retries: 1
+    timeout: 10m
   values:
     installScope: cluster
     leaderElection:

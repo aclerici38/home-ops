@@ -11,13 +11,9 @@ spec:
     kind: OCIRepository
     name: intel-gpu-resource-driver
   install:
-    timeout: 2m
-    remediation:
-      retries: 1
+    timeout: 10m
   upgrade:
-    timeout: 2m
-    remediation:
-      retries: 1
+    timeout: 10m
   values:
     kubeletPlugin:
       privileged: true

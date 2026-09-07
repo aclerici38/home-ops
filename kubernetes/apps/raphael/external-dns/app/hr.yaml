@@ -11,9 +11,9 @@ spec:
     kind: OCIRepository
     name: external-dns
   install:
-    timeout: 2m
+    timeout: 10m
   upgrade:
-    timeout: 2m
+    timeout: 10m
   dependsOn:
     - name: external-dns-resources
   values:

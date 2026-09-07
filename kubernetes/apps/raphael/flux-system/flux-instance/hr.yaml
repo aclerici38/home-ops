@@ -11,13 +11,9 @@ spec:
     kind: OCIRepository
     name: flux-instance
   install:
-    timeout: 2m
-    remediation:
-      retries: 1
+    timeout: 10m
   upgrade:
-    timeout: 2m
-    remediation:
-      retries: 1
+    timeout: 10m
   values:
     instance:
       cluster:
