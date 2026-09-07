@@ -1,0 +1,58 @@
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: Repository
+metadata:
+  name: versity-raphael
+spec:
+  backend:
+    s3:
+      bucket: kopiur
+      prefix: raphael/
+      endpoint: versitygw.versity.svc.cluster.local:7070
+      region: us-east-1
+      tls:
+        disableTls: true
+      auth:
+        secretRef:
+          name: kopiur-versity
+  encryption:
+    passwordSecretRef:
+      name: kopiur-versity
+      key: KOPIA_PASSWORD
+  # Raphael owns this repository's lifecycle; never bootstrap it from here.
+  create:
+    enabled: false
+  health:
+    probe:
+      enabled: true
+      interval: 1h
+  maintenance:
+    enabled: true
+    schedule:
+      timezone: America/Los_Angeles
+      quick:
+        cron: "0 */6 * * *"
+        jitter: 1h
+      # Offset from versity (05:00) and backblaze (06:00 Sun).
+      full:
+        cron: "0 3 * * *"
+        jitter: 30m
+    mover:
+      cache:
+        mode: Persistent
+        storageClassName: zfs-ssd
+        capacity: 5Gi
+        contentCacheSizeMb: 500
+        metadataCacheSizeMb: 2000
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      podSecurityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      ttlSecondsAfterFinished: 300
