@@ -46,18 +46,36 @@ spec:
             severity: warning
 
         # CDS/LDS rejections mean Envoy refused a snapshot the control plane
-        # thought it accepted -- config drift between the two.
-        - alert: EnvoyProxyXdsUpdateFailing
+        # thought it accepted -- config drift between the two. This must key on
+        # _rejected (a NACK), NOT _update_failure: the latter also counts a
+        # transient fetch failure, and every OIDC SecurityPolicy re-subscribes to
+        # its oauth2 client_secret/hmac_secret on each config push and regularly
+        # trips the 15s SDS initial-fetch timeout, which fails the enclosing
+        # LDS/CDS update and then immediately succeeds on retry.
+        - alert: EnvoyProxyXdsUpdateRejected
           expr: |-
             sum by (gateway, pod) (
-              increase(envoy_cluster_manager_cds_update_failure[15m])
-              + increase(envoy_listener_manager_lds_update_failure[15m])
+              increase(envoy_cluster_manager_cds_update_rejected[15m])
+              + increase(envoy_listener_manager_lds_update_rejected[15m])
             ) > 0
           for: 10m
           annotations:
             summary: >-
               Envoy {{ $labels.pod }} ({{ $labels.gateway }}) rejected xDS updates;
               it is running stale listener/cluster config.
+          labels:
+            severity: warning
+
+        # The case the failure counters were reaching for: the ADS stream itself
+        # is down, so no snapshot can land at all. Retries are sub-second, so
+        # only a sustained disconnect gets here.
+        - alert: EnvoyProxyXdsDisconnected
+          expr: envoy_control_plane_connected_state == 0
+          for: 10m
+          annotations:
+            summary: >-
+              Envoy {{ $labels.pod }} ({{ $labels.gateway }}) has been disconnected
+              from the xDS control plane for 10m; its config is frozen.
           labels:
             severity: warning
 
