@@ -30,6 +30,7 @@
     masApps = {
       "Discovery" = 1381004916;
       "Magnet" = 441258766;
+      "Moonfin" = 6761283970;
       "Wireguard" = 1451685025;
     };
   };
