@@ -46,7 +46,7 @@ nodes:
             - security=none
             - enforcing=0
             - -selinux
-            - zfs.zfs_arc_max=42949672960 # 25Gi
+            - zfs.zfs_arc_max=26843545600 # 25Gi
             - zfs.zfs_arc_shrinker_limit=0
             - i915.enable_guc=3
             - i915.force_probe=!a7a0

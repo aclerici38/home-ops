@@ -42,7 +42,7 @@ spec:
 
     metrics:
       enabled: true
-      secure: true
+      secure: false
       # The inference PodMonitor below is the discovery mechanism; enabling
       # annotations too would double-scrape every inference pod.
       emitScrapeAnnotations: false
