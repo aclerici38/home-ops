@@ -30,7 +30,7 @@ FLATE_ALLOW_MISSING_SECRETS = "true"
 FLATE_SKIP_CRDS = "false"
 
 [hooks]
-postinstall = "lefthook install"
+postinstall = "cd {{ env.HOME }}/home-ops 2>/dev/null || cd {{ config_root }}; lefthook install"
 
 [tools]
 "aqua:jdx/mise" = "2026.9.1"
@@ -55,6 +55,7 @@ talhelper = "3.1.17"
 # Tools
 actionlint = "1.7.12"
 age = "1.3.2"
+atuin = "18.21.0"
 claude-code = "2.1.263"
 crane = "0.22.1"
 dyff = "1.12.0"

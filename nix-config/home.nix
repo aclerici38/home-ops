@@ -83,12 +83,6 @@
     };
   };
 
-  programs.atuin = {
-    enable = true;
-    enableFishIntegration = true;
-
-  };
-
   programs.direnv.enable = true;
 
   programs.fish = {
@@ -127,6 +121,7 @@
       else
         mise activate fish | source
       end
+      atuin init fish | source
     '';
   };
 }
