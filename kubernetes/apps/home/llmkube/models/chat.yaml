@@ -39,7 +39,7 @@ spec:
   # SYCL only pays off above ~15 prompt tokens per generated token on a cache
   # miss — bulk document summarisation, not chat or voice.
   # SYCL image: server-intel-b10711@sha256:d46028d074393c12d3734269cb9be77b1d38121f1dc1f6e1d51235f7eee8b835
-  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b10853@sha256:0006ecb5f87e42cfbfc1807b455962d33dd8b93018858042e74344a44ba7c314
+  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b10868@sha256:c4643056a4e827af25cc92f988a57e73e6080ba8759aff2c7d01bd532634e0c8
 
   # Measured VRAM: this service holds ~7.15 GiB, device total sits at 12.84 of
   # 15.9 with the media stack idle and ~14.0 at its 7-day peak. KV is 144 KiB
