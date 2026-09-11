@@ -26,7 +26,7 @@ spec:
           seed:
             image: &img
               repository: ghcr.io/autobrr/dashbrr
-              tag: v0.6.0@sha256:55289a0487008f13388e4541fc95079f3d3a9cd660dfba170861dd4b6f0b7292
+              tag: v0.7.0@sha256:0a14f0b614e840e0157290d70abd753ea124a7af28769e79f11acbfc5db01cf0
             command:
               - sh
               - -c
@@ -40,26 +40,10 @@ spec:
               DASHBRR__LISTEN_ADDR: ":8080"
               DASHBRR__LOG_LEVEL: info
               DASHBRR__DB_TYPE: postgres
-              DASHBRR__DB_HOST:
+              DASHBRR__DB_DSN:
                 secretKeyRef:
                   name: dashbrr-postgres
-                  key: host
-              DASHBRR__DB_PORT:
-                secretKeyRef:
-                  name: dashbrr-postgres
-                  key: port
-              DASHBRR__DB_USER:
-                secretKeyRef:
-                  name: dashbrr-postgres
-                  key: user
-              DASHBRR__DB_PASSWORD:
-                secretKeyRef:
-                  name: dashbrr-postgres
-                  key: password
-              DASHBRR__DB_NAME:
-                secretKeyRef:
-                  name: dashbrr-postgres
-                  key: dbname
+                  key: uri
               DASHBRR__OIDC_ISSUER:
                 secretKeyRef:
                   name: dashbrr-oidc-credentials
