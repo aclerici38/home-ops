@@ -64,7 +64,7 @@ spec:
           home-assistant:
             image:
               repository: ghcr.io/home-operations/home-assistant
-              tag: 2026.9.1@sha256:1bcf770d15bd91a55491d04f12494febb35da68b025e1f6612a167a2e190a8c7
+              tag: 2026.9.2@sha256:83decfe1f940120bd7ecbb2c7d72d5b2723dfddb39de3f4e9914c19ead1f721f
             env:
               VENV_FOLDER: /venv
               DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/tmp/dbus-stub"
@@ -80,7 +80,7 @@ spec:
           code-server:
             image:
               repository: ghcr.io/coder/code-server
-              tag: 4.135.0@sha256:ccd326184d71efc5ebb94155eda7bb30153902342a35dbc8525450d81aa55012
+              tag: 4.137.0@sha256:57ac684d44deb6fa94317b3e8f3e128dd7fb897fffd95b4efcd16f56ce607971
             command:
               - "/usr/bin/dumb-init"
               - "--"
