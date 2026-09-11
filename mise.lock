@@ -1453,25 +1453,25 @@ url_api = "https://api.github.com/repos/FiloSottile/age/releases/assets/53554189
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "2026.9.4"
+version = "2026.9.5"
 backend = "aqua:jdx/mise"
 
 [tools."aqua:jdx/mise"."platforms.linux-arm64"]
-checksum = "sha256:c8d6281ae88d2b32086f97d04e75089aa26159d8d68da9f3a5d0ecbf43dbca47"
-url = "https://github.com/jdx/mise/releases/download/v2026.9.4/mise-v2026.9.4-linux-arm64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/553623984"
+checksum = "sha256:7915fb3089cb03919fb93c8c629ed065fe30c7cf8e797d9a58c8a70853f44d7e"
+url = "https://github.com/jdx/mise/releases/download/v2026.9.5/mise-v2026.9.5-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/556036285"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.linux-x64"]
-checksum = "sha256:b6c52880891eaa457ee6bd9c040905a07dc95cb75af009cb26ab78aff06f51d1"
-url = "https://github.com/jdx/mise/releases/download/v2026.9.4/mise-v2026.9.4-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/553624232"
+checksum = "sha256:6f0445ef390b60f8de2fdefc15cc69997faacdf75bb9fc113593879269054b17"
+url = "https://github.com/jdx/mise/releases/download/v2026.9.5/mise-v2026.9.5-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/556036495"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.macos-arm64"]
-checksum = "sha256:989fa96f2c9eba80e0cc35b0887d69b8f5b25c17f54bc8676aa520e93450425f"
-url = "https://github.com/jdx/mise/releases/download/v2026.9.4/mise-v2026.9.4-macos-arm64.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/553624371"
+checksum = "sha256:cb994f2e8a94fbf00300045c81ee799ffebcd8e78241ff37b0aa2da96b924aad"
+url = "https://github.com/jdx/mise/releases/download/v2026.9.5/mise-v2026.9.5-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/556036544"
 provenance = "minisign"
 
 [[tools.atuin]]
@@ -1516,23 +1516,23 @@ url = "https://github.com/cilium/cilium-cli/releases/download/v0.20.0/cilium-dar
 url_api = "https://api.github.com/repos/cilium/cilium-cli/releases/assets/530475790"
 
 [[tools.claude-code]]
-version = "2.1.267"
+version = "2.1.268"
 backend = "aqua:anthropics/claude-code"
 
 [tools.claude-code."platforms.linux-arm64"]
-checksum = "sha256:a8d72d6586f7858210c1fcd538c4a517d9cd44268d92edbc71380f56afab372f"
-url = "https://github.com/anthropics/claude-code/releases/download/v2.1.267/claude-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/553320291"
+checksum = "sha256:e9047c49d31f358af005198d77225b32468785ab28cacee815c42be314d335a8"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.268/claude-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/555585278"
 
 [tools.claude-code."platforms.linux-x64"]
-checksum = "sha256:449bc65dc82d68694103a801c8ac54b6549f9e12f469217c9e0d5560c1085023"
-url = "https://github.com/anthropics/claude-code/releases/download/v2.1.267/claude-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/553320444"
+checksum = "sha256:dfd082062904f36e695cafa16835e3214e93b7ed272c858069d2367d68dc3b02"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.268/claude-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/555585369"
 
 [tools.claude-code."platforms.macos-arm64"]
-checksum = "sha256:eef3ff022932943bffca2439f8ca4a28381b2adc1cf46c76177879e233c1b290"
-url = "https://github.com/anthropics/claude-code/releases/download/v2.1.267/claude-darwin-arm64.tar.gz"
-url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/553320289"
+checksum = "sha256:20e6377cdcd310abcd2f1fb567ccebee08edc40b2aae92c587ba212a940152a3"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.268/claude-darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/555585282"
 
 [[tools.crane]]
 version = "0.22.1"
@@ -2503,25 +2503,25 @@ url = "https://github.com/tamasfe/taplo/releases/download/0.10.0/taplo-darwin-aa
 url_api = "https://api.github.com/repos/tamasfe/taplo/releases/assets/257323110"
 
 [[tools.uv]]
-version = "0.12.12"
+version = "0.12.13"
 backend = "aqua:astral-sh/uv"
 
 [tools.uv."platforms.linux-arm64"]
-checksum = "sha256:fe08db50cc1b56cd1da7801065ed1103d27ed3f9571cd122386cfc7faf1b8df5"
-url = "https://github.com/astral-sh/uv/releases/download/0.12.12/uv-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/553169214"
+checksum = "sha256:2eaa5d94f5db7b3a1a092156b9420459e42ab0217d917fe74a876309cef9b5e9"
+url = "https://github.com/astral-sh/uv/releases/download/0.12.13/uv-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/555670186"
 provenance = "github-attestations"
 
 [tools.uv."platforms.linux-x64"]
-checksum = "sha256:ab9b309d4586403f024e100abaceb396616e178a553e2500c36087d180f09509"
-url = "https://github.com/astral-sh/uv/releases/download/0.12.12/uv-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/553169491"
+checksum = "sha256:745765a3b6e360ad76743599ae5c42e9278c7edf8bbff9fc76d05bf2623a04dd"
+url = "https://github.com/astral-sh/uv/releases/download/0.12.13/uv-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/555670375"
 provenance = "github-attestations"
 
 [tools.uv."platforms.macos-arm64"]
-checksum = "sha256:46740540b63fdee9a6cb2e19baf3f1f475b850c440a33e63455087a6871263f1"
-url = "https://github.com/astral-sh/uv/releases/download/0.12.12/uv-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/553169165"
+checksum = "sha256:7e6ddb9316acc00f2296c82ff4d99977870ee34b2f0ddcae9444d714db9364ed"
+url = "https://github.com/astral-sh/uv/releases/download/0.12.13/uv-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/555670160"
 provenance = "github-attestations"
 
 [[tools.yamlfmt]]
