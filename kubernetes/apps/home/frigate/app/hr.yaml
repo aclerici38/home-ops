@@ -81,6 +81,8 @@ spec:
             port: 8554
           webrtc:
             port: 8555
+          go2rtc:
+            port: 1984
     route:
       auth:
         forceRename: frigate
@@ -99,7 +101,7 @@ spec:
           - backendRefs:
               - identifier: frigate
                 port: *auth
-      # Birdseye snapshot
+      # Birdseye stream via go2rtc
       birdseye:
         hostnames:
           - birdseye.clerici.tech
@@ -114,6 +116,20 @@ spec:
             backendRefs:
               - identifier: frigate
                 port: 5000
+          - matches:
+              - path:
+                  type: Exact
+                  value: /video-rtc.js
+              - path:
+                  type: Exact
+                  value: /api/ws
+                queryParams:
+                  - type: Exact
+                    name: src
+                    value: birdseye
+            backendRefs:
+              - identifier: frigate
+                port: 1984
     persistence:
       config:
         existingClaim: frigate
