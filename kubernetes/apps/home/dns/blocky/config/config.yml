@@ -30,10 +30,6 @@ ports:
 prometheus:
   enable: true
 
-customDNS:
-  mapping:
-    wireguard.clerici.tech: 10.0.0.1
-
 conditional:
   fallbackUpstream: false
   mapping:
