@@ -1453,25 +1453,25 @@ url_api = "https://api.github.com/repos/FiloSottile/age/releases/assets/53554189
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "2026.9.5"
+version = "2026.9.6"
 backend = "aqua:jdx/mise"
 
 [tools."aqua:jdx/mise"."platforms.linux-arm64"]
-checksum = "sha256:7915fb3089cb03919fb93c8c629ed065fe30c7cf8e797d9a58c8a70853f44d7e"
-url = "https://github.com/jdx/mise/releases/download/v2026.9.5/mise-v2026.9.5-linux-arm64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/556036285"
+checksum = "sha256:0756712abbb855a38c134b5144eb1fdc086d42311388b927b136b215e8474183"
+url = "https://github.com/jdx/mise/releases/download/v2026.9.6/mise-v2026.9.6-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/560174566"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.linux-x64"]
-checksum = "sha256:6f0445ef390b60f8de2fdefc15cc69997faacdf75bb9fc113593879269054b17"
-url = "https://github.com/jdx/mise/releases/download/v2026.9.5/mise-v2026.9.5-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/556036495"
+checksum = "sha256:451bd4773bd2acf9c069d3bc43097ed53261b9ed8dcbccecca825472fb068112"
+url = "https://github.com/jdx/mise/releases/download/v2026.9.6/mise-v2026.9.6-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/560174807"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.macos-arm64"]
-checksum = "sha256:cb994f2e8a94fbf00300045c81ee799ffebcd8e78241ff37b0aa2da96b924aad"
-url = "https://github.com/jdx/mise/releases/download/v2026.9.5/mise-v2026.9.5-macos-arm64.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/556036544"
+checksum = "sha256:47d93429ab421a47e7ca158cdc97aad5c12475c7b306e600583b5b00d6922b8f"
+url = "https://github.com/jdx/mise/releases/download/v2026.9.6/mise-v2026.9.6-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/560174910"
 provenance = "minisign"
 
 [[tools.atuin]]
@@ -1516,23 +1516,23 @@ url = "https://github.com/cilium/cilium-cli/releases/download/v0.20.0/cilium-dar
 url_api = "https://api.github.com/repos/cilium/cilium-cli/releases/assets/530475790"
 
 [[tools.claude-code]]
-version = "2.1.269"
+version = "2.1.270"
 backend = "aqua:anthropics/claude-code"
 
 [tools.claude-code."platforms.linux-arm64"]
-checksum = "sha256:b6834b006482a17618ee41d790dd39eaed9aac10ea6efef190252bd029c84d2b"
-url = "https://github.com/anthropics/claude-code/releases/download/v2.1.269/claude-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/557750831"
+checksum = "sha256:005d990a52bc16a5dd9ac51f2cc959f686a2c502b343b2eab92351ababf50f7f"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.270/claude-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/559771865"
 
 [tools.claude-code."platforms.linux-x64"]
-checksum = "sha256:2749b0fc61cb5ff9a998431d30e9e447a2214b4c5393708db0800245dd3733eb"
-url = "https://github.com/anthropics/claude-code/releases/download/v2.1.269/claude-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/557750940"
+checksum = "sha256:b069b327de3ad6c8cda70886675da46fb213797ac99a367df384e2202b37e0b7"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.270/claude-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/559771973"
 
 [tools.claude-code."platforms.macos-arm64"]
-checksum = "sha256:c1649ec5235ac893c2055badc28347d28b9399ca641ad3c485b1c2432c2d6ccd"
-url = "https://github.com/anthropics/claude-code/releases/download/v2.1.269/claude-darwin-arm64.tar.gz"
-url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/557750835"
+checksum = "sha256:844b574a4f66103138a0d3090e7ef6117f83790b4d637c25a798057a735e68e9"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.270/claude-darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/559771867"
 
 [[tools.crane]]
 version = "0.22.1"
@@ -2154,23 +2154,23 @@ url = "https://github.com/norwoodj/helm-docs/releases/download/v1.14.2/helm-docs
 url_api = "https://api.github.com/repos/norwoodj/helm-docs/releases/assets/178327215"
 
 [[tools.helmfile]]
-version = "1.7.4"
+version = "1.8.0"
 backend = "aqua:helmfile/helmfile"
 
 [tools.helmfile."platforms.linux-arm64"]
-checksum = "sha256:0292f57a4638a21e775b0ce8bde37ee3fdd65dbbdbe0e5b9a06718f1dd04c7fa"
-url = "https://github.com/helmfile/helmfile/releases/download/v1.7.4/helmfile_1.7.4_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/helmfile/helmfile/releases/assets/516813268"
+checksum = "sha256:01037dc187840a778ec65eae66b549b63d619a853540c8983f90d73ccbce5033"
+url = "https://github.com/helmfile/helmfile/releases/download/v1.8.0/helmfile_1.8.0_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/helmfile/helmfile/releases/assets/560342817"
 
 [tools.helmfile."platforms.linux-x64"]
-checksum = "sha256:f96ef0a015df06b29d7f38bf0ca08821018ae25eb96bf2c7abd3affa1b84e112"
-url = "https://github.com/helmfile/helmfile/releases/download/v1.7.4/helmfile_1.7.4_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/helmfile/helmfile/releases/assets/516813296"
+checksum = "sha256:35d5d39fc608342b23fc7ce1dd0c3bf0c96cc07ec3796507ab6894a5d172bf20"
+url = "https://github.com/helmfile/helmfile/releases/download/v1.8.0/helmfile_1.8.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/helmfile/helmfile/releases/assets/560342815"
 
 [tools.helmfile."platforms.macos-arm64"]
-checksum = "sha256:e1490d371fecc1f2d9aae914ef34058f3cb2363c9ee63350b37a85c3994d71d9"
-url = "https://github.com/helmfile/helmfile/releases/download/v1.7.4/helmfile_1.7.4_darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/helmfile/helmfile/releases/assets/516813297"
+checksum = "sha256:b377e295940018fb0e49ca9e0aabdabb00fc612af3d9e12003f01635dc87e1ef"
+url = "https://github.com/helmfile/helmfile/releases/download/v1.8.0/helmfile_1.8.0_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/helmfile/helmfile/releases/assets/560342814"
 
 [[tools.jq]]
 version = "1.8.2"
