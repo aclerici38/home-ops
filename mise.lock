@@ -1453,40 +1453,45 @@ url_api = "https://api.github.com/repos/FiloSottile/age/releases/assets/53554189
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "2026.9.6"
+version = "2026.9.7"
 backend = "aqua:jdx/mise"
 
 [tools."aqua:jdx/mise"."platforms.linux-arm64"]
-checksum = "sha256:0756712abbb855a38c134b5144eb1fdc086d42311388b927b136b215e8474183"
-url = "https://github.com/jdx/mise/releases/download/v2026.9.6/mise-v2026.9.6-linux-arm64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/560174566"
+checksum = "sha256:85cce4289be0f931609ba2ac179b84875198e948ccb8557a8e842aa15ee117b6"
+url = "https://github.com/jdx/mise/releases/download/v2026.9.7/mise-v2026.9.7-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/562126533"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.linux-x64"]
-checksum = "sha256:451bd4773bd2acf9c069d3bc43097ed53261b9ed8dcbccecca825472fb068112"
-url = "https://github.com/jdx/mise/releases/download/v2026.9.6/mise-v2026.9.6-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/560174807"
+checksum = "sha256:2b95652a7e946be3fc72b729d3e415813eba74c49eb3a13b96d16b213aaf6c60"
+url = "https://github.com/jdx/mise/releases/download/v2026.9.7/mise-v2026.9.7-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/562126845"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.macos-arm64"]
-checksum = "sha256:47d93429ab421a47e7ca158cdc97aad5c12475c7b306e600583b5b00d6922b8f"
-url = "https://github.com/jdx/mise/releases/download/v2026.9.6/mise-v2026.9.6-macos-arm64.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/560174910"
+checksum = "sha256:f6810aa1609a475ce7f3fdc83eb1e090ace6231d3b1b5aaead944663c4b4b7f1"
+url = "https://github.com/jdx/mise/releases/download/v2026.9.7/mise-v2026.9.7-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/562126985"
 provenance = "minisign"
 
 [[tools."aqua:nklmilojevic/sofka"]]
-version = "v0.26.0"
+version = "v0.27.2"
 backend = "aqua:nklmilojevic/sofka"
 
+[tools."aqua:nklmilojevic/sofka"."platforms.linux-arm64"]
+checksum = "sha256:97aa2104294dfcc33c63438bab59222c19519728713a83c19a3cfce7eae60882"
+url = "https://github.com/nklmilojevic/sofka/releases/download/v0.27.2/sofka-v0.27.2-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/561781494"
+
 [tools."aqua:nklmilojevic/sofka"."platforms.linux-x64"]
-checksum = "sha256:6b1320fa82716cba8c715caa214adcb36aa9705935e5b9cbebc41529ea80f23e"
-url = "https://github.com/nklmilojevic/sofka/releases/download/v0.26.0/sofka-v0.26.0-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/559166307"
+checksum = "sha256:56fecad163b5f76d591fa1d32ea77ddc5ce42d6e7536e1775a3383b1685fa698"
+url = "https://github.com/nklmilojevic/sofka/releases/download/v0.27.2/sofka-v0.27.2-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/561781496"
 
 [tools."aqua:nklmilojevic/sofka"."platforms.macos-arm64"]
-checksum = "sha256:2352d42748139bacc974368655128eb6af0173aa4f15372f1ceab2705655bf02"
-url = "https://github.com/nklmilojevic/sofka/releases/download/v0.26.0/sofka-v0.26.0-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/559166312"
+checksum = "sha256:5d801b0d67e728d8a176c1b8e9f8b1e5686a4e4f1a18d42975413b3a7af17b9c"
+url = "https://github.com/nklmilojevic/sofka/releases/download/v0.27.2/sofka-v0.27.2-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/561781497"
 
 [[tools.atuin]]
 version = "18.22.0"
