@@ -33,7 +33,7 @@ FLATE_SKIP_CRDS = "false"
 postinstall = "cd {{ env.HOME }}/home-ops 2>/dev/null || cd {{ config_root }}; lefthook install"
 
 [tools]
-"aqua:jdx/mise" = "2026.9.6"
+"aqua:jdx/mise" = "2026.9.7"
 
 # k8s
 kubectl = "1.37.0"
@@ -85,5 +85,5 @@ zizmor = "1.30.1"
 "github:cloudnative-pg/cloudnative-pg" = { version = "1.30.0", exe = "kubectl-cnpg" }
 "github:home-operations/yayamlls" = "0.3.0"
 "github:home-operations/flate" = "v0.6.5"
-"aqua:nklmilojevic/sofka" = "v0.26.0"
+"aqua:nklmilojevic/sofka" = "v0.27.2"
 bun = "v1.4.2"
