@@ -30,6 +30,10 @@ ports:
 prometheus:
   enable: true
 
+# In-memory rolling 24h stats served at /api/stats
+statistics:
+  enable: true
+
 conditional:
   fallbackUpstream: false
   mapping:

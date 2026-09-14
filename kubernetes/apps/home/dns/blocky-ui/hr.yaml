@@ -38,12 +38,7 @@ spec:
               repository: ghcr.io/gabeduartem/blocky-ui
               tag: 2.1.0@sha256:ccf1c15c4ae856bca7a56a4e0d607b3e5047d0b1ab648b5eaaf3f308299ac646
             env:
-              QUERY_LOG_TYPE: postgresql
-              QUERY_LOG_TARGET:
-                secretKeyRef:
-                  name: blocky-postgres
-                  key: uri
-              BLOCKY_API_URL: http://blocky-k8s:4000
+              BLOCKY_UI_CONFIG: /config/blocky-ui.yaml
             probes:
               liveness:
                 enabled: true
@@ -70,3 +65,31 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    configMaps:
+      config:
+        data:
+          # https://github.com/GabeDuarteM/blocky-ui/blob/main/blocky-ui.example.yml
+          blocky-ui.yaml: |-
+            servers:
+              blocky:
+                name: Blocky
+                url: http://blocky-k8s:4000
+                logs:
+                  source: postgres
+            logSources:
+              postgres:
+                type: postgresql
+                target: file:/secrets/query-log-target
+    persistence:
+      config:
+        type: configMap
+        name: blocky-ui
+        globalMounts:
+          - path: /config/blocky-ui.yaml
+            subPath: blocky-ui.yaml
+      query-log-target:
+        type: secret
+        name: blocky-postgres
+        globalMounts:
+          - path: /secrets/query-log-target
+            subPath: uri

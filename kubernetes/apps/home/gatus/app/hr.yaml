@@ -39,6 +39,10 @@ spec:
                         emptyDir:
                           medium: Memory
   values:
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "1"
     podSecurityContext:
       seccompProfile:
         type: RuntimeDefault
