@@ -37,7 +37,7 @@ endpoints:
 
   - name: Raphael
     group: travel
-    url: https://raphael.clerici.tech/manifest.json
+    url: https://raphael.living/manifest.json
     client: &client
       dns-resolver: udp://${K8S_GATEWAY_CLUSTER_IP}:53
     conditions:

@@ -7,7 +7,7 @@ metadata:
 spec:
   endpoints:
     - fqdn:
-        hostname: raphael.clerici.tech
+        hostname: raphael.living
         port: 443
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.6.2/backendtlspolicy_v1.json
@@ -22,7 +22,7 @@ spec:
       name: raphael
   validation:
     wellKnownCACertificates: System
-    hostname: raphael.clerici.tech
+    hostname: raphael.living
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.10.0/externalsecret_v1.json
 apiVersion: external-secrets.io/v1

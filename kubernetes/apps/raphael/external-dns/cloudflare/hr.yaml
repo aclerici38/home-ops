@@ -9,13 +9,13 @@ spec:
   maxHistory: 1
   chartRef:
     kind: OCIRepository
-    name: external-dns
+    name: external-dns-cloudflare
   install:
     timeout: 10m
   upgrade:
     timeout: 10m
   dependsOn:
-    - name: external-dns-resources
+    - name: external-dns-cloudflare-resources
   values:
     image:
       repository: registry.k8s.io/external-dns/external-dns
@@ -26,7 +26,7 @@ spec:
       - name: CF_API_TOKEN
         valueFrom:
           secretKeyRef:
-            name: external-dns
+            name: external-dns-cloudflare
             key: CLOUDFLARE_API_TOKEN
     extraArgs:
       - --cloudflare-dns-records-per-page=1000
@@ -41,3 +41,4 @@ spec:
     txtOwnerId: ${CLUSTER_NAME}
     domainFilters:
       - "clerici.tech"
+      - "raphael.living"

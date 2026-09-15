@@ -14,7 +14,7 @@ spec:
       namespace: envoy-gateway
       sectionName: https
   hostnames:
-    - flux-instance.${CLUSTER_NAME}.clerici.tech
+    - flux-instance.raphael.living
   rules:
     - matches:
         - path:

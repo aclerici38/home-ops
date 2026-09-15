@@ -51,7 +51,7 @@ spec:
               # Frontend
               ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED: true
               ZIGBEE2MQTT_CONFIG_FRONTEND_PORT: &port 8080
-              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://z2m.raphael.clerici.tech
+              ZIGBEE2MQTT_CONFIG_FRONTEND_URL: https://z2m.raphael.living
               # Advanced
               ZIGBEE2MQTT_CONFIG_ADVANCED_NETWORK_KEY:
                 secretKeyRef:
@@ -95,7 +95,7 @@ spec:
     route:
       zigbee2mqtt:
         hostnames:
-          - z2m.raphael.clerici.tech
+          - z2m.raphael.living
         parentRefs:
           - name: internal
             namespace: envoy-gateway
