@@ -4,7 +4,7 @@
 #
 # Unlike the Talos clusters, k3s already ships a CNI (flannel) and CoreDNS, so
 # the only thing installed out-of-band is Flux itself (operator + instance).
-# Once flux-instance is up it reconciles kubernetes/flux/raphael and pulls in
+# Once the FluxInstance is up it reconciles kubernetes/flux/raphael and pulls in
 # everything else (cert-manager, external-secrets, envoy-gateway, the apps, ...).
 #
 # Chart url/version + values are read straight from the Flux manifests so this
@@ -13,17 +13,13 @@
 #   version <- OCIRepository .spec.ref.tag (repo.yaml)
 #   values  <- HelmRelease   .spec.values  (hr.yaml)
 #
+# The FluxInstance is a plain resource (flux-instance/instance.yaml), applied
+# server-side by flux-operator's postsync hook. kustomize-controller strips the
+# `kubectl` field manager on its first apply, so Flux cleanly takes ownership.
+#
 # Run via `mise run bootstrap:raphael [kube-context]`.
 {{ $root := requiredEnv "ROOT_DIR" }}
 {{ $base := printf "%s/kubernetes/apps/raphael/flux-system" $root }}
-{{ $apps := list
-  (dict
-    "name" "flux-operator" "dir" "flux-operator"
-    "needs" (list))
-  (dict
-    "name" "flux-instance" "dir" "flux-instance"
-    "needs" (list "flux-system/flux-operator"))
-}}
 
 helmDefaults:
   timeout: 600
@@ -31,20 +27,21 @@ helmDefaults:
   waitForJobs: true
 
 releases:
-{{- range $apps }}
-{{- $repo := printf "%s/%s/repo.yaml" $base .dir }}
-{{- $hr   := printf "%s/%s/hr.yaml" $base .dir }}
-  - name: {{ .name }}
+  - name: flux-operator
     namespace: flux-system
-    chart: {{ exec "yq" (list "e" ".spec.url" $repo) | trim }}
-    version: {{ exec "yq" (list "e" ".spec.ref.tag" $repo) | trim | quote }}
+    chart: {{ exec "yq" (list "e" ".spec.url" (printf "%s/flux-operator/repo.yaml" $base)) | trim }}
+    version: {{ exec "yq" (list "e" ".spec.ref.tag" (printf "%s/flux-operator/repo.yaml" $base)) | trim | quote }}
     atomic: true
-    {{- if .needs }}
-    needs:
-      {{- range .needs }}
-      - {{ . }}
-      {{- end }}
-    {{- end }}
     values:
-      - {{ exec "bash" (list "-c" (printf "yq -o=json -I=0 '.spec.values // {}' %s" $hr)) }}
-{{- end }}
+      - {{ exec "bash" (list "-c" (printf "yq -o=json -I=0 '.spec.values // {}' %s/flux-operator/hr.yaml" $base)) }}
+    hooks:
+      # FluxInstance once the operator + its CRDs are up, then wait for Flux to be ready.
+      - events: ["postsync"]
+        showlogs: true
+        command: bash
+        args:
+          - -c
+          - |
+            set -euo pipefail
+            kubectl apply --server-side --namespace flux-system -f "{{ $base }}/flux-instance/instance.yaml"
+            kubectl --namespace flux-system wait fluxinstance/flux --for=condition=Ready --timeout=10m

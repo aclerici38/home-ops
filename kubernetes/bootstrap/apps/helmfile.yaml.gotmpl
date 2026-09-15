@@ -12,6 +12,10 @@
 #               HelmRelease .spec.values       (overlay, wins)
 # `yq -o=json -I=0` emits single-line JSON (valid YAML) so it drops in after a
 # `- `, and `envsubst` resolves the ${VARS} Flux would substitute at runtime.
+#
+# The FluxInstance is a plain resource (flux-instance/instance.yaml), applied
+# server-side by flux-operator's postsync hook. kustomize-controller strips the
+# `kubectl` field manager on its first apply, so Flux cleanly takes ownership.
 {{ $root    := requiredEnv "ROOT_DIR" }}
 {{ $cluster := requiredEnv "CLUSTER" }}
 {{ $apps := list
@@ -33,12 +37,6 @@
     "base"  ""
     "hr"    "kubernetes/apps/shared/flux-system/flux-operator/hr.yaml"
     "needs" (list "kube-system/coredns"))
-  (dict
-    "name" "flux-instance" "namespace" "flux-system" "atomic" true
-    "repo"  "kubernetes/apps/shared/flux-system/flux-instance/repo.yaml"
-    "base"  ""
-    "hr"    "kubernetes/apps/shared/flux-system/flux-instance/hr.yaml"
-    "needs" (list "flux-system/flux-operator"))
 }}
 
 helmDefaults:
@@ -116,5 +114,19 @@ releases:
               grep -v 'yaml-language-server' "$f" | envsubst
               printf '\n---\n'
             done | kubectl apply -f -
+    {{- end }}
+    {{- if eq .name "flux-operator" }}
+    hooks:
+      # FluxInstance once the operator + its CRDs are up, then wait for Flux to be ready.
+      - events: ["postsync"]
+        showlogs: true
+        command: bash
+        args:
+          - -c
+          - |
+            set -euo pipefail
+            grep -v 'yaml-language-server' "{{ $root }}/kubernetes/apps/shared/flux-system/flux-instance/instance.yaml" \
+              | envsubst | kubectl apply --server-side --namespace {{ .namespace }} -f -
+            kubectl --namespace {{ .namespace }} wait fluxinstance/flux --for=condition=Ready --timeout=10m
     {{- end }}
 {{- end }}
