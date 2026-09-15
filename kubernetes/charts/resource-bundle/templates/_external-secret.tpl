@@ -1,7 +1,7 @@
 {{- define "resources.externalSecret.spec" -}}
 {{- $app := include "resources.app" . -}}
 {{- $es := .Values.externalSecret -}}
-refreshInterval: "1m"
+refreshInterval: "1h"
 secretStoreRef:
   kind: ClusterSecretStore
   name: onepassword-connect
