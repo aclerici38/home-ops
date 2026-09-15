@@ -81,7 +81,7 @@
     enable = true;
     port = 9091;
     settings.WebService = {
-      Origins = lib.mkForce "https://cockpit.raphael.clerici.tech";
+      Origins = lib.mkForce "https://cockpit.raphael.living";
       ProtocolHeader = "X-Forwarded-Proto";
       AllowUnencrypted = true;
     };

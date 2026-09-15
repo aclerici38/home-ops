@@ -1,0 +1,63 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.5/helmrelease_v2.json?values=external-dns/1.20.0
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns-adguard
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: external-dns-adguard
+  install:
+    timeout: 10m
+  upgrade:
+    timeout: 10m
+  dependsOn:
+    - name: external-dns-adguard-resources
+  values:
+    image:
+      repository: registry.k8s.io/external-dns/external-dns
+      tag: v0.22.0@sha256:5fdcaf7deb5c158f93a1fc6fe169cdff4cfb9ae0172bee1a90ab0ef74fb9c9cf
+    provider:
+      name: webhook
+      webhook:
+        image:
+          repository: ghcr.io/muhlba91/external-dns-provider-adguard
+          tag: v11.1.3@sha256:d00e350712c328ab97ba442ce4ac881688cb19c286d1bc0fa51e75608e580053
+        env:
+          # The client appends API paths verbatim, so the /control/ suffix is required
+          - name: ADGUARD_URL
+            value: http://192.168.71.1:3000/control/
+          - name: ADGUARD_USER
+            valueFrom:
+              secretKeyRef:
+                name: external-dns-adguard
+                key: username
+          - name: ADGUARD_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: external-dns-adguard
+                key: password
+          - name: DOMAIN_FILTER
+            value: raphael.living,raphael.clerici.tech
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          capabilities: {drop: ["ALL"]}
+    extraArgs:
+      # Routes on both gateways would otherwise get the internal IP and the vps CNAME for one name
+      - --gateway-name=internal
+    policy: sync
+    triggerLoopOnEvent: true
+    sources:
+      - "crd"
+      - "gateway-httproute"
+      - "service"
+    txtPrefix: k8s.
+    txtOwnerId: ${CLUSTER_NAME}
+    domainFilters:
+      - "raphael.living"
+      - "raphael.clerici.tech"

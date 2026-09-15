@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #MISE description="Fetch raphael's kubeconfig and merge it into ~/.kube/config"
-#USAGE arg "[remote]" help="ssh target" default="anthony@raphael.clerici.tech"
+#USAGE arg "[remote]" help="ssh target" default="anthony@192.168.71.193"
 set -euo pipefail
 remote="$usage_remote"
 # k3s.nix emits /etc/rancher/k3s/raphael.yaml (context "raphael", server at the

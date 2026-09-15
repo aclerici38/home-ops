@@ -30,6 +30,10 @@ spec:
           origin: external.envoy-gateway.svc.cluster.local:443
         - hostname: "*.raphael.clerici.tech"
           origin: external.envoy-gateway.svc.cluster.local:443
+        - hostname: "raphael.living"
+          origin: external.envoy-gateway.svc.cluster.local:443
+        - hostname: "*.raphael.living"
+          origin: external.envoy-gateway.svc.cluster.local:443
       udpServices:
         - name: wireguard
           origin: 192.168.71.1:51822

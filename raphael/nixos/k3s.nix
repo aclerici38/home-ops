@@ -15,7 +15,7 @@ let
   k3sPkgs = inputs.nixpkgs-k3s.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 
   # Address kubectl reaches the API server at from off-box
-  apiHost = "raphael.clerici.tech";
+  apiHost = "192.168.71.193";
 in
 {
   services.k3s = {
@@ -31,6 +31,7 @@ in
       "--egress-selector-mode=disabled"
       "--write-kubeconfig-mode=0600"
       "--tls-san=${apiHost}"
+      "--tls-san=raphael.clerici.tech"
       "--tls-san=raphael"
 
       "--kubelet-arg=image-gc-high-threshold=75" # start pruning images at 75% imagefs
