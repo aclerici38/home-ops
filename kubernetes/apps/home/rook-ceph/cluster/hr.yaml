@@ -64,9 +64,16 @@ spec:
           daemon:
             keyRotationPolicy: KeyGeneration
             keyGeneration: 2
+          # Talos backported kernel aes256k support to 6.18 (v1.14.0+).
+          # Keep the prior generation until every node is drained, then set to 0.
+          csi:
+            keyRotationPolicy: KeyGeneration
+            keyGeneration: 2
+            keyType: aes256k
+            keepPriorKeyCountMax: 1
       healthCheck:
         muteHealthWarning:
-          # Unresolvable until every node runs Linux 7.0+ and CSI keys move to aes256k.
+          # Unmute once CSI + rbd-mirror-peer keys are aes256k and allowedCiphers is [aes256k].
           AUTH_INSECURE_CLIENT_KEY_TYPE:
             policy: mute
           AUTH_INSECURE_KEYS_ALLOWED:
