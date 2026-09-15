@@ -100,17 +100,11 @@
     {
       description: "Flux Operator Group",
       groupName: "Flux Operator",
-      matchPackageNames: [
-        "/flux-operator/",
-        "/flux-instance/",
-        "/controlplaneio-fluxcd/charts/",
-        "/^flux$/",
-      ],
+      matchPackageNames: ["/flux-operator/", "/controlplaneio-fluxcd/charts/", "/^flux$/"],
       matchDatasources: ["docker", "github-tags"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
-      minimumGroupSize: 2,
     },
     {
       description: "Intel-Device-Plugins Group",

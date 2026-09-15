@@ -14,6 +14,17 @@ spec:
     timeout: 10m
   upgrade:
     timeout: 10m
+  # Metered uplink: drop the distribution artifact so flux-operator uses the manifests
+  # embedded in its image instead of pulling :latest on every reconcile. The chart
+  # renders `artifact: ""` as null, which the CRD rejects, so remove it post-render.
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: FluxInstance
+            patch: |-
+              - op: remove
+                path: /spec/distribution/artifact
   values:
     instance:
       cluster:
@@ -28,7 +39,7 @@ spec:
         url: "https://github.com/aclerici38/home-ops.git"
         ref: refs/heads/raphael-deploy
         path: "kubernetes/flux/raphael"
-        interval: 30m
+        interval: 1h
       distribution:
         registry: "ghcr.io/fluxcd"
         version: 2.x

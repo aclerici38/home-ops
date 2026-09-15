@@ -6,7 +6,7 @@ metadata:
   name: app-template
   namespace: flux-system
 spec:
-  interval: 5m
+  interval: 8760h
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy

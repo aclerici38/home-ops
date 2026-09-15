@@ -32,6 +32,8 @@ spec:
       - --cloudflare-dns-records-per-page=1000
       - --gateway-name=external
     policy: sync
+    # Events still trigger syncs
+    interval: 1h
     triggerLoopOnEvent: true
     sources:
       - "crd"
