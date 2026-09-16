@@ -76,18 +76,6 @@ spec:
             keyRotationPolicy: KeyGeneration
             keyGeneration: 2
             keyType: aes256k
-      healthCheck:
-        muteHealthWarning:
-          # Flipped to unmute rather than deleted: mutes are sticky inside Ceph,
-          # so dropping the entries could leave them active and hide a stale key
-          # that shows up later. Delete these entries in a follow-up commit once
-          # the cluster reports HEALTH_OK with nothing muted.
-          AUTH_INSECURE_CLIENT_KEY_TYPE:
-            policy: unmute
-          AUTH_INSECURE_KEYS_ALLOWED:
-            policy: unmute
-          AUTH_INSECURE_KEYS_CREATABLE:
-            policy: unmute
       csi:
         cephfs:
           kernelMountOptions: ms_mode=crc
