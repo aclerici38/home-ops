@@ -19,6 +19,8 @@ spec:
   upgrade:
     timeout: 5m
   dependsOn:
+    - name: cloudnative-pg
+      namespace: cloudnative-pg
     - name: external-secrets
       namespace: external-secrets
     - name: pocket-id-operator
@@ -26,6 +28,12 @@ spec:
     - name: kopiur
       namespace: kopiur
   values:
+    cnpg:
+      mode: shared
+      # start.sh takes pg_advisory_xact_lock in a transaction that then sits
+      # idle for the whole migration run, so the transaction pooler's
+      # idle_transaction_timeout (60s) would drop it mid-migration.
+      poolMode: session
     externalSecret: {}
     pocketId:
       url: todo.clerici.tech
@@ -36,7 +44,5 @@ spec:
       callbackPaths:
         - /api/oidc/callback/pocket-id
     kopiur:
-      ignoreRules:
-        # start.sh rotates its own sqlite copies on every boot; the live DB is
-        # the only thing worth shipping to the repository.
-        - /db/db-backup-*.sqlite3
+      cephfs: true
+      capacity: 2Gi

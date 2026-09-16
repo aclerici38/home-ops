@@ -50,6 +50,10 @@ spec:
               FF_ENABLE_BACKUPS: false
               # start.sh shells out to npx for migrations; npm wants a writable HOME.
               HOME: /tmp
+              DATABASE_URL:
+                secretKeyRef:
+                  name: tududi-postgres
+                  key: uri
               DISABLE_TELEGRAM: true
               PASSWORD_AUTH_ENABLED: "false"
               OIDC_ENABLED: "true"
@@ -123,11 +127,10 @@ spec:
           - name: external
             namespace: envoy-gateway
     persistence:
-      data:
+      # Attachments and avatars
+      uploads:
         existingClaim: tududi
         globalMounts:
-          - path: /app/db
-            subPath: db
           - path: /app/uploads
             subPath: uploads
       tmpfs:
