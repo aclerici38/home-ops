@@ -12,10 +12,18 @@ spec:
     #
     #   nats_varz_*     - per-server, one series per exporter (label: server_id).
     #                     Aggregating hides which node is unhealthy; do not dedupe.
-    #   nats_consumer_* - cluster-wide. The chart runs the exporter with -jsz=all,
-    #   nats_stream_*     so all 3 exporters report every stream and consumer,
-    #   nats_account_*    each labelled with its own server_name. Every expression
-    #                     over these MUST dedupe with max by (...) or it triples.
+    #   nats_consumer_* - NOT cluster-wide, despite -jsz=all. All 3 exporters report
+    #   nats_stream_*     every stream and consumer, but each reports its OWN server's
+    #   nats_account_*    local view, so the 3 series for one consumer can legitimately
+    #                     disagree: a non-leader replica may report a frozen ack_floor
+    #                     and phantom num_ack_pending for days while the consumer is
+    #                     perfectly healthy (2026-09-15: evhistory read 270 un-acked on
+    #                     nats-0 and 0 on its leader, for hours). Only the leader's
+    #                     series is authoritative, so every consumer expression MUST
+    #                     filter is_consumer_leader="true". That also collapses the 3
+    #                     series to 1, but keep the max by (...) wrapper: during an
+    #                     election there can briefly be two claimants (or none).
+    #                     For the same reason, never alert on cross-server spread.
     - name: nats-opencloud.jetstream.rules
       rules:
         # Per-consumer backlog on the shared event bus. This is the authoritative
@@ -25,7 +33,7 @@ spec:
         - alert: NatsConsumerBacklog
           expr: |-
             max by (stream_name, consumer_name) (
-              nats_consumer_num_pending{stream_name="main-queue"}
+              nats_consumer_num_pending{stream_name="main-queue", is_consumer_leader="true"}
             ) > 0
           for: 15m
           annotations:
@@ -40,7 +48,7 @@ spec:
         - alert: NatsConsumerAckPending
           expr: |-
             max by (stream_name, consumer_name) (
-              nats_consumer_num_ack_pending{stream_name="main-queue"}
+              nats_consumer_num_ack_pending{stream_name="main-queue", is_consumer_leader="true"}
             ) > 0
           for: 30m
           annotations:
@@ -54,7 +62,7 @@ spec:
         - alert: NatsConsumerRedelivering
           expr: |-
             max by (stream_name, consumer_name) (
-              nats_consumer_num_redelivered{stream_name="main-queue"}
+              nats_consumer_num_redelivered{stream_name="main-queue", is_consumer_leader="true"}
             ) > 0
           for: 15m
           annotations:
@@ -74,13 +82,13 @@ spec:
           expr: |-
             (
               max by (stream_name, consumer_name) (
-                nats_consumer_num_pending{stream_name="main-queue"}
+                nats_consumer_num_pending{stream_name="main-queue", is_consumer_leader="true"}
               ) > 0
             )
             and
             (
               max by (stream_name, consumer_name) (
-                nats_consumer_last_ack_seconds{stream_name="main-queue"}
+                nats_consumer_last_ack_seconds{stream_name="main-queue", is_consumer_leader="true"}
               ) > 900
             )
           for: 5m
