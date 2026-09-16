@@ -73,14 +73,31 @@ spec:
                   name: tududi
                   key: TUDUDI_SESSION_SECRET
             probes:
-              liveness: &probes
+              # /api/health is liveness only; /api/health/ready also checks the db
+              liveness:
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
                     port: &port 3002
                     path: /api/health
-              readiness: *probes
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: *port
+                    path: &ready /api/health/ready
+              # start.sh runs migrations before app.js binds the port
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: *port
+                    path: *ready
+                  periodSeconds: 5
+                  failureThreshold: 36
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
