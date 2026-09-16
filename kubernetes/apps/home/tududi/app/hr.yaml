@@ -46,7 +46,8 @@ spec:
               BASE_URL: &url https://todo.clerici.tech
               TUDUDI_ALLOWED_ORIGINS: *url
               TUDUDI_TRUST_PROXY: 1
-              COOKIE_SECURE: "true"
+              COOKIE_SECURE: true
+              FF_ENABLE_BACKUPS: false
               # start.sh shells out to npx for migrations; npm wants a writable HOME.
               HOME: /tmp
               DISABLE_TELEGRAM: true
