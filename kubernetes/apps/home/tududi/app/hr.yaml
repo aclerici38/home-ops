@@ -37,7 +37,7 @@ spec:
           tududi:
             image:
               repository: mirror.gcr.io/chrisvel/tududi
-              tag: 1.4.2@sha256:1433ec2ea84d563c1ffe61195a53ed2a0f7a1981d39d7f15a446cdf0a39824ad
+              tag: 1.5.0@sha256:c37c5525ec45cab3eacb1ea05e19ba0a6881b0f15052abe387da864f7a198538
             # docker-entrypoint.sh only exists to chown /app and su-exec down; it
             # needs root, so skip straight to the start script it would exec.
             command:
@@ -73,14 +73,31 @@ spec:
                   name: tududi
                   key: TUDUDI_SESSION_SECRET
             probes:
-              liveness: &probes
+              # /api/health is liveness only; /api/health/ready also checks the db
+              liveness:
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
                     port: &port 3002
                     path: /api/health
-              readiness: *probes
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: *port
+                    path: &ready /api/health/ready
+              # start.sh runs migrations before app.js binds the port
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: *port
+                    path: *ready
+                  periodSeconds: 5
+                  failureThreshold: 36
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
