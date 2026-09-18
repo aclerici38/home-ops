@@ -39,6 +39,8 @@ spec:
               tag: 2.1.1@sha256:7edeaddee3963e59248b0dd0900234912982c86ea867c544fe2ee084bd479274
             env:
               BLOCKY_UI_CONFIG: /config/blocky-ui.yaml
+              # The target uri carries sslmode=verify-full; trust the cluster CA for it.
+              NODE_EXTRA_CA_CERTS: /var/run/secrets/postgresql/ca.crt
             probes:
               liveness:
                 enabled: true
@@ -89,7 +91,16 @@ spec:
             subPath: blocky-ui.yaml
       query-log-target:
         type: secret
-        name: blocky-postgres
+        name: blocky-ui-postgres
         globalMounts:
           - path: /secrets/query-log-target
             subPath: uri
+      postgres-ca:
+        type: secret
+        name: blocky-ui-postgres
+        items:
+          - key: ca.crt
+            path: ca.crt
+        globalMounts:
+          - path: /var/run/secrets/postgresql
+            readOnly: true

@@ -19,41 +19,48 @@ spec:
     user: $${user}
     jsonData:
       database: $${dbname}
+      # mTLS as the read-only blocky-grafana role; cert files come from the
+      # csi-driver volume on the Grafana pod.
       sslmode: verify-full
-      tlsConfigurationMethod: file-content
+      tlsConfigurationMethod: file-path
+      sslRootCertFile: $${sslrootcert}
+      sslCertFile: $${sslcert}
+      sslKeyFile: $${sslkey}
       postgresVersion: 1801
       timescaledb: false
-    secureJsonData:
-      password: $${password}
-      tlsCACert: $${ca.crt}
   valuesFrom:
     - targetPath: url
       valueFrom:
-        secretKeyRef:
-          name: blocky-postgres
+        configMapKeyRef:
+          name: blocky-grafana-postgres
           key: host
     - targetPath: url
       valueFrom:
-        secretKeyRef:
-          name: blocky-postgres
+        configMapKeyRef:
+          name: blocky-grafana-postgres
           key: port
     - targetPath: user
       valueFrom:
-        secretKeyRef:
-          name: blocky-postgres
+        configMapKeyRef:
+          name: blocky-grafana-postgres
           key: user
     - targetPath: jsonData.database
       valueFrom:
-        secretKeyRef:
-          name: blocky-postgres
+        configMapKeyRef:
+          name: blocky-grafana-postgres
           key: dbname
-    - targetPath: secureJsonData.password
+    - targetPath: jsonData.sslRootCertFile
       valueFrom:
-        secretKeyRef:
-          name: blocky-postgres
-          key: password
-    - targetPath: secureJsonData.tlsCACert
+        configMapKeyRef:
+          name: blocky-grafana-postgres
+          key: sslrootcert
+    - targetPath: jsonData.sslCertFile
       valueFrom:
-        secretKeyRef:
-          name: blocky-postgres
-          key: ca.crt
+        configMapKeyRef:
+          name: blocky-grafana-postgres
+          key: sslcert
+    - targetPath: jsonData.sslKeyFile
+      valueFrom:
+        configMapKeyRef:
+          name: blocky-grafana-postgres
+          key: sslkey

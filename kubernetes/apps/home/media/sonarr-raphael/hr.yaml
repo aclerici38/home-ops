@@ -45,24 +45,24 @@ spec:
               SONARR__SERVER__PORT: &port 8989
               SONARR__POSTGRES__HOST:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: sonarr-raphael-postgres
                     key: host
               SONARR__POSTGRES__USER:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: sonarr-raphael-postgres
                     key: username
-              SONARR__POSTGRES__PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: sonarr-raphael-postgres
-                    key: password
               SONARR__POSTGRES__MAINDB:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: sonarr-raphael-postgres
                     key: dbname
+              # Sonarr v4 (Npgsql 7) takes no connection string or SSL Mode, but Npgsql
+              # presents PGSSLCERT/PGSSLKEY: client-cert auth works; the pooler cert is
+              # not verified (SslMode stays Prefer) until Sonarr takes a connection string.
+              PGSSLCERT: /var/run/secrets/postgresql/tls.crt
+              PGSSLKEY: /var/run/secrets/postgresql/tls.key
             envFrom:
               - secretRef:
                   name: sonarr-raphael
@@ -99,6 +99,23 @@ spec:
           - name: internal
             namespace: envoy-gateway
     persistence:
+      postgres-cert:
+        type: custom
+        volumeSpec:
+          csi:
+            driver: csi.cert-manager.io
+            readOnly: true
+            volumeAttributes:
+              csi.cert-manager.io/issuer-name: postgres-mtls
+              csi.cert-manager.io/issuer-kind: ClusterIssuer
+              csi.cert-manager.io/common-name: sonarr-raphael
+              csi.cert-manager.io/key-usages: client auth,digital signature
+              csi.cert-manager.io/key-algorithm: ECDSA
+              csi.cert-manager.io/key-size: "384"
+              csi.cert-manager.io/key-encoding: PKCS8
+              csi.cert-manager.io/duration: 24h
+        globalMounts:
+          - path: /var/run/secrets/postgresql
       tmpfs:
         type: emptyDir
         globalMounts:

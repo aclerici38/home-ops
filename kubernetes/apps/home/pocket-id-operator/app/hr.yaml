@@ -47,6 +47,20 @@ spec:
           podTemplate:
             spec:
               hostUsers: false
+              volumes:
+                - name: postgres-cert
+                  csi:
+                    driver: csi.cert-manager.io
+                    readOnly: true
+                    volumeAttributes:
+                      csi.cert-manager.io/issuer-name: postgres-mtls
+                      csi.cert-manager.io/issuer-kind: ClusterIssuer
+                      csi.cert-manager.io/common-name: pocket-id
+                      csi.cert-manager.io/key-usages: client auth,digital signature
+                      csi.cert-manager.io/key-algorithm: ECDSA
+                      csi.cert-manager.io/key-size: "384"
+                      csi.cert-manager.io/key-encoding: PKCS8
+                      csi.cert-manager.io/duration: 24h
           route:
             enabled: true
             parentRefs:
@@ -62,7 +76,7 @@ spec:
                 key: ENCRYPTION_KEY
           databaseUrl:
             valueFrom:
-              secretKeyRef:
+              configMapKeyRef:
                 name: pocket-id-postgres
                 key: uri
           appUrl: https://id.clerici.tech
@@ -85,6 +99,10 @@ spec:
             verification: true
           persistence:
             enabled: false
+            extraVolumeMounts:
+              - name: postgres-cert
+                mountPath: /var/run/secrets/postgresql
+                readOnly: true
           metrics:
             enabled: true
           OIDCClientRotation:

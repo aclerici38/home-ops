@@ -58,10 +58,34 @@ spec:
           host: $${DB_HOST}
           port: $${DB_PORT}
           user: $${DB_USER}
-          password: $${DB_PASSWORD}
+          # Not used
+          password: cert-auth
           db_name: $${DB_NAME}
+          sslmode: verify-full
+          ssl_ca_cert: /var/run/secrets/postgresql/ca.crt
+          ssl_client_cert: /var/run/secrets/postgresql/tls.crt
+          ssl_client_key: /var/run/secrets/postgresql/tls.key
     lapi:
       replicas: 2
+      # mTLS client cert for the cert-only pooler (LAPI runs as root, reads 0440).
+      extraVolumes:
+        - name: postgres-cert
+          csi:
+            driver: csi.cert-manager.io
+            readOnly: true
+            volumeAttributes:
+              csi.cert-manager.io/issuer-name: postgres-mtls
+              csi.cert-manager.io/issuer-kind: ClusterIssuer
+              csi.cert-manager.io/common-name: crowdsec
+              csi.cert-manager.io/key-usages: client auth,digital signature
+              csi.cert-manager.io/key-algorithm: ECDSA
+              csi.cert-manager.io/key-size: "384"
+              csi.cert-manager.io/key-encoding: PKCS8
+              csi.cert-manager.io/duration: 24h
+      extraVolumeMounts:
+        - name: postgres-cert
+          mountPath: /var/run/secrets/postgresql
+          readOnly: true
       strategy:
         type: RollingUpdate
       storeCAPICredentialsInSecret: true
@@ -78,27 +102,22 @@ spec:
       env:
         - name: DB_HOST
           valueFrom:
-            secretKeyRef:
+            configMapKeyRef:
               name: crowdsec-postgres
               key: host
         - name: DB_PORT
           valueFrom:
-            secretKeyRef:
+            configMapKeyRef:
               name: crowdsec-postgres
               key: port
         - name: DB_USER
           valueFrom:
-            secretKeyRef:
+            configMapKeyRef:
               name: crowdsec-postgres
               key: username
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: crowdsec-postgres
-              key: password
         - name: DB_NAME
           valueFrom:
-            secretKeyRef:
+            configMapKeyRef:
               name: crowdsec-postgres
               key: dbname
       service:

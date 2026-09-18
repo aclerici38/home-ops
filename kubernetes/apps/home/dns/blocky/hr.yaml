@@ -42,6 +42,7 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
             runAsGroup: 1000
+            fsGroup: 1000
             seccompProfile: {type: RuntimeDefault}
         containers:
           blocky:
@@ -50,29 +51,28 @@ spec:
               tag: v0.35.0@sha256:4f165b63db0d76c96ecc47c7a8f57caeedc003a912bdce29abb0e283ce02e16b
             env:
               PGCONNECT_TIMEOUT: 10
+              PGSSLMODE: verify-full
+              PGSSLCERT: /var/run/secrets/postgresql/tls.crt
+              PGSSLKEY: /var/run/secrets/postgresql/tls.key
+              PGSSLROOTCERT: /var/run/secrets/postgresql/ca.crt
               PGHOST:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: blocky-postgres
                     key: host
               PGPORT:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: blocky-postgres
                     key: port
               PGUSER:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: blocky-postgres
                     key: username
-              PGPASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: blocky-postgres
-                    key: password
               PGDATABASE:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: blocky-postgres
                     key: dbname
             probes:
@@ -151,6 +151,23 @@ spec:
               - identifier: k8s
                 port: *port
     persistence:
+      postgres-cert:
+        type: custom
+        volumeSpec:
+          csi:
+            driver: csi.cert-manager.io
+            readOnly: true
+            volumeAttributes:
+              csi.cert-manager.io/issuer-name: postgres-mtls
+              csi.cert-manager.io/issuer-kind: ClusterIssuer
+              csi.cert-manager.io/common-name: blocky
+              csi.cert-manager.io/key-usages: client auth,digital signature
+              csi.cert-manager.io/key-algorithm: ECDSA
+              csi.cert-manager.io/key-size: "384"
+              csi.cert-manager.io/key-encoding: PKCS8
+              csi.cert-manager.io/duration: 24h
+        globalMounts:
+          - path: /var/run/secrets/postgresql
       config:
         type: configMap
         name: blocky-config

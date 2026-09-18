@@ -73,7 +73,7 @@ spec:
               DB_ENGINE: postgres
               POSTGRES_URL_OVERRIDE:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: mealie-postgres
                     key: uri
               # SMTP
@@ -118,6 +118,23 @@ spec:
           - name: external
             namespace: envoy-gateway
     persistence:
+      postgres-cert:
+        type: custom
+        volumeSpec:
+          csi:
+            driver: csi.cert-manager.io
+            readOnly: true
+            volumeAttributes:
+              csi.cert-manager.io/issuer-name: postgres-mtls
+              csi.cert-manager.io/issuer-kind: ClusterIssuer
+              csi.cert-manager.io/common-name: mealie
+              csi.cert-manager.io/key-usages: client auth,digital signature
+              csi.cert-manager.io/key-algorithm: ECDSA
+              csi.cert-manager.io/key-size: "384"
+              csi.cert-manager.io/key-encoding: PKCS8
+              csi.cert-manager.io/duration: 24h
+        globalMounts:
+          - path: /var/run/secrets/postgresql
       data:
         existingClaim: mealie
         globalMounts:

@@ -43,26 +43,11 @@ spec:
               RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
               RADARR__LOG__LEVEL: info
               RADARR__SERVER__PORT: &port 7878
-              RADARR__POSTGRES__HOST:
+              RADARR__POSTGRES__MAINDBCONNECTIONSTRING:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: radarr-postgres
-                    key: host
-              RADARR__POSTGRES__USER:
-                valueFrom:
-                  secretKeyRef:
-                    name: radarr-postgres
-                    key: username
-              RADARR__POSTGRES__PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: radarr-postgres
-                    key: password
-              RADARR__POSTGRES__MAINDB:
-                valueFrom:
-                  secretKeyRef:
-                    name: radarr-postgres
-                    key: dbname
+                    key: npgsql
             envFrom:
               - secretRef:
                   name: radarr
@@ -99,6 +84,23 @@ spec:
           - name: internal
             namespace: envoy-gateway
     persistence:
+      postgres-cert:
+        type: custom
+        volumeSpec:
+          csi:
+            driver: csi.cert-manager.io
+            readOnly: true
+            volumeAttributes:
+              csi.cert-manager.io/issuer-name: postgres-mtls
+              csi.cert-manager.io/issuer-kind: ClusterIssuer
+              csi.cert-manager.io/common-name: radarr
+              csi.cert-manager.io/key-usages: client auth,digital signature
+              csi.cert-manager.io/key-algorithm: ECDSA
+              csi.cert-manager.io/key-size: "384"
+              csi.cert-manager.io/key-encoding: PKCS8
+              csi.cert-manager.io/duration: 24h
+        globalMounts:
+          - path: /var/run/secrets/postgresql
       tmfs:
         type: emptyDir
         globalMounts:

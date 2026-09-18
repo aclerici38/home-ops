@@ -45,24 +45,23 @@ spec:
               POSTGRES_ENABLED: "true"
               POSTGRES_HOST:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: bazarr-postgres
                     key: host
               POSTGRES_USERNAME:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: bazarr-postgres
                     key: username
-              POSTGRES_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: bazarr-postgres
-                    key: password
               POSTGRES_DATABASE:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: bazarr-postgres
                     key: dbname
+              PGSSLMODE: verify-full
+              PGSSLCERT: /var/run/secrets/postgresql/tls.crt
+              PGSSLKEY: /var/run/secrets/postgresql/tls.key
+              PGSSLROOTCERT: /var/run/secrets/postgresql/ca.crt
             probes:
               liveness: &probes
                 enabled: true
@@ -100,6 +99,23 @@ spec:
           - name: internal
             namespace: envoy-gateway
     persistence:
+      postgres-cert:
+        type: custom
+        volumeSpec:
+          csi:
+            driver: csi.cert-manager.io
+            readOnly: true
+            volumeAttributes:
+              csi.cert-manager.io/issuer-name: postgres-mtls
+              csi.cert-manager.io/issuer-kind: ClusterIssuer
+              csi.cert-manager.io/common-name: bazarr
+              csi.cert-manager.io/key-usages: client auth,digital signature
+              csi.cert-manager.io/key-algorithm: ECDSA
+              csi.cert-manager.io/key-size: "384"
+              csi.cert-manager.io/key-encoding: PKCS8
+              csi.cert-manager.io/duration: 24h
+        globalMounts:
+          - path: /var/run/secrets/postgresql
       config:
         existingClaim: bazarr
       media:

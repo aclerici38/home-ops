@@ -88,21 +88,21 @@ spec:
                   name: dawarich
                   key: OTP_ENCRYPTION_KEY_DERIVATION_SALT
               DATABASE_HOST:
-                secretKeyRef:
+                configMapKeyRef:
                   name: dawarich-postgres
                   key: host
               DATABASE_USERNAME:
-                secretKeyRef:
+                configMapKeyRef:
                   name: dawarich-postgres
                   key: user
-              DATABASE_PASSWORD:
-                secretKeyRef:
-                  name: dawarich-postgres
-                  key: password
               DATABASE_NAME:
-                secretKeyRef:
+                configMapKeyRef:
                   name: dawarich-postgres
                   key: dbname
+              PGSSLMODE: verify-full
+              PGSSLCERT: /var/run/secrets/postgresql/tls.crt
+              PGSSLKEY: /var/run/secrets/postgresql/tls.key
+              PGSSLROOTCERT: /var/run/secrets/postgresql/ca.crt
               OIDC_CLIENT_ID:
                 secretKeyRef:
                   name: dawarich-oidc-credentials
@@ -187,6 +187,23 @@ spec:
           - name: external
             namespace: envoy-gateway
     persistence:
+      postgres-cert:
+        type: custom
+        volumeSpec:
+          csi:
+            driver: csi.cert-manager.io
+            readOnly: true
+            volumeAttributes:
+              csi.cert-manager.io/issuer-name: postgres-mtls
+              csi.cert-manager.io/issuer-kind: ClusterIssuer
+              csi.cert-manager.io/common-name: dawarich
+              csi.cert-manager.io/key-usages: client auth,digital signature
+              csi.cert-manager.io/key-algorithm: ECDSA
+              csi.cert-manager.io/key-size: "384"
+              csi.cert-manager.io/key-encoding: PKCS8
+              csi.cert-manager.io/duration: 24h
+        globalMounts:
+          - path: /var/run/secrets/postgresql
       data:
         existingClaim: dawarich
         globalMounts:

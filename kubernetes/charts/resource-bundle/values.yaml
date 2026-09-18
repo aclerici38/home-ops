@@ -25,6 +25,15 @@
 #   clusterNamespace: cloudnative-pg
 #   allowFrom: []         # extra NetworkPolicyPeers admitted to the pooler; the
 #                         # app's own namespace is always allowed
+#   readers: []           # shared: extra read-only roles (pg_read_all_data) on
+#                         # this database, each rendered like the owner with its
+#                         # own <name>-postgres Secret/ConfigMap and pooler policy:
+#                         #   - name: blocky-ui     # role name
+#                         #     mtls: false
+#                         #     poolMode: transaction
+#                         #     allowFrom: []
+#                         # sameuser in pg_hba refuses them until a line in
+#                         # cloudnative-pg/cluster (Postgres + pooler) names them.
 #   mtls: false           # shared: passwordless. Role joins cert_apps with no
 #                         # password; app uses the pg18-pooler-mtls-* pooler and
 #                         # the <app>-postgres ConfigMap (uri/sslcert/... paths).

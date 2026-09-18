@@ -10,6 +10,7 @@
        mTLS apps the cert-only pair (pg18-pooler-mtls-*). */}}
 {{- $pooler := printf "pg18-pooler%s%s-rw" ($mtls | ternary "-mtls" "") ($session | ternary "-session" "") }}
 mtls: {{ $mtls }}
+readOnly: {{ dig "readOnly" false $c }}
 cluster: {{ $cluster }}
 namespace: {{ $cnpgNs }}
 database: {{ dig "database" $app $c }}
@@ -26,14 +27,20 @@ name: {{ $i.role }}
 ensure: present
 login: true
 databaseRoleReclaimPolicy: retain
-{{- if $i.mtls }}
+{{- $in := list }}
 {{- /* Cert-only: no password at all; cert_apps is what the mTLS poolers may act for. */}}
+{{- if $i.mtls }}{{ $in = append $in "cert_apps" }}{{ end }}
+{{- /* Readers: SELECT everywhere, fenced to one database by pg_hba. */}}
+{{- if $i.readOnly }}{{ $in = append $in "pg_read_all_data" }}{{ end }}
+{{- if $i.mtls }}
 disablePassword: true
-inRoles:
-  - cert_apps
 {{- else }}
 passwordSecret:
   name: {{ include "resources.app" . }}-role
+{{- end }}
+{{- with $in }}
+inRoles:
+  {{- toYaml . | nindent 2 }}
 {{- end }}
 {{- end -}}
 
@@ -98,7 +105,8 @@ target:
       ca.crt: {{ $ca | quote }}
       pgpass: {{ printf "%s:5432:%s:%s:%s" $host $db $role $pw | quote }}
       jdbc-uri: {{ printf "jdbc:postgresql://%s:5432/%s?password=%s&user=%s" $host $db $pw $role | quote }}
-      uri: {{ printf "postgresql://%s:%s@%s:5432/%s" $role $pw $host $db | quote }}
+      # Verified TLS by default; point the client at ca.crt (e.g. NODE_EXTRA_CA_CERTS / sslrootcert).
+      uri: {{ printf "postgresql://%s:%s@%s:5432/%s?sslmode=verify-full" $role $pw $host $db | quote }}
 data:
   - secretKey: password
     remoteRef:
@@ -129,4 +137,6 @@ sslcert: {{ $dir }}/tls.crt
 sslkey: {{ $dir }}/tls.key
 sslrootcert: {{ $dir }}/ca.crt
 uri: {{ printf "postgresql://%s@%s:5432/%s?%s" $i.role $i.host $i.database $tls | quote }}
+{{- /* Npgsql (.NET) connection-string form of the same settings. */}}
+npgsql: {{ printf "Host=%s;Port=5432;Database=%s;Username=%s;SSL Mode=VerifyFull;Root Certificate=%s/ca.crt;SSL Certificate=%s/tls.crt;SSL Key=%s/tls.key" $i.host $i.database $i.role $dir $dir $dir | quote }}
 {{- end -}}

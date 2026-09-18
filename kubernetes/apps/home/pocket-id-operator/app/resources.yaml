@@ -27,6 +27,7 @@ spec:
     app: pocket-id
     cnpg:
       mode: shared
+      mtls: true
       # Migrations get upset
       poolMode: session
     externalSecret:

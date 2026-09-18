@@ -7,15 +7,32 @@
   With cnpg.mtls the role has no password: the app mounts a csi-driver client
   cert (CN = role) and talks to the cert-only pooler; this renders a ConfigMap
   instead of the ExternalSecrets.
+  cnpg.readers adds read-only roles (pg_read_all_data) on the same database;
+  sameuser in pg_hba refuses them until cloudnative-pg/cluster names them.
 */}}
 {{- if and (hasKey .Values "cnpg") (eq (dig "mode" "" .Values.cnpg) "shared") }}
+{{- $c := .Values.cnpg -}}
+{{- /* The owner role first, then one read-only role per cnpg.readers entry on the
+       same database. Each gets a context whose Values.app is its role name, so
+       the helpers below render its role/secret/ConfigMap/NetworkPolicy. */ -}}
+{{- $db := dig "database" (include "resources.app" .) $c -}}
+{{- $roles := list (dict "ctx" $ "owner" true) -}}
+{{- range $r := dig "readers" list $c }}
+{{- $rc := dict "database" $db "readOnly" true "mtls" (dig "mtls" false $r) "poolMode" (dig "poolMode" "transaction" $r) "allowFrom" (dig "allowFrom" list $r) -}}
+{{- $rc = merge $rc (pick $c "cluster" "clusterNamespace") -}}
+{{- $roles = append $roles (dict "ctx" (dict "Values" (dict "app" $r.name "cnpg" $rc) "Release" $.Release) "owner" false) -}}
+{{- end }}
+{{- range $roles }}
+{{- $owner := .owner -}}
+{{- with .ctx }}
 {{- $app := include "resources.app" . -}}
 {{- $c := .Values.cnpg -}}
-{{- /* Per-resource overrides, deep-merged onto each rendered .spec. */ -}}
-{{- $spec := dig "spec" dict $c -}}
+{{- /* Per-resource overrides, deep-merged onto each rendered .spec (owner only). */ -}}
+{{- $spec := $owner | ternary (dig "spec" dict $c) dict -}}
 {{- $cnpgNs := dig "clusterNamespace" "cloudnative-pg" $c -}}
 {{- $ns := include "resources.ns" . -}}
-{{- $i := fromYaml (include "resources.cnpgShared.ident" .) -}}
+{{- /* No right-chomp: keeps each iteration's `---` on its own line. */}}
+{{- $i := fromYaml (include "resources.cnpgShared.ident" .) }}
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: DatabaseRole
@@ -24,6 +41,7 @@ metadata:
   namespace: {{ $cnpgNs }}
 spec:
   {{- include "resources.mergeSpec" (list (include "resources.cnpgShared.roleSpec" .) (dig "role" dict $spec)) | nindent 2 }}
+{{- if $owner }}
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
@@ -32,6 +50,7 @@ metadata:
   namespace: {{ $cnpgNs }}
 spec:
   {{- include "resources.mergeSpec" (list (include "resources.cnpgShared.databaseSpec" .) (dig "database" dict $spec)) | nindent 2 }}
+{{- end }}
 {{- if not $i.mtls }}
 ---
 # Generated role password — source of truth, mirrored into the app namespace below.
@@ -93,5 +112,7 @@ metadata:
     dormammu.internal/component: cnpg
 spec:
   {{- include "resources.cnpgShared.appSecretSpec" . | nindent 2 }}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- end }}

@@ -26,12 +26,18 @@ spec:
   values:
     cnpg:
       mode: shared
-      # Grafana's blocky-postgres datasource queries the pooler directly.
-      allowFrom:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: grafana-operator
-          podSelector:
-            matchLabels:
-              app: grafana
+      mtls: true
+      # Read-only roles on the blocky database (pg_hba lines in cloudnative-pg/cluster).
+      readers:
+        # postgres.js can't present a client cert: password + verified TLS.
+        - name: blocky-ui
+        - name: blocky-grafana
+          mtls: true
+          allowFrom:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: grafana-operator
+              podSelector:
+                matchLabels:
+                  app: grafana
     dragonfly: {}

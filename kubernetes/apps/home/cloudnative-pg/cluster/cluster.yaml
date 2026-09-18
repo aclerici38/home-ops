@@ -68,6 +68,9 @@ spec:
       - hostssl postgres pgbouncer_mtls $${podselector:mtls-poolers} cert
       - hostssl sameuser +cert_apps $${podselector:mtls-poolers} cert map=mtls
       - hostssl sameuser all $${podselector:poolers} scram-sha-256 clientcert=verify-ca
+      # Read-only roles on another app's database (resource-bundle cnpg.readers).
+      - hostssl blocky blocky-grafana $${podselector:mtls-poolers} cert map=mtls
+      - hostssl blocky blocky-ui $${podselector:poolers} scram-sha-256 clientcert=verify-ca
       - host all all all reject
     pg_ident:
       - mtls pgbouncer_mtls +cert_apps
@@ -145,6 +148,7 @@ spec:
     # TLS + SCRAM only, each role to its own database.
     pg_hba:
       - hostssl sameuser all all scram-sha-256
+      - hostssl blocky blocky-ui all scram-sha-256
       - host all all all reject
 ---
 # Session-mode pooler for apps that need session semantics (immich, dawarich, pocket-id).
