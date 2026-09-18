@@ -40,24 +40,24 @@ spec:
               DB_TYPE: postgres
               DB_HOST:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: seerr-postgres
                     key: host
               DB_USER:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: seerr-postgres
                     key: username
-              DB_PASS:
-                valueFrom:
-                  secretKeyRef:
-                    name: seerr-postgres
-                    key: password
               DB_NAME:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: seerr-postgres
                     key: dbname
+              # mTLS
+              DB_USE_SSL: "true"
+              DB_SSL_CA_FILE: /var/run/secrets/postgresql/ca.crt
+              DB_SSL_CERT_FILE: /var/run/secrets/postgresql/tls.crt
+              DB_SSL_KEY_FILE: /var/run/secrets/postgresql/tls.key
             resources:
               requests:
                 cpu: 15m
@@ -94,6 +94,23 @@ spec:
           - name: external
             namespace: envoy-gateway
     persistence:
+      postgres-cert:
+        type: custom
+        volumeSpec:
+          csi:
+            driver: csi.cert-manager.io
+            readOnly: true
+            volumeAttributes:
+              csi.cert-manager.io/issuer-name: postgres-mtls
+              csi.cert-manager.io/issuer-kind: ClusterIssuer
+              csi.cert-manager.io/common-name: seerr
+              csi.cert-manager.io/key-usages: client auth,digital signature
+              csi.cert-manager.io/key-algorithm: ECDSA
+              csi.cert-manager.io/key-size: "384"
+              csi.cert-manager.io/key-encoding: PKCS8
+              csi.cert-manager.io/duration: 24h
+        globalMounts:
+          - path: /var/run/secrets/postgresql
       config:
         existingClaim: seerr
         globalMounts:

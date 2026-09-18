@@ -42,7 +42,7 @@ spec:
               IMMICH_PROCESS_INVALID_IMAGES: true
               DB_URL:
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     name: immich-postgres
                     key: uri
             probes:
@@ -142,6 +142,25 @@ spec:
               - identifier: server
                 port: *port
     persistence:
+      postgres-cert:
+        type: custom
+        volumeSpec:
+          csi:
+            driver: csi.cert-manager.io
+            readOnly: true
+            volumeAttributes:
+              csi.cert-manager.io/issuer-name: postgres-mtls
+              csi.cert-manager.io/issuer-kind: ClusterIssuer
+              csi.cert-manager.io/common-name: immich
+              csi.cert-manager.io/key-usages: client auth,digital signature
+              csi.cert-manager.io/key-algorithm: ECDSA
+              csi.cert-manager.io/key-size: "384"
+              csi.cert-manager.io/key-encoding: PKCS8
+              csi.cert-manager.io/duration: 24h
+        advancedMounts:
+          server:
+            immich-server:
+              - path: /var/run/secrets/postgresql
       data:
         type: persistentVolumeClaim
         storageClass: nfs-immich
