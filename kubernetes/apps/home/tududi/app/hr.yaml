@@ -54,6 +54,9 @@ spec:
                 secretKeyRef:
                   name: tududi-postgres
                   key: uri
+              # TLS to the pooler, no mtls
+              DB_SSL: "true"
+              NODE_EXTRA_CA_CERTS: /var/run/secrets/postgresql/ca.crt
               DISABLE_TELEGRAM: true
               PASSWORD_AUTH_ENABLED: "false"
               OIDC_ENABLED: "true"
@@ -127,6 +130,15 @@ spec:
           - name: internal
             namespace: envoy-gateway
     persistence:
+      postgres-ca:
+        type: secret
+        name: tududi-postgres
+        items:
+          - key: ca.crt
+            path: ca.crt
+        globalMounts:
+          - path: /var/run/secrets/postgresql
+            readOnly: true
       # Attachments and avatars
       uploads:
         existingClaim: tududi
