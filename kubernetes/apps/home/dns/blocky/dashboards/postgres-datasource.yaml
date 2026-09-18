@@ -19,11 +19,13 @@ spec:
     user: $${user}
     jsonData:
       database: $${dbname}
-      sslmode: 'disable'
+      sslmode: verify-full
+      tlsConfigurationMethod: file-content
       postgresVersion: 1801
       timescaledb: false
     secureJsonData:
       password: $${password}
+      tlsCACert: $${ca.crt}
   valuesFrom:
     - targetPath: url
       valueFrom:
@@ -50,3 +52,8 @@ spec:
         secretKeyRef:
           name: blocky-postgres
           key: password
+    - targetPath: secureJsonData.tlsCACert
+      valueFrom:
+        secretKeyRef:
+          name: blocky-postgres
+          key: ca.crt

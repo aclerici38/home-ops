@@ -26,4 +26,12 @@ spec:
   values:
     cnpg:
       mode: shared
+      # Grafana's blocky-postgres datasource queries the pooler directly.
+      allowFrom:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: grafana-operator
+          podSelector:
+            matchLabels:
+              app: grafana
     dragonfly: {}

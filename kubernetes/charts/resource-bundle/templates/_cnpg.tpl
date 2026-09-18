@@ -21,9 +21,7 @@ imageCatalogRef:
 storage:
   size: 2Gi
   storageClass: openebs-hostpath
-superuserSecret:
-  name: cloudnative-pg
-enableSuperuserAccess: true
+enableSuperuserAccess: false
 postgresql:
   {{- if not $single }}
   synchronous:

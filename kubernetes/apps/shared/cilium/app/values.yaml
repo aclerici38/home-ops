@@ -15,7 +15,8 @@ data:
       distributedLRU:
         enabled: true
     bpfClockProbe: true
-    policyEnforcementMode: never
+    # Enforce NetworkPolicies; pods no policy selects stay allow-all.
+    policyEnforcementMode: default
     enableIPv4BIGTCP: true
     enableIPv6BIGTCP: true
     localRedirectPolicy: true

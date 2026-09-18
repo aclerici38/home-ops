@@ -1,0 +1,67 @@
+---
+# Postgres is reachable only from the poolers, the operator and the cluster's own pods (replicas, join/recovery Jobs). Apps never talk to it.
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.0-standalone-strict/networkpolicy-networking-v1.json
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: pg18
+spec:
+  podSelector:
+    matchLabels:
+      cnpg.io/cluster: pg18
+      cnpg.io/podRole: instance
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              cnpg.io/cluster: pg18
+            matchExpressions:
+              - {key: cnpg.io/podRole, operator: NotIn, values: [pooler]}
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: cloudnative-pg
+      ports:
+        - {port: 5432, protocol: TCP}
+        - {port: 8000, protocol: TCP}
+    - from:
+        - podSelector:
+            matchLabels:
+              cnpg.io/cluster: pg18
+              cnpg.io/podRole: pooler
+      ports:
+        - {port: 5432, protocol: TCP}
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-prometheus-stack
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus
+      ports:
+        - {port: 9187, protocol: TCP}
+---
+# Client access on 5432 comes from the per-app <app>-pooler policies the resource-bundle chart renders into this namespace.
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.0-standalone-strict/networkpolicy-networking-v1.json
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: pg18-poolers
+spec:
+  podSelector:
+    matchLabels:
+      cnpg.io/cluster: pg18
+      cnpg.io/podRole: pooler
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-prometheus-stack
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: prometheus
+      ports:
+        - {port: 9127, protocol: TCP}

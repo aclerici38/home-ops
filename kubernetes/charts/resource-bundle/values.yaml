@@ -23,6 +23,8 @@
 #   database: <app>       # shared: db + role name
 #   cluster: pg18         # shared: target Cluster
 #   clusterNamespace: cloudnative-pg
+#   allowFrom: []         # extra NetworkPolicyPeers admitted to the pooler; the
+#                         # app's own namespace is always allowed
 #   spec:
 #     cluster: {}         # Cluster
 #     pooler: {}          # Pooler

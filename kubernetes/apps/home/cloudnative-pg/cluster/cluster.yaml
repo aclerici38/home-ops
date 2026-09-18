@@ -21,9 +21,18 @@ spec:
   storage:
     size: 80Gi
     storageClass: openebs-hostpath
-  superuserSecret:
-    name: cloudnative-pg
-  enableSuperuserAccess: true
+  # `kubectl cnpg psql` uses the local socket (peer auth)
+  enableSuperuserAccess: false
+  certificates:
+    serverAltDNSNames:
+      - pg18-pooler-rw
+      - pg18-pooler-rw.cloudnative-pg
+      - pg18-pooler-rw.cloudnative-pg.svc
+      - pg18-pooler-rw.cloudnative-pg.svc.cluster.local
+      - pg18-pooler-session-rw
+      - pg18-pooler-session-rw.cloudnative-pg
+      - pg18-pooler-session-rw.cloudnative-pg.svc
+      - pg18-pooler-session-rw.cloudnative-pg.svc.cluster.local
   postgresql:
     synchronous:
       method: any

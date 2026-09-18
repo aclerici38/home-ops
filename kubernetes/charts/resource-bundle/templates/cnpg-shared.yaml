@@ -11,6 +11,8 @@
 {{- /* Per-resource overrides, deep-merged onto each rendered .spec. */ -}}
 {{- $spec := dig "spec" dict $c -}}
 {{- $cnpgNs := dig "clusterNamespace" "cloudnative-pg" $c -}}
+{{- $ns := include "resources.ns" . -}}
+{{- $i := fromYaml (include "resources.cnpgShared.ident" .) -}}
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: DatabaseRole
@@ -38,6 +40,31 @@ metadata:
     dormammu.internal/component: cnpg
 spec:
   {{- include "resources.cnpgShared.roleSecretSpec" . | nindent 2 }}
+---
+# Admit the app's namespace (plus any cnpg.allowFrom peers) to its pooler.
+# Allow rules from every app's policy union on the shared pooler pods.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ $app }}-pooler
+  namespace: {{ $cnpgNs }}
+spec:
+  podSelector:
+    matchLabels:
+      cnpg.io/poolerName: {{ $i.pooler }}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ $ns }}
+        {{- with $c.allowFrom }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      ports:
+        - port: 5432
+          protocol: TCP
 ---
 # App-facing connection secret, in the app's own namespace.
 apiVersion: external-secrets.io/v1
