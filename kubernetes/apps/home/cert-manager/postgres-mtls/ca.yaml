@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.21.2/issuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: postgres-mtls-selfsigned
+spec:
+  selfSigned: {}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.21.2/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgres-mtls-ca
+spec:
+  isCA: true
+  commonName: Postgres mTLS CA
+  subject:
+    organizations:
+      - home-ops
+  usages:
+    - cert sign
+    - crl sign
+  duration: 87600h # 10y
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    encoding: PKCS8
+    # Re-issue with the same key so leaf certs keep verifying across renewal.
+    rotationPolicy: Never
+  issuerRef:
+    group: cert-manager.io
+    kind: Issuer
+    name: postgres-mtls-selfsigned
+  secretName: postgres-mtls-ca
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.21.2/clusterissuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: postgres-mtls
+spec:
+  ca:
+    secretName: postgres-mtls-ca

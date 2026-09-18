@@ -25,6 +25,28 @@
 #   clusterNamespace: cloudnative-pg
 #   allowFrom: []         # extra NetworkPolicyPeers admitted to the pooler; the
 #                         # app's own namespace is always allowed
+#   mtls: false           # shared: passwordless. Role joins cert_apps with no
+#                         # password; app uses the pg18-pooler-mtls-* pooler and
+#                         # the <app>-postgres ConfigMap (uri/sslcert/... paths).
+#                         # The app mounts its cert with csi-driver, e.g.:
+#                         #   persistence:
+#                         #     postgres-cert:
+#                         #       type: custom
+#                         #       globalMounts: [{path: /var/run/secrets/postgresql}]
+#                         #       volumeSpec:
+#                         #         csi:
+#                         #           driver: csi.cert-manager.io
+#                         #           readOnly: true
+#                         #           volumeAttributes:
+#                         #             csi.cert-manager.io/issuer-name: postgres-mtls
+#                         #             csi.cert-manager.io/issuer-kind: ClusterIssuer
+#                         #             csi.cert-manager.io/common-name: <role>
+#                         #             csi.cert-manager.io/key-usages: client auth,digital signature
+#                         #             csi.cert-manager.io/key-algorithm: ECDSA
+#                         #             csi.cert-manager.io/key-size: "384"
+#                         #             csi.cert-manager.io/key-encoding: PKCS8
+#                         #             csi.cert-manager.io/duration: 24h
+#                         #             csi.cert-manager.io/fs-group: "<pod fsGroup>"
 #   spec:
 #     cluster: {}         # Cluster
 #     pooler: {}          # Pooler

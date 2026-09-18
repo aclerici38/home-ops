@@ -4,9 +4,12 @@
 {{- $c := .Values.cnpg -}}
 {{- $cnpgNs := dig "clusterNamespace" "cloudnative-pg" $c -}}
 {{- $session := eq (dig "poolMode" "transaction" $c) "session" -}}
+{{- $mtls := dig "mtls" false $c -}}
 {{- $cluster := dig "cluster" "pg18" $c -}}
-{{- /* Session-scoped apps use the session pooler, everyone else transaction. */}}
-{{- $pooler := $session | ternary "pg18-pooler-session-rw" "pg18-pooler-rw" }}
+{{- /* Session-scoped apps use a session pooler, everyone else transaction;
+       mTLS apps the cert-only pair (pg18-pooler-mtls-*). */}}
+{{- $pooler := printf "pg18-pooler%s%s-rw" ($mtls | ternary "-mtls" "") ($session | ternary "-session" "") }}
+mtls: {{ $mtls }}
 cluster: {{ $cluster }}
 namespace: {{ $cnpgNs }}
 database: {{ dig "database" $app $c }}
@@ -23,8 +26,15 @@ name: {{ $i.role }}
 ensure: present
 login: true
 databaseRoleReclaimPolicy: retain
+{{- if $i.mtls }}
+{{- /* Cert-only: no password at all; cert_apps is what the mTLS poolers may act for. */}}
+disablePassword: true
+inRoles:
+  - cert_apps
+{{- else }}
 passwordSecret:
   name: {{ include "resources.app" . }}-role
+{{- end }}
 {{- end -}}
 
 {{- define "resources.cnpgShared.databaseSpec" -}}
@@ -98,4 +108,25 @@ data:
     remoteRef:
       key: {{ $i.cluster }}-ca
       property: ca.crt
+{{- end -}}
+
+
+{{- /* Where apps mount the csi-driver volume (tls.crt, tls.key, ca.crt). */}}
+{{- define "resources.cnpgShared.certDir" -}}/var/run/secrets/postgresql{{- end -}}
+
+{{- /* mTLS connection settings: nothing secret, so a ConfigMap. */}}
+{{- define "resources.cnpgShared.mtlsConfigData" -}}
+{{- $i := fromYaml (include "resources.cnpgShared.ident" .) -}}
+{{- $dir := include "resources.cnpgShared.certDir" . -}}
+{{- $tls := printf "sslmode=verify-full&sslcert=%s/tls.crt&sslkey=%s/tls.key&sslrootcert=%s/ca.crt" $dir $dir $dir -}}
+user: {{ $i.role }}
+username: {{ $i.role }}
+dbname: {{ $i.database }}
+host: {{ $i.host | quote }}
+port: "5432"
+sslmode: verify-full
+sslcert: {{ $dir }}/tls.crt
+sslkey: {{ $dir }}/tls.key
+sslrootcert: {{ $dir }}/ca.crt
+uri: {{ printf "postgresql://%s@%s:5432/%s?%s" $i.role $i.host $i.database $tls | quote }}
 {{- end -}}

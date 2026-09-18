@@ -4,6 +4,9 @@
   ExternalSecret in cloudnative-pg, which the DatabaseRole references) and read
   back into the app namespace via the cnpg-role-secrets ClusterSecretStore, so
   both copies always match.
+  With cnpg.mtls the role has no password: the app mounts a csi-driver client
+  cert (CN = role) and talks to the cert-only pooler; this renders a ConfigMap
+  instead of the ExternalSecrets.
 */}}
 {{- if and (hasKey .Values "cnpg") (eq (dig "mode" "" .Values.cnpg) "shared") }}
 {{- $app := include "resources.app" . -}}
@@ -29,6 +32,7 @@ metadata:
   namespace: {{ $cnpgNs }}
 spec:
   {{- include "resources.mergeSpec" (list (include "resources.cnpgShared.databaseSpec" .) (dig "database" dict $spec)) | nindent 2 }}
+{{- if not $i.mtls }}
 ---
 # Generated role password — source of truth, mirrored into the app namespace below.
 apiVersion: external-secrets.io/v1
@@ -40,6 +44,7 @@ metadata:
     dormammu.internal/component: cnpg
 spec:
   {{- include "resources.cnpgShared.roleSecretSpec" . | nindent 2 }}
+{{- end }}
 ---
 # Admit the app's namespace (plus any cnpg.allowFrom peers) to its pooler.
 # Allow rules from every app's policy union on the shared pooler pods.
@@ -65,6 +70,19 @@ spec:
       ports:
         - port: 5432
           protocol: TCP
+{{- if $i.mtls }}
+---
+# Connection settings for the cert-only pooler. The credential is the csi-driver
+# cert the app mounts at the sslcert/sslkey/sslrootcert paths below.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $app }}-postgres
+  labels:
+    dormammu.internal/component: cnpg
+data:
+  {{- include "resources.cnpgShared.mtlsConfigData" . | nindent 2 }}
+{{- else }}
 ---
 # App-facing connection secret, in the app's own namespace.
 apiVersion: external-secrets.io/v1
@@ -75,4 +93,5 @@ metadata:
     dormammu.internal/component: cnpg
 spec:
   {{- include "resources.cnpgShared.appSecretSpec" . | nindent 2 }}
+{{- end }}
 {{- end }}

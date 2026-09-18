@@ -52,6 +52,9 @@ spec:
               - host app postgres localhost trust
               - host app app localhost trust
               - host app documentdb_bg_worker_role localhost trust
+              # Replaces the chart's list, so restate its lockdown after the above.
+              - hostssl sameuser all $${podselector:poolers} scram-sha-256 clientcert=verify-ca
+              - host all all all reject
             parameters:
               max_connections: "200"
               cron.database_name: app

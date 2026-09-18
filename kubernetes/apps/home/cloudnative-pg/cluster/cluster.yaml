@@ -33,7 +33,44 @@ spec:
       - pg18-pooler-session-rw.cloudnative-pg
       - pg18-pooler-session-rw.cloudnative-pg.svc
       - pg18-pooler-session-rw.cloudnative-pg.svc.cluster.local
+  # Resolved to pod IPs for the $${podselector:NAME} pg_hba addresses
+  # Split by pooler name so neither set can use the other's rules.
+  podSelectorRefs:
+    - name: poolers
+      selector:
+        matchLabels:
+          cnpg.io/cluster: pg18
+          cnpg.io/podRole: pooler
+        matchExpressions:
+          - key: cnpg.io/poolerName
+            operator: In
+            values:
+              - pg18-pooler-rw
+              - pg18-pooler-session-rw
+    - name: mtls-poolers
+      selector:
+        matchLabels:
+          cnpg.io/cluster: pg18
+          cnpg.io/podRole: pooler
+        matchExpressions:
+          - key: cnpg.io/poolerName
+            operator: In
+            values:
+              - pg18-pooler-mtls-rw
+              - pg18-pooler-mtls-session-rw
   postgresql:
+    # Only pooler pods, only TLS, each role only to the database named after it:
+    # - mTLS poolers: cert as pgbouncer_mtls (auth_query in `postgres`), acting
+    #   for +cert_apps members via the "mtls" ident map. No passwords.
+    # - password poolers: SCRAM plus the pooler's client cert (verify-ca: its
+    #   CN is the auth user, not the role).
+    pg_hba:
+      - hostssl postgres pgbouncer_mtls $${podselector:mtls-poolers} cert
+      - hostssl sameuser +cert_apps $${podselector:mtls-poolers} cert map=mtls
+      - hostssl sameuser all $${podselector:poolers} scram-sha-256 clientcert=verify-ca
+      - host all all all reject
+    pg_ident:
+      - mtls pgbouncer_mtls +cert_apps
     synchronous:
       method: any
       number: 1
@@ -65,6 +102,8 @@ spec:
       log_autovacuum_min_duration: "250"
       log_temp_files: 128MB
       log_lock_waits: "on"
+      log_connections: "on"
+      log_disconnections: "on"
       autovacuum_vacuum_cost_limit: "2000"
       autovacuum_max_workers: "4"
       autovacuum_naptime: 20s
@@ -99,6 +138,14 @@ spec:
       idle_transaction_timeout: "60"
       server_idle_timeout: "180"
       max_prepared_statements: "200"
+      # Clients must use TLS; pooler -> Postgres verifies pg18-rw's cert and name.
+      client_tls_sslmode: require
+      server_tls_sslmode: verify-full
+      server_tls_protocols: tlsv1.3
+    # TLS + SCRAM only, each role to its own database.
+    pg_hba:
+      - hostssl sameuser all all scram-sha-256
+      - host all all all reject
 ---
 # Session-mode pooler for apps that need session semantics (immich, dawarich, pocket-id).
 # Session pooling pins a server connection for the whole client session, so
@@ -125,3 +172,12 @@ spec:
       listen_backlog: "1024"
       query_wait_timeout: "120"
       server_idle_timeout: "180"
+      # Clients must use TLS; pooler -> Postgres verifies pg18-rw's cert and name.
+      client_tls_sslmode: require
+      server_tls_sslmode: verify-full
+      server_tls_protocols: tlsv1.3
+    # Ahead of the operator's `host all all 0.0.0.0/0 md5` fallback, which the
+    # reject makes unreachable: TLS + SCRAM only, each role to its own database.
+    pg_hba:
+      - hostssl sameuser all all scram-sha-256
+      - host all all all reject

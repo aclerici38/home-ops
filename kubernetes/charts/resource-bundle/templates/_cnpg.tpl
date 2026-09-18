@@ -22,7 +22,27 @@ storage:
   size: 2Gi
   storageClass: openebs-hostpath
 enableSuperuserAccess: false
+{{- $ns := include "resources.ns" . }}
+certificates:
+  # The pooler serves this server cert; list its Service for sslmode=verify-full.
+  serverAltDNSNames:
+    - {{ $app }}-pooler-rw
+    - {{ $app }}-pooler-rw.{{ $ns }}
+    - {{ $app }}-pooler-rw.{{ $ns }}.svc
+    - {{ $app }}-pooler-rw.{{ $ns }}.svc.cluster.local
+podSelectorRefs:
+  - name: poolers
+    selector:
+      matchLabels:
+        cnpg.io/cluster: {{ $app }}-db
+        cnpg.io/podRole: pooler
 postgresql:
+  # Only the pooler, over TLS with its client cert, each role to its own
+  # database; the reject shadows CNPG's `host all all all` fallback. Overriding
+  # spec.cluster.postgresql.pg_hba REPLACES this list, so keep these two last.
+  pg_hba:
+    - hostssl sameuser all ${podselector:poolers} scram-sha-256 clientcert=verify-ca
+    - host all all all reject
   {{- if not $single }}
   synchronous:
     method: any
@@ -49,6 +69,8 @@ postgresql:
     log_autovacuum_min_duration: "250"
     log_temp_files: 128MB
     log_lock_waits: "on"
+    log_connections: "on"
+    log_disconnections: "on"
     autovacuum_vacuum_cost_limit: "2000"
     autovacuum_max_workers: "3"
     autovacuum_naptime: 20s
@@ -95,6 +117,12 @@ pgbouncer:
     idle_transaction_timeout: "60"
     server_idle_timeout: "180"
     max_prepared_statements: "200"
+    client_tls_sslmode: require
+    server_tls_sslmode: verify-full
+    server_tls_protocols: tlsv1.3
+  pg_hba:
+    - hostssl sameuser all all scram-sha-256
+    - host all all all reject
 {{- end -}}
 
 {{- define "resources.cnpg.databaseSpec" -}}

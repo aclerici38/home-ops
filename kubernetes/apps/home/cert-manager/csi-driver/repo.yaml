@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.5/ocirepository_v1.jsonapiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: cert-manager-csi-driver
+spec:
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: v0.16.0
+    digest: sha256:f591202c7673d4c8f752cbb469477aef2a2ad15aafd5a0e555cb6a4164b29562
+  url: oci://quay.io/jetstack/charts/cert-manager-csi-driver

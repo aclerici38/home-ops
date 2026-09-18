@@ -1,0 +1,183 @@
+---
+# See cnpg.mtls in the resource-bundle chart. The password poolers in
+# cluster.yaml stay for apps not converted yet.
+# Group whose members the mTLS poolers may log in as (pg_ident map "mtls").
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/databaserole_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: DatabaseRole
+metadata:
+  name: cert-apps
+spec:
+  cluster:
+    name: pg18
+  name: cert_apps
+  login: false
+  databaseRoleReclaimPolicy: retain
+---
+# The mTLS poolers' identity toward Postgres. CNPG issues its client cert from
+# the cluster client CA into pgbouncer-mtls-client-cert (auto-renewed).
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/databaserole_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: DatabaseRole
+metadata:
+  name: pgbouncer-mtls
+spec:
+  cluster:
+    name: pg18
+  name: pgbouncer_mtls
+  login: true
+  disablePassword: true
+  databaseRoleReclaimPolicy: retain
+  clientCertificate:
+    enabled: true
+---
+# Server cert the mTLS poolers present to apps; its ca.crt doubles as the CA
+# they verify client certs against.
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.21.2/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: pg18-pooler-mtls
+spec:
+  secretName: pg18-pooler-mtls
+  secretTemplate:
+    labels:
+      cnpg.io/reload: "true"
+  dnsNames:
+    - pg18-pooler-mtls-rw
+    - pg18-pooler-mtls-rw.cloudnative-pg
+    - pg18-pooler-mtls-rw.cloudnative-pg.svc
+    - pg18-pooler-mtls-rw.cloudnative-pg.svc.cluster.local
+    - pg18-pooler-mtls-session-rw
+    - pg18-pooler-mtls-session-rw.cloudnative-pg
+    - pg18-pooler-mtls-session-rw.cloudnative-pg.svc
+    - pg18-pooler-mtls-session-rw.cloudnative-pg.svc.cluster.local
+  usages:
+    - server auth
+    - digital signature
+  duration: 720h
+  renewBefore: 240h
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    encoding: PKCS8
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: postgres-mtls
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/pooler_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: pg18-pooler-mtls-rw
+spec:
+  cluster:
+    name: pg18
+  instances: 2
+  type: rw
+  pgbouncer:
+    poolMode: transaction
+    # Custom certs turn off CNPG's password integration. pgbouncer logs in to
+    # Postgres as the CN of serverTLSSecret (pgbouncer_mtls, allowed to act for
+    # +cert_apps via pg_ident) and auth_query only confirms the name; clients
+    # prove who they are with their own cert (CN = role).
+    authQuery: SELECT $$1::text, NULL::text
+    serverTLSSecret:
+      name: pgbouncer-mtls-client-cert
+    serverCASecret:
+      name: pg18-ca
+    clientTLSSecret:
+      name: pg18-pooler-mtls
+    clientCASecret:
+      name: pg18-pooler-mtls
+    parameters:
+      default_pool_size: "30"
+      min_pool_size: "5"
+      reserve_pool_size: "10"
+      reserve_pool_timeout: "5"
+      max_client_conn: "1000"
+      listen_backlog: "1024"
+      query_wait_timeout: "120"
+      idle_transaction_timeout: "60"
+      server_idle_timeout: "180"
+      max_prepared_statements: "200"
+      client_tls_sslmode: verify-full
+      server_tls_sslmode: verify-full
+      server_tls_protocols: tlsv1.3
+    pg_hba:
+      - hostssl sameuser all all cert
+      - host all all all reject
+---
+# Session-semantics counterpart of pg18-pooler-mtls-rw.
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/pooler_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: pg18-pooler-mtls-session-rw
+spec:
+  cluster:
+    name: pg18
+  instances: 2
+  type: rw
+  pgbouncer:
+    poolMode: session
+    # Custom certs turn off CNPG's password integration. pgbouncer logs in to
+    # Postgres as the CN of serverTLSSecret (pgbouncer_mtls, allowed to act for
+    # +cert_apps via pg_ident) and auth_query only confirms the name; clients
+    # prove who they are with their own cert (CN = role).
+    authQuery: SELECT $$1::text, NULL::text
+    serverTLSSecret:
+      name: pgbouncer-mtls-client-cert
+    serverCASecret:
+      name: pg18-ca
+    clientTLSSecret:
+      name: pg18-pooler-mtls
+    clientCASecret:
+      name: pg18-pooler-mtls
+    parameters:
+      default_pool_size: "25"
+      min_pool_size: "2"
+      reserve_pool_size: "5"
+      reserve_pool_timeout: "5"
+      max_client_conn: "500"
+      listen_backlog: "1024"
+      query_wait_timeout: "120"
+      server_idle_timeout: "180"
+      client_tls_sslmode: verify-full
+      server_tls_sslmode: verify-full
+      server_tls_protocols: tlsv1.3
+    pg_hba:
+      - hostssl sameuser all all cert
+      - host all all all reject
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/monitoring.coreos.com/podmonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: pg18-pooler-mtls-rw
+  labels:
+    cnpg.io/poolerName: pg18-pooler-mtls-rw
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/podRole: pooler
+      cnpg.io/poolerName: pg18-pooler-mtls-rw
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/monitoring.coreos.com/podmonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: pg18-pooler-mtls-session-rw
+  labels:
+    cnpg.io/poolerName: pg18-pooler-mtls-session-rw
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/podRole: pooler
+      cnpg.io/poolerName: pg18-pooler-mtls-session-rw
