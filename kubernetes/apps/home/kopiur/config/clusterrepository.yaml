@@ -8,10 +8,8 @@ spec:
     s3:
       bucket: kopiur
       prefix: home/
-      endpoint: versitygw.versity.svc.cluster.local:7070
+      endpoint: s3.clerici.tech
       region: us-east-1
-      tls:
-        disableTls: true
       auth:
         secretRef:
           name: kopiur-versity

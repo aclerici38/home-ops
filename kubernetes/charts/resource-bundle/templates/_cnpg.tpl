@@ -139,7 +139,7 @@ configuration:
   data: {compression: gzip, jobs: 8}
   wal: {compression: zstd, maxParallel: 12}
   destinationPath: s3://cnpg
-  endpointURL: http://versitygw.versity.svc.cluster.local:7070
+  endpointURL: https://s3.clerici.tech
   historyTags: {keepHistory: "true"}
   s3Credentials:
     accessKeyId: {name: cloudnative-pg, key: versity-access-key-id}

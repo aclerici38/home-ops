@@ -51,6 +51,13 @@ spec:
           sectionName: https
       hostnames:
         - s3.clerici.tech
+    # All s3 traffic through Envoy pods
+    networkPolicy:
+      enabled: true
+      allowIngressFromNamespaces:
+        kubernetes.io/metadata.name: envoy-gateway
+      allowIngressFromPods:
+        gateway.envoyproxy.io/owning-gateway-name: internal
     auth:
       existingSecret: versity
     gateway:

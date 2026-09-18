@@ -95,7 +95,7 @@ spec:
               NOTIFICATIONS_SMTP_INSECURE: true
               STORAGE_USERS_DRIVER: decomposeds3
               STORAGE_USERS_DECOMPOSEDS3_BUCKET: opencloud
-              STORAGE_USERS_DECOMPOSEDS3_ENDPOINT: http://versitygw.versity.svc.cluster.local:7070
+              STORAGE_USERS_DECOMPOSEDS3_ENDPOINT: https://s3.clerici.tech
               STORAGE_USERS_DECOMPOSEDS3_REGION: us-east-1
               STORAGE_USERS_DECOMPOSEDS3_ACCESS_KEY:
                 secretKeyRef:
