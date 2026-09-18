@@ -9,7 +9,7 @@ data:
     autoDirectNodeRoutes: true
     namespaceOverride: cilium
     bpf:
-      datapathMode: veth
+      datapathMode: netkit
       masquerade: true
       preallocateMaps: true
       distributedLRU:
