@@ -117,6 +117,27 @@ spec:
         parentRefs:
           - name: external
             namespace: envoy-gateway
+    networkpolicies:
+      mealie:
+        type: cilium
+        endpointSelector: {}
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "9000", protocol: TCP}
+        egress:
+          - toEntities:
+              - cluster
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+                  - {port: "443", protocol: TCP}
     persistence:
       postgres-cert:
         type: custom

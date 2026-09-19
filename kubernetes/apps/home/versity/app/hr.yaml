@@ -178,38 +178,27 @@ spec:
           - backendRefs:
               - identifier: versity
                 port: *webuiPort
-    # S3 is open, admin API and WebUI are only reachable through the internal Envoy gateway,
-    # metrics only from Prometheus. StatsD to the exporter is pod-local loopback.
-    # All egress is denied.
     networkpolicies:
       versity:
+        type: cilium
         controller: versity
-        policyTypes:
-          - Ingress
-          - Egress
-        rules:
-          ingress:
-            - ports:
-                - {port: *s3Port, protocol: TCP}
-            - from:
-                - namespaceSelector:
-                    matchLabels:
-                      kubernetes.io/metadata.name: envoy-gateway
-                  podSelector:
-                    matchLabels:
-                      gateway.envoyproxy.io/owning-gateway-name: internal
-              ports:
-                - {port: *adminPort, protocol: TCP}
-                - {port: *webuiPort, protocol: TCP}
-            - from:
-                - namespaceSelector:
-                    matchLabels:
-                      kubernetes.io/metadata.name: kube-prometheus-stack
-                  podSelector:
-                    matchLabels:
-                      app.kubernetes.io/name: prometheus
-              ports:
-                - {port: *metricsPort, protocol: TCP}
+        ingress:
+          - fromEntities:
+              - all
+            toPorts:
+              - ports:
+                  - {port: "7070", protocol: TCP}
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "7071", protocol: TCP}
+                  - {port: "8080", protocol: TCP}
+        # All egress is denied
+        egress:
+          - {}
     persistence:
       data:
         existingClaim: backups
