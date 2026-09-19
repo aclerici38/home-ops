@@ -103,10 +103,8 @@ spec:
                   password: ""
                   database: blocky
                   options:
-                    ssl:
-                      ca: {{ .Values.postgresTLS.ca | toJson }}
-                      cert: {{ .Values.postgresTLS.cert | toJson }}
-                      key: {{ .Values.postgresTLS.key | toJson }}
+                    # postgresTLS is injected via valuesFrom. defaults are just for flate to pass
+                    ssl: {{ .Values.postgresTLS | default dict | toJson }}
     persistence:
       config:
         type: secret
