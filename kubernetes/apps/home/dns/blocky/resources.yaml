@@ -29,8 +29,8 @@ spec:
       mtls: true
       # Read-only roles on the blocky database (pg_hba lines in cloudnative-pg/cluster).
       readers:
-        # postgres.js can't present a client cert: password + verified TLS.
         - name: blocky-ui
+          mtls: true
         - name: blocky-grafana
           mtls: true
           allowFrom:

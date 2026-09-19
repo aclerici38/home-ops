@@ -109,6 +109,7 @@ spec:
     pg_hba:
       - hostssl sameuser all all cert
       - hostssl blocky blocky-grafana all cert
+      - hostssl blocky blocky-ui all cert
       - host all all all reject
 ---
 # Session-semantics counterpart of pg18-pooler-mtls-rw.
