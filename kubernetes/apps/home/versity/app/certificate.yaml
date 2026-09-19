@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.21.2/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: versitygw-tls
+spec:
+  secretName: versitygw-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: s3.clerici.tech
+  dnsNames:
+    - s3.clerici.tech
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+    rotationPolicy: Always
