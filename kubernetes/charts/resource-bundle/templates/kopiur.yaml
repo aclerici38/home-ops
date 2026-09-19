@@ -43,4 +43,18 @@ metadata:
 spec:
   {{- include "resources.mergeSpec" (list (include "resources.kopiur.pvcSpec" .) (dig "pvc" dict $spec)) | nindent 2 }}
 {{- end }}
+{{- /* Cilium clusters only (raphael has none). Allow-only: the app's own policy
+       decides whether the namespace is enforced; this keeps movers able to
+       reach their repository once it is. */}}
+{{- if .Capabilities.APIVersions.Has "cilium.io/v2/CiliumNetworkPolicy" }}
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: {{ $app }}-kopiur
+  labels:
+    dormammu.internal/component: kopiur
+spec:
+  {{- include "resources.mergeSpec" (list (include "resources.kopiur.networkPolicySpec" .) (dig "networkPolicy" dict $spec)) | nindent 2 }}
+{{- end }}
 {{- end }}

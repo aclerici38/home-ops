@@ -60,8 +60,6 @@ data:
         prometheus:
           serviceMonitor:
             enabled: true
-    daemon:
-      enableSourceIPVerification: false
     envoy:
       enabled: false
     gatewayAPI:

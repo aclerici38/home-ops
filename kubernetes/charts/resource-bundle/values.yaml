@@ -113,6 +113,9 @@
 #     schedule: {}        # SnapshotSchedule
 #     restore: {}         # Restore
 #     pvc: {}             # PersistentVolumeClaim
+#     networkPolicy: {}   # CiliumNetworkPolicy <app>-kopiur (Cilium clusters only):
+#                         # mover egress to the repository — versity pods or the
+#                         # B2 FQDN; any other repository must set egress here
 
 # gpu:
 #   spec: {}              # ResourceClaimTemplate (Intel GPU, <app>-gpu)

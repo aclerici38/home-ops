@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.0/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cilium-policy-rules
+spec:
+  groups:
+    - name: cilium-policy.rules
+      rules:
+        # A policy blocking real traffic. ICMP is left out: pods with ingress
+        # policies drop a steady trickle of IPv6 neighbour discovery.
+        - alert: CiliumPolicyDrops
+          expr: |-
+            sum by (node) (increase(hubble_drop_total{reason="POLICY_DENIED", protocol=~"TCP|UDP"}[15m])) > 30
+          for: 15m
+          annotations:
+            summary: >-
+              {{ $labels.node }} dropped {{ $value | humanize }} TCP/UDP packets
+              on policy in 15m — find them with
+              `hubble observe --verdict DROPPED` in that node's cilium-agent
+          labels:
+            severity: warning
