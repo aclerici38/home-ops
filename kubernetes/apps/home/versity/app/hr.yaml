@@ -66,6 +66,13 @@ spec:
               VGW_WEBUI_NO_TLS: "true"
               VGW_WEBUI_GATEWAYS: https://s3.clerici.tech
               VGW_WEBUI_ADMIN_GATEWAYS: https://s3-admin.clerici.tech
+              VGW_KEEP_ALIVE: "true"
+              # AWS-format S3 access log + admin API audit log replace the default request summary.
+              VGW_ACCESS_LOG: stdout
+              VGW_ADMIN_ACCESS_LOG: stdout
+              VGW_QUIET: "true"
+              VGW_METRICS_STATSD_SERVERS: 127.0.0.1:9125
+              VGW_METRICS_SERVICE_NAME: versity
             probes:
               liveness: &probes
                 enabled: true
@@ -76,7 +83,7 @@ spec:
                     port: 7070
                     scheme: HTTPS
               readiness: *probes
-            securityContext:
+            securityContext: &securityContext
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
@@ -86,6 +93,30 @@ spec:
                 memory: 256Mi
               limits:
                 memory: 1Gi
+          statsd-exporter:
+            image:
+              repository: quay.io/prometheus/statsd-exporter
+              tag: v0.31.0@sha256:1d5d341c4eb7abdd3445a3f85c3d498402b676ad29b4cf0421f5d280943871ab
+            args:
+              - --statsd.listen-udp=127.0.0.1:9125
+              - --statsd.listen-tcp=
+              - --web.listen-address=:9102
+            probes:
+              liveness: &exporterProbes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /metrics
+                    port: &metricsPort 9102
+              readiness: *exporterProbes
+            securityContext: *securityContext
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
     service:
       versity:
         controller: versity
@@ -96,6 +127,8 @@ spec:
             port: &adminPort 7071
           webui:
             port: &webuiPort 8080
+          metrics:
+            port: *metricsPort
       s3:
         controller: versity
         type: LoadBalancer
@@ -114,6 +147,15 @@ spec:
           https:
             port: 443
             targetPort: *s3Port
+    serviceMonitor:
+      versity:
+        serviceName: versity
+        endpoints:
+          - port: metrics
+            # service=<name> from VGW_METRICS_SERVICE_NAME collides with the target label.
+            metricRelabelings:
+              - action: labeldrop
+                regex: exported_service
     route:
       admin:
         annotations:
@@ -136,7 +178,8 @@ spec:
           - backendRefs:
               - identifier: versity
                 port: *webuiPort
-    # S3 is open, admin API and WebUI are only reachable through the internal Envoy gateway.
+    # S3 is open, admin API and WebUI are only reachable through the internal Envoy gateway,
+    # metrics only from Prometheus. StatsD to the exporter is pod-local loopback.
     # All egress is denied.
     networkpolicies:
       versity:
@@ -158,19 +201,32 @@ spec:
               ports:
                 - {port: *adminPort, protocol: TCP}
                 - {port: *webuiPort, protocol: TCP}
+            - from:
+                - namespaceSelector:
+                    matchLabels:
+                      kubernetes.io/metadata.name: kube-prometheus-stack
+                  podSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: prometheus
+              ports:
+                - {port: *metricsPort, protocol: TCP}
     persistence:
       data:
         existingClaim: backups
-        globalMounts:
-          - path: /mnt/data
-            subPath: data
-          - path: /mnt/metadata
-            subPath: metadata
-          - path: /mnt/versioning
-            subPath: versioning
+        advancedMounts:
+          versity:
+            versity:
+              - path: /mnt/data
+                subPath: data
+              - path: /mnt/metadata
+                subPath: metadata
+              - path: /mnt/versioning
+                subPath: versioning
       certs:
         type: secret
         name: versitygw-tls
-        globalMounts:
-          - path: /certs
-            readOnly: true
+        advancedMounts:
+          versity:
+            versity:
+              - path: /certs
+                readOnly: true

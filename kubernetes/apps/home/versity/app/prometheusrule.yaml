@@ -1,0 +1,72 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.0/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: versity-rules
+spec:
+  groups:
+    # versitygw only emits StatsD; the statsd-exporter sidecar turns it into plain
+    # counters (no _total suffix) labelled action/bucket/method/status. Counters live
+    # in the exporter, so they reset whenever the pod restarts.
+    - name: versity.rules
+      rules:
+        # Covers both "pod gone" and "exporter up but not scraped". Gatus covers the
+        # S3 endpoint itself.
+        - alert: VersityMetricsAbsent
+          expr: |-
+            absent(up{job="versity"} == 1)
+          for: 10m
+          annotations:
+            summary: >-
+              No healthy versity scrape target for 10m — the gateway is down or the
+              ServiceMonitor stopped matching.
+          labels:
+            severity: critical
+
+        # failed_count includes routine 404s (HEAD before PUT, missing WAL probes), so
+        # only 5xx counts as a server fault. 503 here is the max-requests limiter.
+        - alert: VersityServerErrors
+          expr: |-
+            sum(rate(versitygw_failed_count{job="versity", status=~"5.."}[15m]))
+              /
+            (
+              sum(rate(versitygw_success_count{job="versity"}[15m]))
+              + sum(rate(versitygw_failed_count{job="versity"}[15m]))
+            ) > 0.05
+          for: 15m
+          annotations:
+            summary: >-
+              {{ $value | humanizePercentage }} of versity S3 requests are failing with
+              5xx — check the backups PV and the gateway logs.
+          labels:
+            severity: warning
+
+        # Every consumer uses valid credentials, so 403s are someone presenting a bad
+        # or stale key (SignatureDoesNotMatch / InvalidAccessKeyId / AccessDenied).
+        # The access log has the source IP.
+        - alert: VersityAuthFailures
+          expr: |-
+            sum(increase(versitygw_failed_count{job="versity", status="403"}[15m])) > 10
+          for: 5m
+          annotations:
+            summary: >-
+              versity rejected {{ $value | humanize }} requests with 403 in 15m — a client
+              has bad credentials or something is probing s3.clerici.tech.
+          labels:
+            severity: warning
+
+        # CNPG archives a WAL segment at least every archive_timeout (5m default) to
+        # s3://cnpg, making it the only guaranteed continuous writer. No objects landing
+        # there for an hour means either archiving or the gateway's write path broke.
+        # `or vector(0)` keeps the alert live after a pod restart wipes the series.
+        - alert: VersityCNPGWritesStalled
+          expr: |-
+            (sum(increase(versitygw_object_created_count{job="versity", bucket="cnpg"}[1h])) or vector(0)) < 1
+          for: 30m
+          annotations:
+            summary: >-
+              No objects written to s3://cnpg for 90m — WAL archiving has stopped. Check
+              the barman-cloud plugin logs, then versity.
+          labels:
+            severity: critical
