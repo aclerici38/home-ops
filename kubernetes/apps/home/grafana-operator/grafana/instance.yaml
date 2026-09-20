@@ -110,18 +110,9 @@ spec:
                 claimName: grafana-pvc
             # mTLS client cert for read-only Postgres datasources (blocky-grafana).
             - name: postgres-cert
-              csi:
-                driver: csi.cert-manager.io
-                readOnly: true
-                volumeAttributes:
-                  csi.cert-manager.io/issuer-name: postgres-mtls
-                  csi.cert-manager.io/issuer-kind: ClusterIssuer
-                  csi.cert-manager.io/common-name: blocky-grafana
-                  csi.cert-manager.io/key-usages: client auth,digital signature
-                  csi.cert-manager.io/key-algorithm: ECDSA
-                  csi.cert-manager.io/key-size: "384"
-                  csi.cert-manager.io/key-encoding: PKCS8
-                  csi.cert-manager.io/duration: 24h
+              secret:
+                secretName: blocky-grafana-postgres-cert
+                defaultMode: 0440
   persistentVolumeClaim:
     spec:
       accessModes:

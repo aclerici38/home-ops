@@ -95,20 +95,9 @@ spec:
             namespace: envoy-gateway
     persistence:
       postgres-cert:
-        type: custom
-        volumeSpec:
-          csi:
-            driver: csi.cert-manager.io
-            readOnly: true
-            volumeAttributes:
-              csi.cert-manager.io/issuer-name: postgres-mtls
-              csi.cert-manager.io/issuer-kind: ClusterIssuer
-              csi.cert-manager.io/common-name: seerr
-              csi.cert-manager.io/key-usages: client auth,digital signature
-              csi.cert-manager.io/key-algorithm: ECDSA
-              csi.cert-manager.io/key-size: "384"
-              csi.cert-manager.io/key-encoding: PKCS8
-              csi.cert-manager.io/duration: 24h
+        type: secret
+        name: seerr-postgres-cert
+        defaultMode: 0440
         globalMounts:
           - path: /var/run/secrets/postgresql
       config:

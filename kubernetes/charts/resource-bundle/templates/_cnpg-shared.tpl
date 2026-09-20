@@ -119,8 +119,35 @@ data:
 {{- end -}}
 
 
-{{- /* Where apps mount the csi-driver volume (tls.crt, tls.key, ca.crt). */}}
+{{- /* Where apps mount the client cert Secret (tls.crt, tls.key, ca.crt). */}}
 {{- define "resources.cnpgShared.certDir" -}}/var/run/secrets/postgresql{{- end -}}
+
+{{- /* Name of the client cert Certificate and the Secret it writes. */}}
+{{- define "resources.cnpgShared.certName" -}}{{ include "resources.app" . }}-postgres-cert{{- end -}}
+
+{{/* Client cert for the cert-only pooler, CN = the role the pooler acts for.
+     Renewal rewrites the Secret, which reloader watches, so the app is rolled:
+     many drivers read sslcert/sslkey once and pin the PEM for the life of the
+     process, and would otherwise keep presenting the expired cert. */}}
+{{- define "resources.cnpgShared.certificateSpec" -}}
+{{- $i := fromYaml (include "resources.cnpgShared.ident" .) -}}
+secretName: {{ include "resources.cnpgShared.certName" . }}
+commonName: {{ $i.role }}
+usages:
+  - client auth
+  - digital signature
+duration: 720h
+renewBefore: 240h
+privateKey:
+  algorithm: ECDSA
+  size: 384
+  encoding: PKCS8
+  rotationPolicy: Always
+issuerRef:
+  group: cert-manager.io
+  kind: ClusterIssuer
+  name: postgres-mtls
+{{- end -}}
 
 {{- /* mTLS connection settings: nothing secret, so a ConfigMap. */}}
 {{- define "resources.cnpgShared.mtlsConfigData" -}}

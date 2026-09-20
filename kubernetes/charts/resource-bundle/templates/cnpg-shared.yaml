@@ -4,9 +4,9 @@
   ExternalSecret in cloudnative-pg, which the DatabaseRole references) and read
   back into the app namespace via the cnpg-role-secrets ClusterSecretStore, so
   both copies always match.
-  With cnpg.mtls the role has no password: the app mounts a csi-driver client
-  cert (CN = role) and talks to the cert-only pooler; this renders a ConfigMap
-  instead of the ExternalSecrets.
+  With cnpg.mtls the role has no password: the app mounts a client cert (CN =
+  role) and talks to the cert-only pooler; this renders a Certificate plus a
+  ConfigMap instead of the ExternalSecrets.
   cnpg.readers adds read-only roles (pg_read_all_data) on the same database;
   sameuser in pg_hba refuses them until cloudnative-pg/cluster names them.
 */}}
@@ -91,8 +91,20 @@ spec:
           protocol: TCP
 {{- if $i.mtls }}
 ---
-# Connection settings for the cert-only pooler. The credential is the csi-driver
-# cert the app mounts at the sslcert/sslkey/sslrootcert paths below.
+# The client cert itself, in the app's namespace. cert-manager writes tls.crt,
+# tls.key and ca.crt into the Secret of the same name, which the app mounts at
+# the sslcert/sslkey/sslrootcert paths below.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "resources.cnpgShared.certName" . }}
+  labels:
+    dormammu.internal/component: cnpg
+spec:
+  {{- include "resources.mergeSpec" (list (include "resources.cnpgShared.certificateSpec" .) (dig "certificate" dict $spec)) | nindent 2 }}
+---
+# Connection settings for the cert-only pooler. The credential is the cert
+# Secret above, mounted at the sslcert/sslkey/sslrootcert paths below.
 apiVersion: v1
 kind: ConfigMap
 metadata:
