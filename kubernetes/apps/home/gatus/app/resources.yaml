@@ -28,6 +28,8 @@ spec:
   values:
     cnpg:
       mode: shared
+      podSelector:
+        app.kubernetes.io/name: gatus-sidecar
       mtls: true
     externalSecret: {}
     pocketId:

@@ -34,6 +34,8 @@ spec:
         - name: blocky-grafana
           mtls: true
           certNamespace: grafana-operator
+          podSelector:
+            app: grafana
           allowFrom:
             - namespaceSelector:
                 matchLabels:

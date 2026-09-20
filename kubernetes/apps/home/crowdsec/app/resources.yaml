@@ -27,4 +27,7 @@ spec:
     externalSecret: {}
     cnpg:
       mode: shared
+      podSelector:
+        k8s-app: crowdsec
+        type: lapi
       mtls: true

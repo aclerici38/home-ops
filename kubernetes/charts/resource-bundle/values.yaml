@@ -25,6 +25,13 @@
 #   clusterNamespace: cloudnative-pg
 #   allowFrom: []         # extra NetworkPolicyPeers admitted to the pooler; the
 #                         # app's own namespace is always allowed
+#   podSelector: {}       # pod labels of this role's DB client, for the egress
+#                         # half: a CiliumNetworkPolicy per role, in the namespace
+#                         # holding the credential (certNamespace when set),
+#                         # letting those pods reach the pooler on 5432. Defaults
+#                         # to app.kubernetes.io/name: <role>, which is what
+#                         # app-template labels its pods. Allow-only, so it does
+#                         # nothing until that namespace is default-deny.
 #   readers: []           # shared: extra read-only roles (pg_read_all_data) on
 #                         # this database, each rendered like the owner with its
 #                         # own <name>-postgres Secret/ConfigMap and pooler policy:
@@ -32,6 +39,7 @@
 #                         #     mtls: false
 #                         #     poolMode: transaction
 #                         #     allowFrom: []
+#                         #     podSelector: {}
 #                         #     certNamespace: ""  # mtls: put the cert Secret
 #                         #       # here instead, when the pod that mounts it
 #                         #       # runs outside this release's namespace

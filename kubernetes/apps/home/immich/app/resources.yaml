@@ -30,6 +30,9 @@ spec:
   values:
     cnpg:
       mode: shared
+      podSelector:
+        app.kubernetes.io/name: immich
+        app.kubernetes.io/controller: server
       mtls: true
       poolMode: session
       spec:

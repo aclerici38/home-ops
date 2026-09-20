@@ -18,7 +18,7 @@
 {{- $db := dig "database" (include "resources.app" .) $c -}}
 {{- $roles := list (dict "ctx" $ "owner" true) -}}
 {{- range $r := dig "readers" list $c }}
-{{- $rc := dict "database" $db "readOnly" true "mtls" (dig "mtls" false $r) "poolMode" (dig "poolMode" "transaction" $r) "allowFrom" (dig "allowFrom" list $r) "certNamespace" (dig "certNamespace" "" $r) -}}
+{{- $rc := dict "database" $db "readOnly" true "mtls" (dig "mtls" false $r) "poolMode" (dig "poolMode" "transaction" $r) "allowFrom" (dig "allowFrom" list $r) "certNamespace" (dig "certNamespace" "" $r) "podSelector" (dig "podSelector" dict $r) -}}
 {{- $rc = merge $rc (pick $c "cluster" "clusterNamespace") -}}
 {{- $roles = append $roles (dict "ctx" (dict "Values" (dict "app" $r.name "cnpg" $rc) "Release" $.Release) "owner" false) -}}
 {{- end }}
@@ -89,6 +89,42 @@ spec:
       ports:
         - port: 5432
           protocol: TCP
+{{- /* The other half, for once the consuming namespace is default-deny: let the
+       pods that hold this role's credential out to its pooler. One policy per
+       role, not per namespace — cnpg.podSelector names the pods, defaulting to
+       app-template's app.kubernetes.io/name. It lands wherever that credential
+       is mounted (certNamespace when the reader is consumed from another
+       namespace). Allow-only, so it never enforces by itself. Cilium clusters
+       only; raphael has none. */}}
+{{- if $.Capabilities.APIVersions.Has "cilium.io/v2/CiliumNetworkPolicy" }}
+{{- $egressNs := dig "certNamespace" "" $c | default $ns }}
+{{- $sel := dig "podSelector" dict $c }}
+{{- if empty $sel }}{{ $sel = dict "app.kubernetes.io/name" $app }}{{ end }}
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: {{ $app }}-pooler
+  namespace: {{ $egressNs }}
+  labels:
+    dormammu.internal/component: cnpg
+spec:
+  description: The {{ $app }} role's pods reach the {{ $i.pooler }} pooler
+  enableDefaultDeny:
+    ingress: false
+    egress: false
+  endpointSelector:
+    matchLabels:
+      {{- toYaml $sel | nindent 6 }}
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: {{ $cnpgNs }}
+            cnpg.io/poolerName: {{ $i.pooler }}
+      toPorts:
+        - ports:
+            - {port: "5432", protocol: TCP}
+{{- end }}
 {{- if $i.mtls }}
 ---
 # The client cert itself, in the app's namespace. cert-manager writes tls.crt,

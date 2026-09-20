@@ -45,6 +45,10 @@ spec:
         spec:
           image: ghcr.io/pocket-id/pocket-id:v2.15.0-distroless@sha256:61890eb62fafc56e188a3a92f94f8654f1549ab5deef412e877ad01bec8eb43f
           podTemplate:
+            metadata:
+              # Selected by the pocket-id role's pooler egress policy.
+              labels:
+                app.kubernetes.io/name: pocket-id
             spec:
               hostUsers: false
               volumes:
