@@ -21,23 +21,6 @@ spec:
       retries: 1
   dependsOn:
     - name: blocky-resources
-  # blocky-ui only takes the client cert as inline PEM
-  valuesFrom:
-    - kind: Secret
-      name: blocky-ui-postgres-cert
-      valuesKey: ca.crt
-      targetPath: postgresTLS.ca
-      literal: true
-    - kind: Secret
-      name: blocky-ui-postgres-cert
-      valuesKey: tls.crt
-      targetPath: postgresTLS.cert
-      literal: true
-    - kind: Secret
-      name: blocky-ui-postgres-cert
-      valuesKey: tls.key
-      targetPath: postgresTLS.key
-      literal: true
   values:
     controllers:
       blocky-ui:
@@ -48,6 +31,7 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
             runAsGroup: 1000
+            fsGroup: 1000
             seccompProfile: {type: RuntimeDefault}
         containers:
           blocky-ui:
@@ -82,10 +66,11 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
-    secrets:
+    configMaps:
       config:
-        stringData:
+        data:
           # https://github.com/GabeDuarteM/blocky-ui/blob/main/blocky-ui.example.yml
+          # file: values come from the blocky-ui-postgres ConfigMap and cert Secret.
           blocky-ui.yaml: |-
             servers:
               blocky:
@@ -97,18 +82,33 @@ spec:
               postgres:
                 type: postgresql
                 target:
-                  host: pg18-pooler-mtls-rw.cloudnative-pg.svc.cluster.local
+                  host: file:/config/postgres/host
                   port: 5432
-                  username: blocky-ui
+                  username: file:/config/postgres/username
                   password: ""
-                  database: blocky
+                  database: file:/config/postgres/dbname
                   options:
-                    # postgresTLS is injected via valuesFrom. defaults are just for flate to pass
-                    ssl: {{ .Values.postgresTLS | default dict | toJson }}
+                    ssl:
+                      ca: file:/var/run/secrets/postgresql/ca.crt
+                      cert: file:/var/run/secrets/postgresql/tls.crt
+                      key: file:/var/run/secrets/postgresql/tls.key
     persistence:
       config:
-        type: secret
+        type: configMap
         identifier: config
         globalMounts:
           - path: /config/blocky-ui.yaml
             subPath: blocky-ui.yaml
+      postgres:
+        type: configMap
+        name: blocky-ui-postgres
+        globalMounts:
+          - path: /config/postgres
+            readOnly: true
+      postgres-cert:
+        type: secret
+        name: blocky-ui-postgres-cert
+        defaultMode: 0440
+        globalMounts:
+          - path: /var/run/secrets/postgresql
+            readOnly: true
