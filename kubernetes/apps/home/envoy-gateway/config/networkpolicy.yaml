@@ -1,0 +1,71 @@
+---
+# An HTTPRoute already says a gateway may reach its backends, so backend ingress
+# is not label-gated: Envoy only dials the backendRefs its routes name. Any port,
+# since a cluster-wide policy can't know each app's.
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumclusterwidenetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: gateway-backends
+spec:
+  description: Every pod accepts traffic from the gateways' Envoy pods
+  enableDefaultDeny:
+    ingress: false
+    egress: false
+  endpointSelector: {}
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway
+          matchExpressions:
+            - key: gateway.envoyproxy.io/owning-gateway-name
+              operator: In
+              values:
+                - external
+                - internal
+---
+# In-cluster calls to *.clerici.tech resolve to the gateway's LB IP, which Cilium
+# translates to the Envoy pods before policy: match them on the container port.
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumclusterwidenetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: external-gateway-clients
+spec:
+  description: Every pod may call routes on the external gateway, as the internet can
+  enableDefaultDeny:
+    ingress: false
+    egress: false
+  endpointSelector: {}
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: external
+      toPorts:
+        - ports:
+            - {port: "10080", protocol: TCP}
+            - {port: "10443", protocol: TCP}
+---
+# The internal gateway is LAN-only, so reaching it stays opt-in.
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumclusterwidenetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: internal-gateway-clients
+spec:
+  description: Pods labelled egress.dormammu/internal-gateway call routes on the internal gateway
+  enableDefaultDeny:
+    ingress: false
+    egress: false
+  endpointSelector:
+    matchLabels:
+      egress.dormammu/internal-gateway: "true"
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: internal
+      toPorts:
+        - ports:
+            - {port: "10443", protocol: TCP}

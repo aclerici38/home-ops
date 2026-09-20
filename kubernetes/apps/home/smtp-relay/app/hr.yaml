@@ -70,6 +70,37 @@ spec:
             port: *metricsPort
           smtp:
             port: *smtpPort
+    # Clients opt in with the pod label `egress.dormammu/smtp-relay: "true"`.
+    networkpolicies:
+      clients:
+        type: ciliumClusterwide
+        endpointSelector:
+          matchLabels:
+            egress.dormammu/smtp-relay: "true"
+        enableDefaultDeny: &allowOnly
+          ingress: false
+          egress: false
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: smtp-relay
+                  app.kubernetes.io/name: smtp-relay
+            toPorts:
+              - ports:
+                  - {port: "25", protocol: TCP}
+      smtp-relay:
+        type: cilium
+        controller: smtp-relay
+        enableDefaultDeny: *allowOnly
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  egress.dormammu/smtp-relay: "true"
+                matchExpressions:
+                  - {key: 'k8s:io.kubernetes.pod.namespace', operator: Exists}
+            toPorts:
+              - ports:
+                  - {port: "25", protocol: TCP}
     serviceMonitor:
       smtp-relay:
         serviceName: smtp-relay

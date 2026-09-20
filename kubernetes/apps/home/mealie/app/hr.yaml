@@ -24,6 +24,14 @@ spec:
       mealie:
         strategy: RollingUpdate
         pod:
+          # Network capabilities (see cilium/policies/default-deny.yaml).
+          labels:
+            # llm.clerici.tech
+            egress.dormammu/internal-gateway: "true"
+            egress.dormammu/pg18: "true"
+            egress.dormammu/internet: "true"
+            egress.dormammu/flaresolverr: "true"
+            egress.dormammu/smtp-relay: "true"
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -117,27 +125,6 @@ spec:
         parentRefs:
           - name: external
             namespace: envoy-gateway
-    networkpolicies:
-      mealie:
-        type: cilium
-        endpointSelector: {}
-        ingress:
-          - fromEndpoints:
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: external
-            toPorts:
-              - ports:
-                  - {port: "9000", protocol: TCP}
-        egress:
-          - toEntities:
-              - cluster
-          - toEntities:
-              - world
-            toPorts:
-              - ports:
-                  - {port: "80", protocol: TCP}
-                  - {port: "443", protocol: TCP}
     persistence:
       postgres-cert:
         type: secret

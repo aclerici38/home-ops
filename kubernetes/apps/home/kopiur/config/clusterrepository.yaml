@@ -31,6 +31,9 @@ spec:
   scheduleDefaults:
     timezone: America/Los_Angeles
   moverDefaults:
+    # Versity egress policy
+    podLabels:
+      egress.dormammu/versity: "true"
     cache:
       mode: Persistent
       storageClassName: zfs-ssd

@@ -196,9 +196,27 @@ spec:
               - ports:
                   - {port: "7071", protocol: TCP}
                   - {port: "8080", protocol: TCP}
-        # All egress is denied
+        # Cilium's `{}` is an empty rule that selects nothing: all egress is denied.
         egress:
           - {}
+      # Clients opt in with the pod label `egress.dormammu/versity: "true"`
+      clients:
+        type: ciliumClusterwide
+        endpointSelector:
+          matchLabels:
+            egress.dormammu/versity: "true"
+        enableDefaultDeny:
+          ingress: false
+          egress: false
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: versity
+                  app.kubernetes.io/name: versity
+                  app.kubernetes.io/controller: versity
+            toPorts:
+              - ports:
+                  - {port: "7070", protocol: TCP}
     persistence:
       data:
         existingClaim: backups

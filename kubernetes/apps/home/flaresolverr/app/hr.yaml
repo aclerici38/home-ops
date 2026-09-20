@@ -62,6 +62,36 @@ spec:
         ports:
           http:
             port: *port
+    networkpolicies:
+      clients:
+        type: ciliumClusterwide
+        endpointSelector:
+          matchLabels:
+            egress.dormammu/flaresolverr: "true"
+        enableDefaultDeny: &allowOnly
+          ingress: false
+          egress: false
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: flaresolverr
+                  app.kubernetes.io/name: flaresolverr
+            toPorts:
+              - ports:
+                  - {port: "8191", protocol: TCP}
+      flaresolverr:
+        type: cilium
+        controller: flaresolverr
+        enableDefaultDeny: *allowOnly
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  egress.dormammu/flaresolverr: "true"
+                matchExpressions:
+                  - {key: 'k8s:io.kubernetes.pod.namespace', operator: Exists}
+            toPorts:
+              - ports:
+                  - {port: "8191", protocol: TCP}
     persistence:
       tmpfs:
         type: emptyDir

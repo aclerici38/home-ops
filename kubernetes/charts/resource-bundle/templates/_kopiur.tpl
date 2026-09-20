@@ -85,41 +85,6 @@ credentialProjection:
   enabled: true
 {{- end -}}
 
-{{/* Mover egress to the policy's repository and nothing else (DNS comes from the
-     cluster baseline). s3.clerici.tech resolves to versity's LB IP, which Cilium
-     translates before policy, so it's matched as the versity pod, not by FQDN. */}}
-{{- define "resources.kopiur.networkPolicySpec" -}}
-{{- $repo := dig "spec" "policy" "repository" "name" "versity" .Values.kopiur -}}
-{{- $override := dig "spec" "networkPolicy" "egress" nil .Values.kopiur -}}
-endpointSelector:
-  matchLabels:
-    app.kubernetes.io/managed-by: kopiur
-enableDefaultDeny:
-  ingress: false
-  egress: false
-egress:
-{{- if eq $repo "versity" }}
-  - toEndpoints:
-      - matchLabels:
-          k8s:io.kubernetes.pod.namespace: versity
-          app.kubernetes.io/name: versity
-          app.kubernetes.io/controller: versity
-    toPorts:
-      - ports:
-          - {port: "7070", protocol: TCP}
-{{- else if eq $repo "backblaze" }}
-  - toFQDNs:
-      - matchName: s3.us-west-004.backblazeb2.com
-    toPorts:
-      - ports:
-          - {port: "443", protocol: TCP}
-{{- else if $override }}
-  []
-{{- else }}
-{{- fail (printf "kopiur: no mover egress for repository %q; set kopiur.spec.networkPolicy.egress" $repo) }}
-{{- end }}
-{{- end -}}
-
 {{- define "resources.kopiur.pvcSpec" -}}
 {{- $app := include "resources.app" . -}}
 {{- $st := fromYaml (include "resources.kopiur.storage" .) -}}

@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumclusterwidenetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: internet-egress
+spec:
+  description: Pods labelled egress.dormammu/internet reach the internet over HTTP(S), never the LAN
+  # Allow-only
+  enableDefaultDeny:
+    ingress: false
+    egress: false
+  endpointSelector:
+    matchLabels:
+      egress.dormammu/internet: "true"
+  egress:
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - {port: "80", protocol: TCP}
+            - {port: "443", protocol: TCP}
+  # `world` also covers the LAN.
+  egressDeny:
+    - toCIDRSet:
+        - cidrGroupRef: private-networks

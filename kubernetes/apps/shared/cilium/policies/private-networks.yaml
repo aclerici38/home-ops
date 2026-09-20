@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumcidrgroup_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumCIDRGroup
+metadata:
+  name: private-networks
+spec:
+  externalCIDRs:
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+    - 192.168.0.0/16
+    - 100.64.0.0/10
+    - 169.254.0.0/16
+    - fc00::/7
+    - fe80::/10

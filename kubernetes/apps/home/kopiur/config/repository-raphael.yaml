@@ -25,6 +25,9 @@ spec:
       enabled: true
       interval: 1h
   moverDefaults:
+    # Versity egress policy
+    podLabels:
+      egress.dormammu/versity: "true"
     securityContext:
       runAsUser: 1000
       runAsGroup: 1000
