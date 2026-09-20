@@ -83,8 +83,7 @@ spec:
         egress:
           - toEndpoints:
               - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: smtp-relay
-                  app.kubernetes.io/name: smtp-relay
+                  app.kubernetes.io/controller: smtp-relay
             toPorts:
               - ports:
                   - {port: "25", protocol: TCP}

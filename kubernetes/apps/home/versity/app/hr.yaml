@@ -211,8 +211,6 @@ spec:
         egress:
           - toEndpoints:
               - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: versity
-                  app.kubernetes.io/name: versity
                   app.kubernetes.io/controller: versity
             toPorts:
               - ports:

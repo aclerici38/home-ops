@@ -5,7 +5,7 @@ kind: CiliumClusterwideNetworkPolicy
 metadata:
   name: baseline
 spec:
-  description: DNS to kube-dns and Prometheus scrapes for every pod outside kube-system/cilium
+  description: Kubelet probes, DNS to kube-dns and Prometheus scrapes for every pod outside kube-system/cilium
   enableDefaultDeny:
     ingress: false
     egress: false
@@ -17,6 +17,9 @@ spec:
           - kube-system
           - cilium
   ingress:
+    # Liveness/readiness probes come from the local kubelet
+    - fromEntities:
+        - host
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: kube-prometheus-stack
