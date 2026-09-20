@@ -18,7 +18,7 @@
 {{- $db := dig "database" (include "resources.app" .) $c -}}
 {{- $roles := list (dict "ctx" $ "owner" true) -}}
 {{- range $r := dig "readers" list $c }}
-{{- $rc := dict "database" $db "readOnly" true "mtls" (dig "mtls" false $r) "poolMode" (dig "poolMode" "transaction" $r) "allowFrom" (dig "allowFrom" list $r) -}}
+{{- $rc := dict "database" $db "readOnly" true "mtls" (dig "mtls" false $r) "poolMode" (dig "poolMode" "transaction" $r) "allowFrom" (dig "allowFrom" list $r) "certNamespace" (dig "certNamespace" "" $r) -}}
 {{- $rc = merge $rc (pick $c "cluster" "clusterNamespace") -}}
 {{- $roles = append $roles (dict "ctx" (dict "Values" (dict "app" $r.name "cnpg" $rc) "Release" $.Release) "owner" false) -}}
 {{- end }}
@@ -98,6 +98,10 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: {{ include "resources.cnpgShared.certName" . }}
+  {{- with dig "certNamespace" "" $c }}
+  # The consuming pod runs here, and a Secret is only mountable in its own namespace.
+  namespace: {{ . }}
+  {{- end }}
   labels:
     dormammu.internal/component: cnpg
 spec:

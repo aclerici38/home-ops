@@ -32,6 +32,9 @@
 #                         #     mtls: false
 #                         #     poolMode: transaction
 #                         #     allowFrom: []
+#                         #     certNamespace: ""  # mtls: put the cert Secret
+#                         #       # here instead, when the pod that mounts it
+#                         #       # runs outside this release's namespace
 #                         # sameuser in pg_hba refuses them until a line in
 #                         # cloudnative-pg/cluster (Postgres + pooler) names them.
 #   mtls: false           # shared: passwordless. Role joins cert_apps with no

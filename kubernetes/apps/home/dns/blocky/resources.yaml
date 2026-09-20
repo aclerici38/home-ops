@@ -33,6 +33,7 @@ spec:
           mtls: true
         - name: blocky-grafana
           mtls: true
+          certNamespace: grafana-operator
           allowFrom:
             - namespaceSelector:
                 matchLabels:
