@@ -51,9 +51,9 @@ conditional:
     0.0.0.2.8.4.7.1.d.f.3.d.6.f.d.f.ip6.arpa: ${COREDNS_CLUSTER_IP}
 
     # bambi
-    bambi.internal: 192.168.8.1:53
-    console.gl-inet.com: 192.168.8.1:53
-    8.168.192.in-addr.arpa: 192.168.8.1:53
+    # bambi.internal: 192.168.8.1:53
+    # console.gl-inet.com: 192.168.8.1:53
+    # 8.168.192.in-addr.arpa: 192.168.8.1:53
 
 # ClientLookup is set to blocky so it can conditionally forward it to coredns/apt/house DHCP
 clientLookup:
@@ -109,6 +109,9 @@ blocking:
     10.0.40.0/24:
       - ads
     "fdf6:d3fd:1748:40::/64":
+      - ads
+    # Wireguard
+    10.38.0.0/24:
       - ads
 
 redis:
