@@ -68,7 +68,7 @@ spec:
         endpointSelector:
           matchLabels:
             egress.dormammu/flaresolverr: "true"
-        enableDefaultDeny: &allowOnly
+        enableDefaultDeny:
           ingress: false
           egress: false
         egress:
@@ -81,7 +81,6 @@ spec:
       flaresolverr:
         type: cilium
         controller: flaresolverr
-        enableDefaultDeny: *allowOnly
         ingress:
           - fromEndpoints:
               - matchLabels:

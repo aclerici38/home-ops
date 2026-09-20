@@ -130,9 +130,6 @@ spec:
       gateway:
         type: cilium
         controller: mealie
-        enableDefaultDeny:
-          ingress: false
-          egress: false
         ingress:
           - fromEndpoints:
               - matchLabels:
