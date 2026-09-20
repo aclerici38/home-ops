@@ -33,7 +33,7 @@ FLATE_SKIP_CRDS = "false"
 postinstall = "cd {{ env.HOME }}/home-ops 2>/dev/null || cd {{ config_root }}; lefthook install"
 
 [tools]
-"aqua:jdx/mise" = "2026.9.11"
+"aqua:jdx/mise" = "2026.9.12"
 
 # k8s
 kubectl = "1.37.0"
