@@ -24,7 +24,6 @@ spec:
       mealie:
         strategy: RollingUpdate
         pod:
-          # Network capabilities (see cilium/policies/default-deny.yaml).
           labels:
             # llm.clerici.tech
             egress.dormammu/internal-gateway: "true"
