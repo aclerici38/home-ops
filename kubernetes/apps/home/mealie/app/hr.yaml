@@ -87,6 +87,9 @@ spec:
               SMTP_PORT: 25
               SMTP_AUTH_STRATEGY: None
               SMTP_FROM_EMAIL: bot@clerici.tech
+            ports:
+              - name: http
+                containerPort: &port 9000
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -103,7 +106,7 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    port: &port 9000
+                    port: http
                     path: /api/app/about
                   periodSeconds: 10
                   failureThreshold: 12
@@ -123,6 +126,21 @@ spec:
         parentRefs:
           - name: external
             namespace: envoy-gateway
+    networkpolicies:
+      gateway:
+        type: cilium
+        controller: mealie
+        enableDefaultDeny:
+          ingress: false
+          egress: false
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "http", protocol: TCP}
     persistence:
       postgres-cert:
         type: secret
