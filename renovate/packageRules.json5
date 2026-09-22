@@ -63,6 +63,11 @@
       respectLatest: false,
     },
     {
+      description: "Let a release's assets settle before mise locks them",
+      matchManagers: ["mise"],
+      minimumReleaseAge: "1 day",
+    },
+    {
       description: "Separate PRs for raphael, so the RV box updates independently of the clusters",
       matchFileNames: ["**/raphael/**"],
       // Keep specific groups in sync
