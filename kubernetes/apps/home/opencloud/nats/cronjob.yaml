@@ -28,7 +28,7 @@ spec:
               type: RuntimeDefault
           containers:
             - name: stream-replicas
-              image: mirror.gcr.io/natsio/nats-box:0.19.7-nonroot@sha256:e86b9681f330ab1aa45744dd5cb367d44205b28fac2519a2f74ca0255803161a
+              image: mirror.gcr.io/natsio/nats-box:0.20.0-nonroot@sha256:be25666441c3aee65193aba33d60ff2f06ede7ee9eba58864324b33d7eb94fea
               env:
                 - name: HOME
                   value: /tmp
