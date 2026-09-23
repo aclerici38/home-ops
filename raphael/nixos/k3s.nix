@@ -31,7 +31,6 @@ in
       "--egress-selector-mode=disabled"
       "--write-kubeconfig-mode=0600"
       "--tls-san=${apiHost}"
-      "--tls-san=raphael.clerici.tech"
       "--tls-san=raphael"
 
       "--kubelet-arg=image-gc-high-threshold=75" # start pruning images at 75% imagefs

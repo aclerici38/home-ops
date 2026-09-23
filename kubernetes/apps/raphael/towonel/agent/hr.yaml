@@ -26,10 +26,6 @@ spec:
         name: raphael-k8s-token
         key: token
       services:
-        - hostname: "raphael.clerici.tech"
-          origin: external.envoy-gateway.svc.cluster.local:443
-        - hostname: "*.raphael.clerici.tech"
-          origin: external.envoy-gateway.svc.cluster.local:443
         - hostname: "raphael.living"
           origin: external.envoy-gateway.svc.cluster.local:443
         - hostname: "*.raphael.living"

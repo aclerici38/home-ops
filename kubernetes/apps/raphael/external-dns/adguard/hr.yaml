@@ -41,7 +41,7 @@ spec:
                 name: external-dns-adguard
                 key: password
           - name: DOMAIN_FILTER
-            value: raphael.living,raphael.clerici.tech
+            value: raphael.living
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
@@ -60,4 +60,3 @@ spec:
     txtOwnerId: ${CLUSTER_NAME}
     domainFilters:
       - "raphael.living"
-      - "raphael.clerici.tech"
