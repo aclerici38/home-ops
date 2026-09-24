@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/cluster_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.1/cluster_v1.json
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
@@ -118,7 +118,7 @@ spec:
         barmanObjectName: pg18
         serverName: pg18
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/pooler_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.1/pooler_v1.json
 apiVersion: postgresql.cnpg.io/v1
 kind: Pooler
 metadata:
@@ -154,7 +154,7 @@ spec:
 # Session pooling pins a server connection for the whole client session, so
 # default_pool_size must cover expected concurrent app connections; only a
 # couple of apps use this, so it stays small.
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/pooler_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.1/pooler_v1.json
 apiVersion: postgresql.cnpg.io/v1
 kind: Pooler
 metadata:

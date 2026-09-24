@@ -2,7 +2,7 @@
 # See cnpg.mtls in the resource-bundle chart. The password poolers in
 # cluster.yaml stay for apps not converted yet.
 # Group whose members the mTLS poolers may log in as (pg_ident map "mtls").
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/databaserole_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.1/databaserole_v1.json
 apiVersion: postgresql.cnpg.io/v1
 kind: DatabaseRole
 metadata:
@@ -16,7 +16,7 @@ spec:
 ---
 # The mTLS poolers' identity toward Postgres. CNPG issues its client cert from
 # the cluster client CA into pgbouncer-mtls-client-cert (auto-renewed).
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/databaserole_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.1/databaserole_v1.json
 apiVersion: postgresql.cnpg.io/v1
 kind: DatabaseRole
 metadata:
@@ -67,7 +67,7 @@ spec:
     kind: ClusterIssuer
     name: postgres-mtls
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/pooler_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.1/pooler_v1.json
 apiVersion: postgresql.cnpg.io/v1
 kind: Pooler
 metadata:
@@ -113,7 +113,7 @@ spec:
       - host all all all reject
 ---
 # Session-semantics counterpart of pg18-pooler-mtls-rw.
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.0/pooler_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.1/pooler_v1.json
 apiVersion: postgresql.cnpg.io/v1
 kind: Pooler
 metadata:
