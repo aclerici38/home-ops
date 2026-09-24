@@ -1,6 +1,6 @@
 ---
 # Postgres is reachable only from the poolers, the operator and the cluster's own pods (replicas, join/recovery Jobs). Apps never talk to it.
-# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.0-standalone-strict/networkpolicy-networking-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.1-standalone-strict/networkpolicy-networking-v1.json
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -43,7 +43,7 @@ spec:
         - {port: 9187, protocol: TCP}
 ---
 # Client access on 5432 comes from the per-app <app>-pooler policies the resource-bundle chart renders into this namespace.
-# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.0-standalone-strict/networkpolicy-networking-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.1-standalone-strict/networkpolicy-networking-v1.json
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
