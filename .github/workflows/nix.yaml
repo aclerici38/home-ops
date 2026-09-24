@@ -78,11 +78,65 @@ jobs:
           flake-lock-path: raphael/flake.lock
           fail-mode: true
 
+  eval:
+    name: Eval (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: raphael
+            os: ubuntu-latest
+            attrs: >-
+              nixosConfigurations.raphael
+          - name: nix-config
+            os: macos-latest
+            attrs: >-
+              darwinConfigurations.Anthonys-Mac-mini
+              darwinConfigurations.Anthonys-MacBook-Pro
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+        with:
+          determinate: false
+
+      # matrix.name doubles as the flake directory
+      - name: Evaluate configurations
+        env:
+          DIR: ${{ matrix.name }}
+          ATTRS: ${{ matrix.attrs }}
+        run: |
+          for attr in $ATTRS; do
+            echo "::group::$attr"
+            nix eval --raw "./$DIR#$attr.config.system.build.toplevel.drvPath"
+            echo
+            echo "::endgroup::"
+          done
+
+      # k3sMinor is minor-only; the patch level comes from flake.lock and is
+      # otherwise invisible in git.
+      - name: Report resolved versions
+        if: ${{ matrix.name == 'raphael' }}
+        run: |
+          k3s="$(nix eval --raw ./raphael#nixosConfigurations.raphael.config.services.k3s.package.version)"
+          nixos="$(nix eval --raw ./raphael#nixosConfigurations.raphael.config.system.nixos.version)"
+          echo "k3s: $k3s" >> "$GITHUB_STEP_SUMMARY"
+          echo "nixos: $nixos" >> "$GITHUB_STEP_SUMMARY"
+
   success:
     if: ${{ !cancelled() }}
     needs:
       - "lint"
       - "flake-checker"
+      - "eval"
     name: Nix - Success
     runs-on: ubuntu-latest
     timeout-minutes: 1

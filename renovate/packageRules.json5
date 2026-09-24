@@ -83,6 +83,7 @@
       matchPackageNames: ["k3s-io/k3s"],
       matchFileNames: ["**/raphael/**"],
       versioning: "loose",
+      rebaseWhen: "behind-base-branch",
     },
   ],
 }

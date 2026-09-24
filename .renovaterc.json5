@@ -28,10 +28,11 @@
   },
   nix: {
     enabled: true,
+    rebaseWhen: "behind-base-branch",
     lockFileMaintenance: {
       enabled: true,
       schedule: ["* 3-4 * * 1"],
-      rebaseWhen: "conflicted",
+      rebaseWhen: "behind-base-branch",
     },
   },
 }
