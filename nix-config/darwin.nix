@@ -6,6 +6,7 @@
     onActivation.upgrade = true;
     onActivation.cleanup = "zap";
     brews = [
+      "ffmpeg"
     ];
 
     casks = [
