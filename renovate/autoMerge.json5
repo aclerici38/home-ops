@@ -52,12 +52,6 @@
       separateMajorMinor: false,
     },
     {
-      description: ["Same, for the mise tools that are outside the Mise tools group"],
-      matchManagers: ["mise"],
-      matchDepNames: ["!cilium-cli", "!kubectl", "!github:cloudnative-pg/cloudnative-pg"],
-      separateMajorMinor: false,
-    },
-    {
       description: ["Auto-merge GitHub Actions for minor and patch"],
       matchManagers: ["github-actions"],
       matchDatasources: ["github-tags"],
