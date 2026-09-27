@@ -52,6 +52,11 @@
       separateMajorMinor: false,
     },
     {
+      description: ["Same, for mise tools"],
+      matchManagers: ["mise"],
+      separateMajorMinor: false,
+    },
+    {
       description: ["Auto-merge GitHub Actions for minor and patch"],
       matchManagers: ["github-actions"],
       matchDatasources: ["github-tags"],
@@ -232,18 +237,6 @@
         commitMessagePrefix: "chore(automerge):",
         commitMessageAction: "",
         commitMessageTopic: "nightly automerge bundle",
-      },
-    },
-    {
-      // Must restore a groupName as well as clearing automerge
-      description: ["Exclude specific mise tools from auto-merge"],
-      matchManagers: ["mise"],
-      matchDepNames: ["cilium-cli", "kubectl", "github:cloudnative-pg/cloudnative-pg"],
-      automerge: false,
-      schedule: ["at any time"],
-      groupName: "{{ replace '.+/' '' depName }}",
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
       },
     },
   ],
