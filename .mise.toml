@@ -33,10 +33,10 @@ FLATE_SKIP_CRDS = "false"
 postinstall = "cd {{ env.HOME }}/home-ops 2>/dev/null || cd {{ config_root }}; lefthook install"
 
 [tools]
-"aqua:jdx/mise" = "2026.9.14"
+"aqua:jdx/mise" = "2026.9.15"
 
 # k8s
-kubectl = "1.37.0"
+kubectl = "1.37.1"
 helm = "4.3.0"
 kustomize = "5.8.1"
 flux2 = "2.9.5"
@@ -45,7 +45,7 @@ kind = "0.33.0"
 kubebuilder = "4.16.0"
 helmfile = "1.8.0"
 helm-docs = "1.14.2"
-cilium-cli = "0.20.0"
+cilium-cli = "0.20.1"
 kubeconform = "0.8.0"
 
 # Talos
@@ -81,9 +81,9 @@ zizmor = "1.30.1"
 
 "github:mirceanton/talstomize" = "0.1.0-rc.2"
 
-"github:cloudnative-pg/cloudnative-pg" = { version = "1.30.0", exe = "kubectl-cnpg" }
+"github:cloudnative-pg/cloudnative-pg" = { version = "v1.30.1", exe = "kubectl-cnpg" }
 "github:home-operations/yayamlls" = "0.3.1"
 "github:home-operations/flate" = "v0.6.5"
-"aqua:nklmilojevic/sofka" = "v0.29.2"
+"aqua:nklmilojevic/sofka" = "v0.29.3"
 bun = "v1.4.2"
 python = "3.14.7"
