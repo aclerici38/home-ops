@@ -120,3 +120,16 @@ spec:
               awaiting approval for 24h — check the Dependency Dashboard.
           labels:
             severity: warning
+
+        # Only emitted when Renovate runs with debug logging; absent otherwise.
+        - alert: RenovateConfigMigrationNeeded
+          expr: |-
+            renovate_operator_config_migration_needed == 1
+          for: 24h
+          annotations:
+            summary: >-
+              The Renovate config for {{ $labels.project }} uses deprecated
+              options and needs migrating — run `renovate-config-validator
+              --strict` against it.
+          labels:
+            severity: warning

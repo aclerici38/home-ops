@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/renovate-operator/6.4.0/renovatejob_v1alpha1.json
+apiVersion: renovate-operator.mogenius.com/v1alpha1
+kind: RenovateJob
+metadata:
+  name: 30-min
+spec:
+  templateRef:
+    name: default
+  discoveryFilters:
+    - /aclerici38\/(home-ops|pocket-id-operator|containers|workflows)/
+  schedule: "*/30 * * * *"
