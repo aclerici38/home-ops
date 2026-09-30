@@ -52,8 +52,7 @@ spec:
                     port: &port 8080
               readiness: *probes
             env:
-              # renovate: datasource=github-releases depName=VueTorrent/VueTorrent
-              RELEASE_TYPE: v2.36.1
+              RELEASE_TYPE: none # UI comes from the image volume; disables the GitHub updater
               PORT: *port
               QBIT_BASE: http://qbittorrent.qbittorrent:8080
             securityContext:
@@ -77,4 +76,7 @@ spec:
             namespace: envoy-gateway
     persistence:
       vuetorrent:
-        type: emptyDir
+        type: image
+        image: ghcr.io/vuetorrent/vuetorrent-lsio-mod:2.36.0@sha256:174f1c29fda45ecc3251ad649036f618c1697bbc612a34358707688404c8557b
+        globalMounts:
+          - path: /vuetorrent
