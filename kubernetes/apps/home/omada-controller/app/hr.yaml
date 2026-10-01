@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.5/helmrelease_v2.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.6/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -47,7 +47,7 @@ spec:
     image:
       repository: mirror.gcr.io/mbentley/omada-controller
       pullPolicy: IfNotPresent
-      tag: 6.3.0.45-openj9@sha256:ca16f9773a6ce28bc747dbd5fd0774fcfb0021ea57bc4a727e8477dbf7a71e62
+      tag: 6.3.0.45-openj9@sha256:b9530e76514cd81bdd2b310d51fba0504f3525283f5e306b4c006b73a78df089
     serviceAccount:
       create: false
     config:
