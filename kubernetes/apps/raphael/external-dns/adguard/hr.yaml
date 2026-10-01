@@ -7,9 +7,13 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
-    kind: OCIRepository
-    name: external-dns-adguard
+  chart:
+    spec:
+      chart: external-dns
+      sourceRef:
+        kind: HelmRepository
+        name: external-dns-adguard
+      version: 1.23.0
   install:
     timeout: 10m
   upgrade:
