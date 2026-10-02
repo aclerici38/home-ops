@@ -32,7 +32,7 @@ spec:
   runtime: llamacpp
   mode: embedding
   replicas: 1
-  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b11312@sha256:ffa3e6a781e3cffbd5975be4b9062854689b3603165366e33358f88270da2c73
+  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b11347@sha256:740ebe6ec35edd3af2240d470cbcf9c77a64b1f6ed1e42fb2d6421d9db33cb27
 
   # batch and ubatch are held equal to contextSize: llama.cpp will not split a
   # sequence across micro-batches when embedding, so a chunk longer than
