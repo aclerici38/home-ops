@@ -60,7 +60,7 @@ spec:
             name: kube-prometheus-stack
             key: DISCORD_WEBHOOK_URL
           title: >-
-            [{{ .Status | toUpper }}] [{{ .CommonLabels.alertname }}]: {{
+            [{{ .Status | toUpper }}] [${CLUSTER_NAME}] [{{ .CommonLabels.alertname }}]: {{
               with .CommonAnnotations.description -}}
                 {{ . }}
               {{- else -}}
