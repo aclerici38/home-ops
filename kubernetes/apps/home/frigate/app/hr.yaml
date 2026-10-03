@@ -139,6 +139,7 @@ spec:
           - path: /media/frigate
       tmpfs:
         type: emptyDir
+        medium: Memory
         globalMounts:
           - path: /run
             subPath: run
