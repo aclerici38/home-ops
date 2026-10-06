@@ -40,7 +40,7 @@ spec:
           init-config:
             image:
               repository: ghcr.io/tagyoureit/njspc
-              tag: 10.0.1@sha256:935abf8c76360cb796d8aff8138260bda31ed3a30cf1a9cff8bab487ee38542f
+              tag: 10.0.2@sha256:1d6b271d974fdd082834c28f9ec8f41fe2f33c29281cd3e3af2b8b895f6524b6
             command:
               - "/bin/sh"
               - "-c"
@@ -70,7 +70,7 @@ spec:
           poolcontroller:
             image:
               repository: ghcr.io/tagyoureit/njspc
-              tag: 10.0.1@sha256:935abf8c76360cb796d8aff8138260bda31ed3a30cf1a9cff8bab487ee38542f
+              tag: 10.0.2@sha256:1d6b271d974fdd082834c28f9ec8f41fe2f33c29281cd3e3af2b8b895f6524b6
             env:
               POOL_NET_CONNECT: "true"
               POOL_NET_HOST: ew11.iot.internal
@@ -104,7 +104,7 @@ spec:
           dashpanel:
             image:
               repository: ghcr.io/rstrouse/njspc-dash
-              tag: 10.0.1@sha256:489b429d36cb43e29961b0c844ec64c7ae7cca9f2e6e7f9ee8c761de7a749a95
+              tag: 10.0.2@sha256:a95302e28f514543588266f1d07ab222cf79c26c53b43c502b69986f9e79a079
             env:
               POOL_WEB_SERVICES_PROTOCOL: http://
               POOL_WEB_SERVICES_IP: nodejs-poolcontroller
