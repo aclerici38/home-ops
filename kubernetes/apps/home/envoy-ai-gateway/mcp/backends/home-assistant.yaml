@@ -5,26 +5,10 @@ kind: Backend
 metadata:
   name: home-assistant
 spec:
-  # External httproute url until https://github.com/envoyproxy/ai-gateway/pull/2587/changes or https://github.com/envoyproxy/ai-gateway/pull/2306/changes
   endpoints:
     - fqdn:
-        hostname: hass.clerici.tech
-        port: 443
----
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.6.3/backendtlspolicy_v1.json
-apiVersion: gateway.networking.k8s.io/v1
-kind: BackendTLSPolicy
-metadata:
-  name: home-assistant
-spec:
-  targetRefs:
-    - group: gateway.envoyproxy.io
-      kind: Backend
-      name: home-assistant
-  validation:
-    # The gateway serves the Let's Encrypt clerici-tech cert.
-    wellKnownCACertificates: System
-    hostname: hass.clerici.tech
+        hostname: home-assistant.home-assistant.svc.cluster.local
+        port: 8123
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.12.0/externalsecret_v1.json
 apiVersion: external-secrets.io/v1

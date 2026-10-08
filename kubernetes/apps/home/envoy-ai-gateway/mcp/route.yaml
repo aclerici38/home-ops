@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-ai-gateway/1.1.0/mcproute_v1beta1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-ai-gateway/1.2.0/mcproute_v1beta1.json
 apiVersion: aigateway.envoyproxy.io/v1beta1
 kind: MCPRoute
 metadata:
@@ -45,6 +45,10 @@ spec:
       group: gateway.envoyproxy.io
       kind: Backend
       path: /mcp
+  # The generated OAuth metadata BackendTrafficPolicy otherwise overrides the
+  # Gateway-wide one on this route, dropping its timeout, bufferLimit and retries.
+  backendTrafficPolicy:
+    mergeType: StrategicMerge
   securityPolicy:
     oauth:
       issuer: https://id.clerici.tech

@@ -23,6 +23,7 @@ spec:
         repository: mirror.gcr.io/envoyproxy/ai-gateway-controller
       # The mutating webhook is failurePolicy: Fail over every pod labelled app.kubernetes.io/managed-by=envoy-gateway
       replicaCount: 2
+      priorityClassName: system-cluster-critical
       podDisruptionBudget:
         enabled: true
       mutatingWebhook:

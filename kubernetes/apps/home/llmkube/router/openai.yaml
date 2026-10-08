@@ -30,7 +30,7 @@ spec:
     sni: api.openai.com
     wellKnownCACertificates: System
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-ai-gateway/1.1.0/aiservicebackend_v1beta1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-ai-gateway/1.2.0/aiservicebackend_v1beta1.json
 apiVersion: aigateway.envoyproxy.io/v1beta1
 kind: AIServiceBackend
 metadata:
@@ -43,7 +43,7 @@ spec:
     kind: Backend
     name: openai
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-ai-gateway/1.1.0/backendsecuritypolicy_v1beta1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-ai-gateway/1.2.0/backendsecuritypolicy_v1beta1.json
 apiVersion: aigateway.envoyproxy.io/v1beta1
 kind: BackendSecurityPolicy
 metadata:
