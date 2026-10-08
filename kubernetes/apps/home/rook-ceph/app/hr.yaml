@@ -22,6 +22,7 @@ spec:
     currentNamespaceOnly: true
     csi:
       installCsiOperator: true
+      createCsiOperatorResources: true
       serviceMonitor:
         enabled: false
     enableDiscoveryDaemon: false
