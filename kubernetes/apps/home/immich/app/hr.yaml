@@ -70,9 +70,9 @@ spec:
             resources:
               requests:
                 cpu: 100m
-                memory: 300Mi
+                memory: &serverMem 8Gi
               limits:
-                memory: 12Gi
+                memory: *serverMem
               claims:
                 - name: gpu
       machine-learning:
@@ -97,9 +97,9 @@ spec:
             resources:
               requests:
                 cpu: 500m
-                memory: 5Gi
+                memory: &mlMem 5Gi
               limits:
-                memory: 16Gi
+                memory: *mlMem
               claims:
                 - name: gpu
             securityContext: *contSec
