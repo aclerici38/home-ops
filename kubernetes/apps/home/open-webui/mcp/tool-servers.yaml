@@ -11,7 +11,8 @@ spec:
     template:
       engineVersion: v2
       data:
-        # One entry per backend on the same gateway URL
+        # One entry per gateway backend on the same gateway URL; tududi is
+        # reached directly so its tokens carry each user's own identity.
         TOOL_SERVER_CONNECTIONS: |-
           [
             {
@@ -55,6 +56,20 @@ spec:
                 "description": "Flux via the MCP gateway",
                 "oauth_client_info": "{{ .flux_oauth_client_info }}"
               }
+            },
+            {
+              "type": "mcp",
+              "url": "https://todo.clerici.tech/api/mcp",
+              "path": "",
+              "auth_type": "oauth_2.1_static",
+              "key": "",
+              "config": {"enable": true},
+              "info": {
+                "id": "open-webui-tududi",
+                "name": "Tududi",
+                "description": "Your own Tududi tasks, projects and notes",
+                "oauth_client_info": "{{ .tududi_oauth_client_info }}"
+              }
             }
           ]
   dataFrom:
@@ -85,3 +100,12 @@ spec:
         - regexp:
             source: "^(.*)$"
             target: "flux_$1"
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: Webhook
+          name: open-webui-tududi-client-info
+      rewrite:
+        - regexp:
+            source: "^(.*)$"
+            target: "tududi_$1"

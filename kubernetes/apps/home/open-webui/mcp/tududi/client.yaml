@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/pocket-id-operator/0.15.0/pocketidoidcclient_v1alpha1.json
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: open-webui-tududi
+spec:
+  name: open-webui (Tududi)
+  # Must equal this backend's tool server info.id
+  clientID: open-webui-tududi
+  pkceEnabled: true
+  callbackUrls:
+    - https://chat.clerici.tech/oauth/clients/mcp:open-webui-tududi/callback
+  secret:
+    additionalLabels:
+      external-secrets.io/type: webhook
+  allowedUserGroups:
+    - name: fam
+      namespace: pocket-id-operator
+  apiAccess:
+    - apiRef:
+        name: tududi
+        namespace: tududi
+      delegatedAccess: true

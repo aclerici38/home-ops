@@ -22,3 +22,7 @@ spec:
         - grafana
         - flux
         - flux:write
+    - apiRef:
+        name: tududi
+        namespace: tududi
+      delegatedAccess: true

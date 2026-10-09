@@ -64,6 +64,8 @@ spec:
               OIDC_PROVIDER_SLUG: pocket-id
               OIDC_SCOPE: openid profile email
               OIDC_AUTO_PROVISION: "true"
+              # Bearer JWTs are otherwise accepted at any audience
+              OIDC_ACCESS_TOKEN_AUDIENCE: *url
               OIDC_ISSUER_URL:
                 secretKeyRef:
                   name: tududi-oidc-credentials
