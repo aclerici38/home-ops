@@ -109,8 +109,6 @@ spec:
               cacheDir: /tmp
               database:
                 path: /home/filebrowser/database/filebrowser.sqlite
-                # One-time v1 (BoltDB) import; remove once v2 is verified
-                migrateFrom: /home/filebrowser/database/filebrowser.db
               sources:
                 - name: Media
                   path: /mnt/media
