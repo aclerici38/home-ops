@@ -19,6 +19,8 @@ clientID: {{ $clientID }}
 launchUrl: https://{{ $host }}
 pkceEnabled: true
 skipConsent: {{ dig "skipConsent" true $p }}
+{{- /* A public client has no secret; the CRD rejects clientSecretOverlap on one. */}}
+{{- if not (dig "spec" "isPublic" false $p) }}
 clientSecretRotation:
   enabled: true
   interval: 6h
@@ -26,6 +28,7 @@ clientSecretRotation:
     opens: "0 0 * * *"
     closesAfter: 4h
 clientSecretOverlap: 15m
+{{- end }}
 {{- /* A group managed outside this cluster overrides spec.allowedUserGroups
        instead ([{groupName: admin}] / [{groupID: <id>}]). */}}
 allowedUserGroups:
