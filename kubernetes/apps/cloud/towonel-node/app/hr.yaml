@@ -15,7 +15,8 @@ spec:
     defaultPodOptions:
       dnsPolicy: Default
     hub:
-      rateLimitPerSecond: 200
+      # tower_governor's per_second(n): ONE token replenished every n seconds, per client IP.
+      rateLimitPerSecond: 1
       rateLimitBurst: 2000
     edge:
       bindAddress: "[::]"
