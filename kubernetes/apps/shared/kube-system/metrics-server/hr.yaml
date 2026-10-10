@@ -7,9 +7,13 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
-    kind: OCIRepository
-    name: metrics-server
+  chart:
+    spec:
+      chart: metrics-server
+      sourceRef:
+        kind: HelmRepository
+        name: metrics-server
+      version: 3.14.0
   install:
     timeout: 2m
   upgrade:

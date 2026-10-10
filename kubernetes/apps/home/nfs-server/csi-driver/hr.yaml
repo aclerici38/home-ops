@@ -7,9 +7,13 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
-    kind: OCIRepository
-    name: csi-driver-nfs
+  chart:
+    spec:
+      chart: csi-driver-nfs
+      sourceRef:
+        kind: HelmRepository
+        name: csi-driver-nfs
+      version: 4.13.5
   install:
     timeout: 2m
     remediation:
