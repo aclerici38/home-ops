@@ -218,6 +218,14 @@ spec:
             toPorts:
               - ports:
                   - {port: "8080", protocol: TCP}
+          # Seerr requests plugin
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: seerr
+            toPorts:
+              - ports:
+                  - {port: "5055", protocol: TCP}
           # Pocket-id
           - toEndpoints:
               - matchLabels:
