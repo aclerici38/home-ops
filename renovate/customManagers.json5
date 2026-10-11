@@ -62,16 +62,24 @@
       depNameTemplate: "ghcr.io/siderolabs/kubelet",
     },
     {
+      // Every schema shares one constant depName so the automerge bundle's
+      // dashboard line lists them as a single `k8s-versioned-schemas` entry
+      // (the dashboard dedupes by depName). The schema name lives in depType,
+      // which still shows per-row in the PR's "Type" column. This has to be
+      // set at extraction: an overrideDepName packageRule would make the
+      // post-replace re-extract see a different depName and fail the branch.
       customType: "regex",
       managerFilePatterns: ["/\\.ya?ml$/"],
       matchStrings: [
-        "k8s-versioned-schemas\\.pages\\.dev/(?<depName>[^/]+)/(?<currentValue>[^/]+)/",
-        "\\?values=(?<depName>[^/]+)/(?<currentValue>[^\\s]+)",
-        "aclerici38/k8s-versioned-schemas/crds/(?<depName>[^/]+)/(?<currentValue>[^/\\s'\"]+)",
+        "k8s-versioned-schemas\\.pages\\.dev/(?<schema>[^/]+)/(?<currentValue>[^/]+)/",
+        "\\?values=(?<schema>[^/]+)/(?<currentValue>[^\\s]+)",
+        "aclerici38/k8s-versioned-schemas/crds/(?<schema>[^/]+)/(?<currentValue>[^/\\s'\"]+)",
       ],
       datasourceTemplate: "github-tags",
+      depNameTemplate: "k8s-versioned-schemas",
+      depTypeTemplate: "{{{schema}}}",
       packageNameTemplate: "aclerici38/k8s-versioned-schemas",
-      extractVersionTemplate: "^{{{depName}}}/(?<version>.*)$",
+      extractVersionTemplate: "^{{{schema}}}/(?<version>.*)$",
     },
   ],
 }
