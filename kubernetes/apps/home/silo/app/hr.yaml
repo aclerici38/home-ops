@@ -176,7 +176,7 @@ spec:
                 port: *port
       jellyfin:
         hostnames:
-          - silo-jf.clerici.tech
+          - jellyfin.clerici.tech
         parentRefs:
           - name: external
             namespace: envoy-gateway
