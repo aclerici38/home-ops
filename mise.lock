@@ -813,6 +813,20 @@ url = "https://github.com/astral-sh/uv/releases/download/0.13.0/uv-aarch64-apple
 url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/626002972"
 provenance = "github-attestations"
 
+[[tools.viddy]]
+version = "v1.3.1"
+backend = "aqua:sachaos/viddy"
+
+[tools.viddy."platforms.linux-x64"]
+checksum = "sha256:c0406da6c19bbfbf0381a1a54cf7098a97372c15e5d64bed38e4b8be53e8455e"
+url = "https://github.com/sachaos/viddy/releases/download/v1.3.1/viddy-v1.3.1-linux-x86_64.tar.gz"
+url_api = "https://api.github.com/repos/sachaos/viddy/releases/assets/447334545"
+
+[tools.viddy."platforms.macos-arm64"]
+checksum = "sha256:46e9f219299e6a012075b46191fed21663bd916cea95f1e419b787a87ddd48bf"
+url = "https://github.com/sachaos/viddy/releases/download/v1.3.1/viddy-v1.3.1-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/sachaos/viddy/releases/assets/447333781"
+
 [[tools.yamlfmt]]
 version = "0.21.0"
 backend = "aqua:google/yamlfmt"
