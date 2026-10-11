@@ -19,7 +19,7 @@
     {
       description: ["Process various other dependencies"],
       customType: "regex",
-      managerFilePatterns: ["/.*/"], // process regex from everywhere
+      managerFilePatterns: ["!/^renovate\\//"],
       matchStrings: [
         // Example: `k3s_release_version: "v1.27.3+k3s1"` (general regex matcher)
         'datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\n.*?"(?<currentValue>.*)"\n',
