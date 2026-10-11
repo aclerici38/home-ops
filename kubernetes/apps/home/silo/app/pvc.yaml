@@ -5,7 +5,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: silo-trickplay
 spec:
-  storageClassName: nfs-tank
+  storageClassName: nfs-ssd
   resources:
     requests:
       storage: 100Gi
