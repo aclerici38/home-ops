@@ -114,6 +114,8 @@ spec:
             port: &go2rtc 1984
     route:
       octoprint:
+        annotations:
+          gatus.home-operations.com/enabled: "false"
         hostnames:
           - octoprint.clerici.tech
         parentRefs:
