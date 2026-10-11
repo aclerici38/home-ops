@@ -150,8 +150,6 @@ spec:
         ports:
           http:
             port: *port
-          metrics:
-            port: 9091
     serviceMonitor:
       silo:
         serviceName: silo
@@ -160,7 +158,7 @@ spec:
       transcode:
         serviceName: silo-transcode
         endpoints:
-          - port: metrics
+          - port: http
     route:
       silo:
         hostnames:
