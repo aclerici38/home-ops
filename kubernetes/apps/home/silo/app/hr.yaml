@@ -197,6 +197,17 @@ spec:
               - ports:
                   - {port: "8080", protocol: TCP}
                   - {port: "8096", protocol: TCP}
+          # Sonarr/Radarr webhooks
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: sonarr
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: radarr
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
         egress:
           - toEndpoints:
               - matchLabels:
