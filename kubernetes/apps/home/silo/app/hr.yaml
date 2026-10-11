@@ -226,6 +226,13 @@ spec:
             toPorts:
               - ports:
                   - {port: "5055", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: llmkube
+                  inference.llmkube.dev/service: qwen3-embedding-0-6b
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
           # Pocket-id
           - toEndpoints:
               - matchLabels:
