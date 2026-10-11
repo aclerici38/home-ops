@@ -310,6 +310,12 @@ spec:
                 subPath: artwork
               - path: /var/lib/silo/compat
                 subPath: compat
+      trickplay:
+        existingClaim: silo-trickplay
+        advancedMounts:
+          silo:
+            silo:
+              - path: /var/lib/silo/artwork/trickplay
       media:
         type: persistentVolumeClaim
         storageClass: nfs-media
