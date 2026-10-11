@@ -26,3 +26,29 @@ spec:
       stabilizationWindowSeconds: 0
     scaleUp:
       stabilizationWindowSeconds: 30
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.1-standalone-strict/horizontalpodautoscaler-autoscaling-v2.json
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: octoprint-go2rtc
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: octoprint-go2rtc
+  minReplicas: 0
+  maxReplicas: 1
+  metrics:
+    - type: External
+      external:
+        metric:
+          name: printer_available
+        target:
+          type: AverageValue
+          averageValue: "1"
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 0
+    scaleUp:
+      stabilizationWindowSeconds: 30

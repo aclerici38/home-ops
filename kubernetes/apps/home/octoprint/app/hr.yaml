@@ -126,6 +126,8 @@ spec:
               - identifier: octoprint
                 port: *port
       go2rtc:
+        annotations:
+          gatus.home-operations.com/enabled: "false"
         hostnames:
           - printer-cam.clerici.tech
         parentRefs:
