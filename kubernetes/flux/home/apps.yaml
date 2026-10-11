@@ -46,7 +46,7 @@ spec:
                 spec:
                   maxHistory: 1
                   driftDetection:
-                    mode: enabled
+                    mode: warn
                   install:
                     crds: CreateReplace
                     serverSideApply: true

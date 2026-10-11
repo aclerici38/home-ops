@@ -111,3 +111,11 @@
 
 # gpu:
 #   spec: {}              # ResourceClaimTemplate (Intel GPU, <app>-gpu)
+
+# nfsGate:                # HPA per target: 0 replicas while nfs_available is 0
+#                         # (nfs-server down or bonds cordoned), via prometheus-adapter.
+#   targets:              # default: [{name: <app>}]
+#     - name: <app>
+#       kind: Deployment  # Deployment | StatefulSet
+#       replicas: 1       # replica count while NFS is up (maxReplicas)
+#   spec: {}              # HorizontalPodAutoscaler, applied to every target

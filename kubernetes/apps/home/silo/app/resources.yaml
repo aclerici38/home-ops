@@ -32,6 +32,12 @@ spec:
     - name: pocket-id-operator
       namespace: pocket-id-operator
   values:
+    nfsGate:
+      targets:
+        - name: silo
+        - name: silo-transcode
+          kind: StatefulSet
+          replicas: 2
     cnpg:
       mode: shared
       mtls: true

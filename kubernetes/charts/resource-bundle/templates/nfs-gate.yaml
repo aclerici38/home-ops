@@ -1,0 +1,13 @@
+{{- if hasKey .Values "nfsGate" }}
+{{- $app := include "resources.app" . -}}
+{{- range (dig "targets" (list (dict "name" $app)) .Values.nfsGate) }}
+{{- $target := merge (deepCopy .) (dict "kind" "Deployment" "replicas" 1) }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ $target.name }}-nfs-gate
+spec:
+  {{- include "resources.mergeSpec" (list (include "resources.nfsGate.spec" $target) (dig "spec" dict $.Values.nfsGate)) | nindent 2 }}
+{{- end }}
+{{- end }}

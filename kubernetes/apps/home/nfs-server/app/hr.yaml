@@ -25,6 +25,7 @@ spec:
         strategy: RollingUpdate
         pod:
           priorityClassName: nfs-critical
+          terminationGracePeriodSeconds: 150
           securityContext:
             runAsUser: 0
             runAsGroup: 0
@@ -62,6 +63,11 @@ spec:
                   failureThreshold: 2
                   successThreshold: 1
               liveness: *probes
+            lifecycle:
+              # Keep serving while nfsGate HPAs scale consumers to zero
+              preStop:
+                sleep:
+                  seconds: 120
             securityContext:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false

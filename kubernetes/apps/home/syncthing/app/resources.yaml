@@ -24,6 +24,7 @@ spec:
     - name: kopiur
       namespace: kopiur
   values:
+    nfsGate: {}
     kopiur:
       # config.xml + cert.pem/key.pem are the device identity and are all that
       # matters; index-v2 is the SQLite index, rebuilt by a rescan and rewritten

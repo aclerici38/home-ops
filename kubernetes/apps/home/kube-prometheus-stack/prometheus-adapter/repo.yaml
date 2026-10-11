@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.6/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: prometheus-adapter
+spec:
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 5.3.0
+    digest: sha256:021eaa13e372ad42c59b50ebe4a0cd9cc3eaa5c21c2df2acb1b8bba44c1b1110
+  url: oci://ghcr.io/prometheus-community/charts/prometheus-adapter

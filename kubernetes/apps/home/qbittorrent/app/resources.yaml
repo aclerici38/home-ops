@@ -26,6 +26,7 @@ spec:
     - name: kopiur
       namespace: kopiur
   values:
+    nfsGate: {}
     externalSecret: {}
     kopiur:
       existingClaim: true

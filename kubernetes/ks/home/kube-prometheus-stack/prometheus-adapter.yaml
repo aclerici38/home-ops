@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.6/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: prometheus-adapter
+  namespace: flux-system
+spec:
+  targetNamespace: kube-prometheus-stack
+  dependsOn:
+    - name: kube-prometheus-stack
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/home/kube-prometheus-stack/prometheus-adapter
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: prometheus-adapter

@@ -53,6 +53,16 @@ spec:
               namespace: envoy-gateway
               sectionName: https
       prometheusSpec:
+        # nfs_available (prometheus-adapter) must keep resolving while bonds drains.
+        affinity: &notBonds
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                    - key: kubernetes.io/hostname
+                      operator: NotIn
+                      values:
+                        - "bonds"
         storageSpec:
           volumeClaimTemplate:
             spec:
@@ -60,3 +70,5 @@ spec:
               resources:
                 requests:
                   storage: 50Gi
+    kube-state-metrics:
+      affinity: *notBonds

@@ -28,6 +28,10 @@ spec:
     - name: pocket-id-operator
       namespace: pocket-id-operator
   values:
+    nfsGate:
+      targets:
+        - name: immich
+        - name: immich-machine-learning
     cnpg:
       mode: shared
       mtls: true
