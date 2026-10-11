@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.1-standalone-strict/horizontalpodautoscaler-autoscaling-v2.json
+# Scale to zero while the printer is off.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: octoprint
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: octoprint
+  minReplicas: 0
+  maxReplicas: 1
+  metrics:
+    - type: External
+      external:
+        metric:
+          name: printer_available
+        target:
+          type: AverageValue
+          averageValue: "1"
+  behavior:
+    scaleDown:
+      # The post-print linger is in the query.
+      stabilizationWindowSeconds: 0
+    scaleUp:
+      stabilizationWindowSeconds: 30

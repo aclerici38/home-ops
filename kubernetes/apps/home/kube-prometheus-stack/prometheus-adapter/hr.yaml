@@ -38,6 +38,15 @@ spec:
               min(last_over_time(kube_deployment_status_replicas_available{namespace="nfs-server",deployment="nfs-server"}[2m]))
               * (1 - max(last_over_time(kube_node_spec_unschedulable{node="bonds"}[2m])))
             , 1)
+        # 1 if the 3d printer was attached in the last hour, else 0.
+        - seriesQuery: 'kube_node_status_allocatable{resource="devic_es_anycubic_kobra"}'
+          resources:
+            namespaced: false
+          name:
+            matches: ^kube_node_status_allocatable$
+            as: printer_available
+          metricsQuery: |-
+            max_over_time((sum(kube_node_status_allocatable{resource="devic_es_anycubic_kobra"}) > bool 0)[1h:1m])
     # Must stay up while bonds drains, or the HPAs can't read the metric and hold.
     affinity:
       nodeAffinity:
