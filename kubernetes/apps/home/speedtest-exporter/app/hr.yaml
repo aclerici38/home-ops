@@ -63,5 +63,5 @@ spec:
         serviceName: speedtest-exporter
         endpoints:
           - port: http
-            interval: 1h
-            scrapeTimeout: 2m
+            interval: 24h
+            scrapeTimeout: 10m
