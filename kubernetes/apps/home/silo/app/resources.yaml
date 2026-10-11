@@ -21,6 +21,8 @@ spec:
   dependsOn:
     - name: cloudnative-pg
       namespace: cloudnative-pg
+    - name: dragonfly-operator
+      namespace: dragonfly-operator
     - name: external-secrets
       namespace: external-secrets
     - name: intel-gpu-resource-driver
@@ -40,6 +42,7 @@ spec:
           extensions:
             - name: vector
               ensure: present
+    dragonfly: {}
     externalSecret: {}
     gpu: {}
     pocketId:

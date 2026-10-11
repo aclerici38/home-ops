@@ -22,26 +22,22 @@ spec:
   dependsOn:
     - name: silo-resources
   values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: {type: RuntimeDefault}
     controllers:
       silo:
-        pod:
-          resourceClaims:
-            - name: gpu
-              resourceClaimTemplateName: silo-gpu
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: &uid 1000
-            runAsGroup: *uid
-            fsGroup: *uid
-            fsGroupChangePolicy: OnRootMismatch
-            seccompProfile: {type: RuntimeDefault}
         containers:
           silo:
-            image:
+            image: &image
               repository: ghcr.io/silo-server/silo-server
               tag: latest@sha256:04b1626f6abe4e3e66f7b7a1f80d44bf8e98e1c75eb340620cb2037fd09cd6e0
-            env:
-              TZ: America/Los_Angeles
+            env: &env
               PORT: &port 8080
               SILO_METRICS_LISTEN: :9091
               # Plugins stored in postgres
@@ -49,6 +45,7 @@ spec:
               SILO_TRUSTED_PROXIES: ${CLUSTER_POD_CIDR}
               # Image has no passwd entry
               HOME: /tmp
+              REDIS_URL: redis://silo-dragonfly-db:6379
               DATABASE_URL:
                 valueFrom:
                   configMapKeyRef:
@@ -65,7 +62,7 @@ spec:
                 spec:
                   httpGet:
                     port: *port
-                    path: &health /api/v1/health
+                    path: /api/v1/health
               readiness:
                 enabled: true
                 custom: true
@@ -73,7 +70,7 @@ spec:
                   httpGet:
                     port: *port
                     path: /api/v1/ready
-            securityContext:
+            securityContext: &containerSecurity
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
@@ -83,6 +80,59 @@ spec:
                 memory: 512Mi
               limits:
                 memory: 8Gi
+      transcode:
+        type: statefulset
+        replicas: 2
+        statefulset:
+          podManagementPolicy: Parallel
+          serviceName:
+            identifier: transcode
+        pod:
+          resourceClaims:
+            - name: gpu
+              resourceClaimTemplateName: silo-gpu
+          # One pod per GPU host
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - topologyKey: kubernetes.io/hostname
+                  labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/instance: silo
+                      app.kubernetes.io/controller: transcode
+        containers:
+          transcode:
+            image: *image
+            env:
+              <<: *env
+              MODE: transcode
+              POD_NAME:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.name
+              NODE_NAME:
+                value: $(POD_NAME)
+                dependsOn: POD_NAME
+              # Must match the URL the node is registered under in the admin UI.
+              NODE_URL:
+                value: http://$(POD_NAME).silo-transcode.silo.svc.cluster.local:8080
+                dependsOn: POD_NAME
+            probes:
+              liveness: &nodeProbes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: *port
+                    path: /api/v1/health
+              readiness: *nodeProbes
+            securityContext: *containerSecurity
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 4Gi
               claims:
                 - name: gpu
     service:
@@ -93,9 +143,22 @@ spec:
             port: *port
           metrics:
             port: 9091
+      # Headless for the stable per-pod NODE_URLs
+      transcode:
+        controller: transcode
+        clusterIP: None
+        ports:
+          http:
+            port: *port
+          metrics:
+            port: 9091
     serviceMonitor:
       silo:
         serviceName: silo
+        endpoints:
+          - port: metrics
+      transcode:
+        serviceName: silo-transcode
         endpoints:
           - port: metrics
     route:
@@ -105,6 +168,10 @@ spec:
         parentRefs:
           - name: external
             namespace: envoy-gateway
+        rules:
+          - backendRefs:
+              - identifier: silo
+                port: *port
     networkpolicies:
       silo:
         type: cilium
@@ -125,6 +192,19 @@ spec:
             toPorts:
               - ports:
                   - {port: "5432", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  app: silo-dragonfly-db
+            toPorts:
+              - ports:
+                  - {port: "6379", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: silo
+                  app.kubernetes.io/controller: transcode
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
           # Pocket-id
           - toEndpoints:
               - matchLabels:
@@ -139,6 +219,53 @@ spec:
             toPorts:
               - ports:
                   - {port: "443", protocol: TCP}
+      transcode:
+        type: cilium
+        controller: transcode
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: silo
+                  app.kubernetes.io/controller: silo
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: cloudnative-pg
+                  cnpg.io/poolerName: pg18-pooler-mtls-session-rw
+            toPorts:
+              - ports:
+                  - {port: "5432", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  app: silo-dragonfly-db
+            toPorts:
+              - ports:
+                  - {port: "6379", protocol: TCP}
+      dragonfly:
+        type: cilium
+        endpointSelector:
+          matchLabels:
+            app: silo-dragonfly-db
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: silo
+            toPorts:
+              - ports:
+                  - {port: "6379", protocol: TCP}
+          - fromEndpoints:
+              - matchLabels:
+                  app: silo-dragonfly-db
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: dragonfly-operator
+                  app.kubernetes.io/name: dragonfly-operator
+            toPorts:
+              - ports:
+                  - {port: "6379", protocol: TCP}
+                  - {port: "9999", protocol: TCP}
     persistence:
       postgres-cert:
         type: secret
@@ -148,11 +275,13 @@ spec:
           - path: /var/run/secrets/postgresql
       data:
         existingClaim: silo
-        globalMounts:
-          - path: /var/lib/silo/artwork
-            subPath: artwork
-          - path: /var/lib/silo/compat
-            subPath: compat
+        advancedMounts:
+          silo:
+            silo:
+              - path: /var/lib/silo/artwork
+                subPath: artwork
+              - path: /var/lib/silo/compat
+                subPath: compat
       media:
         type: persistentVolumeClaim
         storageClass: nfs-media
