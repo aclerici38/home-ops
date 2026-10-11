@@ -39,6 +39,8 @@ spec:
               tag: latest@sha256:04b1626f6abe4e3e66f7b7a1f80d44bf8e98e1c75eb340620cb2037fd09cd6e0
             env: &env
               PORT: &port 8080
+              # Jellyfin/Emby compatibility listener
+              JF_PORT: &jfPort 8096
               SILO_METRICS_LISTEN: :9091
               # Plugins stored in postgres
               SILO_PLUGIN_CACHE_DIR: /tmp/silo-plugins
@@ -141,6 +143,8 @@ spec:
         ports:
           http:
             port: *port
+          jellyfin:
+            port: *jfPort
           metrics:
             port: 9091
       # Headless for the stable per-pod NODE_URLs
@@ -170,6 +174,16 @@ spec:
           - backendRefs:
               - identifier: silo
                 port: *port
+      jellyfin:
+        hostnames:
+          - silo-jf.clerici.tech
+        parentRefs:
+          - name: external
+            namespace: envoy-gateway
+        rules:
+          - backendRefs:
+              - identifier: silo
+                port: *jfPort
     networkpolicies:
       silo:
         type: cilium
@@ -182,6 +196,7 @@ spec:
             toPorts:
               - ports:
                   - {port: "8080", protocol: TCP}
+                  - {port: "8096", protocol: TCP}
         egress:
           - toEndpoints:
               - matchLabels:
