@@ -26,8 +26,7 @@ spec:
     - name: kopiur
       namespace: kopiur
   values:
-    # Disabled while scaled to 0
-    # nfsGate: {}
+    nfsGate: {}
     gpu: {}
     kopiur:
       existingClaim: true

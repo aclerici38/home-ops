@@ -22,8 +22,6 @@ spec:
   values:
     controllers:
       jellyfin:
-        # Temp replaced by silo's jellyfin compat listener
-        replicas: 0
         pod:
           resourceClaims:
             - name: gpu
@@ -76,14 +74,13 @@ spec:
         endpoints:
           - port: http
     # jellyfin.clerici.tech moved to silo
-    # route:
-    #   jellyfin:
-    #     hostnames:
-    #       - jellyfin.clerici.tech
-    #       - tv.clerici.tech
-    #     parentRefs:
-    #       - name: external
-    #         namespace: envoy-gateway
+    route:
+      jellyfin:
+        hostnames:
+          - tv.clerici.tech
+        parentRefs:
+          - name: external
+            namespace: envoy-gateway
     persistence:
       config:
         existingClaim: jellyfin
