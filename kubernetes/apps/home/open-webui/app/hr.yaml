@@ -186,11 +186,17 @@ spec:
         globalMounts:
           - path: /var/run/secrets/postgresql
       data:
-        existingClaim: open-webui
+        type: emptyDir
+        sizeLimit: 5Gi
         globalMounts:
           - path: /app/backend/data
-            subPath: data
+      nltk:
+        type: persistentVolumeClaim
+        suffix: nltk
+        storageClass: ceph-filesystem
+        accessMode: ReadWriteMany
+        size: 1Gi
+        globalMounts:
           - path: /app/backend/nltk_data
-            subPath: nltk_data
   dependsOn:
     - name: open-webui-resources

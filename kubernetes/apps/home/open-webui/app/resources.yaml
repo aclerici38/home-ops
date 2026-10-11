@@ -25,8 +25,6 @@ spec:
       namespace: external-secrets
     - name: pocket-id-operator
       namespace: pocket-id-operator
-    - name: kopiur
-      namespace: kopiur
   values:
     cnpg:
       mode: shared
@@ -54,9 +52,6 @@ spec:
       group: fam
       callbackUrls:
         - https://chat.clerici.tech/oauth/oidc/callback
-    kopiur:
-      existingClaim: true
-      cephfs: true
     machineTokens:
       llm:
         data:
