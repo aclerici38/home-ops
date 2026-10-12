@@ -19,6 +19,8 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  dependsOn:
+    - name: vuetorrent-resources
   values:
     controllers:
       vuetorrent:
@@ -27,8 +29,9 @@ spec:
           hostUsers: false
           securityContext:
             runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
+            runAsUser: &uid 1000
+            runAsGroup: *uid
+            fsGroup: *uid
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: {type: RuntimeDefault}
         containers:
@@ -99,3 +102,8 @@ spec:
         image: ghcr.io/vuetorrent/vuetorrent-lsio-mod:2.36.1@sha256:2750543ce2f9868e12bca941482431eb59b5517e89c2538cb2229124aa79d2c2
         globalMounts:
           - path: /vuetorrent
+      # Server-side settings store (CONFIG_PATH defaults to /config)
+      config:
+        existingClaim: vuetorrent
+        globalMounts:
+          - path: /config
