@@ -20,8 +20,6 @@
   //                          below, covering the sets whose majors auto-merge.
   //   additionalBranchPrefix "", to undo the preset's zer0ver rule, which
   //                          routes 0.x minors onto a `major-` branch.
-  //                          packageRules.json5 is extended after this file and
-  //                          re-sets `raphael-`, so raphael keeps its own PR.
   //   minimumGroupSize       1, defensively: no member inherits a group gate
   //                          today, but generateBranchConfig() takes the MAX
   //                          across a branch's upgrades, so if one ever did
@@ -166,12 +164,19 @@
       },
     },
     {
-      description: ["Auto-merge specific digest-only updates"],
+      description: ["Allow and auto-merge digest-only updates for select images"],
+      enabled: true,
       automerge: true,
+      matchDatasources: ["docker"],
       matchPackageNames: [
         "ghcr.io/home-operations/**",
+        "!ghcr.io/home-operations/charts/**",
+        "ghcr.io/aclerici38/**",
         "**/mbentley/omada-controller",
-        "**/cloudnative-pg/charts/plugin-barman-cloud",
+        "**/library/haproxy",
+        "**/library/influxdb",
+        "**/library/eclipse-mosquitto",
+        // rolling tags
         "**/silo-server/silo-server",
       ],
       matchUpdateTypes: ["digest"],

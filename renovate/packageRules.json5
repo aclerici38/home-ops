@@ -11,6 +11,15 @@
       overridePackageName: "{{{replace 'mirror\\.gcr\\.io' 'docker.io' packageName}}}",
     },
     {
+      // Digests are still pinned (pinDigest) and still move with every tag
+      // bump; this only drops the "same tag, new digest" rebuild PRs.
+      // The exceptions are re-enabled (and auto-merged) in autoMerge.json5.
+      description: "No digest-only updates for images by default",
+      matchDatasources: ["docker"],
+      matchUpdateTypes: ["digest"],
+      enabled: false,
+    },
+    {
       description: ["Loose versioning for non-semver containers"],
       matchDatasources: ["docker"],
       matchPackageNames: ["/searxng/"],
@@ -72,6 +81,8 @@
       matchFileNames: ["**/raphael/**"],
       // Keep specific groups in sync
       matchPackageNames: ["!/towonel-agent/", "!/siderolabs/kubelet/"],
+      // Auto-merged updates still join the nightly bundle: autoMerge.json5 is
+      // extended after this file and resets the prefix to "".
       additionalBranchPrefix: "raphael-",
       commitMessageSuffix: "(raphael)",
       addLabels: ["raphael"],
