@@ -46,7 +46,7 @@ spec:
               - path: /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
       - name: disks
         groups:
-          - count: 1
+          - count: 4
             paths:
               - {path: /dev/sda, optional: true}
               - {path: /dev/sdb, optional: true}
