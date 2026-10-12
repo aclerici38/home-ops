@@ -108,6 +108,9 @@ spec:
           podManagementPolicy: Parallel
           serviceName:
             identifier: transcode
+        pod:
+          # Below default so the server can evict it when it needs this host
+          priorityClassName: silo-transcode
         containers:
           transcode:
             image: *image
