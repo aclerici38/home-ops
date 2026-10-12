@@ -30,10 +30,11 @@ spec:
             runAsGroup: 1000
             runAsNonRoot: true
             seccompProfile: {type: RuntimeDefault}
-            # cf_clearance is bound to the solving IP; Chrome picks v4/v6 per connection.
-            sysctls:
-              - {name: net.ipv6.conf.all.disable_ipv6, value: "1"}
-              - {name: net.ipv6.conf.default.disable_ipv6, value: "1"}
+          # cf_clearance is bound to the solving IP; Chrome picks v4/v6 per connection.
+          # glibc skips AAAA lookups with no-aaaa; dns.json points Chrome at glibc instead of its own resolver.
+          dnsConfig:
+            options:
+              - name: no-aaaa
         containers:
           flaresolverr:
             image:
@@ -91,7 +92,20 @@ spec:
                   - {port: "80", protocol: TCP}
                   - {port: "443", protocol: TCP}
                   - {port: "443", protocol: UDP}
+    configMaps:
+      chromium-policy:
+        data:
+          # Challenge pages probe WebRTC, which sends STUN (UDP 3478/19302)
+          webrtc.json: |-
+            {"WebRtcIPHandling": "disable_non_proxied_udp"}
+          dns.json: |-
+            {"BuiltInDnsClientEnabled": false, "DnsOverHttpsMode": "off"}
     persistence:
+      chromium-policy:
+        type: configMap
+        identifier: chromium-policy
+        globalMounts:
+          - path: /etc/chromium/policies/managed
       tmpfs:
         type: emptyDir
         medium: Memory
