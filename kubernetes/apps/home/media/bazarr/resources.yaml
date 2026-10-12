@@ -25,9 +25,22 @@ spec:
       namespace: nfs-server
     - name: kopiur
       namespace: kopiur
+    - name: envoy-gateway
+      namespace: envoy-gateway
+    - name: pocket-id-operator
+      namespace: pocket-id-operator
   values:
     nfsGate: {}
     cnpg:
       mode: shared
       mtls: true
     kopiur: {}
+    pocketId:
+      callbackPaths:
+        - /oauth2/callback
+      spec:
+        secret:
+          keys:
+            clientID: client-id
+            clientSecret: client-secret
+    oidc: {}

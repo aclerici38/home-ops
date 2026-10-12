@@ -23,6 +23,8 @@ spec:
     controllers:
       bazarr:
         pod:
+          automountServiceAccountToken: false
+          enableServiceLinks: false
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -33,48 +35,34 @@ spec:
         containers:
           bazarr:
             image:
-              repository: ghcr.io/home-operations/bazarr
-              tag: 1.6.2@sha256:17dc1cff22e99694ffbfb06555526cb47a66b362b4d6c982f06b557f7caae2bb
+              repository: ghcr.io/home-operations/bazarr-plus
+              tag: 2.7.1@sha256:f72f7be289a4675e33979241f2dd1d6e7f9505c9f92f1587b5d44d0280c2de3f
             env:
-              BAZARR__APP__INSTANCENAME: Bazarr
-              BAZARR__APP__THEME: dark
-              BAZARR__AUTH__METHOD: External
-              BAZARR__AUTH__REQUIRED: DisabledForLocalAddresses
-              BAZARR__LOG__DBENABLED: "False"
-              BAZARR__LOG__LEVEL: info
               POSTGRES_ENABLED: "true"
-              POSTGRES_HOST:
+              POSTGRES_URL:
                 valueFrom:
                   configMapKeyRef:
                     name: bazarr-postgres
-                    key: host
-              POSTGRES_USERNAME:
-                valueFrom:
-                  configMapKeyRef:
-                    name: bazarr-postgres
-                    key: username
-              POSTGRES_DATABASE:
-                valueFrom:
-                  configMapKeyRef:
-                    name: bazarr-postgres
-                    key: dbname
-              PGSSLMODE: verify-full
-              PGSSLCERT: /var/run/secrets/postgresql/tls.crt
-              PGSSLKEY: /var/run/secrets/postgresql/tls.key
-              PGSSLROOTCERT: /var/run/secrets/postgresql/ca.crt
+                    key: uri
             probes:
               liveness: &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /health
+                    path: /api/system/ping
                     port: &port 6767
-                  periodSeconds: 10
-                  failureThreshold: 12
-                  initialDelaySeconds: 10
-                  timeoutSeconds: 1
               readiness: *probes
+              # Alembic migrations run before the server binds.
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/system/ping
+                    port: *port
+                  periodSeconds: 5
+                  failureThreshold: 60
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -82,7 +70,7 @@ spec:
             resources:
               requests:
                 cpu: 100m
-                memory: 100Mi
+                memory: 256Mi
               limits:
                 memory: 4Gi
     service:
@@ -98,6 +86,75 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      bazarr:
+        type: cilium
+        controller: bazarr
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: dashbrr
+                  app.kubernetes.io/instance: dashbrr
+            toPorts: &web
+              - ports:
+                  - {port: "6767", protocol: TCP}
+          # On-import webhooks
+          - fromEndpoints: &sonarr
+              - matchLabels:
+                  app.kubernetes.io/instance: sonarr
+              - matchLabels:
+                  app.kubernetes.io/instance: sonarr-raphael
+            toPorts: *web
+          - fromEndpoints: &radarr
+              - matchLabels:
+                  app.kubernetes.io/instance: radarr
+              - matchLabels:
+                  app.kubernetes.io/instance: radarr-raphael
+            toPorts: *web
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: cloudnative-pg
+                  cnpg.io/poolerName: pg18-pooler-mtls-rw
+            toPorts:
+              - ports:
+                  - {port: "5432", protocol: TCP}
+          - toEndpoints: *sonarr
+            toPorts:
+              - ports:
+                  - {port: "8989", protocol: TCP}
+          - toEndpoints: *radarr
+            toPorts:
+              - ports:
+                  - {port: "7878", protocol: TCP}
+          # Item/library refresh on subtitle download
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: silo
+                  app.kubernetes.io/instance: silo
+                  app.kubernetes.io/controller: silo
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+          # Cloudflare challenges for scraping provider plugins
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: flaresolverr
+                  app.kubernetes.io/instance: flaresolverr
+            toPorts:
+              - ports:
+                  - {port: "8191", protocol: TCP}
+          # Subtitle providers (some still plain http), TMDB, Provider Hub
+          # catalog on GitHub + plugin deps from PyPI
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+                  - {port: "443", protocol: TCP}
     persistence:
       postgres-cert:
         type: secret
@@ -107,6 +164,11 @@ spec:
           - path: /var/run/secrets/postgresql
       config:
         existingClaim: bazarr
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
       media:
         type: persistentVolumeClaim
         storageClass: nfs-media
@@ -115,6 +177,6 @@ spec:
         size: 1Gi
         suffix: media
         globalMounts:
-          - path: /allMedia
+          - path: /mnt/media
   dependsOn:
     - name: bazarr-resources
