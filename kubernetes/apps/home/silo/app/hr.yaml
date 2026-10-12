@@ -159,10 +159,21 @@ spec:
         serviceName: silo
         endpoints:
           - port: metrics
+            # Target labels the upstream rules/dashboard aggregate on
+            relabelings:
+              - targetLabel: cluster
+                replacement: home
+              - targetLabel: process_role
+                replacement: api
       transcode:
         serviceName: silo-transcode
         endpoints:
           - port: http
+            relabelings:
+              - targetLabel: cluster
+                replacement: home
+              - targetLabel: process_role
+                replacement: transcode
     route:
       silo:
         hostnames:
