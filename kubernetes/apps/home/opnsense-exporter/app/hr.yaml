@@ -1,0 +1,102 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.6/helmrelease_v2.json?values=app-template/5.3.0
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: opnsense-exporter
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  dependsOn:
+    - name: opnsense-exporter-resources
+  values:
+    controllers:
+      opnsense-exporter:
+        pod:
+          hostUsers: false
+          automountServiceAccountToken: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile: {type: RuntimeDefault}
+        containers:
+          opnsense-exporter:
+            image:
+              repository: ghcr.io/athennamind/opnsense-exporter
+              tag: 0.0.17@sha256:04a28ad984a091ea1e8371cf515da8b38b1d00416f53e6b5c9d68fec39d92ce0
+            args:
+              - --opnsense.protocol=https
+              - --opnsense.address=${NODE_GATEWAY}
+              - --opnsense.insecure
+              - --exporter.instance-label=opnsense
+              - --web.listen-address=:8080
+              - --exporter.disable-ipsec
+              - --exporter.disable-unbound
+              - --exporter.disable-openvpn
+              - --exporter.disable-kea-dhcpv4
+              - --exporter.disable-kea-dhcpv6
+            env:
+              OPNSENSE_EXPORTER_OPS_API_KEY:
+                secretKeyRef:
+                  name: opnsense-exporter
+                  key: OPNSENSE_EXPORTER_OPS_API_KEY
+              OPNSENSE_EXPORTER_OPS_API_SECRET:
+                secretKeyRef:
+                  name: opnsense-exporter
+                  key: OPNSENSE_EXPORTER_OPS_API_SECRET
+            probes:
+              readiness: &probes
+                enabled: true
+                type: HTTP
+              liveness: *probes
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 256Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      opnsense-exporter:
+        controller: opnsense-exporter
+        ports:
+          http:
+            port: 8080
+    serviceMonitor:
+      opnsense-exporter:
+        serviceName: opnsense-exporter
+        endpoints:
+          - port: http
+            interval: 1m
+            scrapeTimeout: 30s
+    networkpolicies:
+      opnsense-exporter:
+        type: cilium
+        controller: opnsense-exporter
+        # Only Prometheus may connect (admitted by the baseline CCNP).
+        ingress:
+          - {}
+        egress:
+          - toCIDR:
+              - ${NODE_GATEWAY}/32
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}

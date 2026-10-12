@@ -1,0 +1,133 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.1/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: opnsense-exporter-rules
+spec:
+  groups:
+    - name: opnsense-gateways.rules
+      rules:
+        # dpinger's loss is already a rolling average over its probe period,
+        # so a short `for` is enough.
+        - alert: OPNsenseGatewayPacketLoss
+          expr: |-
+            opnsense_gateways_loss_percentage > 2
+          for: 10m
+          annotations:
+            summary: >-
+              Gateway {{ $labels.name }} is losing {{ $value | humanize }}% of
+              monitor pings — check the modem's upstream power and event log
+          labels:
+            severity: warning
+        - alert: OPNsenseGatewayLatency
+          expr: |-
+            opnsense_gateways_rtt_milliseconds > 100
+          for: 15m
+          annotations:
+            summary: >-
+              Gateway {{ $labels.name }} RTT is {{ $value | humanize }}ms
+          labels:
+            severity: warning
+        - alert: OPNsenseGatewayDown
+          expr: |-
+            opnsense_gateways_status == 0
+          for: 5m
+          annotations:
+            summary: >-
+              Gateway {{ $labels.name }} ({{ $labels.address }}) is offline
+          labels:
+            severity: critical
+    - name: opnsense-system.rules
+      rules:
+        # upgrade_packages carries the count as a label too, so drop it or a
+        # changing count would restart `for`. The 1h max bridges brief
+        # exporter gaps that would otherwise reset the 5-day timer.
+        - alert: OPNsenseFirmwareUpdateAvailable
+          expr: |-
+            max_over_time((max without (upgrade_packages) (opnsense_firmware_upgrade_packages))[1h:]) > 0
+          for: 5d
+          annotations:
+            summary: >-
+              OPNsense has had {{ $value | humanize }} package upgrades pending
+              for 5 days — run System > Firmware > Updates
+          labels:
+            severity: warning
+        # Value is always 1; the state lives in the needs_reboot label.
+        - alert: OPNsenseRebootPending
+          expr: |-
+            opnsense_firmware_needs_reboot{needs_reboot="1"}
+          for: 1d
+          annotations:
+            summary: >-
+              OPNsense has been waiting a day for a reboot to finish an update
+          labels:
+            severity: warning
+        # system/status reports configuration and filter-reload problems (the
+        # banner in the GUI header).
+        - alert: OPNsenseSystemErrors
+          expr: |-
+            opnsense_firewall_status == 0
+          for: 10m
+          annotations:
+            summary: >-
+              OPNsense reports system errors — check the notice banner in the
+              web UI
+          labels:
+            severity: warning
+        - alert: OPNsenseServiceStopped
+          expr: |-
+            opnsense_services_status == 0
+          for: 10m
+          annotations:
+            summary: >-
+              OPNsense service {{ $labels.name }} ({{ $labels.description }})
+              is stopped
+          labels:
+            severity: warning
+        # Idle ~39°C, 7-day peak ~59°C (2026-10).
+        - alert: OPNsenseHighTemperature
+          expr: |-
+            opnsense_temperature_celsius > 80
+          for: 15m
+          annotations:
+            summary: >-
+              OPNsense {{ $labels.device }} is at {{ $value | humanize }}°C
+          labels:
+            severity: warning
+        - alert: OPNsenseWireguardInterfaceDown
+          expr: |-
+            opnsense_wireguard_interfaces_status == 0
+          for: 10m
+          annotations:
+            summary: >-
+              WireGuard interface {{ $labels.name }} ({{ $labels.description }})
+              is down
+          labels:
+            severity: warning
+    - name: opnsense-exporter.rules
+      rules:
+        # up=0 means the health check failed: the API key was revoked or the
+        # user lost the System: Status privilege.
+        - alert: OPNsenseExporterDown
+          expr: |-
+            opnsense_up == 0 or absent(opnsense_up)
+          for: 15m
+          annotations:
+            summary: >-
+              opnsense-exporter cannot reach the OPNsense API — WAN gateway
+              monitoring is blind
+          labels:
+            severity: warning
+        # A single collector failing (usually a 403 from a missing privilege)
+        # leaves its metrics silently absent while up stays 1.
+        - alert: OPNsenseExporterEndpointErrors
+          expr: |-
+            increase(opnsense_exporter_endpoint_errors_total[15m]) > 0
+          for: 30m
+          annotations:
+            summary: >-
+              opnsense-exporter keeps failing to fetch {{ $labels.endpoint }} —
+              likely a missing API privilege
+          labels:
+            severity: warning
