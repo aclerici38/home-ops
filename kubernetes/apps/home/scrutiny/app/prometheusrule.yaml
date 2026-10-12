@@ -1,0 +1,156 @@
+---
+# Scrutiny's exporter is current-state: values only change when a collector
+# uploads (SMART hourly, ZFS every 15m), so `for:` durations are sized to at
+# least one collection interval. A dead collector does NOT clear its series —
+# the last upload is served forever — hence the explicit staleness alerts on
+# the collectors' own timestamps.
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.1/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: scrutiny-rules
+spec:
+  groups:
+    - name: scrutiny.rules
+      rules:
+        - alert: ScrutinyDown
+          expr: |-
+            absent(scrutiny_devices_total)
+          for: 15m
+          annotations:
+            summary: >-
+              Scrutiny is not exporting metrics — drive health is unmonitored
+          labels:
+            severity: critical
+
+        - alert: ScrutinyDriveFailed
+          # Bitmask: 1 = SMART (manufacturer) failure, 2 = Scrutiny
+          # (Backblaze-threshold) failure, 3 = both.
+          expr: |-
+            scrutiny_device_status > 0
+          for: 5m
+          annotations:
+            summary: >-
+              {{ $labels.host_id }}/{{ $labels.device_name }}
+              ({{ $labels.model_name }}) is failing
+              ({{ if eq $value 1.0 }}SMART{{ else if eq $value 2.0 }}Scrutiny thresholds{{ else }}SMART + Scrutiny thresholds{{ end }})
+          labels:
+            severity: critical
+
+        - alert: ScrutinySelfTestFailed
+          expr: |-
+            scrutiny_device_self_test_last_passed == 0
+          for: 5m
+          annotations:
+            summary: >-
+              Latest SMART self-test on {{ $labels.host_id }}/{{ $labels.device_name }}
+              ({{ $labels.model_name }}) did not pass
+          labels:
+            severity: warning
+
+        - alert: ScrutinyCollectorStale
+          # Hourly collector; three missed runs. Also fires for a drive that was
+          # pulled — archive it in the UI to clear.
+          expr: |-
+            time() - scrutiny_smart_collector_timestamp / 1000 > 3 * 3600
+          for: 15m
+          annotations:
+            summary: >-
+              No SMART data from {{ $labels.host_id }}/{{ $labels.device_name }}
+              ({{ $labels.model_name }}) for {{ $value | humanizeDuration }}
+          labels:
+            severity: warning
+
+        - alert: ScrutinyDriveHot
+          expr: |-
+            scrutiny_smart_temperature_celsius{protocol!="NVMe"} >= 55
+              or
+            scrutiny_smart_temperature_celsius{protocol="NVMe"} >= 70
+          # Two consecutive hourly readings.
+          for: 90m
+          annotations:
+            summary: >-
+              {{ $labels.host_id }}/{{ $labels.device_name }}
+              ({{ $labels.model_name }}) is at {{ $value }}°C
+          labels:
+            severity: warning
+
+        - alert: ScrutinySSDWearHigh
+          expr: |-
+            scrutiny_workload_endurance_percentage_used >= 80
+          for: 1h
+          annotations:
+            summary: >-
+              {{ $labels.host_id }}/{{ $labels.device_name }}
+              ({{ $labels.model_name }}) has used {{ $value }}% of its rated endurance
+          labels:
+            severity: warning
+
+        - alert: ScrutinyZFSPoolUnhealthy
+          # 1 = ONLINE; 2 DEGRADED, 3 FAULTED, 4 OFFLINE, 5 REMOVED, 6 UNAVAIL, 0 unknown.
+          expr: |-
+            scrutiny_zfs_pool_status_code != 1
+          for: 15m
+          annotations:
+            summary: >-
+              ZFS pool {{ $labels.pool_name }} on {{ $labels.host_id }} is not ONLINE
+          labels:
+            severity: critical
+
+        - alert: ScrutinyZFSPoolErrors
+          expr: |-
+            scrutiny_zfs_pool_errors_read_total
+              + scrutiny_zfs_pool_errors_write_total
+              + scrutiny_zfs_pool_errors_checksum_total
+              > 0
+          for: 15m
+          annotations:
+            summary: >-
+              ZFS pool {{ $labels.pool_name }} on {{ $labels.host_id }} has
+              {{ $value }} read/write/checksum errors
+          labels:
+            severity: warning
+
+        - alert: ScrutinyZFSScrubErrors
+          expr: |-
+            scrutiny_zfs_pool_scrub_errors_total > 0
+          for: 15m
+          annotations:
+            summary: >-
+              Last scrub of ZFS pool {{ $labels.pool_name }} on {{ $labels.host_id }}
+              found {{ $value }} errors
+          labels:
+            severity: warning
+
+        - alert: ScrutinyZFSPoolNearlyFull
+          expr: |-
+            scrutiny_zfs_pool_capacity_percent >= 85
+          for: 1h
+          annotations:
+            summary: >-
+              ZFS pool {{ $labels.pool_name }} on {{ $labels.host_id }} is {{ $value }}% full
+          labels:
+            severity: warning
+
+        - alert: ScrutinyZFSPoolMissing
+          # A collector inventory that no longer lists the pool.
+          expr: |-
+            scrutiny_zfs_pool_presence{presence="missing"} == 1
+          for: 15m
+          annotations:
+            summary: >-
+              ZFS pool {{ $labels.pool_name }} is no longer reported by {{ $labels.host_id }}
+          labels:
+            severity: critical
+
+        - alert: ScrutinyZFSCollectorStale
+          # Presence is only recomputed on upload, so a dead ZFS collector would
+          # leave pools "present" forever; check the inventory clock directly.
+          expr: |-
+            time() - scrutiny_zfs_pool_last_inventory_timestamp > 3600
+          for: 15m
+          annotations:
+            summary: >-
+              No ZFS inventory from {{ $labels.host_id }} for {{ $value | humanizeDuration }}
+          labels:
+            severity: warning

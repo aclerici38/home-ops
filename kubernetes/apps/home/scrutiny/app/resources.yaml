@@ -21,7 +21,27 @@ spec:
   dependsOn:
     - name: kopiur
       namespace: kopiur
+    - name: cloudnative-pg
+      namespace: cloudnative-pg
+    - name: external-secrets
+      namespace: external-secrets
+    - name: envoy-gateway
+      namespace: envoy-gateway
+    - name: pocket-id-operator
+      namespace: pocket-id-operator
   values:
     kopiur:
       existingClaim: true
       cephfs: true
+    cnpg:
+      mode: shared
+      mtls: true
+    pocketId:
+      callbackPaths:
+        - /oauth2/callback
+      spec:
+        secret:
+          keys:
+            clientID: client-id
+            clientSecret: client-secret
+    oidc: {}
