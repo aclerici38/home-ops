@@ -44,7 +44,10 @@ data:
       metrics:
         enabled:
           - "dns:query"
-          - "drop"
+          # Who/what was dropped, for CiliumPolicyDrops. Workloads for pods, the
+          # reserved identity (world, host, ...) or resolved DNS name otherwise.
+          # No IPs: world destinations would be unbounded cardinality.
+          - "drop:sourceContext=reserved-identity;destinationContext=dns|reserved-identity;labelsContext=source_namespace,source_workload,destination_namespace,destination_workload,traffic_direction"
           - "tcp"
           - "flow"
           - "port-distribution"

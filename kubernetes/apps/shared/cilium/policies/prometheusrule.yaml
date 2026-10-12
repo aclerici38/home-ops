@@ -8,16 +8,33 @@ spec:
   groups:
     - name: cilium-policy.rules
       rules:
-        # A policy blocking real traffic. ICMP is left out: pods with ingress
-        # policies drop a steady trickle of IPv6 neighbour discovery.
+        # A policy blocking real traffic, one alert per source→destination pair.
+        # ICMP is left out: pods drop a steady trickle of IPv6 neighbour
+        # discovery, and ICMP errors to ClusterIPs show up as world.
+        # source/destination are set only for non-pods (reserved:world, reserved:host,
+        # or the DNS name Cilium resolved for it); pods use *_namespace/*_workload.
         - alert: CiliumPolicyDrops
           expr: |-
-            sum by (node) (increase(hubble_drop_total{reason="POLICY_DENIED", protocol=~"TCP|UDP"}[15m])) > 30
+            sum by (node, protocol, traffic_direction, source_namespace, source_workload, source, destination_namespace, destination_workload, destination) (
+              increase(hubble_drop_total{reason="POLICY_DENIED", protocol=~"TCP|UDP"}[15m])
+            ) > 30
           for: 15m
           annotations:
             summary: >-
-              {{ $labels.node }} dropped {{ $value | humanize }} TCP/UDP packets
-              on policy in 15m — find them with
-              `hubble observe --verdict DROPPED` in that node's cilium-agent
+              {{ $labels.node }}: {{ $value | humanize }} {{ $labels.protocol }} packets
+              {{ if $labels.source_workload }}{{ $labels.source_namespace }}/{{ $labels.source_workload }}{{ else }}{{ or $labels.source "unknown" }}{{ end }}
+              →
+              {{ if $labels.destination_workload }}{{ $labels.destination_namespace }}/{{ $labels.destination_workload }}{{ else }}{{ or $labels.destination "unknown" }}{{ end }}
+              denied on {{ $labels.traffic_direction | toLower }} policy in 15m
+            description: |-
+              Node: {{ $labels.node }}
+              Direction: {{ $labels.traffic_direction }} (EGRESS = the source's egress policy denied it, INGRESS = the destination's ingress policy did)
+              Protocol: {{ $labels.protocol }}
+              Source: {{ if $labels.source_workload }}pod {{ $labels.source_namespace }}/{{ $labels.source_workload }}{{ else }}{{ or $labels.source "unknown (not a pod; no reserved identity or DNS name)" }}{{ end }}
+              Destination: {{ if $labels.destination_workload }}pod {{ $labels.destination_namespace }}/{{ $labels.destination_workload }}{{ else }}{{ or $labels.destination "unknown (not a pod; no reserved identity or DNS name; e.g. an untranslated ClusterIP)" }}{{ end }}
+
+              The metric has no ports or IPs. Get them from the node's cilium-agent
+              (its flow buffer only holds seconds, so follow while it's happening):
+              kubectl -n cilium exec $(kubectl -n cilium get pod -l k8s-app=cilium --field-selector spec.nodeName={{ $labels.node }} -o name) -c cilium-agent -- hubble observe -f --verdict DROPPED --drop-reason-desc POLICY_DENIED --protocol {{ $labels.protocol | toLower }}{{ if $labels.source_workload }} --from-pod {{ $labels.source_namespace }}/{{ $labels.source_workload }}{{ end }}{{ if $labels.destination_workload }} --to-pod {{ $labels.destination_namespace }}/{{ $labels.destination_workload }}{{ end }}
           labels:
             severity: warning
