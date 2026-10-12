@@ -25,11 +25,17 @@ spec:
         strategy: RollingUpdate
         pod:
           hostUsers: false
+          automountServiceAccountToken: false
+          enableServiceLinks: false
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
             runAsNonRoot: true
             seccompProfile: {type: RuntimeDefault}
+            # cf_clearance is bound to the solving IP; Chrome picks v4/v6 per connection.
+            sysctls:
+              - {name: net.ipv6.conf.all.disable_ipv6, value: "1"}
+              - {name: net.ipv6.conf.default.disable_ipv6, value: "1"}
         containers:
           flaresolverr:
             image:
@@ -40,7 +46,7 @@ spec:
                 cpu: 500m
                 memory: 150Mi
               limits:
-                memory: 2Gi
+                memory: 3Gi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
@@ -62,9 +68,36 @@ spec:
         ports:
           http:
             port: *port
+    networkpolicies:
+      flaresolverr:
+        type: cilium
+        controller: flaresolverr
+        ingress:
+          # Opt-in clients; egress side is the flaresolverr-clients CCNP.
+          # Without the namespace Exists, fromEndpoints is scoped to this namespace only.
+          - fromEndpoints:
+              - matchLabels:
+                  dormammu.internal/flaresolverr-client: "true"
+                matchExpressions:
+                  - key: k8s:io.kubernetes.pod.namespace
+                    operator: Exists
+            toPorts:
+              - ports:
+                  - {port: "8191", protocol: TCP}
+        egress:
+          # Headless Chrome against arbitrary sites
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+                  - {port: "443", protocol: TCP}
+                  - {port: "443", protocol: UDP}
     persistence:
       tmpfs:
         type: emptyDir
+        medium: Memory
+        sizeLimit: 1Gi
         globalMounts:
           - path: /tmp
             subPath: tmp

@@ -23,6 +23,8 @@ spec:
     controllers:
       bazarr:
         pod:
+          labels:
+            dormammu.internal/flaresolverr-client: "true"
           automountServiceAccountToken: false
           enableServiceLinks: false
           securityContext:
@@ -139,14 +141,6 @@ spec:
             toPorts:
               - ports:
                   - {port: "8080", protocol: TCP}
-          # Cloudflare challenges for scraping provider plugins
-          - toEndpoints:
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: flaresolverr
-                  app.kubernetes.io/instance: flaresolverr
-            toPorts:
-              - ports:
-                  - {port: "8191", protocol: TCP}
           # Subtitle providers (some still plain http), TMDB, Provider Hub
           # catalog on GitHub + plugin deps from PyPI
           - toEntities:

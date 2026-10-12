@@ -24,7 +24,11 @@ spec:
       prowlarr:
         strategy: RollingUpdate
         pod:
+          labels:
+            dormammu.internal/flaresolverr-client: "true"
           hostUsers: false
+          automountServiceAccountToken: false
+          enableServiceLinks: false
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -38,6 +42,8 @@ spec:
               repository: ghcr.io/home-operations/prowlarr
               tag: 2.6.5.5623@sha256:6152751c3ea2e7751564f5952173d5e83eed0e09f3fabd2cb6bdb58690c39e2f
             env:
+              # FlareSolverr's cf_clearance cookie is bound to the v4 egress IP; .NET otherwise prefers v6 and gets re-challenged
+              DOTNET_SYSTEM_NET_DISABLEIPV6: "1"
               PROWLARR__APP__INSTANCENAME: Prowlarr
               PROWLARR__APP__THEME: dark
               PROWLARR__AUTH__METHOD: External
@@ -85,6 +91,66 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      prowlarr:
+        type: cilium
+        controller: prowlarr
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: dashbrr
+                  app.kubernetes.io/instance: dashbrr
+            toPorts: &web
+              - ports:
+                  - {port: "9696", protocol: TCP}
+          # Synced indexers proxy their searches back through prowlarr
+          - fromEndpoints: &sonarr
+              - matchLabels:
+                  app.kubernetes.io/instance: sonarr
+              - matchLabels:
+                  app.kubernetes.io/instance: sonarr-raphael
+            toPorts: *web
+          - fromEndpoints: &radarr
+              - matchLabels:
+                  app.kubernetes.io/instance: radarr
+              - matchLabels:
+                  app.kubernetes.io/instance: radarr-raphael
+            toPorts: *web
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: cloudnative-pg
+                  cnpg.io/poolerName: pg18-pooler-mtls-rw
+            toPorts:
+              - ports:
+                  - {port: "5432", protocol: TCP}
+          # App sync (indexer push)
+          - toEndpoints: *sonarr
+            toPorts:
+              - ports:
+                  - {port: "8989", protocol: TCP}
+          - toEndpoints: *radarr
+            toPorts:
+              - ports:
+                  - {port: "7878", protocol: TCP}
+          # Grabs from prowlarr's own search UI
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: qbittorrent
+                  app.kubernetes.io/instance: qbittorrent
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+          # Indexers, servarr update/definitions API
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+                  - {port: "443", protocol: TCP}
     persistence:
       postgres-cert:
         type: secret

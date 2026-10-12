@@ -24,6 +24,8 @@ spec:
       mealie:
         strategy: RollingUpdate
         pod:
+          labels:
+            dormammu.internal/flaresolverr-client: "true"
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
