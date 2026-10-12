@@ -23,6 +23,19 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: {type: RuntimeDefault}
+          # gluetun forwards cluster names to the resolv.conf nameservers; the v6 one resolves to
+          # CoreDNS pod IPs (socket LB) that would need the v6 pod CIDR allowed, but that /56
+          # contains the pod gateway and breaks gluetun's outbound routes. Keep cluster DNS on v4.
+          dnsPolicy: None
+          dnsConfig:
+            nameservers:
+              - "${COREDNS_CLUSTER_IP}"
+            searches:
+              - qbittorrent.svc.cluster.local
+              - svc.cluster.local
+              - cluster.local
+            options:
+              - {name: ndots, value: "1"}
         initContainers:
           gluetun:
             lifecycle:
@@ -50,7 +63,7 @@ spec:
               VPN_PORT_FORWARDING: "on"
               VPN_PORT_FORWARDING_PROVIDER: protonvpn
               FIREWALL_INPUT_PORTS: &port 8080
-              FIREWALL_OUTBOUND_SUBNETS: ${CLUSTER_POD_CIDR},${CLUSTER_POD_CIDR_V6},${CLUSTER_SVC_CIDR},${CLUSTER_SVC_CIDR_V6}
+              FIREWALL_OUTBOUND_SUBNETS: ${CLUSTER_POD_CIDR},${CLUSTER_SVC_CIDR},${CLUSTER_SVC_CIDR_V6}
               VPN_PORT_FORWARDING_UP_COMMAND: /bin/sh -c '/usr/bin/wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{`{{PORTS}}`}}}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'
             restartPolicy: Always
             envFrom:
