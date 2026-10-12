@@ -1,0 +1,34 @@
+{
+  "trash_id": "local-english-subs-only",
+  "name": "Language: English Subs Only",
+  "includeCustomFormatWhenRenaming": false,
+  "specifications": [
+    {
+      "name": "Multiple Subtitle [ENG] Tags",
+      "implementation": "ReleaseTitleSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": "\\bmulti(ple)?[ ._-]?sub(title)?s?\\b.*\\[ENG\\]"
+      }
+    },
+    {
+      "name": "English Subs Tag",
+      "implementation": "ReleaseTitleSpecification",
+      "negate": false,
+      "required": false,
+      "fields": {
+        "value": "\\beng(lish)?[ ._-]?sub(s|bed|titles?)?\\b"
+      }
+    },
+    {
+      "name": "No English Track In Title",
+      "implementation": "ReleaseTitleSpecification",
+      "negate": true,
+      "required": true,
+      "fields": {
+        "value": "dual[ ._-]?(audio)|[([]dual[])]|\\b(JA|ZH|KO)(?= ?\\+ ?.*?\\b(EN))|\\b(EN)(?= ?\\+ ?.*?\\b(JA|ZH|KO))|\\b(Japanese|Chinese|Korean) ?[ ._\\+&-] ?\\b(English)|\\b(English) ?[ ._\\+&-] ?\\b(Japanese|Chinese|Korean)|\\b(\\d{3,4}(p|i)|4K|U(ltra)?HD)\\b.*\\b(DUAL)\\b(?!.*\\(|\\))|\\bmulti[ ._-]?audio\\b|\\benglish[ ._-]?dub(bed)?\\b|\\bmulti[ ._-]?dub(s|bed)?\\b"
+      }
+    }
+  ]
+}

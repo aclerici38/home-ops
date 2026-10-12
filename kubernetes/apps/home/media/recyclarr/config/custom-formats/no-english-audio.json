@@ -1,0 +1,25 @@
+{
+  "trash_id": "local-no-english-audio",
+  "name": "Language: No English Audio",
+  "includeCustomFormatWhenRenaming": false,
+  "specifications": [
+    {
+      "name": "Not English",
+      "implementation": "LanguageSpecification",
+      "negate": true,
+      "required": true,
+      "fields": {
+        "value": 1
+      }
+    },
+    {
+      "name": "No English Track In Title",
+      "implementation": "ReleaseTitleSpecification",
+      "negate": true,
+      "required": true,
+      "fields": {
+        "value": "dual[ ._-]?(audio)|[([]dual[])]|\\b(JA|ZH|KO)(?= ?\\+ ?.*?\\b(EN))|\\b(EN)(?= ?\\+ ?.*?\\b(JA|ZH|KO))|\\b(Japanese|Chinese|Korean) ?[ ._\\+&-] ?\\b(English)|\\b(English) ?[ ._\\+&-] ?\\b(Japanese|Chinese|Korean)|\\b(\\d{3,4}(p|i)|4K|U(ltra)?HD)\\b.*\\b(DUAL)\\b(?!.*\\(|\\))|\\bmulti[ ._-]?audio\\b|\\benglish[ ._-]?dub(bed)?\\b|\\bmulti[ ._-]?dub(s|bed)?\\b"
+      }
+    }
+  ]
+}

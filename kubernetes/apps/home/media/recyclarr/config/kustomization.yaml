@@ -8,3 +8,8 @@ configMapGenerator:
   - name: recyclarr-config
     files:
       - ./recyclarr.yml
+      - ./settings.yml
+  - name: recyclarr-custom-formats
+    files:
+      - ./custom-formats/english-subs-only.json
+      - ./custom-formats/no-english-audio.json

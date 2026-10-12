@@ -34,6 +34,7 @@ spec:
         pod:
           restartPolicy: Never
           hostUsers: false
+          automountServiceAccountToken: false
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -63,6 +64,36 @@ spec:
               capabilities:
                 drop:
                   - ALL
+    networkpolicies:
+      recyclarr:
+        type: cilium
+        controller: recyclarr
+        # Nothing connects in (baseline CCNP still admits Prometheus).
+        ingress:
+          - {}
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: sonarr
+              - matchLabels:
+                  app.kubernetes.io/instance: sonarr-raphael
+            toPorts:
+              - ports:
+                  - {port: "8989", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: radarr
+              - matchLabels:
+                  app.kubernetes.io/instance: radarr-raphael
+            toPorts:
+              - ports:
+                  - {port: "7878", protocol: TCP}
+          # Git resource providers: TRaSH Guides + recyclarr config templates
+          - toFQDNs:
+              - matchName: github.com
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
     persistence:
       config:
         existingClaim: recyclarr
@@ -72,3 +103,10 @@ spec:
         globalMounts:
           - path: /config/recyclarr.yml
             subPath: recyclarr.yml
+          - path: /config/settings.yml
+            subPath: settings.yml
+      custom-formats:
+        type: configMap
+        name: recyclarr-custom-formats
+        globalMounts:
+          - path: /custom-formats

@@ -1,0 +1,7 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/recyclarr/recyclarr/refs/tags/v8.7.3/schemas/settings-schema.json
+# Our own CFs (./custom-formats, mounted from the recyclarr-custom-formats
+# ConfigMap). Service-agnostic, so one directory serves both.
+resource_providers:
+  - {name: local-sonarr, type: custom-formats, service: sonarr, path: /custom-formats}
+  - {name: local-radarr, type: custom-formats, service: radarr, path: /custom-formats}
