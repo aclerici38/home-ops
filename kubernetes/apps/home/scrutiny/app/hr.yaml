@@ -28,7 +28,13 @@ spec:
               repository: ghcr.io/starosdev/scrutiny
               tag: 1.76.4-web@sha256:3fe864c8844bce1947dbf2602f044f7446bef81b6c997571d84eb1091abf6418
             env:
+              SCRUTINY_NO_LOGO: true
               SCRUTINY_WEB_INFLUXDB_HOST: scrutiny-influxdb
+              SCRUTINY_WEB_DATABASE_TYPE: postgres
+              SCRUTINY_WEB_DATABASE_DSN:
+                configMapKeyRef:
+                  name: scrutiny-postgres
+                  key: uri
             probes:
               liveness: &probes
                 enabled: true
@@ -45,15 +51,17 @@ spec:
             resources:
               requests:
                 cpu: 100m
-                memory: 20Mi
+                memory: 32Mi
               limits:
-                memory: 128Mi
+                memory: 256Mi
       influxdb:
         containers:
           influxdb:
             image:
               repository: mirror.gcr.io/library/influxdb
               tag: 2.9.1-alpine@sha256:f551adeb94b6f97626d2043ec90ed17f81de18d15bb5412d2101e0965c93c797
+            env:
+              INFLUXD_REPORTING_DISABLED: true
             probes:
               liveness: &dbProbes
                 enabled: false
@@ -77,38 +85,85 @@ spec:
             image:
               repository: ghcr.io/starosdev/scrutiny
               tag: 1.76.4-collector@sha256:70cb8617e879f0fffa7f84102aa65ebdb6c13e231bd916879e753a79a74814ef
+            # The image's entrypoint rewrites /etc/cron.d and su's into cron,
+            # which needs a writable rootfs plus SETUID/SETGID. A plain loop
+            # needs neither; the first pass doubles as run-on-startup.
+            command: &loop
+              - /bin/sh
+              - -c
+              - |
+                trap 'exit 0' TERM INT
+                while :; do
+                  "$0" run || echo "collector run failed: $?" >&2
+                  sleep "$INTERVAL" & wait $!
+                done
+            args:
+              - /opt/scrutiny/bin/scrutiny-collector-metrics
             env:
-              COLLECTOR_RUN_STARTUP: true
-              COLLECTOR_API_ENDPOINT: "http://scrutiny:8080"
-              COLLECTOR_CRON_SCHEDULE: "0 * * * *"
-              COLLECTOR_HOST_ID:
+              INTERVAL: 3600
+              SCRUTINY_NO_LOGO: true
+              COLLECTOR_API_ENDPOINT: &api http://scrutiny:8080
+              # Seagate FARM log; non-Seagate drives are skipped.
+              COLLECTOR_COMMANDS_METRICS_FARM_ENABLED: true
+              COLLECTOR_HOST_ID: &nodeName
                 valueFrom:
                   fieldRef:
                     fieldPath: spec.nodeName
             resources:
               requests:
-                cpu: 100m
+                cpu: 10m
                 memory: 10Mi
                 devic.es/disks: 1
               limits:
                 memory: 128Mi
                 devic.es/disks: 1
-            securityContext:
+            # smartctl needs root: SYS_RAWIO for SATA/SAS passthrough, SYS_ADMIN
+            # for NVMe admin commands
+            securityContext: &rootSec
               privileged: false
               allowPrivilegeEscalation: false
               runAsNonRoot: false
               runAsUser: 0
               runAsGroup: 0
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
-                  - ALL
+                  - "ALL"
                 add:
-                  - SYS_RAWIO
-                  - SYS_ADMIN
-                  - SETUID
-                  - SETGID
+                  - "SYS_RAWIO"
+                  - "SYS_ADMIN"
+      collector-zfs:
+        containers:
+          collector-zfs:
+            image:
+              repository: ghcr.io/starosdev/scrutiny
+              tag: 1.76.4-collector-zfs@sha256:750f64d5790e7ecd198799f739b20cdd91ee923a35a955118d9c663016c3e15e
+            command: *loop
+            args:
+              - /opt/scrutiny/bin/scrutiny-collector-zfs
+            env:
+              INTERVAL: 900
+              SCRUTINY_NO_LOGO: true
+              COLLECTOR_ZFS_API_ENDPOINT: *api
+              COLLECTOR_ZFS_HOST_ID: *nodeName
+            resources:
+              requests:
+                cpu: 10m
+                memory: 10Mi
+              limits:
+                memory: 64Mi
+                devic.es/zfs: 1
+            # zpool/zfs ioctls on /dev/zfs need SYS_ADMIN.
+            securityContext:
+              <<: *rootSec
+              capabilities:
+                drop:
+                  - "ALL"
+                add:
+                  - "SYS_ADMIN"
     defaultPodOptions:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -127,6 +182,64 @@ spec:
         ports:
           http:
             port: *dbPort
+    serviceMonitor:
+      scrutiny:
+        serviceName: scrutiny
+        endpoints:
+          - port: http
+            path: /api/metrics
+            interval: 1m
+    networkpolicies:
+      web:
+        type: cilium
+        controller: scrutiny
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts: &web
+              - ports:
+                  - {port: "8080", protocol: TCP}
+          - fromControllers:
+              - collector
+              - collector-zfs
+            toPorts: *web
+        egress:
+          - toControllers:
+              - influxdb
+            toPorts:
+              - ports:
+                  - {port: "8086", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: cloudnative-pg
+                  cnpg.io/poolerName: pg18-pooler-mtls-rw
+            toPorts:
+              - ports:
+                  - {port: "5432", protocol: TCP}
+      influxdb:
+        type: cilium
+        controller: influxdb
+        ingress:
+          - fromControllers:
+              - scrutiny
+            toPorts:
+              - ports:
+                  - {port: "8086", protocol: TCP}
+        egress:
+          - {}
+      collectors:
+        type: cilium
+        controllers:
+          - collector
+          - collector-zfs
+        ingress:
+          - {}
+        egress:
+          - toControllers:
+              - scrutiny
+            toPorts: *web
     route:
       scrutiny:
         hostnames:
@@ -142,14 +255,23 @@ spec:
       config:
         existingClaim: scrutiny
         advancedMounts:
-          scrutiny:
-            scrutiny:
-              - path: /opt/scrutiny/config
-                subPath: scrutiny
           influxdb:
             influxdb:
               - path: /var/lib/influxdb2
                 subPath: influxdb
+      postgres-cert:
+        type: secret
+        name: scrutiny-postgres-cert
+        defaultMode: 0440
+        advancedMounts:
+          scrutiny:
+            scrutiny:
+              - path: /var/run/secrets/postgresql
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
       udev:
         type: hostPath
         hostPath: /run/udev
