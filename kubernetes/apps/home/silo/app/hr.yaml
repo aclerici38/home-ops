@@ -159,8 +159,12 @@ spec:
         serviceName: silo
         endpoints:
           - port: metrics
-            # Target labels the upstream rules/dashboard aggregate on
+            # Target labels the upstream rules/dashboard aggregate on; the
+            # dashboard legends are {{instance}}, so name targets by pod not IP
             relabelings:
+              - sourceLabels:
+                  - __meta_kubernetes_pod_name
+                targetLabel: instance
               - targetLabel: cluster
                 replacement: home
               - targetLabel: process_role
@@ -170,6 +174,9 @@ spec:
         endpoints:
           - port: http
             relabelings:
+              - sourceLabels:
+                  - __meta_kubernetes_pod_name
+                targetLabel: instance
               - targetLabel: cluster
                 replacement: home
               - targetLabel: process_role
