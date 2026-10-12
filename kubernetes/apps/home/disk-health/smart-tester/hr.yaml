@@ -62,8 +62,6 @@ spec:
                   - "SYS_RAWIO"
                   - "SYS_ADMIN"
     defaultPodOptions:
-      automountServiceAccountToken: false
-      enableServiceLinks: false
       securityContext:
         seccompProfile: {type: RuntimeDefault}
     configMaps:

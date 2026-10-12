@@ -89,6 +89,20 @@ spec:
       ports:
         - port: 5432
           protocol: TCP
+{{- /* Cilium clusters only. Allow-only, like the kopiur mover policy: the app's
+       own policy decides whether it is enforced; this is the egress half of the
+       pooler policy above. Owner only — readers run wherever their consumer does. */}}
+{{- if and $owner ($.Capabilities.APIVersions.Has "cilium.io/v2/CiliumNetworkPolicy") }}
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: {{ $app }}-postgres
+  labels:
+    dormammu.internal/component: cnpg
+spec:
+  {{- include "resources.mergeSpec" (list (include "resources.cnpgShared.networkPolicySpec" .) (dig "networkPolicy" dict $spec)) | nindent 2 }}
+{{- end }}
 {{- if $i.mtls }}
 ---
 # The client cert itself, in the app's namespace. cert-manager writes tls.crt,

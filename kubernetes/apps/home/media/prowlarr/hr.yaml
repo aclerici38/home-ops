@@ -27,8 +27,6 @@ spec:
           labels:
             dormammu.internal/flaresolverr-client: "true"
           hostUsers: false
-          automountServiceAccountToken: false
-          enableServiceLinks: false
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -49,6 +47,7 @@ spec:
               PROWLARR__AUTH__METHOD: External
               PROWLARR__AUTH__REQUIRED: DisabledForLocalAddresses
               PROWLARR__LOG__DBENABLED: "False"
+              PROWLARR__LOG__ANALYTICSENABLED: "False"
               PROWLARR__LOG__LEVEL: info
               PROWLARR__SERVER__PORT: &port 9696
               PROWLARR__POSTGRES__MAINDBCONNECTIONSTRING:
@@ -120,13 +119,6 @@ spec:
                   app.kubernetes.io/instance: radarr-raphael
             toPorts: *web
         egress:
-          - toEndpoints:
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: cloudnative-pg
-                  cnpg.io/poolerName: pg18-pooler-mtls-rw
-            toPorts:
-              - ports:
-                  - {port: "5432", protocol: TCP}
           # App sync (indexer push)
           - toEndpoints: *sonarr
             toPorts:

@@ -74,6 +74,25 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      vuetorrent:
+        type: cilium
+        controller: vuetorrent
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: qbittorrent
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
     persistence:
       vuetorrent:
         type: image

@@ -25,8 +25,6 @@ spec:
         pod:
           labels:
             dormammu.internal/flaresolverr-client: "true"
-          automountServiceAccountToken: false
-          enableServiceLinks: false
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -117,13 +115,6 @@ spec:
                   app.kubernetes.io/instance: radarr-raphael
             toPorts: *web
         egress:
-          - toEndpoints:
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: cloudnative-pg
-                  cnpg.io/poolerName: pg18-pooler-mtls-rw
-            toPorts:
-              - ports:
-                  - {port: "5432", protocol: TCP}
           - toEndpoints: *sonarr
             toPorts:
               - ports:

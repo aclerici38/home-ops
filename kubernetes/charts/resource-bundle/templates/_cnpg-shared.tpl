@@ -76,6 +76,26 @@ dataFrom:
         name: cnpg-pass-generator
 {{- end -}}
 
+{{- define "resources.cnpgShared.networkPolicySpec" -}}
+{{- $i := fromYaml (include "resources.cnpgShared.ident" .) -}}
+{{- /* A named knob, not a spec override: mergeSpec would add labels, never drop the default. */}}
+{{- $labels := dig "podLabels" (dict "app.kubernetes.io/instance" (include "resources.app" .)) .Values.cnpg -}}
+endpointSelector:
+  matchLabels:
+    {{- toYaml $labels | nindent 4 }}
+enableDefaultDeny:
+  ingress: false
+  egress: false
+egress:
+  - toEndpoints:
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: {{ $i.namespace }}
+          cnpg.io/poolerName: {{ $i.pooler }}
+    toPorts:
+      - ports:
+          - {port: "5432", protocol: TCP}
+{{- end -}}
+
 {{- define "resources.cnpgShared.appSecretSpec" -}}
 {{- $app := include "resources.app" . -}}
 {{- $i := fromYaml (include "resources.cnpgShared.ident" .) -}}

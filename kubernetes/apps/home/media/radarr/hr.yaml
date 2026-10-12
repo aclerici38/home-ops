@@ -40,6 +40,7 @@ spec:
               RADARR__APP__THEME: dark
               RADARR__AUTH__METHOD: External
               RADARR__LOG__DBENABLED: "False"
+              RADARR__LOG__ANALYTICSENABLED: "False"
               RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
               RADARR__LOG__LEVEL: info
               RADARR__SERVER__PORT: &port 7878
@@ -83,6 +84,75 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      radarr:
+        type: cilium
+        controller: radarr
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: dashbrr
+                  app.kubernetes.io/instance: dashbrr
+              # App sync
+              - matchLabels:
+                  app.kubernetes.io/instance: prowlarr
+              # Bazarr+ API polling
+              - matchLabels:
+                  app.kubernetes.io/instance: bazarr
+              # Recyclarr profile sync
+              - matchLabels:
+                  app.kubernetes.io/instance: recyclarr
+              # Seerr requests
+              - matchLabels:
+                  app.kubernetes.io/instance: seerr
+              # Import list
+              - matchLabels:
+                  app.kubernetes.io/instance: radarr-raphael
+            toPorts:
+              - ports:
+                  - {port: "7878", protocol: TCP}
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: qbittorrent
+                  app.kubernetes.io/instance: qbittorrent
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+          # Torznab indexers proxied by prowlarr
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: prowlarr
+            toPorts:
+              - ports:
+                  - {port: "9696", protocol: TCP}
+          # On-import webhook
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: bazarr
+            toPorts:
+              - ports:
+                  - {port: "6767", protocol: TCP}
+          # Autoscan webhook
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: silo
+                  app.kubernetes.io/instance: silo
+                  app.kubernetes.io/controller: silo
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+          # Radarr metadata, TMDB artwork
+          - toFQDNs:
+              - matchName: api.radarr.video
+              - matchName: radarr.servarr.com
+              - matchName: image.tmdb.org
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
     persistence:
       postgres-cert:
         type: secret
@@ -90,7 +160,7 @@ spec:
         defaultMode: 0440
         globalMounts:
           - path: /var/run/secrets/postgresql
-      tmfs:
+      tmpfs:
         type: emptyDir
         globalMounts:
           - path: /tmp

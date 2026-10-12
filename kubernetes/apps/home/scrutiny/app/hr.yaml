@@ -174,8 +174,6 @@ spec:
                 add:
                   - "SYS_ADMIN"
     defaultPodOptions:
-      automountServiceAccountToken: false
-      enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -223,13 +221,6 @@ spec:
             toPorts:
               - ports:
                   - {port: "8086", protocol: TCP}
-          - toEndpoints:
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: cloudnative-pg
-                  cnpg.io/poolerName: pg18-pooler-mtls-rw
-            toPorts:
-              - ports:
-                  - {port: "5432", protocol: TCP}
       influxdb:
         type: cilium
         controller: influxdb

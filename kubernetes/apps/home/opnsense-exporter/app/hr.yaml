@@ -26,7 +26,6 @@ spec:
       opnsense-exporter:
         pod:
           hostUsers: false
-          automountServiceAccountToken: false
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000

@@ -108,6 +108,76 @@ spec:
         parentRefs:
           - name: external
             namespace: envoy-gateway
+    networkpolicies:
+      dashbrr:
+        type: cilium
+        controller: dashbrr
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+        egress:
+          # Pocket-id
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "10443", protocol: TCP}
+          # Monitored services
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: sonarr
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: sonarr-raphael
+            toPorts:
+              - ports:
+                  - {port: "8989", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: radarr
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: radarr-raphael
+            toPorts:
+              - ports:
+                  - {port: "7878", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: prowlarr
+            toPorts:
+              - ports:
+                  - {port: "9696", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: bazarr
+            toPorts:
+              - ports:
+                  - {port: "6767", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: seerr
+            toPorts:
+              - ports:
+                  - {port: "5055", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: qbittorrent
+                  app.kubernetes.io/instance: qbittorrent
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
     persistence:
       postgres-cert:
         type: secret

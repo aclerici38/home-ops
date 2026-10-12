@@ -34,7 +34,6 @@ spec:
         pod:
           restartPolicy: Never
           hostUsers: false
-          automountServiceAccountToken: false
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000

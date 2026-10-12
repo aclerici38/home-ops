@@ -28,3 +28,7 @@ spec:
     cnpg:
       mode: shared
       mtls: true
+      # Upstream chart: LAPI is the only DB client.
+      podLabels:
+        k8s-app: crowdsec
+        type: lapi

@@ -37,6 +37,8 @@
 #                         #       # runs outside this release's namespace
 #                         # sameuser in pg_hba refuses them until a line in
 #                         # cloudnative-pg/cluster (Postgres + pooler) names them.
+#   podLabels:            # shared, Cilium only: pods the <app>-postgres egress
+#                         # policy selects (default app.kubernetes.io/instance: <app>)
 #   mtls: false           # shared: passwordless. Role joins cert_apps with no
 #                         # password; app uses the pg18-pooler-mtls-* pooler and
 #                         # the <app>-postgres ConfigMap (uri/sslcert/... paths).
@@ -55,6 +57,8 @@
 #     role: {}            # shared: DatabaseRole
 #     certificate: {}     # shared+mtls: Certificate <app>-postgres-cert
 #                         # (720h / renewBefore 240h, ECDSA-384, postgres-mtls)
+#     networkPolicy: {}   # shared, Cilium only: CiliumNetworkPolicy <app>-postgres
+#                         # (allow-only egress to the pooler from cnpg.podLabels)
 
 # dragonfly:
 #   extraArgs: []         # appended to the default args

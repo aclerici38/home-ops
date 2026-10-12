@@ -15,6 +15,10 @@ spec:
     timeout: 2m
   upgrade:
     timeout: 2m
+  valuesFrom:
+    - kind: Secret
+      name: qbittorrent-netpol-values
+      valuesKey: values.yaml
   values:
     controllers:
       qbittorrent:
@@ -114,6 +118,37 @@ spec:
         ports:
           http:
             port: *port
+    networkpolicies:
+      qbittorrent:
+        type: cilium
+        controller: qbittorrent
+        # egress comes from valuesFrom (qbittorrent-netpol-values): pinned to the VPN endpoint IP,
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: vuetorrent
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: dashbrr
+                  app.kubernetes.io/instance: dashbrr
+              # Download client for the arrs; prowlarr grabs from its search UI
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: sonarr
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: sonarr-raphael
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: radarr
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: radarr-raphael
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: prowlarr
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
     persistence:
       config:
         existingClaim: qbittorrent

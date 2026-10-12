@@ -41,6 +41,7 @@ spec:
               SONARR__AUTH__METHOD: External
               SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
               SONARR__LOG__DBENABLED: "False"
+              SONARR__LOG__ANALYTICSENABLED: "False"
               SONARR__LOG__LEVEL: info
               SONARR__SERVER__PORT: &port 8989
               SONARR__POSTGRES__HOST:
@@ -98,6 +99,68 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      sonarr-raphael:
+        type: cilium
+        controller: sonarr-raphael
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: dashbrr
+                  app.kubernetes.io/instance: dashbrr
+              # App sync
+              - matchLabels:
+                  app.kubernetes.io/instance: prowlarr
+              # Bazarr+ API polling
+              - matchLabels:
+                  app.kubernetes.io/instance: bazarr
+              # Recyclarr profile sync
+              - matchLabels:
+                  app.kubernetes.io/instance: recyclarr
+            toPorts:
+              - ports:
+                  - {port: "8989", protocol: TCP}
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: qbittorrent
+                  app.kubernetes.io/instance: qbittorrent
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+          # Torznab indexers proxied by prowlarr
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: prowlarr
+            toPorts:
+              - ports:
+                  - {port: "9696", protocol: TCP}
+          # On-import webhook
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: bazarr
+            toPorts:
+              - ports:
+                  - {port: "6767", protocol: TCP}
+          # "Main Sonarr" import list
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: sonarr
+            toPorts:
+              - ports:
+                  - {port: "8989", protocol: TCP}
+          # Skyhook metadata, scene mappings (services + XEM), TheTVDB artwork
+          - toFQDNs:
+              - matchName: skyhook.sonarr.tv
+              - matchName: services.sonarr.tv
+              - matchName: thexem.info
+              - matchName: artworks.thetvdb.com
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
     persistence:
       postgres-cert:
         type: secret

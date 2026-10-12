@@ -238,14 +238,15 @@ spec:
             toPorts:
               - ports:
                   - {port: "8080", protocol: TCP}
-        egress:
-          - toEndpoints:
+          # Seerr library sync + media-server login
+          - fromEndpoints:
               - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: cloudnative-pg
-                  cnpg.io/poolerName: pg18-pooler-mtls-session-rw
+                  k8s:io.kubernetes.pod.namespace: media
+                  app.kubernetes.io/instance: seerr
             toPorts:
               - ports:
-                  - {port: "5432", protocol: TCP}
+                  - {port: "8096", protocol: TCP}
+        egress:
           - toEndpoints:
               - matchLabels:
                   app: silo-dragonfly-db
@@ -300,13 +301,6 @@ spec:
               - ports:
                   - {port: "8080", protocol: TCP}
         egress:
-          - toEndpoints:
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: cloudnative-pg
-                  cnpg.io/poolerName: pg18-pooler-mtls-session-rw
-            toPorts:
-              - ports:
-                  - {port: "5432", protocol: TCP}
           - toEndpoints:
               - matchLabels:
                   app: silo-dragonfly-db
