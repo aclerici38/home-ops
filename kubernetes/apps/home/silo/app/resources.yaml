@@ -37,7 +37,7 @@ spec:
         - name: silo
         - name: silo-transcode
           kind: StatefulSet
-          replicas: 2
+          replicas: 1
     cnpg:
       mode: shared
       mtls: true
