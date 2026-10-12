@@ -94,6 +94,8 @@ spec:
               MACHINE_LEARNING_CACHE_FOLDER: /cache
               MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: ViT-SO400M-16-SigLIP2-384__webli
               GUNICORN_CMD_ARGS: --no-control-socket
+              # onnxruntime >=1.30 ships 1DS telemetry on linux (mobile.events.data.microsoft.com)
+              ORT_DISABLE_TELEMETRY: 1
             resources:
               requests:
                 cpu: 500m
