@@ -85,14 +85,16 @@ spec:
               is stopped
           labels:
             severity: warning
-        # Idle ~39°C, 7-day peak ~59°C (2026-10).
+        # From the node_exporter plugin: the exporter's temperature endpoint
+        # needs the broad Lobby: Dashboard privilege. Idle ~39°C, 7-day peak
+        # ~59°C (2026-10).
         - alert: OPNsenseHighTemperature
           expr: |-
-            opnsense_temperature_celsius > 80
+            node_cpu_temperature_celsius{job="opnsense"} > 80
           for: 15m
           annotations:
             summary: >-
-              OPNsense {{ $labels.device }} is at {{ $value | humanize }}°C
+              OPNsense CPU {{ $labels.cpu }} is at {{ $value | humanize }}°C
           labels:
             severity: warning
         - alert: OPNsenseWireguardInterfaceDown
@@ -120,14 +122,15 @@ spec:
           labels:
             severity: warning
         # A single collector failing (usually a 403 from a missing privilege)
-        # leaves its metrics silently absent while up stays 1.
+        # leaves its metrics silently absent while up stays 1. The exporter's
+        # `endpoint` label collides with the ServiceMonitor's, hence exported_.
         - alert: OPNsenseExporterEndpointErrors
           expr: |-
             increase(opnsense_exporter_endpoint_errors_total[15m]) > 0
           for: 30m
           annotations:
             summary: >-
-              opnsense-exporter keeps failing to fetch {{ $labels.endpoint }} —
+              opnsense-exporter keeps failing to fetch {{ $labels.exported_endpoint }} —
               likely a missing API privilege
           labels:
             severity: warning
