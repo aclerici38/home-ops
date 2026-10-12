@@ -51,6 +51,8 @@ spec:
     service:
       clusterIP: ${K8S_GATEWAY_CLUSTER_IP}
     prometheus:
+      service:
+        enabled: true
       monitor:
         enabled: true
     podDisruptionBudget:
