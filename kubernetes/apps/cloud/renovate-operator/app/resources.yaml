@@ -28,7 +28,7 @@ spec:
   values:
     dragonfly:
       podLabels:
-        renovate-operator.mogenius.com/type: executor
+        app.kubernetes.io/name: renovate
     pocketId:
       name: renovate
       external: true

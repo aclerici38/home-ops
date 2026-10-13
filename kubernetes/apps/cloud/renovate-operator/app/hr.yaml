@@ -30,6 +30,9 @@ spec:
     config:
       logStorage:
         mode: memory
+      # Common label on discovery + executor job pods, for netpols
+      podLabelTemplates:
+        app.kubernetes.io/name: renovate
     logging:
       format: console
     webhook:
