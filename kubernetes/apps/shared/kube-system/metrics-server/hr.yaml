@@ -19,6 +19,8 @@ spec:
   upgrade:
     timeout: 2m
   values:
+    podLabels:
+      dormammu.internal/apiserver-client: "true"
     args:
       - --kubelet-insecure-tls
       - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname

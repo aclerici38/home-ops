@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: generic-device-plugin
+spec:
+  # Talks to the kubelet over its unix socket only
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: generic-device-plugin
+      app.kubernetes.io/name: generic-device-plugin
+  ingress:
+    - {}
+  egress:
+    - {}
