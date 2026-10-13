@@ -94,6 +94,29 @@ spec:
         ports:
           http:
             port: *apiPort
+    networkpolicies:
+      onepassword-connect:
+        type: cilium
+        controller: onepassword-connect
+        ingress:
+          # onepassword-connect ClusterSecretStore
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: external-secrets
+                  app.kubernetes.io/instance: external-secrets
+                  app.kubernetes.io/name: external-secrets
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+        # api <-> sync bus is over localhost
+        egress:
+          - toFQDNs:
+              - matchName: my.1password.com
+              - matchName: b5n.1password.com
+              - matchName: f.1passwordusercontent.com
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
     persistence:
       config:
         type: emptyDir
