@@ -38,8 +38,26 @@ spec:
             env:
               SONARR__APP__INSTANCENAME: Sonarr Raphael
               SONARR__APP__THEME: dark
-              SONARR__AUTH__METHOD: External
-              SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              SONARR__AUTH__METHOD: Oidc
+              SONARR__AUTH__REQUIRED: Enabled
+              SONARR__AUTH__OIDCAUTHORITY:
+                valueFrom:
+                  secretKeyRef:
+                    name: sonarr-raphael-oidc-credentials
+                    key: issuer_url
+              SONARR__AUTH__OIDCCLIENTID:
+                valueFrom:
+                  secretKeyRef:
+                    name: sonarr-raphael-oidc-credentials
+                    key: client_id
+              SONARR__AUTH__OIDCCLIENTSECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: sonarr-raphael-oidc-credentials
+                    key: client_secret
+              # pocket-id sub
+              SONARR__AUTH__OIDCUSERIDENTIFIER: a15f91db-50ff-4b61-aafa-ad5276a4c21e
+              SONARR__SERVER__TRUSTEDNETWORKS: ${CLUSTER_POD_CIDR},${CLUSTER_POD_CIDR_V6}
               SONARR__LOG__DBENABLED: "False"
               SONARR__LOG__ANALYTICSENABLED: "False"
               SONARR__LOG__LEVEL: info
@@ -137,6 +155,14 @@ spec:
             toPorts:
               - ports:
                   - {port: "8989", protocol: TCP}
+          # Pocket-id
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "10443", protocol: TCP}
           # Skyhook metadata, scene mappings (services + XEM), TheTVDB artwork
           - toFQDNs:
               - matchName: skyhook.sonarr.tv

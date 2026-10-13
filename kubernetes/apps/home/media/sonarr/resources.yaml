@@ -25,9 +25,17 @@ spec:
       namespace: external-secrets
     - name: nfs-server
       namespace: nfs-server
+    - name: pocket-id-operator
+      namespace: pocket-id-operator
   values:
     nfsGate: {}
     cnpg:
       mode: shared
       mtls: true
+    pocketId:
+      # ASP.NET OpenIdConnect defaults
+      callbackPaths:
+        - /signin-oidc
+      logoutCallbackPaths:
+        - /signout-callback-oidc
     externalSecret: {}
