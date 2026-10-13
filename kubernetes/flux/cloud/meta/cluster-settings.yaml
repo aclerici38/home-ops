@@ -9,6 +9,8 @@ data:
   FLUX_PATH: kubernetes/flux/cloud
   CLUSTER_NAME: cloud
   CLUSTER_POD_CIDR: 172.16.0.0/16
+  # pocket-id runs on home; resource-bundle pocketId.external
+  POCKET_ID_EXTERNAL: "true"
   SECRET_DOMAIN: clerici.tech
   EXTERNAL_DOMAIN: cloud.clerici.tech
   NODE_V4_IP: 192.9.147.24

@@ -269,14 +269,6 @@ spec:
             toPorts:
               - ports:
                   - {port: "8080", protocol: TCP}
-          # Pocket-id
-          - toEndpoints:
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: external
-            toPorts:
-              - ports:
-                  - {port: "10443", protocol: TCP}
           # Metadata providers, plugin catalog, jellyfin-web source + npm registry
           - toEntities:
               - world

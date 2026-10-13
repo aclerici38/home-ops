@@ -20,7 +20,7 @@ launchUrl: https://{{ $host }}
 pkceEnabled: true
 skipConsent: {{ dig "skipConsent" true $p }}
 {{- /* A public client has no secret; the CRD rejects clientSecretOverlap on one. */}}
-{{- if not (dig "spec" "isPublic" false $p) }}
+{{- if not (dig "spec" "oidcClient" "isPublic" false $p) }}
 clientSecretRotation:
   enabled: true
   interval: 6h
@@ -29,7 +29,7 @@ clientSecretRotation:
     closesAfter: 4h
 clientSecretOverlap: 15m
 {{- end }}
-{{- /* A group managed outside this cluster overrides spec.allowedUserGroups
+{{- /* A group managed outside this cluster overrides spec.oidcClient.allowedUserGroups
        instead ([{groupName: admin}] / [{groupID: <id>}]). */}}
 allowedUserGroups:
   - name: {{ dig "group" "admin" $p }}
@@ -39,5 +39,34 @@ callbackUrls: {{ toYaml . | nindent 2 }}
 {{- end }}
 {{- with $lcbs }}
 logoutCallbackUrls: {{ toYaml . | nindent 2 }}
+{{- end }}
+{{- end -}}
+
+{{- /* Allow-only, like <app>-postgres: the app's own policy decides enforcement.
+       In-cluster, id.clerici.tech resolves to the external gateway's LB IP, which
+       Cilium translates before policy, so it's matched as the Envoy pod. */}}
+{{- define "resources.pocketId.networkPolicySpec" -}}
+{{- $p := .Values.pocketId -}}
+endpointSelector:
+  matchLabels:
+    {{- toYaml (dig "podLabels" (dict "app.kubernetes.io/instance" (include "resources.app" .)) $p) | nindent 4 }}
+enableDefaultDeny:
+  ingress: false
+  egress: false
+egress:
+{{- if dig "external" false $p }}
+  - toFQDNs:
+      - matchName: id.clerici.tech
+    toPorts:
+      - ports:
+          - {port: "443", protocol: TCP}
+{{- else }}
+  - toEndpoints:
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: envoy-gateway
+          gateway.envoyproxy.io/owning-gateway-name: external
+    toPorts:
+      - ports:
+          - {port: "10443", protocol: TCP}
 {{- end }}
 {{- end -}}

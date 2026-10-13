@@ -29,7 +29,8 @@ spec:
     nfsGate: {}
     pocketId:
       spec:
-        pkceEnabled: false
+        oidcClient:
+          pkceEnabled: false
       callbackPaths:
         - /api/auth/oidc/callback
     kopiur:

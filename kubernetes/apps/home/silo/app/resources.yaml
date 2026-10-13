@@ -53,10 +53,14 @@ spec:
     gpu: {}
     pocketId:
       group: all
+      podLabels:
+        app.kubernetes.io/instance: silo
+        app.kubernetes.io/controller: silo
       spec:
-        isPublic: true
-        secret:
-          enabled: false
+        oidcClient:
+          isPublic: true
+          secret:
+            enabled: false
       # Plugin installation ID isn't known until it's installed.
       callbackPaths:
         - /api/v2/auth/oauth/*/callback

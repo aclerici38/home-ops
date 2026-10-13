@@ -30,13 +30,14 @@ spec:
       clientID: kopia-versity-home
       name: Kopia (versity)
       spec:
-        requiresReauthentication: true
-        logo:
-          nameOverride: kopia
-        secret:
-          keys:
-            clientID: client-id
-            clientSecret: client-secret
+        oidcClient:
+          requiresReauthentication: true
+          logo:
+            nameOverride: kopia
+          secret:
+            keys:
+              clientID: client-id
+              clientSecret: client-secret
       callbackPaths:
         - /oauth2/callback
     oidc: {}
@@ -71,13 +72,14 @@ spec:
       clientID: kopia-backblaze-home
       name: Kopia (backblaze)
       spec:
-        requiresReauthentication: true
-        logo:
-          nameOverride: kopia
-        secret:
-          keys:
-            clientID: client-id
-            clientSecret: client-secret
+        oidcClient:
+          requiresReauthentication: true
+          logo:
+            nameOverride: kopia
+          secret:
+            keys:
+              clientID: client-id
+              clientSecret: client-secret
       callbackPaths:
         - /oauth2/callback
     oidc: {}

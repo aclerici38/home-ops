@@ -61,11 +61,15 @@ spec:
         - --default_lua_flags=allow-undeclared-keys
     pocketId:
       group: all
+      podLabels:
+        app.kubernetes.io/instance: immich
+        app.kubernetes.io/controller: server
       spec:
-        secret:
-          storeClientSecret: false
-        clientSecretRotation:
-          enabled: false
+        oidcClient:
+          secret:
+            storeClientSecret: false
+          clientSecretRotation:
+            enabled: false
       callbackUrls:
         - app.immich:///oauth-callback
       callbackPaths:

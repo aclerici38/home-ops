@@ -32,6 +32,7 @@ spec:
     externalSecret: {}
     pocketId:
       spec:
-        pkceEnabled: false
+        oidcClient:
+          pkceEnabled: false
       callbackPaths:
         - /authorization-code/callback

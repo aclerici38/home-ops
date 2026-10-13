@@ -79,7 +79,14 @@
 #   callbackPaths: []     # each becomes https://<url><path>
 #   callbackUrls: []      # literal entries, combined with the above
 #   skipConsent: true     # skip the initial authorization consent screen
-#   spec: {}              # PocketIDOIDCClient
+#   podLabels:            # Cilium only: pods given egress to pocket-id
+#                         # (default app.kubernetes.io/instance: <app>)
+#   external: false       # pocket-id isn't in this cluster: egress to the public
+#                         # id.clerici.tech instead of the external gateway
+#   spec:
+#     oidcClient: {}      # PocketIDOIDCClient
+#     networkPolicy: {}   # Cilium only, skipped with oidc: CiliumNetworkPolicy
+#                         # <app>-pocket-id (allow-only egress from podLabels)
 
 # externalSecret:
 #   key: <app>            # 1Password item to extract

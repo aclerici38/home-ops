@@ -27,12 +27,16 @@ spec:
     externalSecret: {}
     pocketId:
       name: grafana
+      external: ${POCKET_ID_EXTERNAL:=false}
+      podLabels:
+        app: grafana
       clientID: grafana-${CLUSTER_NAME}
       url: grafana.${CLUSTER_NAME}.clerici.tech
       callbackPaths:
         - /login/generic_oauth
       spec:
-        allowedUserGroups:
-          - groupName: admin
-        logo:
-          nameOverride: grafana
+        oidcClient:
+          allowedUserGroups:
+            - groupName: admin
+          logo:
+            nameOverride: grafana

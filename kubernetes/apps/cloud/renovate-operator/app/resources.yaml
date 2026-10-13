@@ -31,11 +31,15 @@ spec:
         renovate-operator.mogenius.com/type: executor
     pocketId:
       name: renovate
+      external: true
+      podLabels:
+        app: renovate-operator
       url: renovate.cloud.clerici.tech
       callbackPaths:
         - /auth/callback
       spec:
-        clientSecretRotation:
-          enabled: false
-        allowedUserGroups:
-          - groupName: admin
+        oidcClient:
+          clientSecretRotation:
+            enabled: false
+          allowedUserGroups:
+            - groupName: admin

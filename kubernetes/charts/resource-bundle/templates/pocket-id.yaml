@@ -1,10 +1,24 @@
 {{- if hasKey .Values "pocketId" }}
 {{- $app := include "resources.app" . -}}
+{{- $spec := dig "spec" dict .Values.pocketId -}}
 ---
 apiVersion: pocketid.internal/v1alpha1
 kind: PocketIDOIDCClient
 metadata:
   name: {{ $app }}
 spec:
-  {{- include "resources.mergeSpec" (list (include "resources.pocketId.spec" .) (dig "spec" dict .Values.pocketId)) | nindent 2 }}
+  {{- include "resources.mergeSpec" (list (include "resources.pocketId.spec" .) (dig "oidcClient" dict $spec)) | nindent 2 }}
+{{- /* Cilium clusters only, and only for apps that speak OIDC themselves: with
+       oidc: the Envoy filter talks to pocket-id, never the app's pods. */}}
+{{- if and (not (hasKey .Values "oidc")) (.Capabilities.APIVersions.Has "cilium.io/v2/CiliumNetworkPolicy") }}
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: {{ $app }}-pocket-id
+  labels:
+    dormammu.internal/component: pocket-id
+spec:
+  {{- include "resources.mergeSpec" (list (include "resources.pocketId.networkPolicySpec" .) (dig "networkPolicy" dict $spec)) | nindent 2 }}
+{{- end }}
 {{- end }}

@@ -39,6 +39,7 @@ spec:
       logoutCallbackPaths:
         - /signout-callback-oidc
       spec:
-        logo:
-          nameOverride: sonarr
+        oidcClient:
+          logo:
+            nameOverride: sonarr
     externalSecret: {}

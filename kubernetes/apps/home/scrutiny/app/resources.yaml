@@ -40,8 +40,9 @@ spec:
       callbackPaths:
         - /oauth2/callback
       spec:
-        secret:
-          keys:
-            clientID: client-id
-            clientSecret: client-secret
+        oidcClient:
+          secret:
+            keys:
+              clientID: client-id
+              clientSecret: client-secret
     oidc: {}

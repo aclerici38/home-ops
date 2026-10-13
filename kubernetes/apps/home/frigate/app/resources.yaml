@@ -60,12 +60,13 @@ spec:
       callbackPaths:
         - /oauth2/callback
       spec:
-        logo:
-          nameOverride: frigate
-        secret:
-          keys:
-            clientID: client-id
-            clientSecret: client-secret
+        oidcClient:
+          logo:
+            nameOverride: frigate
+          secret:
+            keys:
+              clientID: client-id
+              clientSecret: client-secret
     oidc:
       spec:
         securityPolicy:

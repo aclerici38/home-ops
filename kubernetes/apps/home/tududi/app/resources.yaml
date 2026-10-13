@@ -39,8 +39,9 @@ spec:
       url: todo.clerici.tech
       group: fam
       spec:
-        # openid-client is driven without a code_challenge (modules/oidc/service.js).
-        pkceEnabled: false
+        oidcClient:
+          # openid-client is driven without a code_challenge (modules/oidc/service.js).
+          pkceEnabled: false
       callbackPaths:
         - /api/oidc/callback/pocket-id
     kopiur:
