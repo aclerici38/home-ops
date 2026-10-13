@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: envoy-internal-mcp
+spec:
+  # The in-cluster MCP Backends are covered by the shared envoy-proxy policy
+  endpointSelector:
+    matchLabels:
+      gateway.envoyproxy.io/owning-gateway-name: internal
+      app.kubernetes.io/managed-by: envoy-gateway
+  egress:
+    # raphael Backend
+    - toFQDNs:
+        - matchName: raphael.living
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}

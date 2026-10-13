@@ -30,6 +30,9 @@ spec:
       imageRegistry: mirror.gcr.io
     deployment:
       replicas: 2
+      pod:
+        labels:
+          dormammu.internal/apiserver-client: "true"
       envoyGateway:
         resources:
           requests:
