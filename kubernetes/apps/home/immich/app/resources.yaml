@@ -36,6 +36,9 @@ spec:
       mode: shared
       mtls: true
       poolMode: session
+      podLabels:
+        app.kubernetes.io/instance: immich
+        app.kubernetes.io/controller: server
       spec:
         database:
           extensions:

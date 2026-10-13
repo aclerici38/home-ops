@@ -43,6 +43,8 @@ spec:
                 secretKeyRef:
                   name: immich-pet-tagger
                   key: IMMICH_API_KEY
+              # Disables ultralytics' Google Analytics events
+              YOLO_OFFLINE: "true"
               POLL_INTERVAL: "900"
               TAG_NAME: Pets/Review
               YOLO_MODEL_NAME: yolov8s.pt
@@ -110,6 +112,34 @@ spec:
           - backendRefs:
               - identifier: immich-pet-tagger
                 port: *port
+    networkpolicies:
+      immich-pet-tagger:
+        type: cilium
+        controller: immich-pet-tagger
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "8000", protocol: TCP}
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: immich
+                  app.kubernetes.io/controller: server
+            toPorts:
+              - ports:
+                  - {port: "2283", protocol: TCP}
+          # YOLO (GitHub releases) and CLIP weight downloads
+          - toFQDNs:
+              - matchName: github.com
+              - matchName: release-assets.githubusercontent.com
+              - matchName: openaipublic.azureedge.net
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
     persistence:
       data:
         existingClaim: immich-pet-tagger

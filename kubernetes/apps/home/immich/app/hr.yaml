@@ -146,6 +146,67 @@ spec:
           - backendRefs:
               - identifier: server
                 port: *port
+    networkpolicies:
+      server:
+        type: cilium
+        controller: server
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+              - matchLabels:
+                  app.kubernetes.io/instance: immich-kiosk
+              - matchLabels:
+                  app.kubernetes.io/instance: immich-pet-tagger
+            toPorts:
+              - ports:
+                  - {port: "2283", protocol: TCP}
+        egress:
+          - toControllers:
+              - machine-learning
+            toPorts:
+              - ports:
+                  - {port: "3003", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  app: immich-dragonfly-db
+            toPorts:
+              - ports:
+                  - {port: "6379", protocol: TCP}
+          # Pocket-id
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "10443", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: smtp-relay
+                  app.kubernetes.io/instance: smtp-relay
+            toPorts:
+              - ports:
+                  - {port: "25", protocol: TCP}
+      machine-learning:
+        type: cilium
+        controller: machine-learning
+        ingress:
+          - fromControllers:
+              - server
+            toPorts:
+              - ports:
+                  - {port: "3003", protocol: TCP}
+        egress:
+          # Model downloads
+          - toFQDNs:
+              - matchName: huggingface.co
+              - matchName: cas-server.xethub.hf.co
+              - matchName: us.aws.cdn.hf.co
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
     persistence:
       postgres-cert:
         type: secret

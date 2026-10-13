@@ -92,6 +92,31 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      immich-kiosk:
+        type: cilium
+        controller: immich-kiosk
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "3000", protocol: TCP}
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: immich
+                  app.kubernetes.io/controller: server
+            toPorts:
+              - ports:
+                  - {port: "2283", protocol: TCP}
+          - toFQDNs:
+              - matchName: api.openweathermap.org
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
     persistence:
       config:
         type: secret
