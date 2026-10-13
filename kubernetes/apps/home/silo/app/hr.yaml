@@ -249,12 +249,6 @@ spec:
         egress:
           - toEndpoints:
               - matchLabels:
-                  app: silo-dragonfly-db
-            toPorts:
-              - ports:
-                  - {port: "6379", protocol: TCP}
-          - toEndpoints:
-              - matchLabels:
                   app.kubernetes.io/instance: silo
                   app.kubernetes.io/controller: transcode
             toPorts:
@@ -301,34 +295,7 @@ spec:
               - ports:
                   - {port: "8080", protocol: TCP}
         egress:
-          - toEndpoints:
-              - matchLabels:
-                  app: silo-dragonfly-db
-            toPorts:
-              - ports:
-                  - {port: "6379", protocol: TCP}
-      dragonfly:
-        type: cilium
-        endpointSelector:
-          matchLabels:
-            app: silo-dragonfly-db
-        ingress:
-          - fromEndpoints:
-              - matchLabels:
-                  app.kubernetes.io/instance: silo
-            toPorts:
-              - ports:
-                  - {port: "6379", protocol: TCP}
-          - fromEndpoints:
-              - matchLabels:
-                  app: silo-dragonfly-db
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: dragonfly-operator
-                  app.kubernetes.io/name: dragonfly-operator
-            toPorts:
-              - ports:
-                  - {port: "6379", protocol: TCP}
-                  - {port: "9999", protocol: TCP}
+          - {}
     persistence:
       postgres-cert:
         type: secret

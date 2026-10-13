@@ -168,12 +168,6 @@ spec:
             toPorts:
               - ports:
                   - {port: "3003", protocol: TCP}
-          - toEndpoints:
-              - matchLabels:
-                  app: immich-dragonfly-db
-            toPorts:
-              - ports:
-                  - {port: "6379", protocol: TCP}
           # Pocket-id
           - toEndpoints:
               - matchLabels:

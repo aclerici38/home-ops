@@ -62,7 +62,14 @@
 
 # dragonfly:
 #   extraArgs: []         # appended to the default args
-#   spec: {}              # Dragonfly
+#   podLabels:            # Cilium only: client pods admitted on 6379 and given
+#                         # egress to it (default app.kubernetes.io/instance: <app>)
+#   spec:
+#     dragonfly: {}       # Dragonfly
+#     networkPolicy: {}   # Cilium only: CiliumNetworkPolicy <app>-dragonfly-db
+#                         # (enforced: clients on 6379, peers + operator on 9999)
+#     clientNetworkPolicy: {} # Cilium only: CiliumNetworkPolicy <app>-dragonfly-client
+#                         # (allow-only egress to 6379 from dragonfly.podLabels)
 
 # pocketId:
 #   clientID: <app>       # also feeds the name default and oidc credentials

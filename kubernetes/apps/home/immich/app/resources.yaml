@@ -54,6 +54,9 @@ spec:
               ensure: present
     externalSecret: {}
     dragonfly:
+      podLabels:
+        app.kubernetes.io/instance: immich
+        app.kubernetes.io/controller: server
       extraArgs:
         - --default_lua_flags=allow-undeclared-keys
     pocketId:

@@ -33,3 +33,55 @@ containerSecurityContext:
   capabilities:
     drop: ["ALL"]
 {{- end -}}
+
+{{- define "resources.dragonfly.podLabels" -}}
+{{- toYaml (dig "podLabels" (dict "app.kubernetes.io/instance" (include "resources.app" .)) .Values.dragonfly) -}}
+{{- end -}}
+
+{{- /* Clients on 6379; the operator and replicas only ever use the admin port. */}}
+{{- define "resources.dragonfly.networkPolicySpec" -}}
+{{- $db := printf "%s-dragonfly-db" (include "resources.app" .) -}}
+endpointSelector:
+  matchLabels:
+    app: {{ $db }}
+ingress:
+  - fromEndpoints:
+      - matchLabels:
+          {{- include "resources.dragonfly.podLabels" . | nindent 10 }}
+    toPorts:
+      - ports:
+          - {port: "6379", protocol: TCP}
+  - fromEndpoints:
+      - matchLabels:
+          app: {{ $db }}
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: dragonfly-operator
+          app.kubernetes.io/name: dragonfly-operator
+    toPorts:
+      - ports:
+          - {port: "9999", protocol: TCP}
+egress:
+  - toEndpoints:
+      - matchLabels:
+          app: {{ $db }}
+    toPorts:
+      - ports:
+          - {port: "9999", protocol: TCP}
+{{- end -}}
+
+{{- /* Allow-only, like <app>-postgres: the app's own policy decides enforcement. */}}
+{{- define "resources.dragonfly.clientNetworkPolicySpec" -}}
+endpointSelector:
+  matchLabels:
+    {{- include "resources.dragonfly.podLabels" . | nindent 4 }}
+enableDefaultDeny:
+  ingress: false
+  egress: false
+egress:
+  - toEndpoints:
+      - matchLabels:
+          app: {{ include "resources.app" . }}-dragonfly-db
+    toPorts:
+      - ports:
+          - {port: "6379", protocol: TCP}
+{{- end -}}

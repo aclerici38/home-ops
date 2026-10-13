@@ -26,9 +26,11 @@ spec:
       # Dragonfly needs 256MiB of maxmemory per proactor thread or it refuses to start
       extraArgs:
         - "--proactor_threads=1"
+      podLabels:
+        app.kubernetes.io/name: envoy-ratelimit
       spec:
-        # MAX_MEMORY tracks limits.memory, which is what that floor is checked
-        # against.
-        resources:
-          requests: {cpu: 50m}
-          limits: {memory: 256Mi}
+        dragonfly:
+          # MAX_MEMORY tracks limits.memory
+          resources:
+            requests: {cpu: 50m}
+            limits: {memory: 256Mi}
