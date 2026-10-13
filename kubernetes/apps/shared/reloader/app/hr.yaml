@@ -24,6 +24,9 @@ spec:
       watchGlobally: true
       ignoreNamespaces: "cilium,rook-ceph,kube-system,renovate-operator"
       readOnlyRootFileSystem: true
+      deployment:
+        labels:
+          dormammu.internal/apiserver-client: "true"
       podMonitor:
         enabled: true
         namespace: reloader
