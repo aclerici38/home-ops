@@ -22,6 +22,8 @@ spec:
       url: http://kube-prometheus-stack-prometheus.kube-prometheus-stack.svc
       port: 9090
     logLevel: 2
+    podLabels:
+      dormammu.internal/apiserver-client: "true"
     rules:
       # External metrics only
       default: false

@@ -18,6 +18,10 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  # Admission webhook certs are issued by cert-manager
+  dependsOn:
+    - name: cert-manager
+      namespace: cert-manager
   valuesFrom:
     - kind: ConfigMap
       name: kube-prometheus-stack-values
