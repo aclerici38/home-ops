@@ -44,6 +44,8 @@ spec:
       # the pod IP.
       - "--allowed-hosts=*"
       - --disable-write
+      # Anonymous usage stats to stats.grafana.org
+      - --usage-stats=disabled
       - --enabled-tools=search,datasource,prometheus,alerting,dashboard,folder,navigation
 
     readinessProbe: &probes

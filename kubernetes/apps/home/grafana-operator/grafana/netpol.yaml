@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: grafana-route
+spec:
+  endpointSelector:
+    matchLabels:
+      app: grafana
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: internal
+      toPorts:
+        - ports:
+            - {port: "3000", protocol: TCP}
+  egress:
+    # blocky-grafana read-only role (dns/blocky-postgres datasource)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: cloudnative-pg
+            cnpg.io/poolerName: pg18-pooler-mtls-rw
+      toPorts:
+        - ports:
+            - {port: "5432", protocol: TCP}
