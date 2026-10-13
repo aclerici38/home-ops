@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: pocket-id-operator
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: pocket-id-operator
+  ingress:
+    - {}
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - {port: "6443", protocol: TCP}
+    # The home instance (PocketIDInstance external.url)
+    - toFQDNs:
+        - matchName: id.clerici.tech
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}

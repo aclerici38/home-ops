@@ -1,0 +1,70 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: pocket-id
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: pocket-id
+      app.kubernetes.io/managed-by: pocket-id-operator
+  ingress:
+    - fromEndpoints:
+        # Route, plus the oidc SecurityPolicy / JWT Backends on both gateways
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: external
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: internal
+        # machineTokens webhook generators
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: external-secrets
+            app.kubernetes.io/name: external-secrets
+        - matchLabels:
+            app.kubernetes.io/name: pocket-id-operator
+      toPorts:
+        - ports:
+            - {port: "1411", protocol: TCP}
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: smtp-relay
+            app.kubernetes.io/instance: smtp-relay
+      toPorts:
+        - ports:
+            - {port: "25", protocol: TCP}
+    # Client logos (selfh.st icons), Claude Code CIMD metadata, usage heartbeat
+    - toFQDNs:
+        - matchName: cdn.jsdelivr.net
+        - matchName: claude.ai
+        - matchName: analytics.pocket-id.org
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: pocket-id-operator
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: pocket-id-operator
+  ingress:
+    - {}
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - {port: "6443", protocol: TCP}
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: pocket-id
+            app.kubernetes.io/managed-by: pocket-id-operator
+      toPorts:
+        - ports:
+            - {port: "1411", protocol: TCP}
