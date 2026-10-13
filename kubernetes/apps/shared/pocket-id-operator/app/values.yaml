@@ -9,6 +9,8 @@ data:
     operator:
       args:
         - --zap-log-level=debug
+      labels:
+        dormammu.internal/apiserver-client: "true"
     metrics:
       enabled: true
       serviceMonitor:
