@@ -4,21 +4,12 @@
   "includeCustomFormatWhenRenaming": false,
   "specifications": [
     {
-      "name": "Multiple Subtitle [ENG] Tags",
-      "implementation": "ReleaseTitleSpecification",
-      "negate": false,
-      "required": false,
-      "fields": {
-        "value": "\\bmulti(ple)?[ ._-]?sub(title)?s?\\b.*\\[ENG\\]"
-      }
-    },
-    {
       "name": "English Subs Tag",
       "implementation": "ReleaseTitleSpecification",
       "negate": false,
-      "required": false,
+      "required": true,
       "fields": {
-        "value": "\\beng(lish)?[ ._-]?sub(s|bed|titles?)?\\b"
+        "value": "\\bmulti(ple)?[ ._-]?sub(title)?s?\\b.*\\[ENG\\]|\\beng(lish)?[ ._-]?sub(s|bed|titles?)?\\b"
       }
     },
     {

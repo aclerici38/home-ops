@@ -19,7 +19,10 @@
 # anime: "Dual Audio"/"Multi-Audio" as Japanese-only (No English Audio exempts
 # them), and subtitle tags like "[Eng-Subs]" or "[Multiple Subtitle] [ENG]" as
 # English audio (English Subs Only, anime profiles only - live-action titles
-# use "Eng Subs" alongside real English audio).
+# use "Eng Subs" alongside real English audio). Specs of one implementation
+# form a group that matches when its required specs pass and ANY spec passes,
+# so a negated required spec makes optional siblings moot: keep every
+# release-title spec in these CFs required.
 #
 # Anime gets its own home profiles because the anime group tiers also list
 # live-action groups (e.g. playWEB). Sonarr/Seerr route by series type; Radarr
