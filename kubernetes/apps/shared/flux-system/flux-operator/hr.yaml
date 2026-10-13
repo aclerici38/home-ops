@@ -19,8 +19,13 @@ spec:
     remediation:
       retries: 1
   values:
+    commonLabels:
+      dormammu.internal/apiserver-client: "true"
     serviceMonitor:
       create: true
+    web:
+      networkPolicy:
+        create: false
     installCRDs: true
     securityContext:
       runAsNonRoot: true

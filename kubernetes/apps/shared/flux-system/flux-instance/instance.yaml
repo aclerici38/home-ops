@@ -28,6 +28,13 @@ spec:
     path: "${FLUX_PATH}"
   kustomize:
     patches:
+      - # apiserver egress via the apiserver-clients CCNP
+        patch: |
+          - op: add
+            path: /spec/template/metadata/labels/dormammu.internal~1apiserver-client
+            value: "true"
+        target:
+          kind: Deployment
       - patch: |
           - op: add
             path: /spec/template/spec/containers/0/args/-

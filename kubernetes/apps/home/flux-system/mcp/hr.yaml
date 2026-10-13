@@ -25,10 +25,11 @@ spec:
     rbac:
       create: false
 
+    commonLabels:
+      dormammu.internal/apiserver-client: "true"
+
     networkPolicy:
-      ingress:
-        namespaces:
-          - envoy-gateway
+      create: false
 
     resources:
       requests:

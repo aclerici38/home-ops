@@ -1,0 +1,99 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: flux
+spec:
+  # All four controllers; apiserver egress comes from the apiserver-clients CCNP
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: flux
+  ingress:
+    - {}
+  egress:
+    - {}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: flux-artifacts-and-events
+spec:
+  # Artifact downloads from source-controller and events to notification-controller
+  endpointSelector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - source-controller
+          - kustomize-controller
+          - helm-controller
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app: source-controller
+      toPorts:
+        - ports:
+            - {port: "9090", protocol: TCP}
+    - toEndpoints:
+        - matchLabels:
+            app: notification-controller
+      toPorts:
+        - ports:
+            - {port: "9090", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: source-controller
+spec:
+  endpointSelector:
+    matchLabels:
+      app: source-controller
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: kustomize-controller
+        - matchLabels:
+            app: helm-controller
+      toPorts:
+        - ports:
+            - {port: "9090", protocol: TCP}
+  egress:
+    # Git/OCI/Helm sources on arbitrary hosts and the CDNs they redirect to
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: notification-controller
+spec:
+  endpointSelector:
+    matchLabels:
+      app: notification-controller
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: source-controller
+        - matchLabels:
+            app: kustomize-controller
+        - matchLabels:
+            app: helm-controller
+      toPorts:
+        - ports:
+            - {port: "9090", protocol: TCP}
+    # GitHub Receiver via the flux-webhook Route
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: external
+      toPorts:
+        - ports:
+            - {port: "9292", protocol: TCP}
