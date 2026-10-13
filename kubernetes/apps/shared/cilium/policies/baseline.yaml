@@ -5,7 +5,7 @@ kind: CiliumClusterwideNetworkPolicy
 metadata:
   name: baseline
 spec:
-  description: DNS to kube-dns and Prometheus scrapes for every pod outside kube-system/cilium
+  description: DNS to kube-dns and Prometheus scrapes for every pod outside kube-system
   enableDefaultDeny:
     ingress: false
     egress: false
@@ -15,7 +15,6 @@ spec:
         operator: NotIn
         values:
           - kube-system
-          - cilium
   ingress:
     - fromEndpoints:
         - matchLabels:

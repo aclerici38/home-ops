@@ -1,0 +1,45 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: hubble-relay
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: hubble-relay
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: hubble-ui
+      toPorts:
+        - ports:
+            - {port: "4245", protocol: TCP}
+  egress:
+    # hubble-peer resolves to the (hostNetwork) agents' gRPC servers
+    - toEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - {port: "4244", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: hubble-ui
+spec:
+  # apiserver egress comes from the apiserver-clients CCNP; Route ingress is per-cluster
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: hubble-ui
+  ingress:
+    - {}
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: hubble-relay
+      toPorts:
+        - ports:
+            - {port: "4245", protocol: TCP}
