@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: dragonfly-operator
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: dragonfly-operator
+  ingress:
+    - {}
+  egress:
+    # Admin port on every Dragonfly instance, in any namespace
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: dragonfly
+            app.kubernetes.io/part-of: dragonfly
+          matchExpressions:
+            - {key: 'k8s:io.kubernetes.pod.namespace', operator: Exists}
+      toPorts:
+        - ports:
+            - {port: "9999", protocol: TCP}
