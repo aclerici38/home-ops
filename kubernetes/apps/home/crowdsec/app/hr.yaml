@@ -43,7 +43,14 @@ spec:
                 - "${CLUSTER_POD_CIDR}"
                 - "${CLOUD_NODE_V4_CIDR}"
                 - "${CLOUD_NODE_V6_CIDR}"
+      # Pin the hub branch so cscli skips its version.crowdsec.net lookup
+      agent_config.yaml.local: &hubBranch |-
+        cscli:
+          hub_branch: master
+      appsec_config.yaml.local: *hubBranch
       config.yaml.local: |-
+        cscli:
+          hub_branch: master
         api:
           server:
             trusted_ips:
