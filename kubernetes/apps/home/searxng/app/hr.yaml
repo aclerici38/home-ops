@@ -96,11 +96,28 @@ spec:
         globalMounts:
           - path: /etc/searxng/settings.yml
             subPath: settings.yml
+          - path: /etc/searxng/limiter.toml
+            subPath: limiter.toml
       tmp:
         type: emptyDir
     configMaps:
       config:
         data:
+          # Pods are trusted proxies, so web users are limited by the client IP
+          # envoy appends to X-Forwarded-For (read right to left, spoof-safe).
+          # In-cluster API callers (open-webui) send no XFF and are passed.
+          limiter.toml: |-
+            [botdetection]
+            trusted_proxies = [
+              '${CLUSTER_POD_CIDR}',
+              '${CLUSTER_POD_CIDR_V6}',
+            ]
+
+            [botdetection.ip_lists]
+            pass_ip = [
+              '${CLUSTER_POD_CIDR}',
+              '${CLUSTER_POD_CIDR_V6}',
+            ]
           settings.yml: |-
             use_default_settings: true
 
