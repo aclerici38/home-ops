@@ -130,6 +130,82 @@ spec:
             backendRefs:
               - identifier: frigate
                 port: 1984
+    networkpolicies:
+      frigate:
+        type: cilium
+        controller: frigate
+        ingress:
+          # Authenticated UI route
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "8971", protocol: TCP}
+          # Birdseye route
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "5000", protocol: TCP}
+                  - {port: "1984", protocol: TCP}
+          # Frigate integration: API + RTSP restream for camera entities
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: home-assistant
+                  app.kubernetes.io/instance: home-assistant
+            toPorts:
+              - ports:
+                  - {port: "5000", protocol: TCP}
+                  - {port: "8554", protocol: TCP}
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: mosquitto
+                  app.kubernetes.io/instance: mosquitto
+            toPorts:
+              - ports:
+                  - {port: "1883", protocol: TCP}
+          # go2rtc sources (config.yaml on the PVC): Dahua + Tapo + E1 Pro RTSP
+          - toFQDNs:
+              - matchName: gate.security.internal
+              - matchName: service-gate.security.internal
+              - matchName: living-room.security.internal
+              - matchName: cottage-yard-cam.cottage.internal
+            toPorts:
+              - ports:
+                  - {port: "554", protocol: TCP}
+          # Reolink HTTP-FLV
+          - toFQDNs:
+              - matchName: front.security.internal
+              - matchName: driveway.security.internal
+              - matchName: garage.security.internal
+              - matchName: not-pumphouse.security.internal
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+          # ONVIF
+          - toFQDNs:
+              - matchName: cottage-yard-cam.cottage.internal
+            toPorts:
+              - ports:
+                  - {port: "2020", protocol: TCP}
+          - toFQDNs:
+              - matchName: living-room.security.internal
+            toPorts:
+              - ports:
+                  - {port: "8000", protocol: TCP}
+          # Semantic search / classification models
+          - toFQDNs:
+              - matchName: huggingface.co
+              - matchPattern: "*.hf.co"
+              - matchPattern: "*.xethub.hf.co"
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
     persistence:
       config:
         existingClaim: frigate
