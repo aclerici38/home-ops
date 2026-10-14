@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  # Rendered once per pool (zfs-scrubber-ssd / -tank ks share this path)
+  name: ${POOL}-zfs-scrubber
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: zfs-scrubber
+      app.kubernetes.io/instance: ${POOL}-zfs-scrubber
+  ingress:
+    - {}
+  egress:
+    # crane pulls the ZFS extension matching TALOS_VERSION
+    - toFQDNs:
+        - matchName: ghcr.io
+        - matchName: pkg-containers.githubusercontent.com
+        - matchName: tuf-repo-cdn.sigstore.dev
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
