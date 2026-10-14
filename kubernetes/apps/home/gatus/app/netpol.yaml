@@ -1,0 +1,81 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: gatus
+spec:
+  # apiserver egress (sidecar watching HTTPRoutes/Services) comes from the
+  # apiserver-clients CCNP; postgres and OIDC from gatus-postgres/-pocket-id
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: gatus
+      app.kubernetes.io/name: gatus-sidecar
+  ingress:
+    # Route
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: external
+      toPorts:
+        - ports:
+            - {port: "8080", protocol: TCP}
+  egress:
+    # dns-resolver for HTTPRoute and travel/towonel probes; the dns rule lets
+    # those answers feed the toFQDNs below
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: dns
+            app.kubernetes.io/instance: k8s-gateway
+      toPorts:
+        - ports:
+            - {port: "53", protocol: ANY}
+          rules:
+            dns:
+              - matchPattern: "*"
+    # HTTPRoute probes, via the Gateway LB IPs
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway
+            app.kubernetes.io/name: envoy
+            app.kubernetes.io/component: proxy
+      toPorts:
+        - ports:
+            - {port: "10080", protocol: TCP}
+            - {port: "10443", protocol: TCP}
+    # versity-s3 Service probe (s3.clerici.tech LB IP)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: versity
+            app.kubernetes.io/instance: versity
+            app.kubernetes.io/controller: versity
+      toPorts:
+        - ports:
+            - {port: "7070", protocol: TCP}
+    # connectivity group
+    - toCIDR:
+        - 1.1.1.1/32
+        - 8.8.8.8/32
+        - 9.9.9.9/32
+      toPorts:
+        - ports:
+            - {port: "53", protocol: TCP}
+    - toFQDNs:
+        - matchName: google.com
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+    # travel + towonel groups
+    - toFQDNs:
+        - matchName: raphael.living
+        - matchName: towonel.cloud.clerici.tech
+        - matchName: vps.clerici.tech
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+    - toFQDNs:
+        - matchName: vps.clerici.tech
+      toPorts:
+        - ports:
+            - {port: "80", protocol: TCP}
+            - {port: "8444", protocol: TCP}
