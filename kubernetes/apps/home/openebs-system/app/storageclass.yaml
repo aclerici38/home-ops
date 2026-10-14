@@ -14,6 +14,7 @@ parameters:
   poolname: "ssd"
   fstype: "zfs"
   shared: "yes"
+  recordsize: "1M"
 provisioner: zfs.csi.openebs.io
 ---
 apiVersion: storage.k8s.io/v1
