@@ -46,7 +46,7 @@ spec:
           etcd-defrag:
             image:
               repository: mirror.gcr.io/library/busybox
-              tag: 1.37.0-musl@sha256:5cec3fc171c87218698e85a52af7087de727372aae264a787b8112901a5b0092
+              tag: 1.38.0-musl@sha256:ea2b9914a16a4ac1981994af97b318f7c7d4db76b580c56177f08bf76f4a0be8
             env:
               PATH: /opt/talosctl:/bin
               TALOSCONFIG: /var/run/secrets/talos.dev/config
