@@ -20,3 +20,6 @@ spec:
       retries: 1
   dependsOn:
     - name: cloudnative-pg
+  values:
+    podLabels:
+      dormammu.internal/apiserver-client: "true"
