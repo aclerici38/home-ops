@@ -25,3 +25,11 @@ spec:
       toPorts:
         - ports:
             - {port: "51823", protocol: UDP}
+  egressDeny:
+    # iroh hole-punches every local address the cloud edge reports not just the public one.
+    # An explicit deny drops them as POLICY_DENY, which CiliumPolicyDrops ignores.
+    - toCIDRSet:
+        - cidrGroupRef: private-networks
+      toPorts:
+        - ports:
+            - {port: "51820", protocol: UDP}
