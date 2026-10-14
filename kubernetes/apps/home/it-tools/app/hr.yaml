@@ -64,6 +64,21 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      it-tools:
+        type: cilium
+        controller: it-tools
+        ingress:
+          # Route
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+        egress:
+          - {}
     persistence:
       tmp:
         type: emptyDir
