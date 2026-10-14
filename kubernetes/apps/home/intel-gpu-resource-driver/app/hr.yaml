@@ -18,6 +18,17 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
+  # The chart has no pod-label value; apiserver egress via the apiserver-clients CCNP
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: DaemonSet
+              name: intel-gpu-resource-driver-kubelet-plugin
+            patch: |
+              - op: add
+                path: /spec/template/metadata/labels/dormammu.internal~1apiserver-client
+                value: "true"
   values:
     cdi:
       staticPath: /var/cdi/static
