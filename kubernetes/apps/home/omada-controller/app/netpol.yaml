@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: omada-controller
+spec:
+  # Controller + ferretdb sidecar. The LB keeps client IPs, so LAN sources
+  # arrive as CIDRs. Devices always dial in; nothing dials them.
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: omada-controller
+      app.kubernetes.io/name: omada-controller
+  ingress:
+    # APs/switches on the management VLAN: every device port
+    - fromCIDR:
+        - 10.0.10.0/24
+    # Web UI from the house and cottage VLANs
+    - fromCIDR:
+        - 10.0.20.0/24
+        - 10.0.40.0/24
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+    # tplink_omada integration and omada-exporter
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: home-assistant
+            app.kubernetes.io/instance: home-assistant
+        - matchLabels:
+            app.kubernetes.io/instance: omada-exporter
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+  egress:
+    # ferretdb
+    - toEndpoints:
+        - matchLabels:
+            cnpg.io/poolerName: omada-controller-pooler-rw
+      toPorts:
+        - ports:
+            - {port: "5432", protocol: TCP}
+    # Omada cloud, device API and firmware (OTA) downloads
+    - toFQDNs:
+        - matchPattern: "**.tplinkcloud.com"
+        - matchName: prd-omada-common-data-manager-storage-use1.s3.amazonaws.com
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}

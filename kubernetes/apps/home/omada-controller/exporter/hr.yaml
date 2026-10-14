@@ -52,6 +52,21 @@ spec:
         ports:
           http:
             port: 9202
+    networkpolicies:
+      omada-exporter:
+        type: cilium
+        controller: omada-exporter
+        ingress:
+          - {}
+        egress:
+          # OMADA_HOST
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: omada-controller
+                  app.kubernetes.io/name: omada-controller
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
     serviceMonitor:
       exporter:
         serviceName: omada-exporter
