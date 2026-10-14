@@ -12,6 +12,7 @@ spec:
     matchLabels:
       app.kubernetes.io/instance: pgmqtt
       app.kubernetes.io/name: pgmqtt
-  enableDefaultDeny:
-    ingress: true
-    egress: true
+  ingress:
+    - {}
+  egress:
+    - {}
