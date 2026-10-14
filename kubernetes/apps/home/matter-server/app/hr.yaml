@@ -110,6 +110,35 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      matter-server:
+        type: cilium
+        controller: matter-server
+        ingress:
+          - fromEndpoints:
+              # Route (dashboard)
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+              # Matter integration
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: home-assistant
+                  app.kubernetes.io/instance: home-assistant
+            toPorts:
+              - ports:
+                  - {port: "5580", protocol: TCP}
+        egress:
+          # DCL + GitHub PAA certs, plus the vendor-hosted OTA images and CRLs
+          # the DCL points at, which can be any host
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+                  - {port: "443", protocol: TCP}
+        egressDeny:
+          - toCIDRSet:
+              - cidrGroupRef: private-networks
     persistence:
       data:
         existingClaim: matter-server
