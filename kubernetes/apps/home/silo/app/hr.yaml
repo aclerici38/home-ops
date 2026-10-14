@@ -238,11 +238,14 @@ spec:
             toPorts:
               - ports:
                   - {port: "8080", protocol: TCP}
-          # Seerr library sync + media-server login
+          # Seerr library sync + media-server login, dashbrr health checks
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: media
                   app.kubernetes.io/instance: seerr
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: dashbrr
+                  app.kubernetes.io/instance: dashbrr
             toPorts:
               - ports:
                   - {port: "8096", protocol: TCP}

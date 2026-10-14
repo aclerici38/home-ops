@@ -165,6 +165,14 @@ spec:
                   - {port: "5055", protocol: TCP}
           - toEndpoints:
               - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: silo
+                  app.kubernetes.io/instance: silo
+                  app.kubernetes.io/controller: silo
+            toPorts:
+              - ports:
+                  - {port: "8096", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
                   k8s:io.kubernetes.pod.namespace: qbittorrent
                   app.kubernetes.io/instance: qbittorrent
             toPorts:
@@ -219,8 +227,9 @@ spec:
                   access_url: https://bazarr.clerici.tech
                   apikey: $${BAZARR_API_KEY}
               jellyfin:
+                # silo's Jellyfin-compatible API
                 - name: Jellyfin
-                  url: http://jellyfin.jellyfin.svc.cluster.local:8096
+                  url: http://silo.silo.svc.cluster.local:8096
                   access_url: https://jellyfin.clerici.tech
                   apikey: $${JELLYFIN_API_KEY}
               overseerr:
