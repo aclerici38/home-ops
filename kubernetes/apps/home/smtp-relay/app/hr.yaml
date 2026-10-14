@@ -26,9 +26,6 @@ spec:
         strategy: RollingUpdate
         pod:
           hostUsers: false
-          # No ARM image
-          nodeSelector:
-            kubernetes.io/arch: amd64
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000

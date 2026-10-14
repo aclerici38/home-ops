@@ -276,6 +276,10 @@ spec:
             toPorts:
               - ports:
                   - {port: "443", protocol: TCP}
+        egressDeny:
+          # Keep the LAN out of reach; in-cluster peers above are pod identities
+          - toCIDRSet:
+              - cidrGroupRef: private-networks
       transcode:
         type: cilium
         controller: transcode
