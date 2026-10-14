@@ -100,6 +100,29 @@ spec:
         ports:
           http:
             port: *port
+    networkpolicies:
+      trek:
+        type: cilium
+        controller: trek
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "3000", protocol: TCP}
+        # OIDC and SMTP egress come from trek-pocket-id and the smtp-relay-clients CCNP.
+        egress:
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
+        egressDeny:
+          # Keep the LAN out of reach; in-cluster peers are pod identities
+          - toCIDRSet:
+              - cidrGroupRef: private-networks
     route:
       trek:
         hostnames:
