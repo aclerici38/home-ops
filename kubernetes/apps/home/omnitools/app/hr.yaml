@@ -70,6 +70,21 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      omnitools:
+        type: cilium
+        controller: omnitools
+        ingress:
+          # Route
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+        egress:
+          - {}
     persistence:
       tmpfs:
         type: emptyDir
