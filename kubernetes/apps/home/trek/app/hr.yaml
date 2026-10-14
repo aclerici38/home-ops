@@ -19,6 +19,8 @@ spec:
     controllers:
       trek:
         pod:
+          labels:
+            dormammu.internal/smtp-relay-client: "true"
           hostUsers: false
           securityContext:
             runAsUser: 1000

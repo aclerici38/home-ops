@@ -26,6 +26,7 @@ spec:
         pod:
           labels:
             dormammu.internal/flaresolverr-client: "true"
+            dormammu.internal/smtp-relay-client: "true"
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000

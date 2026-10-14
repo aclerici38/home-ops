@@ -25,6 +25,8 @@ spec:
         forceRename: immich
         strategy: RollingUpdate
         pod:
+          labels:
+            dormammu.internal/smtp-relay-client: "true"
           # keep at 1 replica until https://github.com/immich-app/immich/pull/28410
           nodeSelector:
             kubernetes.io/hostname: "bonds"
@@ -168,13 +170,6 @@ spec:
             toPorts:
               - ports:
                   - {port: "3003", protocol: TCP}
-          - toEndpoints:
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: smtp-relay
-                  app.kubernetes.io/instance: smtp-relay
-            toPorts:
-              - ports:
-                  - {port: "25", protocol: TCP}
       machine-learning:
         type: cilium
         controller: machine-learning

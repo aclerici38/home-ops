@@ -25,6 +25,9 @@ spec:
         replicas: 2
         strategy: RollingUpdate
         forceRename: opencloud
+        pod:
+          labels:
+            dormammu.internal/smtp-relay-client: "true"
         containers:
           opencloud:
             image: &img
