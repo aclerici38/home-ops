@@ -53,7 +53,6 @@ spec:
               BACKBONE_IF: backbone
               BAUDRATE: "460800"
               FIREWALL: "1"
-              NAT64: "1"
               NETWORK_DEVICE: cottage-slzb-ultima3.iot.internal:7638
               S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
               S6_READ_ONLY_ROOT: 1
@@ -124,6 +123,36 @@ spec:
         ports:
           http:
             port: *port
+    networkpolicies:
+      # Only eth0 is policed: the backbone (Thread/OMR, mDNS, TREL) is multus
+      cottage:
+        type: cilium
+        controller: cottage
+        ingress:
+          # HA otbr integration (REST)
+          - fromEndpoints: &hass
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: home-assistant
+                  app.kubernetes.io/instance: home-assistant
+            toPorts: &rest
+              - ports:
+                  - {port: "8081", protocol: TCP}
+        egress:
+          - toFQDNs:
+              - matchName: cottage-slzb-ultima3.iot.internal
+            toPorts: &rcp
+              - ports:
+                  - {port: "7638", protocol: TCP}
+      house:
+        type: cilium
+        controller: house
+        ingress:
+          - fromEndpoints: *hass
+            toPorts: *rest
+        egress:
+          - toFQDNs:
+              - matchName: house-slzb-ultima3.iot.internal
+            toPorts: *rcp
     persistence:
       data:
         existingClaim: otbr
