@@ -89,6 +89,36 @@ spec:
         parentRefs:
           - name: external
             namespace: envoy-gateway
+    networkpolicies:
+      searxng:
+        type: cilium
+        controller: searxng
+        # Valkey egress comes from searxng-dragonfly-client
+        ingress:
+          - fromEndpoints:
+              # Route
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+              # open-webui web search (JSON API, passed by limiter.toml)
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: open-webui
+                  app.kubernetes.io/instance: open-webui
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+        egress:
+          # Search engines, autocomplete, favicons and the image proxy
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+                  - {port: "443", protocol: TCP}
+                  - {port: "443", protocol: UDP}
+        egressDeny:
+          - toCIDRSet:
+              - cidrGroupRef: private-networks
     persistence:
       config:
         type: configMap
