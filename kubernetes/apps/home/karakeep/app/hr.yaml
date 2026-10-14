@@ -174,6 +174,76 @@ spec:
           - backendRefs:
               - identifier: karakeep
                 port: *port
+    networkpolicies:
+      karakeep:
+        type: cilium
+        controller: karakeep
+        # OIDC egress comes from karakeep-pocket-id
+        ingress:
+          # Route
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "3000", protocol: TCP}
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/controller: chrome
+            toPorts:
+              - ports:
+                  - {port: "9222", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/controller: meilisearch
+            toPorts:
+              - ports:
+                  - {port: "7700", protocol: TCP}
+          # Link metadata, banner images, feeds, adblock lists
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+                  - {port: "443", protocol: TCP}
+        egressDeny: &lan
+          # Keep the LAN out of reach (SSRF)
+          - toCIDRSet:
+              - cidrGroupRef: private-networks
+      chrome:
+        type: cilium
+        controller: chrome
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/controller: karakeep
+            toPorts:
+              - ports:
+                  - {port: "9222", protocol: TCP}
+        egress:
+          # Crawling arbitrary public sites
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+                  - {port: "443", protocol: TCP}
+                  - {port: "443", protocol: UDP}
+        egressDeny: *lan
+      meilisearch:
+        type: cilium
+        controller: meilisearch
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/controller: karakeep
+            toPorts:
+              - ports:
+                  - {port: "7700", protocol: TCP}
+        egress:
+          - {}
     persistence:
       data:
         existingClaim: karakeep

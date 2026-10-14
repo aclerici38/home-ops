@@ -29,6 +29,9 @@ spec:
     externalSecret: {}
     pocketId:
       group: fam
+      podLabels:
+        app.kubernetes.io/instance: karakeep
+        app.kubernetes.io/controller: karakeep
       callbackPaths:
         - /api/auth/callback/custom
     kopiur:
