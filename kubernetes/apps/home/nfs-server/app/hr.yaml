@@ -83,6 +83,20 @@ spec:
         ports:
           nfs:
             port: 2049
+    networkpolicies:
+      nfs-server:
+        type: cilium
+        controller: nfs-server
+        ingress:
+          # Kubelet / csi-nfs mounts (hostNetwork) via the LB IP
+          - fromEntities:
+              - host
+              - remote-node
+            toPorts:
+              - ports:
+                  - {port: "2049", protocol: TCP}
+        egress:
+          - {}
     persistence:
       exports:
         type: configMap
