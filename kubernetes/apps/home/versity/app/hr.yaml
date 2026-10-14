@@ -44,6 +44,8 @@ spec:
               # kopia doesn't support xattrs so we must store metadata separately.
               VGW_META_SIDECAR: /mnt/metadata
               VGW_VERSIONING_DIR: /mnt/versioning
+              # Flush objects before acking
+              VGW_FSYNC: "true"
               ROOT_ACCESS_KEY_ID:
                 secretKeyRef:
                   name: versity
