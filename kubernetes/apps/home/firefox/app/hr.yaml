@@ -76,6 +76,31 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      firefox:
+        type: cilium
+        controller: firefox
+        ingress:
+          # Route
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "3000", protocol: TCP}
+        egress:
+          # Browsing arbitrary public sites
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+                  - {port: "443", protocol: TCP}
+                  - {port: "443", protocol: UDP}
+        egressDeny:
+          - toCIDRSet:
+              - cidrGroupRef: private-networks
     persistence:
       config:
         existingClaim: firefox
