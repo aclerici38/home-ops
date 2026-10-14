@@ -58,6 +58,31 @@ spec:
         ports:
           http:
             port: &port 9798
+    networkpolicies:
+      speedtest-exporter:
+        type: cilium
+        controller: speedtest-exporter
+        # Only Prometheus scrapes it (baseline)
+        ingress:
+          - {}
+        egress:
+          # Ookla API: server list, CLI config, result upload
+          - toFQDNs:
+              - matchPattern: "*.speedtest.net"
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
+          # 8080 is the test port, 5060 the TCP fallback, UDP 8080 the packet-loss probe
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+                  - {port: "8080", protocol: UDP}
+                  - {port: "5060", protocol: TCP}
+        egressDeny:
+          - toCIDRSet:
+              - cidrGroupRef: private-networks
     serviceMonitor:
       speedtest-exporter:
         serviceName: speedtest-exporter
