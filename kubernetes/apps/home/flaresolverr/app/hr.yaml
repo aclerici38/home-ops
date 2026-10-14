@@ -100,12 +100,23 @@ spec:
             {"WebRtcIPHandling": "disable_non_proxied_udp"}
           dns.json: |-
             {"BuiltInDnsClientEnabled": false, "DnsOverHttpsMode": "off"}
+      chromium-flags:
+        data:
+          zz-disable-background-networking: |-
+            export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --disable-background-networking"
     persistence:
       chromium-policy:
         type: configMap
         identifier: chromium-policy
         globalMounts:
           - path: /etc/chromium/policies/managed
+      chromium-flags:
+        type: configMap
+        identifier: chromium-flags
+        globalMounts:
+          - path: /etc/chromium.d/zz-disable-background-networking
+            subPath: zz-disable-background-networking
+            readOnly: true
       tmpfs:
         type: emptyDir
         medium: Memory
