@@ -187,13 +187,6 @@ spec:
             toPorts:
               - ports:
                   - {port: "443", protocol: TCP}
-          - toEndpoints:
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: mosquitto
-                  app.kubernetes.io/instance: mosquitto
-            toPorts:
-              - ports:
-                  - {port: "1883", protocol: TCP}
           # Frigate integration: API + RTSP restream
           - toEndpoints:
               - matchLabels:

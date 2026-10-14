@@ -26,10 +26,11 @@ spec:
     - name: kopiur
       namespace: kopiur
   values:
+    externalSecret: {}
     mqtt:
       passwordFrom:
-        key: home-mosquitto
-        property: NJSPC_MQTT_PASS
+        key: nodejs-poolcontroller
+        property: MQTT_PASS
       spec:
         user:
           username: njspc

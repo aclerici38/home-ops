@@ -167,14 +167,6 @@ spec:
             toPorts:
               - ports:
                   - {port: "8899", protocol: TCP}
-          # mqtt + homeAssistant bindings
-          - toEndpoints:
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: mosquitto
-                  app.kubernetes.io/instance: mosquitto
-            toPorts:
-              - ports:
-                  - {port: "1883", protocol: TCP}
       dashpanel:
         type: cilium
         controller: dashpanel
