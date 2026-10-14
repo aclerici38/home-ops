@@ -124,6 +124,22 @@ spec:
         ports:
           http:
             port: *port
+    networkpolicies:
+      tududi:
+        type: cilium
+        controller: tududi
+        ingress:
+          # UI, plus open-webui's MCP tool server via the gateway
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "3002", protocol: TCP}
+        # Postgres and OIDC egress come from tududi-postgres and tududi-pocket-id
+        egress:
+          - {}
     route:
       tududi:
         hostnames:
