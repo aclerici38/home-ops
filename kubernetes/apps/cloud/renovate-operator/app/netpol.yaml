@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: renovate-operator
+spec:
+  # apiserver egress comes from the apiserver-clients CCNP, the OIDC issuer from
+  # renovate-operator-pocket-id. Job logs are read through the apiserver.
+  endpointSelector:
+    matchLabels:
+      app: renovate-operator
+  ingress:
+    # UI via the Route
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: external
+      toPorts:
+        - ports:
+            - {port: "8081", protocol: TCP}
+  egress:
+    - {}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: renovate
+spec:
+  # Discovery + executor Job pods
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: renovate
+  ingress:
+    - {}
+  egress:
+    # GitHub API/git plus every datasource, registry and mise tool download
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}

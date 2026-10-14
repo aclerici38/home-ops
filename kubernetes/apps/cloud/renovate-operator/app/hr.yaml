@@ -20,6 +20,9 @@ spec:
       targetPath: auth.oidc.clientId
   values:
     fullnameOverride: renovate-operator
+    deployment:
+      podLabels:
+        dormammu.internal/apiserver-client: "true"
     route:
       enabled: true
       hostnames:
