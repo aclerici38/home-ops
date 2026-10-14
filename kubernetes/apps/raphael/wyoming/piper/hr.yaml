@@ -35,6 +35,8 @@ spec:
               tag: 2.5.2@sha256:7d39aafac409c2b6b09d999ed04d84c311d632e558b35baa60fad6aac722af7a
             env:
               HOME: /tmp
+              # onnxruntime >=1.30 ships 1DS telemetry on linux (mobile.events.data.microsoft.com)
+              ORT_DISABLE_TELEMETRY: 1
             args:
               - --voice
               - en_US-lessac-medium

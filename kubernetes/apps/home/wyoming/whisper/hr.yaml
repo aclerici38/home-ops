@@ -50,6 +50,8 @@ spec:
               tag: 3.8.1@sha256:ba6fcb6056ebe237d15a325381763a80af2fc8fcedaa04f6a714a7375eb20d80
             env:
               HOME: /tmp
+              # onnxruntime >=1.30 ships 1DS telemetry on linux (mobile.events.data.microsoft.com)
+              ORT_DISABLE_TELEMETRY: 1
               HF_HOME: /data
               HASS_TOKEN:
                 valueFrom:
@@ -104,6 +106,34 @@ spec:
         ports:
           wyoming:
             port: 10300
+    networkpolicies:
+      whisper:
+        type: cilium
+        controller: whisper
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: home-assistant
+                  app.kubernetes.io/instance: home-assistant
+            toPorts:
+              - ports:
+                  - {port: "10300", protocol: TCP}
+        egress:
+          # --hass-api: entity/area names for the initial prompt
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: home-assistant
+                  app.kubernetes.io/instance: home-assistant
+            toPorts:
+              - ports:
+                  - {port: "8123", protocol: TCP}
+          # Model/voice downloads when --voice/--model changes (cached on the PVC);
+          - toFQDNs:
+              - matchName: huggingface.co
+              - matchPattern: "*.hf.co"
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
     persistence:
       data:
         existingClaim: whisper-data

@@ -50,6 +50,8 @@ spec:
               tag: 2.5.2@sha256:7d39aafac409c2b6b09d999ed04d84c311d632e558b35baa60fad6aac722af7a
             env:
               HOME: /tmp
+              # onnxruntime >=1.30 ships 1DS telemetry on linux (mobile.events.data.microsoft.com)
+              ORT_DISABLE_TELEMETRY: 1
             args:
               - --voice
               - en_US-lessac-high
@@ -88,6 +90,26 @@ spec:
         ports:
           wyoming:
             port: 10200
+    networkpolicies:
+      piper:
+        type: cilium
+        controller: piper
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: home-assistant
+                  app.kubernetes.io/instance: home-assistant
+            toPorts:
+              - ports:
+                  - {port: "10200", protocol: TCP}
+        egress:
+          # Model/voice downloads when --voice/--model changes (cached on the PVC);
+          - toFQDNs:
+              - matchName: huggingface.co
+              - matchPattern: "*.hf.co"
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
     persistence:
       data:
         existingClaim: piper-data
