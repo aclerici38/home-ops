@@ -81,12 +81,3 @@ spec:
           - path: /etc/smartd.conf
             subPath: smartd.conf
             readOnly: true
-    networkpolicies:
-      smart-tester:
-        type: cilium
-        controller: smart-tester
-        # Talks to nothing; baseline CCNP still allows DNS/Prometheus.
-        ingress:
-          - {}
-        egress:
-          - {}
