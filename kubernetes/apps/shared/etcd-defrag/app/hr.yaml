@@ -1,0 +1,114 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.6/helmrelease_v2.json?values=app-template/5.3.0
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: etcd-defrag
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    controllers:
+      etcd-defrag:
+        type: cronjob
+        cronjob:
+          # Daily; most runs defrag nothing.
+          schedule: "15 5 * * *"
+          timeZone: America/Los_Angeles
+          concurrencyPolicy: Forbid
+          startingDeadlineSeconds: 300
+          successfulJobsHistory: 1
+          failedJobsHistory: 1
+          # Don't retry
+          backoffLimit: 0
+          activeDeadlineSeconds: 900
+        pod:
+          restartPolicy: Never
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile: {type: RuntimeDefault}
+        containers:
+          etcd-defrag:
+            image:
+              repository: mirror.gcr.io/library/busybox
+              tag: 1.37.0-musl@sha256:5cec3fc171c87218698e85a52af7087de727372aae264a787b8112901a5b0092
+            env:
+              PATH: /opt/talosctl:/bin
+              TALOSCONFIG: /var/run/secrets/talos.dev/config
+              NODES: ${ETCD_NODES}
+            command:
+              - sh
+              - -c
+            args:
+              - |
+                set -eu
+                # Fails if any member is unreachable
+                status=$(talosctl -n "$NODES" etcd status)
+                echo "$status"
+
+                # Defrag members using under half their db file (the alert's ratio), leader last.
+                # Columns: NODE MEMBER DB SIZE (2) IN USE (3, e.g. "102 MB (19.41%)") LEADER ...
+                for node in $(echo "$status" | awk 'NR > 1 {
+                  gsub(/[(%)]/, "", $7)
+                  if ($7 < 50) print ($2 == $8), $1
+                }' | sort | cut -d' ' -f2); do
+                  talosctl -n "$node" etcd defrag
+                  sleep 30
+                done
+
+                # No-op without alarms; etcd re-raises NOSPACE if still over quota
+                talosctl -n "$NODES" etcd alarm disarm
+                talosctl -n "$NODES" etcd status
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    persistence:
+      talosctl:
+        type: image
+        image: ghcr.io/siderolabs/talosctl:${TALOS_VERSION}
+        globalMounts:
+          - path: /opt/talosctl
+      talosconfig:
+        type: secret
+        name: etcd-defrag
+        defaultMode: 0440
+        globalMounts:
+          - path: /var/run/secrets/talos.dev
+    networkpolicies:
+      etcd-defrag:
+        type: cilium
+        controller: etcd-defrag
+        ingress:
+          - {}
+        egress:
+          # apid via the talos.default Service
+          - toEntities:
+              - host
+              - remote-node
+            toPorts:
+              - ports:
+                  - {port: "50000", protocol: TCP}
