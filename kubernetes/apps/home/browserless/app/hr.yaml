@@ -65,6 +65,32 @@ spec:
         ports:
           http:
             port: *port
+    networkpolicies:
+      browserless:
+        type: cilium
+        controller: browserless
+        ingress:
+          # open-webui's Playwright web loader
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: open-webui
+                  app.kubernetes.io/instance: open-webui
+            toPorts:
+              - ports:
+                  - {port: "3000", protocol: TCP}
+        egress:
+          # Headless Chromium against arbitrary public sites
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+                  - {port: "443", protocol: TCP}
+                  - {port: "443", protocol: UDP}
+        egressDeny:
+          # Keep the LAN out of reach (SSRF)
+          - toCIDRSet:
+              - cidrGroupRef: private-networks
     persistence:
       tmpfs:
         type: emptyDir
