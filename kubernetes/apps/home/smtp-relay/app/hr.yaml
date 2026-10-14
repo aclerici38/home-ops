@@ -67,6 +67,28 @@ spec:
             port: *metricsPort
           smtp:
             port: *smtpPort
+    networkpolicies:
+      smtp-relay:
+        type: cilium
+        controller: smtp-relay
+        ingress:
+          # Opt-in clients; egress side is the smtp-relay-clients CCNP.
+          - fromEndpoints:
+              - matchLabels:
+                  dormammu.internal/smtp-relay-client: "true"
+                matchExpressions:
+                  - key: k8s:io.kubernetes.pod.namespace
+                    operator: Exists
+            toPorts:
+              - ports:
+                  - {port: "25", protocol: TCP}
+        egress:
+          # Upstream submission (implicit TLS)
+          - toFQDNs:
+              - matchName: smtp.migadu.com
+            toPorts:
+              - ports:
+                  - {port: "465", protocol: TCP}
     serviceMonitor:
       smtp-relay:
         serviceName: smtp-relay
