@@ -27,6 +27,15 @@ spec:
     matchLabels:
       gateway.envoyproxy.io/owning-gateway-name: internal
       app.kubernetes.io/managed-by: envoy-gateway
+  # Off-cluster clients only from these VLANs + VPN
+  ingressDeny:
+    - fromCIDRSet:
+        - cidr: 0.0.0.0/0
+          except:
+            - 10.0.20.0/24
+            - 10.0.40.0/24
+            - 10.0.80.0/24
+            - 10.38.0.0/24
   egress:
     # rook-ceph dashboard (hostNetwork mgr)
     - toEntities:
