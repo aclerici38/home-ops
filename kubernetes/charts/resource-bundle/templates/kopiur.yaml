@@ -43,9 +43,8 @@ metadata:
 spec:
   {{- include "resources.mergeSpec" (list (include "resources.kopiur.pvcSpec" .) (dig "pvc" dict $spec)) | nindent 2 }}
 {{- end }}
-{{- /* Cilium clusters only (raphael has none). Allow-only: the app's own policy
-       decides whether the namespace is enforced; this keeps movers able to
-       reach their repository once it is. */}}
+{{- /* Cilium clusters only (raphael has none). Selects the movers alone, so it
+       is default-deny for them without touching the app's own pods. */}}
 {{- if .Capabilities.APIVersions.Has "cilium.io/v2/CiliumNetworkPolicy" }}
 ---
 apiVersion: cilium.io/v2

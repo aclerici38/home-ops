@@ -25,6 +25,9 @@ spec:
       enabled: true
       interval: 1h
   moverDefaults:
+    # Movers PATCH Snapshot/Restore status; apiserver egress via apiserver-clients
+    podLabels:
+      dormammu.internal/apiserver-client: "true"
     securityContext:
       runAsUser: 1000
       runAsGroup: 1000

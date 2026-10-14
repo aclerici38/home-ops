@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kopiur-movers
+spec:
+  # Maintenance, health-probe, bootstrap and delete Jobs
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/managed-by: kopiur
+  ingress:
+    - {}
+  egress:
+    - toFQDNs:
+        - matchName: s3.us-west-004.backblazeb2.com
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
