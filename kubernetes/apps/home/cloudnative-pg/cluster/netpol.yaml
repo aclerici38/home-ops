@@ -32,7 +32,8 @@ spec:
         - ports:
             - {port: "5432", protocol: TCP}
   egress:
-    # Streaming replication / pg_basebackup between instances and Jobs
+    # Streaming replication / pg_basebackup and instance manager status
+    # between instances and Jobs
     - toEndpoints:
         - matchLabels:
             cnpg.io/cluster: pg18
@@ -41,6 +42,7 @@ spec:
       toPorts:
         - ports:
             - {port: "5432", protocol: TCP}
+            - {port: "8000", protocol: TCP}
     # barman-cloud WAL archive + base backups (s3.clerici.tech -> versity)
     - toEndpoints:
         - matchLabels:

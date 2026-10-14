@@ -18,10 +18,12 @@ spec:
         - ports:
             - {port: "9443", protocol: TCP}
   egress:
-    # Instance manager status/control
+    # Instance manager status/control, for Clusters in any namespace
     - toEndpoints:
         - matchLabels:
             cnpg.io/podRole: instance
+          matchExpressions:
+            - {key: 'k8s:io.kubernetes.pod.namespace', operator: Exists}
       toPorts:
         - ports:
             - {port: "8000", protocol: TCP}
