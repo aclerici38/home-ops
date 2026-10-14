@@ -19,6 +19,8 @@ spec:
     remediation:
       retries: 1
   values:
+    podLabels:
+      dormammu.internal/apiserver-client: "true"
     crds:
       create: true
     replicaCount: 2

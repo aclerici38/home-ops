@@ -11,6 +11,9 @@ data:
       upgradeJob:
         enabled: true
         forceConflicts: true
+        podLabels:
+          app.kubernetes.io/component: crds-upgrade
+          dormammu.internal/apiserver-client: "true"
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
       enabled: true
@@ -27,9 +30,19 @@ data:
           component: kube-apiserver # etcd runs on control plane nodes
     kubeProxy:
       enabled: false
+    prometheusOperator:
+      podLabels:
+        dormammu.internal/apiserver-client: "true"
+      admissionWebhooks:
+        # Webhook certs from cert-manager instead of the create/patch hook Jobs
+        certManager:
+          enabled: true
     prometheus:
       prometheusSpec:
         version: v2.55.1 # bypass 'unsupported Prometheus version' error
+        podMetadata:
+          labels:
+            dormammu.internal/apiserver-client: "true"
         image:
           registry: ghcr.io
           repository: deckhouse/prompp
@@ -65,6 +78,8 @@ data:
               targetLabel: kubernetes_node
     kube-state-metrics:
       fullnameOverride: kube-state-metrics
+      podLabels:
+        dormammu.internal/apiserver-client: "true"
       metricLabelsAllowlist:
         - pods=[*]
         - deployments=[*]

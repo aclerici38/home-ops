@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: silence-operator
+spec:
+  # apiserver egress comes from the apiserver-clients CCNP
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: silence-operator
+      app.kubernetes.io/name: silence-operator
+  ingress:
+    - {}
+  egress:
+    # alertmanagerAddress
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-prometheus-stack
+            app.kubernetes.io/name: alertmanager
+      toPorts:
+        - ports:
+            - {port: "9093", protocol: TCP}

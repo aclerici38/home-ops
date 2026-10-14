@@ -76,6 +76,22 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      filebrowser:
+        type: cilium
+        controller: filebrowser
+        ingress:
+          # Route
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+        # OIDC egress comes from filebrowser-pocket-id; the media NFS mount is the node's
+        egress:
+          - {}
     persistence:
       database:
         existingClaim: filebrowser

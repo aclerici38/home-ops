@@ -20,6 +20,9 @@ spec:
       retries: 1
   values:
     installCRDs: true
+    global:
+      podLabels:
+        dormammu.internal/apiserver-client: "true"
     grafanaDashboard:
       enabled: true
     replicaCount: 2

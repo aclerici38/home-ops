@@ -72,6 +72,7 @@ spec:
               ocs plugins.classicwebcam.snapshot "http://octoprint-go2rtc:1984/api/frame.jpeg?src=printer"
               ocs plugins.classicwebcam.stream "https://printer-cam.clerici.tech/api/stream.mjpeg?src=printer"
               ocs serial.port /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0
+              ocs --bool plugins.tracking.enabled false
             env:
               OCTOPRINT_BASEDIR: /config
             securityContext: *sec
@@ -137,6 +138,61 @@ spec:
           - backendRefs:
               - identifier: go2rtc
                 port: *go2rtc
+    networkpolicies:
+      octoprint:
+        type: cilium
+        controller: octoprint
+        ingress:
+          # Route
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "5000", protocol: TCP}
+        egress:
+          # classicwebcam snapshots
+          - toControllers:
+              - go2rtc
+            toPorts:
+              - ports:
+                  - {port: "1984", protocol: TCP}
+          # Announcements and the plugin repository
+          - toFQDNs:
+              - matchName: octoprint.org
+              - matchName: plugins.octoprint.org
+              - matchName: github.com
+              - matchName: codeload.github.com
+              - matchName: release-assets.githubusercontent.com
+              - matchName: pypi.org
+              - matchName: files.pythonhosted.org
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
+      go2rtc:
+        type: cilium
+        controller: go2rtc
+        ingress:
+          # printer-cam route
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "1984", protocol: TCP}
+          - fromControllers:
+              - octoprint
+            toPorts:
+              - ports:
+                  - {port: "1984", protocol: TCP}
+        egress:
+          - toFQDNs:
+              - matchName: 3d-printer.security.internal
+            toPorts:
+              - ports:
+                  - {port: "554", protocol: TCP}
     configMaps:
       config:
         data:

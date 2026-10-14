@@ -36,6 +36,10 @@ spec:
     cnpg:
       mode: shared
       mtls: true
+      # Only the web pod; the collectors never touch postgres
+      podLabels:
+        app.kubernetes.io/instance: scrutiny
+        app.kubernetes.io/controller: scrutiny
     pocketId:
       callbackPaths:
         - /oauth2/callback

@@ -183,8 +183,34 @@ spec:
         type: cilium
         controller: versity
         ingress:
-          - fromEntities:
-              - all
+          # S3 clients reach s3.clerici.tech's LB IP
+          - fromEndpoints:
+              # barman-cloud WAL archive, base backups and recovery jobs
+              - matchExpressions:
+                  - {key: 'k8s:io.kubernetes.pod.namespace', operator: Exists}
+                  - {key: cnpg.io/cluster, operator: Exists}
+              # Movers, maintenance/probe jobs and kopia-server UIs
+              - matchLabels:
+                  app.kubernetes.io/managed-by: kopiur
+                matchExpressions:
+                  - {key: 'k8s:io.kubernetes.pod.namespace', operator: Exists}
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: open-webui
+                  app.kubernetes.io/instance: open-webui
+              # decomposeds3 blobs
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: opencloud
+                  app.kubernetes.io/instance: opencloud
+              # versity-s3 Service probe
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: gatus
+                  app.kubernetes.io/instance: gatus
+            toPorts:
+              - ports:
+                  - {port: "7070", protocol: TCP}
+          # LAN browsers (web UI calls S3 directly) and raphael's kopiur, via the LB
+          - fromCIDRSet:
+              - cidrGroupRef: private-networks
             toPorts:
               - ports:
                   - {port: "7070", protocol: TCP}
@@ -199,6 +225,19 @@ spec:
         # All egress is denied
         egress:
           - {}
+      kopiur:
+        type: cilium
+        endpointSelector:
+          matchLabels:
+            app.kubernetes.io/managed-by: kopiur
+        ingress:
+          - {}
+        egress:
+          - toFQDNs:
+              - matchName: s3.us-west-004.backblazeb2.com
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
     persistence:
       data:
         existingClaim: backups

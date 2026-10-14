@@ -149,6 +149,50 @@ spec:
           - backendRefs:
               - identifier: dashpanel
                 port: *dashport
+    networkpolicies:
+      poolcontroller:
+        type: cilium
+        controller: poolcontroller
+        ingress:
+          # dashPanel proxies the UI and socket.io to njspc
+          - fromControllers:
+              - dashpanel
+            toPorts:
+              - ports:
+                  - {port: "4200", protocol: TCP}
+        egress:
+          # EW11 RS-485 bridge
+          - toFQDNs:
+              - matchName: ew11.iot.internal
+            toPorts:
+              - ports:
+                  - {port: "8899", protocol: TCP}
+          # mqtt + homeAssistant bindings
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: mosquitto
+                  app.kubernetes.io/instance: mosquitto
+            toPorts:
+              - ports:
+                  - {port: "1883", protocol: TCP}
+      dashpanel:
+        type: cilium
+        controller: dashpanel
+        ingress:
+          # Route
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "5150", protocol: TCP}
+        egress:
+          - toControllers:
+              - poolcontroller
+            toPorts:
+              - ports:
+                  - {port: "4200", protocol: TCP}
     persistence:
       data:
         existingClaim: nodejs-poolcontroller

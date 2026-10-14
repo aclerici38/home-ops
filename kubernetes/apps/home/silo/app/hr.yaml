@@ -238,19 +238,20 @@ spec:
             toPorts:
               - ports:
                   - {port: "8080", protocol: TCP}
-          # Seerr library sync + media-server login
+          # Seerr library sync + media-server login, dashbrr health checks
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: media
                   app.kubernetes.io/instance: seerr
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: dashbrr
+                  app.kubernetes.io/instance: dashbrr
             toPorts:
               - ports:
                   - {port: "8096", protocol: TCP}
         egress:
-          - toEndpoints:
-              - matchLabels:
-                  app.kubernetes.io/instance: silo
-                  app.kubernetes.io/controller: transcode
+          - toControllers:
+              - transcode
             toPorts:
               - ports:
                   - {port: "8080", protocol: TCP}
@@ -275,14 +276,16 @@ spec:
             toPorts:
               - ports:
                   - {port: "443", protocol: TCP}
+        egressDeny:
+          # Keep the LAN out of reach; in-cluster peers above are pod identities
+          - toCIDRSet:
+              - cidrGroupRef: private-networks
       transcode:
         type: cilium
         controller: transcode
         ingress:
-          - fromEndpoints:
-              - matchLabels:
-                  app.kubernetes.io/instance: silo
-                  app.kubernetes.io/controller: silo
+          - fromControllers:
+              - silo
             toPorts:
               - ports:
                   - {port: "8080", protocol: TCP}

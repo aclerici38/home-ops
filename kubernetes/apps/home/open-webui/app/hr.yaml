@@ -35,21 +35,19 @@ spec:
               HOME: /app/backend
               ENABLE_PERSISTENT_CONFIG: false # always read env vars
               ENABLE_WEB_SEARCH: true
-              WEB_SEARCH_ENGINE: tavily
+              WEB_SEARCH_ENGINE: searxng
               WEB_SEARCH_RESULT_COUNT: 5
               WEB_SEARCH_CONCURRENT_REQUESTS: 3
               BYPASS_EMBEDDING_AND_RETRIEVAL: false
               RAG_FULL_CONTEXT: false
-              TASK_MODEL: llama3.2:3b
+              ENABLE_OLLAMA_API: false
+              OLLAMA_BASE_URL: http://127.0.0.1:11434
               # Title/tag/query generation for OpenAI-type connections.
               TASK_MODEL_EXTERNAL: qwen3-8b
               ENABLE_RAG_WEB_SEARCH: true
               ENABLE_SEARCH_QUERY: true
-              RAG_WEB_SEARCH_ENGINE: tavily
-              TAVILY_API_KEY:
-                secretKeyRef:
-                  name: open-webui
-                  key: TAVILY_API_KEY
+              RAG_WEB_SEARCH_ENGINE: searxng
+              SEARXNG_QUERY_URL: http://searxng.searxng.svc.cluster.local:8080/search?q=<query>
               WEB_LOADER_ENGINE: playwright
               PLAYWRIGHT_WS_URL: ws://browserless.browserless:3000/chromium/playwright
               WEBUI_URL: &url https://chat.clerici.tech
@@ -178,6 +176,70 @@ spec:
         parentRefs:
           - name: external
             namespace: envoy-gateway
+    networkpolicies:
+      open-webui:
+        type: cilium
+        controller: open-webui
+        # Postgres and OIDC egress come from open-webui-postgres/-pocket-id
+        ingress:
+          # Route
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+          # Webhook generators registering the MCP OAuth clients
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: external-secrets
+                  app.kubernetes.io/name: external-secrets
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+        egress:
+          # llm, mcp and todo (tududi) via the internal Gateway LB IP
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "10443", protocol: TCP}
+          # S3_ENDPOINT_URL
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: versity
+                  app.kubernetes.io/instance: versity
+                  app.kubernetes.io/controller: versity
+            toPorts:
+              - ports:
+                  - {port: "7070", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: tika
+                  app.kubernetes.io/instance: tika
+            toPorts:
+              - ports:
+                  - {port: "9998", protocol: TCP}
+          # Playwright web loader
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: browserless
+                  app.kubernetes.io/instance: browserless
+            toPorts:
+              - ports:
+                  - {port: "3000", protocol: TCP}
+          # Web search
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: searxng
+                  app.kubernetes.io/instance: searxng
+                  app.kubernetes.io/controller: searxng
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
     persistence:
       postgres-cert:
         type: secret

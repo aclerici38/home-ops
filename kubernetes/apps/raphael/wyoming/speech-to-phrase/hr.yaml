@@ -37,6 +37,8 @@ spec:
               tag: 1.4.3@sha256:e532f0dbc6b21285c4c784212003865b9167041927328a767cb0beb1a0beaa20
             env:
               HOME: /tmp
+              # onnxruntime >=1.30 ships 1DS telemetry on linux (mobile.events.data.microsoft.com)
+              ORT_DISABLE_TELEMETRY: 1
               TMPDIR: /tmp
               HASS_TOKEN:
                 valueFrom:

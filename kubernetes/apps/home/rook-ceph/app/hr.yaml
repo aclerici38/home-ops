@@ -18,7 +18,30 @@ spec:
     timeout: 5m
     remediation:
       retries: 1
+  # ceph-csi-operator subchart: no pod-label value, and an unconditional
+  # NetworkPolicy whose `egress: [{}]` (allow all) would union away netpol.yaml
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: ceph-csi-controller-manager
+            patch: |
+              - op: add
+                path: /spec/template/metadata/labels/dormammu.internal~1apiserver-client
+                value: "true"
+          - target:
+              kind: NetworkPolicy
+              name: ceph-csi-ceph-csi-controller-manager
+            patch: |
+              $patch: delete
+              apiVersion: networking.k8s.io/v1
+              kind: NetworkPolicy
+              metadata:
+                name: ceph-csi-ceph-csi-controller-manager
   values:
+    operatorPodLabels:
+      dormammu.internal/apiserver-client: "true"
     currentNamespaceOnly: true
     csi:
       installCsiOperator: true

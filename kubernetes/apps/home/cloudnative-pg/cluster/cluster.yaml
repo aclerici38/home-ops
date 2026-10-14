@@ -6,6 +6,10 @@ metadata:
   name: pg18
 spec:
   instances: 3
+  # Instance pods + Jobs: instance manager and barman sidecar use the apiserver
+  inheritedMetadata:
+    labels:
+      dormammu.internal/apiserver-client: "true"
   primaryUpdateStrategy: unsupervised
   primaryUpdateMethod: switchover
   enablePDB: true
@@ -127,6 +131,10 @@ spec:
   cluster:
     name: pg18
   instances: 2
+  template:
+    metadata:
+      labels:
+        dormammu.internal/apiserver-client: "true"
   type: rw
   pgbouncer:
     poolMode: transaction
@@ -163,6 +171,10 @@ spec:
   cluster:
     name: pg18
   instances: 2
+  template:
+    metadata:
+      labels:
+        dormammu.internal/apiserver-client: "true"
   type: rw
   pgbouncer:
     poolMode: session

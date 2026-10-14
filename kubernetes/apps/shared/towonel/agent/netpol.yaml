@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: towonel-agent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: towonel-agent
+      app.kubernetes.io/name: towonel-agent
+  ingress:
+    - {}
+  egress:
+    # services origin, and the hub API on cloud (CoreDNS rewrite)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: external
+      toPorts:
+        - ports:
+            - {port: "10443", protocol: TCP}
+    # Hub API (bootstrap)
+    - toFQDNs:
+        - matchName: towonel.cloud.clerici.tech
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+    # Edge on the cloud node: iroh-relay HTTPS + QAD, and the edge's iroh socket
+    # for the direct path
+    - toFQDNs:
+        - matchName: vps.clerici.tech
+      toPorts:
+        - ports:
+            - {port: "8444", protocol: TCP}
+            - {port: "7842", protocol: UDP}
+            - {port: "51820", protocol: UDP}

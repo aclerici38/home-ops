@@ -37,8 +37,12 @@ spec:
       enabled: true
       global:
         imageRegistry: ghcr.io
+      analytics:
+        enabled: false
       localpv:
         basePath: &hostPath /var/mnt/local-path
+        podLabels: &apiserver
+          dormammu.internal/apiserver-client: "true"
       hostpathClass:
         enabled: true
         name: openebs-hostpath
@@ -77,6 +81,7 @@ spec:
         image:
           registry: ghcr.io/
       zfsController:
+        podLabels: *apiserver
         snapshotController:
           enabled: false
       crds:

@@ -3,22 +3,17 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: pocket-id-operator
+  name: envoy-internal-mcp
 spec:
+  # The in-cluster MCP Backends are covered by the shared envoy-proxy policy
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/name: pocket-id-operator
-  ingress:
-    - {}
+      gateway.envoyproxy.io/owning-gateway-name: internal
+      app.kubernetes.io/managed-by: envoy-gateway
   egress:
-    - toEntities:
-        - kube-apiserver
-      toPorts:
-        - ports:
-            - {port: "6443", protocol: TCP}
-    # The home instance (PocketIDInstance external.url)
+    # raphael Backend
     - toFQDNs:
-        - matchName: id.clerici.tech
+        - matchName: raphael.living
       toPorts:
         - ports:
             - {port: "443", protocol: TCP}

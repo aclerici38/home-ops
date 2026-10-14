@@ -20,6 +20,8 @@ spec:
       retries: 1
   values:
     replicaCount: 2
+    podLabels:
+      dormammu.internal/apiserver-client: "true"
     servers:
       - zones:
           - zone: .

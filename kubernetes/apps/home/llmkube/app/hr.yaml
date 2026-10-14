@@ -23,6 +23,9 @@ spec:
       install: true
       keep: true
 
+    podLabels:
+      dormammu.internal/apiserver-client: "true"
+
     controllerManager:
       # Not needed for intel DRA
       driRenderGID: 0

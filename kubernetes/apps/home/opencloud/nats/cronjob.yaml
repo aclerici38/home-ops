@@ -16,6 +16,9 @@ spec:
       activeDeadlineSeconds: 600
       ttlSecondsAfterFinished: 7200
       template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: nats-opencloud-stream-replicas
         spec:
           restartPolicy: Never
           automountServiceAccountToken: false

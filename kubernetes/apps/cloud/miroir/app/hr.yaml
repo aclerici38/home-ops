@@ -19,6 +19,9 @@ spec:
     remediation:
       retries: 1
   values:
+    # Controller pod
+    podLabels:
+      dormammu.internal/apiserver-client: "true"
     logging:
       level: error
     drbd:

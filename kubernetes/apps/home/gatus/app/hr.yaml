@@ -43,6 +43,8 @@ spec:
       options:
         - name: ndots
           value: "1"
+    podLabels:
+      dormammu.internal/apiserver-client: "true"
     podSecurityContext:
       seccompProfile:
         type: RuntimeDefault

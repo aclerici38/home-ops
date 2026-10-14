@@ -144,6 +144,50 @@ spec:
           - backendRefs:
               - identifier: house
                 port: *port
+    networkpolicies:
+      cottage:
+        type: cilium
+        controller: cottage
+        ingress: &ingress
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+        egress:
+          # Coordinator (ember over TCP)
+          - toFQDNs:
+              - matchName: cottage-slzb-ultima3.iot.internal
+            toPorts: &adapterPorts
+              - ports:
+                  - {port: "6638", protocol: TCP}
+          - &mqtt
+            toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: mosquitto
+                  app.kubernetes.io/instance: mosquitto
+            toPorts:
+              - ports:
+                  - {port: "1883", protocol: TCP}
+          - &ota
+            # OTA index (Koenkk/zigbee-OTA) and the images it hosts
+            toFQDNs:
+              - matchName: raw.githubusercontent.com
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
+      house:
+        type: cilium
+        controller: house
+        ingress: *ingress
+        egress:
+          - toFQDNs:
+              - matchName: house-slzb-ultima3.iot.internal
+            toPorts: *adapterPorts
+          - *mqtt
+          - *ota
     persistence:
       data:
         existingClaim: zigbee2mqtt

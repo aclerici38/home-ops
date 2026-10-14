@@ -78,6 +78,30 @@ spec:
         ports:
           http:
             port: *port
+    networkpolicies:
+      tika:
+        type: cilium
+        controller: tika
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: open-webui
+                  app.kubernetes.io/instance: open-webui
+              # Full-text search extraction
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: opencloud
+                  app.kubernetes.io/instance: opencloud
+                matchExpressions:
+                  - key: app.kubernetes.io/controller
+                    operator: In
+                    values:
+                      - opencloud
+                      - search
+            toPorts:
+              - ports:
+                  - {port: "9998", protocol: TCP}
+        egress:
+          - {}
     persistence:
       tmp:
         type: emptyDir

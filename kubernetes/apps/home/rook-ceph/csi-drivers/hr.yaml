@@ -24,6 +24,19 @@ spec:
       retries: 1
   dependsOn:
     - name: rook-ceph
+  # The chart copies a fixed list of controllerPlugin fields and drops
+  # `labels`; apiserver egress for the ctrlplugins via the apiserver-clients CCNP
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: OperatorConfig
+              name: ceph-csi-operator-config
+            patch: |
+              - op: add
+                path: /spec/driverSpecDefaults/controllerPlugin/labels
+                value:
+                  dormammu.internal/apiserver-client: "true"
   values:
     operatorConfig:
       create: true

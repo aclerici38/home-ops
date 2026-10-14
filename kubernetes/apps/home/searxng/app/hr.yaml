@@ -89,6 +89,36 @@ spec:
         parentRefs:
           - name: external
             namespace: envoy-gateway
+    networkpolicies:
+      searxng:
+        type: cilium
+        controller: searxng
+        # Valkey egress comes from searxng-dragonfly-client
+        ingress:
+          - fromEndpoints:
+              # Route
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+              # open-webui web search (JSON API, passed by limiter.toml)
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: open-webui
+                  app.kubernetes.io/instance: open-webui
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+        egress:
+          # Search engines, autocomplete, favicons and the image proxy
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+                  - {port: "443", protocol: TCP}
+                  - {port: "443", protocol: UDP}
+        egressDeny:
+          - toCIDRSet:
+              - cidrGroupRef: private-networks
     persistence:
       config:
         type: configMap
@@ -96,11 +126,28 @@ spec:
         globalMounts:
           - path: /etc/searxng/settings.yml
             subPath: settings.yml
+          - path: /etc/searxng/limiter.toml
+            subPath: limiter.toml
       tmp:
         type: emptyDir
     configMaps:
       config:
         data:
+          # Pods are trusted proxies, so web users are limited by the client IP
+          # envoy appends to X-Forwarded-For (read right to left, spoof-safe).
+          # In-cluster API callers (open-webui) send no XFF and are passed.
+          limiter.toml: |-
+            [botdetection]
+            trusted_proxies = [
+              '${CLUSTER_POD_CIDR}',
+              '${CLUSTER_POD_CIDR_V6}',
+            ]
+
+            [botdetection.ip_lists]
+            pass_ip = [
+              '${CLUSTER_POD_CIDR}',
+              '${CLUSTER_POD_CIDR_V6}',
+            ]
           settings.yml: |-
             use_default_settings: true
 

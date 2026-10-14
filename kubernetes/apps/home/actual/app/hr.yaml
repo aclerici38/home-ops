@@ -83,6 +83,26 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      actual:
+        type: cilium
+        controller: actual
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "5006", protocol: TCP}
+        # OIDC egress comes from actual-pocket-id
+        egress:
+          # SimpleFIN bank sync
+          - toFQDNs:
+              - matchName: beta-bridge.simplefin.org
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
     persistence:
       data:
         existingClaim: actual

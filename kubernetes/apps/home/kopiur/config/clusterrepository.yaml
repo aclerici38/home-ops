@@ -31,6 +31,9 @@ spec:
   scheduleDefaults:
     timezone: America/Los_Angeles
   moverDefaults:
+    # Movers PATCH Snapshot/Restore status; apiserver egress via apiserver-clients
+    podLabels:
+      dormammu.internal/apiserver-client: "true"
     cache:
       mode: Persistent
       storageClassName: zfs-ssd

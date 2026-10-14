@@ -23,6 +23,8 @@ spec:
     controllers:
       dawarich:
         pod:
+          labels:
+            dormammu.internal/smtp-relay-client: "true"
           hostUsers: false
           securityContext:
             runAsNonRoot: true
@@ -186,6 +188,22 @@ spec:
         parentRefs:
           - name: external
             namespace: envoy-gateway
+    networkpolicies:
+      dawarich:
+        type: cilium
+        controller: dawarich
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "3000", protocol: TCP}
+        # Postgres, Dragonfly, OIDC and SMTP egress come from the dawarich-*
+        # policies and the smtp-relay-clients CCNP. No reverse geocoder is configured.
+        egress:
+          - {}
     persistence:
       postgres-cert:
         type: secret

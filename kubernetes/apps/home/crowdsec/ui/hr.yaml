@@ -41,6 +41,7 @@ spec:
               tag: 2026.10.5@sha256:54d048dcab5082c0e394f0d00caacaf292f8f042ee449b974f9a28d1a192e3b7
             env:
               CONFIG_UI_TIME_ZONE: ${TZ}
+              CONFIG_UPDATES_ENABLED: false
               CONFIG_INSTANCE_LAPI_URL: http://crowdsec-service:8080
               CONFIG_INSTANCE_LAPI_AUTH_USERNAME: crowdsec-web-ui
               CONFIG_INSTANCE_LAPI_AUTH_PASSWORD:
@@ -91,6 +92,27 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      crowdsec-ui:
+        type: cilium
+        controller: crowdsec-ui
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "3000", protocol: TCP}
+        # OIDC egress comes from crowdsec-ui-pocket-id.
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  k8s-app: crowdsec
+                  type: lapi
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
     persistence:
       data:
         existingClaim: crowdsec-ui

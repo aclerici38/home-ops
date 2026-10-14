@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: coredns
+spec:
+  # apiserver egress comes from the apiserver-clients CCNP; home's blocky
+  # upstream is in apps/home
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: coredns
+      app.kubernetes.io/name: coredns
+  ingress:
+    - fromEntities:
+        - all
+      toPorts:
+        - ports:
+            - {port: "53", protocol: ANY}
+  egress:
+    # Cloud's node resolver, and home's bootstrap / blocky-down fallback
+    - toCIDR:
+        - 1.1.1.1/32
+      toPorts:
+        - ports:
+            - {port: "53", protocol: ANY}

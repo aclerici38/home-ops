@@ -1,0 +1,71 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: external-secrets
+spec:
+  # controller, webhook and cert-controller; apiserver egress (incl. the
+  # cnpg-role-secrets kubernetes store) comes from the apiserver-clients CCNP
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: external-secrets
+  ingress:
+    - {}
+  egress:
+    - {}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: external-secrets-controller
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: external-secrets
+      app.kubernetes.io/name: external-secrets
+  egress:
+    # onepassword-connect ClusterSecretStore
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: onepassword-connect
+            app.kubernetes.io/instance: onepassword-connect
+      toPorts:
+        - ports:
+            - {port: "80", protocol: TCP}
+    # Webhook generators (home): machine tokens
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: pocket-id-operator
+            app.kubernetes.io/instance: pocket-id
+            app.kubernetes.io/managed-by: pocket-id-operator
+      toPorts:
+        - ports:
+            - {port: "1411", protocol: TCP}
+    # Webhook generators (home): MCP OAuth client registration
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: open-webui
+            app.kubernetes.io/instance: open-webui
+      toPorts:
+        - ports:
+            - {port: "8080", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: external-secrets-webhook
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: external-secrets
+      app.kubernetes.io/name: external-secrets-webhook
+  ingress:
+    # Validating webhooks (Service 443 -> 10250)
+    - fromEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - {port: "10250", protocol: TCP}

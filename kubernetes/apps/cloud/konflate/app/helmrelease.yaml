@@ -60,8 +60,7 @@ spec:
       serviceMonitor:
         enabled: true
     networkPolicy:
-      enabled: true
-      type: cilium
+      enabled: false
     resources:
       requests:
         cpu: 50m

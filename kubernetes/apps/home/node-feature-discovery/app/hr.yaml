@@ -15,7 +15,13 @@ spec:
   upgrade:
     timeout: 2m
   values:
+    master:
+      labels: &apiserver
+        dormammu.internal/apiserver-client: "true"
+    gc:
+      labels: *apiserver
     worker:
+      labels: *apiserver
       config:
         core:
           labelSources:

@@ -66,6 +66,34 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      blocky-ui:
+        type: cilium
+        controller: blocky-ui
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "3000", protocol: TCP}
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: blocky
+                  app.kubernetes.io/controller: blocky
+            toPorts:
+              - ports:
+                  - {port: "4000", protocol: TCP}
+          # blocky-ui read-only role; resource-bundle renders no egress for readers
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: cloudnative-pg
+                  cnpg.io/poolerName: pg18-pooler-mtls-rw
+            toPorts:
+              - ports:
+                  - {port: "5432", protocol: TCP}
     configMaps:
       config:
         data:

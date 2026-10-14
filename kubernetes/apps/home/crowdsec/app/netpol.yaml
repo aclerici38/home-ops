@@ -1,0 +1,104 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: crowdsec-lapi
+spec:
+  endpointSelector:
+    matchLabels:
+      k8s-app: crowdsec
+      type: lapi
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s-app: crowdsec
+            type: agent
+        - matchLabels:
+            k8s-app: crowdsec
+            type: appsec
+        - matchLabels:
+            app.kubernetes.io/instance: envoy-proxy-crowdsec-bouncer
+        - matchLabels:
+            app.kubernetes.io/instance: crowdsec-ui
+      toPorts:
+        - ports:
+            - {port: "8080", protocol: TCP}
+    # opnsense firewall bouncer via the LoadBalancer
+    - fromCIDR:
+        - ${NODE_GATEWAY}/32
+      toPorts:
+        - ports:
+            - {port: "8080", protocol: TCP}
+  egress:
+    # CAPI (community blocklists, signal sharing) and hub
+    - toFQDNs:
+        - matchName: api.crowdsec.net
+        - matchName: hub-data.crowdsec.net
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: crowdsec-agent
+spec:
+  endpointSelector:
+    matchLabels:
+      k8s-app: crowdsec
+      type: agent
+  ingress:
+    # opnsense/pf syslog via the LoadBalancer
+    - fromCIDR:
+        - ${NODE_GATEWAY}/32
+      toPorts:
+        - ports:
+            - {port: "514", protocol: UDP}
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s-app: crowdsec
+            type: lapi
+      toPorts:
+        - ports:
+            - {port: "8080", protocol: TCP}
+    # Hub collections/parsers installed at startup
+    - toFQDNs:
+        - matchName: hub-data.crowdsec.net
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: crowdsec-appsec
+spec:
+  endpointSelector:
+    matchLabels:
+      k8s-app: crowdsec
+      type: appsec
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: envoy-proxy-crowdsec-bouncer
+      toPorts:
+        - ports:
+            - {port: "7422", protocol: TCP}
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s-app: crowdsec
+            type: lapi
+      toPorts:
+        - ports:
+            - {port: "8080", protocol: TCP}
+    # Hub collections installed at startup
+    - toFQDNs:
+        - matchName: hub-data.crowdsec.net
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}

@@ -28,13 +28,6 @@ spec:
         - ports:
             - {port: "1411", protocol: TCP}
   egress:
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: smtp-relay
-            app.kubernetes.io/instance: smtp-relay
-      toPorts:
-        - ports:
-            - {port: "25", protocol: TCP}
     # Client logos (selfh.st icons), Claude Code CIMD metadata, usage heartbeat
     - toFQDNs:
         - matchName: cdn.jsdelivr.net
@@ -56,11 +49,6 @@ spec:
   ingress:
     - {}
   egress:
-    - toEntities:
-        - kube-apiserver
-      toPorts:
-        - ports:
-            - {port: "6443", protocol: TCP}
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/instance: pocket-id

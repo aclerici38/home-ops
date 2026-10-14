@@ -1,0 +1,58 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: envoy-gateway-ai
+spec:
+  # Additions to the shared envoy-gateway policy for the values in this ConfigMap
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: gateway-helm
+      control-plane: envoy-gateway
+  ingress:
+    # Rate limit service xDS
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: envoy-ratelimit
+      toPorts:
+        - ports:
+            - {port: "18001", protocol: TCP}
+  egress:
+    # extensionManager
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-ai-gateway
+            app.kubernetes.io/instance: ai-gateway
+            app.kubernetes.io/name: ai-gateway-helm
+      toPorts:
+        - ports:
+            - {port: "1063", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: envoy-ratelimit
+spec:
+  # Dragonfly egress comes from envoy-ratelimit-dragonfly-client
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: envoy-ratelimit
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: envoy
+            app.kubernetes.io/component: proxy
+            app.kubernetes.io/managed-by: envoy-gateway
+      toPorts:
+        - ports:
+            - {port: "8081", protocol: TCP}
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: gateway-helm
+            control-plane: envoy-gateway
+      toPorts:
+        - ports:
+            - {port: "18001", protocol: TCP}

@@ -20,6 +20,11 @@ spec:
       retries: 1
   values:
     installScope: cluster
+    # Controller; apiserver egress via the apiserver-clients CCNP
+    podLabels: &apiserverClient
+      dormammu.internal/apiserver-client: "true"
+    webhook:
+      podLabels: *apiserverClient
     replicaCount: 2
     workerThreads: 4
     logging:

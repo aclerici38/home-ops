@@ -80,6 +80,39 @@ spec:
           sync-udp:
             port: *syncPort
             protocol: UDP
+    networkpolicies:
+      syncthing:
+        type: cilium
+        controller: syncthing
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "8384", protocol: TCP}
+          # Peers dial in via sync.clerici.tech -> VPS -> towonel agent
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: towonel
+                  app.kubernetes.io/instance: towonel-agent
+                  app.kubernetes.io/name: towonel-agent
+            toPorts:
+              - ports:
+                  - {port: "22000", protocol: TCP}
+                  - {port: "22000", protocol: UDP}
+          # LAN peers via the sync LoadBalancer (externalTrafficPolicy Local keeps the client IP)
+          - fromCIDRSet:
+              - cidrGroupRef: private-networks
+            toPorts:
+              - ports:
+                  - {port: "22000", protocol: TCP}
+                  - {port: "22000", protocol: UDP}
+        # Discovery, relays, NAT and local announce are off in config.xml and every
+        # device address is dynamic, so it never dials out
+        egress:
+          - {}
     route:
       syncthing:
         hostnames:

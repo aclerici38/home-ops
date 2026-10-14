@@ -1,0 +1,109 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: prometheus
+spec:
+  # Route/adapter/mgr ingress is per-cluster; apiserver egress (service
+  # discovery) comes from the apiserver-clients CCNP
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus
+      operator.prometheus.io/name: kube-prometheus-stack
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: grafana-operator
+            app: grafana
+      toPorts:
+        - ports:
+            - {port: "9090", protocol: TCP}
+  egress:
+    # Scrape targets: any pod, plus hostNetwork exporters, kubelets and the
+    # control plane
+    - toEndpoints:
+        - matchExpressions:
+            - {key: 'k8s:io.kubernetes.pod.namespace', operator: Exists}
+    - toEntities:
+        - host
+        - remote-node
+        - kube-apiserver
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: alertmanager
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: alertmanager
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+            operator.prometheus.io/name: kube-prometheus-stack
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: grafana-operator
+            app: grafana
+      toPorts:
+        - ports:
+            - {port: "9093", protocol: TCP}
+  egress:
+    # discord receiver
+    - toFQDNs:
+        - matchName: discord.com
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: prometheus-operator
+spec:
+  # apiserver egress comes from the apiserver-clients CCNP
+  endpointSelector:
+    matchLabels:
+      app: kube-prometheus-stack-operator
+  ingress:
+    # PrometheusRule admission webhooks
+    - fromEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - {port: "10250", protocol: TCP}
+  egress:
+    - {}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kube-state-metrics
+spec:
+  # apiserver egress comes from the apiserver-clients CCNP
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: kube-state-metrics
+  ingress:
+    - {}
+  egress:
+    - {}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: crds-upgrade
+spec:
+  # CRD upgrade hook Job; apiserver egress comes from the apiserver-clients CCNP
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: crds-upgrade
+  ingress:
+    - {}
+  egress:
+    - {}

@@ -41,6 +41,8 @@ data:
       ui:
         enabled: true
         rollOutPods: true
+        podLabels:
+          dormammu.internal/apiserver-client: "true"
       metrics:
         enabled:
           - "dns:query"

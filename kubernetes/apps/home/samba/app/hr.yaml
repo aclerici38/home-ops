@@ -57,6 +57,19 @@ spec:
           smb:
             port: 445
             protocol: TCP
+    networkpolicies:
+      samba:
+        type: cilium
+        controller: samba
+        ingress:
+          # Time Machine from the house VLAN
+          - fromCIDR:
+              - 10.0.20.0/24
+            toPorts:
+              - ports:
+                  - {port: "445", protocol: TCP}
+        egress:
+          - {}
     persistence:
       config:
         type: configMap

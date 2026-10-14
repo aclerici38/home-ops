@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: rook-ceph-operator
+spec:
+  # apiserver egress comes from the apiserver-clients CCNP. Every Ceph daemon
+  # is hostNetwork (network.provider: host), so they are node entities.
+  endpointSelector:
+    matchLabels:
+      app: rook-ceph-operator
+  ingress:
+    - {}
+  egress:
+    # ceph CLI: mons (msgr2 only), then mgr/osd/mds commands
+    - toEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - {port: "3300", protocol: TCP}
+            - {port: "6800", endPort: 7568, protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: ceph-csi-operator
+spec:
+  # Only reconciles Driver/OperatorConfig objects (apiserver-clients CCNP)
+  endpointSelector:
+    matchLabels:
+      control-plane: ceph-csi-op-controller-manager
+  ingress:
+    - {}
+  egress:
+    - {}

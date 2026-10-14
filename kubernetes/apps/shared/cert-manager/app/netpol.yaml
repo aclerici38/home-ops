@@ -1,0 +1,59 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: cert-manager
+spec:
+  # controller, cainjector, webhook and the startupapicheck hook Job
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: cert-manager
+  ingress:
+    - {}
+  egress:
+    - {}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: cert-manager-controller
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: cert-manager
+      app.kubernetes.io/component: controller
+  egress:
+    # ACME orders + Cloudflare DNS01 records
+    - toFQDNs:
+        - matchName: acme-v02.api.letsencrypt.org
+        - matchName: api.cloudflare.com
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+    # dns01RecursiveNameservers (DoH) for the propagation self-check
+    - toCIDR:
+        - 1.1.1.1/32
+        - 1.0.0.1/32
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: cert-manager-webhook
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: cert-manager
+      app.kubernetes.io/component: webhook
+  ingress:
+    # Admission/conversion calls (Service 443 -> 10250)
+    - fromEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - {port: "10250", protocol: TCP}

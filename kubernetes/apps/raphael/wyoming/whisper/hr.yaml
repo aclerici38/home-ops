@@ -35,6 +35,8 @@ spec:
               tag: 3.8.1@sha256:ba6fcb6056ebe237d15a325381763a80af2fc8fcedaa04f6a714a7375eb20d80
             env:
               HOME: /tmp
+              # onnxruntime >=1.30 ships 1DS telemetry on linux (mobile.events.data.microsoft.com)
+              ORT_DISABLE_TELEMETRY: 1
               HF_HOME: /data
               # base.en loads via huggingface_hub, which probes the network
               # even when the model is already on the PVC. Bound that probe so

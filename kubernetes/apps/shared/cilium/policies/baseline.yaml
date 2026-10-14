@@ -5,17 +5,11 @@ kind: CiliumClusterwideNetworkPolicy
 metadata:
   name: baseline
 spec:
-  description: DNS to kube-dns and Prometheus scrapes for every pod outside kube-system/cilium
+  description: DNS to kube-dns and Prometheus scrapes for every pod
   enableDefaultDeny:
     ingress: false
     egress: false
-  endpointSelector:
-    matchExpressions:
-      - key: k8s:io.kubernetes.pod.namespace
-        operator: NotIn
-        values:
-          - kube-system
-          - cilium
+  endpointSelector: {}
   ingress:
     - fromEndpoints:
         - matchLabels:

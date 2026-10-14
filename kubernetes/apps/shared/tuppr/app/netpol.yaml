@@ -1,0 +1,59 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: tuppr
+spec:
+  # apiserver egress comes from the apiserver-clients CCNP
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: tuppr
+      app.kubernetes.io/name: tuppr
+  ingress:
+    # TalosUpgrade/KubernetesUpgrade validating webhooks
+    - fromEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - {port: "9443", protocol: TCP}
+  egress:
+    # Talos API (apid) on the nodes
+    - toEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - {port: "50000", protocol: TCP}
+    # Target installer image availability check
+    - toFQDNs:
+        - matchName: factory.talos.dev
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: tuppr-jobs
+spec:
+  # talos-upgrade / kubernetes-upgrade (talosctl) Jobs. tuppr sets their labels
+  # itself, so apiserver egress (upgrade-k8s) is granted here directly.
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: tuppr
+  ingress:
+    - {}
+  egress:
+    - toEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - {port: "50000", protocol: TCP}
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - {port: "6443", protocol: TCP}

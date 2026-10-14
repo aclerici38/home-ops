@@ -81,6 +81,21 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      atuin:
+        type: cilium
+        controller: atuin
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "8888", protocol: TCP}
+        # Postgres egress comes from atuin-postgres
+        egress:
+          - {}
     persistence:
       postgres-cert:
         type: secret

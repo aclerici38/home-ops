@@ -150,6 +150,76 @@ spec:
             backendRefs:
               - identifier: k8s
                 port: *port
+    networkpolicies:
+      blocky:
+        type: cilium
+        controller: blocky
+        # Postgres (query log) and Dragonfly egress come from blocky-postgres and
+        # blocky-dragonfly-client. Incoming DNS is open to everything; outgoing
+        # DNS only reaches the configured bootstrap/conditional servers.
+        ingress:
+          - fromEntities:
+              - all
+            toPorts:
+              - ports:
+                  - {port: "53", protocol: UDP}
+                  - {port: "53", protocol: TCP}
+                  - {port: "853", protocol: TCP}
+          # DoH via the Route, and blocky-ui's API calls
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+              - matchLabels:
+                  app.kubernetes.io/instance: blocky-ui
+            toPorts:
+              - ports:
+                  - {port: "4000", protocol: TCP}
+        egress:
+          # bootstrapDns
+          - toCIDR:
+              - 8.8.8.8/32
+              - 1.1.1.1/32
+              - 9.9.9.9/32
+              - 2620:fe::fe/128
+              - 2606:4700:4700::1111/128
+              - 2001:4860:4860::8888/128
+            toPorts:
+              - ports:
+                  - {port: "53", protocol: UDP}
+                  - {port: "53", protocol: TCP}
+          # conditional: house/.internal + PTR on opnsense
+          - toCIDR:
+              - ${NODE_GATEWAY}/32
+            toPorts:
+              - ports:
+                  - {port: "53", protocol: UDP}
+                  - {port: "53", protocol: TCP}
+          # Upstreams: DoQ (quad9, controld) and DoH (opendns, cloudflare), plus
+          # denylists. Resolved via bootstrapDns, never kube-dns, so no FQDN rules.
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
+                  - {port: "853", protocol: UDP}
+          # conditional: clerici.tech -> k8s-gateway
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: k8s-gateway
+            toPorts:
+              - ports:
+                  - {port: "1053", protocol: UDP}
+                  - {port: "1053", protocol: TCP}
+          # conditional: cluster.local + pod/service PTR -> CoreDNS
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: kube-system
+                  k8s-app: kube-dns
+            toPorts:
+              - ports:
+                  - {port: "53", protocol: UDP}
+                  - {port: "53", protocol: TCP}
     persistence:
       postgres-cert:
         type: secret

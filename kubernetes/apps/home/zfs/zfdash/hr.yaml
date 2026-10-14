@@ -66,6 +66,20 @@ spec:
         parentRefs:
           - name: internal
             namespace: envoy-gateway
+    networkpolicies:
+      zfdash:
+        type: cilium
+        controller: zfdash
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "5001", protocol: TCP}
+        egress:
+          - {}
     persistence:
       config:
         existingClaim: zfdash

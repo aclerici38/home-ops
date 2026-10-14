@@ -74,6 +74,9 @@ spec:
           cimdUrlAllowlist:
             - https://claude.ai/oauth/claude-code-client-metadata
           hostUsers: false
+          # Workload + pod; egress via the smtp-relay-clients CCNP
+          labels:
+            dormammu.internal/smtp-relay-client: "true"
           versionCheckDisabled: true
           fileBackend: database
           ui:

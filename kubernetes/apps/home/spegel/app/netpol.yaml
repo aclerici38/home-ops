@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: spegel
+spec:
+  # Nothing leaves the cluster.
+  # The post-delete cleanup hooks (component: cleanup*) are left unselected.
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: spegel
+      app.kubernetes.io/component: spegel
+  ingress:
+    # containerd mirror via hostPort 29999, NodePort 30021 fallback (may land on
+    # another node's spegel), and kubelet probes
+    - fromEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - {port: "5000", protocol: TCP}
+    # Peers: layer fetches + p2p router (TCP and QUIC)
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: spegel
+            app.kubernetes.io/component: spegel
+      toPorts:
+        - ports:
+            - {port: "5000", protocol: TCP}
+            - {port: "5001", protocol: TCP}
+            - {port: "5001", protocol: UDP}
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: spegel
+            app.kubernetes.io/component: spegel
+      toPorts:
+        - ports:
+            - {port: "5000", protocol: TCP}
+            - {port: "5001", protocol: TCP}
+            - {port: "5001", protocol: UDP}
