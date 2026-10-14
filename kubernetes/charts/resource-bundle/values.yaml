@@ -63,7 +63,7 @@
 # mqtt:                   # account on the shared pgmqtt broker; the broker's
 #                         # operator writes <app>-mqtt-credentials (username,
 #                         # password, host, port, uri, ws-port, ws-uri) here
-#   broker: pgmqtt        # broker release name (its pods' instance label)
+#   broker: pgmqtt        # broker release name (pods: instance=<broker>, component=broker)
 #   brokerNamespace: pgmqtt
 #   websocket: false      # also allow 8083 (MQTT over WebSocket)
 #   passwordFrom:         # take the password from 1Password instead, for apps

@@ -21,9 +21,27 @@ spec:
   dependsOn:
     - name: cloudnative-pg
       namespace: cloudnative-pg
+    - name: envoy-gateway
+      namespace: envoy-gateway
+    - name: pocket-id-operator
+      namespace: pocket-id-operator
   values:
     cnpg:
       mode: shared
       mtls: true
       # LISTEN/NOTIFY + session advisory locks
       poolMode: session
+      # The broker only, not the UI
+      podLabels:
+        app.kubernetes.io/instance: pgmqtt
+        app.kubernetes.io/component: broker
+    pocketId:
+      callbackPaths:
+        - /oauth2/callback
+      spec:
+        oidcClient:
+          secret:
+            keys:
+              clientID: client-id
+              clientSecret: client-secret
+    oidc: {}

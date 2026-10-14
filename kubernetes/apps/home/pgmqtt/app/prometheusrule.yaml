@@ -1,0 +1,133 @@
+---
+# Table-backed gauges (sessions, retained, ...) are the same cluster-wide value
+# on every pod, so only per-pod series like pgmqtt_connections are summed.
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.1/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: pgmqtt-rules
+spec:
+  groups:
+    - name: pgmqtt.rules
+      rules:
+        - alert: PgmqttUnavailable
+          expr: |-
+            kube_deployment_status_replicas_available{namespace="pgmqtt", deployment="pgmqtt"} == 0
+          for: 1m
+          annotations:
+            summary: >-
+              No pgmqtt broker replica is available
+            description: >-
+              Every MQTT client (zigbee2mqtt, frigate, Home Assistant, njspc) is
+              disconnected. Readiness pings Postgres, so check pg18 and the
+              pg18-pooler-mtls-session-rw pooler before the broker itself.
+          labels:
+            severity: critical
+
+        - alert: PgmqttTargetDown
+          expr: |-
+            up{job="pgmqtt"} == 0
+          for: 5m
+          annotations:
+            summary: >-
+              pgmqtt metrics target {{ $labels.pod }} is down
+          labels:
+            severity: warning
+
+        - alert: PgmqttClientsMissing
+          expr: |-
+            sum(pgmqtt_connections)
+              < max_over_time(sum(pgmqtt_connections)[6h:5m])
+          for: 15m
+          annotations:
+            summary: >-
+              pgmqtt has {{ $value }} clients connected, fewer than its 6h peak
+            description: >-
+              A client dropped off and hasn't come back. Check the broker logs for
+              "connect rejected" and the client's own logs. Resolves on its own
+              6h after a client is removed for good.
+          labels:
+            severity: warning
+
+        - alert: PgmqttTakeoverLoop
+          expr: |-
+            sum(increase(pgmqtt_takeovers_total[15m])) > 5
+          annotations:
+            summary: >-
+              pgmqtt clients keep displacing each other
+            description: >-
+              Two clients are probably sharing a client ID and kicking each
+              other off on every reconnect.
+          labels:
+            severity: warning
+
+        - alert: PgmqttSubscriberDisconnected
+          expr: |-
+            sum(increase(pgmqtt_quota_exceeded_total[15m])) > 0
+              or sum(increase(pgmqtt_rate_limited_total[15m])) > 0
+          annotations:
+            summary: >-
+              pgmqtt disconnected a client for exceeding its queue or rate limit
+            description: >-
+              A subscriber fell behind (quota) or a publisher went over
+              maxInboundMsgsPerSec (rate). That client is losing messages.
+          labels:
+            severity: warning
+
+        - alert: PgmqttDeliveriesDropped
+          expr: |-
+            sum by (reason) (increase(pgmqtt_deliveries_dropped_total[15m])) > 0
+          annotations:
+            summary: >-
+              pgmqtt dropped messages ({{ $labels.reason }})
+          labels:
+            severity: warning
+
+        - alert: PgmqttRetainedDispatchFailed
+          expr: |-
+            sum(increase(pgmqtt_retained_dispatch_failed_total[15m])) > 0
+          annotations:
+            summary: >-
+              pgmqtt failed to send retained messages on subscribe
+            description: >-
+              A subscriber (e.g. Home Assistant after a restart) missed retained
+              state such as discovery configs.
+          labels:
+            severity: warning
+
+        - alert: PgmqttSessionResumeFailing
+          expr: |-
+            sum(increase(pgmqtt_drain_session_queue_failures_total[15m])) > 0
+          annotations:
+            summary: >-
+              pgmqtt can't replay queued messages to reconnecting clients
+            description: >-
+              Usually Postgres is unreachable from the broker.
+          labels:
+            severity: warning
+
+        - alert: PgmqttNotifyBacklog
+          expr: |-
+            max(pgmqtt_pg_notify_queue_usage_ratio) > 0.5
+          for: 5m
+          annotations:
+            summary: >-
+              Postgres NOTIFY queue is {{ $value | humanizePercentage }} full
+            description: >-
+              Cross-pod fanout is backing up behind a slow LISTEN connection.
+              At 100% every publish fails.
+          labels:
+            severity: warning
+
+        - alert: PgmqttPostgresSlow
+          expr: |-
+            histogram_quantile(0.99, sum by (le) (rate(pgmqtt_pgx_acquire_seconds_bucket[5m]))) > 0.5
+          for: 10m
+          annotations:
+            summary: >-
+              pgmqtt waits {{ $value | humanizeDuration }} (p99) for a Postgres connection
+            description: >-
+              The broker's pool or the session pooler is saturated, or Postgres
+              is slow. Publishes and deliveries are delayed.
+          labels:
+            severity: warning

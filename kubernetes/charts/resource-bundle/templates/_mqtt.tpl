@@ -54,6 +54,7 @@ egress:
       - matchLabels:
           k8s:io.kubernetes.pod.namespace: {{ $i.namespace }}
           app.kubernetes.io/instance: {{ $i.broker }}
+          app.kubernetes.io/component: broker
     toPorts:
       - ports:
           {{- toYaml $i.ports | nindent 10 }}
@@ -66,6 +67,7 @@ egress:
 endpointSelector:
   matchLabels:
     app.kubernetes.io/instance: {{ $i.broker }}
+    app.kubernetes.io/component: broker
 enableDefaultDeny:
   ingress: false
   egress: false
