@@ -20,6 +20,17 @@ spec:
       retries: 1
   dependsOn:
     - name: towonel-operator-resources
+  # The chart has no pod-label value; apiserver egress via the apiserver-clients CCNP
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: towonel-operator
+            patch: |
+              - op: add
+                path: /spec/template/metadata/labels/dormammu.internal~1apiserver-client
+                value: "true"
   values:
     replicas: 1
     leaderElection:

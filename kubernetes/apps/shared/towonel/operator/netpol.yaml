@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: towonel-operator
+spec:
+  # apiserver egress comes from the apiserver-clients CCNP
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: towonel-operator
+      app.kubernetes.io/name: towonel-operator
+  ingress:
+    - {}
+  egress:
+    # Hub API (towonel.apiURL). Public on home; cloud's CoreDNS rewrites it to
+    # the external gateway Service.
+    - toFQDNs:
+        - matchName: towonel.cloud.clerici.tech
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: external
+      toPorts:
+        - ports:
+            - {port: "10443", protocol: TCP}

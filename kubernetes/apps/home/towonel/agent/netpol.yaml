@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: towonel-agent-home
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: towonel-agent
+      app.kubernetes.io/name: towonel-agent
+  egress:
+    # tcpServices/udpServices: syncthing
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: syncthing
+            app.kubernetes.io/instance: syncthing
+      toPorts:
+        - ports:
+            - {port: "22000", protocol: TCP}
+            - {port: "22000", protocol: UDP}
+    # udpServices: home-wireguard on opnsense
+    - toCIDR:
+        - 10.0.30.1/32
+      toPorts:
+        - ports:
+            - {port: "51823", protocol: UDP}
