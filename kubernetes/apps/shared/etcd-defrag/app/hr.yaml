@@ -64,16 +64,36 @@ spec:
 
                 # Defrag members using under half their db file (the alert's ratio), leader last.
                 # Columns: NODE MEMBER DB SIZE (2) IN USE (3, e.g. "102 MB (19.41%)") LEADER ...
-                for node in $(echo "$status" | awk 'NR > 1 {
+                # Decisions go to stderr, the node list to stdout.
+                nodes=$(echo "$status" | awk 'NR > 1 {
                   gsub(/[(%)]/, "", $7)
-                  if ($7 < 50) print ($2 == $8), $1
-                }' | sort | cut -d' ' -f2); do
+                  role = ($2 == $8) ? "leader" : "follower"
+                  action = ($7 < 50) ? "defrag" : "skip"
+                  printf "%s (%s): %s %s of %s %s in use (%s%%) -> %s\n", $1, role, $5, $6, $3, $4, $7, action > "/dev/stderr"
+                  if (action == "defrag") print ($2 == $8), $1
+                }' | sort | cut -d' ' -f2)
+
+                for node in $nodes; do
+                  log "defragmenting $node"
+                  start=$(date +%s)
                   talosctl -n "$node" etcd defrag
+                  log "defragmented $node in $(($(date +%s) - start))s, waiting 30s"
                   sleep 30
                 done
+                [ -n "$nodes" ] || log "nothing to defragment"
 
-                # No-op without alarms; etcd re-raises NOSPACE if still over quota
+                # alarm list prints nothing when there are none. Disarm is a no-op
+                # without alarms; etcd re-raises NOSPACE if a member is still over quota.
+                alarms=$(talosctl -n "$NODES" etcd alarm list)
+                if [ -n "$alarms" ]; then
+                  log "alarms, disarming:"
+                  echo "$alarms"
+                else
+                  log "no alarms"
+                fi
                 talosctl -n "$NODES" etcd alarm disarm
+
+                log "done"
                 talosctl -n "$NODES" etcd status
             resources:
               requests:
