@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: smartctl-exporter
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: smartctl-exporter
+      app.kubernetes.io/name: prometheus-smartctl-exporter
+  ingress:
+    - {}
+  egress:
+    - {}

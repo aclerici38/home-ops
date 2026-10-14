@@ -61,6 +61,15 @@ spec:
                 add:
                   - "SYS_RAWIO"
                   - "SYS_ADMIN"
+    networkpolicies:
+      smart-tester:
+        type: cilium
+        controller: smart-tester
+        # Only talks to local disks; no inbound or outbound traffic
+        ingress:
+          - {}
+        egress:
+          - {}
     defaultPodOptions:
       securityContext:
         seccompProfile: {type: RuntimeDefault}
