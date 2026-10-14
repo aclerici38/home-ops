@@ -135,6 +135,102 @@ spec:
           - backendRefs:
               - identifier: home-assistant
                 port: 8123
+    networkpolicies:
+      home-assistant:
+        type: cilium
+        controller: home-assistant
+        # Only eth0 is policed: the house/cottage/iot multus legs bypass Cilium
+        ingress:
+          # UI/companion apps (external), MCP backend (internal)
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  app.kubernetes.io/name: envoy
+                  app.kubernetes.io/component: proxy
+              # whisper --hass-api
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: wyoming
+                  app.kubernetes.io/instance: whisper
+            toPorts:
+              - ports:
+                  - {port: "8123", protocol: TCP}
+        egress:
+          - toCIDRSet:
+              - cidr: 0.0.0.0/0
+                except:
+                  - 0.0.0.0/8
+                  - 10.0.0.0/8
+                  - 100.64.0.0/10
+                  - 127.0.0.0/8
+                  - 169.254.0.0/16
+                  - 172.16.0.0/12
+                  - 192.168.0.0/16
+              - cidr: ::/0
+                except:
+                  - ::1/128
+                  - fc00::/7
+                  - fe80::/10
+          # hass.clerici.tech (self) and llm.clerici.tech via the Gateway LB IPs
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  app.kubernetes.io/name: envoy
+                  app.kubernetes.io/component: proxy
+            toPorts:
+              - ports:
+                  - {port: "10443", protocol: TCP}
+          # tplink_omada (omada-controller.clerici.tech LB IP)
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: omada-controller
+                  app.kubernetes.io/instance: omada-controller
+            toPorts:
+              - ports:
+                  - {port: "443", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: mosquitto
+                  app.kubernetes.io/instance: mosquitto
+            toPorts:
+              - ports:
+                  - {port: "1883", protocol: TCP}
+          # Frigate integration: API + RTSP restream
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: frigate
+                  app.kubernetes.io/instance: frigate
+            toPorts:
+              - ports:
+                  - {port: "5000", protocol: TCP}
+                  - {port: "8554", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: matter-server
+                  app.kubernetes.io/instance: matter-server
+            toPorts:
+              - ports:
+                  - {port: "5580", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: otbr
+                  app.kubernetes.io/instance: otbr
+            toPorts:
+              - ports:
+                  - {port: "8081", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: wyoming
+                  app.kubernetes.io/instance: whisper
+            toPorts:
+              - ports:
+                  - {port: "10300", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: wyoming
+                  app.kubernetes.io/instance: piper
+            toPorts:
+              - ports:
+                  - {port: "10200", protocol: TCP}
     persistence:
       config:
         existingClaim: home-assistant
