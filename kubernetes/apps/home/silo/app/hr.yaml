@@ -250,10 +250,8 @@ spec:
               - ports:
                   - {port: "8096", protocol: TCP}
         egress:
-          - toEndpoints:
-              - matchLabels:
-                  app.kubernetes.io/instance: silo
-                  app.kubernetes.io/controller: transcode
+          - toControllers:
+              - transcode
             toPorts:
               - ports:
                   - {port: "8080", protocol: TCP}
@@ -282,10 +280,8 @@ spec:
         type: cilium
         controller: transcode
         ingress:
-          - fromEndpoints:
-              - matchLabels:
-                  app.kubernetes.io/instance: silo
-                  app.kubernetes.io/controller: silo
+          - fromControllers:
+              - silo
             toPorts:
               - ports:
                   - {port: "8080", protocol: TCP}

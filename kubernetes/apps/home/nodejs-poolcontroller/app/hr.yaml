@@ -155,9 +155,8 @@ spec:
         controller: poolcontroller
         ingress:
           # dashPanel proxies the UI and socket.io to njspc
-          - fromEndpoints:
-              - matchLabels:
-                  app.kubernetes.io/controller: dashpanel
+          - fromControllers:
+              - dashpanel
             toPorts:
               - ports:
                   - {port: "4200", protocol: TCP}
@@ -189,9 +188,8 @@ spec:
               - ports:
                   - {port: "5150", protocol: TCP}
         egress:
-          - toEndpoints:
-              - matchLabels:
-                  app.kubernetes.io/controller: poolcontroller
+          - toControllers:
+              - poolcontroller
             toPorts:
               - ports:
                   - {port: "4200", protocol: TCP}

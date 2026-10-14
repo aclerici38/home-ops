@@ -189,15 +189,13 @@ spec:
               - ports:
                   - {port: "3000", protocol: TCP}
         egress:
-          - toEndpoints:
-              - matchLabels:
-                  app.kubernetes.io/controller: chrome
+          - toControllers:
+              - chrome
             toPorts:
               - ports:
                   - {port: "9222", protocol: TCP}
-          - toEndpoints:
-              - matchLabels:
-                  app.kubernetes.io/controller: meilisearch
+          - toControllers:
+              - meilisearch
             toPorts:
               - ports:
                   - {port: "7700", protocol: TCP}
@@ -216,9 +214,8 @@ spec:
         type: cilium
         controller: chrome
         ingress:
-          - fromEndpoints:
-              - matchLabels:
-                  app.kubernetes.io/controller: karakeep
+          - fromControllers:
+              - karakeep
             toPorts:
               - ports:
                   - {port: "9222", protocol: TCP}
@@ -236,9 +233,8 @@ spec:
         type: cilium
         controller: meilisearch
         ingress:
-          - fromEndpoints:
-              - matchLabels:
-                  app.kubernetes.io/controller: karakeep
+          - fromControllers:
+              - karakeep
             toPorts:
               - ports:
                   - {port: "7700", protocol: TCP}
