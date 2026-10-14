@@ -21,15 +21,15 @@ spec:
         - ports:
             - {port: "8080", protocol: TCP}
   egress:
-    # dns-resolver for HTTPRoute and travel/towonel probes; the dns rule lets
-    # those answers feed the toFQDNs below
+    # dns-resolver for HTTPRoute and travel/towonel probes (Service 53 -> 1053);
+    # the dns rule lets those answers feed the toFQDNs below
     - toEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: dns
             app.kubernetes.io/instance: k8s-gateway
       toPorts:
         - ports:
-            - {port: "53", protocol: ANY}
+            - {port: "1053", protocol: ANY}
           rules:
             dns:
               - matchPattern: "*"
