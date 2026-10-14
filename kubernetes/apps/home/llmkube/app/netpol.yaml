@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: llmkube-controller-manager
+spec:
+  # apiserver egress comes from the apiserver-clients CCNP
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: llmkube
+      app.kubernetes.io/name: llmkube
+      control-plane: controller-manager
+  ingress:
+    # Validating/mutating webhooks (Service 443 -> 9443)
+    - fromEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - {port: "9443", protocol: TCP}
+  egress:
+    # Model metadata for Model.spec.source
+    - toFQDNs:
+        - matchName: huggingface.co
+        - matchPattern: "**.hf.co"
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}

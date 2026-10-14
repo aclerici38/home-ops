@@ -201,8 +201,7 @@ spec:
           # Semantic search / classification models
           - toFQDNs:
               - matchName: huggingface.co
-              - matchPattern: "*.hf.co"
-              - matchPattern: "*.xethub.hf.co"
+              - matchPattern: "**.hf.co"
             toPorts:
               - ports:
                   - {port: "443", protocol: TCP}
