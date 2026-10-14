@@ -58,6 +58,8 @@ spec:
             args:
               - |
                 set -eu
+                log() { echo "[$(date +%T)] $*"; }
+
                 # Fails if any member is unreachable
                 status=$(talosctl -n "$NODES" etcd status)
                 echo "$status"
