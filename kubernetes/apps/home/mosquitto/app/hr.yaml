@@ -73,13 +73,38 @@ spec:
                 type: TCP
     service:
       mosquitto:
-        type: LoadBalancer
-        annotations:
-          lbipam.cilium.io/ips: "${MOSQUITTO_LB_IP}"
-          coredns.io/hostname: "mqtt.clerici.tech"
         ports:
           mqtt:
             port: 1883
+    networkpolicies:
+      mosquitto:
+        type: cilium
+        controller: mosquitto
+        ingress:
+          # Users in init-passwd
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: zigbee2mqtt
+                  app.kubernetes.io/instance: zigbee2mqtt
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: home-assistant
+                  app.kubernetes.io/instance: home-assistant
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: frigate
+                  app.kubernetes.io/instance: frigate
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: nodejs-poolcontroller
+                  app.kubernetes.io/instance: nodejs-poolcontroller
+            toPorts:
+              - ports:
+                  - {port: "1883", protocol: TCP}
+        egress:
+          # Victron bridge
+          - toFQDNs:
+              - matchName: einstein.bambi.internal
+            toPorts:
+              - ports:
+                  - {port: "1883", protocol: TCP}
     configMaps:
       config:
         data:
