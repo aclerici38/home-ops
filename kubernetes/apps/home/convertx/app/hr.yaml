@@ -91,6 +91,22 @@ spec:
           - backendRefs:
               - identifier: convertx
                 port: *port
+    networkpolicies:
+      convertx:
+        type: cilium
+        controller: convertx
+        ingress:
+          # Route (OIDC is enforced at the gateway)
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "3000", protocol: TCP}
+        # Converts locally; no outbound traffic
+        egress:
+          - {}
     persistence:
       tmpfs:
         type: emptyDir
