@@ -96,6 +96,28 @@ spec:
         parentRefs:
           - name: external
             namespace: envoy-gateway
+    networkpolicies:
+      collabora:
+        type: cilium
+        controller: collabora
+        ingress:
+          # Route
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "9980", protocol: TCP}
+        egress:
+          # aliasgroup1 WOPI host
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: opencloud
+                  app.kubernetes.io/controller: wopi
+            toPorts:
+              - ports:
+                  - {port: "9300", protocol: TCP}
     persistence:
       tmpfs:
         type: emptyDir

@@ -336,6 +336,92 @@ spec:
           - backendRefs:
               - identifier: wopi
                 port: 9300
+    networkpolicies:
+      opencloud:
+        type: cilium
+        controllers: &controllers
+          - opencloud
+          - idm
+          - search
+          - wopi
+        ingress:
+          - fromControllers: *controllers
+        egress:
+          - toControllers: *controllers
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: nats-opencloud
+                  app.kubernetes.io/name: nats
+            toPorts:
+              - ports:
+                  - {port: "4222", protocol: TCP}
+      proxy:
+        type: cilium
+        controller: opencloud
+        # SMTP egress comes from the smtp-relay-clients CCNP via the pod label
+        ingress:
+          # Route
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "9200", protocol: TCP}
+        egress:
+          # id.clerici.tech (OIDC) via the external Gateway LB IP
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "10443", protocol: TCP}
+          # decomposeds3 blobs
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: versity
+                  app.kubernetes.io/instance: versity
+                  app.kubernetes.io/controller: versity
+            toPorts:
+              - ports:
+                  - {port: "7070", protocol: TCP}
+          - toEndpoints: &tika
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: tika
+                  app.kubernetes.io/instance: tika
+            toPorts: &tikaPorts
+              - ports:
+                  - {port: "9998", protocol: TCP}
+      search:
+        type: cilium
+        controller: search
+        egress:
+          - toEndpoints: *tika
+            toPorts: *tikaPorts
+      wopi:
+        type: cilium
+        controller: wopi
+        ingress:
+          # Route, and Collabora calling back into the WOPI host
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+              - matchLabels:
+                  app.kubernetes.io/instance: collabora
+            toPorts:
+              - ports:
+                  - {port: "9300", protocol: TCP}
+        egress:
+          # Collabora discovery (collabora.clerici.tech) via the external Gateway
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: external
+            toPorts:
+              - ports:
+                  - {port: "10443", protocol: TCP}
     persistence:
       config:
         type: configMap
