@@ -123,8 +123,11 @@ spec:
     networkpolicies:
       mealie:
         type: cilium
-        endpointSelector: {}
+        controller: mealie
+        # Postgres and OIDC egress come from mealie-postgres/-pocket-id;
+        # FlareSolverr and SMTP from the *-clients CCNPs via the pod labels
         ingress:
+          # Route
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
@@ -133,14 +136,25 @@ spec:
               - ports:
                   - {port: "9000", protocol: TCP}
         egress:
-          - toEntities:
-              - cluster
+          # llm.clerici.tech via the internal Gateway LB IP
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts:
+              - ports:
+                  - {port: "10443", protocol: TCP}
+          # Recipe scraping and images from arbitrary sites
           - toEntities:
               - world
             toPorts:
               - ports:
                   - {port: "80", protocol: TCP}
                   - {port: "443", protocol: TCP}
+        egressDeny:
+          # Keep the LAN out of reach (SSRF)
+          - toCIDRSet:
+              - cidrGroupRef: private-networks
     persistence:
       postgres-cert:
         type: secret
