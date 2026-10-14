@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: pgmqtt
+spec:
+  # Client ingress comes from each client's <app>-mqtt (resource-bundle mqtt),
+  # Postgres egress from pgmqtt-postgres, apiserver egress from the
+  # apiserver-clients CCNP, DNS + Prometheus from the baseline CCNP.
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: pgmqtt
+      app.kubernetes.io/name: pgmqtt
+  enableDefaultDeny:
+    ingress: true
+    egress: true

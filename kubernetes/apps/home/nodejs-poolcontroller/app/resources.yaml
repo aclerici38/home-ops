@@ -19,8 +19,19 @@ spec:
   upgrade:
     timeout: 5m
   dependsOn:
+    - name: pgmqtt
+      namespace: pgmqtt
+    - name: external-secrets
+      namespace: external-secrets
     - name: kopiur
       namespace: kopiur
   values:
+    mqtt:
+      passwordFrom:
+        key: home-mosquitto
+        property: NJSPC_MQTT_PASS
+      spec:
+        user:
+          username: njspc
     kopiur:
       existingClaim: true

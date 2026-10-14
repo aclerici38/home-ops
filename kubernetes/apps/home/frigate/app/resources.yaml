@@ -19,6 +19,8 @@ spec:
   upgrade:
     timeout: 5m
   dependsOn:
+    - name: pgmqtt
+      namespace: pgmqtt
     - name: external-secrets
       namespace: external-secrets
     - name: intel-gpu-resource-driver
@@ -32,14 +34,9 @@ spec:
     - name: kopiur
       namespace: kopiur
   values:
+    mqtt: {}
     nfsGate: {}
-    externalSecret:
-      spec:
-        data:
-          - secretKey: FRIGATE_MQTT_PASS
-            remoteRef:
-              key: home-mosquitto
-              property: FRIGATE_MQTT_PASS
+    externalSecret: {}
     gpu: {}
     kopiur:
       existingClaim: true

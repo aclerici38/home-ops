@@ -40,14 +40,17 @@ spec:
                 ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: ember
                 ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE: 115200
                 # MQTT
-                ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://mosquitto.mosquitto.svc.cluster.local
+                ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://pgmqtt.pgmqtt.svc.cluster.local
                 ZIGBEE2MQTT_CONFIG_MQTT_VERSION: 5
                 ZIGBEE2MQTT_CONFIG_MQTT_INCLUDE_DEVICE_INFORMATION: true
-                ZIGBEE2MQTT_CONFIG_MQTT_USER: zigbee2mqtt
+                ZIGBEE2MQTT_CONFIG_MQTT_USER:
+                  secretKeyRef:
+                    name: zigbee2mqtt-mqtt-credentials
+                    key: username
                 ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD:
                   secretKeyRef:
-                    name: zigbee2mqtt
-                    key: MQTT_PASSWORD
+                    name: zigbee2mqtt-mqtt-credentials
+                    key: password
                 # Frontend
                 ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED: true
                 ZIGBEE2MQTT_CONFIG_FRONTEND_PORT: &port 8080
@@ -163,14 +166,6 @@ spec:
             toPorts: &adapterPorts
               - ports:
                   - {port: "6638", protocol: TCP}
-          - &mqtt
-            toEndpoints:
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: mosquitto
-                  app.kubernetes.io/instance: mosquitto
-            toPorts:
-              - ports:
-                  - {port: "1883", protocol: TCP}
           - &ota
             # OTA index (Koenkk/zigbee-OTA) and the images it hosts
             toFQDNs:
@@ -186,7 +181,6 @@ spec:
           - toFQDNs:
               - matchName: house-slzb-ultima3.iot.internal
             toPorts: *adapterPorts
-          - *mqtt
           - *ota
     persistence:
       data:

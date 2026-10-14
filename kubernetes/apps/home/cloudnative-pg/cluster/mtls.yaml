@@ -158,6 +158,10 @@ spec:
       client_tls_sslmode: verify-full
       server_tls_sslmode: verify-full
       server_tls_protocols: tlsv1.3
+      # pgmqtt always sends these Postgres settings when it connects, and
+      # pgbouncer drops any client that sends one it doesn't track. They only
+      # tune the Postgres<->pgbouncer socket, so ignoring them is harmless.
+      ignore_startup_parameters: tcp_keepalives_idle,tcp_keepalives_interval,tcp_keepalives_count
     pg_hba:
       - hostssl sameuser all all cert
       - host all all all reject

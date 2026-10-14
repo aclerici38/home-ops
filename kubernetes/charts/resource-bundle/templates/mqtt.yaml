@@ -1,0 +1,50 @@
+{{- /*
+  mqtt — an account on the shared pgmqtt broker. The User CR lives next to the
+  app so the broker's operator writes <app>-mqtt-credentials here, and both
+  halves of the network path render with it, so adding or removing a client
+  is one values key.
+*/}}
+{{- if hasKey .Values "mqtt" }}
+{{- $app := include "resources.app" . -}}
+{{- $spec := dig "spec" dict .Values.mqtt -}}
+{{- $i := fromYaml (include "resources.mqtt.ident" .) -}}
+---
+apiVersion: pgmqtt.io/v1alpha1
+kind: User
+metadata:
+  name: {{ $app }}
+spec:
+  {{- include "resources.mergeSpec" (list (include "resources.mqtt.userSpec" .) (dig "user" dict $spec)) | nindent 2 }}
+{{- if hasKey .Values.mqtt "passwordFrom" }}
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: {{ $app }}-mqtt-password
+  labels:
+    dormammu.internal/component: mqtt
+spec:
+  {{- include "resources.mergeSpec" (list (include "resources.mqtt.passwordSecretSpec" .) (dig "passwordSecret" dict $spec)) | nindent 2 }}
+{{- end }}
+{{- if .Capabilities.APIVersions.Has "cilium.io/v2/CiliumNetworkPolicy" }}
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: {{ $app }}-mqtt
+  labels:
+    dormammu.internal/component: mqtt
+spec:
+  {{- include "resources.mergeSpec" (list (include "resources.mqtt.networkPolicySpec" .) (dig "networkPolicy" dict $spec)) | nindent 2 }}
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: {{ $app }}-mqtt
+  namespace: {{ $i.namespace }}
+  labels:
+    dormammu.internal/component: mqtt
+spec:
+  {{- include "resources.mergeSpec" (list (include "resources.mqtt.brokerNetworkPolicySpec" .) (dig "brokerNetworkPolicy" dict $spec)) | nindent 2 }}
+{{- end }}
+{{- end }}

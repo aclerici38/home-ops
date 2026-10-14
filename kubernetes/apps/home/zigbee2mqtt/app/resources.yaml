@@ -19,16 +19,13 @@ spec:
   upgrade:
     timeout: 5m
   dependsOn:
+    - name: pgmqtt
+      namespace: pgmqtt
     - name: kopiur
       namespace: kopiur
   values:
+    mqtt: {}
     kopiur:
       existingClaim: true
       cephfs: true
-    externalSecret:
-      spec:
-        data:
-          - secretKey: MQTT_PASSWORD
-            remoteRef:
-              key: home-mosquitto
-              property: Z2M_MQTT_PASS
+    externalSecret: {}

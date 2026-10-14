@@ -60,6 +60,25 @@
 #     networkPolicy: {}   # shared, Cilium only: CiliumNetworkPolicy <app>-postgres
 #                         # (allow-only egress to the pooler from cnpg.podLabels)
 
+# mqtt:                   # account on the shared pgmqtt broker; the broker's
+#                         # operator writes <app>-mqtt-credentials (username,
+#                         # password, host, port, uri, ws-port, ws-uri) here
+#   broker: pgmqtt        # broker release name (its pods' instance label)
+#   brokerNamespace: pgmqtt
+#   websocket: false      # also allow 8083 (MQTT over WebSocket)
+#   passwordFrom:         # take the password from 1Password instead, for apps
+#     key: <app>          # that can't read a Secret; no credentials Secret then
+#     property: <field>   # REQUIRED
+#   podLabels:            # Cilium only: client pods given the path to the broker
+#                         # (default app.kubernetes.io/instance: <app>)
+#   spec:
+#     user: {}            # User (pgmqtt.io); username defaults to <app>
+#     passwordSecret: {}  # passwordFrom only: ExternalSecret <app>-mqtt-password
+#     networkPolicy: {}   # Cilium only: CiliumNetworkPolicy <app>-mqtt
+#                         # (allow-only egress to the broker from podLabels)
+#     brokerNetworkPolicy: {} # Cilium only: CiliumNetworkPolicy <app>-mqtt in
+#                         # brokerNamespace (ingress from podLabels)
+
 # dragonfly:
 #   extraArgs: []         # appended to the default args
 #   podLabels:            # Cilium only: client pods admitted on 6379 and given

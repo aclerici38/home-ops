@@ -42,6 +42,19 @@ spec:
               # FRIGATE_MEMRAY_MODULES: frigate.detector:openvino
               S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
               S6_READ_ONLY_ROOT: 1
+              # Substituted into mqtt: in config.yaml on the PVC
+              FRIGATE_MQTT_HOST:
+                secretKeyRef:
+                  name: frigate-mqtt-credentials
+                  key: host
+              FRIGATE_MQTT_USER:
+                secretKeyRef:
+                  name: frigate-mqtt-credentials
+                  key: username
+              FRIGATE_MQTT_PASSWORD:
+                secretKeyRef:
+                  name: frigate-mqtt-credentials
+                  key: password
             envFrom:
               - secretRef:
                   name: frigate
@@ -162,13 +175,6 @@ spec:
                   - {port: "5000", protocol: TCP}
                   - {port: "8554", protocol: TCP}
         egress:
-          - toEndpoints:
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: mosquitto
-                  app.kubernetes.io/instance: mosquitto
-            toPorts:
-              - ports:
-                  - {port: "1883", protocol: TCP}
           # go2rtc sources (config.yaml on the PVC): Dahua + Tapo + E1 Pro RTSP
           - toFQDNs:
               - matchName: gate.security.internal

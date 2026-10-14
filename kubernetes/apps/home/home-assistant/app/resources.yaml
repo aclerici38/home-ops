@@ -19,6 +19,8 @@ spec:
   upgrade:
     timeout: 5m
   dependsOn:
+    - name: pgmqtt
+      namespace: pgmqtt
     - name: external-secrets
       namespace: external-secrets
     - name: pocket-id-operator
@@ -26,6 +28,10 @@ spec:
     - name: kopiur
       namespace: kopiur
   values:
+    mqtt:
+      passwordFrom:
+        key: home-mosquitto
+        property: HASS_MQTT_PASS
     kopiur:
       existingClaim: true
       ignoreRules:
