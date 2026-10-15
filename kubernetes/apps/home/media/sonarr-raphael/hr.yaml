@@ -176,8 +176,13 @@ spec:
         globalMounts:
           - path: /tmp
             subPath: tmp
+      config:
+        type: persistentVolumeClaim
+        storageClass: ceph-filesystem
+        accessMode: ReadWriteMany
+        size: 5Gi
+        globalMounts:
           - path: /config
-            subPath: config
       media:
         type: persistentVolumeClaim
         storageClass: nfs-media
