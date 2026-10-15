@@ -211,6 +211,38 @@ spec:
             toPorts:
               - ports:
                   - {port: "443", protocol: TCP}
+    configMaps:
+      # temp until v0.19
+      # https://github.com/blakeblackshear/frigate/pull/24573 https://github.com/blakeblackshear/frigate/pull/24010
+      paho-select-fix:
+        data:
+          paho_select_fix.py: |
+            import selectors
+            import types
+
+            def _select(rlist, wlist, xlist, timeout=None):
+                events = {}
+                for obj in rlist:
+                    events[obj] = events.get(obj, 0) | selectors.EVENT_READ
+                for obj in wlist:
+                    events[obj] = events.get(obj, 0) | selectors.EVENT_WRITE
+                with selectors.DefaultSelector() as sel:
+                    for obj, mask in events.items():
+                        sel.register(obj, mask)
+                    ready = sel.select(timeout)
+                r = [key.fileobj for key, mask in ready if mask & selectors.EVENT_READ]
+                w = [key.fileobj for key, mask in ready if mask & selectors.EVENT_WRITE]
+                return r, w, []
+
+            try:
+                import paho.mqtt.client as _paho_client
+            except ImportError:
+                pass
+            else:
+                _paho_client.select = types.SimpleNamespace(select=_select)
+          # site.py executes `import` lines in .pth files at interpreter startup
+          paho-select-fix.pth: |
+            import paho_select_fix
     persistence:
       config:
         existingClaim: frigate
@@ -233,5 +265,15 @@ spec:
             # memray dumps are huge
             # - path: /config/memray_reports
             #   subPath: memray
+      paho-select-fix:
+        type: configMap
+        identifier: paho-select-fix
+        globalMounts:
+          - path: /usr/local/lib/python3.11/dist-packages/paho_select_fix.py
+            subPath: paho_select_fix.py
+            readOnly: true
+          - path: /usr/local/lib/python3.11/dist-packages/paho-select-fix.pth
+            subPath: paho-select-fix.pth
+            readOnly: true
   dependsOn:
     - name: frigate-resources
