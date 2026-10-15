@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumclusterwidenetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: default-deny
+spec:
+  # Pods fail closed with only the baseline allowed.
+  description: Default-deny ingress and egress for every pod outside flux-system
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  endpointSelector:
+    matchExpressions:
+      - key: k8s:io.kubernetes.pod.namespace
+        operator: NotIn
+        values:
+          - flux-system
+          - kube-system
+  ingress:
+    - {}
+  egress:
+    - {}
