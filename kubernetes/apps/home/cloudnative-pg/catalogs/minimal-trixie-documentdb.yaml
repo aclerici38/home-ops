@@ -5,14 +5,17 @@ kind: ClusterImageCatalog
 metadata:
   name: postgresql-minimal-trixie-documentdb
 spec:
+  componentImages:
+    - key: pgbouncer
+      image: ghcr.io/cloudnative-pg/pgbouncer:1.26.0@sha256:ce54f1133c509f1db8a8092c3f1c761d8c9292065ed6b6698786bb966da4dab9
   images:
     # DocumentDB doesn't immediately support new postgres versions apparently
     - major: 18
-      image: ghcr.io/cloudnative-pg/postgresql:18.4-minimal-trixie
+      image: ghcr.io/cloudnative-pg/postgresql:18.4-minimal-trixie@sha256:2cf8d1c297265331b8a81aefe5b7b397ddbb836e15eaa953543f6190e8dabf98
       extensions:
         - name: documentdb
           image:
-            reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:0.114.0
+            reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:0.114.0@sha256:4454f51ee33a2e2304c186eacfb339b4409b6bc7602c0fe3076f46c277ebe5e5
           dynamic_library_path:
             - "lib"
           extension_control_path:

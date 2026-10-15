@@ -112,6 +112,12 @@ template:
       dormammu.internal/apiserver-client: "true"
 type: rw
 pgbouncer:
+  {{- /* Same catalog as the cluster (spec.cluster.imageCatalogRef override included). */}}
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: {{ dig "spec" "cluster" "imageCatalogRef" "name" "postgresql-minimal-trixie" .Values.cnpg }}
+    key: pgbouncer
   {{- /* Also selects the shared-cluster pooler service in cnpg-shared.yaml. */}}
   poolMode: {{ dig "poolMode" "transaction" .Values.cnpg | quote }}
   parameters:

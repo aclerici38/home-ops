@@ -5,16 +5,19 @@ kind: ClusterImageCatalog
 metadata:
   name: postgresql-minimal-trixie
 spec:
+  componentImages:
+    - key: pgbouncer
+      image: ghcr.io/cloudnative-pg/pgbouncer:1.26.0@sha256:ce54f1133c509f1db8a8092c3f1c761d8c9292065ed6b6698786bb966da4dab9
   images:
     - major: 18
-      image: ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie
+      image: ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie@sha256:c9be7f221a05b18fe65259d9136affbabe3b39ad91c3b68f8f2f990a45f35f38
       extensions:
         - name: pgvector
           image:
-            reference: ghcr.io/cloudnative-pg/pgvector:0.8.6-18-trixie
+            reference: ghcr.io/cloudnative-pg/pgvector:0.8.6-18-trixie@sha256:2da4ddaf07cec8edf9ea265968c5368a5df4568737964d2a268d9843589e3e42
         - name: postgis
           image:
-            reference: ghcr.io/cloudnative-pg/postgis-extension:3.6.4-18-trixie
+            reference: ghcr.io/cloudnative-pg/postgis-extension:3.6.4-18-trixie@sha256:84a8e286d79aaec6fe824a792179d11252745a0d2b139d88692424fa61494df0
           ld_library_path:
             - system
           env:
@@ -24,14 +27,14 @@ spec:
               value: $${image_root}/share/proj
         - name: vchord
           image:
-            reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.1.1
+            reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.1.1@sha256:bdea43bed2a414e21bbf71767bf6f0739747ac480b267b51772dc214ac28dcb3
           dynamic_library_path:
             - /usr/lib/postgresql/18/lib
           extension_control_path:
             - /usr/share/postgresql/18/
         - name: documentdb
           image:
-            reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:0.114.0
+            reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:0.114.0@sha256:4454f51ee33a2e2304c186eacfb339b4409b6bc7602c0fe3076f46c277ebe5e5
           dynamic_library_path:
             - "lib"
           extension_control_path:

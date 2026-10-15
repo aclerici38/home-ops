@@ -82,6 +82,11 @@ spec:
         dormammu.internal/apiserver-client: "true"
   type: rw
   pgbouncer:
+    imageCatalogRef:
+      apiGroup: postgresql.cnpg.io
+      kind: ClusterImageCatalog
+      name: postgresql-minimal-trixie
+      key: pgbouncer
     poolMode: transaction
     # Custom certs turn off CNPG's password integration. pgbouncer logs in to
     # Postgres as the CN of serverTLSSecret (pgbouncer_mtls, allowed to act for
@@ -132,6 +137,11 @@ spec:
         dormammu.internal/apiserver-client: "true"
   type: rw
   pgbouncer:
+    imageCatalogRef:
+      apiGroup: postgresql.cnpg.io
+      kind: ClusterImageCatalog
+      name: postgresql-minimal-trixie
+      key: pgbouncer
     poolMode: session
     # Custom certs turn off CNPG's password integration. pgbouncer logs in to
     # Postgres as the CN of serverTLSSecret (pgbouncer_mtls, allowed to act for

@@ -137,6 +137,11 @@ spec:
         dormammu.internal/apiserver-client: "true"
   type: rw
   pgbouncer:
+    imageCatalogRef:
+      apiGroup: postgresql.cnpg.io
+      kind: ClusterImageCatalog
+      name: postgresql-minimal-trixie
+      key: pgbouncer
     poolMode: transaction
     parameters:
       default_pool_size: "30"
@@ -177,6 +182,11 @@ spec:
         dormammu.internal/apiserver-client: "true"
   type: rw
   pgbouncer:
+    imageCatalogRef:
+      apiGroup: postgresql.cnpg.io
+      kind: ClusterImageCatalog
+      name: postgresql-minimal-trixie
+      key: pgbouncer
     poolMode: session
     parameters:
       default_pool_size: "25"
