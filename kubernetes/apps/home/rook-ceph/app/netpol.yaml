@@ -43,11 +43,12 @@ kind: CiliumNetworkPolicy
 metadata:
   name: rook-ceph-detect-version
 spec:
-  # cmd-reporter job (`ceph --version`, result written to a ConfigMap). Rook
-  # hardcodes its pod labels, so it can't opt into the apiserver-clients CCNP.
+  # <controller>-detect-version cmd-reporter jobs (`ceph --version`, result
+  # written to a ConfigMap). Rook hardcodes their pod labels, so they can't opt
+  # into the apiserver-clients CCNP.
   endpointSelector:
-    matchLabels:
-      app: rook-ceph-detect-version
+    matchExpressions:
+      - {key: rook-version, operator: Exists}
   egress:
     - toEntities:
         - kube-apiserver
