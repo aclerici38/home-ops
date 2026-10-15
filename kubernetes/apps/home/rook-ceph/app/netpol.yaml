@@ -36,3 +36,21 @@ spec:
     - {}
   egress:
     - {}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.2/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: rook-ceph-detect-version
+spec:
+  # cmd-reporter job (`ceph --version`, result written to a ConfigMap). Rook
+  # hardcodes its pod labels, so it can't opt into the apiserver-clients CCNP.
+  endpointSelector:
+    matchLabels:
+      app: rook-ceph-detect-version
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - {port: "6443", protocol: TCP}
