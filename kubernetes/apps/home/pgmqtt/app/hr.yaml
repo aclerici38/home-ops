@@ -48,8 +48,8 @@ spec:
         instanceSelector:
           matchLabels:
             grafana.internal/instance: grafana
-            # MQTTX Web, a static SPA that connects back over wss://pgmqtt.clerici.tech/mqtt
-            ui:
-              enabled: true
-              securityContext:
-                readOnlyRootFilesystem: true
+    # MQTTX Web
+    ui:
+      enabled: true
+      securityContext:
+        readOnlyRootFilesystem: true
