@@ -10,8 +10,9 @@ spec:
     matchLabels:
       app.kubernetes.io/managed-by: kopiur
     matchExpressions:
-      # kopia-server UI Deployments are policied below
-      - {key: app.kubernetes.io/component, operator: DoesNotExist}
+      # kopia-server UI Deployments are policied below; maintenance Jobs carry
+      # component=maintenance, so match everything else rather than no label
+      - {key: app.kubernetes.io/component, operator: NotIn, values: [kopia-server]}
   ingress:
     - {}
   egress:

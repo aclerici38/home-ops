@@ -11,7 +11,10 @@ spec:
     ingress: true
     egress: true
   endpointSelector:
+    # All pods
     matchExpressions:
+      - key: k8s:io.kubernetes.pod.namespace
+        operator: Exists
       - key: k8s:io.kubernetes.pod.namespace
         operator: NotIn
         values:
