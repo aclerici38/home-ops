@@ -10,6 +10,10 @@ affinity:
   nodeSelector:
     storage.openebs.io/hostpath: "true"
 instances: {{ dig "instances" 3 $c }}
+# Instance pods + Jobs: instance manager and barman sidecar use the apiserver
+inheritedMetadata:
+  labels:
+    dormammu.internal/apiserver-client: "true"
 primaryUpdateStrategy: unsupervised
 primaryUpdateMethod: {{ ternary "restart" "switchover" $single }}
 enablePDB: {{ not $single }}
@@ -102,6 +106,10 @@ externalClusters:
 cluster:
   name: {{ $app }}-db
 instances: 1
+template:
+  metadata:
+    labels:
+      dormammu.internal/apiserver-client: "true"
 type: rw
 pgbouncer:
   {{- /* Also selects the shared-cluster pooler service in cnpg-shared.yaml. */}}

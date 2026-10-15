@@ -109,6 +109,94 @@ spec:
     matchLabels:
       cnpg.io/podRole: pooler
       cnpg.io/poolerName: {{ $app }}-pooler-rw
+{{- if .Capabilities.APIVersions.Has "cilium.io/v2/CiliumNetworkPolicy" }}
+{{- if $c.allowFrom }}{{ fail "cnpg.allowFrom is NetworkPolicy peer syntax; it has no Cilium equivalent here" }}{{- end }}
+---
+# Instances plus the cluster's join/recovery Jobs. Postgres is reachable only
+# from the pooler, the operator and the cluster's own pods. apiserver egress
+# comes from inheritedMetadata, Prometheus scrapes from the baseline CCNP.
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: {{ $app }}-db
+  labels:
+    dormammu.internal/component: cnpg
+spec:
+  endpointSelector:
+    matchLabels:
+      cnpg.io/cluster: {{ $app }}-db
+    matchExpressions:
+      - {key: cnpg.io/podRole, operator: NotIn, values: [pooler]}
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            cnpg.io/cluster: {{ $app }}-db
+          matchExpressions:
+            - {key: cnpg.io/podRole, operator: NotIn, values: [pooler]}
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: cloudnative-pg
+            app.kubernetes.io/name: cloudnative-pg
+      toPorts:
+        - ports:
+            - {port: "5432", protocol: TCP}
+            - {port: "8000", protocol: TCP}
+    - fromEndpoints:
+        - matchLabels:
+            cnpg.io/poolerName: {{ $app }}-pooler-rw
+      toPorts:
+        - ports:
+            - {port: "5432", protocol: TCP}
+  egress:
+    # Streaming replication / pg_basebackup and instance manager status
+    # between instances and Jobs
+    - toEndpoints:
+        - matchLabels:
+            cnpg.io/cluster: {{ $app }}-db
+          matchExpressions:
+            - {key: cnpg.io/podRole, operator: NotIn, values: [pooler]}
+      toPorts:
+        - ports:
+            - {port: "5432", protocol: TCP}
+            - {port: "8000", protocol: TCP}
+    {{- if $backup }}
+    # barman-cloud WAL archive, base backups and recovery (s3.clerici.tech -> versity)
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: versity
+            app.kubernetes.io/name: versity
+            app.kubernetes.io/controller: versity
+      toPorts:
+        - ports:
+            - {port: "7070", protocol: TCP}
+    {{- end }}
+---
+# Clients: any pod in the app's namespace. apiserver egress (pooler instance
+# manager) comes from the Pooler's template labels.
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: {{ $app }}-pooler-rw
+  labels:
+    dormammu.internal/component: cnpg
+spec:
+  endpointSelector:
+    matchLabels:
+      cnpg.io/poolerName: {{ $app }}-pooler-rw
+  ingress:
+    - fromEndpoints:
+        - {}
+      toPorts:
+        - ports:
+            - {port: "5432", protocol: TCP}
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            cnpg.io/cluster: {{ $app }}-db
+            cnpg.io/podRole: instance
+      toPorts:
+        - ports:
+            - {port: "5432", protocol: TCP}
+{{- else }}
 ---
 # Instances: Postgres is reachable only from the pooler, the operator and the
 # cluster's own pods (replicas, join/recovery Jobs).
@@ -182,4 +270,5 @@ spec:
               app.kubernetes.io/name: prometheus
       ports:
         - {port: 9127, protocol: TCP}
+{{- end }}
 {{- end }}
