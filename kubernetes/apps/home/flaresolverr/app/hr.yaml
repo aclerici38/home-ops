@@ -45,7 +45,7 @@ spec:
                 cpu: 500m
                 memory: 150Mi
               limits:
-                memory: 3Gi
+                memory: 4Gi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
@@ -53,6 +53,7 @@ spec:
                 drop:
                   - ALL
             probes:
+              # /health can stall
               liveness: &probes
                 enabled: true
                 custom: true
@@ -60,6 +61,9 @@ spec:
                   httpGet:
                     port: &port 8191
                     path: /health
+                  timeoutSeconds: 5
+                  periodSeconds: 20
+                  failureThreshold: 6
               readiness: *probes
     service:
       flaresolverr:
