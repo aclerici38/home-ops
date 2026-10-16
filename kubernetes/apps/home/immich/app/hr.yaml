@@ -126,6 +126,8 @@ spec:
             port: *port
           metrics-api:
             port: 8081
+          metrics-microservices:
+            port: 8082
       ml:
         controller: machine-learning
         ports:
@@ -136,6 +138,8 @@ spec:
         serviceName: immich-server
         endpoints:
           - port: metrics-api
+            scheme: http
+          - port: metrics-microservices
             scheme: http
     route:
       immich:
