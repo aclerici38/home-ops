@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.3/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: default
+spec:
+  description: Ad-hoc pods in default may reach the internet only; no cluster or private-network traffic
+  endpointSelector: {}
+  ingress:
+    - {}
+  egress:
+    - toEntities:
+        - world
+  egressDeny:
+    - toCIDRSet:
+        - cidrGroupRef: private-networks
