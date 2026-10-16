@@ -227,19 +227,6 @@ spec:
         # All egress is denied
         egress:
           - {}
-      kopiur:
-        type: cilium
-        endpointSelector:
-          matchLabels:
-            app.kubernetes.io/managed-by: kopiur
-        ingress:
-          - {}
-        egress:
-          - toFQDNs:
-              - matchName: s3.us-west-004.backblazeb2.com
-            toPorts:
-              - ports:
-                  - {port: "443", protocol: TCP}
     persistence:
       data:
         existingClaim: backups

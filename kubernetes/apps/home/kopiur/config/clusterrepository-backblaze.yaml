@@ -34,9 +34,11 @@ spec:
   scheduleDefaults:
     timezone: America/Los_Angeles
   moverDefaults:
-    # Movers PATCH Snapshot/Restore status; apiserver egress via apiserver-clients
+    # Movers PATCH Snapshot/Restore status; apiserver egress via apiserver-clients,
+    # B2 egress via backblaze-clients
     podLabels:
       dormammu.internal/apiserver-client: "true"
+      dormammu.internal/backblaze-client: "true"
     cache:
       mode: Ephemeral
       contentCacheSizeMb: 2000

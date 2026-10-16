@@ -87,8 +87,8 @@ credentialProjection:
 
 {{/* Default-deny for the movers only (never the app's pods): egress to the
      policy's repository and nothing else. DNS comes from the cluster baseline and
-     the apiserver (status PATCHes) from the ClusterRepository's
-     moverDefaults.podLabels + the apiserver-clients CCNP. s3.clerici.tech resolves
+     the apiserver (status PATCHes) and Backblaze from the ClusterRepository's
+     moverDefaults.podLabels + the apiserver-clients / backblaze-clients CCNPs. s3.clerici.tech resolves
      to versity's LB IP, which Cilium translates before policy, so it's matched as
      the versity pod, not by FQDN. */}}
 {{- define "resources.kopiur.networkPolicySpec" -}}
@@ -109,13 +109,8 @@ egress:
     toPorts:
       - ports:
           - {port: "7070", protocol: TCP}
-{{- else if eq $repo "backblaze" }}
-  - toFQDNs:
-      - matchName: s3.us-west-004.backblazeb2.com
-    toPorts:
-      - ports:
-          - {port: "443", protocol: TCP}
-{{- else if $override }}
+{{- else if or (eq $repo "backblaze") $override }}
+  {{- /* backblaze: the ClusterRepository's podLabels + the backblaze-clients CCNP */}}
   []
 {{- else }}
 {{- fail (printf "kopiur: no mover egress for repository %q; set kopiur.spec.networkPolicy.egress" $repo) }}
