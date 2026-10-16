@@ -38,8 +38,7 @@ spec:
       envoyService:
         externalTrafficPolicy: Local
   shutdown:
-    # Long enough for Jellyfin streams and websockets to finish on a rollout.
-    drainTimeout: 300s
+    drainTimeout: 60s
     minDrainDuration: 15s
   telemetry:
     metrics:

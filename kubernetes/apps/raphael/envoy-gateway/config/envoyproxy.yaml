@@ -30,7 +30,7 @@ spec:
       envoyService:
         externalTrafficPolicy: Local
   shutdown:
-    drainTimeout: 300s
+    drainTimeout: 60s
     minDrainDuration: 15s
   telemetry:
     # No Prometheus here, and every logged request is a write to the QLC drive.
