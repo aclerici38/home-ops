@@ -21,6 +21,21 @@ spec:
   dependsOn:
     - name: kopiur
       namespace: kopiur
+    - name: envoy-gateway
+      namespace: envoy-gateway
+    - name: pocket-id-operator
+      namespace: pocket-id-operator
   values:
     kopiur:
       cephfs: true
+    pocketId:
+      url: qbit.clerici.tech
+      callbackPaths:
+        - /oauth2/callback
+      spec:
+        oidcClient:
+          secret:
+            keys:
+              clientID: client-id
+              clientSecret: client-secret
+    oidc: {}
