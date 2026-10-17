@@ -41,6 +41,20 @@ spec:
             image:
               repository: ghcr.io/luigi311/jellyplex-watched
               tag: 8.5.3@sha256:e23a0d3dc686e4bbc9eeb655aeb96a2a1352bd2a26297ec77e06ef6f8eb2d5e1
+            # silo API keys only see their own user, and jellyplex-watched syncs every server pair
+            # (two silo keys share no users and abort the run), so sync raphael against one silo
+            # user at a time. SILO_USERS is "<user> <key>" per line, built from the 1Password item.
+            args:
+              - sh
+              - -c
+              - |
+                while read -r user key; do
+                  [ -n "$user" ] || continue
+                  echo "=== syncing $user"
+                  JELLYFIN_TOKEN="$RAPHAEL_API_KEY, $key" WHITELIST_USERS="$user" python -u main.py </dev/null
+                done <<EOF
+                $SILO_USERS
+                EOF
             env:
               DEBUG_LEVEL: INFO
               DRYRUN: "false"
@@ -53,19 +67,16 @@ spec:
               # Raphael's copies are separate arr grabs, so filenames never match
               GENERATE_GUIDS: "true"
               GENERATE_LOCATIONS: "false"
-              # Order here must match the token order in the jellyplex-watched secret.
+              # Order must match JELLYFIN_TOKEN in args: raphael, then home (silo).
               JELLYFIN_BASEURL: "http://jellyfin:8096, https://jellyfin.clerici.tech"
               SYNC_FROM_JELLYFIN_TO_JELLYFIN: "true"
               SYNC_FROM_JELLYFIN_TO_PLEX: "false"
               SYNC_FROM_JELLYFIN_TO_EMBY: "false"
-              WHITELIST_USERS: "Anthony,Melanie,Steve"
               WHITELIST_LIBRARY: "Movies,TV Shows"
               LIBRARY_MAPPING: '{"TV Shows": "TV"}'
-
-              JELLYFIN_TOKEN:
-                secretKeyRef:
+            envFrom:
+              - secretRef:
                   name: jellyplex-watched
-                  key: JELLYFIN_TOKEN
             resources:
               requests:
                 cpu: 25m
