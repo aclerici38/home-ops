@@ -10,12 +10,6 @@ data:
     controllers:
       main:
         replicas: 1
-        containers:
-          main:
-            image:
-              # Maybe bbr3 change, n0-computer/noq #800 / #819.
-              tag: 1.11.0
-              digest: sha256:f2e0d2bba2a30b85def3e7b6c110a74ad23c6be31697516225a42a8c999712c9
     defaultPodOptions:
       hostUsers: false
     agent:
