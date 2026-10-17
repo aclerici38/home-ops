@@ -79,7 +79,7 @@ spec:
                     path: /ping
                     port: *port
               readiness: *probes
-            securityContext:
+            securityContext: &containerSecurity
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
@@ -89,12 +89,52 @@ spec:
                 memory: 100Mi
               limits:
                 memory: 16Gi
+          exportarr:
+            image:
+              repository: ghcr.io/onedr0p/exportarr
+              tag: v2.3.0@sha256:af535d94061cf97a52e1661945ffba78c03f9443eae7c0da1a80a5a4be56b520
+            args:
+              - sonarr
+            env:
+              PORT: &metricsPort 9707
+              URL: http://localhost:8989
+              API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: sonarr
+                    key: SONARR__AUTH__APIKEY
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: *metricsPort
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
+            securityContext: *containerSecurity
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
     service:
       sonarr:
         controller: sonarr
         ports:
           http:
             port: *port
+          metrics:
+            port: *metricsPort
+    serviceMonitor:
+      sonarr:
+        serviceName: sonarr
+        endpoints:
+          - port: metrics
     route:
       sonarr:
         hostnames:
@@ -177,20 +217,26 @@ spec:
         type: secret
         name: sonarr-postgres-cert
         defaultMode: 0440
-        globalMounts:
-          - path: /var/run/secrets/postgresql
+        advancedMounts:
+          sonarr:
+            sonarr:
+              - path: /var/run/secrets/postgresql
       tmpfs:
         type: emptyDir
-        globalMounts:
-          - path: /tmp
-            subPath: tmp
+        advancedMounts:
+          sonarr:
+            sonarr:
+              - path: /tmp
+                subPath: tmp
       config:
         type: persistentVolumeClaim
         storageClass: ceph-filesystem
         accessMode: ReadWriteMany
         size: 5Gi
-        globalMounts:
-          - path: /config
+        advancedMounts:
+          sonarr:
+            sonarr:
+              - path: /config
       media:
         type: persistentVolumeClaim
         storageClass: nfs-media
@@ -198,7 +244,9 @@ spec:
         # Ignored
         size: 1Gi
         suffix: media
-        globalMounts:
-          - path: /allMedia
+        advancedMounts:
+          sonarr:
+            sonarr:
+              - path: /allMedia
   dependsOn:
     - name: sonarr-resources

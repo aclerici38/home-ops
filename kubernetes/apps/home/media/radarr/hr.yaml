@@ -61,7 +61,7 @@ spec:
                     path: /ping
                     port: *port
               readiness: *probes
-            securityContext:
+            securityContext: &containerSecurity
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
@@ -71,12 +71,52 @@ spec:
                 memory: 100Mi
               limits:
                 memory: 4Gi
+          exportarr:
+            image:
+              repository: ghcr.io/onedr0p/exportarr
+              tag: v2.3.0@sha256:af535d94061cf97a52e1661945ffba78c03f9443eae7c0da1a80a5a4be56b520
+            args:
+              - radarr
+            env:
+              PORT: &metricsPort 9707
+              URL: http://localhost:7878
+              API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr
+                    key: RADARR__AUTH__APIKEY
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: *metricsPort
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
+            securityContext: *containerSecurity
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
     service:
       radarr:
         controller: radarr
         ports:
           http:
             port: *port
+          metrics:
+            port: *metricsPort
+    serviceMonitor:
+      radarr:
+        serviceName: radarr
+        endpoints:
+          - port: metrics
     route:
       radarr:
         hostnames:
@@ -158,20 +198,26 @@ spec:
         type: secret
         name: radarr-postgres-cert
         defaultMode: 0440
-        globalMounts:
-          - path: /var/run/secrets/postgresql
+        advancedMounts:
+          radarr:
+            radarr:
+              - path: /var/run/secrets/postgresql
       tmpfs:
         type: emptyDir
-        globalMounts:
-          - path: /tmp
-            subPath: tmp
+        advancedMounts:
+          radarr:
+            radarr:
+              - path: /tmp
+                subPath: tmp
       config:
         type: persistentVolumeClaim
         storageClass: ceph-filesystem
         accessMode: ReadWriteMany
         size: 5Gi
-        globalMounts:
-          - path: /config
+        advancedMounts:
+          radarr:
+            radarr:
+              - path: /config
       media:
         type: persistentVolumeClaim
         storageClass: nfs-media
@@ -179,7 +225,9 @@ spec:
         # Ignored
         size: 1Gi
         suffix: media
-        globalMounts:
-          - path: /allMedia
+        advancedMounts:
+          radarr:
+            radarr:
+              - path: /allMedia
   dependsOn:
     - name: radarr-resources

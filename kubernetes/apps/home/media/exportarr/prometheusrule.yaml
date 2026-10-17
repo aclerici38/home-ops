@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.1/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: exportarr-rules
+spec:
+  groups:
+    - name: exportarr.rules
+      rules:
+        # importBlocked = needs manual import; failedPending/failed = failed-download handling stuck
+        - alert: ArrImportStuck
+          expr: |-
+            sum by (job, download_state, download_status) (
+              {__name__=~"(sonarr|radarr)_queue_total", download_state=~"importBlocked|failedPending|failed"}
+                or {__name__=~"(sonarr|radarr)_queue_total", download_status="error"}
+            ) > 0
+          for: 1h
+          annotations:
+            summary: >-
+              {{ $value }} {{ $labels.job }} queue item(s) stuck in {{ $labels.download_state }}
+              ({{ $labels.download_status }})
+          labels: &labels
+            severity: warning
+        # Queue status, not trackedDownloadStatus: "stalled with no connections" only shows up here
+        - alert: ArrDownloadsStalled
+          expr: |-
+            sum by (job) ({__name__=~"(sonarr|radarr)_queue_total", status="warning"}) > 0
+          for: 12h
+          annotations:
+            summary: >-
+              {{ $value }} {{ $labels.job }} download(s) stalled or warning for over 12h
+          labels: *labels
+        # Indexer failures are reported once, by prowlarr, and only the long-term (>6h) check:
+        # the short-term IndexerStatusCheck flaps with every transient indexer error
+        - alert: ArrHealthIssue
+          expr: |-
+            {__name__=~"(sonarr|radarr)_system_health_issues", source!~"IndexerStatusCheck|IndexerLongTermStatusCheck"} > 0
+              or prowlarr_system_health_issues{source!="IndexerStatusCheck"} > 0
+          for: 30m
+          annotations:
+            summary: >-
+              {{ $labels.job }} {{ $labels.source }}: {{ $labels.message }}
+          labels: *labels

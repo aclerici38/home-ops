@@ -67,7 +67,7 @@ spec:
                     path: /ping
                     port: *port
               readiness: *probes
-            securityContext:
+            securityContext: &containerSecurity
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
@@ -77,12 +77,52 @@ spec:
                 memory: 100Mi
               limits:
                 memory: 2Gi
+          exportarr:
+            image:
+              repository: ghcr.io/onedr0p/exportarr
+              tag: v2.3.0@sha256:af535d94061cf97a52e1661945ffba78c03f9443eae7c0da1a80a5a4be56b520
+            args:
+              - prowlarr
+            env:
+              PORT: &metricsPort 9707
+              URL: http://localhost:9696
+              API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: prowlarr
+                    key: PROWLARR__AUTH__APIKEY
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: *metricsPort
+              readiness:
+                enabled: false
+              startup:
+                enabled: false
+            securityContext: *containerSecurity
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
     service:
       prowlarr:
         controller: prowlarr
         ports:
           http:
             port: *port
+          metrics:
+            port: *metricsPort
+    serviceMonitor:
+      prowlarr:
+        serviceName: prowlarr
+        endpoints:
+          - port: metrics
     route:
       prowlarr:
         hostnames:
@@ -148,14 +188,18 @@ spec:
         type: secret
         name: prowlarr-postgres-cert
         defaultMode: 0440
-        globalMounts:
-          - path: /var/run/secrets/postgresql
+        advancedMounts:
+          prowlarr:
+            prowlarr:
+              - path: /var/run/secrets/postgresql
       tmpfs:
         type: emptyDir
-        globalMounts:
-          - path: /config
-            subPath: config
-          - path: /tmp
-            subPath: tmp
+        advancedMounts:
+          prowlarr:
+            prowlarr:
+              - path: /config
+                subPath: config
+              - path: /tmp
+                subPath: tmp
   dependsOn:
     - name: prowlarr-resources
