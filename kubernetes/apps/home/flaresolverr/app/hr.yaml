@@ -106,8 +106,14 @@ spec:
             {"BuiltInDnsClientEnabled": false, "DnsOverHttpsMode": "off"}
       chromium-flags:
         data:
-          zz-disable-background-networking: |-
+          # Every profile starts the user-policy FCM invalidation listeners (no switch/policy gate),
+          # which force a GCM checkin + MCS connect to mtalk.google.com:5228. Point GCM at a dead
+          # local port so checkin never succeeds and MCS is never attempted (no fallback with an override).
+          zz-local-flags: |-
             export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --disable-background-networking"
+            export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --gcm-checkin-url=http://127.0.0.1:9/"
+            export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --gcm-registration-url=http://127.0.0.1:9/"
+            export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --gcm-mcs-endpoint=https://127.0.0.1:9"
     persistence:
       chromium-policy:
         type: configMap
@@ -118,8 +124,8 @@ spec:
         type: configMap
         identifier: chromium-flags
         globalMounts:
-          - path: /etc/chromium.d/zz-disable-background-networking
-            subPath: zz-disable-background-networking
+          - path: /etc/chromium.d/zz-local-flags
+            subPath: zz-local-flags
             readOnly: true
       tmpfs:
         type: emptyDir
