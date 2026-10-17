@@ -201,6 +201,16 @@ spec:
           - backendRefs:
               - identifier: silo
                 port: *port
+      jellyfin:
+        hostnames:
+          - jellyfin.clerici.tech
+        parentRefs:
+          - name: external
+            namespace: envoy-gateway
+        rules:
+          - backendRefs:
+              - identifier: silo
+                port: *jfPort
     networkpolicies:
       silo:
         type: cilium
