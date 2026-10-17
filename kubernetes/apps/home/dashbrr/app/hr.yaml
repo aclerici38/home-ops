@@ -231,7 +231,7 @@ spec:
                 - name: Jellyfin
                   url: http://silo.silo.svc.cluster.local:8096
                   access_url: https://jellyfin.clerici.tech
-                  apikey: $${JELLYFIN_API_KEY}
+                  apikey: $${SILO_API_KEY}
               overseerr:
                 - name: Seerr
                   url: http://seerr.media.svc.cluster.local:5055
