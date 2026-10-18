@@ -1,0 +1,205 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.6/helmrelease_v2.json?values=app-template/5.3.0
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: scrutiny
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 10m
+  upgrade:
+    timeout: 10m
+  dependsOn:
+    - name: scrutiny-resources
+  values:
+    controllers:
+      scrutiny:
+        pod:
+          hostUsers: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile:
+              type: RuntimeDefault
+        initContainers:
+          # Native sidecar: up before the web container, and only reachable
+          # from inside this pod
+          influxdb:
+            restartPolicy: Always
+            image:
+              repository: mirror.gcr.io/library/influxdb
+              tag: 2.9.1-alpine@sha256:f551adeb94b6f97626d2043ec90ed17f81de18d15bb5412d2101e0965c93c797
+            env:
+              INFLUXD_REPORTING_DISABLED: true
+              INFLUXD_HTTP_BIND_ADDRESS: 127.0.0.1:8086
+              INFLUXD_LOG_LEVEL: error
+              # One SMART point an hour: keep it in the WAL-backed cache for a
+              # day instead of cutting a tiny TSM file (and compacting it) every
+              # 10 minutes
+              INFLUXD_STORAGE_CACHE_SNAPSHOT_WRITE_COLD_DURATION: 24h
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - influx
+                      - ping
+                      - --host
+                      - http://127.0.0.1:8086
+                  periodSeconds: 5
+                  failureThreshold: 60
+            securityContext: &sec
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+        containers:
+          scrutiny:
+            image:
+              repository: ghcr.io/starosdev/scrutiny
+              tag: 1.76.6-web@sha256:2f65aad129d28a94e8cc88d29181667cef0760e49f8b9612ece387acc1aaa543
+            env:
+              SCRUTINY_NO_LOGO: true
+              # INFO logs every request, probes included
+              SCRUTINY_LOG_LEVEL: WARN
+              # Matches the sidecar's bind; "localhost" can resolve to ::1
+              SCRUTINY_WEB_INFLUXDB_HOST: 127.0.0.1
+              SCRUTINY_WEB_MQTT_ENABLED: true
+              SCRUTINY_WEB_MQTT_BROKER: tcp://mosquitto.mosquitto.svc.cluster.local:1883
+              SCRUTINY_WEB_MQTT_USERNAME: scrutiny
+              SCRUTINY_WEB_MQTT_PASSWORD:
+                secretKeyRef:
+                  name: scrutiny
+                  key: MQTT_PASSWORD
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/health
+                    port: &port 8080
+              readiness: *probes
+            securityContext: *sec
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 256Mi
+      collector:
+        type: daemonset
+        pod:
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+        containers:
+          collector:
+            image:
+              repository: ghcr.io/starosdev/scrutiny
+              tag: 1.76.6-collector@sha256:5f4830a0be9d046c782e99e0b7e8ab49fa96246eec59a311ae9dfc9810441735
+            # The image's entrypoint rewrites /etc/cron.d and su's into cron,
+            # which needs a writable rootfs plus SETUID/SETGID. A plain loop
+            # needs neither; the first pass doubles as run-on-startup.
+            command:
+              - /bin/sh
+              - -c
+              - |
+                trap 'exit 0' TERM INT
+                while :; do
+                  "$0" run || echo "collector run failed: $?" >&2
+                  sleep "$INTERVAL" & wait $!
+                done
+            args:
+              - /opt/scrutiny/bin/scrutiny-collector-metrics
+            env:
+              INTERVAL: 3600
+              SCRUTINY_NO_LOGO: true
+              COLLECTOR_LOG_LEVEL: WARN
+              COLLECTOR_API_ENDPOINT: http://scrutiny:8080
+              COLLECTOR_PERFORMANCE_ENABLED: false
+              COLLECTOR_HOST_ID:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+            resources:
+              requests:
+                cpu: 10m
+                memory: 10Mi
+                devic.es/disks: 1
+              limits:
+                memory: 64Mi
+                devic.es/disks: 1
+            # smartctl needs root + SYS_ADMIN for NVMe admin commands (NVMe
+            # only here, so no SYS_RAWIO for SATA/SAS passthrough)
+            securityContext:
+              privileged: false
+              allowPrivilegeEscalation: false
+              runAsNonRoot: false
+              runAsUser: 0
+              runAsGroup: 0
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+                add:
+                  - SYS_ADMIN
+    service:
+      scrutiny:
+        controller: scrutiny
+        ports:
+          http:
+            port: *port
+    route:
+      scrutiny:
+        hostnames:
+          - scrutiny.raphael.living
+        parentRefs:
+          - name: internal
+            namespace: envoy-gateway
+    persistence:
+      influxdb:
+        existingClaim: scrutiny-influxdb
+        advancedMounts:
+          scrutiny:
+            influxdb:
+              - path: /var/lib/influxdb2
+      # SQLite (devices, settings, the 10s scheduler lease) stays in memory.
+      # Devices re-register on the next collector pass and history is matched
+      # by WWN, so a restart only resets UI settings to their defaults.
+      config:
+        type: emptyDir
+        medium: Memory
+        advancedMounts:
+          scrutiny:
+            scrutiny:
+              - path: /opt/scrutiny/config
+      tmp:
+        type: emptyDir
+        medium: Memory
+        globalMounts:
+          - path: /tmp
+      udev:
+        type: hostPath
+        hostPath: /run/udev
+        advancedMounts:
+          collector:
+            collector:
+              - path: /run/udev
+                readOnly: true

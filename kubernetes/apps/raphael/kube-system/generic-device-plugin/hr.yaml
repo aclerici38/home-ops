@@ -61,3 +61,9 @@ spec:
                   - count: 1
                     paths:
                       - path: /dev/serial/by-id/usb-SONOFF_SONOFF_Dongle_Lite_MG21_046deb1ea4a3ef1187ab4abd61ce3355-if00-port0
+              # NVMe controller char device, for the scrutiny collector's smartctl
+              - name: disks
+                groups:
+                  - count: 1
+                    paths:
+                      - path: /dev/nvme0
