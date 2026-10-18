@@ -22,20 +22,18 @@ spec:
           hostNetwork: true
           dnsPolicy: ClusterFirstWithHostNet
           securityContext:
-            runAsUser: 0
-            runAsGroup: 0
-            fsGroup: 0
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-            runAsNonRoot: false
-            seccompProfile: {type: Unconfined}
+            runAsNonRoot: true
+            seccompProfile: {type: RuntimeDefault}
         containers:
           home-assistant:
             image:
-              repository: ghcr.io/home-assistant/home-assistant
-              tag: 2026.10.2@sha256:33afb0659d786213264c2211f8d91c5fe87461c56eba6a3a546eb05fc71e89f4
+              repository: ghcr.io/home-operations/home-assistant
+              tag: 2026.10.2@sha256:0d289f21951f9ecf0bf8888089c6d43f379611c47fe84f13d3302e83daa3c8fa
             env:
-              S6_READ_ONLY_ROOT: true
-              S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
               CODE_SERVER_COOKIE:
                 valueFrom:
                   secretKeyRef:
@@ -46,15 +44,15 @@ spec:
                 cpu: 47m
               limits:
                 memory: 1Gi
+            # No NET_ADMIN/NET_RAW: they are never effective for a non-root process,
+            # so Bluetooth runs over BlueZ D-Bus in habluetooth's degraded mode
+            # (no automatic adapter recovery or mgmt advertisement side channel)
             securityContext:
-              allowPrivilegeEscalation: true
-              readOnlyRootFilesystem: false
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
-                add:
-                  - NET_RAW
-                  - NET_ADMIN
           code-server:
             image:
               repository: ghcr.io/coder/code-server
@@ -148,11 +146,7 @@ spec:
         type: emptyDir
         medium: Memory
         globalMounts:
-          - path: /.dockerenv
-            subPath: dockerenv
           - path: /config/logs
             subPath: logs
-          - path: /run
-            subPath: run
           - path: /tmp
             subPath: tmp
