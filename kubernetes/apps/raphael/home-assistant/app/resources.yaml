@@ -27,6 +27,7 @@ spec:
       ignoreRules:
         - /backups
         - /home-assistant_v2.db*
+        - /.venv
       spec:
         policy:
           repository:
@@ -34,6 +35,3 @@ spec:
           volumeSnapshotClassName: miroir
           upload:
             maxParallelFileReads: 1
-      # Custom integration deps; the image rebuilds the venv on every HA version
-      ignoreRules:
-        - /.venv
