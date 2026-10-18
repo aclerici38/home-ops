@@ -116,15 +116,22 @@ spec:
               tag: 1.76.7-collector@sha256:9d69569e54025639af08cc5fb5c28c3103a2d94a24a914b1e1fa2fb72a1e28a0
             # The image's entrypoint rewrites /etc/cron.d and su's into cron,
             # which needs a writable rootfs plus SETUID/SETGID. A plain loop
-            # needs neither; the first pass doubles as run-on-startup.
+            # needs neither; the first pass doubles as run-on-startup. A failed
+            # pass (e.g. web not up yet after a rollout) retries after a minute
+            # instead of leaving the in-memory device list empty for an hour.
             command:
               - /bin/sh
               - -c
               - |
                 trap 'exit 0' TERM INT
                 while :; do
-                  "$0" run || echo "collector run failed: $?" >&2
-                  sleep "$INTERVAL" & wait $!
+                  if "$0" run; then
+                    delay="$INTERVAL"
+                  else
+                    echo "collector run failed: $?" >&2
+                    delay=60
+                  fi
+                  sleep "$delay" & wait $!
                 done
             args:
               - /opt/scrutiny/bin/scrutiny-collector-metrics
