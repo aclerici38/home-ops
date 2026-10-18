@@ -22,6 +22,9 @@ spec:
     deployment:
       replicas: 1
       envoyGateway:
+        # No leader election
+        strategy:
+          type: Recreate
         resources:
           requests:
             cpu: 25m
@@ -30,6 +33,11 @@ spec:
             memory: 512Mi
     config:
       envoyGateway:
+        provider:
+          kubernetes:
+            # Single node
+            leaderElection:
+              disable: true
         extensionApis:
           # Gates the Backend CRD the OIDC SecurityPolicies resolve pocket-id
           # through. EnvoyPatchPolicy stays off: it injects arbitrary xDS.

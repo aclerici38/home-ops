@@ -124,3 +124,24 @@ spec:
         target:
           kind: Deployment
           name: kustomize-controller
+      - # Single node
+        # later flag overrides the default --enable-leader-election.
+        patch: |-
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --enable-leader-election=false
+        target:
+          kind: Deployment
+          name: "(source-controller|kustomize-controller|helm-controller|notification-controller)"
+      - patch: |-
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: all
+          spec:
+            strategy:
+              $patch: replace
+              type: Recreate
+        target:
+          kind: Deployment
+          name: "(kustomize-controller|helm-controller|notification-controller)"

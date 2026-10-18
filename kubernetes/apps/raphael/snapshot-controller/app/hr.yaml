@@ -16,6 +16,17 @@ spec:
     timeout: 10m
   values:
     replicaCount: 1
+    # Single node
+    controller:
+      leaderElection:
+        enabled: false
+    # /healthz/leader-election only exists with leader election on.
+    livenessProbe:
+      httpGet:
+        path: /metrics
+    readinessProbe:
+      httpGet:
+        path: /metrics
     resources:
       requests:
         cpu: 10m

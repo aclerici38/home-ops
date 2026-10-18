@@ -16,8 +16,28 @@ spec:
     timeout: 10m
   dependsOn:
     - name: towonel-operator-resources
+  # The chart hardcodes RollingUpdate; without leader election a surge pod
+  # would reconcile alongside the old one.
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: towonel-operator
+            patch: |-
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: towonel-operator
+              spec:
+                strategy:
+                  $patch: replace
+                  type: Recreate
   values:
     replicas: 1
+    # Single node
+    leaderElection:
+      enabled: false
     towonel:
       apiURL: https://towonel.cloud.clerici.tech
     credentials:

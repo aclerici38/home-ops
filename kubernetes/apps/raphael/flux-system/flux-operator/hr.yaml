@@ -16,6 +16,11 @@ spec:
     timeout: 10m
   values:
     installCRDs: true
+    # Single node
+    extraArgs:
+      - --enable-leader-election=false
+    strategy:
+      type: Recreate
     securityContext:
       runAsNonRoot: true
       readOnlyRootFilesystem: true
