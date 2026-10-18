@@ -53,7 +53,7 @@ spec:
           silo:
             image: &image
               repository: ghcr.io/silo-server/silo-server
-              tag: latest@sha256:983d6bf3ee570277091ad38fcf99b044f41e87658a57c4327de4e13bfbfaca2b
+              tag: latest@sha256:80f2173c611edd59909718485351f39828c72b93e00c588844a7f8f589a91b0c
             env: &env
               PORT: &port 8080
               # Jellyfin/Emby compatibility listener
