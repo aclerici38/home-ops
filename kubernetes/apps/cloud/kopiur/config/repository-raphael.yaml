@@ -2,32 +2,37 @@
 apiVersion: kopiur.home-operations.com/v1alpha1
 kind: Repository
 metadata:
-  name: versity-raphael
+  name: backblaze-raphael
 spec:
   backend:
     s3:
-      bucket: kopiur
+      bucket: kopia-k8s
       prefix: raphael/
-      endpoint: s3.clerici.tech
-      region: us-east-1
+      endpoint: s3.us-west-004.backblazeb2.com
+      region: us-west-004
       auth:
         secretRef:
-          name: kopiur-versity
+          name: kopiur-backblaze
   encryption:
     passwordSecretRef:
-      name: kopiur-versity
+      name: kopiur-backblaze
       key: KOPIA_PASSWORD
   # Raphael owns this repository's lifecycle; never bootstrap it from here.
   create:
     enabled: false
+  bootstrap:
+    failurePolicy:
+      activeDeadlineSeconds: 900
   health:
     probe:
       enabled: true
       interval: 1h
   moverDefaults:
-    # Movers PATCH Snapshot/Restore status; apiserver egress via apiserver-clients
+    # Movers PATCH Snapshot/Restore status; apiserver egress via apiserver-clients,
+    # B2 egress via backblaze-clients
     podLabels:
       dormammu.internal/apiserver-client: "true"
+      dormammu.internal/backblaze-client: "true"
     securityContext:
       runAsUser: 1000
       runAsGroup: 1000
@@ -45,16 +50,14 @@ spec:
     schedule:
       timezone: America/Los_Angeles
       quick:
-        cron: "0 */6 * * *"
+        cron: "0 */12 * * *"
         jitter: 1h
-      # Offset from versity (05:00) and backblaze (06:00 Sun).
+      # Offset from cloud's own backblaze full (07:00 Sun).
       full:
-        cron: "0 3 * * *"
-        jitter: 30m
+        cron: "0 5 * * 0"
+        jitter: 1h
     mover:
       cache:
-        mode: Persistent
-        storageClassName: zfs-ssd
-        capacity: 5Gi
+        mode: Ephemeral
         contentCacheSizeMb: 500
-        metadataCacheSizeMb: 2000
+        metadataCacheSizeMb: 500

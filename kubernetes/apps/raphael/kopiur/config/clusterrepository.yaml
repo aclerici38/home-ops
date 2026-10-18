@@ -2,25 +2,28 @@
 apiVersion: kopiur.home-operations.com/v1alpha1
 kind: ClusterRepository
 metadata:
-  name: versity
+  name: backblaze
 spec:
   backend:
     s3:
-      bucket: kopiur
+      bucket: kopia-k8s
       prefix: raphael/
-      endpoint: s3.clerici.tech
-      region: us-east-1
+      endpoint: s3.us-west-004.backblazeb2.com
+      region: us-west-004
       auth:
         secretRef:
-          name: kopiur-versity
+          name: kopiur-backblaze
           namespace: kopiur
   encryption:
     passwordSecretRef:
-      name: kopiur-versity
+      name: kopiur-backblaze
       namespace: kopiur
       key: KOPIA_PASSWORD
   create:
     enabled: true
+  bootstrap:
+    failurePolicy:
+      activeDeadlineSeconds: 900
   allowedNamespaces:
     all: true
   credentialProjection:
@@ -30,11 +33,18 @@ spec:
   identityDefaults:
     hostnameExpr: namespace
     usernameExpr: namespace + '-' + policyName
+  scheduleDefaults:
+    timezone: America/Los_Angeles
   moverDefaults:
+    # The emptyDir cache lands on the QLC disk and the sources are tiny (tens of
+    # MB), so keep the cache small; it only needs the indexes and manifests.
     cache:
       mode: Ephemeral
-      contentCacheSizeMb: 500
-      metadataCacheSizeMb: 500
+      contentCacheSizeMb: 100
+      metadataCacheSizeMb: 100
+    # Keep a backup (or a first full seed) from saturating the van uplink.
+    throttle:
+      uploadBytesPerSecond: 5242880
     # Movers run as 1000 and use fsGroup to read group-owned data off the staged
     # snapshot (and write restored files); apps on another uid override per-policy.
     securityContext:
@@ -55,5 +65,6 @@ spec:
       enabled: true
       interval: 1h
   maintenance:
-    # Home's `versity-raphael` Repository maintains this repository
+    # Cloud's `backblaze-raphael` Repository maintains this repository, keeping
+    # GC/compaction CPU, disk writes and B2 traffic off the van
     enabled: false

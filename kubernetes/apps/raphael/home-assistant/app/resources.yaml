@@ -22,8 +22,15 @@ spec:
     kopiur:
       capacity: 10Gi
       storageClass: miroir
+      # HA's own backups/ are encrypted tars that never dedup (~470 MB/day), and
+      # the recorder DB re-uploads most of itself daily (~0.7 GB) for history only.
+      ignoreRules:
+        - /backups
+        - /home-assistant_v2.db*
       spec:
         policy:
+          repository:
+            name: backblaze
           volumeSnapshotClassName: miroir
           upload:
             maxParallelFileReads: 1

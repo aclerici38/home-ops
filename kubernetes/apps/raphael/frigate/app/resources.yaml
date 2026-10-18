@@ -29,6 +29,8 @@ spec:
       storageClass: miroir
       spec:
         policy:
+          repository:
+            name: backblaze
           volumeSnapshotClassName: miroir
           upload:
             maxParallelFileReads: 1
