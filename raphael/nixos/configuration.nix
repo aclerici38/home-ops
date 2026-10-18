@@ -64,6 +64,18 @@
   boot.tmp.useTmpfs = true;
   services.fstrim.enable = true;
   services.thermald.enable = true;
+  # Short at 00:00 on the 8th/16th/22nd, long at 02:00 on the 3rd (same as home).
+  services.smartd = {
+    enable = true;
+    autodetect = false;
+    notifications.wall.enable = false;
+    devices = [
+      {
+        device = "/dev/disk/by-id/nvme-WD_Green_SN350_2TB_25227R800703";
+        options = "-s (S/../(08|16|22)/./00|L/../03/./02)";
+      }
+    ];
+  };
 
   services.journald.extraConfig = ''
     Storage=volatile
