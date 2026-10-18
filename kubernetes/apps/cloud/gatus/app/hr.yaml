@@ -26,15 +26,17 @@ spec:
       options:
         - name: ndots
           value: "1"
+    podLabels:
+      dormammu.internal/apiserver-client: "true"
     podSecurityContext:
       seccompProfile:
         type: RuntimeDefault
     resources:
       limits:
-        memory: 128Mi
+        memory: 256Mi
       requests:
         cpu: 10m
-        memory: 32Mi
+        memory: 64Mi
     gatus:
       image:
         repository: ghcr.io/twin/gatus
@@ -45,10 +47,17 @@ spec:
             secretKeyRef:
               name: gatus
               key: BUDDY_TOKEN
+    # Opt-in discovery of towonel-node only, read via a Role there
+    # (towonel-node/app/gatus-rbac.yaml) rather than the chart's ClusterRole
     sidecar:
-      enabled: false
-    serviceAccount:
-      automount: false
+      namespace: towonel-node
+      kinds:
+        httproute:
+          enable: true
+          auto: false
+        service:
+          enable: true
+          auto: false
     rbac:
       create: false
     config:

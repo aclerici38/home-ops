@@ -72,6 +72,13 @@ spec:
         existingClaim: towonel-node
     route:
       towonel-node:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            group: towonel
+            path: /v1/health
+            conditions:
+              - "[STATUS] == 200"
+              - "[BODY].status == ok"
         hostnames:
           - towonel.cloud.clerici.tech
         parentRefs:

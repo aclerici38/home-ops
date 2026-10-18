@@ -1,0 +1,38 @@
+---
+# Read-only discovery for cloud's gatus-sidecar, which watches only this
+# namespace (sidecar.namespace) instead of holding the chart's ClusterRole.
+# No gateways: the parent-annotation GET on envoy-gateway/external is denied,
+# which the sidecar treats as "no parent template" (that Gateway has none).
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.1-standalone-strict/role-rbac-v1.json
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: gatus-sidecar
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs: &read
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - httproutes
+    verbs: *read
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.1-standalone-strict/rolebinding-rbac-v1.json
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: gatus-sidecar
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: gatus-sidecar
+subjects:
+  - kind: ServiceAccount
+    name: gatus-gatus-sidecar
+    namespace: gatus

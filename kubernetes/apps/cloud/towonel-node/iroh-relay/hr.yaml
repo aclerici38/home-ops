@@ -60,6 +60,14 @@ spec:
     service:
       iroh-relay:
         controller: iroh-relay
+        annotations:
+          # Public HTTPS listener, via the node's public IP
+          gatus.home-operations.com/endpoint: |-
+            group: towonel
+            url: https://vps.clerici.tech:8444/healthz
+            conditions:
+              - "[STATUS] == 200"
+              - "[BODY].status == ok"
         ports:
           http:
             port: *httpPort

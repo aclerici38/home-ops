@@ -109,6 +109,15 @@ spec:
     service:
       haproxy:
         controller: haproxy
+        annotations:
+          # Public :80 edge (redirects to https), via the node's public IP
+          gatus.home-operations.com/endpoint: |-
+            group: towonel
+            url: http://vps.clerici.tech
+            client:
+              ignore-redirect: true
+            conditions:
+              - "[STATUS] == 301"
         ports:
           metrics:
             port: 8404

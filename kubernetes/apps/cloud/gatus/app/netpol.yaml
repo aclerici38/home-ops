@@ -5,6 +5,7 @@ kind: CiliumNetworkPolicy
 metadata:
   name: gatus
 spec:
+  # apiserver egress comes from the apiserver-clients CCNP
   endpointSelector:
     matchLabels:
       app.kubernetes.io/instance: gatus
@@ -25,6 +26,15 @@ spec:
       toPorts:
         - ports:
             - {port: "53", protocol: TCP}
+    # towonel-node's annotated endpoints, via the node's public IP
+    - toFQDNs:
+        - matchName: towonel.cloud.clerici.tech
+        - matchName: vps.clerici.tech
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+            - {port: "80", protocol: TCP}
+            - {port: "8444", protocol: TCP}
     # home and raphael, via their public records (-> VPS edge -> towonel)
     - toFQDNs:
         - matchName: id.clerici.tech
