@@ -20,12 +20,16 @@ spec:
         - ports:
             - {port: "8080", protocol: TCP}
   egress:
-    # connectivity checker
+    # connectivity checker, and the towonel-node probe's resolver; the dns
+    # rule feeds the toFQDNs below
     - toCIDR:
         - 1.1.1.1/32
       toPorts:
         - ports:
-            - {port: "53", protocol: TCP}
+            - {port: "53", protocol: ANY}
+          rules:
+            dns:
+              - matchPattern: "*"
     # towonel-node's annotated endpoints, via the node's public IP
     - toFQDNs:
         - matchName: towonel.cloud.clerici.tech

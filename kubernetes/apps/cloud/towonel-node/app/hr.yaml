@@ -73,9 +73,13 @@ spec:
     route:
       towonel-node:
         annotations:
+          # coredns rewrites this name to the in-cluster envoy Service (agent
+          # bootstrap); resolve publicly so the probe takes haproxy -> envoy
           gatus.home-operations.com/endpoint: |-
             group: towonel
             path: /v1/health
+            client:
+              dns-resolver: udp://1.1.1.1:53
             conditions:
               - "[STATUS] == 200"
               - "[BODY].status == ok"
