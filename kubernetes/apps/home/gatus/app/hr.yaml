@@ -75,14 +75,22 @@ spec:
             secretKeyRef:
               name: gatus-oidc-credentials
               key: client_secret
+        # cloud's Alertmanager pushes its Watchdog here (buddy group)
+        - name: BUDDY_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: gatus
+              key: BUDDY_TOKEN
+    # Every HTTPRoute is auto-probed; the parent Gateway's annotation decides
+    # how (external: public path via 1.1.1.1, internal: guarded leak check)
     sidecar:
-      defaultInterval: 10s
+      defaultInterval: 1m
       kinds:
         httproute:
-          enabled: true
+          enable: true
           auto: true
         service:
-          enabled: true
+          enable: true
     config:
       existingConfigMap: gatus-sidecar-config
       items:

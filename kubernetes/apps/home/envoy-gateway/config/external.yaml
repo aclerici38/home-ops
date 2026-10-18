@@ -6,10 +6,12 @@ metadata:
   name: external
   annotations:
     external-dns.kubernetes.io/target: vps.clerici.tech
-    # Inherited by gatus-sidecar HTTPRoute endpoints: resolve via k8s-gateway so probes skip blocky's query log
+    # Inherited by gatus-sidecar HTTPRoute endpoints: resolve publicly so probes
+    # take the real path (WAN -> VPS edge -> towonel -> here) and skip blocky
     gatus.home-operations.com/endpoint: |-
+      group: external
       client:
-        dns-resolver: udp://${K8S_GATEWAY_CLUSTER_IP}:53
+        dns-resolver: udp://1.1.1.1:53
 spec:
   gatewayClassName: envoy-gateway
   infrastructure:

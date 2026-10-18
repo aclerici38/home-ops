@@ -139,6 +139,7 @@ spec:
           lbipam.cilium.io/ips: ${VERSITY_LB_IP}
           coredns.io/hostname: s3.clerici.tech
           gatus.home-operations.com/endpoint: |-
+            group: services
             url: https://s3.clerici.tech/_/health
             conditions:
               - "[STATUS] == 200"
@@ -160,8 +161,6 @@ spec:
                 regex: exported_service
     route:
       admin:
-        annotations:
-          gatus.home-operations.com/enabled: "false"
         hostnames:
           - s3-admin.clerici.tech
         parentRefs: &gateway

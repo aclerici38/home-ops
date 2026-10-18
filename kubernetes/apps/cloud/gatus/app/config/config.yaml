@@ -1,0 +1,56 @@
+---
+# Public, unauthenticated status page: pocket-id lives at home, and this has
+# to stay readable when home is down.
+ui:
+  title: Status | clerici.tech
+  header: Status
+
+# Skip evaluations while the VPS itself can't reach the internet
+connectivity:
+  checker:
+    target: 1.1.1.1:53
+    interval: 1m
+
+endpoints:
+  # Home, from outside. Everything home-side is probed in depth by home's gatus;
+  # this is the one check that has to work for the rest to be reachable.
+  - name: Pocket-ID
+    group: home
+    url: https://id.clerici.tech/.well-known/openid-configuration
+    interval: 1m
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].issuer == https://id.clerici.tech"
+      - "[CERTIFICATE_EXPIRATION] > 240h"
+
+  - name: Raphael
+    group: travel
+    url: https://raphael.living/manifest.json
+    interval: 1m
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].name == Home Assistant"
+
+  - name: Status-Page
+    group: buddy
+    url: https://gatus.clerici.tech/health
+    interval: 1m
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].status == UP"
+
+# home's Alertmanager Watchdog, pushed every ~2m; silence means home's
+# Prometheus, Alertmanager or WAN is down
+external-endpoints:
+  - name: dormammu
+    group: buddy
+    token: $${BUDDY_TOKEN}
+    heartbeat:
+      interval: 10m
+
+metrics: true
+
+storage:
+  type: sqlite
+  caching: true
+  path: /config/gatus.db

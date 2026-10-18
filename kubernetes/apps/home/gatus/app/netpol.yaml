@@ -21,8 +21,27 @@ spec:
         - ports:
             - {port: "8080", protocol: TCP}
   egress:
-    # dns-resolver for HTTPRoute and travel/towonel probes (Service 53 -> 1053);
-    # the dns rule lets those answers feed the toFQDNs below
+    # 1.1.1.1 resolves every external/static probe (so it takes the public
+    # path), answers the internal routes' guarded lookups and is the
+    # connectivity checker; the dns rule feeds the toFQDNs below
+    - toCIDR:
+        - 1.1.1.1/32
+      toPorts:
+        - ports:
+            - {port: "53", protocol: ANY}
+          rules:
+            dns:
+              - matchPattern: "*"
+    # Blocky checks: the LB IPs are translated to the blocky pods in-cluster
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: dns
+            app.kubernetes.io/instance: blocky
+            app.kubernetes.io/controller: blocky
+      toPorts:
+        - ports:
+            - {port: "53", protocol: UDP}
+    # versity-s3 Service probe resolves via k8s-gateway (Service 53 -> 1053)
     - toEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: dns
@@ -33,17 +52,7 @@ spec:
           rules:
             dns:
               - matchPattern: "*"
-    # HTTPRoute probes, via the Gateway LB IPs
-    - toEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: envoy-gateway
-            app.kubernetes.io/name: envoy
-            app.kubernetes.io/component: proxy
-      toPorts:
-        - ports:
-            - {port: "10080", protocol: TCP}
-            - {port: "10443", protocol: TCP}
-    # versity-s3 Service probe (s3.clerici.tech LB IP)
+    # ...and lands on the s3.clerici.tech LB IP
     - toEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: versity
@@ -52,24 +61,12 @@ spec:
       toPorts:
         - ports:
             - {port: "7070", protocol: TCP}
-    # connectivity group
-    - toCIDR:
-        - 1.1.1.1/32
-        - 8.8.8.8/32
-        - 9.9.9.9/32
-      toPorts:
-        - ports:
-            - {port: "53", protocol: TCP}
+    # External HTTPRoutes, towonel and cloud probes, all of which resolve to
+    # the VPS publicly
     - toFQDNs:
-        - matchName: google.com
-      toPorts:
-        - ports:
-            - {port: "443", protocol: TCP}
-    # travel + towonel groups
-    - toFQDNs:
-        - matchName: raphael.living
-        - matchName: towonel.cloud.clerici.tech
-        - matchName: vps.clerici.tech
+        - matchPattern: "*.clerici.tech"
+        - matchPattern: "*.dormammu.clerici.tech"
+        - matchPattern: "*.cloud.clerici.tech"
       toPorts:
         - ports:
             - {port: "443", protocol: TCP}

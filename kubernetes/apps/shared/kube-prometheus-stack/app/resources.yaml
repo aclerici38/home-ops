@@ -24,3 +24,10 @@ spec:
   values:
     externalSecret:
       key: alertmanager
+      spec:
+        # heartbeat receiver's bearer token, shared with both gatus instances
+        data:
+          - secretKey: BUDDY_TOKEN
+            remoteRef:
+              key: gatus
+              property: BUDDY_TOKEN

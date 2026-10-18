@@ -20,6 +20,8 @@ data:
   TZ: America/Los_Angeles
   COREDNS_CLUSTER_IP: "172.17.0.10"
   GRAFANA_RESYNC_PERIOD: 1m
+  # Alertmanager Watchdog heartbeat target (home's gatus)
+  GATUS_BUDDY_HOST: gatus.clerici.tech
   # renovate: datasource=github-releases depName=siderolabs/talos
   TALOS_VERSION: v1.14.4
   # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet

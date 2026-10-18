@@ -10,11 +10,22 @@ spec:
       rules:
         - alert: GatusEndpointDown
           expr: |-
-            gatus_results_endpoint_success == 0
+            gatus_results_endpoint_success{group!="internal"} == 0
           for: 5m
           annotations:
             summary: >-
               The {{ $labels.name }} endpoint is down
+          labels:
+            severity: critical
+        # internal-gateway routes are guarded: they fail when the hostname
+        # resolves on public DNS
+        - alert: GatusEndpointExposed
+          expr: |-
+            gatus_results_endpoint_success{group="internal"} == 0
+          for: 5m
+          annotations:
+            summary: >-
+              The internal {{ $labels.name }} endpoint has a public DNS record
           labels:
             severity: critical
         - alert: GatusDown

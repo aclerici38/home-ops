@@ -2,52 +2,59 @@
 # PKCE
 web:
   read-buffer-size: 32768
+# Skip evaluations while the internet itself is unreachable, so a WAN drop
+# doesn't record every external endpoint as down
 connectivity:
   checker:
-    target: ${COREDNS_CLUSTER_IP}:53
+    target: 1.1.1.1:53
     interval: 1m
 
 endpoints:
-  - name: Cloudflare
-    group: connectivity
-    url: tcp://1.1.1.1:53
-    interval: 1m
-    conditions:
-      - "[CONNECTED] == true"
+  # Plain UDP lookups against the network DNS LB IPs
+  - name: Blocky-IPv4
+    group: dns
+    url: ${BLOCKY_LB_IP}:53
+    dns: &google
+      query-name: google.com
+      query-type: A
+    conditions: &resolves
+      - "[DNS_RCODE] == NOERROR"
+      - "len([BODY]) > 0"
 
-  - name: Google-DNS
-    group: connectivity
-    url: tcp://8.8.8.8:53
-    interval: 1m
-    conditions:
-      - "[CONNECTED] == true"
+  - name: Blocky-IPv6
+    group: dns
+    url: "[${BLOCKY_LB_IPV6}]:53"
+    dns: *google
+    conditions: *resolves
 
-  - name: Quad9
-    group: connectivity
-    url: tcp://9.9.9.9:53
-    interval: 1m
+  # clerici.tech records, conditionally forwarded to k8s-gateway, must
+  # still point at the right Gateway
+  - name: Blocky-External
+    group: dns
+    url: ${BLOCKY_LB_IP}:53
+    dns:
+      query-name: id.clerici.tech
+      query-type: A
     conditions:
-      - "[CONNECTED] == true"
+      - "[DNS_RCODE] == NOERROR"
+      - "[BODY] == ${ENVOY_EXTERNAL_LB_IP}"
 
-  - name: Google-HTTPS
-    group: connectivity
-    url: tcp://google.com:443
+  - name: Blocky-Internal
+    group: dns
+    url: ${BLOCKY_LB_IP}:53
+    dns:
+      query-name: blocky.clerici.tech
+      query-type: A
     conditions:
-      - "[CONNECTED] == true"
+      - "[DNS_RCODE] == NOERROR"
+      - "[BODY] == ${ENVOY_INTERNAL_LB_IP}"
 
-  - name: Raphael
-    group: travel
-    url: https://raphael.living/manifest.json
-    client: &client
-      dns-resolver: udp://${K8S_GATEWAY_CLUSTER_IP}:53
-    conditions:
-      - "[STATUS] == 200"
-      - "[BODY].name == Home Assistant"
-
+  # The VPS, from outside it
   - name: Hub-API
     group: towonel
     url: https://towonel.cloud.clerici.tech/v1/health
-    client: *client
+    client: &client
+      dns-resolver: udp://1.1.1.1:53
     conditions:
       - "[STATUS] == 200"
       - "[BODY].status == ok"
@@ -68,6 +75,23 @@ endpoints:
     conditions:
       - "[STATUS] == 200"
       - "[BODY].status == ok"
+
+  - name: Status-Page
+    group: buddy
+    url: https://gatus.cloud.clerici.tech/health
+    client: *client
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY].status == UP"
+
+# cloud's Alertmanager Watchdog, pushed every ~2m; silence means cloud's
+# Prometheus, Alertmanager or the path from it is down
+external-endpoints:
+  - name: cloud
+    group: buddy
+    token: $${BUDDY_TOKEN}
+    heartbeat:
+      interval: 10m
 
 metrics: true
 

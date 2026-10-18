@@ -1,0 +1,35 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.3/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: gatus
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/instance: gatus
+      app.kubernetes.io/name: gatus-sidecar
+  ingress:
+    # Status page and home's heartbeat push, via the Route
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: external
+      toPorts:
+        - ports:
+            - {port: "8080", protocol: TCP}
+  egress:
+    # connectivity checker
+    - toCIDR:
+        - 1.1.1.1/32
+      toPorts:
+        - ports:
+            - {port: "53", protocol: TCP}
+    # home and raphael, via their public records (-> VPS edge -> towonel)
+    - toFQDNs:
+        - matchName: id.clerici.tech
+        - matchName: gatus.clerici.tech
+        - matchName: raphael.living
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}

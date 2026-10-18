@@ -101,8 +101,6 @@ spec:
             port: *port
     route:
       immich-pet-tagger:
-        annotations:
-          gatus.home-operations.com/enabled: "false"
         hostnames:
           - pets.clerici.tech
         parentRefs:

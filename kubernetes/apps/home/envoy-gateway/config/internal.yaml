@@ -5,10 +5,12 @@ kind: Gateway
 metadata:
   name: internal
   annotations:
-    # Inherited by gatus-sidecar HTTPRoute endpoints: resolve via k8s-gateway so probes skip blocky's query log
+    # Inherited by gatus-sidecar HTTPRoute endpoints: guarded swaps the HTTP
+    # probe for an A lookup on 1.1.1.1 that must come back empty, i.e. the
+    # hostname has no public record (GatusEndpointExposed)
     gatus.home-operations.com/endpoint: |-
-      client:
-        dns-resolver: udp://${K8S_GATEWAY_CLUSTER_IP}:53
+      group: internal
+      guarded: true
 spec:
   gatewayClassName: envoy-gateway
   infrastructure:

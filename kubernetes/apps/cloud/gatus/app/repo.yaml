@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.6/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: gatus-sidecar
+spec:
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 0.5.3
+    digest: sha256:6a6589ce569d92a398bd166e06a16cf1370dd6403f8a3b61d9dd59c7f44427f4
+  url: oci://ghcr.io/home-operations/charts/gatus-sidecar
+  verify:
+    provider: cosign
+    matchOIDCIdentity:
+      - issuer: "^https://token.actions.githubusercontent.com$"
+        subject: "^https://github.com/home-operations/gatus-sidecar.*$"
