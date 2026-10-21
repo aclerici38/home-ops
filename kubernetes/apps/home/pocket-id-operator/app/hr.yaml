@@ -87,10 +87,10 @@ spec:
             port: 25
             tls: none
           emailNotifications:
-            loginNotification: true
+            loginNotificationMode: browserRecognition
             oneTimeAccessAsAdmin: true
             apiKeyExpiration: true
-            verification: true
+            verificationMode: optional
           persistence:
             enabled: false
             extraVolumeMounts:
