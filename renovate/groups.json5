@@ -299,7 +299,7 @@
       groupName: "Nix Flake",
       groupSlug: "nix-config",
       matchManagers: ["nix"],
-      matchFileNames: ["nix-config/**"],
+      matchFileNames: ["nix-config/**", "macbook-air/**"],
       lockFileMaintenance: {
         automerge: true,
         automergeType: "pr",

@@ -9,6 +9,7 @@ on:
     paths:
       - "nix-config/**"
       - "raphael/**"
+      - "macbook-air/**"
       - ".github/workflows/nix.yaml"
   pull_request:
     branches:
@@ -16,6 +17,7 @@ on:
     paths:
       - "nix-config/**"
       - "raphael/**"
+      - "macbook-air/**"
       - ".github/workflows/nix.yaml"
 
 concurrency:
@@ -44,15 +46,16 @@ jobs:
           determinate: false
 
       - name: nixfmt
-        run: nix shell nixpkgs#nixfmt --command nixfmt --check nix-config/*.nix raphael/*.nix raphael/nixos/*.nix
+        run: nix shell nixpkgs#nixfmt --command nixfmt --check nix-config/*.nix raphael/*.nix raphael/nixos/*.nix macbook-air/*.nix macbook-air/nixos/*.nix
 
       - name: statix
         run: |
           nix shell nixpkgs#statix --command statix check -c nix-config nix-config
           nix shell nixpkgs#statix --command statix check -c raphael raphael
+          nix shell nixpkgs#statix --command statix check -c macbook-air macbook-air
 
       - name: deadnix
-        run: nix shell nixpkgs#deadnix --command deadnix --fail nix-config raphael
+        run: nix shell nixpkgs#deadnix --command deadnix --fail nix-config raphael macbook-air
 
   flake-checker:
     name: Flake Health
@@ -78,6 +81,12 @@ jobs:
           flake-lock-path: raphael/flake.lock
           fail-mode: true
 
+      - name: Flake Checker (macbook-air)
+        uses: DeterminateSystems/flake-checker-action@3164002371bc90729c68af0e24d5aacf20d7c9f6 # v12
+        with:
+          flake-lock-path: macbook-air/flake.lock
+          fail-mode: true
+
   eval:
     name: Eval (${{ matrix.name }})
     runs-on: ${{ matrix.os }}
@@ -92,6 +101,10 @@ jobs:
             os: ubuntu-latest
             attrs: >-
               nixosConfigurations.raphael
+          - name: macbook-air
+            os: ubuntu-latest
+            attrs: >-
+              nixosConfigurations.macbook-air
           - name: nix-config
             os: macos-latest
             attrs: >-
