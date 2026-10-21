@@ -10,7 +10,7 @@
   services.libinput = {
     enable = true;
     touchpad = {
-      naturalScrolling = true;
+      naturalScrolling = false;
       tapping = false;
       disableWhileTyping = true;
     };
