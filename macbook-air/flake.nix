@@ -36,6 +36,7 @@
           ./nixos/hardware.nix
           ./nixos/wifi.nix
           ./nixos/desktop.nix
+          ./nixos/git.nix
           ./nixos/comin.nix
         ];
       };

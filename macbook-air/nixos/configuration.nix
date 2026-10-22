@@ -22,7 +22,6 @@
     ];
   };
   programs.fish.enable = true;
-  programs.git.enable = true;
 
   services.openssh.enable = true;
   services.openssh.settings = {
