@@ -20,12 +20,6 @@
       enabled: false,
     },
     {
-      description: ["Loose versioning for non-semver containers"],
-      matchDatasources: ["docker"],
-      matchPackageNames: ["/searxng/"],
-      versioning: "loose",
-    },
-    {
       description: ["Custom versioning for calibre-web-automated (V)"],
       matchDatasources: ["docker"],
       matchPackageNames: ["/calibre-web-automated/"],
@@ -48,18 +42,12 @@
     {
       description: "Vectorchord imageVolume pg extension (immich versioned)",
       matchDatasources: ["docker"],
-      matchPackageNames: ["/tensorchord/vchord-scratch/"],
-      matchFileNames: ["**/immich/**"],
-      versioning: "regex:^pg18-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
+      matchPackageNames: ["ghcr.io/tensorchord/vchord-scratch"],
+      // Both the catalog image and immich's Database version pin, so a release
+      // immich can't use moves neither of them.
+      matchFileNames: ["**/immich/**", "**/cloudnative-pg/catalogs/**"],
       // https://github.com/immich-app/immich/blob/main/server/src/constants.ts
-      allowedVersions: "/^pg18-v1\\.\\d+\\.\\d+$/",
-    },
-    {
-      description: "VectorChord CNPG extension (immich versioned)",
-      matchDatasources: ["github-releases"],
-      matchPackageNames: ["/tensorchord/VectorChord/"],
-      matchFileNames: ["**/immich/**"],
-      allowedVersions: "/^1\\.\\d+\\.\\d+$/",
+      allowedVersions: "/^(?:pg18-v)?1\\.\\d+\\.\\d+$/",
     },
     {
       description: "Frigate beta and RC",

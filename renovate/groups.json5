@@ -217,8 +217,8 @@
     {
       description: "Vectorchord Group",
       groupName: "Vectorchord",
-      matchPackageNames: ["/VectorChord/", "/vchord-scratch/"],
-      matchDatasources: ["docker", "github-releases"],
+      matchPackageNames: ["ghcr.io/tensorchord/vchord-scratch"],
+      matchDatasources: ["docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
