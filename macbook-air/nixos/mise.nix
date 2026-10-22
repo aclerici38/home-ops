@@ -4,7 +4,13 @@
   # config, so every machine runs the versions pinned in mise.lock. nixpkgs'
   # mise only bootstraps; after `mise install` the aqua:jdx/mise build pinned
   # there takes over.
-  environment.systemPackages = [ pkgs.mise ];
+  # gcc/make for things that compile on the fly: nvim-treesitter parsers,
+  # Python/npm packages with native extensions, cgo.
+  environment.systemPackages = with pkgs; [
+    mise
+    gcc
+    gnumake
+  ];
 
   # mise downloads generic glibc binaries (node, python, neovim, uv, ...),
   # which can't find a dynamic loader on NixOS without this.
