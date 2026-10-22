@@ -37,7 +37,7 @@ spec:
             restartPolicy: Always
             image:
               repository: mirror.gcr.io/library/influxdb
-              tag: 2.9.1-alpine@sha256:f551adeb94b6f97626d2043ec90ed17f81de18d15bb5412d2101e0965c93c797
+              tag: 2.9.1-alpine@sha256:385d5fe4746f4c087d6468519f023b24b425c0848a63b3185de8681e0f94d285
             env:
               INFLUXD_REPORTING_DISABLED: true
               INFLUXD_HTTP_BIND_ADDRESS: 127.0.0.1:8086
