@@ -31,6 +31,24 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
+  name: renovate-operator-crd-install
+spec:
+  # pre-install/pre-upgrade hook Job that applies the CRDs. The chart has no
+  # pod-label value for it, so it only carries the Job's own labels.
+  endpointSelector:
+    matchLabels:
+      batch.kubernetes.io/job-name: renovate-operator-crd-install
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - {port: "6443", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.3/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
   name: renovate
 spec:
   # Discovery + executor Job pods
