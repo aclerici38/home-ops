@@ -1,7 +1,7 @@
 _: {
   services.comin = {
     enable = true;
-    repositorySubdir = "macbook-air";
+    repositorySubdir = "nix-config";
     remotes = [
       {
         name = "origin";

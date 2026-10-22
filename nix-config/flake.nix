@@ -1,12 +1,16 @@
 {
-  description = "My nix-darwin + home-manager config";
+  description = "My nix-darwin, NixOS and home-manager configs";
 
   inputs = {
+    # Macs: nixpkgs-unstable only advances once darwin builds are cached.
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    # NixOS: nixos-unstable additionally waits on the NixOS boot/module tests.
+    nixpkgs-nixos.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
+    # useGlobalPkgs: each host builds home-manager against its own nixpkgs.
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -14,51 +18,48 @@
     opnix.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-homebrew.url = "github:zhaofengli/nix-homebrew/main";
+
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-hardware.inputs.nixpkgs.follows = "nixpkgs-nixos";
+
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs-nixos";
+
+    comin.url = "github:nlewo/comin";
+    comin.inputs.nixpkgs.follows = "nixpkgs-nixos";
   };
 
   outputs =
     inputs@{
       self,
+      nixpkgs-nixos,
       nix-darwin,
-      home-manager,
-      opnix,
-      nix-homebrew,
       ...
     }:
     let
-      sharedModules = [
-        home-manager.darwinModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "backup";
-          home-manager.sharedModules = [ opnix.homeManagerModules.default ];
-          home-manager.users.anthony = import ./home.nix;
-        }
-        nix-homebrew.darwinModules.nix-homebrew
-        {
-          nix-homebrew = {
-            enable = true;
-            enableRosetta = true;
-            user = "anthony";
-            autoMigrate = true;
-          };
-        }
-      ];
+      specialArgs = { inherit inputs self; };
+      mac = nix-darwin.lib.darwinSystem {
+        inherit specialArgs;
+        modules = [
+          ./common.nix
+          ./darwin.nix
+        ];
+      };
     in
     {
+      # $ darwin-rebuild switch --flake .
       darwinConfigurations = {
-        # $ darwin-rebuild switch --flake .#Anthonys-Mac-mini
-        "Anthonys-Mac-mini" = nix-darwin.lib.darwinSystem {
-          specialArgs = { inherit inputs self; };
-          modules = [ ./darwin.nix ] ++ sharedModules;
-        };
+        "Anthonys-Mac-mini" = mac;
+        "Anthonys-MacBook-Pro" = mac;
+      };
 
-        # $ darwin-rebuild switch --flake .#Anthonys-MacBook-Pro
-        "Anthonys-MacBook-Pro" = nix-darwin.lib.darwinSystem {
-          specialArgs = { inherit inputs self; };
-          modules = [ ./darwin.nix ] ++ sharedModules;
-        };
+      # $ nixos-rebuild switch --flake .  (comin deploys main automatically)
+      nixosConfigurations.macbook-air = nixpkgs-nixos.lib.nixosSystem {
+        inherit specialArgs;
+        modules = [
+          ./common.nix
+          ./macbook-air
+        ];
       };
     };
 }

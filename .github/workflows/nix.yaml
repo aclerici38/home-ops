@@ -9,7 +9,6 @@ on:
     paths:
       - "nix-config/**"
       - "raphael/**"
-      - "macbook-air/**"
       - ".github/workflows/nix.yaml"
   pull_request:
     branches:
@@ -17,7 +16,6 @@ on:
     paths:
       - "nix-config/**"
       - "raphael/**"
-      - "macbook-air/**"
       - ".github/workflows/nix.yaml"
 
 concurrency:
@@ -46,16 +44,15 @@ jobs:
           determinate: false
 
       - name: nixfmt
-        run: nix shell nixpkgs#nixfmt --command nixfmt --check nix-config/*.nix raphael/*.nix raphael/nixos/*.nix macbook-air/*.nix macbook-air/nixos/*.nix
+        run: nix shell nixpkgs#nixfmt --command nixfmt --check nix-config/*.nix nix-config/macbook-air/*.nix raphael/*.nix raphael/nixos/*.nix
 
       - name: statix
         run: |
           nix shell nixpkgs#statix --command statix check -c nix-config nix-config
           nix shell nixpkgs#statix --command statix check -c raphael raphael
-          nix shell nixpkgs#statix --command statix check -c macbook-air macbook-air
 
       - name: deadnix
-        run: nix shell nixpkgs#deadnix --command deadnix --fail nix-config raphael macbook-air
+        run: nix shell nixpkgs#deadnix --command deadnix --fail nix-config raphael
 
   flake-checker:
     name: Flake Health
@@ -73,18 +70,13 @@ jobs:
         uses: DeterminateSystems/flake-checker-action@3164002371bc90729c68af0e24d5aacf20d7c9f6 # v12
         with:
           flake-lock-path: nix-config/flake.lock
+          nixpkgs-keys: nixpkgs,nixpkgs-nixos
           fail-mode: true
 
       - name: Flake Checker (raphael)
         uses: DeterminateSystems/flake-checker-action@3164002371bc90729c68af0e24d5aacf20d7c9f6 # v12
         with:
           flake-lock-path: raphael/flake.lock
-          fail-mode: true
-
-      - name: Flake Checker (macbook-air)
-        uses: DeterminateSystems/flake-checker-action@3164002371bc90729c68af0e24d5aacf20d7c9f6 # v12
-        with:
-          flake-lock-path: macbook-air/flake.lock
           fail-mode: true
 
   eval:
@@ -102,6 +94,7 @@ jobs:
             attrs: >-
               nixosConfigurations.raphael
           - name: macbook-air
+            dir: nix-config
             os: ubuntu-latest
             attrs: >-
               nixosConfigurations.macbook-air
@@ -121,10 +114,10 @@ jobs:
         with:
           determinate: false
 
-      # matrix.name doubles as the flake directory
+      # matrix.name doubles as the flake directory unless matrix.dir is set
       - name: Evaluate configurations
         env:
-          DIR: ${{ matrix.name }}
+          DIR: ${{ matrix.dir || matrix.name }}
           ATTRS: ${{ matrix.attrs }}
         run: |
           for attr in $ATTRS; do

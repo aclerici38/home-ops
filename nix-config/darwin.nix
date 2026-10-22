@@ -1,5 +1,22 @@
-{ pkgs, self, ... }:
+{ inputs, pkgs, ... }:
 {
+  imports = [
+    inputs.home-manager.darwinModules.home-manager
+    inputs.nix-homebrew.darwinModules.nix-homebrew
+  ];
+
+  home-manager.users.anthony.imports = [
+    inputs.opnix.homeManagerModules.default
+    ./home-darwin.nix
+  ];
+
+  nix-homebrew = {
+    enable = true;
+    enableRosetta = true;
+    user = "anthony";
+    autoMigrate = true;
+  };
+
   homebrew = {
     enable = true;
     onActivation.autoUpdate = false;
@@ -38,20 +55,11 @@
 
   nix.package = pkgs.nix;
 
-  nix.settings.experimental-features = "nix-command flakes";
-
-  # Deduplicate identical files in /nix/store as they're added.
-  nix.settings.auto-optimise-store = true;
-
   # Garbage-collect old generations weekly.
-  nix.gc = {
-    automatic = true;
-    interval = {
-      Weekday = 0;
-      Hour = 3;
-      Minute = 0;
-    };
-    options = "--delete-older-than 30d";
+  nix.gc.interval = {
+    Weekday = 0;
+    Hour = 3;
+    Minute = 0;
   };
 
   # Touch ID for sudo
@@ -77,21 +85,13 @@
     };
   };
 
-  # System-level fish: vendor completions, etc.
-  # User-level fish config (aliases, abbrs, functions) lives in home.nix.
-  programs.fish.enable = true;
+  # Lets chsh/Users & Groups accept fish as a login shell.
   environment.shells = [ pkgs.fish ];
 
-  users.users.anthony = {
-    name = "anthony";
-    home = "/Users/anthony";
-    shell = pkgs.fish;
-  };
+  users.users.anthony.home = "/Users/anthony";
 
   system.primaryUser = "anthony";
-  system.configurationRevision = self.rev or self.dirtyRev or null;
   system.stateVersion = 6;
 
   nixpkgs.hostPlatform = "aarch64-darwin";
-  nixpkgs.config.allowUnfree = true;
 }

@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+_: {
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -16,12 +15,10 @@
       "wheel"
       "networkmanager"
     ];
-    shell = pkgs.fish;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKqgluvCmCmTP872eVF1gSq4nUozATZPwjVT4BlnuVtM anthony"
     ];
   };
-  programs.fish.enable = true;
 
   services.openssh.enable = true;
   services.openssh.settings = {
@@ -31,19 +28,8 @@
   };
   networking.firewall.enable = true;
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
-  nix.optimise = {
-    automatic = true;
-    dates = [ "weekly" ];
-  };
+  nix.gc.dates = "weekly";
+  nix.optimise.dates = [ "weekly" ];
 
   boot.tmp.useTmpfs = true;
   services.fstrim.enable = true;

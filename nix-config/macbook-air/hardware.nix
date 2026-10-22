@@ -1,5 +1,7 @@
 { pkgs, ... }:
 {
+  nixpkgs.hostPlatform = "x86_64-linux";
+
   # nixos-hardware's apple-macbook-air-6 profile already covers facetimehd
   # (gated on allowUnfree), mbpfan, and blacklisting bcma.
   boot.initrd.availableKernelModules = [

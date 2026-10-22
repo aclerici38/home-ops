@@ -1,20 +1,22 @@
+# home-manager config shared by every host. Platform-specific bits live next to
+# the host config: home-darwin.nix and macbook-air/desktop.nix.
 {
   pkgs,
   config,
-  lib,
   ...
 }:
+let
+  # Held in 1Password; GitHub has it registered for both auth and signing.
+  githubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKqgluvCmCmTP872eVF1gSq4nUozATZPwjVT4BlnuVtM";
+  rebuild = if pkgs.stdenv.hostPlatform.isDarwin then "darwin-rebuild" else "nixos-rebuild";
+in
 {
-  home.username = "anthony";
-  home.homeDirectory = "/Users/anthony";
   # Apparently can't change this
   home.stateVersion = "25.11";
 
   # Tool versions tracked via mise where possible.
   home.packages = with pkgs; [
-    _1password-cli
     deadnix
-    mas
     nil
     nixd
     nixfmt
@@ -22,6 +24,7 @@
     statix
   ];
 
+  # Only bootstraps: fish activates the aqua:jdx/mise build pinned in mise.lock.
   programs.mise = {
     enable = true;
     enableFishIntegration = false;
@@ -29,45 +32,34 @@
 
   programs.home-manager.enable = true;
 
-  # Zed (installed via brew cask) — symlink settings.json to the repo so
-  # edits via Zed's "Open settings" land in version control and apply
-  # without a darwin-rebuild round-trip.
+  # Symlink Zed's settings.json to the repo so edits via Zed's "Open settings"
+  # land in version control and apply without a rebuild round-trip.
   home.file.".config/zed/settings.json".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/home-ops/zed/settings.json";
 
-  # Bootstrap opnix via 1Password desktop
-  home.activation.bootstrapOpnixToken = lib.hm.dag.entryBefore [ "writeBoundary" ] ''
-    TOKEN_FILE="$HOME/.config/opnix/token"
-    if [ ! -s "$TOKEN_FILE" ]; then
-      $DRY_RUN_CMD mkdir -p "$(dirname "$TOKEN_FILE")"
-      if ${pkgs._1password-cli}/bin/op read "op://Private/OPNIX_TOKEN/credential" > "$TOKEN_FILE" 2>/dev/null; then
-        chmod 600 "$TOKEN_FILE"
-      else
-        rm -f "$TOKEN_FILE"
-        echo "warning: opnix token bootstrap failed; ensure 1Password app is unlocked and OPNIX_TOKEN exists in Private vault" >&2
-      fi
-    fi
-  '';
-
-  # 1Password secrets materialized at activation time (one read per `drs`).
-  programs.onepassword-secrets = {
-    enable = true;
-    tokenFile = "${config.home.homeDirectory}/.config/opnix/token";
-    secrets.githubToken = {
-      reference = "op://kubernetes/GITHUB_TOKEN/token";
-      path = ".local/share/opnix/github-token";
-      mode = "0600";
-    };
-  };
-
+  # The 1Password agent socket is set per platform. For GitHub, only offer its
+  # key and refuse unknown host keys instead of prompting.
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    settings."*".IdentityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+    settings."github.com" = {
+      IdentityFile = "~/.ssh/github.pub";
+      IdentitiesOnly = true;
+      StrictHostKeyChecking = "yes";
+    };
   };
+  home.file.".ssh/github.pub".text = "${githubKey}\n";
 
+  # The op-ssh-sign signer is set per platform.
   programs.git = {
     enable = true;
+    signing = {
+      format = "ssh";
+      key = "key::${githubKey}";
+      signByDefault = true;
+      # Lets `git log --show-signature` verify our own signatures locally.
+      allowedSigners = "anthony@clerici.me ${githubKey}";
+    };
     settings = {
       user = {
         email = "anthony@clerici.me";
@@ -76,10 +68,10 @@
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
-      gpg.format = "ssh";
-      commit.gpgsign = true;
-      "gpg.ssh".program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
-      user.signingkey = "key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKqgluvCmCmTP872eVF1gSq4nUozATZPwjVT4BlnuVtM";
+      # Reject corrupt or malformed objects on every fetch, clone and push.
+      transfer.fsckObjects = true;
+      # Pushes always go over SSH; https clones (and comin) are left alone.
+      url."git@github.com:".pushInsteadOf = "https://github.com/";
     };
   };
 
@@ -88,6 +80,8 @@
   programs.fish = {
     enable = true;
 
+    # The repo's .mise.toml is the global config, so every machine runs the
+    # versions pinned in mise.lock.
     shellInit = ''
       set -gx MISE_GLOBAL_CONFIG_FILE $HOME/home-ops/.mise.toml
     '';
@@ -99,29 +93,20 @@
     };
 
     shellAbbrs = {
-      drs = "sudo darwin-rebuild switch --flake ~/home-ops/nix-config";
+      drs = "sudo ${rebuild} switch --flake ~/home-ops/nix-config";
     };
-
-    functions.load-secrets = ''
-      set -l gh ~/.local/share/opnix/github-token
-      test -f $gh; and set -gx GITHUB_TOKEN (cat $gh)
-    '';
 
     interactiveShellInit = ''
       set fish_greeting
-      load-secrets
       set -l _aqua_mise_dir $HOME/.local/share/mise/installs/aqua-jdx-mise
-      if test -d $_aqua_mise_dir
-        set -l _ver (command ls $_aqua_mise_dir | sort -V | tail -1)
-        if test -n "$_ver"; and test -x $_aqua_mise_dir/$_ver/mise/bin/mise
-          $_aqua_mise_dir/$_ver/mise/bin/mise activate fish | source
-        else
-          mise activate fish | source
-        end
+      set -l _ver
+      test -d $_aqua_mise_dir; and set _ver (command ls $_aqua_mise_dir | sort -V | tail -1)
+      if test -n "$_ver"; and test -x $_aqua_mise_dir/$_ver/mise/bin/mise
+        $_aqua_mise_dir/$_ver/mise/bin/mise activate fish | source
       else
         mise activate fish | source
       end
-      atuin init fish | source
+      type -q atuin; and atuin init fish | source
     '';
   };
 }

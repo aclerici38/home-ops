@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   services.xserver = {
     enable = true;
@@ -62,11 +67,12 @@
     enable = true;
     polkitPolicyOwners = [ "anthony" ];
   };
-  # Serve SSH keys from the 1Password vault (Settings → Developer → SSH agent).
-  programs.ssh.extraConfig = ''
-    Host *
-      IdentityAgent ~/.1password/agent.sock
-  '';
+  # Serve SSH keys and git signing from the 1Password vault
+  # (Settings → Developer → SSH agent).
+  home-manager.users.anthony = {
+    programs.ssh.settings."*".IdentityAgent = "~/.1password/agent.sock";
+    programs.git.signing.signer = lib.getExe' config.programs._1password-gui.package "op-ssh-sign";
+  };
 
   environment.systemPackages = with pkgs; [
     thunderbird
