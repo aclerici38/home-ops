@@ -51,8 +51,17 @@
       };
     };
   };
+  # The NixOS modules (not plain packages) set up the setgid helper and polkit
+  # policy that browser integration, system unlock and the CLI need.
+  programs._1password.enable = true;
+  programs._1password-gui = {
+    enable = true;
+    polkitPolicyOwners = [ "anthony" ];
+  };
+
   environment.systemPackages = with pkgs; [
     thunderbird
+    zed-editor
     networkmanagerapplet
   ];
 
