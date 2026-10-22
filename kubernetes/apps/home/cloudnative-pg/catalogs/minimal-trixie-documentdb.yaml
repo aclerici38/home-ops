@@ -11,7 +11,7 @@ spec:
   images:
     # DocumentDB doesn't immediately support new postgres versions apparently
     - major: 18
-      image: ghcr.io/cloudnative-pg/postgresql:18.4-minimal-trixie@sha256:2cf8d1c297265331b8a81aefe5b7b397ddbb836e15eaa953543f6190e8dabf98
+      image: ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie@sha256:0675340b02be838319b9b6f323c206693e519dcd62ec729d539be9f46bb7a2f9
       extensions:
         - name: documentdb
           image:
