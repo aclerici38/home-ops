@@ -45,16 +45,19 @@ url_api = "https://api.github.com/repos/FiloSottile/age/releases/assets/53554189
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "2026.10.16"
+version = "v2026.10.17"
 backend = "aqua:jdx/mise"
 
-[tools."aqua:jdx/mise"."platforms.linux-arm64"]
-provenance = "minisign"
-
 [tools."aqua:jdx/mise"."platforms.linux-x64"]
+checksum = "sha256:54dc5f1a0de14bddf70a4d8273603647c140eedd8b9d083a8f73ca13a9a82f53"
+url = "https://github.com/jdx/mise/releases/download/v2026.10.17/mise-v2026.10.17-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/660998820"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.macos-arm64"]
+checksum = "sha512:40b2c23f544aa6a33b616aece639feaf5710d575c23a86dd3d6262f8d92109b3ebc25f4877e0dbe8555734de68ed138a0bfd217f9d650bf42ade4a11ee4bdefb"
+url = "https://github.com/jdx/mise/releases/download/v2026.10.17/mise-v2026.10.17-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/660999029"
 provenance = "minisign"
 
 [[tools."aqua:nklmilojevic/sofka"]]
