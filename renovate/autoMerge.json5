@@ -46,7 +46,12 @@
       // three sets whose majors auto-merge get separateMajorMinor here instead.
       // Without it a major lands on `renovate/major-automerge` as a second PR.
       description: ["Keep auto-merged majors on the bundle branch"],
-      matchPackageNames: ["**/llama.cpp", "**/firefox", "aclerici38/k8s-versioned-schemas"],
+      matchPackageNames: [
+        "**/llama.cpp",
+        "**/firefox",
+        "**/karakeep-chrome",
+        "aclerici38/k8s-versioned-schemas",
+      ],
       separateMajorMinor: false,
     },
     {
@@ -122,7 +127,7 @@
       description: ["Auto-merge specific apps' major versions"],
       automerge: true,
       matchDatasources: ["docker", "helm"],
-      matchPackageNames: ["**/llama.cpp", "**/firefox"],
+      matchPackageNames: ["**/llama.cpp", "**/firefox", "**/karakeep-chrome"],
       matchUpdateTypes: ["major", "minor", "patch", "digest"],
       groupName: "automerge",
       additionalBranchPrefix: "",
