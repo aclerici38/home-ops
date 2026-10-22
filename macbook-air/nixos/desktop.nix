@@ -62,6 +62,11 @@
     enable = true;
     polkitPolicyOwners = [ "anthony" ];
   };
+  # Serve SSH keys from the 1Password vault (Settings → Developer → SSH agent).
+  programs.ssh.extraConfig = ''
+    Host *
+      IdentityAgent ~/.1password/agent.sock
+  '';
 
   environment.systemPackages = with pkgs; [
     thunderbird
