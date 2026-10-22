@@ -78,6 +78,8 @@ spec:
               - --storage-path=/data
               - --ota-provider-dir=/data/ota
               - --production-mode
+            env:
+              MATTER_LOG_FORMAT: plain
             probes:
               liveness: &probe
                 enabled: true
@@ -136,6 +138,14 @@ spec:
               - ports:
                   - {port: "80", protocol: TCP}
                   - {port: "443", protocol: TCP}
+          # mDNS goes out every interface, eth0 included (matter.js can only
+          # limit it to one, and it needs all three multus nets). Allowing it
+          # lets it die quietly at the host instead of tripping CiliumPolicyDrops
+          - toCIDR:
+              - 224.0.0.251/32
+            toPorts:
+              - ports:
+                  - {port: "5353", protocol: UDP}
         egressDeny:
           - toCIDRSet:
               - cidrGroupRef: private-networks
