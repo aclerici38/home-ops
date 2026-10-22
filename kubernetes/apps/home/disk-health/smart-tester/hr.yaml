@@ -27,7 +27,7 @@ spec:
           smartd:
             image:
               repository: ghcr.io/aclerici38/smartmontools
-              tag: 7.5.0@sha256:de9fb9e8c576f12d14fa3469a8eb6a545f968cfbb46edd28e8e1cafaaa517d93
+              tag: 7.5.0@sha256:1226f7478c145ba028e58e5b1f19545e73ca0cb92119b0a03cdc3303c416f5c9
             # smartd's own scheduler runs the self-tests on every node; results
             # land in each drive's self-test log, which scrutiny's collector
             # picks up. --debug keeps smartd in the foreground and logs to
