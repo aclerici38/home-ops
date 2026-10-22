@@ -882,7 +882,10 @@ url_api = "https://api.github.com/repos/google/yamlfmt/releases/assets/336650209
 version = "1.38.0"
 backend = "pypi:yamllint"
 specifiers = ["1.38.0"]
-uv = { path = ".mise/locks/yamllint/1.38.0", digest = "sha256:1c17e2202cb7c4429202c5065081c40e66a1aa274bff88b96c933f262d6cdeb1" }
+uv = { path = ".mise/locks/yamllint/1.38.0~647ee145", digest = "sha256:cdd14970e893844fca88ebb02bb2fb601a37abf7c699ee2f3cd2fb5d5d4be2ca" }
+
+[tools.yamllint.options]
+python = "3.14"
 
 [[tools.yq]]
 version = "4.54.1"
