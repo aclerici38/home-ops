@@ -1,7 +1,7 @@
 ---
 # Table-backed gauges (sessions, retained, ...) are the same cluster-wide value
 # on every pod, so only per-pod series like pgmqtt_connections are summed.
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.1/prometheusrule_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.2/prometheusrule_v1.json
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
