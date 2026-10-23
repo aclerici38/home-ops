@@ -37,12 +37,12 @@ spec:
   mutations:
     - patchType: JSONPatch
       jsonPatch:
+        # Remove by index: a value built from typed Containers cannot be marshalled.
         expression: >-
           [
             JSONPatch{
-              op: "replace",
-              path: "/spec/initContainers",
-              value: object.spec.initContainers.filter(c, c.name != "model-cache-prep")
+              op: "remove",
+              path: "/spec/initContainers/" + string(object.spec.initContainers.map(c, c.name).indexOf("model-cache-prep"))
             }
           ]
 ---
