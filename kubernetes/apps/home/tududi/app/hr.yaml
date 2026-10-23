@@ -37,7 +37,7 @@ spec:
           tududi:
             image:
               repository: mirror.gcr.io/chrisvel/tududi
-              tag: 1.9.6@sha256:11ced9d29a78a1936df2054d28bb90629bd6fe7eac23c2d28ec169649fa35b7c
+              tag: 1.9.7@sha256:bd1191e04b1c4b32fb8fa68199bd6982520f89eed9445cc91f886fbbebd2086c
             # docker-entrypoint.sh only exists to chown /app and su-exec down; it
             # needs root, so skip straight to the start script it would exec.
             command:
@@ -50,13 +50,12 @@ spec:
               FF_ENABLE_BACKUPS: false
               # start.sh shells out to npx for migrations; npm wants a writable HOME.
               HOME: /tmp
+              # mTLS: sslrootcert/sslcert/sslkey ride along in the uri
               DATABASE_URL:
-                secretKeyRef:
+                configMapKeyRef:
                   name: tududi-postgres
                   key: uri
-              # TLS to the pooler, no mtls
               DB_SSL: "true"
-              NODE_EXTRA_CA_CERTS: /var/run/secrets/postgresql/ca.crt
               DISABLE_TELEGRAM: true
               PASSWORD_AUTH_ENABLED: "false"
               OIDC_ENABLED: "true"
@@ -148,15 +147,12 @@ spec:
           - name: internal
             namespace: envoy-gateway
     persistence:
-      postgres-ca:
+      postgres-cert:
         type: secret
-        name: tududi-postgres
-        items:
-          - key: ca.crt
-            path: ca.crt
+        name: tududi-postgres-cert
+        defaultMode: 0440
         globalMounts:
           - path: /var/run/secrets/postgresql
-            readOnly: true
       # Attachments and avatars
       uploads:
         existingClaim: tududi

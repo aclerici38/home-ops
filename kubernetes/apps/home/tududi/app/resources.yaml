@@ -30,6 +30,7 @@ spec:
   values:
     cnpg:
       mode: shared
+      mtls: true
       # start.sh takes pg_advisory_xact_lock in a transaction that then sits
       # idle for the whole migration run, so the transaction pooler's
       # idle_transaction_timeout (60s) would drop it mid-migration.
