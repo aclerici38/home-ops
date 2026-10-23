@@ -7,6 +7,7 @@ metadata:
 spec:
   source: https://huggingface.co/bartowski/Qwen_Qwen3-8B-GGUF/resolve/main/Qwen_Qwen3-8B-Q4_K_M.gguf
   format: gguf
+  sha256: 54fffa050078e984116639c83dfb64b5aa6d4cd474e018b076777c632bbccccd
   quantization: Q4_K_M
   hardware:
     accelerator: intel
@@ -100,6 +101,7 @@ spec:
       mountPath: /tmp
 
   podSecurityContext:
+    runAsNonRoot: true
     runAsUser: 1000
     runAsGroup: 1000
     fsGroup: 1000

@@ -7,6 +7,7 @@ metadata:
 spec:
   source: https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF/resolve/main/Qwen3-Embedding-0.6B-Q8_0.gguf
   format: gguf
+  sha256: 06507c7b42688469c4e7298b0a1e16deff06caf291cf0a5b278c308249c3e439
   quantization: Q8_0
   hardware:
     # cain's iGPU, not the A770: keeps the chat model's VRAM budget intact.
@@ -66,6 +67,7 @@ spec:
       mountPath: /tmp
 
   podSecurityContext:
+    runAsNonRoot: true
     runAsUser: 1000
     runAsGroup: 1000
     fsGroup: 1000

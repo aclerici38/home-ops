@@ -7,6 +7,7 @@ metadata:
 spec:
   source: https://huggingface.co/gpustack/bge-reranker-v2-m3-GGUF/resolve/main/bge-reranker-v2-m3-Q8_0.gguf
   format: gguf
+  sha256: a43c7c9b11a4c1517e5bf95151960e1621d1b72f7a493364b01e386cf1aaa1d3
   quantization: Q8_0
   hardware:
     # cain's iGPU, shared with the embedder — see claims.yaml.
@@ -66,6 +67,7 @@ spec:
       mountPath: /tmp
 
   podSecurityContext:
+    runAsNonRoot: true
     runAsUser: 1000
     runAsGroup: 1000
     fsGroup: 1000

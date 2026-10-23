@@ -62,6 +62,9 @@ spec:
           # drm-exporter covers this
           gpu:
             enabled: false
+          # NVIDIA DCGM Xid alerts, rendered independently of gpu above
+          gpuHealth:
+            enabled: false
           inference:
             enabled: true
           serving:
