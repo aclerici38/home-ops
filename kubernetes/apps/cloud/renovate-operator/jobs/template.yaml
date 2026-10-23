@@ -12,7 +12,11 @@ spec:
       module.exports = {
         allowedCommands: ['pnpm run bundle'],
         allowedUnsafeExecutions: ['mise'],
-        customEnvVariables: {MISE_TRUSTED_CONFIG_PATHS: '/tmp/repos'},
+        customEnvVariables: {
+          MISE_TRUSTED_CONFIG_PATHS: '/tmp/repos',
+          // Override mise's default 24h cooldown
+          MISE_MINIMUM_RELEASE_AGE: '0s',
+        },
         // Docker Hub 403s past page 10
         dockerMaxPages: 10,
         hostRules: [
