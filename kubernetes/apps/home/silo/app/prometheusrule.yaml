@@ -1,7 +1,7 @@
 ---
 # Adapted from upstream deploy/observability/silo.rules.yml. Shared-queue gauges
 # are sampled by every API replica, so they're deduplicated with max, never summed.
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.1/prometheusrule_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.2/prometheusrule_v1.json
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
