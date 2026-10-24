@@ -104,6 +104,31 @@ spec:
             {"WebRtcIPHandling": "disable_non_proxied_udp"}
           dns.json: |-
             {"BuiltInDnsClientEnabled": false, "DnsOverHttpsMode": "off"}
+          # Browser-initiated Google traffic: NTP/search suggest, network time, safe browsing,
+          # autofill/translate/spellcheck servers, optimization guide model downloads, preconnects
+          background.json: |-
+            {
+              "DefaultSearchProviderEnabled": false,
+              "SearchSuggestEnabled": false,
+              "NewTabPageLocation": "about:blank",
+              "NetworkPredictionOptions": 2,
+              "BrowserNetworkTimeQueriesEnabled": false,
+              "ComponentUpdatesEnabled": false,
+              "BrowserSignin": 0,
+              "SyncDisabled": true,
+              "SafeBrowsingProtectionLevel": 0,
+              "AutofillAddressEnabled": false,
+              "AutofillCreditCardEnabled": false,
+              "PasswordManagerEnabled": false,
+              "TranslateEnabled": false,
+              "SpellcheckEnabled": false,
+              "SpellCheckServiceEnabled": false,
+              "UrlKeyedAnonymizedDataCollectionEnabled": false,
+              "MetricsReportingEnabled": false,
+              "DomainReliabilityAllowed": false,
+              "AlternateErrorPagesEnabled": false,
+              "GenAiDefaultSettings": 2
+            }
       chromium-flags:
         data:
           # Every profile starts the user-policy FCM invalidation listeners (no switch/policy gate),
@@ -114,6 +139,24 @@ spec:
             export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --gcm-checkin-url=http://127.0.0.1:9/"
             export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --gcm-registration-url=http://127.0.0.1:9/"
             export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --gcm-mcs-endpoint=https://127.0.0.1:9"
+            # The ComponentUpdatesEnabled policy (needed to stop optimization guide model fetches)
+            # still lets some components check in; the switch doesn't.
+            export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --disable-component-update"
+            # Fail these lookups in-browser: Adscore (pulled in by ad scripts on indexer pages) probes
+            # 4/6.adsco.re:2087 to fingerprint the v4/v6 address, and the Gaia cookie manager polls
+            # ListAccounts on every launch regardless of the signin policies.
+            # Prepended to "$@" since the wrapper word-splits CHROMIUM_FLAGS and the rules need spaces.
+            set -- "--host-resolver-rules=MAP adsco.re ~NOTFOUND, MAP *.adsco.re ~NOTFOUND, MAP accounts.google.com ~NOTFOUND" "$@"
+            # Cloudflare NEL/Reporting beacons (a.nel.cloudflare.com). FlareSolverr passes its own
+            # --disable-features and the last one wins, so merge into it rather than adding another.
+            _feat=NetworkErrorLogging,Reporting
+            _merged=
+            for _arg; do
+              shift
+              case $_arg in --disable-features=*) _arg="$_arg,$_feat" _merged=1 ;; esac
+              set -- "$@" "$_arg"
+            done
+            [ -n "$_merged" ] || set -- "$@" "--disable-features=$_feat"
     persistence:
       chromium-policy:
         type: configMap

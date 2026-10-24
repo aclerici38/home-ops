@@ -90,6 +90,8 @@ blocking:
       - https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/multi.txt
     security:
       - https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/tif.txt
+    ads-strict:
+      - https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/pro.plus.txt
   allowlists:
     ads:
       - |
@@ -113,6 +115,15 @@ blocking:
     # Wireguard
     10.38.0.0/24:
       - ads
+    172.16.0.0/16:
+      - ads-strict
+    "fdf6:d3fd:1748:1000::/56":
+      - ads-strict
+    # iot
+    10.0.80.0/24:
+      - ads-strict
+    "fdf6:d3fd:1748:80::/64":
+      - ads-strict
 
 redis:
   address: blocky-dragonfly-db:6379
