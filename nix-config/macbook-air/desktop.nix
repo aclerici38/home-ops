@@ -38,6 +38,11 @@
 
   services.blueman.enable = true;
 
+  programs.localsend = {
+    enable = true;
+    openFirewall = true;
+  };
+
   # Kill the biggest process before Firefox can freeze the whole machine.
   services.earlyoom.enable = true;
 
