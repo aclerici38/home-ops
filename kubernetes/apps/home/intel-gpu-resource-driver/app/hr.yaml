@@ -18,10 +18,10 @@ spec:
     timeout: 2m
     remediation:
       retries: 1
-  # The chart has no pod-label value; apiserver egress via the apiserver-clients CCNP
   postRenderers:
     - kustomize:
         patches:
+          # The chart has no pod-label value; apiserver egress via the apiserver-clients CCNP
           - target:
               kind: DaemonSet
               name: intel-gpu-resource-driver-kubelet-plugin
@@ -29,11 +29,64 @@ spec:
               - op: add
                 path: /spec/template/metadata/labels/dormammu.internal~1apiserver-client
                 value: "true"
+          # With --manage-binding=false the plugin never writes sysfs, so /sys goes
+          # read-only. It only needs its own kubelet plugin dir, not every CSI/DRA
+          # driver's sockets under /var/lib/kubelet/plugins, and the GPU driver
+          # never touches the dynamic CDI dir (it writes specs to /etc/cdi)
+          - target:
+              kind: DaemonSet
+              name: intel-gpu-resource-driver-kubelet-plugin
+            patch: |
+              apiVersion: apps/v1
+              kind: DaemonSet
+              metadata:
+                name: intel-gpu-resource-driver-kubelet-plugin
+              spec:
+                template:
+                  spec:
+                    containers:
+                      - name: kubelet-plugin
+                        securityContext:
+                          allowPrivilegeEscalation: false
+                        volumeMounts:
+                          - mountPath: /sysfs
+                            readOnly: true
+                          - mountPath: /var/lib/kubelet/plugins
+                            $patch: delete
+                          - name: plugins
+                            mountPath: /var/lib/kubelet/plugins/gpu.intel.com
+                          - mountPath: /var/run/cdi
+                            $patch: delete
+                    volumes:
+                      - name: plugins
+                        hostPath:
+                          path: /var/lib/kubelet/plugins/gpu.intel.com
+                          type: DirectoryOrCreate
+                      - name: varruncdi
+                        $patch: delete
+          # Nothing here runs VMs; with binding management off a VFIO claim can't
+          # be prepared anyway, so don't offer the class at all
+          - target:
+              kind: DeviceClass
+              name: gpu-vfio.intel.com
+            patch: |
+              $patch: delete
+              apiVersion: resource.k8s.io/v1
+              kind: DeviceClass
+              metadata:
+                name: gpu-vfio.intel.com
   values:
     cdi:
       staticPath: /var/cdi/static
       dynamicPath: /var/cdi/dynamic
     kubeletPlugin:
-      privileged: true
+      # Privileged only buys the A770's VRAM size in the ResourceSlice (an ioctl on
+      # /dev/dri/cardN); no claim selects on it. Everything else is sysfs.
+      privileged: false
+      # The chart only renders --manage-binding when healthMonitoring is on; keeps
+      # the plugin from unbinding a GPU from i915/xe and handing it to vfio-pci
+      extraArgs: --manage-binding=false
+      nodeSelector:
+        intel.feature.node.kubernetes.io/gpu: "true"
       healthMonitoring:
         enabled: false
