@@ -8,6 +8,9 @@ spec:
   groups:
     - name: exportarr.rules
       rules:
+        # Queue-only: health checks are config nags, not broken downloads.
+        # exportarr drops queue series on a failed scrape, so keep_firing_for
+        # stops a brief gap from resolving and re-notifying.
         # importBlocked = needs manual import; failedPending/failed = failed-download handling stuck
         - alert: ArrImportStuck
           expr: |-
@@ -16,6 +19,7 @@ spec:
                 or {__name__=~"(sonarr|radarr)_queue_total", download_status="error"}
             ) > 0
           for: 1h
+          keep_firing_for: 30m
           annotations:
             summary: >-
               {{ $value }} {{ $labels.job }} queue item(s) stuck in {{ $labels.download_state }}
@@ -27,18 +31,8 @@ spec:
           expr: |-
             sum by (job) ({__name__=~"(sonarr|radarr)_queue_total", status="warning"}) > 0
           for: 12h
+          keep_firing_for: 30m
           annotations:
             summary: >-
               {{ $value }} {{ $labels.job }} download(s) stalled or warning for over 12h
-          labels: *labels
-        # Indexer failures are reported once, by prowlarr, and only the long-term (>6h) check:
-        # the short-term IndexerStatusCheck flaps with every transient indexer error
-        - alert: ArrHealthIssue
-          expr: |-
-            {__name__=~"(sonarr|radarr)_system_health_issues", source!~"IndexerStatusCheck|IndexerLongTermStatusCheck"} > 0
-              or prowlarr_system_health_issues{source!="IndexerStatusCheck"} > 0
-          for: 30m
-          annotations:
-            summary: >-
-              {{ $labels.job }} {{ $labels.source }}: {{ $labels.message }}
           labels: *labels
