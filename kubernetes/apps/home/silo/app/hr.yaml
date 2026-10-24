@@ -62,6 +62,7 @@ spec:
               # Plugins stored in postgres
               SILO_PLUGIN_CACHE_DIR: /tmp/silo-plugins
               SILO_TRUSTED_PROXIES: ${CLUSTER_POD_CIDR}
+              SILO_SHUTDOWN_DELAY: "0"
               # Image has no passwd entry
               HOME: /tmp
               REDIS_URL: redis://silo-dragonfly-db:6379
@@ -117,6 +118,8 @@ spec:
             env:
               <<: *env
               MODE: transcode
+              # Stop at once instead of draining; sessions replan onto the server
+              SILO_NODE_DRAIN_TIMEOUT: "0"
               POD_NAME:
                 valueFrom:
                   fieldRef:
