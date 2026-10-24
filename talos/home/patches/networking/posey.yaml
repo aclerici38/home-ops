@@ -17,6 +17,19 @@ name: bond1-link1
 selector:
   match: glob("a8:5e:45:9c:d0:99", mac(link.permanent_addr))
 ---
+# igc defaults to a 256-entry RX ring, which overflows under Ceph load
+apiVersion: v1alpha1
+kind: EthernetConfig
+name: enp10s0
+rings:
+  rx: 4096
+---
+apiVersion: v1alpha1
+kind: EthernetConfig
+name: enp11s0
+rings:
+  rx: 4096
+---
 apiVersion: v1alpha1
 kind: BondConfig
 name: bond0
