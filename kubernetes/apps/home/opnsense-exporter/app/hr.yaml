@@ -48,6 +48,7 @@ spec:
               - --exporter.disable-kea-dhcpv4
               - --exporter.disable-kea-dhcpv6
               - --exporter.disable-temperature
+              - --exporter.disable-carp
             env:
               OPNSENSE_EXPORTER_OPS_API_KEY:
                 secretKeyRef:
