@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.3/ciliumnetworkpolicy_v2.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.4/ciliumnetworkpolicy_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
@@ -30,7 +30,7 @@ spec:
         - remote-node
         - kube-apiserver
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.3/ciliumnetworkpolicy_v2.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.4/ciliumnetworkpolicy_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
@@ -59,7 +59,7 @@ spec:
         - ports:
             - {port: "443", protocol: TCP}
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.3/ciliumnetworkpolicy_v2.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.4/ciliumnetworkpolicy_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
@@ -79,7 +79,7 @@ spec:
   egress:
     - {}
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.3/ciliumnetworkpolicy_v2.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.4/ciliumnetworkpolicy_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
@@ -94,7 +94,7 @@ spec:
   egress:
     - {}
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.3/ciliumnetworkpolicy_v2.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.4/ciliumnetworkpolicy_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
