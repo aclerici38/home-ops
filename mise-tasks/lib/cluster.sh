@@ -19,7 +19,7 @@ select_cluster() {
 
 require_context() {
   kubectl config get-contexts --output name | grep -qx "$1" || {
-    echo "ERROR: kube context '$1' not found; merge it first (e.g. talosctl kubeconfig)" >&2
+    echo "ERROR: kube context '$1' not found; merge it first (mise run kube:talos $CLUSTER)" >&2
     return 1
   }
   kubectl config use-context "$1" > /dev/null

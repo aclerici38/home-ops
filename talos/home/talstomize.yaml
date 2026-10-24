@@ -5,6 +5,7 @@ kind: Talstomize
 clusterName: ${CLUSTER_NAME}
 controlPlaneEndpoint: ${CLUSTER_ENDPOINT_URL}
 kubernetesVersion: ${KUBE_VERSION}
+talosVersion: ${TALOS_VERSION}
 secrets: ./talsecret.sops.yaml
 
 additionalSubjectAltNames:
@@ -24,9 +25,6 @@ additionalSubjectAltNames:
   - "${BELT_IP}"
   - "127.0.0.1"
   - "${CLUSTER_SVC_GATEWAY}"
-
-installer:
-  talosVersion: ${TALOS_VERSION}
 
 nodes:
   bonds:
