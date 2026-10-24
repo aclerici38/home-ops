@@ -224,28 +224,6 @@ spec:
             toPorts:
               - ports:
                   - {port: "10200", protocol: TCP}
-    configMaps:
-      # temp until pylutron-caseta ships the Python 3.14.8 fix
-      # https://github.com/gurumitts/pylutron-caseta/issues/217 https://github.com/gurumitts/pylutron-caseta/pull/218
-      lutron-tls-fix:
-        data:
-          lutron_tls_fix.py: |
-            try:
-                from pylutron_caseta.smartbridge import Smartbridge
-            except ImportError:
-                pass
-            else:
-                _create_tls_context = Smartbridge._create_tls_context
-
-                def _create_tls_context_no_hostname(keyfile, certfile, ca_certs):
-                    ssl_context = _create_tls_context(keyfile, certfile, ca_certs)
-                    ssl_context.check_hostname = False
-                    return ssl_context
-
-                Smartbridge._create_tls_context = staticmethod(_create_tls_context_no_hostname)
-          # site.py executes `import` lines in .pth files at interpreter startup
-          lutron-tls-fix.pth: |
-            import lutron_tls_fix
     persistence:
       config:
         existingClaim: home-assistant
@@ -260,18 +238,6 @@ spec:
         existingClaim: hass-cache
         globalMounts:
           - path: /venv
-      lutron-tls-fix:
-        type: configMap
-        identifier: lutron-tls-fix
-        advancedMounts:
-          home-assistant:
-            home-assistant:
-              - path: /usr/local/lib/python3.14/site-packages/lutron_tls_fix.py
-                subPath: lutron_tls_fix.py
-                readOnly: true
-              - path: /usr/local/lib/python3.14/site-packages/lutron-tls-fix.pth
-                subPath: lutron-tls-fix.pth
-                readOnly: true
       tmpfs:
         type: emptyDir
         globalMounts:
