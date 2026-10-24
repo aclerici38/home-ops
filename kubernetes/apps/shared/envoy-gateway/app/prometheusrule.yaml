@@ -33,18 +33,6 @@ spec:
           labels:
             severity: critical
 
-        # Envoy serves certs from the xDS snapshot, so this catches a cert-manager
-        # renewal that succeeded in the Secret but never propagated to the proxy.
-        - alert: EnvoyProxyCertExpiringSoon
-          expr: min by (gateway) (envoy_server_days_until_first_cert_expiring) < 14
-          for: 1h
-          annotations:
-            summary: >-
-              Envoy on gateway {{ $labels.gateway }} is serving a certificate that
-              expires in {{ $value | printf "%.0f" }} days.
-          labels:
-            severity: warning
-
         # CDS/LDS rejections mean Envoy refused a snapshot the control plane
         # thought it accepted -- config drift between the two. This must key on
         # _rejected (a NACK), NOT _update_failure: the latter also counts a

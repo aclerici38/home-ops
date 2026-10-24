@@ -21,7 +21,6 @@ endpoints:
     conditions:
       - "[STATUS] == 200"
       - "[BODY].issuer == https://id.clerici.tech"
-      - "[CERTIFICATE_EXPIRATION] > 240h"
 
   - name: Raphael
     group: travel

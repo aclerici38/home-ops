@@ -17,6 +17,18 @@ spec:
               The {{ $labels.name }} endpoint is down
           labels:
             severity: critical
+        # The cert actually served, seen from outside: home (Pocket-ID,
+        # Status-Page) and raphael.living
+        - alert: GatusCertificateExpiringSoon
+          expr: |-
+            gatus_results_certificate_expiration_seconds < 14 * 86400
+          for: 1h
+          annotations:
+            summary: >-
+              {{ $labels.name }} is serving a certificate that expires in
+              {{ $value | humanizeDuration }}
+          labels:
+            severity: warning
         - alert: GatusDown
           expr: |-
             absent(gatus_results_endpoint_success)

@@ -28,6 +28,19 @@ spec:
               The internal {{ $labels.name }} endpoint has a public DNS record
           labels:
             severity: critical
+        # The cert actually served, seen from outside: cloud's gateway and its
+        # directly-served certs. Home's own routes (external group) are watched
+        # from cloud instead of once per route here.
+        - alert: GatusCertificateExpiringSoon
+          expr: |-
+            gatus_results_certificate_expiration_seconds{group!="external"} < 14 * 86400
+          for: 1h
+          annotations:
+            summary: >-
+              {{ $labels.name }} is serving a certificate that expires in
+              {{ $value | humanizeDuration }}
+          labels:
+            severity: warning
         - alert: GatusDown
           expr: |-
             absent(gatus_results_endpoint_success)
