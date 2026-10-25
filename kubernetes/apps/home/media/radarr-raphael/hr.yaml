@@ -38,8 +38,26 @@ spec:
             env:
               RADARR__APP__INSTANCENAME: Radarr Raphael
               RADARR__APP__THEME: dark
-              RADARR__AUTH__METHOD: External
-              RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              RADARR__AUTH__METHOD: Oidc
+              RADARR__AUTH__REQUIRED: Enabled
+              RADARR__AUTH__OIDCAUTHORITY:
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr-raphael-oidc-credentials
+                    key: issuer_url
+              RADARR__AUTH__OIDCCLIENTID:
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr-raphael-oidc-credentials
+                    key: client_id
+              RADARR__AUTH__OIDCCLIENTSECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr-raphael-oidc-credentials
+                    key: client_secret
+              # pocket-id sub
+              RADARR__AUTH__OIDCUSERIDENTIFIER: a15f91db-50ff-4b61-aafa-ad5276a4c21e
+              RADARR__SERVER__TRUSTEDNETWORKS: ${CLUSTER_POD_CIDR},${CLUSTER_POD_CIDR_V6}
               RADARR__LOG__DBENABLED: "False"
               RADARR__LOG__ANALYTICSENABLED: "False"
               RADARR__LOG__LEVEL: info
