@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./app-template.yaml
   - ./resource-bundle-chart.yaml
+  - ./timezone.yaml
 configMapGenerator:
   - name: cluster-settings
     envs:

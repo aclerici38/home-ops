@@ -15,3 +15,8 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  postBuild:
+    substitute:
+      TZ: America/Los_Angeles
+      # renovate: datasource=docker depName=quay.io/k8tz/tzdata versioning=loose
+      TZDATA_VERSION: "2026e@sha256:aede69d0c675a5eb6d7ac722d379e4eedd7e38f1d1baf1a4ab67051cb37e3961"

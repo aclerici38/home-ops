@@ -76,7 +76,7 @@ spec:
     configMaps:
       config:
         data:
-          # Schedule regex is T/MM/DD/d/HH in local time (k8tz sets TZ). Same
+          # Schedule regex is T/MM/DD/d/HH in local time (the pod-timezone MAP sets TZ). Same
           # cadence as the old CronJobs: short at 00:00 on the 8th/16th/22nd,
           # long at 02:00 on the 3rd. Only -s is given, so smartd runs tests
           # and nothing else: no attribute monitoring, no mail.
