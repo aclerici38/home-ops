@@ -28,7 +28,7 @@ spec:
           scrutiny:
             image:
               repository: ghcr.io/starosdev/scrutiny
-              tag: 1.76.9-web@sha256:11a9ab44413361c68bccc5ac06ed2e1bf2a8c17947c89086e470859eac157887
+              tag: 1.77.0-web@sha256:7f40943ec7ae0f5b27ae1f8b9d9aef4d46988d8af144e6ae90382f1f8808cc4b
             env:
               SCRUTINY_NO_LOGO: true
               SCRUTINY_WEB_INFLUXDB_HOST: scrutiny-influxdb
@@ -96,7 +96,7 @@ spec:
           scrutiny-collector:
             image:
               repository: ghcr.io/starosdev/scrutiny
-              tag: 1.76.9-collector@sha256:6b8bdab3c60ae6f75ee5a1e21c4d2d711a2d34be6190b31d91265faa575a2486
+              tag: 1.77.0-collector@sha256:c2a979415e893419d43645007f78a46e7a49dc2b2508dfae1a1aecefe9f7ecb6
             # The image's entrypoint rewrites /etc/cron.d and su's into cron,
             # which needs a writable rootfs plus SETUID/SETGID. A plain loop
             # needs neither; the first pass doubles as run-on-startup.
@@ -149,7 +149,7 @@ spec:
           collector-zfs:
             image:
               repository: ghcr.io/starosdev/scrutiny
-              tag: 1.76.9-collector-zfs@sha256:13694ba8dffb2f4cbed37616919eb02e35da8f2d103e9f8bc167359f32d3c7e7
+              tag: 1.77.0-collector-zfs@sha256:1048b2bcb27260c9931fbf7b37c8f9d7ce1a20c467e4d0a153d9ea2c94372bea
             command: *loop
             args:
               - /opt/scrutiny/bin/scrutiny-collector-zfs
