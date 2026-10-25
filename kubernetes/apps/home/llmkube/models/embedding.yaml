@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.9/model_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.10/model_v1alpha1.json
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: Model
 metadata:
@@ -8,6 +8,8 @@ spec:
   source: https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF/resolve/main/Qwen3-Embedding-0.6B-Q8_0.gguf
   format: gguf
   sha256: 06507c7b42688469c4e7298b0a1e16deff06caf291cf0a5b278c308249c3e439
+  # Stage into the shared cache from a Job; Model reads Downloading until done.
+  prefetch: true
   quantization: Q8_0
   hardware:
     # cain's iGPU, not the A770: keeps the chat model's VRAM budget intact.
@@ -23,7 +25,7 @@ spec:
     cpu: "1"
     memory: 4Gi
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.9/inferenceservice_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.10/inferenceservice_v1alpha1.json
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: InferenceService
 metadata:
@@ -66,11 +68,15 @@ spec:
     - name: tmp
       mountPath: /tmp
 
+  modelCache:
+    prefetch: true
+
   podSecurityContext:
     runAsNonRoot: true
     runAsUser: 1000
     runAsGroup: 1000
-    fsGroup: 1000
+    # The operator --default-fsgroup (curl_group)
+    fsGroup: 102
     fsGroupChangePolicy: OnRootMismatch
     seccompProfile: {type: RuntimeDefault}
   securityContext:

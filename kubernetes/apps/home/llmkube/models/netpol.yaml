@@ -19,7 +19,21 @@ spec:
         - ports:
             - {port: "8080", protocol: TCP}
   egress:
-    # model-downloader init container, on a model cache miss
+    - {}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.4/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: llmkube-prefetch
+spec:
+  # Model prefetch Job pods (operator-set pod template labels)
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: model-prefetch
+  ingress:
+    - {}
+  egress:
     - toFQDNs:
         - matchName: huggingface.co
         - matchPattern: "**.hf.co"

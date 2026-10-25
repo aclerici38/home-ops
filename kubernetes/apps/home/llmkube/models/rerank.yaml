@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.9/model_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.10/model_v1alpha1.json
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: Model
 metadata:
@@ -8,6 +8,8 @@ spec:
   source: https://huggingface.co/gpustack/bge-reranker-v2-m3-GGUF/resolve/main/bge-reranker-v2-m3-Q8_0.gguf
   format: gguf
   sha256: a43c7c9b11a4c1517e5bf95151960e1621d1b72f7a493364b01e386cf1aaa1d3
+  # Stage into the shared cache from a Job; Model reads Downloading until done.
+  prefetch: true
   quantization: Q8_0
   hardware:
     # cain's iGPU, shared with the embedder — see claims.yaml.
@@ -23,7 +25,7 @@ spec:
     cpu: "1"
     memory: 4Gi
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.9/inferenceservice_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.10/inferenceservice_v1alpha1.json
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: InferenceService
 metadata:
@@ -66,11 +68,15 @@ spec:
     - name: tmp
       mountPath: /tmp
 
+  modelCache:
+    prefetch: true
+
   podSecurityContext:
     runAsNonRoot: true
     runAsUser: 1000
     runAsGroup: 1000
-    fsGroup: 1000
+    # The operator --default-fsgroup (curl_group)
+    fsGroup: 102
     fsGroupChangePolicy: OnRootMismatch
     seccompProfile: {type: RuntimeDefault}
   securityContext:

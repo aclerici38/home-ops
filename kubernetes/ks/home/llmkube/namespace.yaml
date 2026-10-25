@@ -4,6 +4,9 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: llmkube
+  annotations:
+    # TODO: find better solution
+    k8tz.io/strategy: imageVolume
   labels:
     pod-security.kubernetes.io/enforce: restricted
     pod-security.kubernetes.io/audit: restricted

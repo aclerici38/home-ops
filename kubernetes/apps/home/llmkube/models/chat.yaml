@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.9/model_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.10/model_v1alpha1.json
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: Model
 metadata:
@@ -8,6 +8,8 @@ spec:
   source: https://huggingface.co/bartowski/Qwen_Qwen3-8B-GGUF/resolve/main/Qwen_Qwen3-8B-Q4_K_M.gguf
   format: gguf
   sha256: 54fffa050078e984116639c83dfb64b5aa6d4cd474e018b076777c632bbccccd
+  # Stage into the shared cache from a Job; Model reads Downloading until done.
+  prefetch: true
   quantization: Q4_K_M
   hardware:
     accelerator: intel
@@ -23,7 +25,7 @@ spec:
     cpu: "2"
     memory: 6Gi
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.9/inferenceservice_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.10/inferenceservice_v1alpha1.json
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: InferenceService
 metadata:
@@ -100,11 +102,15 @@ spec:
     - name: tmp
       mountPath: /tmp
 
+  modelCache:
+    prefetch: true
+
   podSecurityContext:
     runAsNonRoot: true
     runAsUser: 1000
     runAsGroup: 1000
-    fsGroup: 1000
+    # The operator --default-fsgroup (curl_group)
+    fsGroup: 102
     fsGroupChangePolicy: OnRootMismatch
     seccompProfile: {type: RuntimeDefault}
   securityContext:
