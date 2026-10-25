@@ -47,23 +47,12 @@ spec:
               - "3000"
               - "-b"
               - "::"
-            env: &env
+            env:
               RAILS_ENV: production
               SELF_HOSTED: true
               REDIS_URL: redis://dawarich-dragonfly-db:6379
               TIME_ZONE: ${TZ}
-              PROMETHEUS_EXPORTER_ENABLED: true
-              SIDEKIQ_METRICS_URL: http://127.0.0.1:9395/metrics
-              # metrics auth required
-              METRICS_USERNAME:
-                secretKeyRef:
-                  name: dawarich-metrics
-                  key: username
-              METRICS_PASSWORD:
-                secretKeyRef:
-                  name: dawarich-metrics
-                  key: password
-              APPLICATION_HOSTS: dawarich.clerici.tech,dawarich.dawarich.svc.cluster.local
+              APPLICATION_HOSTS: dawarich.clerici.tech
               DISTANCE_UNIT: mi
               STORE_GEODATA: true
               RAILS_CACHE_DB: 0
@@ -147,9 +136,6 @@ spec:
               - "sidekiq-entrypoint.sh"
             args:
               - "bundle exec sidekiq"
-            env:
-              <<: *env
-              PROMETHEUS_EXPORTER_PORT: 9395
             probes:
               liveness:
                 enabled: false
@@ -161,26 +147,6 @@ spec:
         ports:
           http:
             port: *port
-    serviceMonitor:
-      dawarich:
-        serviceName: dawarich
-        endpoints:
-          - port: http
-            scheme: http
-            path: /metrics
-            basicAuth:
-              username:
-                name: dawarich-metrics
-                key: username
-              password:
-                name: dawarich-metrics
-                key: password
-            relabelings:
-              # Rails host authorization only exempts /api/v1/health and matches
-              # APPLICATION_HOSTS verbatim, so scraping the pod IP gets a 403.
-              # Prometheus derives Host from __address__, so pin it to the FQDN.
-              - targetLabel: __address__
-                replacement: dawarich.dawarich.svc.cluster.local:3000
     route:
       dawarich:
         hostnames:
