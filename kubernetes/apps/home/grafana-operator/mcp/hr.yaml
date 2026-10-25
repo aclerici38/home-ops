@@ -29,11 +29,10 @@ spec:
         name: mcp-grafana-token
         key: token
 
-    envValueFrom:
-      MCP_GRAFANA_SERVER_TOKEN:
-        secretKeyRef:
-          name: mcp-grafana-server-token
-          key: token
+    serverAuth:
+      tokenSecret:
+        name: mcp-grafana-server-token
+        key: token
 
     extraArgs:
       # Appended to the entrypoint's own "--transport sse --address
