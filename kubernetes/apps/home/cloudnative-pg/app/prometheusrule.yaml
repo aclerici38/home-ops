@@ -1,0 +1,178 @@
+---
+# Adapted from the cloudnative-pg/charts `cluster` chart prometheus_rules
+# and the operator's docs/src/samples/monitoring rules, generalised to all
+# clusters (job = <namespace>/<cluster>). Not carried over: disk space
+# (openebs-hostpath reports the node filesystem, not the PVC; node
+# alerts cover it), zone spread (no zones), logical replication (none).
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.2/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cnpg-rules
+spec:
+  groups:
+    - name: cnpg-cluster
+      rules:
+        - alert: CNPGClusterOffline
+          expr: |
+            max by (namespace, job) (cnpg_collector_up) == 0
+              or
+            (count by (namespace, job) (cnpg_collector_up offset 15m)
+              unless count by (namespace, job) (cnpg_collector_up))
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "CNPG cluster {{ $labels.job }} has no running instances"
+            description: "No instance of {{ $labels.job }} reports PostgreSQL up. Applications cannot reach the database."
+            runbook_url: https://github.com/cloudnative-pg/charts/blob/main/charts/cluster/docs/runbooks/CNPGClusterOffline.md
+        - alert: CNPGInstanceMetricsAbsent
+          expr: up{container="postgres", endpoint="metrics"} == 0
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "CNPG instance {{ $labels.namespace }}/{{ $labels.pod }} metrics endpoint unreachable"
+            description: "The HA, lag and replication alerts read from this exporter and can't fire while it's down. Check the instance directly."
+            runbook_url: https://github.com/cloudnative-pg/charts/blob/main/charts/cluster/docs/runbooks/CNPGInstanceMetricsAbsent.md
+        - alert: CNPGMetricsQueryErrors
+          # Canary for broken monitoring queries: pg18's were all failing
+          # unnoticed for 5 weeks (dropped `app` db), omada's after the
+          # CVE-2026-44477 exporter role change (documentdb grants).
+          expr: max by (namespace, job, pod) (cnpg_last_error) > 0
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "CNPG metrics queries failing on {{ $labels.namespace }}/{{ $labels.pod }}"
+            description: "The exporter's last collection ended with an error, so cnpg_pg_* metrics (and alerts built on them) may be missing. Check the instance log for 'Error collecting user query'."
+        - alert: CNPGClusterHACritical
+          expr: |
+            max by (namespace, job) (cnpg_pg_replication_streaming_replicas - cnpg_pg_replication_is_wal_receiver_up) < 1
+              and on (namespace, job)
+            max by (namespace, job) (cnpg_collector_replica_mode) == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "CNPG cluster {{ $labels.job }} has no streaming standbys"
+            description: "The primary is running alone; a primary failure now means downtime and possible data loss."
+            runbook_url: https://github.com/cloudnative-pg/charts/blob/main/charts/cluster/docs/runbooks/CNPGClusterHACritical.md
+        - alert: CNPGClusterHAWarning
+          expr: |
+            max by (namespace, job) (cnpg_pg_replication_streaming_replicas - cnpg_pg_replication_is_wal_receiver_up) < 2
+              and on (namespace, job)
+            max by (namespace, job) (cnpg_collector_replica_mode) == 0
+          # Upstream uses 5m; a tuppr node reboot takes a standby away for
+          # ~3-8m, so this would fire on every upgrade.
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "CNPG cluster {{ $labels.job }} has {{ $value }} streaming standbys"
+            description: "Fewer than 2 standbys are streaming; another instance failure leaves the primary unprotected."
+            runbook_url: https://github.com/cloudnative-pg/charts/blob/main/charts/cluster/docs/runbooks/CNPGClusterHAWarning.md
+        - alert: CNPGReplicaNotStreaming
+          expr: max by (namespace, job, pod) (cnpg_pg_replication_in_recovery - cnpg_pg_replication_is_wal_receiver_up) > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "CNPG standby {{ $labels.namespace }}/{{ $labels.pod }} is not streaming from the primary"
+            description: "The standby is in recovery but its WAL receiver is down. With synchronous replication this can stall commits on the primary."
+        - alert: CNPGClusterPhysicalReplicationLagWarning
+          expr: max by (namespace, job) (cnpg_pg_replication_lag) > 1
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "CNPG cluster {{ $labels.job }} replication lag {{ $value | humanizeDuration }}"
+            description: "Standbys are behind the primary: network issues, busy instances, slow queries or configuration."
+            runbook_url: https://github.com/cloudnative-pg/charts/blob/main/charts/cluster/docs/runbooks/CNPGClusterPhysicalReplicationLag.md
+        - alert: CNPGClusterPhysicalReplicationLagCritical
+          expr: max by (namespace, job) (cnpg_pg_replication_lag) > 15
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "CNPG cluster {{ $labels.job }} replication lag {{ $value | humanizeDuration }}"
+            description: "Standbys are far behind the primary; a failover now would lose recent writes or take long to catch up."
+            runbook_url: https://github.com/cloudnative-pg/charts/blob/main/charts/cluster/docs/runbooks/CNPGClusterPhysicalReplicationLag.md
+        - alert: CNPGClusterHighConnectionsWarning
+          expr: |
+            sum by (namespace, job, pod) (cnpg_backends_total)
+              / on (namespace, job, pod)
+            max by (namespace, job, pod) (cnpg_pg_settings_setting{name="max_connections"}) * 100 > 80
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "CNPG instance {{ $labels.namespace }}/{{ $labels.pod }} at {{ $value | humanize }}% of max_connections"
+            runbook_url: https://github.com/cloudnative-pg/charts/blob/main/charts/cluster/docs/runbooks/CNPGClusterHighConnectionsWarning.md
+        - alert: CNPGClusterHighConnectionsCritical
+          expr: |
+            sum by (namespace, job, pod) (cnpg_backends_total)
+              / on (namespace, job, pod)
+            max by (namespace, job, pod) (cnpg_pg_settings_setting{name="max_connections"}) * 100 > 95
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "CNPG instance {{ $labels.namespace }}/{{ $labels.pod }} at {{ $value | humanize }}% of max_connections"
+            runbook_url: https://github.com/cloudnative-pg/charts/blob/main/charts/cluster/docs/runbooks/CNPGClusterHighConnectionsCritical.md
+        - alert: CNPGClusterInstancesOnSameNode
+          expr: |
+            count by (namespace, label_cnpg_io_cluster, node) (
+              kube_pod_info
+                * on (namespace, pod) group_left (label_cnpg_io_cluster)
+              kube_pod_labels{label_cnpg_io_pod_role="instance"}
+            ) > 1
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "CNPG cluster {{ $labels.namespace }}/{{ $labels.label_cnpg_io_cluster }} has {{ $value }} instances on {{ $labels.node }}"
+            description: "Losing or draining that node takes down several instances at once."
+            runbook_url: https://github.com/cloudnative-pg/charts/blob/main/charts/cluster/docs/runbooks/CNPGClusterInstancesOnSameNode.md
+        - alert: CNPGLongRunningTransaction
+          expr: max by (namespace, job, pod, datname, usename) (cnpg_backends_max_tx_duration_seconds) > 300
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Transaction open {{ $value | humanizeDuration }} on {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.datname }}, {{ $labels.usename }})"
+            description: "Long transactions block vacuum and hold locks; in session pools they also pin a server connection."
+        - alert: CNPGDatabaseXidAge
+          expr: max by (namespace, job, datname) (cnpg_pg_database_xid_age) > 300000000
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Database {{ $labels.datname }} in {{ $labels.job }} XID age {{ $value | humanize }}"
+            description: "Transaction ID age is high; autovacuum isn't freezing fast enough. Wraparound protection forces a shutdown at ~2 billion."
+        - alert: CNPGDatabaseDeadlocks
+          expr: sum by (namespace, job, datname) (increase(cnpg_pg_stat_database_deadlocks[1h])) > 10
+          labels:
+            severity: warning
+          annotations:
+            summary: "{{ $value | humanize }} deadlocks in the last hour on {{ $labels.datname }} ({{ $labels.job }})"
+    # No upstream equivalents; pgbouncer exporter metrics from the Poolers.
+    - name: cnpg-pooler
+      rules:
+        - alert: CNPGPoolerMetricsAbsent
+          expr: up{container="pgbouncer", endpoint="metrics"} == 0
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "CNPG pooler {{ $labels.namespace }}/{{ $labels.pod }} metrics endpoint unreachable"
+        - alert: CNPGPoolerClientsWaiting
+          # A pool whose server connections are all in use queues new
+          # clients (session pools: default_pool_size + reserve_pool_size).
+          expr: max by (namespace, job, database) (cnpg_pgbouncer_pools_maxwait) > 10
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Clients waiting {{ $value }}s for a server connection ({{ $labels.job }}, db {{ $labels.database }})"
+            description: "The pool is saturated. Raise its pool size or find what is holding connections."

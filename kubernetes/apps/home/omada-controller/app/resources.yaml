@@ -70,12 +70,13 @@ spec:
               documentdb.enableUserCrud: "true"
               documentdb.maxUserLimit: "100"
         # The metrics exporter (cnpg_metrics_exporter, non-superuser since
-        # CVE-2026-44477) can't call any function in this db without USAGE on
-        # documentdb_core: documentdb's hooks resolve its objects on every call,
-        # so every default metric query fails. The CRDs can't express grants;
-        # applied once by hand on the primary (persists in the catalog and in
-        # backups, replicates to standbys):
-        #   GRANT USAGE ON SCHEMA documentdb_core TO cnpg_metrics_exporter;
+        # CVE-2026-44477) fails every default metric query in this db:
+        # documentdb's planner hooks resolve their own functions/operators as
+        # the calling role on every query, which needs schema USAGE. The CRDs
+        # can't express grants; applied once by hand on the primary (persists
+        # in the catalog and in backups, replicates to standbys):
+        #   GRANT USAGE ON SCHEMA documentdb_core, documentdb_api_internal,
+        #     documentdb_api_catalog, documentdb_api TO cnpg_metrics_exporter;
         database:
           extensions:
             - {name: pg_cron, ensure: present}
