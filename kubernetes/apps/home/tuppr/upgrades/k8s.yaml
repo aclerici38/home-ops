@@ -16,3 +16,28 @@ spec:
       kind: CephCluster
       expr: |-
         status.ceph.health in ['HEALTH_OK']
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      description: CNPG clusters healthy, every instance ready, no switchover in flight
+      timeout: 15m
+      expr: |-
+        status.phase == "Cluster in healthy state" &&
+        status.readyInstances == object.spec.instances &&
+        status.currentPrimary == status.targetPrimary
+    - apiVersion: apps/v1
+      kind: Deployment
+      description: every CNPG pooler fully available
+      timeout: 10m
+      labelSelector:
+        matchLabels:
+          cnpg.io/podRole: pooler
+      expr: |-
+        has(status.availableReplicas) && status.availableReplicas == object.spec.replicas
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: pocket-id
+      namespace: pocket-id-operator
+      description: pocket-id serving
+      timeout: 10m
+      expr: |-
+        has(status.availableReplicas) && status.availableReplicas == object.spec.replicas

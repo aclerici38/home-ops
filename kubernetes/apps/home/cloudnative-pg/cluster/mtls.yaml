@@ -80,6 +80,19 @@ spec:
     metadata:
       labels:
         dormammu.internal/apiserver-client: "true"
+    # One pod per node so a single drain never takes the whole pooler
+    spec:
+      containers: []
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          nodeTaintsPolicy: Honor
+          labelSelector:
+            matchLabels:
+              cnpg.io/poolerName: pg18-pooler-mtls-rw
+          matchLabelKeys:
+            - pod-template-hash
   type: rw
   pgbouncer:
     imageCatalogRef:
@@ -135,6 +148,19 @@ spec:
     metadata:
       labels:
         dormammu.internal/apiserver-client: "true"
+    # One pod per node so a single drain never takes the whole pooler
+    spec:
+      containers: []
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          nodeTaintsPolicy: Honor
+          labelSelector:
+            matchLabels:
+              cnpg.io/poolerName: pg18-pooler-mtls-session-rw
+          matchLabelKeys:
+            - pod-template-hash
   type: rw
   pgbouncer:
     imageCatalogRef:
