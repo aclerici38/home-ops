@@ -83,5 +83,5 @@ spec:
             - {name: tsm_system_rows, ensure: present}
             - {name: vector, ensure: present}
             - {name: postgis, ensure: present}
-            - {name: documentdb_core, ensure: present}
-            - {name: documentdb, ensure: present}
+            - {name: documentdb_core, ensure: present, version: "1.0-0"}
+            - {name: documentdb, ensure: present, version: "1.0-0"}
