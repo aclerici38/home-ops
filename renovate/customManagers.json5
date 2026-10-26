@@ -17,6 +17,18 @@
       extractVersionTemplate: "^v(?<version>\\d+\\.\\d+)",
     },
     {
+      description: ["Process annotated nix package versions"],
+      customType: "regex",
+      managerFilePatterns: ["/\\.nix$/"],
+      matchStrings: [
+        // renovate: datasource=docker depName=ghcr.io/defilantech/charts/llmkube
+        // version = "0.10.11";
+        'datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\\n\\s*version = "(?<currentValue>[^"]+)";',
+      ],
+      datasourceTemplate: "{{{datasource}}}",
+      versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
+    },
+    {
       description: ["Process various other dependencies"],
       customType: "regex",
       managerFilePatterns: ["!/^renovate\\//"],

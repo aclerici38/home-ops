@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.11/model_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: Model
+metadata:
+  name: qwen3-14b
+spec:
+  source: https://huggingface.co/bartowski/Qwen_Qwen3-14B-GGUF/resolve/main/Qwen_Qwen3-14B-Q4_K_M.gguf
+  format: gguf
+  sha256: 915913e22399475dbe6c968ac014d9f1fbe08975e489279aede9d5c7b2c98eb6
+  quantization: Q4_K_M
+  hardware:
+    # Served by the Mac mini's metal-agent
+    accelerator: metal
+    gpu:
+      enabled: true
+      layers: -1
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.11/inferenceservice_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: InferenceService
+metadata:
+  name: qwen3-14b
+spec:
+  modelRef: qwen3-14b
+  runtime: llamacpp
+  mode: chat
+  replicas: 1
+  # ~8.4 GiB weights + 2.5 GiB f16 KV, inside the agent's ~16 GiB budget
+  contextSize: 16384
+  parallelSlots: 2
+  flashAttention: true
+  jinja: true
+  extraArgs:
+    - --cache-ram
+    - "2048"

@@ -1,0 +1,61 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: llmkube-metal-agent
+
+# Renovate bumps the version alongside the llmkube chart; this refreshes the
+# src and vendor hashes on its branch.
+on:
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - "nix-config/mac-mini/llmkube-metal-agent.nix"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  hashes:
+    name: Update hashes
+    if: ${{ startsWith(github.head_ref, 'renovate/') && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: macos-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+        with:
+          determinate: false
+
+      - name: Update hashes
+        working-directory: nix-config
+        run: nix run nixpkgs#nix-update -- --flake --version skip llmkube-metal-agent
+
+      - name: Build
+        working-directory: nix-config
+        run: nix build .#llmkube-metal-agent
+
+      # Through the API so the commit is signed
+      - name: Commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.head_ref }}
+          FILE: nix-config/mac-mini/llmkube-metal-agent.nix
+        run: |
+          git diff --quiet -- "$FILE" && exit 0
+          gh api -X PUT "repos/$GITHUB_REPOSITORY/contents/$FILE" \
+            -f message="fix(nix): update llmkube-metal-agent hashes" \
+            -f content="$(base64 -i "$FILE")" \
+            -f sha="$(git rev-parse "HEAD:$FILE")" \
+            -f branch="$BRANCH"

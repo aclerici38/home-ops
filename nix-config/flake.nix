@@ -32,25 +32,33 @@
   outputs =
     inputs@{
       self,
+      nixpkgs,
       nixpkgs-nixos,
       nix-darwin,
       ...
     }:
     let
       specialArgs = { inherit inputs self; };
-      mac = nix-darwin.lib.darwinSystem {
-        inherit specialArgs;
-        modules = [
-          ./common.nix
-          ./darwin.nix
-        ];
-      };
+      mkMac =
+        extraModules:
+        nix-darwin.lib.darwinSystem {
+          inherit specialArgs;
+          modules = [
+            ./common.nix
+            ./darwin.nix
+          ]
+          ++ extraModules;
+        };
     in
     {
+      packages.aarch64-darwin.llmkube-metal-agent =
+        nixpkgs.legacyPackages.aarch64-darwin.callPackage ./mac-mini/llmkube-metal-agent.nix
+          { };
+
       # $ darwin-rebuild switch --flake .
       darwinConfigurations = {
-        "Anthonys-Mac-mini" = mac;
-        "Anthonys-MacBook-Pro" = mac;
+        "Anthonys-Mac-mini" = mkMac [ ./mac-mini ];
+        "Anthonys-MacBook-Pro" = mkMac [ ];
       };
 
       # $ nixos-rebuild switch --flake .  (comin deploys main automatically)

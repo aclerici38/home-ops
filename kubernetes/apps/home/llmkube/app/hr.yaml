@@ -91,6 +91,16 @@ spec:
     modelSource:
       allowedHostPathRoots: []
       allowedRemoteHosts: []
+
+    # Mac mini (nix-config/mac-mini); token in models/metal-agent.yaml
+    metalAgent:
+      rbac:
+        enabled: true
+        scope: namespaced
+        namespaces:
+          - llmkube
+        secretNames:
+          - llmkube-metal-relay
   dependsOn:
     - name: intel-gpu-resource-driver
       namespace: intel-gpu-resource-driver

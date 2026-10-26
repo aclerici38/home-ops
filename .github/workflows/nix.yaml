@@ -44,7 +44,7 @@ jobs:
           determinate: false
 
       - name: nixfmt
-        run: nix shell nixpkgs#nixfmt --command nixfmt --check nix-config/*.nix nix-config/macbook-air/*.nix raphael/*.nix raphael/nixos/*.nix
+        run: nix shell nixpkgs#nixfmt --command nixfmt --check nix-config/*.nix nix-config/macbook-air/*.nix nix-config/mac-mini/*.nix raphael/*.nix raphael/nixos/*.nix
 
       - name: statix
         run: |

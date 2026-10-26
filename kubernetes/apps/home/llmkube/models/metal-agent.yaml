@@ -1,0 +1,56 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.1-standalone-strict/secret-v1.json
+# Here rather than app/ so the chart's ServiceAccount exists first
+apiVersion: v1
+kind: Secret
+metadata:
+  name: llmkube-metal-agent-token
+  annotations:
+    kubernetes.io/service-account.name: llmkube-metal-agent
+type: kubernetes.io/service-account-token
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.14.0/pushsecret_v1alpha1.json
+# Read by opnix on the Mac (nix-config/mac-mini)
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: llmkube-metal-agent
+spec:
+  refreshInterval: 1h
+  secretStoreRefs:
+    - name: onepassword-connect
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: llmkube-metal-agent-token
+  data:
+    - match:
+        secretKey: token
+        remoteRef:
+          remoteKey: llmkube-metal-agent
+          property: token
+    - match:
+        secretKey: ca.crt
+        remoteRef:
+          remoteKey: llmkube-metal-agent
+          property: ca
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.4/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: llmkube-metal-relay
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: metal-relay
+  egress:
+    # The agent's selectorless <isvc>-agent Services, whose endpoint is the Mac
+    - toServices:
+        - k8sServiceSelector:
+            selector:
+              matchLabels:
+                llmkube.ai/managed-by: metal-agent
+      toPorts:
+        - ports:
+            - {port: "9443", protocol: TCP}
