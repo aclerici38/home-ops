@@ -37,14 +37,14 @@ spec:
       spec:
         database:
           extensions:
-            - {name: postgis}
-            - {name: postgis_raster}
-            - {name: postgis_sfcgal}
+            - {name: postgis, version: 3.6.4}
+            - {name: postgis_raster, version: 3.6.4}
+            - {name: postgis_sfcgal, version: 3.6.4}
             - {name: fuzzystrmatch}
-            - {name: address_standardizer}
-            - {name: address_standardizer_data_us}
-            - {name: postgis_tiger_geocoder}
-            - {name: postgis_topology}
+            - {name: address_standardizer, version: 3.6.4}
+            - {name: address_standardizer_data_us, version: 3.6.4}
+            - {name: postgis_tiger_geocoder, version: 3.6.4}
+            - {name: postgis_topology, version: 3.6.4}
     dragonfly:
       extraArgs:
         - --default_lua_flags=allow-undeclared-keys

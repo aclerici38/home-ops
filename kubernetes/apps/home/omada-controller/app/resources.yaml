@@ -42,7 +42,11 @@ spec:
                 inRoles:
                   - documentdb_admin_role
           postgresql:
+            # First match on the search paths wins: these shadow the copies
+            # bundled in the documentdb image, so they stay Renovate-pinned.
             extensions:
+              - {name: pgvector}
+              - {name: postgis}
               - {name: documentdb}
             shared_preload_libraries:
               - pg_cron
@@ -81,7 +85,7 @@ spec:
           extensions:
             - {name: pg_cron, ensure: present}
             - {name: tsm_system_rows, ensure: present}
-            - {name: vector, ensure: present}
-            - {name: postgis, ensure: present}
+            - {name: vector, ensure: present, version: 0.8.7}
+            - {name: postgis, ensure: present, version: 3.6.4}
             - {name: documentdb_core, ensure: present, version: "1.0-0"}
             - {name: documentdb, ensure: present, version: "1.0-0"}

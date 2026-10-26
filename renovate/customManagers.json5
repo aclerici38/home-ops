@@ -49,6 +49,19 @@
       autoReplaceStringTemplate: "{name: {{{depType}}}, ensure: present, version: \"{{{replace '^(\\d+\\.\\d+)\\.(\\d+)$' '$1-$2' newValue}}}\"}",
     },
     {
+      // Pins follow the catalog's rolling `X.Y.Z-18-trixie` tags (not the timestamped rebuilds)
+      description: "Detect CNPG Database CRD pgvector/postgis extension version pins",
+      customType: "regex",
+      managerFilePatterns: ["/(^|/)kubernetes/apps/.+/resources\\.ya?ml$/"],
+      matchStrings: [
+        "\\{name:\\s*(?<depType>vector|postgis\\w*|address_standardizer\\w*)\\s*,[^}\\n]*?version:\\s*[\"']?(?<currentValue>\\d+\\.\\d+\\.\\d+)[\"']?",
+        "name:\\s+(?<depType>vector|postgis\\w*|address_standardizer\\w*)[ \\t]*(?:\\n +[a-z_]+:[^\\n]*)*?\\n +version:\\s*[\"']?(?<currentValue>\\d+\\.\\d+\\.\\d+)[\"']?",
+      ],
+      datasourceTemplate: "docker",
+      depNameTemplate: "{{#if (equals depType 'vector')}}ghcr.io/cloudnative-pg/pgvector{{else}}ghcr.io/cloudnative-pg/postgis-extension{{/if}}",
+      extractVersionTemplate: "^(?<version>\\d+\\.\\d+\\.\\d+)-18-trixie$",
+    },
+    {
       customType: "regex",
       description: "Process Grafana CRD version field",
       managerFilePatterns: ["/grafana-operator/grafana/.*\\.ya?ml$/"],

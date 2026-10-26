@@ -13,6 +13,19 @@ spec:
     - major: 18
       image: ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie@sha256:0675340b02be838319b9b6f323c206693e519dcd62ec729d539be9f46bb7a2f9
       extensions:
+        - name: pgvector
+          image:
+            reference: ghcr.io/cloudnative-pg/pgvector:0.8.7-18-trixie@sha256:5e42ba35f8f1102cf8760dbb3db9352698257f12f757c089eb78740c50da944d
+        - name: postgis
+          image:
+            reference: ghcr.io/cloudnative-pg/postgis-extension:3.6.4-18-trixie@sha256:84a8e286d79aaec6fe824a792179d11252745a0d2b139d88692424fa61494df0
+          ld_library_path:
+            - system
+          env:
+            - name: GDAL_DATA
+              value: $${image_root}/share/gdal
+            - name: PROJ_DATA
+              value: $${image_root}/share/proj
         - name: documentdb
           image:
             reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:1.0.0@sha256:6b2b014a754ca96ab0f028a1015bd735caa8eda0ec153e3e64dc5dab3ee83bf9
