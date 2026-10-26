@@ -9,13 +9,24 @@ spec:
     version: ${TALOS_VERSION}
   policy:
     rebootMode: powercycle
+    # Drain + wait for CSI detach before the powercycle; otherwise RWO Ceph
+    # volumes stay attached to the dead node until it returns (Multi-Attach)
+    waitForVolumeDetach: true
   healthChecks:
+    - apiVersion: v1
+      kind: Node
+      description: every node Ready
+      timeout: 15m
+      expr: |-
+        status.conditions.exists(c, c.type == "Ready" && c.status == "True")
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: Snapshot
+      timeout: 15m
       expr: |-
         status.phase != "Running"
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
+      timeout: 15m
       expr: |-
         status.ceph.health in ['HEALTH_OK']
     - apiVersion: postgresql.cnpg.io/v1
