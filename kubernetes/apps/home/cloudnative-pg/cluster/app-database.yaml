@@ -1,0 +1,20 @@
+---
+# Empty placeholder for the bootstrap database (initdb.database, defaulted to
+# "app"). The metrics exporter runs its default queries against it, so without
+# it every default metric (replication, archiver, backends...) is missing.
+# Re-pointing initdb.database instead would also change the pg18-app secret and
+# the operator's app-user reconciliation. Owned by postgres so no
+# non-superuser owns it. Only local peer logins (postgres,
+# cnpg_metrics_exporter) can reach it: the pooler sameuser rules would only
+# admit a role named "app", which is NOLOGIN.
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.1/database_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: pg18-app
+spec:
+  cluster:
+    name: pg18
+  name: app
+  owner: postgres
+  databaseReclaimPolicy: retain
