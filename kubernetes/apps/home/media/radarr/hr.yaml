@@ -225,6 +225,8 @@ spec:
         advancedMounts:
           radarr:
             radarr:
+              - path: /config
+                subPath: config
               - path: /tmp
                 subPath: tmp
       config:
@@ -235,7 +237,8 @@ spec:
         advancedMounts:
           radarr:
             radarr:
-              - path: /config
+              - path: /config/MediaCover
+                subPath: MediaCover
       media:
         type: persistentVolumeClaim
         storageClass: nfs-media

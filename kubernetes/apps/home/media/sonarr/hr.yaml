@@ -226,6 +226,8 @@ spec:
         advancedMounts:
           sonarr:
             sonarr:
+              - path: /config
+                subPath: config
               - path: /tmp
                 subPath: tmp
       config:
@@ -236,7 +238,8 @@ spec:
         advancedMounts:
           sonarr:
             sonarr:
-              - path: /config
+              - path: /config/MediaCover
+                subPath: MediaCover
       media:
         type: persistentVolumeClaim
         storageClass: nfs-media
