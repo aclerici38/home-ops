@@ -25,3 +25,15 @@ contents: |-
   rsize=1048576
   wsize=1048576
   noatime=True
+---
+# nfsrahead reads this from Talos 1.15; until then it uses the identical
+# defaults baked into the extension. Without it, 1.15 drops to 128 KiB.
+apiVersion: v1alpha1
+kind: EtcFileConfig
+name: nfs.conf
+mode: 0o644
+contents: |-
+  [nfsrahead]
+  nfs=15000
+  nfs4=16000
+  default=128

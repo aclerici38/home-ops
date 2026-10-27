@@ -46,14 +46,12 @@ nodes:
             - -selinux
             - zfs.zfs_arc_max=26843545600 # 25Gi
             - zfs.zfs_arc_shrinker_limit=0
-            - i915.enable_guc=3
-            - i915.force_probe=!a7a0
-            - xe.force_probe=a7a0
             - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
           systemExtensions:
             officialExtensions:
+              # A770 (DG2) stays on i915: xe needs force_probe for it and
+              # has no DG2 HuC (no VDEnc CBR/VBR) as of Linux 6.18
               - siderolabs/i915
-              - siderolabs/xe
               - siderolabs/zfs
               - siderolabs/amd-ucode
               - siderolabs/nfsd
@@ -90,14 +88,10 @@ nodes:
             - security=none
             - sysctl.kernel.kexec_load_disabled=1
             - talos.auditd.disabled=1
-            - i915.enable_guc=3
-            - i915.force_probe=!a7a0
-            - xe.force_probe=a7a0
             - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
           systemExtensions:
             officialExtensions:
               - siderolabs/i915
-              - siderolabs/xe
               - siderolabs/mei
               - siderolabs/intel-ucode
               - siderolabs/nfsrahead
@@ -129,6 +123,7 @@ nodes:
             officialExtensions:
               - siderolabs/amd-ucode
               - siderolabs/nfsrahead
+              - siderolabs/realtek-firmware # rtl_nic for bond1's RTL8168h
     patches:
       - machine:
           install:
