@@ -28,14 +28,21 @@ static_resources:
               address: "::"
               port_value: 443
       per_connection_buffer_limit_bytes: 32768
+      # Blocked connections only
       access_log: &accessLog
         - name: envoy.access_loggers.stdout
+          filter:
+            extension_filter:
+              name: envoy.access_loggers.extension_filters.cel
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.access_loggers.filters.cel.v3.ExpressionFilter
+                expression: connection.termination_details.startsWith('rbac_access_denied')
           typed_config:
             "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
             log_format:
               text_format_source:
                 inline_string: |
-                  %DOWNSTREAM_REMOTE_ADDRESS% -> %DOWNSTREAM_LOCAL_ADDRESS% country=%FILTER_STATE(envoy.geoip:FIELD:country)% term=%CONNECTION_TERMINATION_DETAILS% flags=%RESPONSE_FLAGS% dur=%DURATION%ms rx=%BYTES_RECEIVED% tx=%BYTES_SENT%
+                  blocked %DOWNSTREAM_REMOTE_ADDRESS% -> %DOWNSTREAM_LOCAL_ADDRESS% country=%FILTER_STATE(envoy.geoip:FIELD:country)%
       filter_chains:
         - filters:
             - &geoip
