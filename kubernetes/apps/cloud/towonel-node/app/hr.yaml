@@ -19,7 +19,8 @@ spec:
       rateLimitPerSecond: 1
       rateLimitBurst: 2000
     edge:
-      bindAddress: "[::]"
+      # Loopback only: geo-proxy is the sole client
+      bindAddress: 127.0.0.1
       httpsPort: 9443
       httpPort: 9080
     controllers:
@@ -34,12 +35,10 @@ spec:
               TOWONEL_EDGE_ADVERTISED_ADDRESSES: vps.clerici.tech:443
               TOWONEL_EDGE_PUBLIC_IPS: ${NODE_V4_IP},${NODE_V6_IP}
               TOWONEL_EDGE_REGION: CA
-              # HAproxy in front
+              # geo-proxy in front. Since v1.12 the edge takes the PROXY v2
+              # destination, so v6 clients work over the single v4 loopback hop.
               TOWONEL_EDGE_PROXY_PROTOCOL: "true"
-              # HAProxy reaches the edge over both loopback families: v4 clients
-              # via 127.0.0.1, v6 clients via [::1], so the transport family
-              # matches the PROXY-advertised client family.
-              TOWONEL_EDGE_PROXY_PROTOCOL_TRUSTED: "127.0.0.1/32,::1/128,::ffff:127.0.0.1/128"
+              TOWONEL_EDGE_PROXY_PROTOCOL_TRUSTED: "127.0.0.1/32"
               TOWONEL_HUB_TRUSTED_PROXIES: "172.16.0.0/24,10.40.40.41/32"
               TOWONEL_HUB_DB_DRIVER: sqlite
               TOWONEL_HUB_DB_DSN: sqlite:///data/towonel.db?mode=rwc
@@ -74,7 +73,7 @@ spec:
       towonel-node:
         annotations:
           # coredns rewrites this name to the in-cluster envoy Service (agent
-          # bootstrap); resolve publicly so the probe takes haproxy -> envoy
+          # bootstrap); resolve publicly so the probe takes geo-proxy -> edge -> envoy
           gatus.home-operations.com/endpoint: |-
             group: towonel
             path: /v1/health

@@ -1,0 +1,152 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.0/helmrelease_v2.json?values=app-template/5.3.0
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: geo-proxy
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 5m
+  upgrade:
+    timeout: 5m
+  values:
+    controllers:
+      geo-proxy:
+        type: daemonset
+        annotations:
+          secret.reloader.stakater.com/auto: "false"
+        pod:
+          # Owns the node's public :443/:80 and hands US clients to the towonel
+          # edge on loopback with PROXY v2.
+          hostNetwork: true
+          dnsPolicy: Default
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+            runAsGroup: 65532
+            fsGroup: 65532
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: {type: RuntimeDefault}
+        initContainers:
+          # Daily check, envoy loads a new file
+          geoip-updater:
+            restartPolicy: Always
+            image:
+              repository: ghcr.io/maxmind/geoipupdate
+              tag: v8.0.0@sha256:51e70dd6f16cd3e4d845ac02d09940b10772a75b9d741427d235a78570923c1d
+            env:
+              GEOIPUPDATE_ACCOUNT_ID_FILE: /secrets/account-id
+              GEOIPUPDATE_LICENSE_KEY_FILE: /secrets/license-key
+              GEOIPUPDATE_EDITION_IDS: GeoLite2-Country
+              GEOIPUPDATE_DB_DIR: /geoip
+              GEOIPUPDATE_FREQUENCY: "24"
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - "test"
+                      - "-s"
+                      - "/geoip/GeoLite2-Country.mmdb"
+                  periodSeconds: 5
+                  failureThreshold: 60
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+              seccompProfile: {type: RuntimeDefault}
+            resources:
+              requests: {cpu: 5m, memory: 16Mi}
+              limits: {memory: 64Mi}
+        containers:
+          envoy:
+            image:
+              repository: mirror.gcr.io/envoyproxy/envoy
+              tag: distroless-v1.40.2@sha256:09ca6f2140a61ad8df11779a4a30d52b48433d444466328494f9188c9c35eded
+            args:
+              - "-c"
+              - "/etc/envoy/envoy.yaml"
+              - "--disable-hot-restart"
+            securityContext: *securityContext
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: {path: /ready, port: &healthPort 8404}
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: {path: /ready, port: *healthPort}
+                  periodSeconds: 10
+            resources:
+              requests: {cpu: 50m, memory: 64Mi}
+              # Covers the downstream connection cap below at the per-connection
+              # buffer limits.
+              limits: {memory: 1Gi}
+    service:
+      geo-proxy:
+        controller: geo-proxy
+        annotations:
+          # Public :80 edge (redirects to https), via the node's public IP
+          gatus.home-operations.com/endpoint: |-
+            group: towonel
+            url: http://vps.clerici.tech
+            client:
+              ignore-redirect: true
+            conditions:
+              - "[STATUS] == 301"
+        ports:
+          health:
+            port: *healthPort
+    persistence:
+      config:
+        type: configMap
+        name: geo-proxy-config
+        advancedMounts:
+          geo-proxy:
+            envoy:
+              - path: /etc/envoy
+                readOnly: true
+      geoip:
+        existingClaim: geo-proxy
+        advancedMounts:
+          geo-proxy:
+            geoip-updater:
+              - path: /geoip
+            envoy:
+              - path: /geoip
+                readOnly: true
+      maxmind:
+        type: secret
+        name: towonel-node
+        defaultMode: 0440
+        items:
+          - key: MAXMIND_ACCOUNT_ID
+            path: account-id
+          - key: MAXMIND_LICENSE_KEY
+            path: license-key
+        # No subPath so they can be re-read without rolling out the pod
+        advancedMounts:
+          geo-proxy:
+            geoip-updater:
+              - path: /secrets
+                readOnly: true
+      # The image's update loop logs to /tmp/geoipupdate.
+      tmp:
+        type: emptyDir
+        sizeLimit: 16Mi
+        medium: Memory
+        advancedMounts:
+          geo-proxy:
+            geoip-updater:
+              - path: /tmp
