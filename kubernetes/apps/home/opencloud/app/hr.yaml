@@ -32,7 +32,7 @@ spec:
           opencloud:
             image: &img
               repository: mirror.gcr.io/opencloudeu/opencloud-rolling
-              tag: 8.1.0@sha256:8fc64ca861739cc62095cd558814f2eba6a90acf5998d884e439b33a47875da8
+              tag: 9.0.0@sha256:bd57f039d0dd3df510fb25f178beefdf0b1f049097285feead607824460e6506
             command:
               - "/bin/sh"
               - "-c"
@@ -88,7 +88,7 @@ spec:
               SETTINGS_SETUP_DEFAULT_ASSIGNMENTS: false
               GRAPH_ASSIGN_DEFAULT_USER_ROLE: false
               GRAPH_USERNAME_MATCH: "none"
-              GRAPH_SPACES_DEFAULT_QUOTA: 0
+              OC_SPACES_DEFAULT_QUOTA: 0
               WEB_OPTION_ACCOUNT_EDIT_LINK_HREF: https://id.clerici.tech/settings/apps
               # prevent nested mounts
               WEB_ASSET_APPS_PATH: /opt/extensions/web/apps
