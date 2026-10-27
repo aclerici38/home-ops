@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.9.6/helmrelease_v2.json?values=app-template/5.3.0
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.0/helmrelease_v2.json?values=app-template/5.3.0
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -38,7 +38,7 @@ spec:
           prowlarr:
             image:
               repository: ghcr.io/home-operations/prowlarr
-              tag: 2.6.5.5623@sha256:0e2e6e9a2a16683a160ff1c6830d8192231a0502ab0d605b416023b2ca225ff9
+              tag: 2.6.6.5717@sha256:8ead2b6f1b5d744fc52849d455896809b2d290f2b78b05f1b3fb21f410866b58
             env:
               # FlareSolverr's cf_clearance cookie is bound to the v4 egress IP; .NET otherwise prefers v6 and gets re-challenged
               DOTNET_SYSTEM_NET_DISABLEIPV6: "1"
