@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+#MISE description="Upgrade Talos on a cluster's nodes one at a time, or a single node"
+#MISE dir="talos"
+#MISE confirm="Upgrade Talos? Nodes reboot one at a time."
+#USAGE arg "<cluster>" help="which Talos cluster" {
+#USAGE   choices "home" "cloud"
+#USAGE }
+#USAGE arg "[node]" help="limit to one node (default: all)"
+#USAGE flag "-m --reboot-mode <mode>" default="powercycle" help="talosctl reboot mode" {
+#USAGE   choices "default" "powercycle" "force"
+#USAGE }
+#USAGE flag "-f --force" help="upgrade even when the node already runs the target image"
+set -euo pipefail
+source "${MISE_PROJECT_ROOT}/mise-tasks/lib/cluster.sh"
+select_cluster "$usage_cluster"
+cd "$usage_cluster"
+
+# tuppr only compares Talos versions, so it cannot roll out a schematic change
+# (kernel args, extensions) at the version the nodes already run. This task
+# covers that case and mirrors the TalosUpgrade policy: drain, wait for CSI
+# detach, upgrade, then wait for Ready, Ceph and CNPG before the next node.
+export TALOSCONFIG="$PWD/clusterconfig/talosconfig"
+
+if [[ ! -f "$TALOSCONFIG" ]]; then
+  echo "ERROR: $TALOSCONFIG missing. Run 'mise run talos:gen $usage_cluster' first."
+  exit 1
+fi
+
+# Render fresh rather than trusting clusterconfig/, which only updates on talos:gen
+rendered="$(mktemp -d)"
+trap 'rm -rf "$rendered"' EXIT
+talstomize build . -o "$rendered" > /dev/null
+
+if [[ -n "${usage_node:-}" ]]; then
+  nodes=("$usage_node")
+else
+  mapfile -t nodes < <(yq -r '.nodes | keys | .[]' talstomize.yaml)
+fi
+
+has_ceph=false
+kubectl get crd cephclusters.ceph.rook.io > /dev/null 2>&1 && has_ceph=true
+
+wait_ceph() {
+  [[ "$has_ceph" == true ]] || return 0
+  echo "==> waiting for Ceph HEALTH_OK"
+  kubectl wait cephcluster --all --all-namespaces \
+    --for=jsonpath='{.status.ceph.health}'=HEALTH_OK --timeout=15m
+}
+
+# Same as the TalosUpgrade health checks: every Cluster healthy with all
+# instances ready and no switchover in flight, every pooler fully available
+wait_cnpg() {
+  [[ "$CLUSTER" == home ]] || return 0
+  local unhealthy
+  echo "==> waiting for CNPG clusters and poolers"
+  for _ in {1..90}; do
+    unhealthy="$(
+      {
+        kubectl get clusters.postgresql.cnpg.io --all-namespaces -o json |
+          jq -r '.items[] | select(
+            .status.phase != "Cluster in healthy state" or
+            .status.readyInstances != .spec.instances or
+            .status.currentPrimary != .status.targetPrimary
+          ) | "cluster \(.metadata.namespace)/\(.metadata.name)"'
+        kubectl get deployments --all-namespaces -l cnpg.io/podRole=pooler -o json |
+          jq -r '.items[] | select((.status.availableReplicas // 0) != .spec.replicas)
+            | "pooler \(.metadata.namespace)/\(.metadata.name)"'
+      } | paste -sd, -
+    )"
+    [[ -z "$unhealthy" ]] && return 0
+    sleep 10
+  done
+  echo "ERROR: CNPG not healthy after 15m: $unhealthy" >&2
+  return 1
+}
+
+wait_volumes_detached() {
+  local node="$1" attached
+  echo "==> waiting for volumes to detach from $node"
+  for _ in {1..90}; do
+    attached="$(kubectl get volumeattachments -o json |
+      jq --arg n "$node" '[.items[] | select(.spec.nodeName == $n and .status.attached)] | length')"
+    [[ "$attached" == 0 ]] && return 0
+    sleep 10
+  done
+  echo "ERROR: $attached volume(s) still attached to $node after 15m" >&2
+  return 1
+}
+
+# Don't start knocking nodes over on an already-degraded cluster
+wait_ceph
+wait_cnpg
+
+for node in "${nodes[@]}"; do
+  ip="$(yq -r ".nodes.\"$node\".ip | envsubst" talstomize.yaml)"
+  image="$(yq -r 'select(.machine) | .machine.install.image' "$rendered/$node.yaml")"
+  current="$(talosctl -n "$ip" get extensions -o json |
+    jq -r 'select(.spec.metadata.name == "schematic") | .spec.metadata.version')"
+  version="$(talosctl -n "$ip" get version -o json | jq -r .spec.version)"
+
+  if [[ "$image" == */"$current:$version" && "${usage_force:-false}" != true ]]; then
+    echo "==> $node already runs $current:$version, skipping"
+    continue
+  fi
+
+  echo "==> $node: $current:$version -> ${image##*/}"
+  kubectl drain "$node" --ignore-daemonsets --delete-emptydir-data --timeout=15m
+  wait_volumes_detached "$node"
+
+  talosctl -n "$ip" upgrade --image "$image" --reboot-mode "$usage_reboot_mode" --wait
+
+  echo "==> waiting for $node Ready"
+  kubectl wait node "$node" --for=condition=Ready --timeout=15m
+  kubectl uncordon "$node"
+  wait_ceph
+  wait_cnpg
+done
