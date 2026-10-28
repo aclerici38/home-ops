@@ -98,15 +98,22 @@ data:
       env:
         - name: COLLECTIONS
           value: "crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-crs crowdsecurity/appsec-generic-rules"
-        # API clients send no User-Agent (towonel-agent polls the hub every 10s);
-        # six hits trip crowdsec-appsec-outofband and ban the client's IP
-        - name: DISABLE_APPSEC_RULES
-          value: "crowdsecurity/experimental-no-user-agent"
+      # Layered on appsec-default. no-user-agent bans API clients (towonel-agent
+      # polls the hub every 10s); removing the rule outright empties
+      # appsec-default's experimental-* glob, which is fatal.
+      configs:
+        disable-no-user-agent.yaml: |
+          name: custom/disable-no-user-agent
+          on_load:
+            - apply:
+                - RemoveOutBandRuleByName("crowdsecurity/experimental-no-user-agent")
       acquisitions:
         - source: appsec
           listen_addr: "0.0.0.0:7422"
           path: /
-          appsec_config: crowdsecurity/appsec-default
+          appsec_configs:
+            - crowdsecurity/appsec-default
+            - custom/disable-no-user-agent
           labels:
             type: appsec
       podSecurityContext: *podSecurityContext
