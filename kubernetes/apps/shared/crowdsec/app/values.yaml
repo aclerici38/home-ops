@@ -90,6 +90,12 @@ data:
     appsec:
       enabled: true
       replicas: 2
+      # Chart defaults to Recreate, which drops both replicas at once
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 0
+          maxSurge: 1
       lapiURL: *lapiURL
       lapiHost: *lapiHost
       lapiPort: *lapiPort
