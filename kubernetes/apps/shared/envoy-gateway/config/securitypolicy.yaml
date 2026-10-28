@@ -10,7 +10,7 @@ spec:
       kind: Gateway
       name: external
   extAuth:
-    failOpen: true
+    failOpen: false
     grpc:
       backendRefs:
         - name: crowdsec-gateway-bouncer

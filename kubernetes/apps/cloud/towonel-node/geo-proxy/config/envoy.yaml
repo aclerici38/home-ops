@@ -1,7 +1,7 @@
 ---
 # Every connection gets a GeoLite2 country lookup on its source IP and anything
 # that is not exactly US is closed, including IPs with no result. US clients
-# are then checked against CrowdSec's community blocklist, failing open. The
+# are then checked against CrowdSec's community blocklist, failing closed. The
 # edge is only dialled after the client has sent data, so both checks have
 # decided before an upstream connection exists.
 #
@@ -97,12 +97,12 @@ static_resources:
               typed_config:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.ext_authz.v3.ExtAuthz
                 stat_prefix: crowdsec
-                failure_mode_allow: true
+                failure_mode_allow: false
                 transport_api_version: V3
                 grpc_service:
                   envoy_grpc:
                     cluster_name: crowdsec
-                  timeout: 0.25s
+                  timeout: 1s
             - name: envoy.filters.network.tcp_proxy
               typed_config:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy

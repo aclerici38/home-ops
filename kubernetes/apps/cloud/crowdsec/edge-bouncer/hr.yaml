@@ -20,6 +20,7 @@ spec:
       retries: 1
   # geo-proxy's L4 ext_authz: decisions only, there is no request to inspect
   values:
+    replicaCount: 2
     fullnameOverride: crowdsec-edge-bouncer
     podLabels:
       dormammu.internal/crowdsec-lapi-client: "true"
