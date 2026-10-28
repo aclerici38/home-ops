@@ -1,0 +1,101 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.2/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: crowdsec-rules
+spec:
+  groups:
+    - name: crowdsec.rules
+      rules:
+        - alert: CrowdsecTargetDown
+          expr: |-
+            up{namespace="crowdsec", job=~"crowdsec-.*"} == 0
+          for: 5m
+          annotations:
+            summary: >-
+              CrowdSec target {{ $labels.pod }} ({{ $labels.job }}) is down
+            description: >-
+              The pod is running but its metrics endpoint stopped answering;
+              check its logs before assuming detection or enforcement still works.
+          labels:
+            severity: warning
+
+        # The sync timestamp advances on every poll (tickerInterval 10s), even
+        # with nothing new, so it only goes stale when the LAPI is unreachable
+        - alert: CrowdsecBouncerDecisionsStale
+          expr: |-
+            time() - bouncer_lapi_last_sync_timestamp_seconds > 300
+          for: 5m
+          annotations:
+            summary: >-
+              Bouncer {{ $labels.pod }} hasn't synced decisions from the LAPI in
+              {{ $value | humanizeDuration }}
+            description: >-
+              It keeps enforcing its cached decisions, but new bans (and unbans)
+              no longer reach it. Check LAPI reachability over mTLS
+              (crowdsec.cloud.clerici.tech from home).
+          labels:
+            severity: critical
+
+        # Errors fail open: the request is let through uninspected
+        - alert: CrowdsecBouncerEvaluationErrors
+          expr: |-
+            (
+              sum by (job, pod) (rate(bouncer_requests_total{action="error"}[15m]))
+              /
+              sum by (job, pod) (rate(bouncer_requests_total[15m]))
+            ) > 0.05
+            and
+            sum by (job, pod) (increase(bouncer_requests_total{action="error"}[15m])) >= 5
+          for: 15m
+          annotations:
+            summary: >-
+              Bouncer {{ $labels.pod }} fails to evaluate
+              {{ $value | humanizePercentage }} of requests
+            description: >-
+              Failed evaluations are allowed through without a decision or WAF
+              check. Usually AppSec is unreachable or rejecting the WAF key;
+              check the bouncer's "failed to evaluate request" logs.
+          labels:
+            severity: warning
+
+        # ~20k community-blocklist entries is normal; a bouncer with none (or
+        # no CAPI series at all) is enforcing local bans only
+        - alert: CrowdsecBouncerBlocklistMissing
+          expr: |-
+            sum by (job, pod) (bouncer_decision_cache_size{origin="CAPI"}) < 1000
+            or
+            (
+              max by (job, pod) (up{namespace="crowdsec", job=~"crowdsec-.*-bouncer"}) == 1
+              unless on (job, pod)
+              bouncer_decision_cache_size{origin="CAPI"}
+            )
+          for: 30m
+          annotations:
+            summary: >-
+              Bouncer {{ $labels.pod }} holds almost no community blocklist
+              decisions
+            description: >-
+              Check `cscli capi status` on the cloud LAPI; if CAPI is healthy,
+              the bouncer's decision stream is the problem.
+          labels:
+            severity: warning
+
+        # Cloud's gateway can drop to a handful of log lines per 30m, hence
+        # the 2h window and a traffic floor before calling it silent
+        - alert: CrowdsecEnvoyLogsNotRead
+          expr: |-
+            sum by (namespace) (increase(bouncer_requests_total{job="crowdsec-gateway-bouncer"}[2h])) > 100
+            unless on (namespace)
+            sum by (namespace) (increase(cs_kubernetessource_hits_total[2h])) > 0
+          for: 15m
+          annotations:
+            summary: >-
+              CrowdSec agent isn't reading external gateway access logs
+            description: >-
+              The gateway is serving traffic but the agent ingested no Envoy log
+              lines in 2h, so HTTP scenarios are blind. Check the agent's
+              kubernetes acquisition selector against the Envoy pod labels.
+          labels:
+            severity: warning

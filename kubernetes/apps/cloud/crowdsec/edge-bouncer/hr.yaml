@@ -46,6 +46,10 @@ spec:
           enabled: true
         tlsSecretRef:
           name: crowdsec-bouncer-tls
+      prometheus:
+        enabled: true
+        serviceMonitor:
+          enabled: true
   # Not exposed by the chart
   postRenderers:
     - kustomize:

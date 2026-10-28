@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.2/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: crowdsec-home-rules
+spec:
+  groups:
+    - name: crowdsec-home.rules
+      rules:
+        # OPNsense never goes quiet (pf logs alone are well above 0.5/s)
+        - alert: CrowdsecSyslogNotReceived
+          expr: |-
+            (sum(rate(cs_syslogsource_hits_total[15m])) or vector(0)) == 0
+          for: 15m
+          annotations:
+            summary: >-
+              CrowdSec agent stopped receiving OPNsense syslog
+            description: >-
+              Firewall scan and OPNsense GUI brute-force detection are blind.
+              Check OPNsense's remote logging target and the agent's syslog
+              listener on 514.
+          labels:
+            severity: warning

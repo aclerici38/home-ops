@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.2/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: crowdsec-lapi-rules
+spec:
+  groups:
+    - name: crowdsec-lapi.rules
+      rules:
+        # The one LAPI: with it gone, no cluster's agents or AppSec can report
+        # and every bouncer is frozen on its cached decisions
+        - alert: CrowdsecLapiDown
+          expr: |-
+            absent(up{namespace="crowdsec", job="crowdsec-service"} == 1)
+          for: 5m
+          annotations:
+            summary: >-
+              CrowdSec LAPI is down
+            description: >-
+              Detection and decision sync are stopped on every cluster. Its
+              database is in memory, so local bans are lost when it restarts.
+          labels:
+            severity: critical
