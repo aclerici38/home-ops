@@ -19,16 +19,14 @@ spec:
   upgrade:
     timeout: 5m
   dependsOn:
-    - name: kopiur
-      namespace: kopiur
     - name: pocket-id-operator
       namespace: pocket-id-operator
   values:
     pocketId:
-      url: crowdsec.clerici.tech
+      external: true
+      url: crowdsec-ui.cloud.clerici.tech
       spec:
         oidcClient:
           pkceEnabled: false
       callbackPaths:
         - /api/auth/oidc/callback
-    kopiur: {}

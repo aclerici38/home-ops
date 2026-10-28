@@ -28,6 +28,7 @@ spec:
         pod:
           labels:
             dormammu.internal/crowdsec-lapi-client: "true"
+          automountServiceAccountToken: false
           hostUsers: false
           securityContext:
             runAsNonRoot: true
@@ -40,16 +41,17 @@ spec:
           crowdsec-ui:
             image:
               repository: ghcr.io/theduffman85/crowdsec-web-ui
-              tag: 2026.10.10@sha256:f57568d27b2c7798155a638b9cb76302777a9dcf43d8026f344c17767589d694
+              tag: 2026.10.11@sha256:20333d6bc218f274a4cdaabc2e79716d7e203c0a23446c75f6aa6ccfc59a1431
             env:
               CONFIG_UI_TIME_ZONE: ${TZ}
               CONFIG_UPDATES_ENABLED: false
-              # Cloud's LAPI, as a machine with the agent cert
-              CONFIG_INSTANCE_LAPI_URL: https://crowdsec.cloud.clerici.tech
+              CONFIG_INSTANCE_LAPI_URL: https://crowdsec-service.crowdsec.svc.cluster.local:8080
               CONFIG_INSTANCE_LAPI_AUTH_TYPE: mtls
               CONFIG_INSTANCE_LAPI_AUTH_CERT_FILE: /certs/tls.crt
               CONFIG_INSTANCE_LAPI_AUTH_KEY_FILE: /certs/tls.key
               CONFIG_INSTANCE_LAPI_TLS_CA_FILE: /certs/ca.crt
+              CONFIG_AUTH_ENABLED: true
+              CONFIG_AUTH_PASSWORD_LOGIN_ENABLED: false
               CONFIG_AUTH_OIDC_ISSUER_URL:
                 secretKeyRef:
                   name: crowdsec-ui-oidc-credentials
@@ -66,6 +68,7 @@ spec:
               CONFIG_AUTH_OIDC_GROUPS_CLAIM: groups
               CONFIG_AUTH_OIDC_ADMIN_GROUPS_0: admin
               CONFIG_AUTH_OIDC_UNMATCHED_ROLE: deny
+              CONFIG_NOTIFICATIONS_ALLOW_PRIVATE_ADDRESSES: false
             probes:
               liveness: &probe
                 enabled: true
@@ -81,6 +84,13 @@ spec:
               capabilities:
                 drop:
                   - ALL
+            resources:
+              requests:
+                cpu: 10m
+                memory: 256Mi
+              # Includes the in-memory data volume
+              limits:
+                memory: 768Mi
     service:
       crowdsec-ui:
         controller: crowdsec-ui
@@ -90,10 +100,21 @@ spec:
     route:
       crowdsec-ui:
         hostnames:
-          - crowdsec.clerici.tech
+          - crowdsec-ui.cloud.clerici.tech
         parentRefs:
-          - name: internal
+          - name: external
             namespace: envoy-gateway
+        rules:
+          - backendRefs:
+              - identifier: crowdsec-ui
+                port: *port
+            # The app builds its CSRF/OIDC/passkey origin from X-Forwarded-Host
+            # when present, and nothing upstream sets it legitimately.
+            filters:
+              - type: RequestHeaderModifier
+                requestHeaderModifier:
+                  remove:
+                    - X-Forwarded-Host
     networkpolicies:
       crowdsec-ui:
         type: cilium
@@ -103,19 +124,21 @@ spec:
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: internal
+                  gateway.envoyproxy.io/owning-gateway-name: external
             toPorts:
               - ports:
                   - {port: "3000", protocol: TCP}
     persistence:
       certs:
         type: secret
-        name: crowdsec-agent-tls
+        name: crowdsec-ui-tls
         defaultMode: 0440
         globalMounts:
           - path: /certs
             readOnly: true
       data:
-        existingClaim: crowdsec-ui
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 256Mi
         globalMounts:
           - path: /app/data

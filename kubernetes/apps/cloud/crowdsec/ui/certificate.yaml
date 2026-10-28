@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.21.3/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: crowdsec-ui
+spec:
+  commonName: crowdsec-ui
+  secretName: crowdsec-ui-tls
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - client auth
+  subject:
+    organizationalUnits:
+      - agent-ou
+  issuerRef:
+    name: crowdsec-ca
+    kind: Issuer
