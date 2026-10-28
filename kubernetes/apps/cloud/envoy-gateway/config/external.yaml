@@ -31,3 +31,18 @@ spec:
         certificateRefs:
           - kind: Secret
             name: clerici-tech-tls
+    # CrowdSec LAPI for home's agents and bouncers: mTLS end to end
+    - name: crowdsec-lapi
+      protocol: TLS
+      port: 443
+      hostname: crowdsec.cloud.clerici.tech
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: crowdsec
+        kinds:
+          - kind: TLSRoute
+      tls:
+        mode: Passthrough

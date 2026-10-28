@@ -1,0 +1,62 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.21.3/issuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: crowdsec-selfsigned
+spec:
+  selfSigned: {}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.21.3/certificate_v1.json
+# Signs every cluster's LAPI, agent and bouncer certs. Long-lived: a new key
+# means re-issuing every leaf in every cluster.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: crowdsec-ca
+spec:
+  isCA: true
+  commonName: crowdsec-ca
+  secretName: crowdsec-ca
+  duration: 87600h # 10y
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: crowdsec-selfsigned
+    kind: Issuer
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.21.3/issuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: crowdsec-ca
+spec:
+  ca:
+    secretName: crowdsec-ca
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.14.0/pushsecret_v1alpha1.json
+# Home's crowdsec-ca Issuer reads this back
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: crowdsec-ca
+spec:
+  refreshInterval: 1h
+  secretStoreRefs:
+    - name: onepassword-connect
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: crowdsec-ca
+  data:
+    - match:
+        secretKey: tls.crt
+        remoteRef:
+          remoteKey: crowdsec-ca
+          property: tls.crt
+    - match:
+        secretKey: tls.key
+        remoteRef:
+          remoteKey: crowdsec-ca
+          property: tls.key

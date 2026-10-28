@@ -1,0 +1,112 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.0/helmrelease_v2.json?values=crowdsec/0.24.2
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: crowdsec
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: crowdsec
+  # The chart's schema (0.24.2) predates the kubernetes acquisition source
+  install:
+    disableSchemaValidation: true
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    disableSchemaValidation: true
+    timeout: 5m
+    remediation:
+      retries: 1
+  valuesFrom:
+    - kind: ConfigMap
+      name: crowdsec-values
+      valuesKey: values.yaml
+  # The one LAPI: every cluster's agents, AppSec and bouncers report here
+  values:
+    config:
+      console.yaml: |
+        share_manual_decisions: false
+        share_custom: true
+        share_tainted: true
+        share_context: true
+      config.yaml.local: |-
+        cscli:
+          hub_branch: master
+        db_config:
+          use_wal: true
+          # Cert-authed machines and bouncers are re-created on connect
+          flush:
+            agents_autodelete:
+              cert: 60m
+            bouncers_autodelete:
+              cert: 60m
+    lapi:
+      enabled: true
+      env:
+        # The gateway bouncers' WAF key, validated by AppSec
+        - name: BOUNCER_KEY_waf
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-secrets
+              key: WAF_API_KEY
+      # In memory: CAPI refills the blocklist and nothing else needs to survive
+      persistentVolume:
+        data:
+          enabled: false
+        config:
+          enabled: false
+      extraVolumes:
+        - name: data
+          emptyDir:
+            medium: Memory
+            sizeLimit: 128Mi
+      extraVolumeMounts:
+        - name: data
+          mountPath: /var/lib/crowdsec/data
+      podSecurityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+      resources:
+        requests:
+          cpu: 50m
+          memory: 128Mi
+        limits:
+          memory: 384Mi
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+  # Not exposed by the chart
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+            patch: |-
+              - op: add
+                path: /spec/template/spec/hostUsers
+                value: false
+          - target:
+              kind: Deployment
+              labelSelector: type in (lapi,appsec)
+            patch: |-
+              - op: add
+                path: /spec/template/spec/automountServiceAccountToken
+                value: false
+          # Home reaches the LAPI by its public name
+          - target:
+              kind: Certificate
+              name: crowdsec-lapi
+            patch: |-
+              - op: add
+                path: /spec/dnsNames/-
+                value: crowdsec.${EXTERNAL_DOMAIN}

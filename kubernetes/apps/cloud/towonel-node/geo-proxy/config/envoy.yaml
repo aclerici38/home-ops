@@ -1,8 +1,9 @@
 ---
 # Every connection gets a GeoLite2 country lookup on its source IP and anything
-# that is not exactly US is closed, including IPs with no result. The edge is
-# only dialled after the client has sent data, so RBAC has decided before an
-# upstream connection exists.
+# that is not exactly US is closed, including IPs with no result. US clients
+# are then checked against CrowdSec's community blocklist, failing open. The
+# edge is only dialled after the client has sent data, so both checks have
+# decided before an upstream connection exists.
 #
 # No admin listener: nothing consumes it, and on hostNetwork any process on the
 # node could reach it.
@@ -28,21 +29,26 @@ static_resources:
               address: "::"
               port_value: 443
       per_connection_buffer_limit_bytes: 32768
-      # Blocked connections only
+      # Blocked connections only; CrowdSec bans carry flags=UAEX
       access_log: &accessLog
         - name: envoy.access_loggers.stdout
           filter:
-            extension_filter:
-              name: envoy.access_loggers.extension_filters.cel
-              typed_config:
-                "@type": type.googleapis.com/envoy.extensions.access_loggers.filters.cel.v3.ExpressionFilter
-                expression: connection.termination_details.startsWith('rbac_access_denied')
+            or_filter:
+              filters:
+                - extension_filter:
+                    name: envoy.access_loggers.extension_filters.cel
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.access_loggers.filters.cel.v3.ExpressionFilter
+                      expression: connection.termination_details.startsWith('rbac_access_denied')
+                - response_flag_filter:
+                    flags:
+                      - UAEX
           typed_config:
             "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
             log_format:
               text_format_source:
                 inline_string: |
-                  blocked %DOWNSTREAM_REMOTE_ADDRESS% -> %DOWNSTREAM_LOCAL_ADDRESS% country=%FILTER_STATE(envoy.geoip:FIELD:country)%
+                  blocked %DOWNSTREAM_REMOTE_ADDRESS% -> %DOWNSTREAM_LOCAL_ADDRESS% country=%FILTER_STATE(envoy.geoip:FIELD:country)% flags=%RESPONSE_FLAGS%
       filter_chains:
         - filters:
             - &geoip
@@ -86,6 +92,17 @@ static_resources:
                         "@type": type.googleapis.com/envoy.config.rbac.v3.Action
                         name: deny
                         action: DENY
+            - &crowdsec
+              name: envoy.filters.network.ext_authz
+              typed_config:
+                "@type": type.googleapis.com/envoy.extensions.filters.network.ext_authz.v3.ExtAuthz
+                stat_prefix: crowdsec
+                failure_mode_allow: true
+                transport_api_version: V3
+                grpc_service:
+                  envoy_grpc:
+                    cluster_name: crowdsec
+                  timeout: 0.25s
             - name: envoy.filters.network.tcp_proxy
               typed_config:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
@@ -109,6 +126,7 @@ static_resources:
         - filters:
             - *geoip
             - *rbac
+            - *crowdsec
             - name: envoy.filters.network.tcp_proxy
               typed_config:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
@@ -180,3 +198,20 @@ static_resources:
                       address: 127.0.0.1
                       port_value: 9080
       transport_socket: *proxyProtocol
+    - name: crowdsec
+      type: STRICT_DNS
+      connect_timeout: 1s
+      typed_extension_protocol_options:
+        envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+          "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+          explicit_http_config:
+            http2_protocol_options: {}
+      load_assignment:
+        cluster_name: crowdsec
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: crowdsec-edge-bouncer.crowdsec.svc.cluster.local
+                      port_value: 8080

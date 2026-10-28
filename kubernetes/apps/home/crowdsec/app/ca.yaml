@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.14.0/externalsecret_v1.json
+# Cloud's CA (generated and pushed there), so home's certs chain to its LAPI
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: crowdsec-ca
+  labels:
+    dormammu.internal/component: external-secret
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  dataFrom:
+    - extract:
+        key: crowdsec-ca
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cert-manager/1.21.3/issuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: crowdsec-ca
+spec:
+  ca:
+    secretName: crowdsec-ca

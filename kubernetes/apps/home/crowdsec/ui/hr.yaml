@@ -26,6 +26,8 @@ spec:
     controllers:
       crowdsec-ui:
         pod:
+          labels:
+            dormammu.internal/crowdsec-lapi-client: "true"
           hostUsers: false
           securityContext:
             runAsNonRoot: true
@@ -42,12 +44,12 @@ spec:
             env:
               CONFIG_UI_TIME_ZONE: ${TZ}
               CONFIG_UPDATES_ENABLED: false
-              CONFIG_INSTANCE_LAPI_URL: http://crowdsec-service:8080
-              CONFIG_INSTANCE_LAPI_AUTH_USERNAME: crowdsec-web-ui
-              CONFIG_INSTANCE_LAPI_AUTH_PASSWORD:
-                secretKeyRef:
-                  name: crowdsec
-                  key: WEBUI_PASS
+              # Cloud's LAPI, as a machine with the agent cert
+              CONFIG_INSTANCE_LAPI_URL: https://crowdsec.cloud.clerici.tech
+              CONFIG_INSTANCE_LAPI_AUTH_TYPE: mtls
+              CONFIG_INSTANCE_LAPI_AUTH_CERT_FILE: /certs/tls.crt
+              CONFIG_INSTANCE_LAPI_AUTH_KEY_FILE: /certs/tls.key
+              CONFIG_INSTANCE_LAPI_TLS_CA_FILE: /certs/ca.crt
               CONFIG_AUTH_OIDC_ISSUER_URL:
                 secretKeyRef:
                   name: crowdsec-ui-oidc-credentials
@@ -96,6 +98,7 @@ spec:
       crowdsec-ui:
         type: cilium
         controller: crowdsec-ui
+        # Egress: OIDC from crowdsec-ui-pocket-id, LAPI from crowdsec-lapi-clients.
         ingress:
           - fromEndpoints:
               - matchLabels:
@@ -104,16 +107,14 @@ spec:
             toPorts:
               - ports:
                   - {port: "3000", protocol: TCP}
-        # OIDC egress comes from crowdsec-ui-pocket-id.
-        egress:
-          - toEndpoints:
-              - matchLabels:
-                  k8s-app: crowdsec
-                  type: lapi
-            toPorts:
-              - ports:
-                  - {port: "8080", protocol: TCP}
     persistence:
+      certs:
+        type: secret
+        name: crowdsec-agent-tls
+        defaultMode: 0440
+        globalMounts:
+          - path: /certs
+            readOnly: true
       data:
         existingClaim: crowdsec-ui
         globalMounts:

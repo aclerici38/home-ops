@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.6.3/tlsroute_v1.json
+# Passthrough, so the LAPI terminates TLS and checks client certs itself
+apiVersion: gateway.networking.k8s.io/v1
+kind: TLSRoute
+metadata:
+  name: crowdsec-lapi
+spec:
+  parentRefs:
+    - name: external
+      namespace: envoy-gateway
+      sectionName: crowdsec-lapi
+  hostnames:
+    - crowdsec.${EXTERNAL_DOMAIN}
+  rules:
+    - backendRefs:
+        - name: crowdsec-service
+          port: 8080
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-dns/1.20.0/dnsendpoint_v1alpha1.json
+# external-dns doesn't watch TLSRoutes
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: crowdsec-lapi
+spec:
+  endpoints:
+    - dnsName: crowdsec.${EXTERNAL_DOMAIN}
+      recordType: CNAME
+      targets:
+        - vps.clerici.tech

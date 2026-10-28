@@ -13,6 +13,6 @@ spec:
     failOpen: true
     grpc:
       backendRefs:
-        - name: crowdsec-bouncer
+        - name: crowdsec-gateway-bouncer
           namespace: crowdsec
           port: 8080
