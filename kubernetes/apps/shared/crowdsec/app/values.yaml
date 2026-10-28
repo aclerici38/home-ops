@@ -10,6 +10,8 @@ data:
   values.yaml: |-
     image:
       repository: ghcr.io/crowdsecurity/crowdsec
+      # renovate: datasource=docker depName=ghcr.io/crowdsecurity/crowdsec
+      tag: "v1.8.1@sha256:0f2523fa61ef507f15d953045cface490cc880670c62f2755ced17524107f71a"
     container_runtime: containerd
     tls:
       enabled: true
