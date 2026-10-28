@@ -98,6 +98,10 @@ data:
       env:
         - name: COLLECTIONS
           value: "crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-crs crowdsecurity/appsec-generic-rules"
+        # API clients send no User-Agent (towonel-agent polls the hub every 10s);
+        # six hits trip crowdsec-appsec-outofband and ban the client's IP
+        - name: DISABLE_APPSEC_RULES
+          value: "crowdsecurity/experimental-no-user-agent"
       acquisitions:
         - source: appsec
           listen_addr: "0.0.0.0:7422"
