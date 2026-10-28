@@ -3,7 +3,7 @@
 # namespace (sidecar.namespace) instead of holding the chart's ClusterRole.
 # No gateways: the parent-annotation GET on envoy-gateway/external is denied,
 # which the sidecar treats as "no parent template" (that Gateway has none).
-# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.1-standalone-strict/role-rbac-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.2-standalone-strict/role-rbac-v1.json
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -23,7 +23,7 @@ rules:
       - httproutes
     verbs: *read
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.1-standalone-strict/rolebinding-rbac-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.2-standalone-strict/rolebinding-rbac-v1.json
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
