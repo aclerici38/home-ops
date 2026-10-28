@@ -28,5 +28,7 @@ spec:
       spec:
         oidcClient:
           pkceEnabled: false
+          allowedUserGroups:
+            - groupName: admin
       callbackPaths:
         - /api/auth/oidc/callback
