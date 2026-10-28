@@ -41,7 +41,7 @@ spec:
         secretKeyRef:
           name: renovate-operator
           key: DOCKERHUB_TOKEN
-  image: ghcr.io/renovatebot/renovate:44.188.2-full@sha256:86ea6dd077df3a5e9e8ac44f109819a28984cd8d793088069ffdbddfe486d9b5
+  image: ghcr.io/renovatebot/renovate:44.190.2-full@sha256:c7325f4366b270a1c82468e923bed3e482bfd1a27549b16f2f5042b331686087
   parallelism: 1
   scratchVolume:
     medium: Memory
