@@ -87,3 +87,15 @@ spec:
               - op: add
                 path: /spec/template/spec/automountServiceAccountToken
                 value: false
+          # With mTLS the chart drops wait-for-lapi's env, so it polls ''
+          - target:
+              kind: Deployment
+              labelSelector: type=agent
+            patch: |-
+              - op: add
+                path: /spec/template/spec/initContainers/0/env
+                value:
+                  - name: LAPI_HOST
+                    value: ${CROWDSEC_LAPI_HOST:=crowdsec.cloud.clerici.tech}
+                  - name: LAPI_PORT
+                    value: "${CROWDSEC_LAPI_PORT:=443}"

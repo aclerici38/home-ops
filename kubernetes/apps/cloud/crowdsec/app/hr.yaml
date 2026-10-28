@@ -47,6 +47,10 @@ spec:
     lapi:
       enabled: true
       env:
+        # AppSec authenticates as a machine with the chart's appsec-ou cert;
+        # the chart leaves this at agent-ou only
+        - name: AGENTS_ALLOWED_OU
+          value: agent-ou,appsec-ou
         # The gateway bouncers' WAF key, validated by AppSec
         - name: BOUNCER_KEY_waf
           valueFrom:
@@ -102,6 +106,18 @@ spec:
               - op: add
                 path: /spec/template/spec/automountServiceAccountToken
                 value: false
+          # With mTLS the chart drops wait-for-lapi's env, so it polls ''
+          - target:
+              kind: Deployment
+              labelSelector: type=agent
+            patch: |-
+              - op: add
+                path: /spec/template/spec/initContainers/0/env
+                value:
+                  - name: LAPI_HOST
+                    value: ${CROWDSEC_LAPI_HOST:=crowdsec.cloud.clerici.tech}
+                  - name: LAPI_PORT
+                    value: "${CROWDSEC_LAPI_PORT:=443}"
           # Home reaches the LAPI by its public name
           - target:
               kind: Certificate
