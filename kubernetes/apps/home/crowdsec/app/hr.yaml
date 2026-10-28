@@ -47,9 +47,9 @@ spec:
     agent:
       env:
         - name: COLLECTIONS
-          value: "yanis-kouidri/envoy crowdsecurity/base-http-scenarios crowdsecurity/http-cve crowdsecurity/opnsense firewallservices/pf"
+          value: "yanis-kouidri/envoy crowdsecurity/base-http-scenarios crowdsecurity/http-cve crowdsecurity/http-dos crowdsecurity/http-extended-context crowdsecurity/opnsense firewallservices/pf"
         - name: PARSERS
-          value: "crowdsecurity/syslog-logs firewallservices/pf-logs"
+          value: "crowdsecurity/syslog-logs firewallservices/pf-logs crowdsecurity/jellyseerr-whitelist"
       additionalAcquisition:
         - source: kubernetes
           namespace: envoy-gateway

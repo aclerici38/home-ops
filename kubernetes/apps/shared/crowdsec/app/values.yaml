@@ -68,7 +68,7 @@ data:
             type: envoy
       env:
         - name: COLLECTIONS
-          value: "yanis-kouidri/envoy crowdsecurity/base-http-scenarios crowdsecurity/http-cve"
+          value: "yanis-kouidri/envoy crowdsecurity/base-http-scenarios crowdsecurity/http-cve crowdsecurity/http-dos crowdsecurity/http-extended-context"
       podSecurityContext: &podSecurityContext
         seccompProfile:
           type: RuntimeDefault
