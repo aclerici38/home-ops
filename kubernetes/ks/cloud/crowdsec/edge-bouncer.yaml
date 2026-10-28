@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: crowdsec-ui
+  name: crowdsec-edge-bouncer
   namespace: flux-system
 spec:
   targetNamespace: crowdsec
@@ -12,7 +12,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kubernetes/apps/home/crowdsec/ui
+  path: ./kubernetes/apps/cloud/crowdsec/edge-bouncer
   commonMetadata:
     labels:
-      app.kubernetes.io/name: crowdsec-ui
+      app.kubernetes.io/name: crowdsec-edge-bouncer

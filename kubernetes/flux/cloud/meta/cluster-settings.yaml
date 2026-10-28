@@ -19,6 +19,9 @@ data:
   ETCD_NODES: 192.9.147.24
   TZ: America/Los_Angeles
   COREDNS_CLUSTER_IP: "172.17.0.10"
+  # In-cluster LAPI; other clusters default to its public name
+  CROWDSEC_LAPI_HOST: crowdsec-service.crowdsec.svc.cluster.local
+  CROWDSEC_LAPI_PORT: "8080"
   GRAFANA_RESYNC_PERIOD: 1m
   # Alertmanager Watchdog heartbeat target (home's gatus)
   GATUS_BUDDY_HOST: gatus.clerici.tech

@@ -1,0 +1,110 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.1-standalone-strict/configmap-v1.json
+# Agent + AppSec for every cluster, reporting to cloud's LAPI over mTLS. Each
+# cluster's HelmRelease adds its own pieces on top (lists replace, maps merge).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: crowdsec-values
+data:
+  values.yaml: |-
+    image:
+      repository: ghcr.io/crowdsecurity/crowdsec
+    tls:
+      enabled: true
+      certManager:
+        issuerRef:
+          name: crowdsec-ca
+          kind: Issuer
+    config:
+      postoverflows:
+        s01-whitelist:
+          01-whitelist-private.yaml: |-
+            name: crowdsec/whitelist-private
+            description: "Whitelist private and in-cluster ranges"
+            whitelist:
+              reason: "Own infrastructure"
+              cidr:
+                - "10.0.0.0/8"
+                - "172.16.0.0/12"
+                - "192.168.0.0/16"
+                - "${CLUSTER_POD_CIDR}"
+      # Pin the hub branch so cscli skips its version.crowdsec.net lookup
+      agent_config.yaml.local: &hubBranch |-
+        cscli:
+          hub_branch: master
+      appsec_config.yaml.local: *hubBranch
+    lapi:
+      enabled: false
+    agent:
+      isDeployment: true
+      # One reader: every replica would stream the same gateway logs
+      replicas: 1
+      serviceAccountName: crowdsec-agent
+      # Cloud's public name unless cluster-settings says otherwise (cloud does)
+      lapiURL: &lapiURL https://${CROWDSEC_LAPI_HOST:=crowdsec.cloud.clerici.tech}:${CROWDSEC_LAPI_PORT:=443}
+      lapiHost: &lapiHost ${CROWDSEC_LAPI_HOST:=crowdsec.cloud.clerici.tech}
+      lapiPort: &lapiPort ${CROWDSEC_LAPI_PORT:=443}
+      podLabels:
+        dormammu.internal/apiserver-client: "true"
+        dormammu.internal/crowdsec-lapi-client: "true"
+      hostVarLog: false
+      acquisition: []
+      additionalAcquisition:
+        - source: kubernetes
+          namespace: envoy-gateway
+          selector: gateway.envoyproxy.io/owning-gateway-name=external
+          labels:
+            type: envoy
+      env:
+        - name: COLLECTIONS
+          value: "yanis-kouidri/envoy crowdsecurity/base-http-scenarios crowdsecurity/http-cve"
+      podSecurityContext: &podSecurityContext
+        seccompProfile:
+          type: RuntimeDefault
+      securityContext: &securityContext
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+      wait_for_lapi:
+        securityContext: *securityContext
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          memory: 256Mi
+      metrics: &metrics
+        enabled: true
+        serviceMonitor:
+          enabled: true
+    appsec:
+      enabled: true
+      replicas: 2
+      lapiURL: *lapiURL
+      lapiHost: *lapiHost
+      lapiPort: *lapiPort
+      podLabels:
+        dormammu.internal/crowdsec-lapi-client: "true"
+      env:
+        - name: COLLECTIONS
+          value: "crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-crs crowdsecurity/appsec-generic-rules"
+      acquisitions:
+        - source: appsec
+          listen_addr: "0.0.0.0:7422"
+          path: /
+          appsec_config: crowdsecurity/appsec-default
+          labels:
+            type: appsec
+      podSecurityContext: *podSecurityContext
+      securityContext: *securityContext
+      wait_for_lapi:
+        securityContext: *securityContext
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          memory: 256Mi
+      metrics: *metrics

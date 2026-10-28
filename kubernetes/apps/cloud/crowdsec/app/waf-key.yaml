@@ -1,0 +1,55 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.14.0/password_v1alpha1.json
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: Password
+metadata:
+  name: crowdsec-waf-key
+spec:
+  length: 48
+  digits: 8
+  symbols: 0
+  noUpper: false
+  allowRepeat: true
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.14.0/externalsecret_v1.json
+# Bouncer key AppSec validates against the LAPI.
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: crowdsec-secrets
+  labels:
+    dormammu.internal/component: external-secret
+spec:
+  refreshPolicy: OnChange
+  target:
+    template:
+      engineVersion: v2
+      data:
+        WAF_API_KEY: "{{ .password }}"
+  dataFrom:
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: Password
+          name: crowdsec-waf-key
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.14.0/pushsecret_v1alpha1.json
+# Home's crowdsec-secrets reads this back
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: crowdsec-waf-key
+spec:
+  refreshInterval: 1h
+  secretStoreRefs:
+    - name: onepassword-connect
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: crowdsec-secrets
+  data:
+    - match:
+        secretKey: WAF_API_KEY
+        remoteRef:
+          remoteKey: crowdsec-waf-key
+          property: WAF_API_KEY

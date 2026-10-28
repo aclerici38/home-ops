@@ -10,163 +10,52 @@ spec:
   chartRef:
     kind: OCIRepository
     name: crowdsec
+  # The chart's schema (0.24.2) predates the kubernetes acquisition source
   install:
+    disableSchemaValidation: true
     timeout: 2m
     remediation:
       retries: 1
   upgrade:
+    disableSchemaValidation: true
     timeout: 2m
     remediation:
       retries: 1
+  valuesFrom:
+    - kind: ConfigMap
+      name: crowdsec-values
+      valuesKey: values.yaml
+  # home-only: OPNsense pf logs over syslog. Lists replace, so the shared
+  # gateway acquisition and collections are restated.
   values:
-    container_runtime: containerd
-    image:
-      repository: ghcr.io/crowdsecurity/crowdsec
-      pullPolicy: IfNotPresent
+    # No LAPI here and mTLS needs no registration token, so this only stops the
+    # chart from demanding values for its own crowdsec-lapi-secrets.
+    secrets:
+      externalSecret:
+        name: crowdsec-secrets
     config:
-      parsers: {}
-      scenarios: {}
-      console.yaml: |
-        share_manual_decisions: false
-        share_custom: true
-        share_tainted: true
-        share_context: true
       postoverflows:
         s01-whitelist:
-          01-whitelist-home.yaml: |-
-            name: crowdsec/whitelist-home
-            description: "Whitelist own infrastructure IP ranges"
+          02-whitelist-cloud.yaml: |-
+            name: crowdsec/whitelist-cloud
+            description: "Whitelist the cloud node (gatus probes)"
             whitelist:
               reason: "Own infrastructure"
               cidr:
-                - "10.0.0.0/16"
-                - "${CLUSTER_POD_CIDR}"
                 - "${CLOUD_NODE_V4_CIDR}"
                 - "${CLOUD_NODE_V6_CIDR}"
-      # Pin the hub branch so cscli skips its version.crowdsec.net lookup
-      agent_config.yaml.local: &hubBranch |-
-        cscli:
-          hub_branch: master
-      appsec_config.yaml.local: *hubBranch
-      config.yaml.local: |-
-        cscli:
-          hub_branch: master
-        api:
-          server:
-            trusted_ips:
-              - ${CLUSTER_POD_CIDR}
-            auto_registration:
-              enabled: true
-              token: "$${REGISTRATION_TOKEN}"
-              allowed_ranges:
-                - "${CLUSTER_POD_CIDR}"
-        db_config:
-          type: postgresql
-          host: $${DB_HOST}
-          port: $${DB_PORT}
-          user: $${DB_USER}
-          # Not used
-          password: cert-auth
-          db_name: $${DB_NAME}
-          sslmode: verify-full
-          ssl_ca_cert: /var/run/secrets/postgresql/ca.crt
-          ssl_client_cert: /var/run/secrets/postgresql/tls.crt
-          ssl_client_key: /var/run/secrets/postgresql/tls.key
-    lapi:
-      replicas: 2
-      # mTLS client cert for the cert-only pooler (LAPI runs as root, reads 0440).
-      extraVolumes:
-        - name: postgres-cert
-          secret:
-            secretName: crowdsec-postgres-cert
-            defaultMode: 0440
-      extraVolumeMounts:
-        - name: postgres-cert
-          mountPath: /var/run/secrets/postgresql
-          readOnly: true
-      strategy:
-        type: RollingUpdate
-      storeCAPICredentialsInSecret: true
-      storeLAPICscliCredentialsInSecret: true
-      podSecurityContext:
-        seccompProfile:
-          type: RuntimeDefault
-      securityContext:
-        allowPrivilegeEscalation: false
-        privileged: false
-        capabilities:
-          drop:
-            - ALL
-      env:
-        - name: DB_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: crowdsec-postgres
-              key: host
-        - name: DB_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: crowdsec-postgres
-              key: port
-        - name: DB_USER
-          valueFrom:
-            configMapKeyRef:
-              name: crowdsec-postgres
-              key: username
-        - name: DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: crowdsec-postgres
-              key: dbname
-      service:
-        type: LoadBalancer
-        annotations:
-          lbipam.cilium.io/ips: ${CROWDSEC_LB_IP}
-      persistentVolume:
-        data:
-          enabled: false
-        config:
-          enabled: false
-      resources:
-        requests:
-          cpu: 100m
-          memory: 256Mi
-        limits:
-          cpu: null
-          memory: 512Mi
-      metrics:
-        enabled: true
-        serviceMonitor:
-          enabled: true
     agent:
-      enabled: true
-      isDeployment: true
-      replicas: 2
-      strategy:
-        type: RollingUpdate
-      hostVarLog: false
-      podSecurityContext:
-        seccompProfile:
-          type: RuntimeDefault
-      securityContext:
-        allowPrivilegeEscalation: false
-        privileged: false
-        capabilities:
-          drop:
-            - ALL
-      wait_for_lapi:
-        securityContext:
-          allowPrivilegeEscalation: false
-          privileged: false
-          capabilities:
-            drop:
-              - ALL
       env:
         - name: COLLECTIONS
-          value: "crowdsecurity/opnsense firewallservices/pf"
+          value: "yanis-kouidri/envoy crowdsecurity/base-http-scenarios crowdsecurity/http-cve crowdsecurity/opnsense firewallservices/pf"
         - name: PARSERS
           value: "crowdsecurity/syslog-logs firewallservices/pf-logs"
       additionalAcquisition:
+        - source: kubernetes
+          namespace: envoy-gateway
+          selector: gateway.envoyproxy.io/owning-gateway-name=external
+          labels:
+            type: envoy
         - source: syslog
           listen_addr: "0.0.0.0"
           listen_port: 514
@@ -181,57 +70,20 @@ spec:
             port: 514
             protocol: UDP
             targetPort: 514
-      resources:
-        requests:
-          cpu: 100m
-          memory: 128Mi
-        limits:
-          cpu: null
-          memory: 256Mi
-      metrics:
-        enabled: true
-        serviceMonitor:
-          enabled: true
-      acquisition: []
-    appsec:
-      enabled: true
-      replicas: 2
-      strategy:
-        type: RollingUpdate
-      podSecurityContext:
-        seccompProfile:
-          type: RuntimeDefault
-      securityContext:
-        allowPrivilegeEscalation: false
-        privileged: false
-        capabilities:
-          drop:
-            - ALL
-      wait_for_lapi:
-        securityContext:
-          allowPrivilegeEscalation: false
-          privileged: false
-          capabilities:
-            drop:
-              - ALL
-      env:
-        - name: COLLECTIONS
-          value: "crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-crs crowdsecurity/appsec-generic-rules"
-      acquisitions:
-        - source: appsec
-          listen_addr: "0.0.0.0:7422"
-          path: /
-          appsec_config: crowdsecurity/appsec-default
-          labels:
-            type: appsec
-      resources:
-        requests:
-          cpu: 100m
-          memory: 128Mi
-        limits:
-          cpu: null
-          memory: 256Mi
-      service:
-        type: ClusterIP
-  dependsOn:
-    - name: crowdsec-resources
+  # Not exposed by the chart
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+            patch: |-
+              - op: add
+                path: /spec/template/spec/hostUsers
+                value: false
+          - target:
+              kind: Deployment
+              labelSelector: type=appsec
+            patch: |-
+              - op: add
+                path: /spec/template/spec/automountServiceAccountToken
+                value: false

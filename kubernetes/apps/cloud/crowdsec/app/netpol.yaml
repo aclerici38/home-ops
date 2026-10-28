@@ -1,0 +1,52 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.4/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: crowdsec-lapi
+spec:
+  endpointSelector:
+    matchLabels:
+      k8s-app: crowdsec
+      type: lapi
+  ingress:
+    # In-cluster agents, AppSec and bouncers
+    - fromEndpoints:
+        - matchExpressions:
+            - {key: dormammu.internal/crowdsec-lapi-client, operator: Exists}
+      toPorts:
+        - ports:
+            - {port: "8080", protocol: TCP}
+    # Home's clients, through the external gateway's TLS passthrough
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: external
+      toPorts:
+        - ports:
+            - {port: "8080", protocol: TCP}
+  egress:
+    # CAPI: community blocklist and signal sharing
+    - toFQDNs:
+        - matchName: api.crowdsec.net
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.4/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: crowdsec-capi-register
+spec:
+  # Pre-install/upgrade hook; only checks the crowdsec-capi-credentials Secret exists
+  endpointSelector:
+    matchLabels:
+      k8s-app: crowdsec
+      type: capi-register-job
+  egress:
+    - toEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - {port: "6443", protocol: TCP}
