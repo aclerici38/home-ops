@@ -57,6 +57,9 @@ spec:
               readOnlyRootFilesystem: true
               seccompProfile: {type: RuntimeDefault}
               capabilities: {drop: ["ALL"]}
+            resources:
+              requests: {cpu: 10m, memory: 16Mi}
+              limits: {memory: 256Mi}
     service:
       iroh-relay:
         controller: iroh-relay
@@ -118,3 +121,8 @@ spec:
             manual_key_path = "/tls/tls.key"
             https_bind_addr = "[::]:8444"
             quic_bind_addr = "[::]:7842"
+
+            # Parsed but NOT implemented as of iroh-relay v1.4.1
+            [limits]
+            accept_conn_limit = 5.0
+            accept_conn_burst = 50
