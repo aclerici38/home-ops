@@ -10,12 +10,20 @@ data:
   values.yaml: |-
     image:
       repository: ghcr.io/crowdsecurity/crowdsec
+    container_runtime: containerd
     tls:
       enabled: true
       certManager:
         issuerRef:
           name: crowdsec-ca
           kind: Issuer
+        # Left empty, the chart renders `secretTemplate: null` (and the AppSec
+        # certs `annotations: null`), which cert-manager rejects. Both need a value.
+        secretTemplate:
+          annotations:
+            dormammu.internal/issuer: crowdsec-ca
+          labels:
+            app.kubernetes.io/name: crowdsec
     config:
       postoverflows:
         s01-whitelist:

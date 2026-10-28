@@ -28,6 +28,12 @@ spec:
       enabled: true
     global:
       imageRegistry: mirror.gcr.io
+    # The pre-install/upgrade hook writes the control plane's TLS Secrets
+    certgen:
+      job:
+        pod:
+          labels:
+            dormammu.internal/apiserver-client: "true"
     deployment:
       replicas: 2
       pod:
