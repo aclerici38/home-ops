@@ -50,6 +50,15 @@ spec:
               CONFIG_INSTANCE_LAPI_AUTH_CERT_FILE: /certs/tls.crt
               CONFIG_INSTANCE_LAPI_AUTH_KEY_FILE: /certs/tls.key
               CONFIG_INSTANCE_LAPI_TLS_CA_FILE: /certs/ca.crt
+              CONFIG_INSTANCE_METRICS_0_ID: lapi
+              CONFIG_INSTANCE_METRICS_0_NAME: LAPI
+              CONFIG_INSTANCE_METRICS_0_URL: http://crowdsec-service.crowdsec.svc.cluster.local:6060/metrics
+              CONFIG_INSTANCE_METRICS_1_ID: agent
+              CONFIG_INSTANCE_METRICS_1_NAME: Agent
+              CONFIG_INSTANCE_METRICS_1_URL: http://crowdsec-agent-service.crowdsec.svc.cluster.local:6060/metrics
+              CONFIG_INSTANCE_METRICS_2_ID: appsec
+              CONFIG_INSTANCE_METRICS_2_NAME: AppSec
+              CONFIG_INSTANCE_METRICS_2_URL: http://crowdsec-appsec-service.crowdsec.svc.cluster.local:6060/metrics
               CONFIG_AUTH_ENABLED: true
               CONFIG_AUTH_PASSWORD_LOGIN_ENABLED: false
               CONFIG_AUTH_OIDC_ISSUER_URL:
@@ -128,6 +137,34 @@ spec:
             toPorts:
               - ports:
                   - {port: "3000", protocol: TCP}
+        egress:
+          # Prometheus scrapes
+          - toEndpoints:
+              - &crowdsecMetrics
+                matchLabels:
+                  k8s-app: crowdsec
+                matchExpressions:
+                  - key: type
+                    operator: In
+                    values:
+                      - lapi
+                      - agent
+                      - appsec
+            toPorts:
+              - ports:
+                  - {port: "6060", protocol: TCP}
+      # The scrape's ingress side, on the crowdsec pods
+      metrics:
+        type: cilium
+        endpointSelector: *crowdsecMetrics
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/name: crowdsec-ui
+                  app.kubernetes.io/controller: crowdsec-ui
+            toPorts:
+              - ports:
+                  - {port: "6060", protocol: TCP}
     persistence:
       certs:
         type: secret
