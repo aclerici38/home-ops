@@ -17,3 +17,9 @@ spec:
       toPorts:
         - ports:
             - {port: "8443", protocol: TCP}
+    # OIDC token exchange with home's pocket-id (resource-bundle oidc)
+    - toFQDNs:
+        - matchName: id.clerici.tech
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}

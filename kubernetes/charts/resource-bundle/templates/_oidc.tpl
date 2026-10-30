@@ -23,7 +23,7 @@ oidc:
     authorizationEndpoint: {{ printf "%s/authorize" $issuer | quote }}
     tokenEndpoint: {{ printf "%s/api/oidc/token" $issuer | quote }}
     endSessionEndpoint: {{ printf "%s/api/oidc/end-session" $issuer | quote }}
-{{- if ne (dig "backendHost" "pocket-id.pocket-id-operator.svc.cluster.local" $o) $issuerHost }}
+{{- if ne (include "resources.oidc.backendHost" .) $issuerHost }}
     {{- /* Only when short-circuiting the issuer host. Left unset, Envoy Gateway
            builds a STRICT_DNS cluster from the token endpoint itself and
            originates TLS with the system trust bundle. */}}
@@ -46,14 +46,21 @@ csrf:
     - "https://id.clerici.tech"
 {{- end -}}
 
+{{- /* Without an in-cluster pocket-id (pocketId.external), the token exchange
+       goes to the public issuer and Envoy Gateway needs no Backend. */}}
+{{- define "resources.oidc.backendHost" -}}
+{{- $external := dig "external" false (.Values.pocketId | default dict) -}}
+{{- dig "backendHost" (ternary "id.clerici.tech" "pocket-id.pocket-id-operator.svc.cluster.local" (eq (toString $external) "true")) .Values.oidc -}}
+{{- end -}}
+
 {{- define "resources.oidc.needsBackend" -}}
 {{- $o := .Values.oidc -}}
-{{- if ne (dig "backendHost" "pocket-id.pocket-id-operator.svc.cluster.local" $o) "id.clerici.tech" }}true{{ end }}
+{{- if ne (include "resources.oidc.backendHost" .) "id.clerici.tech" }}true{{ end }}
 {{- end -}}
 
 {{- define "resources.oidc.backendSpec" -}}
 {{- $o := .Values.oidc -}}
-{{- $host := dig "backendHost" "pocket-id.pocket-id-operator.svc.cluster.local" $o -}}
+{{- $host := include "resources.oidc.backendHost" . -}}
 {{- $port := dig "backendPort" 1411 $o -}}
 endpoints:
   - fqdn:

@@ -113,6 +113,7 @@
 
 # oidc:                   # Envoy Gateway OIDC forward-auth for an HTTPRoute
 #   backendHost: pocket-id.pocket-id-operator.svc.cluster.local
+#                         # (id.clerici.tech with pocketId.external)
 #   backendPort: 1411
 #   backendTLS: <port==443>
 #   route: <app>          # HTTPRoute the SecurityPolicy targets

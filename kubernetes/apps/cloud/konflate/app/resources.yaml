@@ -1,0 +1,69 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.0/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: konflate-${KONFLATE_CLUSTER}-resources
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: kubernetes/charts/resource-bundle
+      reconcileStrategy: Revision
+      sourceRef:
+        kind: GitRepository
+        name: resource-bundle-chart
+        namespace: flux-system
+  install:
+    timeout: 5m
+  upgrade:
+    timeout: 5m
+  dependsOn:
+    - name: envoy-gateway
+      namespace: envoy-gateway
+    - name: pocket-id-operator
+      namespace: pocket-id-operator
+  values:
+    pocketId:
+      name: Konflate (${KONFLATE_CLUSTER})
+      external: true
+      url: konflate-${KONFLATE_CLUSTER}.${CLUSTER_NAME}.clerici.tech
+      callbackPaths:
+        - /oauth2/callback
+      spec:
+        oidcClient:
+          allowedUserGroups:
+            - groupName: admin
+          logo:
+            nameOverride: konflate
+          secret:
+            keys:
+              clientID: client-id
+              clientSecret: client-secret
+    oidc: {}
+---
+# GitHub's webhook deliveries can't log in. Exact beats the OIDC route's / prefix.
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.6.3/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: konflate-${KONFLATE_CLUSTER}-hooks
+  annotations:
+    # The main route's probe already covers this host
+    gatus.home-operations.com/enabled: "false"
+spec:
+  hostnames:
+    - konflate-${KONFLATE_CLUSTER}.${CLUSTER_NAME}.clerici.tech
+  parentRefs:
+    - name: external
+      namespace: envoy-gateway
+      sectionName: https
+  rules:
+    - matches:
+        - method: POST
+          path:
+            type: Exact
+            value: /hooks
+      backendRefs:
+        - name: konflate-${KONFLATE_CLUSTER}
+          port: 8080
