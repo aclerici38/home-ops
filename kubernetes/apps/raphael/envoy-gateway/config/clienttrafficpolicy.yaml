@@ -17,6 +17,12 @@ spec:
       # The towonel agent is a pod, so the immediate peer is never the client.
       trustedCIDRs:
         - ${CLUSTER_POD_CIDR}
+  headers:
+    # Nothing here should be indexed or used for training by compliant crawlers
+    lateResponseHeaders:
+      set:
+        - name: X-Robots-Tag
+          value: "noindex, nofollow, noarchive, nosnippet, noimageindex"
   http2:
     onInvalidMessage: TerminateStream
   timeout:

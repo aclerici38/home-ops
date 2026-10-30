@@ -23,6 +23,11 @@ spec:
       remove:
         - x-forwarded-user
         - x-forwarded-groups
+    # Nothing here should be indexed or used for training by compliant crawlers
+    lateResponseHeaders:
+      set:
+        - name: X-Robots-Tag
+          value: "noindex, nofollow, noarchive, nosnippet, noimageindex"
   http2:
     onInvalidMessage: TerminateStream
   connection:
