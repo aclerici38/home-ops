@@ -19,9 +19,6 @@ spec:
   upgrade:
     timeout: 10m
   values:
-    global:
-      image:
-        registry: mirror.gcr.io
     config:
       cluster:
         enabled: true
@@ -41,6 +38,10 @@ spec:
     natsBox:
       enabled: false
     container:
+      image:
+        registry: mirror.gcr.io
+        repository: nats
+        tag: 2.15.1-alpine@sha256:7ae34c25dfd6fe2e01c6483eabef20d796690fdcac6c4d94ca780a6cf9877fde
       env:
         # Should be ~80% of memory limit
         GOMEMLIMIT: 410MiB
@@ -59,10 +60,18 @@ spec:
           limits:
             memory: 512Mi
     reloader:
+      image:
+        registry: mirror.gcr.io
+        repository: natsio/nats-server-config-reloader
+        tag: 0.24.0@sha256:d758a82a9c20337e46c2f7356a413faa52cf4d6b02497c3ad81f72f1ba106464
       merge:
         securityContext: *sec
     promExporter:
       enabled: true
+      image:
+        registry: mirror.gcr.io
+        repository: natsio/prometheus-nats-exporter
+        tag: 0.20.2@sha256:c623b608e148e31e1c1c878673a197f1828e58ce90de4f01d22f1baa84c8fee9
       merge:
         securityContext: *sec
         resources:
