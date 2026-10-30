@@ -41,7 +41,7 @@ spec:
       image:
         registry: mirror.gcr.io
         repository: nats
-        tag: 2.15.1-alpine@sha256:7ae34c25dfd6fe2e01c6483eabef20d796690fdcac6c4d94ca780a6cf9877fde
+        tag: 2.15.2-alpine@sha256:823e7f1d6d8ffe3b30dbd73d4a06bbb939acf94929f7fdf224404da7a05bafb5
       env:
         # Should be ~80% of memory limit
         GOMEMLIMIT: 410MiB
@@ -71,7 +71,7 @@ spec:
       image:
         registry: mirror.gcr.io
         repository: natsio/prometheus-nats-exporter
-        tag: 0.20.2@sha256:c623b608e148e31e1c1c878673a197f1828e58ce90de4f01d22f1baa84c8fee9
+        tag: 0.20.3@sha256:4b8ddc1c86fec360b5cd3d5e1fbc6fb52bdafd5805bba3901cc52926538af255
       merge:
         securityContext: *sec
         resources:
