@@ -41,10 +41,66 @@ spec:
       sectionName: https
   rules:
     - filters:
+        # basic_auth leaves the Authorization header on the request
         - type: RequestHeaderModifier
           requestHeaderModifier:
             remove:
               - cookie
+              - authorization
       backendRefs:
         - name: opensprinkler
           port: 80
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.9.3/securitypolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: opensprinkler
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: opensprinkler
+  # Unset, a route policy replaces the Gateway's outright, dropping the
+  # crowdsec-ext-auth ext_authz on the external gateway.
+  mergeType: StrategicMerge
+  basicAuth:
+    users:
+      name: opensprinkler
+  # The apps are Cordova webviews, so every request is cross-origin and the
+  # Authorization header forces a preflight that carries no credentials. The
+  # cors filter runs ahead of basic_auth and answers it.
+  cors:
+    allowOrigins:
+      - ionic://localhost # iOS
+      - https://localhost # Android
+    allowMethods:
+      - GET
+      - POST
+    allowHeaders:
+      - authorization
+      - content-type
+    # The app polls every few seconds; without this each poll is preceded by
+    # a preflight.
+    maxAge: 10m
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.14.0/externalsecret_v1.json
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: opensprinkler
+spec:
+  refreshInterval: "1h"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  target:
+    template:
+      data:
+        # Envoy's basic_auth only accepts {SHA} htpasswd entries.
+        .htpasswd: '{{ htpasswd "opensprinkler" .password "sha" }}'
+  data:
+    - secretKey: password
+      remoteRef:
+        key: opensprinkler
+        property: password
