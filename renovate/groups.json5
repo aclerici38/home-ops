@@ -225,6 +225,15 @@
       minimumGroupSize: 2,
     },
     {
+      description: "NATS group",
+      groupName: "NATS",
+      matchPackageNames: ["/(^|/)nats$/", "/natsio//"],
+      matchDatasources: ["docker", "helm"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "Pocket-ID group",
       groupName: "Pocket-ID",
       matchPackageNames: ["/pocket-id/"],
