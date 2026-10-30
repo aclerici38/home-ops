@@ -25,7 +25,7 @@ spec:
     - kind: ConfigMap
       name: crowdsec-values
       valuesKey: values.yaml
-  # home-only: OPNsense pf logs over syslog. Lists replace, so the shared
+  # home-only: OPNsense pf logs over syslog, HA failed logins. Lists replace, so the shared
   # gateway acquisition and collections are restated.
   values:
     # No LAPI here and mTLS needs no registration token, so this only stops the
@@ -47,7 +47,7 @@ spec:
     agent:
       env:
         - name: COLLECTIONS
-          value: "yanis-kouidri/envoy crowdsecurity/base-http-scenarios crowdsecurity/http-cve crowdsecurity/http-dos crowdsecurity/http-extended-context crowdsecurity/opnsense firewallservices/pf"
+          value: "yanis-kouidri/envoy crowdsecurity/base-http-scenarios crowdsecurity/http-cve crowdsecurity/http-dos crowdsecurity/http-extended-context crowdsecurity/opnsense firewallservices/pf crowdsecurity/home-assistant"
         - name: PARSERS
           value: "crowdsecurity/syslog-logs firewallservices/pf-logs crowdsecurity/jellyseerr-whitelist"
       additionalAcquisition:
@@ -56,6 +56,11 @@ spec:
           selector: gateway.envoyproxy.io/owning-gateway-name=external
           labels:
             type: envoy
+        - source: kubernetes
+          namespace: home-assistant
+          selector: app.kubernetes.io/controller=home-assistant
+          labels:
+            type: home-assistant
         - source: syslog
           listen_addr: "0.0.0.0"
           listen_port: 514
