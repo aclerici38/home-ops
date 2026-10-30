@@ -49,69 +49,72 @@ url_api = "https://api.github.com/repos/FiloSottile/age/releases/assets/53554189
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "v2026.10.21"
+version = "v2026.10.23"
 backend = "aqua:jdx/mise"
-specifiers = ["v2026.10.21"]
+specifiers = ["v2026.10.23"]
 
 [tools."aqua:jdx/mise"."platforms.linux-arm64"]
-checksum = "sha256:9b44072897d0489d79b8f12de13c3a27342e11f857b614aa58c5f34774c0da75"
-url = "https://github.com/jdx/mise/releases/download/v2026.10.21/mise-v2026.10.21-linux-arm64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/681211631"
+checksum = "sha256:bc65f5413ca407f6b7587c010e82b07c0e29c7cb03368e386b11e1f96ea637ff"
+url = "https://github.com/jdx/mise/releases/download/v2026.10.23/mise-v2026.10.23-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/688110494"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.linux-x64"]
-checksum = "sha256:63b5621467b5b9950b99b7333aec1b4a34c5f23a9e464d330357c5b35502e8d7"
-url = "https://github.com/jdx/mise/releases/download/v2026.10.21/mise-v2026.10.21-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/681212091"
+checksum = "sha256:c297998a3d6870db26ea42eb114e273d43a197eb37c4eecd73507b7bf007fbcd"
+url = "https://github.com/jdx/mise/releases/download/v2026.10.23/mise-v2026.10.23-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/688111047"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.macos-arm64"]
-checksum = "sha256:d67b6006cb1144131910ce80d6cf52134f55b9c7da55648bd717df36b3f238d6"
-url = "https://github.com/jdx/mise/releases/download/v2026.10.21/mise-v2026.10.21-macos-arm64.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/681212342"
+checksum = "sha256:b9146f565a02c18dc117e63a9e59ec1cb5189d1602e2cc68b27c0322c2a5908d"
+url = "https://github.com/jdx/mise/releases/download/v2026.10.23/mise-v2026.10.23-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/688111395"
 provenance = "minisign"
 
 [[tools."aqua:nklmilojevic/sofka"]]
-version = "v0.32.0"
+version = "v0.33.0"
 backend = "aqua:nklmilojevic/sofka"
-specifiers = ["v0.32.0"]
+specifiers = ["v0.33.0"]
 
 [tools."aqua:nklmilojevic/sofka"."platforms.linux-arm64"]
-checksum = "sha256:cd66135597b70ebb911a6fb8a8afd6c89ab9d51c47320ef67e660a36b26cad74"
-url = "https://github.com/nklmilojevic/sofka/releases/download/v0.32.0/sofka-v0.32.0-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/665842442"
+checksum = "sha256:f4622175b47cd8e9f89a946938981f2daa92ad1b3b676bd291f5575adfc3e238"
+checksum_source = "mise-versions"
+url = "https://github.com/nklmilojevic/sofka/releases/download/v0.33.0/sofka-v0.33.0-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/688019501"
 
 [tools."aqua:nklmilojevic/sofka"."platforms.linux-x64"]
-checksum = "sha256:c2d7140c67f288c2ff8d0a61ef1027d0974d95d4f2801e0819b601966703649e"
-url = "https://github.com/nklmilojevic/sofka/releases/download/v0.32.0/sofka-v0.32.0-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/665842446"
+checksum = "sha256:17ce98903d364ee0a9eae829f948134a50fee7c4c25548f51a11eeab3fc15bb5"
+checksum_source = "mise-versions"
+url = "https://github.com/nklmilojevic/sofka/releases/download/v0.33.0/sofka-v0.33.0-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/688019503"
 
 [tools."aqua:nklmilojevic/sofka"."platforms.macos-arm64"]
-checksum = "sha256:a6bdcda0b211fa8443a0326ebc266ecba0861009fcca0ea66cdefbcd8f1d7948"
-url = "https://github.com/nklmilojevic/sofka/releases/download/v0.32.0/sofka-v0.32.0-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/665842441"
+checksum = "sha256:82a813cc1bcebf7f0a6aa2603a26a7d37ba2ccb84dcc6ded39f8a7f57e83bad3"
+checksum_source = "mise-versions"
+url = "https://github.com/nklmilojevic/sofka/releases/download/v0.33.0/sofka-v0.33.0-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/688019504"
 
 [[tools.atuin]]
-version = "18.24.2"
+version = "18.24.3"
 backend = "aqua:atuinsh/atuin"
-specifiers = ["18.24.2"]
+specifiers = ["18.24.3"]
 
 [tools.atuin."platforms.linux-arm64"]
-checksum = "sha256:5ec6cc8bd3889b616970cc1fa1ede46b5608da693a0bb81c04fbb48ed63967ab"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.2/atuin-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/665441748"
+checksum = "sha256:fb9b67771736bfd47ddbe2cf49a2c0c57f50b1f74e396b579833a977551104d4"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.24.3/atuin-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/687132645"
 provenance = "github-attestations"
 
 [tools.atuin."platforms.linux-x64"]
-checksum = "sha256:005a4953f2fe96d4506fee7d926de73ec8cf64c89b2a07acd39bfa4fd88c0449"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.2/atuin-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/665441954"
+checksum = "sha256:f26874cae03d6436a6f5997d9bcebef3b37237eedf9aedee12eed7421f90b847"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.24.3/atuin-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/687132780"
 provenance = "github-attestations"
 
 [tools.atuin."platforms.macos-arm64"]
-checksum = "sha256:ba155cb61385e424c972ba5cadab68add2c6ad0d4f842365fc958d7a5f5917d5"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.2/atuin-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/665441742"
+checksum = "sha256:dd266366b1b00c298d689b0613c1acbe82855f04eb47d3f3f96262b148d8ebb9"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.24.3/atuin-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/687132647"
 provenance = "github-attestations"
 
 [[tools.bun]]
@@ -148,24 +151,27 @@ checksum = "sha256:c240d7f0ccb90c263a849fcdb09b7ee62630d921348ed6aafda86b9d577bc
 url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-darwin-aarch64.zip"
 
 [[tools.cilium-cli]]
-version = "0.20.1"
+version = "0.20.2"
 backend = "aqua:cilium/cilium-cli"
-specifiers = ["0.20.1"]
+specifiers = ["0.20.2"]
 
 [tools.cilium-cli."platforms.linux-arm64"]
-checksum = "sha256:d237550b882af6f2e01e8985e1e024d57c0774611c0a527c7a20dcee7dc4fd07"
-url = "https://github.com/cilium/cilium-cli/releases/download/v0.20.1/cilium-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/cilium/cilium-cli/releases/assets/585358779"
+checksum = "sha256:922af9c977e781500eb96c51137e495409b1cdd248c9e1b7fffb863e6b6efdf8"
+checksum_source = "mise-versions"
+url = "https://github.com/cilium/cilium-cli/releases/download/v0.20.2/cilium-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/cilium/cilium-cli/releases/assets/687888468"
 
 [tools.cilium-cli."platforms.linux-x64"]
-checksum = "sha256:24e817dcfcc8a12e325ce7547617bcbcf171c5b0b335bb24d2bb1207ba047f61"
-url = "https://github.com/cilium/cilium-cli/releases/download/v0.20.1/cilium-linux-amd64.tar.gz"
-url_api = "https://api.github.com/repos/cilium/cilium-cli/releases/assets/585358772"
+checksum = "sha256:b7224a62bfed0e84f1a84567d274fefc5017df76a936e067c42012bb7fc30856"
+checksum_source = "mise-versions"
+url = "https://github.com/cilium/cilium-cli/releases/download/v0.20.2/cilium-linux-amd64.tar.gz"
+url_api = "https://api.github.com/repos/cilium/cilium-cli/releases/assets/687888470"
 
 [tools.cilium-cli."platforms.macos-arm64"]
-checksum = "sha256:3521cb6af8f621d64dac63c7537fd9aa2ff878fb1f7a6f50e69b31bf45c02cb8"
-url = "https://github.com/cilium/cilium-cli/releases/download/v0.20.1/cilium-darwin-arm64.tar.gz"
-url_api = "https://api.github.com/repos/cilium/cilium-cli/releases/assets/585358773"
+checksum = "sha256:944c388f71b939e0befa405422c93d5fcbd574e4dd12c4bf01244858961d79de"
+checksum_source = "mise-versions"
+url = "https://github.com/cilium/cilium-cli/releases/download/v0.20.2/cilium-darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/cilium/cilium-cli/releases/assets/687888463"
 
 [[tools.claude-code]]
 version = "2.1.312"
