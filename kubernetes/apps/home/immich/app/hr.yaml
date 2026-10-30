@@ -24,12 +24,31 @@ spec:
       server:
         forceRename: immich
         strategy: RollingUpdate
+        replicas: 2
+        rollingUpdate:
+          surge: 0
+          unavailable: 1
         pod:
           labels:
             dormammu.internal/smtp-relay-client: "true"
-          # keep at 1 replica until https://github.com/immich-app/immich/pull/28410
-          nodeSelector:
-            kubernetes.io/hostname: "bonds"
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: kubernetes.io/hostname
+                        operator: In
+                        values:
+                          - bonds
+                          - cain
+            # never co-locate replicas so job workers stay spread across GPU nodes
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - topologyKey: kubernetes.io/hostname
+                  labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/instance: immich
+                      app.kubernetes.io/controller: server
         containers:
           immich-server:
             image:
