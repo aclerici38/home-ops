@@ -27,7 +27,6 @@ spec:
       url: crowdsec-ui.cloud.clerici.tech
       spec:
         oidcClient:
-          pkceEnabled: false
           allowedUserGroups:
             - groupName: admin
       callbackPaths:
