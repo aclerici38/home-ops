@@ -31,6 +31,7 @@ spec:
     nfsGate:
       targets:
         - name: immich
+          replicas: 2
         - name: immich-machine-learning
     cnpg:
       mode: shared
