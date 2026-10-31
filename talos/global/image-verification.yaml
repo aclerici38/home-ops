@@ -1,0 +1,78 @@
+---
+apiVersion: v1alpha1
+kind: ImageVerificationConfig
+rules:
+  - image: registry.k8s.io/*
+    keyless:
+      issuer: https://accounts.google.com
+      subjectRegex: ^(krel-trust@k8s-releng-prod|k8s-infra-gcr-promoter@k8s-artifacts-prod)\.iam\.gserviceaccount\.com$
+  - image: ghcr.io/fluxcd/*
+    keyless: &flux
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: ^https://github\.com/fluxcd/
+  - image: ghcr.io/controlplaneio-fluxcd/flux-operator*
+    keyless:
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: ^https://github\.com/controlplaneio-fluxcd/flux-operator/
+  - image: quay.io/cilium/cilium
+    keyless: &cilium
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: ^https://github\.com/cilium/cilium/
+  - image: quay.io/cilium/hubble-relay
+    keyless: *cilium
+  - image: quay.io/cilium/operator-generic
+    keyless: *cilium
+  - image: ghcr.io/rook/ceph
+    keyless:
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: ^https://github\.com/rook/rook/
+  - image: ghcr.io/cloudnative-pg/cloudnative-pg
+    keyless: &cnpg
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: ^https://github\.com/cloudnative-pg/
+  - image: ghcr.io/cloudnative-pg/postgresql
+    keyless: *cnpg
+  - image: ghcr.io/cloudnative-pg/pgbouncer
+    keyless: *cnpg
+  - image: ghcr.io/external-secrets/external-secrets
+    keyless:
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: ^https://github\.com/external-secrets/external-secrets/
+  - image: ghcr.io/spegel-org/spegel
+    keyless:
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: ^https://github\.com/spegel-org/spegel/
+  - image: ghcr.io/renovatebot/renovate
+    keyless:
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: ^https://github\.com/renovatebot/renovate/
+  - image: ghcr.io/aclerici38/pocket-id-operator
+    keyless:
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: ^https://github\.com/aclerici38/pocket-id-operator/
+  - image: ghcr.io/aclerici38/smartmontools
+    keyless:
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: ^https://github\.com/aclerici38/containers/
+  - image: ghcr.io/home-operations/bazarr-plus
+    keyless: &home-ops
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: ^https://github\.com/home-operations/containers/
+  - image: ghcr.io/home-operations/cni-plugins
+    keyless: *home-ops
+  - image: ghcr.io/home-operations/home-assistant
+    keyless: *home-ops
+  - image: ghcr.io/home-operations/prowlarr
+    keyless: *home-ops
+  - image: ghcr.io/home-operations/qbittorrent
+    keyless: *home-ops
+  - image: ghcr.io/home-operations/radarr
+    keyless: *home-ops
+  - image: ghcr.io/home-operations/smartctl-exporter
+    keyless: *home-ops
+  - image: ghcr.io/home-operations/sonarr
+    keyless: *home-ops
+  - image: docker.io/getmeili/meilisearch
+    keyless:
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: ^https://github\.com/meilisearch/meilisearch/

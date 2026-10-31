@@ -196,6 +196,23 @@ checksum_source = "mise-versions"
 url = "https://github.com/anthropics/claude-code/releases/download/v2.1.312/claude-darwin-arm64.tar.gz"
 url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/682510790"
 
+[[tools.cosign]]
+version = "3.1.4"
+backend = "aqua:sigstore/cosign"
+specifiers = ["3.1.4"]
+
+[tools.cosign."platforms.linux-x64"]
+checksum = "sha256:424e2c97d0b45fd7a6b608a87f090f35633f4c23ece5f092d48bba11aaf4bbfa"
+url = "https://github.com/sigstore/cosign/releases/download/v3.1.4/cosign-linux-amd64"
+url_api = "https://api.github.com/repos/sigstore/cosign/releases/assets/660069428"
+provenance = "cosign"
+
+[tools.cosign."platforms.macos-arm64"]
+checksum = "sha256:9f9b8cd557cf2e5b3df3373a00baa005a86b02391e3e06dd0ce37b3a1533d3a4"
+url = "https://github.com/sigstore/cosign/releases/download/v3.1.4/cosign-darwin-arm64"
+url_api = "https://api.github.com/repos/sigstore/cosign/releases/assets/660069257"
+provenance = "cosign"
+
 [[tools.crane]]
 version = "0.22.1"
 backend = "aqua:google/go-containerregistry"
