@@ -306,10 +306,6 @@ spec:
         globalMounts:
           - path: /var/run/secrets/postgresql
       # Skipped s6 init links /var/lib/silo -> /config/silo
-      config:
-        type: emptyDir
-        globalMounts:
-          - path: /config/silo
       data:
         existingClaim: silo
         advancedMounts:
