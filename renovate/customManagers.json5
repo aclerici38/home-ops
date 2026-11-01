@@ -17,6 +17,19 @@
       extractVersionTemplate: "^v(?<version>\\d+\\.\\d+)",
     },
     {
+      // The tag keeps its v: the digest lookup fetches releases/tags/<currentValue>.
+      // The new digest comes from the release's checksums.txt.
+      description: ["Track the llmkube metal-agent release tarball"],
+      customType: "regex",
+      managerFilePatterns: ["/(^|/)nix-config/mac-mini/llmkube-metal-agent\\.nix$/"],
+      matchStrings: [
+        'version = "(?<currentValue>v[^"]+)";\\s+sha256 = "(?<currentDigest>[a-f0-9]{64})";',
+      ],
+      depNameTemplate: "defilantech/LLMKube",
+      datasourceTemplate: "github-release-attachments",
+      versioningTemplate: "semver",
+    },
+    {
       description: ["Process various other dependencies"],
       customType: "regex",
       managerFilePatterns: ["!/^renovate\\//"],

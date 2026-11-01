@@ -24,6 +24,14 @@
       },
     },
     {
+      description: "Keep the Mac's metal-agent on the llmkube chart version",
+      matchPackageNames: ["defilantech/LLMKube"],
+      groupName: "llmkube",
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "Mise tools group",
       groupName: "Mise tools",
       matchManagers: ["mise"],

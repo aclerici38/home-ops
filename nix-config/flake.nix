@@ -38,19 +38,22 @@
     }:
     let
       specialArgs = { inherit inputs self; };
-      mac = nix-darwin.lib.darwinSystem {
-        inherit specialArgs;
-        modules = [
-          ./common.nix
-          ./darwin.nix
-        ];
-      };
+      mkMac =
+        extraModules:
+        nix-darwin.lib.darwinSystem {
+          inherit specialArgs;
+          modules = [
+            ./common.nix
+            ./darwin.nix
+          ]
+          ++ extraModules;
+        };
     in
     {
       # $ darwin-rebuild switch --flake .
       darwinConfigurations = {
-        "Anthonys-Mac-mini" = mac;
-        "Anthonys-MacBook-Pro" = mac;
+        "Anthonys-Mac-mini" = mkMac [ ./mac-mini ];
+        "Anthonys-MacBook-Pro" = mkMac [ ];
       };
 
       # $ nixos-rebuild switch --flake .  (comin deploys main automatically)
