@@ -91,6 +91,16 @@ spec:
     modelSource:
       allowedHostPathRoots: []
       allowedRemoteHosts: []
+
+    # The shared Role `llmkube metal token create` binds the Mac mini to
+    metalAgent:
+      rbac:
+        enabled: true
+        scope: namespaced
+        namespaces:
+          - llmkube
+        secretNames:
+          - llmkube-metal-relay
   dependsOn:
     - name: intel-gpu-resource-driver
       namespace: intel-gpu-resource-driver

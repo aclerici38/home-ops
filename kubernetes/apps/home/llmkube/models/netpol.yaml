@@ -45,6 +45,24 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
+  name: llmkube-metal
+spec:
+  # Relays (ingress comes from llmkube-inference) and MetalNode dial-back pods
+  endpointSelector:
+    matchExpressions:
+      - {key: app.kubernetes.io/component, operator: In, values: [metal-relay, metal-node-verifier]}
+  egress:
+    # The agent's ingress (selectorless <isvc>-agent Services); nix-config/mac-mini
+    - toCIDR:
+        - 10.0.40.140/32
+      toPorts:
+        - ports:
+            - {port: "9443", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.4/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
   name: llmkube-embedding-silo
 spec:
   # silo's recommendations.embedding_base_url points at the Service directly
