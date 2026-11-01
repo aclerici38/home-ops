@@ -30,54 +30,62 @@ spec:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: {type: RuntimeDefault}
-      resourceClaims:
-        - name: gpu
-          resourceClaimTemplateName: silo-gpu
-      # Server and transcode node never share a GPU host
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/instance: silo
-                matchExpressions:
-                  - key: app.kubernetes.io/controller
-                    operator: In
-                    values:
-                      - silo
-                      - transcode
     controllers:
       silo:
+        pod: &gpuPod
+          resourceClaims:
+            - name: gpu
+              resourceClaimTemplateName: silo-gpu
+          # Server and transcode node never share a GPU host
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - topologyKey: kubernetes.io/hostname
+                  labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/instance: silo
+                    matchExpressions:
+                      - key: app.kubernetes.io/controller
+                        operator: In
+                        values:
+                          - silo
+                          - transcode
         containers:
           silo:
             image: &image
               repository: ghcr.io/silo-server/silo-server
-              tag: latest@sha256:2fb6e173724cfb729b8eee91fa0fe8ac5eb1ca4daf174a8b82a931de527ee832
+              tag: latest@sha256:8b652b0be194081936889b8ce48d5fc25cd8f71269d376a51170aada75678d07
             # Skip s6 /init
             command: &command
               - silo
-            env: &env
-              PORT: &port 8080
-              # Jellyfin/Emby compatibility listener
-              JF_PORT: &jfPort 8096
-              SILO_METRICS_LISTEN: :9091
-              # Plugins stored in postgres
-              SILO_PLUGIN_CACHE_DIR: /tmp/silo-plugins
-              SILO_TRUSTED_PROXIES: ${CLUSTER_POD_CIDR}
-              SILO_SHUTDOWN_DELAY: "0"
-              # Image has no passwd entry
-              HOME: /tmp
-              REDIS_URL: redis://silo-dragonfly-db:6379
-              DATABASE_URL:
-                valueFrom:
-                  configMapKeyRef:
-                    name: silo-postgres
-                    key: uri
-              SECRET_KEY:
+            env:
+              <<: &env
+                PORT: &port 8080
+                # Jellyfin/Emby compatibility listener
+                JF_PORT: &jfPort 8096
+                SILO_METRICS_LISTEN: :9091
+                # Plugins stored in postgres
+                SILO_PLUGIN_CACHE_DIR: /tmp/silo-plugins
+                SILO_TRUSTED_PROXIES: ${CLUSTER_POD_CIDR}
+                SILO_SHUTDOWN_DELAY: "0"
+                # Image has no passwd entry
+                HOME: /tmp
+                REDIS_URL: redis://silo-dragonfly-db:6379
+                DATABASE_URL:
+                  valueFrom:
+                    configMapKeyRef:
+                      name: silo-postgres
+                      key: uri
+                SECRET_KEY:
+                  secretKeyRef:
+                    name: silo
+                    key: SECRET_KEY
+              SILO_SEARCH_PROVIDER: meilisearch
+              SILO_MEILISEARCH_URL: http://silo-meilisearch:7700
+              SILO_MEILISEARCH_API_KEY:
                 secretKeyRef:
                   name: silo
-                  key: SECRET_KEY
+                  key: MEILI_MASTER_KEY
             probes:
               liveness:
                 enabled: true
@@ -113,6 +121,7 @@ spec:
           serviceName:
             identifier: transcode
         pod:
+          <<: *gpuPod
           # Below default so the server can evict it when it needs this host
           priorityClassName: silo-transcode
         containers:
@@ -153,6 +162,43 @@ spec:
                 memory: 4Gi
               claims:
                 - name: gpu
+      meilisearch:
+        pod:
+          hostUsers: false
+        containers:
+          meilisearch:
+            image:
+              repository: docker.io/getmeili/meilisearch
+              tag: v1.56.0@sha256:1f578fa865f8251894b3bf38d6668d6209a3f451f8f65ab953e129d4c1db5ef4
+            args:
+              - /bin/meilisearch
+            env:
+              MEILI_ENV: production
+              MEILI_NO_ANALYTICS: true
+              # Upstream sets this too: Silo polls, which floods INFO
+              MEILI_LOG_LEVEL: WARN
+              MEILI_UPGRADE_DB: true
+              MEILI_MAX_INDEXING_MEMORY: 1GiB
+              MEILI_MASTER_KEY:
+                secretKeyRef:
+                  name: silo
+                  key: MEILI_MASTER_KEY
+            probes:
+              liveness: &meiliProbes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: 7700
+                    path: /health
+              readiness: *meiliProbes
+            securityContext: *containerSecurity
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 2Gi
     service:
       silo:
         controller: silo
@@ -170,6 +216,11 @@ spec:
         ports:
           http:
             port: *port
+      meilisearch:
+        controller: meilisearch
+        ports:
+          http:
+            port: 7700
     serviceMonitor:
       silo:
         serviceName: silo
@@ -262,6 +313,11 @@ spec:
             toPorts:
               - ports:
                   - {port: "8080", protocol: TCP}
+          - toControllers:
+              - meilisearch
+            toPorts:
+              - ports:
+                  - {port: "7700", protocol: TCP}
           # Seerr requests plugin
           - toEndpoints:
               - matchLabels:
@@ -298,13 +354,28 @@ spec:
                   - {port: "8080", protocol: TCP}
         egress:
           - {}
+      meilisearch:
+        type: cilium
+        controller: meilisearch
+        ingress:
+          - fromControllers:
+              - silo
+            toPorts:
+              - ports:
+                  - {port: "7700", protocol: TCP}
+        egress:
+          - {}
     persistence:
       postgres-cert:
         type: secret
         name: silo-postgres-cert
         defaultMode: 0440
-        globalMounts:
-          - path: /var/run/secrets/postgresql
+        advancedMounts:
+          silo:
+            silo: &postgresCertMount
+              - path: /var/run/secrets/postgresql
+          transcode:
+            transcode: *postgresCertMount
       # Skipped s6 init links /var/lib/silo -> /config/silo
       data:
         existingClaim: silo
@@ -328,9 +399,20 @@ spec:
         # Ignored
         size: 1Gi
         suffix: media
-        globalMounts:
-          - path: /mnt/media
-            readOnly: true
+        advancedMounts:
+          silo:
+            silo: &mediaMount
+              - path: /mnt/media
+                readOnly: true
+          transcode:
+            transcode: *mediaMount
+      # Derived from postgres, so not backed up
+      meilisearch:
+        existingClaim: silo-meilisearch
+        advancedMounts:
+          meilisearch:
+            meilisearch:
+              - path: /meili_data
       # Transcodes, download artifacts, uploads and the plugin cache
       tmpfs:
         type: emptyDir

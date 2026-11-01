@@ -49,7 +49,10 @@ spec:
             - name: vector
               ensure: present
               version: 0.8.7
-    dragonfly: {}
+    dragonfly:
+      extraArgs:
+        # Meilisearch search sessions: script trims keys it can't declare
+        - --default_lua_flags=allow-undeclared-keys
     externalSecret: {}
     gpu: {}
     pocketId:

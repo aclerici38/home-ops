@@ -11,3 +11,16 @@ spec:
       storage: 100Gi
   accessModes:
     - ReadWriteMany
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.2-standalone-strict/persistentvolumeclaim-v1.json
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: silo-meilisearch
+spec:
+  storageClassName: ceph-block
+  resources:
+    requests:
+      storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
