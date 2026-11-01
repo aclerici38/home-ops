@@ -12,8 +12,9 @@ spec:
       app.kubernetes.io/instance: omada-controller
       app.kubernetes.io/name: omada-controller
   ingress:
-    # APs/switches on the management VLAN: every device port
+    # APs/switches on the management VLAN and LAN for adoption
     - fromCIDR:
+        - 10.0.0.0/24
         - 10.0.10.0/24
     # Web UI from the house and cottage VLANs
     - fromCIDR:
