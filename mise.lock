@@ -49,26 +49,26 @@ url_api = "https://api.github.com/repos/FiloSottile/age/releases/assets/53554189
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "v2026.10.24"
+version = "v2026.10.25"
 backend = "aqua:jdx/mise"
-specifiers = ["v2026.10.24"]
+specifiers = ["v2026.10.25"]
 
 [tools."aqua:jdx/mise"."platforms.linux-arm64"]
-checksum = "sha256:c1391f191cce6019ead500b6b22eb50f73bb0ba48f64619cc66bb27ff42840d0"
-url = "https://github.com/jdx/mise/releases/download/v2026.10.24/mise-v2026.10.24-linux-arm64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/691698518"
+checksum = "sha256:8584bd9a7e80ab46f20abcfaf6d0b9a1bd216fbaa8ba00c58a8814b47a565346"
+url = "https://github.com/jdx/mise/releases/download/v2026.10.25/mise-v2026.10.25-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/695048986"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.linux-x64"]
-checksum = "sha256:257bc6521a2401470fc38cf6be45bbf5783c0443c80298b61fb13f3354f7e06e"
-url = "https://github.com/jdx/mise/releases/download/v2026.10.24/mise-v2026.10.24-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/691699113"
+checksum = "sha256:1bcb291396a002cb61d9094dbb0d06474abc3df4d1ab4e1fdf59dc669ca73506"
+url = "https://github.com/jdx/mise/releases/download/v2026.10.25/mise-v2026.10.25-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/695049757"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.macos-arm64"]
-checksum = "sha256:aa2fc59242db108f97ea9fb2d2e2cb42ff1467fcafe3c91e48d51c841ba67a65"
-url = "https://github.com/jdx/mise/releases/download/v2026.10.24/mise-v2026.10.24-macos-arm64.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/691699386"
+checksum = "sha256:774236e3247e48d78078c0bce79e5327d4e4479f1a94c8487827f178197ee39b"
+url = "https://github.com/jdx/mise/releases/download/v2026.10.25/mise-v2026.10.25-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/695050171"
 provenance = "minisign"
 
 [[tools."aqua:nklmilojevic/sofka"]]
@@ -174,27 +174,27 @@ url = "https://github.com/cilium/cilium-cli/releases/download/v0.20.2/cilium-dar
 url_api = "https://api.github.com/repos/cilium/cilium-cli/releases/assets/687888463"
 
 [[tools.claude-code]]
-version = "2.1.314"
+version = "2.1.316"
 backend = "aqua:anthropics/claude-code"
-specifiers = ["2.1.314"]
+specifiers = ["2.1.316"]
 
 [tools.claude-code."platforms.linux-arm64"]
-checksum = "sha256:6acfc0d2f965bf910f12e89da32cc2bc826974e555d50c4a4b0936e042ec749b"
+checksum = "sha256:5f82c7fd9f289c9aad37792ffa5ca1bcd40d6dd3298b3a36ce01179e12ab2b14"
 checksum_source = "mise-versions"
-url = "https://github.com/anthropics/claude-code/releases/download/v2.1.314/claude-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/690337506"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.316/claude-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/693882163"
 
 [tools.claude-code."platforms.linux-x64"]
-checksum = "sha256:348a302629f3734a2a7318a97eb6a05d4c30e772f9c8366cb78a55977eca46da"
+checksum = "sha256:9ca14cd81a7b0d9654d392fc1253773e70f31f470aa98334732744956cd1006b"
 checksum_source = "mise-versions"
-url = "https://github.com/anthropics/claude-code/releases/download/v2.1.314/claude-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/690337852"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.316/claude-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/693882314"
 
 [tools.claude-code."platforms.macos-arm64"]
-checksum = "sha256:c819253fa84c46ee77e14afb1aab0c38d7fdb240d914d168e9ad2e21ce3ba1b4"
+checksum = "sha256:e8956064b1c5055c1c79945aa7714faef98b29060a065c6930e8956953d0bace"
 checksum_source = "mise-versions"
-url = "https://github.com/anthropics/claude-code/releases/download/v2.1.314/claude-darwin-arm64.tar.gz"
-url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/690337508"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.316/claude-darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/693882159"
 
 [[tools.cosign]]
 version = "3.1.4"
