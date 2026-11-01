@@ -19,7 +19,6 @@ in
       uid = 540;
       gid = 540;
       inherit home;
-      createHome = true;
       shell = "/usr/bin/false";
       description = "LLMKube metal-agent";
     };
@@ -28,6 +27,13 @@ in
       description = "LLMKube metal-agent";
     };
   };
+
+  # createhomedir can't handle a home behind the /var symlink (ELOOP)
+  system.activationScripts.postActivation.text = ''
+    mkdir -p ${home}
+    chown -R ${user}:${user} ${home}
+    chmod 700 ${home}
+  '';
 
   # A daemon, not the LaunchAgent `llmkube metal join` installs: agents wait for
   # a GUI login, and lose local network access with every new binary (TN3179).
