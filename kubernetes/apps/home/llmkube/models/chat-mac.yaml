@@ -31,6 +31,9 @@ spec:
   parallelSlots: 2
   flashAttention: true
   jinja: true
+  uBatchSize: 2048
   extraArgs:
     - --cache-ram
     - "2048"
+    - --reasoning-budget
+    - "0"
