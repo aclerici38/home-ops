@@ -26,13 +26,15 @@ spec:
   runtime: llamacpp
   mode: chat
   replicas: 1
-  # ~8.4 GiB weights + 2.5 GiB f16 KV, inside the agent's ~16 GiB budget
-  contextSize: 16384
+  # ~8.4 GiB weights + 5 GiB f16 KV, inside the agent's ~16 GiB budget.
+  # 32768 is the model's training context; slots share it via --kv-unified
+  contextSize: 32768
   parallelSlots: 2
   flashAttention: true
   jinja: true
   uBatchSize: 2048
   extraArgs:
+    - --kv-unified
     - --cache-ram
     - "2048"
     - --reasoning-budget
