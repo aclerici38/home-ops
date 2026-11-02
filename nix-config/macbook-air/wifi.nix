@@ -1,34 +1,12 @@
 { config, lib, ... }:
 let
   kp = config.boot.kernelPackages;
-  modDir = "lib/modules/${kp.kernel.modDirVersion}";
 in
 {
   # BCM4360 Wi-Fi: only Broadcom's proprietary wl driver supports it, and the
   # in-tree drivers must stay out of its way. Shared with the installer ISO.
   boot.kernelModules = [ "wl" ];
-  boot.extraModulePackages = [
-    # Module aggregation now needs each external module's wl.ko.cer, which only
-    # kbuild's modules_install writes. Backport of nixpkgs#576651; turns itself
-    # off once that lands.
-    (kp.broadcom_sta.overrideAttrs (
-      old:
-      lib.optionalAttrs (!lib.hasInfix "modules_install" old.installPhase) {
-        makeFlags = kp.kernelModuleMakeFlags ++ old.makeFlags;
-        installPhase = ''
-          runHook preInstall
-          local flagsArray=()
-          concatTo flagsArray makeFlags makeFlagsArray
-          KBUILD_NOPEDANTIC=1 make -C ${kp.kernel.dev}/${modDir}/build \
-            M="$PWD" "''${flagsArray[@]}" \
-            INSTALL_MOD_PATH="$out" INSTALL_MOD_DIR=kernel/net/wireless DEPMOD=true \
-            modules_install
-          install -Dm644 lib/LICENSE.txt -t "$out/share/doc/broadcom-sta"
-          runHook postInstall
-        '';
-      }
-    ))
-  ];
+  boot.extraModulePackages = [ kp.broadcom_sta ];
   boot.blacklistedKernelModules = [
     "b43"
     "bcma"
