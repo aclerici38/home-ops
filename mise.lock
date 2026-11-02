@@ -201,6 +201,12 @@ version = "3.1.4"
 backend = "aqua:sigstore/cosign"
 specifiers = ["3.1.4"]
 
+[tools.cosign."platforms.linux-arm64"]
+checksum = "sha256:ade83b7aac62e131cacfe96d958948b2150cc9efec46a570a2649b8e27dedad2"
+url = "https://github.com/sigstore/cosign/releases/download/v3.1.4/cosign-linux-arm64"
+url_api = "https://api.github.com/repos/sigstore/cosign/releases/assets/660068106"
+provenance = "cosign"
+
 [tools.cosign."platforms.linux-x64"]
 checksum = "sha256:424e2c97d0b45fd7a6b608a87f090f35633f4c23ece5f092d48bba11aaf4bbfa"
 url = "https://github.com/sigstore/cosign/releases/download/v3.1.4/cosign-linux-amd64"
@@ -220,6 +226,7 @@ specifiers = ["0.22.1"]
 
 [tools.crane."platforms.linux-arm64"]
 checksum = "sha256:898c0cff975f898a33e8c4580bdafb0e7c02c7faa33374e946762f97c4ab7110"
+checksum_source = "mise-versions"
 url = "https://github.com/google/go-containerregistry/releases/download/v0.22.1/go-containerregistry_Linux_arm64.tar.gz"
 url_api = "https://api.github.com/repos/google/go-containerregistry/releases/assets/543544372"
 
@@ -240,6 +247,7 @@ specifiers = ["1.12.0"]
 
 [tools.dyff."platforms.linux-arm64"]
 checksum = "sha256:c9710f57940306abc1e34e2bf1a1ba94e6a92c543cde4e5dfaea169ded06e832"
+checksum_source = "mise-versions"
 url = "https://github.com/homeport/dyff/releases/download/v1.12.0/dyff_1.12.0_linux_arm64.tar.gz"
 url_api = "https://api.github.com/repos/homeport/dyff/releases/assets/406097912"
 
@@ -326,11 +334,9 @@ specifiers = ["v1.30.1"]
 
 [tools."github:cloudnative-pg/cloudnative-pg"."platforms.linux-arm64"]
 checksum = "sha256:6ffad753bbbf5d353576967233063f2ba0adb843a4e7ef5ff4cb7384b2716d5e"
+checksum_source = "mise-versions"
 url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.30.1/kubectl-cnpg_1.30.1_linux_arm64.tar.gz"
 url_api = "https://api.github.com/repos/cloudnative-pg/cloudnative-pg/releases/assets/583849045"
-
-[tools."github:cloudnative-pg/cloudnative-pg"."platforms.linux-arm64".provenance.slsa]
-url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.30.1/multiple.intoto.jsonl"
 
 [tools."github:cloudnative-pg/cloudnative-pg"."platforms.linux-x64"]
 checksum = "sha256:784bc46f176b24a150d5de84d0691f10ff613b59456af86b1a4868e1bacb9953"
@@ -355,6 +361,7 @@ specifiers = ["v0.6.5"]
 
 [tools."github:home-operations/flate"."platforms.linux-arm64"]
 checksum = "sha256:7f514814890df4a095887943ae606be1a8af878606b7bd0575efe75402cd38dc"
+checksum_source = "mise-versions"
 url = "https://github.com/home-operations/flate/releases/download/v0.6.5/flate_0.6.5_linux_arm64.tar.gz"
 url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/541337295"
 
@@ -375,6 +382,7 @@ specifiers = ["0.3.2"]
 
 [tools."github:home-operations/yayamlls"."platforms.linux-arm64"]
 checksum = "sha256:fc1399b8af2dc5fb11bb5b2c4c8ba35499766f3e5f2a5756d267d5ed77bb12fb"
+checksum_source = "mise-versions"
 url = "https://github.com/home-operations/yayamlls/releases/download/0.3.2/yayamlls_0.3.2_linux_arm64.tar.gz"
 url_api = "https://api.github.com/repos/home-operations/yayamlls/releases/assets/593933784"
 
@@ -470,15 +478,23 @@ version = "1.8.2"
 backend = "packslip:github.com/helmfile/helmfile"
 specifiers = ["1.8.2"]
 
+[tools.helmfile."platforms.linux-arm64"]
+checksum = "sha256:9163f0d7ad088d243d7305ba09c3465aac02dfebd658d46c62dbdaa11c224b16"
+url = "https://github.com/helmfile/helmfile/releases/download/v1.8.2/helmfile_1.8.2_linux_arm64.tar.gz"
+signer = "sigstore-oidc:https://github.com/helmfile/helmfile/.github/workflows/releaser.yaml"
+repository_ids = { repository = "474521466" }
+
 [tools.helmfile."platforms.linux-x64"]
 checksum = "sha256:f179485c5bb9f8e20fbd8ea16d8807915988aba4d60131ee864fb3232452716e"
 url = "https://github.com/helmfile/helmfile/releases/download/v1.8.2/helmfile_1.8.2_linux_amd64.tar.gz"
 signer = "sigstore-oidc:https://github.com/helmfile/helmfile/.github/workflows/releaser.yaml"
+repository_ids = { repository = "474521466" }
 
 [tools.helmfile."platforms.macos-arm64"]
 checksum = "sha256:0e788f4aa7b4eea1ec0d1e278e0e66e845d5733be5f4e6cb7f832c779e656c72"
 url = "https://github.com/helmfile/helmfile/releases/download/v1.8.2/helmfile_1.8.2_darwin_arm64.tar.gz"
 signer = "sigstore-oidc:https://github.com/helmfile/helmfile/.github/workflows/releaser.yaml"
+repository_ids = { repository = "474521466" }
 
 [[tools.jq]]
 version = "1.8.2"
@@ -510,6 +526,7 @@ specifiers = ["0.51.0"]
 
 [tools.k9s."platforms.linux-arm64"]
 checksum = "sha256:3ee05c82e5f9198928a4e86133608ba6a2c10a2244d6a7789e820f78319d640c"
+checksum_source = "mise-versions"
 url = "https://github.com/derailed/k9s/releases/download/v0.51.0/k9s_Linux_arm64.tar.gz"
 url_api = "https://api.github.com/repos/derailed/k9s/releases/assets/440226045"
 
@@ -530,6 +547,7 @@ specifiers = ["0.33.0"]
 
 [tools.kind."platforms.linux-arm64"]
 checksum = "sha256:20022bee6cfcd5086cb7234d218e3454e6090022f2a8f55d1fa7fcf42c3867a2"
+checksum_source = "mise-versions"
 url = "https://github.com/kubernetes-sigs/kind/releases/download/v0.33.0/kind-linux-arm64"
 url_api = "https://api.github.com/repos/kubernetes-sigs/kind/releases/assets/531396478"
 
@@ -550,6 +568,7 @@ specifiers = ["4.16.0"]
 
 [tools.kubebuilder."platforms.linux-arm64"]
 checksum = "sha256:6833432c8faab62d2ca6b583f32c88b0a3d1b7264562739c202084c996a55845"
+checksum_source = "mise-versions"
 url = "https://github.com/kubernetes-sigs/kubebuilder/releases/download/v4.16.0/kubebuilder_linux_arm64"
 url_api = "https://api.github.com/repos/kubernetes-sigs/kubebuilder/releases/assets/554787208"
 
@@ -570,6 +589,7 @@ specifiers = ["0.8.0"]
 
 [tools.kubeconform."platforms.linux-arm64"]
 checksum = "sha256:1f53fc8e81258197a35e8603054162a5af1de8c5af13746c71ab680d9534ed87"
+checksum_source = "mise-versions"
 url = "https://github.com/yannh/kubeconform/releases/download/v0.8.0/kubeconform-linux-arm64.tar.gz"
 url_api = "https://api.github.com/repos/yannh/kubeconform/releases/assets/438612685"
 
@@ -607,6 +627,7 @@ specifiers = ["5.8.3"]
 
 [tools.kustomize."platforms.linux-arm64"]
 checksum = "sha256:9867b76482cfc6d25b546abc1d2b5a32bd137505aba640649b4b378f64f6d68f"
+checksum_source = "mise-versions"
 url = "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v5.8.3/kustomize_v5.8.3_linux_arm64.tar.gz"
 url_api = "https://api.github.com/repos/kubernetes-sigs/kustomize/releases/assets/621661325"
 
@@ -672,12 +693,15 @@ backend = "vfox:mise-plugins/vfox-neovim"
 specifiers = ["0.12.6"]
 
 [tools.neovim."platforms.linux-arm64"]
+checksum = "sha256:8f1f64a0bdb97247034038c3823c6cbad5bdf9ecd5751b85494b71c3ee04c815"
 url = "https://github.com/neovim/neovim/releases/download/v0.12.6/nvim-linux-arm64.tar.gz"
 
 [tools.neovim."platforms.linux-x64"]
+checksum = "sha256:474430d53e6264f6d6dd18db42d6dc9df3a1b56ca9e88a325bbf860e1a811d87"
 url = "https://github.com/neovim/neovim/releases/download/v0.12.6/nvim-linux-x86_64.tar.gz"
 
 [tools.neovim."platforms.macos-arm64"]
+checksum = "sha256:1dbd148222b051ba6c307c4d17a318ed083df018a4f6a5a0ce46955ffc9ab87b"
 url = "https://github.com/neovim/neovim/releases/download/v0.12.6/nvim-macos-arm64.tar.gz"
 
 [[tools.node]]
@@ -750,6 +774,7 @@ specifiers = ["0.11.0"]
 
 [tools.shellcheck."platforms.linux-arm64"]
 checksum = "sha256:12b331c1d2db6b9eb13cfca64306b1b157a86eb69db83023e261eaa7e7c14588"
+checksum_source = "mise-versions"
 url = "https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.aarch64.tar.xz"
 url_api = "https://api.github.com/repos/koalaman/shellcheck/releases/assets/279056934"
 
@@ -770,6 +795,7 @@ specifiers = ["3.14.1"]
 
 [tools.shfmt."platforms.linux-arm64"]
 checksum = "sha256:5f2db09dae91fca848f7adbdd014632e921a383863a2ad7e0450ad3aba0c6489"
+checksum_source = "mise-versions"
 url = "https://github.com/mvdan/sh/releases/download/v3.14.1/shfmt_v3.14.1_linux_arm64"
 url_api = "https://api.github.com/repos/mvdan/sh/releases/assets/547320869"
 
@@ -792,9 +818,7 @@ specifiers = ["3.13.3"]
 checksum = "sha256:53b0abacd38ef1b12a66d6c100956691b9cefce018d91f81e73ddf7438b94d77"
 url = "https://github.com/getsops/sops/releases/download/v3.13.3/sops-v3.13.3.linux.arm64"
 url_api = "https://api.github.com/repos/getsops/sops/releases/assets/486808229"
-
-[tools.sops."platforms.linux-arm64".provenance.slsa]
-url = "https://github.com/getsops/sops/releases/download/v3.13.3/sops-v3.13.3.intoto.jsonl"
+provenance = "cosign"
 
 [tools.sops."platforms.linux-x64"]
 checksum = "sha256:e5bec3346a873ae91d871550f3e698c1aad962aff462a080e40f25fde17fef6b"
@@ -819,6 +843,7 @@ specifiers = ["3.1.17"]
 
 [tools.talhelper."platforms.linux-arm64"]
 checksum = "sha256:1841915ec6f533ef653baedc5f1cbf68683e0ca9a72f240ac2f257d94f68798b"
+checksum_source = "mise-versions"
 url = "https://github.com/budimanjojo/talhelper/releases/download/v3.1.17/talhelper_linux_arm64.tar.gz"
 url_api = "https://api.github.com/repos/budimanjojo/talhelper/releases/assets/530086688"
 
@@ -861,10 +886,12 @@ backend = "aqua:tamasfe/taplo"
 specifiers = ["0.10.0"]
 
 [tools.taplo."platforms.linux-arm64"]
+checksum = "sha256:033681d01eec8376c3fd38fa3703c79316f5e14bb013d859943b60a07bccdcc3"
 url = "https://github.com/tamasfe/taplo/releases/download/0.10.0/taplo-linux-aarch64.gz"
 url_api = "https://api.github.com/repos/tamasfe/taplo/releases/assets/257322597"
 
 [tools.taplo."platforms.linux-x64"]
+checksum = "sha256:8fe196b894ccf9072f98d4e1013a180306e17d244830b03986ee5e8eabeb6156"
 url = "https://github.com/tamasfe/taplo/releases/download/0.10.0/taplo-linux-x86_64.gz"
 url_api = "https://api.github.com/repos/tamasfe/taplo/releases/assets/257322600"
 
@@ -903,6 +930,7 @@ specifiers = ["v1.3.1"]
 
 [tools.viddy."platforms.linux-arm64"]
 checksum = "sha256:4bf88aa5443b09a49e8af55c1e92ff6148486856703b8f886e1984b0e541af4d"
+checksum_source = "mise-versions"
 url = "https://github.com/sachaos/viddy/releases/download/v1.3.1/viddy-v1.3.1-linux-arm64.tar.gz"
 url_api = "https://api.github.com/repos/sachaos/viddy/releases/assets/447334573"
 
@@ -923,6 +951,7 @@ specifiers = ["0.21.0"]
 
 [tools.yamlfmt."platforms.linux-arm64"]
 checksum = "sha256:5b2689c963b177271330c5ce8ca7396751107e5a826be46f03d2cb9b6f0c7784"
+checksum_source = "mise-versions"
 url = "https://github.com/google/yamlfmt/releases/download/v0.21.0/yamlfmt_0.21.0_Linux_arm64.tar.gz"
 url_api = "https://api.github.com/repos/google/yamlfmt/releases/assets/336650208"
 
