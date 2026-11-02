@@ -54,7 +54,7 @@ spec:
           silo:
             image: &image
               repository: ghcr.io/silo-server/silo-server
-              tag: latest@sha256:8b652b0be194081936889b8ce48d5fc25cd8f71269d376a51170aada75678d07
+              tag: latest@sha256:b2e78645fca45846cdf344d022def67b5c7f802d4c413f10dc07e5256244cb12
             # Skip s6 /init
             command: &command
               - silo
@@ -169,7 +169,7 @@ spec:
           meilisearch:
             image:
               repository: docker.io/getmeili/meilisearch
-              tag: v1.56.0@sha256:1f578fa865f8251894b3bf38d6668d6209a3f451f8f65ab953e129d4c1db5ef4
+              tag: v1.56.1@sha256:b7ba431bf6f9b26cc86132798f3640964147a699cf23f026b74c6c05dbb1d60d
             args:
               - /bin/meilisearch
             env:
