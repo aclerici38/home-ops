@@ -86,6 +86,6 @@ spec:
             - {name: pg_cron, ensure: present}
             - {name: tsm_system_rows, ensure: present}
             - {name: vector, ensure: present, version: 0.8.7}
-            - {name: postgis, ensure: present, version: 3.6.4}
+            - {name: postgis, ensure: present, version: 3.7.0}
             - {name: documentdb_core, ensure: present, version: "1.0-0"}
             - {name: documentdb, ensure: present, version: "1.0-0"}
