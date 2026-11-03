@@ -80,6 +80,8 @@ spec:
               - --production-mode
               # HA's Matter integration bridges its Bluetooth proxies to /ble
               - --ble-proxy
+              # API/dashboard/ble on the pod network only
+              - --listen-address=eth0
             env:
               MATTER_LOG_FORMAT: plain
             probes:
