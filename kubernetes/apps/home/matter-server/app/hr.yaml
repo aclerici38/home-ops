@@ -78,6 +78,8 @@ spec:
               - --storage-path=/data
               - --ota-provider-dir=/data/ota
               - --production-mode
+              # HA's Matter integration bridges its Bluetooth proxies to /ble
+              - --ble-proxy
             env:
               MATTER_LOG_FORMAT: plain
             probes:
