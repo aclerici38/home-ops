@@ -21,7 +21,39 @@ spec:
   dependsOn:
     - name: kopiur
       namespace: kopiur
+    - name: envoy-gateway
+      namespace: envoy-gateway
+    - name: pocket-id-operator
+      namespace: pocket-id-operator
   values:
+    # One client and one SecurityPolicy for both sites' web UIs
+    pocketId:
+      name: OpenThread Border Router
+      url: otbr-house.clerici.tech
+      callbackUrls:
+        - https://otbr-house.clerici.tech/oauth2/callback
+        - https://otbr-cottage.clerici.tech/oauth2/callback
+      logoutCallbackUrls:
+        - https://otbr-house.clerici.tech/
+        - https://otbr-cottage.clerici.tech/
+      spec:
+        oidcClient:
+          logo:
+            nameOverride: thread
+          secret:
+            keys:
+              clientID: client-id
+              clientSecret: client-secret
+    oidc:
+      spec:
+        securityPolicy:
+          targetRefs:
+            - group: gateway.networking.k8s.io
+              kind: HTTPRoute
+              name: otbr-house
+            - group: gateway.networking.k8s.io
+              kind: HTTPRoute
+              name: otbr-cottage
     kopiur:
       existingClaim: true
       cephfs: true

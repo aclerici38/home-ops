@@ -117,11 +117,34 @@ spec:
         ports:
           http:
             port: *port
+          web:
+            port: &web 8080
       house:
         controller: house
         ports:
           http:
             port: *port
+          web:
+            port: *web
+    route:
+      cottage:
+        hostnames:
+          - otbr-cottage.clerici.tech
+        parentRefs: &internal
+          - name: internal
+            namespace: envoy-gateway
+        rules:
+          - backendRefs:
+              - identifier: cottage
+                port: *web
+      house:
+        hostnames:
+          - otbr-house.clerici.tech
+        parentRefs: *internal
+        rules:
+          - backendRefs:
+              - identifier: house
+                port: *web
     networkpolicies:
       # Only eth0 is policed: the backbone (Thread/OMR, mDNS, TREL) is multus
       cottage:
@@ -136,6 +159,14 @@ spec:
             toPorts: &rest
               - ports:
                   - {port: "8081", protocol: TCP}
+          # Web UI via the internal Gateway
+          - fromEndpoints: &gateway
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: internal
+            toPorts: &webui
+              - ports:
+                  - {port: "8080", protocol: TCP}
         egress:
           - toFQDNs:
               - matchName: cottage-slzb-ultima3.iot.internal
@@ -148,6 +179,8 @@ spec:
         ingress:
           - fromEndpoints: *hass
             toPorts: *rest
+          - fromEndpoints: *gateway
+            toPorts: *webui
         egress:
           - toFQDNs:
               - matchName: house-slzb-ultima3.iot.internal
