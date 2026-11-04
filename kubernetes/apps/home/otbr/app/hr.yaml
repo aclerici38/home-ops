@@ -104,13 +104,6 @@ spec:
           type: RuntimeDefault
       nodeSelector:
         network.dormammu/multus: "true"
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: ScheduleAnyway
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/instance: otbr
     service:
       cottage:
         controller: cottage
