@@ -6,7 +6,7 @@ metadata:
   name: hubble
 spec:
   parentRefs:
-    - name: internal
+    - name: trusted
       kind: Gateway
       namespace: envoy-gateway
       sectionName: https

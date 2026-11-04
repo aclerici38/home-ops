@@ -17,7 +17,7 @@ spec:
             gateway.envoyproxy.io/owning-gateway-name: external
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: envoy-gateway
-            gateway.envoyproxy.io/owning-gateway-name: internal
+            gateway.envoyproxy.io/owning-gateway-name: trusted
         # machineTokens webhook generators
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: external-secrets

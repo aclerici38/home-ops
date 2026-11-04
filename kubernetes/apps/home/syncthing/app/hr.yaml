@@ -88,7 +88,7 @@ spec:
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: internal
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
             toPorts:
               - ports:
                   - {port: "8384", protocol: TCP}
@@ -118,7 +118,7 @@ spec:
         hostnames:
           - syncthing.clerici.tech
         parentRefs:
-          - name: internal
+          - name: trusted
             namespace: envoy-gateway
         rules:
           - backendRefs:

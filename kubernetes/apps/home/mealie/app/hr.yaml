@@ -136,11 +136,11 @@ spec:
               - ports:
                   - {port: "9000", protocol: TCP}
         egress:
-          # llm.clerici.tech via the internal Gateway LB IP
+          # llm.clerici.tech via the trusted Gateway LB IP
           - toEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: internal
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
             toPorts:
               - ports:
                   - {port: "10443", protocol: TCP}

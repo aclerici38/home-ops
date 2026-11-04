@@ -3,12 +3,12 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: envoy-internal-mcp
+  name: envoy-trusted-mcp
 spec:
   # The in-cluster MCP Backends are covered by the shared envoy-proxy policy
   endpointSelector:
     matchLabels:
-      gateway.envoyproxy.io/owning-gateway-name: internal
+      gateway.envoyproxy.io/owning-gateway-name: trusted
       app.kubernetes.io/managed-by: envoy-gateway
   egress:
     # raphael Backend

@@ -81,7 +81,7 @@ spec:
         hostnames:
           - actual.clerici.tech
         parentRefs:
-          - name: internal
+          - name: trusted
             namespace: envoy-gateway
     networkpolicies:
       actual:
@@ -91,7 +91,7 @@ spec:
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: internal
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
             toPorts:
               - ports:
                   - {port: "5006", protocol: TCP}

@@ -140,7 +140,7 @@ spec:
         hostnames:
           - radarr-raphael.clerici.tech
         parentRefs:
-          - name: internal
+          - name: trusted
             namespace: envoy-gateway
     networkpolicies:
       radarr-raphael:
@@ -150,7 +150,7 @@ spec:
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: internal
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: dashbrr
                   app.kubernetes.io/instance: dashbrr

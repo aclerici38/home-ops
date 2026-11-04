@@ -15,7 +15,7 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: envoy-gateway
-            gateway.envoyproxy.io/owning-gateway-name: internal
+            gateway.envoyproxy.io/owning-gateway-name: trusted
       toPorts:
         - ports:
             - {port: "9090", protocol: TCP}

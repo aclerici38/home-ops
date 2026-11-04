@@ -10,22 +10,22 @@ spec:
       rules:
         - alert: GatusEndpointDown
           expr: |-
-            gatus_results_endpoint_success{group!="internal"} == 0
+            gatus_results_endpoint_success{group!~"internal|trusted"} == 0
           for: 5m
           annotations:
             summary: >-
               The {{ $labels.name }} endpoint is down
           labels:
             severity: critical
-        # internal-gateway routes are guarded: they fail when the hostname
-        # resolves on public DNS
+        # internal- and trusted-gateway routes are guarded: they fail when the
+        # hostname resolves on public DNS
         - alert: GatusEndpointExposed
           expr: |-
-            gatus_results_endpoint_success{group="internal"} == 0
+            gatus_results_endpoint_success{group=~"internal|trusted"} == 0
           for: 5m
           annotations:
             summary: >-
-              The internal {{ $labels.name }} endpoint has a public DNS record
+              The {{ $labels.group }} {{ $labels.name }} endpoint has a public DNS record
           labels:
             severity: critical
         # The cert actually served, seen from outside: cloud's gateway and its

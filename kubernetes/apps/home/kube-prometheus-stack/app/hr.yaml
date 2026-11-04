@@ -34,7 +34,7 @@ spec:
           hostnames:
             - "alertmanager.clerici.tech"
           parentRefs:
-            - name: internal
+            - name: trusted
               namespace: envoy-gateway
               sectionName: https
       alertmanagerSpec:
@@ -53,7 +53,7 @@ spec:
           hostnames:
             - "prometheus.clerici.tech"
           parentRefs:
-            - name: internal
+            - name: trusted
               namespace: envoy-gateway
               sectionName: https
       prometheusSpec:

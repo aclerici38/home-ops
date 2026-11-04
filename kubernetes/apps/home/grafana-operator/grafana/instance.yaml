@@ -47,7 +47,7 @@ spec:
       hostnames:
         - grafana.${CLUSTER_NAME}.clerici.tech
       parentRefs:
-        - name: internal
+        - name: trusted
           namespace: envoy-gateway
   deployment:
     spec:

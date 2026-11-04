@@ -74,7 +74,7 @@ spec:
         hostnames:
           - filebrowser.clerici.tech
         parentRefs:
-          - name: internal
+          - name: trusted
             namespace: envoy-gateway
     networkpolicies:
       filebrowser:
@@ -85,7 +85,7 @@ spec:
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: internal
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
             toPorts:
               - ports:
                   - {port: "8080", protocol: TCP}

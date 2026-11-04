@@ -54,7 +54,7 @@ spec:
           path: /
           pathType: PathPrefix
         parentRefs:
-          - name: internal
+          - name: trusted
             namespace: envoy-gateway
             sectionName: https
     cephClusterSpec:

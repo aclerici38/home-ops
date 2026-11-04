@@ -114,7 +114,7 @@ spec:
         hostnames:
           - matter.clerici.tech
         parentRefs:
-          - name: internal
+          - name: trusted
             namespace: envoy-gateway
     networkpolicies:
       matter-server:
@@ -125,7 +125,7 @@ spec:
               # Route (dashboard)
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: internal
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
               # Matter integration
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: home-assistant

@@ -36,6 +36,25 @@ spec:
             - 10.0.40.0/24
             - 10.0.80.0/24
             - 10.38.0.0/24
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.4/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: envoy-trusted
+spec:
+  endpointSelector:
+    matchLabels:
+      gateway.envoyproxy.io/owning-gateway-name: trusted
+      app.kubernetes.io/managed-by: envoy-gateway
+  # Off-cluster clients only from house (20), cottage (40) + VPN
+  ingressDeny:
+    - fromCIDRSet:
+        - cidr: 0.0.0.0/0
+          except:
+            - 10.0.20.0/24
+            - 10.0.40.0/24
+            - 10.38.0.0/24
   egress:
     # rook-ceph dashboard (hostNetwork mgr)
     - toEntities:

@@ -43,11 +43,21 @@ endpoints:
     group: dns
     url: ${BLOCKY_LB_IP}:53
     dns:
-      query-name: blocky.clerici.tech
+      query-name: birdseye.clerici.tech
       query-type: A
     conditions:
       - "[DNS_RCODE] == NOERROR"
       - "[BODY] == ${ENVOY_INTERNAL_LB_IP}"
+
+  - name: Blocky-Trusted
+    group: dns
+    url: ${BLOCKY_LB_IP}:53
+    dns:
+      query-name: blocky.clerici.tech
+      query-type: A
+    conditions:
+      - "[DNS_RCODE] == NOERROR"
+      - "[BODY] == ${ENVOY_TRUSTED_LB_IP}"
 
   # The VPS, from outside it
   - name: Hub-API

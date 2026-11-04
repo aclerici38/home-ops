@@ -118,7 +118,7 @@ spec:
         hostnames:
           - octoprint.clerici.tech
         parentRefs:
-          - name: internal
+          - name: trusted
             namespace: envoy-gateway
         rules:
           - backendRefs:
@@ -128,7 +128,7 @@ spec:
         hostnames:
           - printer-cam.clerici.tech
         parentRefs:
-          - name: internal
+          - name: trusted
             namespace: envoy-gateway
         rules:
           - backendRefs:
@@ -143,7 +143,7 @@ spec:
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: internal
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
             toPorts:
               - ports:
                   - {port: "5000", protocol: TCP}
@@ -174,7 +174,7 @@ spec:
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: internal
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
             toPorts:
               - ports:
                   - {port: "1984", protocol: TCP}

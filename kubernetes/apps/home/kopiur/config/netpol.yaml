@@ -41,7 +41,7 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: envoy-gateway
-            gateway.envoyproxy.io/owning-gateway-name: internal
+            gateway.envoyproxy.io/owning-gateway-name: trusted
       toPorts:
         - ports:
             - {port: "51515", protocol: TCP}
@@ -70,7 +70,7 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: envoy-gateway
-            gateway.envoyproxy.io/owning-gateway-name: internal
+            gateway.envoyproxy.io/owning-gateway-name: trusted
       toPorts:
         - ports:
             - {port: "51515", protocol: TCP}

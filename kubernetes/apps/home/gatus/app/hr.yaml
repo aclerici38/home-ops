@@ -82,7 +82,7 @@ spec:
               name: gatus
               key: BUDDY_TOKEN
     # Every HTTPRoute is auto-probed; the parent Gateway's annotation decides
-    # how (external: public path via 1.1.1.1, internal: guarded leak check)
+    # how (external: public path via 1.1.1.1, internal/trusted: guarded leak check)
     sidecar:
       defaultInterval: 1m
       kinds:

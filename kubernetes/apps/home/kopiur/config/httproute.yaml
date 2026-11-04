@@ -6,7 +6,7 @@ metadata:
   name: kopia-versity
 spec:
   parentRefs:
-    - name: internal
+    - name: trusted
       kind: Gateway
       namespace: envoy-gateway
       sectionName: https
@@ -28,7 +28,7 @@ metadata:
   name: kopia-backblaze
 spec:
   parentRefs:
-    - name: internal
+    - name: trusted
       kind: Gateway
       namespace: envoy-gateway
       sectionName: https

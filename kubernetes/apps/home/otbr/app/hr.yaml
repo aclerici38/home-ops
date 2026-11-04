@@ -130,8 +130,8 @@ spec:
       cottage:
         hostnames:
           - otbr-cottage.clerici.tech
-        parentRefs: &internal
-          - name: internal
+        parentRefs: &trusted
+          - name: trusted
             namespace: envoy-gateway
         rules:
           - backendRefs:
@@ -140,7 +140,7 @@ spec:
       house:
         hostnames:
           - otbr-house.clerici.tech
-        parentRefs: *internal
+        parentRefs: *trusted
         rules:
           - backendRefs:
               - identifier: house
@@ -159,11 +159,11 @@ spec:
             toPorts: &rest
               - ports:
                   - {port: "8081", protocol: TCP}
-          # Web UI via the internal Gateway
+          # Web UI via the trusted Gateway
           - fromEndpoints: &gateway
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: internal
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
             toPorts: &webui
               - ports:
                   - {port: "8080", protocol: TCP}

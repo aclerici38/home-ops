@@ -199,11 +199,11 @@ spec:
               - ports:
                   - {port: "8080", protocol: TCP}
         egress:
-          # llm, mcp and todo (tududi) via the internal Gateway LB IP
+          # llm, mcp and todo (tududi) via the trusted Gateway LB IP
           - toEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: internal
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
             toPorts:
               - ports:
                   - {port: "10443", protocol: TCP}

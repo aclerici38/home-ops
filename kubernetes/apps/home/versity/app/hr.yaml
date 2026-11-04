@@ -164,7 +164,7 @@ spec:
         hostnames:
           - s3-admin.clerici.tech
         parentRefs: &gateway
-          - name: internal
+          - name: trusted
             namespace: envoy-gateway
             sectionName: https
         rules:
@@ -218,7 +218,7 @@ spec:
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: internal
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
             toPorts:
               - ports:
                   - {port: "7071", protocol: TCP}

@@ -133,7 +133,7 @@ spec:
         hostnames:
           - z2m.clerici.tech
         parentRefs: &parentRefs
-          - name: internal
+          - name: trusted
             namespace: envoy-gateway
         rules:
           - backendRefs:
@@ -155,7 +155,7 @@ spec:
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: internal
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
             toPorts:
               - ports:
                   - {port: "8080", protocol: TCP}
