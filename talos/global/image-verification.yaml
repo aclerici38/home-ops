@@ -72,6 +72,14 @@ rules:
     keyless: *home-ops
   - image: ghcr.io/home-operations/sonarr
     keyless: *home-ops
+  - image: mirror.gcr.io/aquasec/trivy-operator
+    keyless:
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: ^https://github\.com/aquasecurity/trivy-operator/
+  - image: ghcr.io/aquasecurity/trivy
+    keyless:
+      issuer: https://token.actions.githubusercontent.com
+      subjectRegex: ^https://github\.com/aquasecurity/trivy/
   - image: docker.io/getmeili/meilisearch
     keyless:
       issuer: https://token.actions.githubusercontent.com

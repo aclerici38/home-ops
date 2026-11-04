@@ -1,15 +1,9 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.0/ocirepository_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.0/helmrepository_v1.json
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
+kind: HelmRepository
 metadata:
-  name: trivy-operator
+  name: aquasecurity
 spec:
-  interval: 15m
-  layerSelector:
-    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
-    operation: copy
-  ref:
-    tag: 0.32.1
-    digest: sha256:39caa565eaac9388bf5d86b9853e7535ae41703b4068475ea553c3e97754c06f
-  url: oci://ghcr.io/aquasecurity/helm-charts/trivy-operator
+  interval: 15m0s
+  url: https://aquasecurity.github.io/helm-charts/

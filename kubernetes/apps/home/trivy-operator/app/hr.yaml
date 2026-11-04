@@ -7,22 +7,27 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
-    kind: OCIRepository
-    name: trivy-operator
+  chart:
+    spec:
+      chart: trivy-operator
+      sourceRef:
+        kind: HelmRepository
+        name: aquasecurity
+      version: 0.38.1
   install:
     timeout: 5m
     remediation:
       retries: 1
   upgrade:
     timeout: 5m
+    crds: CreateReplace
     remediation:
       retries: 1
   values:
     image:
       registry: mirror.gcr.io
       repository: aquasec/trivy-operator
-      tag: 0.30.1@sha256:448484ece65e26f1c7237c8d20dab997f5a8319968286a09e188140b863cf1f9
+      tag: 0.36.1@sha256:05191a514247ae644dd5cc71306a94f44faff0a6a3fa817235911b911ecebcb9
     operator:
       podLabels:
         dormammu.internal/apiserver-client: "true"
