@@ -40,7 +40,7 @@ spec:
           jellyplex-watched:
             image:
               repository: ghcr.io/luigi311/jellyplex-watched
-              tag: 8.5.3@sha256:e23a0d3dc686e4bbc9eeb655aeb96a2a1352bd2a26297ec77e06ef6f8eb2d5e1
+              tag: 9.0.0@sha256:f7174e8a53fb5782a81e5cddf4ede5406eed7577c171406cab3de73bffb2c6c7
             # silo API keys only see their own user, and jellyplex-watched syncs every server pair
             # (two silo keys share no users and abort the run), so sync raphael against one silo
             # user at a time. SILO_USERS is "<user> <key>" per line, built from the 1Password item.
