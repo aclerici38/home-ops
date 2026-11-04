@@ -1,0 +1,73 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.4/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: trivy-operator
+spec:
+  # apiserver egress comes from the apiserver-clients CCNP
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: trivy-operator
+  ingress:
+    - {}
+  egress:
+    # Server health check
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: trivy-server
+      toPorts:
+        - ports:
+            - {port: "4954", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.4/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: trivy-server
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: trivy-server
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: trivy-operator
+        - matchLabels:
+            app.kubernetes.io/component: scanner
+      toPorts:
+        - ports:
+            - {port: "4954", protocol: TCP}
+  egress:
+    # Vulnerability DBs from mirror.gcr.io and the CDN it redirects to
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cilium/1.20.4/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: trivy-scanner
+spec:
+  # Scan job pods (scanJobPodTemplateLabels)
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: scanner
+  ingress:
+    - {}
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: trivy-server
+      toPorts:
+        - ports:
+            - {port: "4954", protocol: TCP}
+    # Image layers from every registry in use and the CDNs they redirect to
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - {port: "443", protocol: TCP}

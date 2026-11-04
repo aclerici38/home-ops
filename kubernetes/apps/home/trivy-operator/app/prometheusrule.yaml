@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.2/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: trivy-operator
+spec:
+  groups:
+    - name: trivy-operator.rules
+      rules:
+        - alert: TrivyFixableCriticalVulnerability
+          # ignoreUnfixed is on, so every counted CVE has a fixed version
+          expr: |-
+            max by (image_registry, image_repository, image_tag) (
+              trivy_image_vulnerabilities{severity="Critical"}
+            ) > 0
+          for: 1d
+          annotations:
+            summary: >-
+              {{ $labels.image_repository }}:{{ $labels.image_tag }} has
+              {{ $value }} fixable critical CVEs
+            description: >-
+              Check the image's VulnerabilityReport; a Renovate bump usually
+              clears it.
+          labels:
+            severity: warning
