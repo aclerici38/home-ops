@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/renovate-operator/6.7.0/renovatejobtemplate_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/renovate-operator/6.8.0/renovatejobtemplate_v1alpha1.json
 apiVersion: renovate-operator.mogenius.com/v1alpha1
 kind: RenovateJobTemplate
 metadata:
@@ -41,7 +41,7 @@ spec:
         secretKeyRef:
           name: renovate-operator
           key: DOCKERHUB_TOKEN
-  image: ghcr.io/renovatebot/renovate:44.209.0-full@sha256:017b161555f97aa3fc327ca7efa62fb452f371ef10c1e8bf9fb216fb288f478b
+  image: ghcr.io/renovatebot/renovate:44.212.0-full@sha256:e1339dcb59faa5ee22004b8b944af86039f5b8d22706d958307f15a59b0026cb
   parallelism: 1
   scratchVolume:
     medium: Memory
