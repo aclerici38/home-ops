@@ -40,40 +40,26 @@ spec:
           jellyplex-watched:
             image:
               repository: ghcr.io/luigi311/jellyplex-watched
-              tag: 8.5.3@sha256:e23a0d3dc686e4bbc9eeb655aeb96a2a1352bd2a26297ec77e06ef6f8eb2d5e1
-            # silo API keys only see their own user, and jellyplex-watched syncs every server pair
-            # (two silo keys share no users and abort the run), so sync raphael against one silo
-            # user at a time. SILO_USERS is "<user> <key>" per line, built from the 1Password item.
-            args:
+              tag: 9.0.0@sha256:f7174e8a53fb5782a81e5cddf4ede5406eed7577c171406cab3de73bffb2c6c7
+            # silo API keys only see their own user, and one server that fails to connect aborts
+            # the whole run, so sync raphael against one silo user at a time. SILO_USERS is
+            # "<user> <key>" per line, built from the 1Password item. Tokens are patched onto the
+            # servers in config.yaml by name. The image entrypoint is skipped: its preflight
+            # validates settings before the loop has set any tokens.
+            command:
               - sh
               - -c
               - |
                 while read -r user key; do
                   [ -n "$user" ] || continue
                   echo "=== syncing $user"
-                  JELLYFIN_TOKEN="$RAPHAEL_API_KEY, $key" WHITELIST_USERS="$user" python -u main.py </dev/null
+                  JPW_SERVER_TOKENS="{\"raphael\": \"$RAPHAEL_API_KEY\", \"silo\": \"$key\"}" \
+                    JPW_WHITELIST_USERS="[\"$user\"]" python -u main.py </dev/null
                 done <<EOF
                 $SILO_USERS
                 EOF
             env:
-              DEBUG_LEVEL: INFO
-              DRYRUN: "false"
-              RUN_ONLY_ONCE: "true"
-              # RO root fs
-              LOG_FILE: /tmp/jellyplex/log.log
-              MARK_FILE: /tmp/jellyplex/mark.log
-              REQUEST_TIMEOUT: "300"
-              MAX_THREADS: "1"
-              # Raphael's copies are separate arr grabs, so filenames never match
-              GENERATE_GUIDS: "true"
-              GENERATE_LOCATIONS: "false"
-              # Order must match JELLYFIN_TOKEN in args: raphael, then home (silo).
-              JELLYFIN_BASEURL: "http://jellyfin:8096, https://jellyfin.clerici.tech"
-              SYNC_FROM_JELLYFIN_TO_JELLYFIN: "true"
-              SYNC_FROM_JELLYFIN_TO_PLEX: "false"
-              SYNC_FROM_JELLYFIN_TO_EMBY: "false"
-              WHITELIST_LIBRARY: "Movies,TV Shows"
-              LIBRARY_MAPPING: '{"TV Shows": "TV"}'
+              YAML_FILE: /app/config/config.yaml
             envFrom:
               - secretRef:
                   name: jellyplex-watched
@@ -87,7 +73,42 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
+    configMaps:
+      config:
+        data:
+          config.yaml: |-
+            dryrun: false
+            debug_level: INFO
+            run_only_once: true
+            # RO root fs
+            log_file: /tmp/log.log
+            mark_file: /tmp/mark.log
+            request_timeout: 300
+            max_threads: 1
+            # Raphael's copies are separate arr grabs, so filenames never match
+            generate_guids: true
+            generate_locations: false
+            whitelist_libraries: [Movies, tv]
+            library_mappings:
+              - canonical: tv
+                aliases:
+                  - {server: raphael, library: TV Shows}
+                  - {server: silo, library: TV}
+            jellyfin:
+              - name: raphael
+                baseurl: http://jellyfin:8096
+                sync_to: [silo]
+              - name: silo
+                baseurl: https://jellyfin.clerici.tech
+                sync_to: [raphael]
     persistence:
+      config:
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /app/config/config.yaml
+            subPath: config.yaml
+            readOnly: true
       tmpfs:
         type: emptyDir
         medium: Memory
