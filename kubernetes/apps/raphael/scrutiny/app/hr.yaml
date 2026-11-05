@@ -73,7 +73,7 @@ spec:
           scrutiny:
             image:
               repository: ghcr.io/starosdev/scrutiny
-              tag: 1.79.2-web@sha256:c73e3fc075fb0da92f66a4230286aabc80e3d4e1c4ef5ab30dbee28bc3f23316
+              tag: 1.79.3-web@sha256:9e40cfdf0a0e7530f571ad989301794518e83fcedf507b4a559f5690e9eddded
             env:
               SCRUTINY_NO_LOGO: true
               # INFO logs every request, probes included
@@ -113,7 +113,7 @@ spec:
           collector:
             image:
               repository: ghcr.io/starosdev/scrutiny
-              tag: 1.79.2-collector@sha256:74cca9f99cef181722282bba53b8ed74c6bebddcf7876877f50ce751d9d61985
+              tag: 1.79.3-collector@sha256:ac46d67302cd170e1b24637d8b0e97dc58bbe1a9f9fff02dfebf22fa72c7f475
             # The image's entrypoint rewrites /etc/cron.d and su's into cron,
             # which needs a writable rootfs plus SETUID/SETGID. A plain loop
             # needs neither; the first pass doubles as run-on-startup. A failed
