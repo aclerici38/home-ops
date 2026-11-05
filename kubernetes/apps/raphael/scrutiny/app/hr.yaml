@@ -113,7 +113,7 @@ spec:
           collector:
             image:
               repository: ghcr.io/starosdev/scrutiny
-              tag: 1.79.1-collector@sha256:898270279ea2b344f52684eb69c54deb9db2cd5c4e4b70987d213deda44422b3
+              tag: 1.79.2-collector@sha256:74cca9f99cef181722282bba53b8ed74c6bebddcf7876877f50ce751d9d61985
             # The image's entrypoint rewrites /etc/cron.d and su's into cron,
             # which needs a writable rootfs plus SETUID/SETGID. A plain loop
             # needs neither; the first pass doubles as run-on-startup. A failed
