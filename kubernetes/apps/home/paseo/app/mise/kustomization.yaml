@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+# The repo's own toolset, versions and checksums, as the global mise config
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+generatorOptions:
+  disableNameSuffixHash: true
+configMapGenerator:
+  - name: paseo-mise
+    files:
+      - .mise.toml=../../../../../../.mise.toml
+      - mise.lock=../../../../../../mise.lock

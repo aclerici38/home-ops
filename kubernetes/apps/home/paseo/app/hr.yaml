@@ -1,0 +1,218 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.0/helmrelease_v2.json?values=app-template/5.3.0
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: paseo
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 10m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 10m
+    remediation:
+      retries: 1
+  dependsOn:
+    - name: paseo-resources
+  values:
+    controllers:
+      paseo:
+        pod:
+          automountServiceAccountToken: true
+          labels:
+            dormammu.internal/apiserver-client: "true"
+          hostUsers: false
+          securityContext:
+            runAsGroup: 1000
+            runAsUser: 1000
+            runAsNonRoot: true
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: {type: RuntimeDefault}
+        initContainers:
+          tools:
+            image: &image
+              repository: ghcr.io/getpaseo/paseo
+              tag: 0.15.2@sha256:e12414fe71f33aa7cedf1eaf027bf2acfccdf01d6b692ba779a220b2ec1c46e6
+            command:
+              - /opt/mise/bin/mise
+              - install
+              - claude-code
+              - gh
+              - kubectl
+              - flux2
+              - helm
+              - kustomize
+              - talosctl
+              - github:home-operations/flate
+              - kubeconform
+              - jq
+              - yq
+              - yamlfmt
+              - lefthook
+            env:
+              <<: &mise
+                MISE_GLOBAL_CONFIG_FILE: /etc/home-ops/.mise.toml
+                MISE_TRUSTED_CONFIG_PATHS: /etc/home-ops:/workspace
+                # .mise.toml templates it from globals.env
+                KUBE_VERSION: ${KUBE_VERSION}
+              # Install from mise.lock only; the ConfigMap is read-only
+              MISE_LOCKED: true
+              MISE_NO_HOOKS: true
+            securityContext: &sec
+              readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 1Gi
+        containers:
+          paseo:
+            image: *image
+            env:
+              <<: *mise
+              # The image's PATH plus mise and its shims
+              PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/mise/bin:/home/paseo/.local/share/mise/shims
+              SHELL: /bin/bash
+              PASEO_HOSTNAMES: paseo.clerici.tech
+              PASEO_TRUSTED_PROXIES: ${CLUSTER_POD_CIDR},${CLUSTER_POD_CIDR_V6}
+              PASEO_RELAY_ENABLED: false
+              # Pairing links and QR codes; app.paseo.sh otherwise
+              PASEO_APP_BASE_URL: https://paseo.clerici.tech
+              # Skips the local speech model download
+              PASEO_DICTATION_ENABLED: false
+              PASEO_PASSWORD:
+                secretKeyRef:
+                  name: paseo
+                  key: PASEO_PASSWORD
+              # Pinned by mise.lock; also no telemetry or error reporting
+              CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: 1
+              # Keeps credentials (not GitHub's) out of agents' Bash, hooks and stdio MCP servers
+              CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: 1
+              # Unattended: wait out 429/529s and usage limits instead of failing
+              CLAUDE_CODE_RETRY_WATCHDOG: 1
+              ENABLE_CLAUDEAI_MCP_SERVERS: false
+              CLAUDE_CODE_OAUTH_TOKEN:
+                secretKeyRef:
+                  name: paseo
+                  key: CLAUDE_CODE_OAUTH_TOKEN
+              GH_TOKEN:
+                secretKeyRef:
+                  name: paseo
+                  key: GH_TOKEN
+              GIT_CONFIG_COUNT: 3
+              GIT_CONFIG_KEY_0: credential.https://github.com.helper
+              GIT_CONFIG_VALUE_0: "!gh auth git-credential"
+              GIT_CONFIG_KEY_1: user.name
+              GIT_CONFIG_VALUE_1: aclerici38
+              GIT_CONFIG_KEY_2: user.email
+              GIT_CONFIG_VALUE_2: anthony@clerici.me
+            securityContext: *sec
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: &health
+                    port: &port 6767
+                    path: /api/health
+                  periodSeconds: 5
+                  failureThreshold: 60
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: *health
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 200m
+                memory: 1Gi
+              limits:
+                memory: 8Gi
+    service:
+      paseo:
+        controller: paseo
+        ports:
+          http:
+            port: *port
+    route:
+      paseo:
+        hostnames:
+          - paseo.clerici.tech
+        parentRefs:
+          - name: trusted
+            namespace: envoy-gateway
+        rules:
+          - backendRefs:
+              - identifier: paseo
+                port: *port
+    networkpolicies:
+      paseo:
+        type: cilium
+        controller: paseo
+        # DNS from the baseline CCNP, apiserver from apiserver-clients
+        ingress:
+          # Route
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
+            toPorts:
+              - ports:
+                  - {port: "6767", protocol: TCP}
+        egress:
+          # *.clerici.tech through every Gateway (their LB IPs translate to these pods)
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  app.kubernetes.io/managed-by: envoy-gateway
+                  app.kubernetes.io/component: proxy
+            toPorts:
+              - ports:
+                  - {port: "10443", protocol: TCP}
+          # Everything outside the cluster; the firewall handles the LAN
+          - toEntities:
+              - world
+    persistence:
+      data:
+        existingClaim: paseo
+        globalMounts:
+          - path: /home/paseo
+            subPath: home
+          # Checkouts; not backed up
+          - path: /workspace
+            subPath: workspace
+      mise-config:
+        type: configMap
+        name: paseo-mise
+        globalMounts:
+          - path: /etc/home-ops
+            readOnly: true
+      mise:
+        type: image
+        image: ghcr.io/jdx/mise:2026.11.0@sha256:6e05da4113a812cc8ac72b21a38889d019fb0f97df6ce8075c0de98d1cf48cc4
+        globalMounts:
+          - path: /opt/mise/bin
+            subPath: usr/local/bin
+      tmp:
+        type: emptyDir
+      logs:
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 64Mi
+        advancedMounts:
+          paseo:
+            paseo:
+              - path: /var/log/paseo
