@@ -23,10 +23,9 @@ spec:
         operator: "Equal"
         value: "true"
         effect: "NoSchedule"
-    # build contains ARM image
     image:
-      repository: ghcr.io/home-operations/smartctl-exporter
-      tag: 0.14.0@sha256:1ce54f6215b4e92ce600d292e6f88af100146521a8e54f449adf3c0f333a9571
+      repository: quay.io/prometheuscommunity/smartctl-exporter
+      tag: v0.15.0@sha256:a76e08dbf5db4781fefd1ed81c65ad46ae8d2849dae6b6d3acebcde2fc4e59d6
     rbac:
       create: false
     config:
