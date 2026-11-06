@@ -29,6 +29,10 @@ spec:
     controllerManager:
       # Not needed for intel DRA
       driRenderGID: 0
+      # Chart default (8.18.0) lags; downloader/verify init containers
+      initContainer:
+        repository: mirror.gcr.io/curlimages/curl
+        tag: latest
       resources:
         requests:
           cpu: 10m
