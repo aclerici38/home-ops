@@ -51,9 +51,7 @@ spec:
                 MISE_TRUSTED_CONFIG_PATHS: /etc/home-ops:/workspace
                 # .mise.toml templates it from globals.env
                 KUBE_VERSION: ${KUBE_VERSION}
-                # The image ships node and the mise image volume ships mise. A
-                # pinned node would also block npm: tools until mise installs it
-                MISE_DISABLE_TOOLS: node,aqua:jdx/mise
+                MISE_DISABLE_TOOLS: node,aqua:jdx/mise,oxfmt,yamllint
               # Install from mise.lock only; the ConfigMap is read-only
               MISE_LOCKED: true
               MISE_NO_HOOKS: true
