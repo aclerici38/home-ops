@@ -35,6 +35,9 @@ spec:
             runAsNonRoot: true
             seccompProfile: {type: RuntimeDefault}
           hostname: home-assistant
+          # Opts into the descheduler multus profile
+          labels:
+            dormammu.internal/multus: "true"
           annotations:
             k8s.v1.cni.cncf.io/networks: |
               [
@@ -60,6 +63,34 @@ spec:
                   "mac": "64:16:7F:13:97:2A"
                 }
               ]
+        initContainers:
+          # Crashloops if multus interfaces are missing; the descheduler recreates the pod
+          multus-guard:
+            image:
+              repository: mirror.gcr.io/library/busybox
+              tag: 1.38.0-musl@sha256:80e38f9a1b39188b8bdb28879178edb322a4402b081a9aedda1924609decd6f6
+            command:
+              - sh
+              - -c
+              - |
+                for i in "$@"; do
+                  [ -e "/sys/class/net/$i" ] || { echo "multus interface $i missing"; exit 1; }
+                done
+              - multus-guard
+            args:
+              - house
+              - cottage
+              - iot
+            resources:
+              requests:
+                cpu: 10m
+                memory: 8Mi
+              limits:
+                memory: 16Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: [ALL]}
         containers:
           home-assistant:
             image:

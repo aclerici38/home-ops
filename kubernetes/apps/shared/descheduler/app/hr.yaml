@@ -1,0 +1,160 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.0/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: descheduler
+spec:
+  interval: 1h
+  maxHistory: 1
+  chart:
+    spec:
+      chart: descheduler
+      sourceRef:
+        kind: HelmRepository
+        name: descheduler
+      version: 0.37.0
+  install:
+    timeout: 2m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 2m
+    remediation:
+      retries: 1
+  values:
+    kind: Deployment
+    deschedulingInterval: 2m
+    image:
+      tag: v0.37.0@sha256:88deef34ff5c85cb69676d7073dd641bd5c35b156bc1ef4a35ca8fbf9644da98
+    leaderElection:
+      enabled: true
+      resourceNamespace: descheduler
+    cmdOptions:
+      v: 3
+    deschedulerPolicy:
+      profiles:
+        # Recreate multus pods whose multus-guard crashloops (missing interfaces)
+        - name: multus
+          pluginConfig:
+            - name: DefaultEvictor
+              args:
+                podProtections:
+                  defaultDisabled:
+                    - PodsWithLocalStorage
+            - name: RemovePodsHavingTooManyRestarts
+              args:
+                labelSelector:
+                  matchLabels:
+                    dormammu.internal/multus: "true"
+                podRestartThreshold: 3
+                includingInitContainers: true
+                states:
+                  - CrashLoopBackOff
+          plugins:
+            deschedule:
+              enabled:
+                - RemovePodsHavingTooManyRestarts
+
+        - name: default
+          pluginConfig:
+            - name: DefaultEvictor
+              args:
+                podProtections:
+                  defaultDisabled:
+                    - PodsWithLocalStorage
+                    - FailedBarePods
+                  extraEnabled:
+                    - PodsWithPVC
+                    - PodsWithResourceClaims
+                  config:
+                    # Node-local storage only
+                    PodsWithPVC:
+                      protectedStorageClasses:
+                        - name: openebs-hostpath
+                        - name: zfs-ssd
+                        - name: zfs-tank
+                nodeFit: true
+                # Outlasts a tuppr upgrade (~17m)
+                minPodAge: 30m
+                noEvictionPolicy: Mandatory
+            - name: RemoveFailedPods
+              args:
+                excludeOwnerKinds:
+                  - Job
+                includingInitContainers: true
+                minPodLifetimeSeconds: 1800
+            - name: RemovePodsViolatingNodeAffinity
+              args:
+                namespaces:
+                  exclude: &excludedNamespaces
+                    - cilium
+                    - flux-system
+                    - kube-system
+                    - openebs-system
+                    - rook-ceph
+                    - tuppr
+                nodeAffinityType:
+                  - requiredDuringSchedulingIgnoredDuringExecution
+            - name: RemovePodsViolatingNodeTaints
+              args:
+                namespaces:
+                  exclude: *excludedNamespaces
+                # Cordon shouldn't drain
+                excludedTaints:
+                  - node.kubernetes.io/unschedulable
+            - name: RemovePodsViolatingInterPodAntiAffinity
+              args:
+                namespaces:
+                  exclude: *excludedNamespaces
+            - name: RemoveDuplicates
+              args:
+                namespaces:
+                  exclude: *excludedNamespaces
+            - name: RemovePodsViolatingTopologySpreadConstraint
+              args:
+                namespaces:
+                  exclude: *excludedNamespaces
+            - name: LowNodeUtilization
+              args:
+                # Requests-based, relative to the cluster mean
+                useDeviationThresholds: true
+                thresholds:
+                  cpu: 15
+                  memory: 15
+                  pods: 15
+                targetThresholds:
+                  cpu: 15
+                  memory: 15
+                  pods: 15
+                evictionLimits:
+                  node: 2
+                evictableNamespaces:
+                  exclude: *excludedNamespaces
+          plugins:
+            balance:
+              enabled:
+                - RemoveDuplicates
+                - RemovePodsViolatingTopologySpreadConstraint
+                - LowNodeUtilization
+            deschedule:
+              enabled:
+                - RemoveFailedPods
+                - RemovePodsViolatingNodeAffinity
+                - RemovePodsViolatingNodeTaints
+                - RemovePodsViolatingInterPodAntiAffinity
+    hostUsers: false
+    podSecurityContext:
+      seccompProfile: {type: RuntimeDefault}
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        memory: 256Mi
+    podLabels:
+      dormammu.internal/apiserver-client: "true"
+    service:
+      enabled: true
+    serviceMonitor:
+      enabled: true

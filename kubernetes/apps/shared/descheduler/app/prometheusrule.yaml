@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.94.2/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: descheduler-rules
+spec:
+  groups:
+    - name: descheduler.rules
+      rules:
+        # Pods not settling; also catches multus pods crashlooping for other reasons
+        - alert: DeschedulerEvictionLoop
+          expr: |-
+            sum by (profile, strategy, namespace) (
+              increase(descheduler_pods_evicted_total{result="success"}[1h])
+            ) > 3
+          annotations:
+            summary: >-
+              descheduler {{ $labels.profile }}/{{ $labels.strategy }} evicted
+              {{ $value | humanize }} pods in {{ $labels.namespace }} in the last hour
+            description: |-
+              kubectl -n descheduler logs deploy/descheduler | grep '{{ $labels.namespace }}/'
+              Opt a pod out with the descheduler.alpha.kubernetes.io/prefer-no-eviction annotation.
+          labels:
+            severity: warning
+        - alert: DeschedulerEvictionsFailing
+          expr: |-
+            sum by (profile, strategy, namespace) (
+              increase(descheduler_pods_evicted_total{result!~"success|background"}[1h])
+            ) > 10
+          for: 1h
+          annotations:
+            summary: >-
+              descheduler {{ $labels.profile }}/{{ $labels.strategy }} failed
+              {{ $value | humanize }} evictions in {{ $labels.namespace }} in the last hour
+            description: |-
+              kubectl -n descheduler logs deploy/descheduler | grep -i error | grep '{{ $labels.namespace }}/'
+          labels:
+            severity: warning

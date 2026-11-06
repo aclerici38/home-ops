@@ -26,6 +26,9 @@ spec:
           # Cameras are reached over L2 on the security VLAN (bond1.50)
           nodeSelector:
             network.dormammu/multus: "true"
+          # Opts into the descheduler multus profile
+          labels:
+            dormammu.internal/multus: "true"
           annotations:
             k8s.v1.cni.cncf.io/networks: |
               [
@@ -46,6 +49,36 @@ spec:
             runAsGroup: 0
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: {type: Unconfined}
+        initContainers:
+          # Crashloops if multus interfaces are missing; the descheduler recreates the pod
+          multus-guard:
+            image:
+              repository: mirror.gcr.io/library/busybox
+              tag: 1.38.0-musl@sha256:80e38f9a1b39188b8bdb28879178edb322a4402b081a9aedda1924609decd6f6
+            command:
+              - sh
+              - -c
+              - |
+                for i in "$@"; do
+                  [ -e "/sys/class/net/$i" ] || { echo "multus interface $i missing"; exit 1; }
+                done
+              - multus-guard
+            args:
+              - security
+            resources:
+              requests:
+                cpu: 10m
+                memory: 8Mi
+              limits:
+                memory: 16Mi
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 65534
+              runAsGroup: 65534
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: [ALL]}
+              seccompProfile: {type: RuntimeDefault}
         containers:
           frigate:
             image:
