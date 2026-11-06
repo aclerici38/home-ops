@@ -4,6 +4,8 @@
 #     ref: "main"
 #     configs:
 #       - "lefthook.common.toml"
+# gobwas (the default) needs at least one dir for `/**/`, so dir/**/*.yaml skips dir/x.yaml
+glob_matcher: doublestar
 pre-commit:
   parallel: true
   commands:
