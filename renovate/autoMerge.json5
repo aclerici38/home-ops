@@ -52,6 +52,7 @@
         "**/karakeep-chrome",
         "**/k8tz/tzdata",
         "aclerici38/k8s-versioned-schemas",
+        "ghcr.io/jdx/mise",
       ],
       separateMajorMinor: false,
     },
@@ -234,6 +235,32 @@
         commitMessageAction: "",
         commitMessageTopic: "nightly automerge bundle",
       },
+    },
+    {
+      description: ["Auto-merge the paseo mise image alongside the mise CLI"],
+      automerge: true,
+      matchDatasources: ["docker"],
+      matchPackageNames: ["ghcr.io/jdx/mise"],
+      matchUpdateTypes: ["major", "minor", "patch"],
+      // Matches the mise manager's, so the image and CLI land the same night
+      minimumReleaseAge: "1 day",
+      groupName: "automerge",
+      additionalBranchPrefix: "",
+      minimumGroupSize: 1,
+      schedule: ["* 3 * * *"],
+      group: {
+        semanticCommitType: "chore",
+        semanticCommitScope: "automerge",
+        commitMessagePrefix: "chore(automerge):",
+        commitMessageAction: "",
+        commitMessageTopic: "nightly automerge bundle",
+      },
+    },
+    {
+      // Keep last to override `minimumGroupSize: 1`
+      description: ["Don't bump the mise CLI or its image alone"],
+      matchDepNames: ["aqua:jdx/mise", "ghcr.io/jdx/mise"],
+      minimumGroupSize: 2,
     },
   ],
 }
