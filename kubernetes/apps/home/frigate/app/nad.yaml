@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/multus/4.3.1/networkattachmentdefinition_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/multus/4.3.2/networkattachmentdefinition_v1.json
 # Security VLAN (cameras). Lives in the frigate namespace rather than multus so
 # that, with multus namespace isolation, only frigate pods can attach to it.
 apiVersion: k8s.cni.cncf.io/v1
