@@ -23,6 +23,10 @@ spec:
       namespace: external-secrets
     - name: kopiur
       namespace: kopiur
+    - name: envoy-gateway
+      namespace: envoy-gateway
+    - name: pocket-id-operator
+      namespace: pocket-id-operator
   values:
     # 1Password item `paseo`: PASEO_PASSWORD, CLAUDE_CODE_OAUTH_TOKEN
     # (`claude setup-token`), GH_TOKEN (fine-grained, home-ops only)
@@ -36,3 +40,13 @@ spec:
         # mise installs
         - /home/.local
         - /home/.cache
+    pocketId:
+      callbackPaths:
+        - /oauth2/callback
+      spec:
+        oidcClient:
+          secret:
+            keys:
+              clientID: client-id
+              clientSecret: client-secret
+    oidc: {}

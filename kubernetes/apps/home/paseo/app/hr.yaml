@@ -140,7 +140,7 @@ spec:
         hostnames:
           - paseo.clerici.tech
         parentRefs:
-          - name: trusted
+          - name: external
             namespace: envoy-gateway
         rules:
           - backendRefs:
@@ -155,7 +155,7 @@ spec:
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: trusted
+                  gateway.envoyproxy.io/owning-gateway-name: external
             toPorts:
               - ports:
                   - {port: "6767", protocol: TCP}
