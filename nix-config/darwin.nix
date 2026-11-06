@@ -34,6 +34,7 @@
       "docker-desktop"
       "ghostty"
       "opencloud"
+      "paseo"
       "protonvpn"
       "spotify"
       "whatcable"
