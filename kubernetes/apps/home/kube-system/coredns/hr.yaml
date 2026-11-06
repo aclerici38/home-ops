@@ -55,8 +55,12 @@ spec:
               pods verified
               fallthrough in-addr.arpa ip6.arpa
           # Enable ECS so blocky gets the client's ip as source instead of coredns
-          - name: rewrite
-            parameters: edns0 subnet set 32 128
+          # Disabled: the rewrite adds a 4096-byte OPT to non-EDNS queries, so CoreDNS
+          # sends >512B uncompressed replies that musl/Cilium-proxy clients can't read
+          # (SERVFAIL, e.g. registry.npmjs.org AAAA). Re-enable once CoreDNS sizes replies
+          # against the original request.
+          # - name: rewrite
+          #   parameters: edns0 subnet set 32 128
           - name: forward
             parameters: . ${BLOCKY_CLUSTER_IP}
             configBlock: |-
