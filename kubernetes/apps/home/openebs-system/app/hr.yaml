@@ -77,6 +77,11 @@ spec:
         encrKeysDir: /var/openebs/keys
         nodeSelector:
           kubernetes.io/hostname: bonds
+        driverRegistrar:
+          image:
+            registry: registry.k8s.io
+            repository: sig-storage/csi-node-driver-registrar
+            tag: v2.18.0@sha256:b7fefd08651f00ac4df1a196ed4c621c2451fbb899297fe9fad9e36c667af0c0
       zfsPlugin:
         image:
           registry: ghcr.io/
@@ -84,6 +89,11 @@ spec:
         podLabels: *apiserver
         snapshotController:
           enabled: false
+        snapshotter:
+          image:
+            registry: registry.k8s.io
+            repository: sig-storage/csi-snapshotter
+            tag: v8.7.0@sha256:b03d3334f8035fa42660b166f6eb819a659a14774da020eb1b6c52cd422eaadb
       crds:
         csi:
           volumeSnapshots:
