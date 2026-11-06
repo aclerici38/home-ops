@@ -33,9 +33,14 @@ spec:
         dormammu.internal/apiserver-client: "true"
       builtInTrivyServer: true
       scanJobsConcurrentLimit: 2
+      # Image vulnerability scanning only
+      sbomGenerationEnabled: false
+      configAuditScannerEnabled: false
+      exposedSecretScannerEnabled: false
       rbacAssessmentScannerEnabled: false
       infraAssessmentScannerEnabled: false
       clusterComplianceEnabled: false
+    # Otherwise the chart still installs the compliance specs
     compliance:
       specs: []
     serviceMonitor:
