@@ -41,18 +41,19 @@ spec:
             image: &image
               repository: ghcr.io/getpaseo/paseo
               tag: 0.15.2@sha256:e12414fe71f33aa7cedf1eaf027bf2acfccdf01d6b692ba779a220b2ec1c46e6
-            # All of [tools], minus MISE_DISABLE_TOOLS
+            # Repo tools install from the checkout
             command:
               - /opt/mise/bin/mise
               - install
+              - claude-code
+              - gh
             env:
               <<: &mise
                 MISE_GLOBAL_CONFIG_FILE: /etc/home-ops/.mise.toml
                 MISE_TRUSTED_CONFIG_PATHS: /etc/home-ops:/workspace
-                # .mise.toml templates it from globals.env
                 KUBE_VERSION: ${KUBE_VERSION}
-                MISE_DISABLE_TOOLS: node,aqua:jdx/mise,oxfmt,yamllint
-              # Install from mise.lock only; the ConfigMap is read-only
+                # Image ships node; mise comes from the image volume
+                MISE_DISABLE_TOOLS: node,aqua:jdx/mise
               MISE_LOCKED: true
               MISE_NO_HOOKS: true
             securityContext: &sec
@@ -71,23 +72,18 @@ spec:
             image: *image
             env:
               <<: *mise
-              # The image's PATH plus mise and its shims
               PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/mise/bin:/home/paseo/.local/share/mise/shims
               SHELL: /bin/bash
               PASEO_HOSTNAMES: paseo.clerici.tech
               PASEO_TRUSTED_PROXIES: ${CLUSTER_POD_CIDR},${CLUSTER_POD_CIDR_V6}
               PASEO_RELAY_ENABLED: false
-              # Pairing links and QR codes; app.paseo.sh otherwise
               PASEO_APP_BASE_URL: https://paseo.clerici.tech
-              # Skips the local speech model download
               PASEO_DICTATION_ENABLED: false
               PASEO_PASSWORD:
                 secretKeyRef:
                   name: paseo
                   key: password
-              # Pinned by mise.lock; also no telemetry or error reporting
               CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: 1
-              # Unattended: wait out 429/529s and usage limits instead of failing
               CLAUDE_CODE_RETRY_WATCHDOG: 1
               ENABLE_CLAUDEAI_MCP_SERVERS: false
               CLAUDE_CODE_OAUTH_TOKEN:
@@ -105,7 +101,6 @@ spec:
               GIT_CONFIG_VALUE_1: aclerici38
               GIT_CONFIG_KEY_2: user.email
               GIT_CONFIG_VALUE_2: anthony@clerici.me
-              # Divergent `git pull`: rebase local commits onto upstream
               GIT_CONFIG_KEY_3: pull.rebase
               GIT_CONFIG_VALUE_3: "true"
             securityContext: *sec
@@ -154,7 +149,6 @@ spec:
         controller: paseo
         # DNS from the baseline CCNP, apiserver from apiserver-clients
         ingress:
-          # Route
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
@@ -163,7 +157,6 @@ spec:
               - ports:
                   - {port: "6767", protocol: TCP}
         egress:
-          # *.clerici.tech through every Gateway (their LB IPs translate to these pods)
           - toEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
@@ -172,7 +165,6 @@ spec:
             toPorts:
               - ports:
                   - {port: "10443", protocol: TCP}
-          # Everything outside the cluster; the firewall handles the LAN
           - toEntities:
               - world
     persistence:
@@ -181,7 +173,6 @@ spec:
         globalMounts:
           - path: /home/paseo
             subPath: home
-          # Checkouts; not backed up
           - path: /workspace
             subPath: workspace
       mise-config:

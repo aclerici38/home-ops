@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && { mise install >/dev/null 2>&1 && lefthook install >/dev/null 2>&1 || echo 'SessionStart: mise install or lefthook install failed in this repo, so pre-commit hooks may be missing tools. Re-run both to see why; never bypass hooks with --no-verify.'; }",
+            "timeout": 600
+          }
+        ]
+      }
+    ]
+  }
+}
