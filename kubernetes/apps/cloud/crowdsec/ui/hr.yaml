@@ -41,7 +41,7 @@ spec:
           crowdsec-ui:
             image:
               repository: ghcr.io/theduffman85/crowdsec-web-ui
-              tag: 2026.11.4@sha256:2415750a09ec56faf40bd63e914bd1227d9b2f5e94e34c2cdba112966c0b28d8
+              tag: 2026.11.5@sha256:8bb448c5c9d9991750dd9e967f3c079782a0bfe8ad1737b87a981ecc1f944a5b
             env:
               CONFIG_UI_TIME_ZONE: ${TZ}
               CONFIG_UPDATES_ENABLED: false
