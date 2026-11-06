@@ -41,28 +41,19 @@ spec:
             image: &image
               repository: ghcr.io/getpaseo/paseo
               tag: 0.15.2@sha256:e12414fe71f33aa7cedf1eaf027bf2acfccdf01d6b692ba779a220b2ec1c46e6
+            # All of [tools], minus MISE_DISABLE_TOOLS
             command:
               - /opt/mise/bin/mise
               - install
-              - claude-code
-              - gh
-              - kubectl
-              - flux2
-              - helm
-              - kustomize
-              - talosctl
-              - github:home-operations/flate
-              - kubeconform
-              - jq
-              - yq
-              - yamlfmt
-              - lefthook
             env:
               <<: &mise
                 MISE_GLOBAL_CONFIG_FILE: /etc/home-ops/.mise.toml
                 MISE_TRUSTED_CONFIG_PATHS: /etc/home-ops:/workspace
                 # .mise.toml templates it from globals.env
                 KUBE_VERSION: ${KUBE_VERSION}
+                # The image ships node and the mise image volume ships mise. A
+                # pinned node would also block npm: tools until mise installs it
+                MISE_DISABLE_TOOLS: node,aqua:jdx/mise
               # Install from mise.lock only; the ConfigMap is read-only
               MISE_LOCKED: true
               MISE_NO_HOOKS: true

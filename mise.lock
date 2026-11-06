@@ -521,27 +521,6 @@ url = "https://github.com/jqlang/jq/releases/download/jq-1.8.2/jq-macos-arm64"
 url_api = "https://api.github.com/repos/jqlang/jq/releases/assets/453012783"
 provenance = "github-attestations"
 
-[[tools.k9s]]
-version = "0.51.0"
-backend = "aqua:derailed/k9s"
-specifiers = ["0.51.0"]
-
-[tools.k9s."platforms.linux-arm64"]
-checksum = "sha256:3ee05c82e5f9198928a4e86133608ba6a2c10a2244d6a7789e820f78319d640c"
-checksum_source = "mise-versions"
-url = "https://github.com/derailed/k9s/releases/download/v0.51.0/k9s_Linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/derailed/k9s/releases/assets/440226045"
-
-[tools.k9s."platforms.linux-x64"]
-checksum = "sha256:c3752ad51a5a4015a113819c4eeb6e55a4d0e4b8e652494797532f6fc8161dd7"
-url = "https://github.com/derailed/k9s/releases/download/v0.51.0/k9s_Linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/derailed/k9s/releases/assets/440224321"
-
-[tools.k9s."platforms.macos-arm64"]
-checksum = "sha256:9b8c0e8f461e5d33aeee43a67f5ef4aff646a008a786887b8266cbb153c610cc"
-url = "https://github.com/derailed/k9s/releases/download/v0.51.0/k9s_Darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/derailed/k9s/releases/assets/440224326"
-
 [[tools.kind]]
 version = "0.33.0"
 backend = "aqua:kubernetes-sigs/kind"
@@ -837,27 +816,6 @@ url_api = "https://api.github.com/repos/getsops/sops/releases/assets/486808198"
 
 [tools.sops."platforms.macos-arm64".provenance.slsa]
 url = "https://github.com/getsops/sops/releases/download/v3.13.3/sops-v3.13.3.intoto.jsonl"
-
-[[tools.talhelper]]
-version = "3.1.17"
-backend = "aqua:budimanjojo/talhelper"
-specifiers = ["3.1.17"]
-
-[tools.talhelper."platforms.linux-arm64"]
-checksum = "sha256:1841915ec6f533ef653baedc5f1cbf68683e0ca9a72f240ac2f257d94f68798b"
-checksum_source = "mise-versions"
-url = "https://github.com/budimanjojo/talhelper/releases/download/v3.1.17/talhelper_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/budimanjojo/talhelper/releases/assets/530086688"
-
-[tools.talhelper."platforms.linux-x64"]
-checksum = "sha256:dff9162569004637b6a842c4020d909b0ffbc7fbbe2fca23a754708db95be204"
-url = "https://github.com/budimanjojo/talhelper/releases/download/v3.1.17/talhelper_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/budimanjojo/talhelper/releases/assets/530086690"
-
-[tools.talhelper."platforms.macos-arm64"]
-checksum = "sha256:cf86526d730010193d3e858f13242e5f0c94fdcefe5e001716c552211b1e95b0"
-url = "https://github.com/budimanjojo/talhelper/releases/download/v3.1.17/talhelper_darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/budimanjojo/talhelper/releases/assets/530086691"
 
 [[tools.talosctl]]
 version = "1.14.5"
