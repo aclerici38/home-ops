@@ -20,6 +20,10 @@ spec:
       retries: 1
   values:
     replicaCount: 2
+    rbacProxy:
+      image:
+        repository: quay.io/brancz/kube-rbac-proxy
+        tag: v0.23.1@sha256:c280684dd23793fb2f287d1f4efc84b7800b3e01205d770b98694827bfe514cb
     podLabels:
       dormammu.internal/apiserver-client: "true"
     serviceMonitor:
