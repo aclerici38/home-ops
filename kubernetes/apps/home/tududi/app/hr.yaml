@@ -37,7 +37,7 @@ spec:
           tududi:
             image:
               repository: mirror.gcr.io/chrisvel/tududi
-              tag: 2.0.0@sha256:f7c1073bac8842b442c74946097fd1deaaf9cc11830167be83260526ee7c794f
+              tag: 2.1.0@sha256:f54f9b454b943f87a0d97939ca4203e086043ee5260514508e71433391a132f7
             # docker-entrypoint.sh only exists to chown /app and su-exec down; it
             # needs root, so skip straight to the start script it would exec.
             command:
