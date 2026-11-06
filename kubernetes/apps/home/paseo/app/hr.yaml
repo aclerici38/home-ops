@@ -202,7 +202,7 @@ spec:
             readOnly: true
       mise:
         type: image
-        image: ghcr.io/jdx/mise:2026.11.0@sha256:6e05da4113a812cc8ac72b21a38889d019fb0f97df6ce8075c0de98d1cf48cc4
+        image: ghcr.io/jdx/mise:2026.11.2@sha256:39cd8aad519a3dbc860eceb64dfd8cb5efe4cdbb8ad741a6867b544b2787b79c
         globalMounts:
           - path: /opt/mise/bin
             subPath: usr/local/bin
