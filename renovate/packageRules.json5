@@ -40,6 +40,14 @@
       versioning: "regex:^unzip-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
     },
     {
+      // Docker versioning only understands suffixes (1.2.3-foo), and every
+      // Envoy variant is prefixed, so without this the pin is silently skipped.
+      description: "Envoy distroless tags (distroless-vX.Y.Z)",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/envoyproxy\\/envoy$/"],
+      versioning: "regex:^distroless-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
+    },
+    {
       description: "Vectorchord imageVolume pg extension (immich versioned)",
       matchDatasources: ["docker"],
       matchPackageNames: ["ghcr.io/tensorchord/vchord-scratch"],
