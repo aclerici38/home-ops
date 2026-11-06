@@ -98,8 +98,6 @@ spec:
                   key: password
               # Pinned by mise.lock; also no telemetry or error reporting
               CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: 1
-              # Keeps credentials (not GitHub's) out of agents' Bash, hooks and stdio MCP servers
-              CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: 1
               # Unattended: wait out 429/529s and usage limits instead of failing
               CLAUDE_CODE_RETRY_WATCHDOG: 1
               ENABLE_CLAUDEAI_MCP_SERVERS: false
