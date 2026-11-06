@@ -41,17 +41,20 @@ spec:
             image: &image
               repository: ghcr.io/getpaseo/paseo
               tag: 0.15.2@sha256:e12414fe71f33aa7cedf1eaf027bf2acfccdf01d6b692ba779a220b2ec1c46e6
-            # Repo tools install from the checkout
+            # Copy the repo's mise config to the default global path (writable, so mise
+            # can relock it), refreshed every start to pick up bumps; works without a checkout
             command:
-              - /opt/mise/bin/mise
-              - install
-              - claude-code
-              - gh
+              - sh
+              - -c
+              - |
+                mkdir -p /home/paseo/.config/mise
+                cp /etc/home-ops/.mise.toml /home/paseo/.config/mise/config.toml
+                cp /etc/home-ops/mise.lock /home/paseo/.config/mise/mise.lock
+                exec /opt/mise/bin/mise install claude-code gh
             env:
               <<: &mise
-                MISE_GLOBAL_CONFIG_FILE: /etc/home-ops/.mise.toml
-                MISE_TRUSTED_CONFIG_PATHS: /etc/home-ops:/workspace
                 KUBE_VERSION: ${KUBE_VERSION}
+                MISE_TRUSTED_CONFIG_PATHS: /workspace
                 # Image ships node; mise comes from the image volume
                 MISE_DISABLE_TOOLS: node,aqua:jdx/mise
               MISE_LOCKED: true
@@ -178,9 +181,11 @@ spec:
       mise-config:
         type: configMap
         name: paseo-mise
-        globalMounts:
-          - path: /etc/home-ops
-            readOnly: true
+        advancedMounts:
+          paseo:
+            tools:
+              - path: /etc/home-ops
+                readOnly: true
       mise:
         type: image
         image: ghcr.io/jdx/mise:2026.11.0@sha256:6e05da4113a812cc8ac72b21a38889d019fb0f97df6ce8075c0de98d1cf48cc4
