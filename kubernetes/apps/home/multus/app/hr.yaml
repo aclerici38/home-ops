@@ -19,6 +19,12 @@ spec:
     remediation:
       retries: 1
   values:
+    # Pods may only attach NADs in their own namespace or in multus (the shared
+    # house/cottage/iot/lab networks). Single-tenant networks live in the
+    # consuming app's namespace (e.g. frigate/security) so nothing else can join.
+    extraArgs:
+      - --namespace-isolation=true
+      - --global-namespaces=multus
     resources:
       requests:
         cpu: 10m

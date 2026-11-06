@@ -7,6 +7,9 @@ metadata:
   namespace: flux-system
 spec:
   targetNamespace: frigate
+  # NetworkAttachmentDefinition CRD (nad.yaml)
+  dependsOn:
+    - name: multus
   sourceRef:
     kind: GitRepository
     name: flux-system

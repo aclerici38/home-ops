@@ -23,6 +23,20 @@ spec:
     controllers:
       frigate:
         pod:
+          # Cameras are reached over L2 on the security VLAN (bond1.50)
+          nodeSelector:
+            network.dormammu/multus: "true"
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name": "security",
+                  "namespace": "frigate",
+                  "interface": "security",
+                  "ips": ["10.0.50.25/24"],
+                  "mac": "64:16:7F:50:F1:25"
+                }
+              ]
           resourceClaims:
             - name: gpu
               resourceClaimTemplateName: frigate-gpu
@@ -174,36 +188,16 @@ spec:
               - ports:
                   - {port: "5000", protocol: TCP}
                   - {port: "8554", protocol: TCP}
+        # Only eth0 is policed: *.security.internal cameras are reached on the
+        # security multus leg (10.0.50.0/24), which bypasses Cilium.
         egress:
-          # go2rtc sources (config.yaml on the PVC): Dahua + Tapo + E1 Pro RTSP
+          # Cottage camera is on the cottage VLAN, still routed: RTSP + ONVIF
           - toFQDNs:
-              - matchName: gate.security.internal
-              - matchName: service-gate.security.internal
-              - matchName: living-room.security.internal
               - matchName: cottage-yard-cam.cottage.internal
             toPorts:
               - ports:
                   - {port: "554", protocol: TCP}
-          # Reolink HTTP-FLV
-          - toFQDNs:
-              - matchName: front.security.internal
-              - matchName: driveway.security.internal
-              - matchName: garage.security.internal
-              - matchName: not-pumphouse.security.internal
-            toPorts:
-              - ports:
-                  - {port: "80", protocol: TCP}
-          # ONVIF
-          - toFQDNs:
-              - matchName: cottage-yard-cam.cottage.internal
-            toPorts:
-              - ports:
                   - {port: "2020", protocol: TCP}
-          - toFQDNs:
-              - matchName: living-room.security.internal
-            toPorts:
-              - ports:
-                  - {port: "8000", protocol: TCP}
           # Semantic search / classification models
           - toFQDNs:
               - matchName: huggingface.co
