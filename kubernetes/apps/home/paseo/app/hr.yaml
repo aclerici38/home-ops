@@ -95,7 +95,7 @@ spec:
               PASEO_PASSWORD:
                 secretKeyRef:
                   name: paseo
-                  key: PASEO_PASSWORD
+                  key: password
               # Pinned by mise.lock; also no telemetry or error reporting
               CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: 1
               # Keeps credentials (not GitHub's) out of agents' Bash, hooks and stdio MCP servers
