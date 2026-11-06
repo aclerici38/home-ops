@@ -109,13 +109,16 @@ spec:
                 secretKeyRef:
                   name: paseo
                   key: GH_TOKEN
-              GIT_CONFIG_COUNT: 3
+              GIT_CONFIG_COUNT: 4
               GIT_CONFIG_KEY_0: credential.https://github.com.helper
               GIT_CONFIG_VALUE_0: "!gh auth git-credential"
               GIT_CONFIG_KEY_1: user.name
               GIT_CONFIG_VALUE_1: aclerici38
               GIT_CONFIG_KEY_2: user.email
               GIT_CONFIG_VALUE_2: anthony@clerici.me
+              # Divergent `git pull`: rebase local commits onto upstream
+              GIT_CONFIG_KEY_3: pull.rebase
+              GIT_CONFIG_VALUE_3: "true"
             securityContext: *sec
             probes:
               startup:
