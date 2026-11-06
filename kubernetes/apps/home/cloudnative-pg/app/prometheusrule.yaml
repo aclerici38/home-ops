@@ -135,7 +135,11 @@ spec:
             description: "Losing or draining that node takes down several instances at once."
             runbook_url: https://github.com/cloudnative-pg/charts/blob/main/charts/cluster/docs/runbooks/CNPGClusterInstancesOnSameNode.md
         - alert: CNPGLongRunningTransaction
-          expr: max by (namespace, job, pod, datname, usename) (cnpg_backends_max_tx_duration_seconds) > 300
+          # immich's nightly checksum job streams one query for up to 1h by design
+          expr: |
+            max by (namespace, job, pod, datname, usename) (cnpg_backends_max_tx_duration_seconds{datname!="immich"}) > 300
+            or
+            max by (namespace, job, pod, datname, usename) (cnpg_backends_max_tx_duration_seconds{datname="immich"}) > 4500
           for: 5m
           labels:
             severity: warning
