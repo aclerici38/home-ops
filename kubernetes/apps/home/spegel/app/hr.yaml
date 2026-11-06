@@ -19,11 +19,13 @@ spec:
     remediation:
       retries: 1
   values:
-    service:
-      registry:
-        hostPort: 29999
     serviceMonitor:
       enabled: true
     spegel:
-      containerdSock: /run/containerd/containerd.sock
+      # Talos keeps containerd registry config here, not /etc/containerd/certs.d
       containerdRegistryConfigPath: /etc/cri/conf.d/hosts
+      # Don't pin mutable :latest tags to the first digest seen in the cluster;
+      # resolve them upstream (layers still come from peers).
+      # https://spegel.dev/docs/usage/resolving-tags/
+      registryFilters:
+        - ":latest$"

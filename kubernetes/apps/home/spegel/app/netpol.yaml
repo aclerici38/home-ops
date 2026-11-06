@@ -12,8 +12,9 @@ spec:
       app.kubernetes.io/name: spegel
       app.kubernetes.io/component: spegel
   ingress:
-    # containerd mirror via hostPort 29999, NodePort 30021 fallback (may land on
-    # another node's spegel), and kubelet probes
+    # containerd mirror via NodePort 30020 (trafficDistribution: PreferSameNode,
+    # lands on another node's spegel if the local one isn't ready), and kubelet
+    # probes
     - fromEntities:
         - host
         - remote-node

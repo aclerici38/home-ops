@@ -30,6 +30,10 @@ spec:
     ipv6NativeRoutingCIDR: fdf6:d3fd:1748:1000::/56
     bgpControlPlane:
       enabled: true
+    loadBalancer:
+      # Honor EndpointSlice hints / trafficDistribution (PreferSameNode etc.).
+      # Spegel's registry NodePort relies on this to keep pulls node-local.
+      serviceTopology: true
     cluster:
       name: main
       id: 1
