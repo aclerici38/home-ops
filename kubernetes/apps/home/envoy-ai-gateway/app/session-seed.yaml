@@ -1,0 +1,35 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.14.0/password_v1alpha1.json
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: Password
+metadata:
+  name: ai-gateway-mcp-session-seed
+spec:
+  length: 64
+  digits: 10
+  symbols: 0
+  noUpper: false
+  allowRepeat: true
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.14.0/externalsecret_v1.json
+# Must not reuse the chart's Secret name; Helm deletes it once existingSecret is set
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: ai-gateway-mcp-session-encryption
+  labels:
+    dormammu.internal/component: external-secret
+spec:
+  refreshPolicy: OnChange
+  target:
+    name: ai-gateway-mcp-session-encryption
+    template:
+      engineVersion: v2
+      data:
+        seed: "{{ .password }}"
+  dataFrom:
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: Password
+          name: ai-gateway-mcp-session-seed

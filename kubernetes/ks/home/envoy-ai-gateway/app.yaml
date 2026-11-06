@@ -10,6 +10,7 @@ spec:
   dependsOn:
     - name: cert-manager
     - name: envoy-gateway
+    - name: external-secrets
   sourceRef:
     kind: GitRepository
     name: flux-system

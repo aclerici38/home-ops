@@ -37,6 +37,9 @@ spec:
           memory: 128Mi
         limits:
           memory: 512Mi
+      mcp:
+        sessionEncryption:
+          existingSecret: ai-gateway-mcp-session-encryption
     extProc:
       image:
         repository: mirror.gcr.io/envoyproxy/ai-gateway-extproc
