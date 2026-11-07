@@ -25,8 +25,9 @@
     },
     {
       description: "Keep the Mac's metal-agent on the llmkube chart version",
-      matchPackageNames: ["defilantech/LLMKube"],
+      matchPackageNames: ["defilantech/LLMKube", "ghcr.io/defilantech/charts/llmkube"],
       groupName: "llmkube",
+      minimumGroupSize: 2,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
