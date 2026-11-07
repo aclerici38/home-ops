@@ -61,6 +61,13 @@ spec:
                   "interface": "iot",
                   "ips": ["10.0.80.25/24"],
                   "mac": "64:16:7F:13:97:2A"
+                },
+                {
+                  "name":"voip",
+                  "namespace": "home-assistant",
+                  "interface": "voip",
+                  "ips": ["10.0.60.25/24"],
+                  "mac": "64:16:7F:60:F1:25"
                 }
               ]
         initContainers:
@@ -81,6 +88,7 @@ spec:
               - house
               - cottage
               - iot
+              - voip
             resources:
               requests:
                 cpu: 10m
@@ -170,7 +178,7 @@ spec:
       home-assistant:
         type: cilium
         controller: home-assistant
-        # Only eth0 is policed: the house/cottage/iot multus legs bypass Cilium
+        # Only eth0 is policed: the house/cottage/iot/voip multus legs bypass Cilium
         ingress:
           # UI/companion apps (external), MCP backend (internal)
           - fromEndpoints:

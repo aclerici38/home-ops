@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/multus/4.3.2/networkattachmentdefinition_v1.json
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: voip
+spec:
+  config: |-
+    {
+      "cniVersion": "1.1.0",
+      "name": "voip",
+      "plugins": [
+        {
+          "type": "macvlan",
+          "master": "bond1.60",
+          "mode": "bridge",
+          "ipam": {
+            "type": "static"
+          }
+        }
+      ]
+    }
