@@ -68,8 +68,6 @@ spec:
                 SILO_PLUGIN_CACHE_DIR: /tmp/silo-plugins
                 SILO_TRUSTED_PROXIES: ${CLUSTER_POD_CIDR}
                 SILO_SHUTDOWN_DELAY: "0"
-                # Image has no passwd entry
-                HOME: /tmp
                 REDIS_URL: redis://silo-dragonfly-db:6379
                 DATABASE_URL:
                   valueFrom:
