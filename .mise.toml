@@ -33,7 +33,7 @@ FLATE_SKIP_CRDS = "false"
 postinstall = "cd {{ env.HOME }}/home-ops 2>/dev/null || cd {{ config_root }}; lefthook install"
 
 [tools]
-"aqua:jdx/mise" = "v2026.11.1"
+"aqua:jdx/mise" = "v2026.11.3"
 
 # k8s
 kubectl = "1.37.2"
@@ -74,7 +74,7 @@ taplo = "0.10.0"
 uv = "0.13.7"
 yamlfmt = "0.21.0"
 yamllint = { version = "1.38.0", python = "3.14" }  # pyyaml has no Python 3.15 wheels yet
-yq = "4.54.1"
+yq = "4.54.2"
 zizmor = "1.32.0"
 
 "github:mirceanton/talstomize" = "v1.0.3"
