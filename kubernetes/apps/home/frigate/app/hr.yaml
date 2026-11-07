@@ -231,6 +231,12 @@ spec:
               - ports:
                   - {port: "554", protocol: TCP}
                   - {port: "2020", protocol: TCP}
+          # Gate access panel is on the voip VLAN, routed: RTSP only
+          - toFQDNs:
+              - matchName: gate-access-panel.voip.internal
+            toPorts:
+              - ports:
+                  - {port: "554", protocol: TCP}
           # Semantic search / classification models
           - toFQDNs:
               - matchName: huggingface.co
