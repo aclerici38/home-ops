@@ -241,6 +241,8 @@ spec:
           - toFQDNs:
               - matchName: huggingface.co
               - matchPattern: "**.hf.co"
+              # Keras MobileNetV2 base weights for custom classification training
+              - matchName: storage.googleapis.com
             toPorts:
               - ports:
                   - {port: "443", protocol: TCP}
