@@ -1,7 +1,13 @@
+{{- /* Own YAML line so the renovate regex manager sees a bare quoted tag. */ -}}
+{{- define "resources.dragonfly.image" -}}
+# renovate: datasource=docker depName=ghcr.io/dragonflydb/dragonfly
+tag: "v2.1.0@sha256:94891bb22ce2fb0f7a5a3ff1bb3b2fbbc5830e2523293e47723d87fa3e5b1184"
+{{- end -}}
+
 {{- define "resources.dragonfly.spec" -}}
 {{- /* Appended to args below; a merge would replace the whole list. */ -}}
 {{- $extraArgs := dig "extraArgs" list .Values.dragonfly -}}
-image: ghcr.io/dragonflydb/dragonfly:v1.40.1@sha256:ebf3c6c213e82fb51b4521660cca13f06f3421dc5b1ed14f2f474c50b5e29986
+image: ghcr.io/dragonflydb/dragonfly:{{ (include "resources.dragonfly.image" . | fromYaml).tag }}
 replicas: 3
 env:
   - name: MAX_MEMORY
