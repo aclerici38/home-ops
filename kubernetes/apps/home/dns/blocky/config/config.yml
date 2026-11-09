@@ -30,6 +30,9 @@ ports:
 prometheus:
   enable: true
 
+pprof:
+  enable: false
+
 # In-memory rolling 24h stats served at /api/stats
 statistics:
   enable: true
