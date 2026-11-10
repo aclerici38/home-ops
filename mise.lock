@@ -49,26 +49,26 @@ url_api = "https://api.github.com/repos/FiloSottile/age/releases/assets/53554189
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "v2026.11.4"
+version = "v2026.11.5"
 backend = "aqua:jdx/mise"
-specifiers = ["v2026.11.4"]
+specifiers = ["v2026.11.5"]
 
 [tools."aqua:jdx/mise"."platforms.linux-arm64"]
-checksum = "sha256:d2b1f015317baff1e3a1486ff323a1a3c571e6b7233778318dd39d5349d42062"
-url = "https://github.com/jdx/mise/releases/download/v2026.11.4/mise-v2026.11.4-linux-arm64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/721205998"
+checksum = "sha256:5b6a086507cd49e1135165ceaeb643e14af2f48b44bf5a67ce491db6b49dc9eb"
+url = "https://github.com/jdx/mise/releases/download/v2026.11.5/mise-v2026.11.5-linux-arm64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/725896120"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.linux-x64"]
-checksum = "sha256:ff81b3a813edbb1e884a0a68b0c1f1aa726f15f6c4e47606f83359fb12beb009"
-url = "https://github.com/jdx/mise/releases/download/v2026.11.4/mise-v2026.11.4-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/721206753"
+checksum = "sha256:5cf376858e091c4f3fe55b063f94bd3ee285ab611cec0cb1a9d6d7986c49a433"
+url = "https://github.com/jdx/mise/releases/download/v2026.11.5/mise-v2026.11.5-linux-x64-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/725896582"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.macos-arm64"]
-checksum = "sha256:d37c01389b0918a19bbf763ee8ed339e533eebdb281be4911e9ad71d00b51477"
-url = "https://github.com/jdx/mise/releases/download/v2026.11.4/mise-v2026.11.4-macos-arm64.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/721207112"
+checksum = "sha256:f69c8a4f7c265d5f3ffdd06d44104aa15a7ffd9b6545a87b7768f893b70f0fd8"
+url = "https://github.com/jdx/mise/releases/download/v2026.11.5/mise-v2026.11.5-macos-arm64.tar.gz"
+url_api = "https://api.github.com/repos/jdx/mise/releases/assets/725896714"
 provenance = "minisign"
 
 [[tools."aqua:nklmilojevic/sofka"]]
@@ -355,25 +355,27 @@ url_api = "https://api.github.com/repos/cloudnative-pg/cloudnative-pg/releases/a
 url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.30.1/multiple.intoto.jsonl"
 
 [[tools."github:home-operations/flate"]]
-version = "0.6.5"
+version = "0.7.3"
 backend = "github:home-operations/flate"
-specifiers = ["v0.6.5"]
+specifiers = ["v0.7.3"]
 
 [tools."github:home-operations/flate"."platforms.linux-arm64"]
-checksum = "sha256:7f514814890df4a095887943ae606be1a8af878606b7bd0575efe75402cd38dc"
+checksum = "sha256:345b8b679de439343003097b79aabec7d070c05e70eeca5c413193ba97aa368f"
 checksum_source = "mise-versions"
-url = "https://github.com/home-operations/flate/releases/download/v0.6.5/flate_0.6.5_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/541337295"
+url = "https://github.com/home-operations/flate/releases/download/v0.7.3/flate_0.7.3_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/727305352"
 
 [tools."github:home-operations/flate"."platforms.linux-x64"]
-checksum = "sha256:37eb0cd91a6752340754375743aa616c263cd8367ce594abd42ee955e1ec0099"
-url = "https://github.com/home-operations/flate/releases/download/v0.6.5/flate_0.6.5_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/541337294"
+checksum = "sha256:05d3c79447647e95329aa45c7035e7ebac3a120942972e78819deadc3bf0afeb"
+checksum_source = "mise-versions"
+url = "https://github.com/home-operations/flate/releases/download/v0.7.3/flate_0.7.3_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/727305354"
 
 [tools."github:home-operations/flate"."platforms.macos-arm64"]
-checksum = "sha256:76274be5ef8b016e80ea0abf7b6f612adc76a89f7613d2e7f7e3550af5b9e186"
-url = "https://github.com/home-operations/flate/releases/download/v0.6.5/flate_0.6.5_darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/541337298"
+checksum = "sha256:fb4aca650b55fb020dac039775975ef3ab753a4582bdd034dc8ad5c73ad47755"
+checksum_source = "mise-versions"
+url = "https://github.com/home-operations/flate/releases/download/v0.7.3/flate_0.7.3_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/727305351"
 
 [[tools."github:home-operations/yayamlls"]]
 version = "0.3.3"
@@ -935,26 +937,26 @@ uv = { path = ".mise/locks/yamllint/1.38.0~647ee145", digest = "sha256:cdd14970e
 python = "3.14"
 
 [[tools.yq]]
-version = "4.54.2"
+version = "4.54.3"
 backend = "aqua:mikefarah/yq"
-specifiers = ["4.54.2"]
+specifiers = ["4.54.3"]
 
 [tools.yq."platforms.linux-arm64"]
-checksum = "sha256:bd44211dcd29a5f0eb701d4b7eb5ccd0cfff3bd3966cb4f7f9bd5b13701d997e"
-url = "https://github.com/mikefarah/yq/releases/download/v4.54.2/yq_linux_arm64"
-url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/715419591"
+checksum = "sha256:89f69310b61b68d1245065a1241d1fc843f7a36cd6103ffd77ad987613bd1b67"
+url = "https://github.com/mikefarah/yq/releases/download/v4.54.3/yq_linux_arm64"
+url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/726219924"
 provenance = "cosign"
 
 [tools.yq."platforms.linux-x64"]
-checksum = "sha256:44c7759059b4910827a0059a2757b22001e59360cdecdb2ef8dedc4b6c7e9f32"
-url = "https://github.com/mikefarah/yq/releases/download/v4.54.2/yq_linux_amd64"
-url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/715419583"
+checksum = "sha256:129534601871538efe0ba4c5e62a34fb1d5f469bcb975c4fddeb467d82974973"
+url = "https://github.com/mikefarah/yq/releases/download/v4.54.3/yq_linux_amd64"
+url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/726219936"
 provenance = "cosign"
 
 [tools.yq."platforms.macos-arm64"]
-checksum = "sha256:34923a7ca09a32a4257702ced5f7f2e5e83b16968cce3866f5ff830e4ce1cdd4"
-url = "https://github.com/mikefarah/yq/releases/download/v4.54.2/yq_darwin_arm64"
-url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/715419585"
+checksum = "sha256:a2aebb93b5bdcb61bb76f630e42a0ef6a3ee10842a6516cd7b9e4080786ec593"
+url = "https://github.com/mikefarah/yq/releases/download/v4.54.3/yq_darwin_arm64"
+url_api = "https://api.github.com/repos/mikefarah/yq/releases/assets/726219940"
 provenance = "cosign"
 
 [[tools.zizmor]]

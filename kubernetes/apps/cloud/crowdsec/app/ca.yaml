@@ -35,7 +35,7 @@ spec:
   ca:
     secretName: crowdsec-ca
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.14.0/pushsecret_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.15.0/pushsecret_v1alpha1.json
 # Home's crowdsec-ca Issuer reads this back
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
