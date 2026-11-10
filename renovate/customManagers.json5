@@ -49,17 +49,19 @@
       versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
     },
     {
-      // documentdb's extension versions are the image tag with the last dot dashed (image 1.0.0 -> extension 1.0-0)
+      // Pins track the extension's own releases (v1.0-0): the operator image tag doesn't encode
+      // it (image 1.0.1 is a gateway-only rebuild of extension 1.0-0). Gated on the image in groups.json5.
       description: "Detect CNPG Database CRD documentdb extension version pins",
       customType: "regex",
       managerFilePatterns: ["/(^|/)kubernetes/apps/.+\\.ya?ml$/"],
       matchStrings: [
-        '\\{name: (?<depType>documentdb(?:_core)?), ensure: present, version: "(?<major>\\d+)\\.(?<minor>\\d+)-(?<patch>\\d+)"\\}',
+        '\\{name: (?<depType>documentdb(?:_core)?), ensure: present, version: "(?<currentValue>\\d+\\.\\d+-\\d+)"\\}',
       ],
-      datasourceTemplate: "docker",
-      depNameTemplate: "ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb",
-      currentValueTemplate: "{{{major}}}.{{{minor}}}.{{{patch}}}",
-      autoReplaceStringTemplate: "{name: {{{depType}}}, ensure: present, version: \"{{{replace '^(\\d+\\.\\d+)\\.(\\d+)$' '$1-$2' newValue}}}\"}",
+      datasourceTemplate: "github-releases",
+      depNameTemplate: "documentdb/documentdb",
+      extractVersionTemplate: "^v(?<version>.+)$",
+      // RC tags (v1.0-RC2) don't match, so prereleases are never proposed
+      versioningTemplate: "regex:^(?<major>\\d+)\\.(?<minor>\\d+)-(?<patch>\\d+)$",
     },
     {
       // Pins follow the catalog's rolling `X.Y.Z-18-trixie` tags (not the timestamped rebuilds)

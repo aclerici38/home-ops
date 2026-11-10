@@ -214,6 +214,30 @@
       },
     },
     {
+      // The Database pins (documentdb_core + documentdb, 2 upgrades) may only move with the
+      // image that ships them (2 catalogs, 2 upgrades). Same asymmetric gate as ceph-csi-drivers:
+      // pins-only resolves to 3 > 2 and is skipped, image-only resolves to 1 and opens, both is
+      // 3 <= 4. Adding a third pin or catalog reference shifts these counts; re-check the 3.
+      // Still verify the image's documentdb.control default_version on the grouped PR: a rebuild
+      // of the old extension landing after a new extension release would also satisfy the gate.
+      description: "Tie documentdb extension pins to the documentdb image",
+      groupName: "documentdb",
+      matchDatasources: ["docker", "github-releases"],
+      matchPackageNames: [
+        "documentdb/documentdb",
+        "ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb",
+      ],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
+      description: "Gate documentdb extension pins on the image",
+      matchDatasources: ["github-releases"],
+      matchPackageNames: ["documentdb/documentdb"],
+      minimumGroupSize: 3,
+    },
+    {
       description: "Streamystats group",
       groupName: "Streamystats",
       matchPackageNames: ["/streamystats-nextjs/", "/streamystats-job-server/"],
