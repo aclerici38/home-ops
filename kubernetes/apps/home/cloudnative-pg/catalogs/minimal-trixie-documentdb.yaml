@@ -28,7 +28,7 @@ spec:
               value: $${image_root}/share/proj
         - name: documentdb
           image:
-            reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:1.0.0@sha256:6b2b014a754ca96ab0f028a1015bd735caa8eda0ec153e3e64dc5dab3ee83bf9
+            reference: ghcr.io/documentdb/documentdb-kubernetes-operator/documentdb:1.0.1@sha256:e848b1d09d2ec14f4f6e6b87e1f97d7292e43b98a67e7b61d7755e9b4ef06a94
           dynamic_library_path:
             - "lib"
           extension_control_path:
