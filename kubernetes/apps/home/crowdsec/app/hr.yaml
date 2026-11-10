@@ -34,6 +34,17 @@ spec:
       externalSecret:
         name: crowdsec-secrets
     config:
+      parsers:
+        s02-enrich:
+          # Item pages prefetch ~30 similar/cast lookups at once, tripping http-crawl-non_statics; 401 when unauthenticated
+          silo-whitelist.yaml: |-
+            name: custom/silo-whitelist
+            description: "Whitelist authenticated Silo catalog lookups"
+            filter: "evt.Meta.service == 'http' && evt.Meta.log_type in ['http_access-log', 'http_error-log']"
+            whitelist:
+              reason: "Silo catalog prefetch"
+              expression:
+                - evt.Meta.target_fqdn == 'silo.clerici.tech' && evt.Meta.http_verb == 'GET' && evt.Meta.http_status in ['200', '304'] && evt.Meta.http_path matches '^/api/v2/catalog/(items|people)/[^/?]+(\\?|$)'
       postoverflows:
         s01-whitelist:
           02-whitelist-cloud.yaml: |-
