@@ -50,6 +50,7 @@ spec:
               PROWLARR__LOG__ANALYTICSENABLED: "False"
               PROWLARR__LOG__LEVEL: info
               PROWLARR__SERVER__PORT: &port 9696
+              PROWLARR__SERVER__ALLOWEDHOSTS: prowlarr.clerici.tech,prowlarr.media,prowlarr.media.svc,prowlarr.media.svc.cluster.local
               PROWLARR__POSTGRES__MAINDBCONNECTIONSTRING:
                 valueFrom:
                   configMapKeyRef:
@@ -66,6 +67,9 @@ spec:
                   httpGet:
                     path: /ping
                     port: *port
+                    # Allowed Hosts rejects the pod-IP Host kubelet sends
+                    httpHeaders:
+                      - {name: Host, value: localhost}
               readiness: *probes
             securityContext: &containerSecurity
               allowPrivilegeEscalation: false
