@@ -113,6 +113,9 @@ spec:
     service:
       prowlarr:
         controller: prowlarr
+        annotations:
+          com.dashbrr.service.type: "prowlarr"
+          com.dashbrr.service.apikey: "$${PROWLARR_API_KEY}"
         ports:
           http:
             port: *port

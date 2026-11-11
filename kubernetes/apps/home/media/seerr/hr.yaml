@@ -82,6 +82,12 @@ spec:
     service:
       seerr:
         controller: seerr
+        # Route's first hostname is the seer.* alias
+        annotations:
+          com.dashbrr.service.type: "overseerr"
+          com.dashbrr.service.name: "Seerr"
+          com.dashbrr.service.apikey: "$${SEERR_API_KEY}"
+          com.dashbrr.service.access_url: "https://seerr.clerici.tech"
         ports:
           http:
             port: *port

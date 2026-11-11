@@ -22,23 +22,24 @@ spec:
   values:
     controllers:
       dashbrr:
-        initContainers:
-          seed:
-            image: &img
+        pod:
+          automountServiceAccountToken: true
+          labels:
+            dormammu.internal/apiserver-client: "true"
+        containers:
+          dashbrr:
+            image:
               repository: ghcr.io/autobrr/dashbrr
-              tag: v0.7.0@sha256:0a14f0b614e840e0157290d70abd753ea124a7af28769e79f11acbfc5db01cf0
-            command:
-              - sh
-              - -c
-              # `config import` has no --yes; it always prompts, and on closed
-              # stdin it reads "" and cancels. Existing services are skipped by
-              # URL, so re-running on every start is a no-op.
-              - |
-                set -eu
-                echo y | dashbrr config import /seed/services.yaml
-            env: &env
+              tag: v0.8.0@sha256:ce36626f51e4f7b2d7017c025c99faf2c41540209f21bb665a601d60c11ffffd
+            env:
               DASHBRR__LISTEN_ADDR: ":8080"
               DASHBRR__LOG_LEVEL: info
+              DASHBRR__ARR_IGNORED_HEALTH_CHECKS: DownloadClientRemovesCompletedDownloadsCheck
+              # Services come from com.dashbrr.service.* annotations; apikeys resolve from envFrom
+              DASHBRR__K8S_DISCOVERY_ENABLED: "true"
+              DASHBRR__K8S_DISCOVERY_NAMESPACES: media,silo,qbittorrent
+              DASHBRR__METRICS_ENABLED: "true"
+              DASHBRR__METRICS_LISTEN_ADDR: ":9075"
               DASHBRR__DB_TYPE: postgres
               DASHBRR__DB_DSN:
                 configMapKeyRef:
@@ -60,24 +61,18 @@ spec:
             envFrom:
               - secretRef:
                   name: dashbrr-service-keys
-            securityContext: &sec
+            securityContext:
               readOnlyRootFilesystem: true
               allowPrivilegeEscalation: false
               capabilities:
                 drop:
                   - ALL
-            resources: &res
+            resources:
               requests:
                 cpu: 10m
                 memory: 64Mi
               limits:
                 memory: 256Mi
-        containers:
-          dashbrr:
-            image: *img
-            env: *env
-            securityContext: *sec
-            resources: *res
             probes:
               liveness: &probes
                 enabled: true
@@ -101,6 +96,13 @@ spec:
         ports:
           http:
             port: *port
+          metrics:
+            port: 9075
+    serviceMonitor:
+      dashbrr:
+        serviceName: dashbrr
+        endpoints:
+          - port: metrics
     route:
       dashbrr:
         hostnames:
@@ -185,62 +187,5 @@ spec:
         defaultMode: 0440
         globalMounts:
           - path: /var/run/secrets/postgresql
-      seed:
-        type: configMap
-        name: dashbrr
-        advancedMounts:
-          dashbrr:
-            seed:
-              - path: /seed
-    configMaps:
-      config:
-        data:
-          services.yaml: |
-            ---
-            services:
-              sonarr:
-                - name: Sonarr
-                  url: http://sonarr.media.svc.cluster.local:8989
-                  access_url: https://sonarr.clerici.tech
-                  apikey: $${SONARR_API_KEY}
-                - name: Sonarr (raphael)
-                  url: http://sonarr-raphael.media.svc.cluster.local:8989
-                  access_url: https://sonarr-raphael.clerici.tech
-                  apikey: $${SONARR_RAPHAEL_API_KEY}
-              radarr:
-                - name: Radarr
-                  url: http://radarr.media.svc.cluster.local:7878
-                  access_url: https://radarr.clerici.tech
-                  apikey: $${RADARR_API_KEY}
-                - name: Radarr (raphael)
-                  url: http://radarr-raphael.media.svc.cluster.local:7878
-                  access_url: https://radarr-raphael.clerici.tech
-                  apikey: $${RADARR_RAPHAEL_API_KEY}
-              prowlarr:
-                - name: Prowlarr
-                  url: http://prowlarr.media.svc.cluster.local:9696
-                  access_url: https://prowlarr.clerici.tech
-                  apikey: $${PROWLARR_API_KEY}
-              bazarr:
-                - name: Bazarr
-                  url: http://bazarr.media.svc.cluster.local:6767
-                  access_url: https://bazarr.clerici.tech
-                  apikey: $${BAZARR_API_KEY}
-              jellyfin:
-                # silo's Jellyfin-compatible API
-                - name: Jellyfin
-                  url: http://silo.silo.svc.cluster.local:8096
-                  access_url: https://jellyfin.clerici.tech
-                  apikey: $${SILO_API_KEY}
-              overseerr:
-                - name: Seerr
-                  url: http://seerr.media.svc.cluster.local:5055
-                  access_url: https://seerr.clerici.tech
-                  apikey: $${SEERR_API_KEY}
-              # No qbittorrent type upstream
-              general:
-                - name: qBittorrent
-                  url: http://qbittorrent.qbittorrent.svc.cluster.local:8080/api/v2/transfer/info
-                  access_url: https://qbit.clerici.tech
   dependsOn:
     - name: dashbrr-resources

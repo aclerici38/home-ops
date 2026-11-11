@@ -200,6 +200,13 @@ spec:
     service:
       silo:
         controller: silo
+        # Jellyfin-compat API; inference would pick the http port and the silo.* route
+        annotations:
+          com.dashbrr.service.type: "jellyfin"
+          com.dashbrr.service.name: "Jellyfin"
+          com.dashbrr.service.url: "http://silo.silo.svc:8096"
+          com.dashbrr.service.apikey: "$${SILO_API_KEY}"
+          com.dashbrr.service.access_url: "https://jellyfin.clerici.tech"
         ports:
           http:
             port: *port

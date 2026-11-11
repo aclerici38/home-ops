@@ -125,6 +125,10 @@ spec:
     service:
       radarr-raphael:
         controller: radarr-raphael
+        annotations:
+          com.dashbrr.service.type: "radarr"
+          com.dashbrr.service.name: "Radarr (raphael)"
+          com.dashbrr.service.apikey: "$${RADARR_RAPHAEL_API_KEY}"
         ports:
           http:
             port: *port

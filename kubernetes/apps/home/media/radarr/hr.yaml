@@ -125,6 +125,9 @@ spec:
     service:
       radarr:
         controller: radarr
+        annotations:
+          com.dashbrr.service.type: "radarr"
+          com.dashbrr.service.apikey: "$${RADARR_API_KEY}"
         ports:
           http:
             port: *port

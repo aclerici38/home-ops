@@ -125,6 +125,10 @@ spec:
     service:
       sonarr-raphael:
         controller: sonarr-raphael
+        annotations:
+          com.dashbrr.service.type: "sonarr"
+          com.dashbrr.service.name: "Sonarr (raphael)"
+          com.dashbrr.service.apikey: "$${SONARR_RAPHAEL_API_KEY}"
         ports:
           http:
             port: *port

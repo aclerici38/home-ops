@@ -76,6 +76,9 @@ spec:
     service:
       bazarr:
         controller: bazarr
+        annotations:
+          com.dashbrr.service.type: "bazarr"
+          com.dashbrr.service.apikey: "$${BAZARR_API_KEY}"
         ports:
           http:
             port: *port
