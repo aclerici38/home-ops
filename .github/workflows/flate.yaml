@@ -38,10 +38,10 @@ jobs:
       contents: read
     strategy:
       matrix:
-        cluster:
-          - home
-          - cloud
-          - raphael
+        include:
+          - { cluster: home, arch: amd64 }
+          - { cluster: cloud, arch: arm64 }
+          - { cluster: raphael, arch: amd64 }
       fail-fast: false
     steps:
       - name: Checkout Pull Request Branch
@@ -57,6 +57,19 @@ jobs:
 
       - name: Run flate test
         run: flate test all --path ./kubernetes/flux/${{ matrix.cluster }}
+
+      - name: Check new images have linux/${{ matrix.arch }}
+        if: github.event_name == 'pull_request'
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          flate diff images --path ./kubernetes/flux/${{ matrix.cluster }} --base origin/main -o json --no-progress \
+            | jq -r '.[] | sub("^mirror.gcr.io/"; "docker.io/")' \
+            | while read -r img; do
+                docker buildx imagetools inspect --raw "$img" \
+                  | jq -e --arg a "$ARCH" '.manifests == null or any(.manifests[]; .platform.architecture == $a)' >/dev/null \
+                  || { echo "::error::$img has no linux/$ARCH manifest"; exit 1; }
+              done
 
   success:
     if: ${{ !cancelled() && github.event_name == 'pull_request' }}

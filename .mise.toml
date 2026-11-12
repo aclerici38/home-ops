@@ -25,9 +25,9 @@ EDITOR = "nvim"
 TALOSCONFIG = "{{ env.HOME }}/home-ops/talos/home/clusterconfig/talosconfig"
 ATUIN_SYNC_ADDRESS = "https://atuin.clerici.tech"
 FLATE_KUBE_VERSION = "{{ env.KUBE_VERSION }}"
-FLATE_API_VERSIONS = "cert-manager.io/v1,monitoring.coreos.com/v1,monitoring.coreos.com/v1alpha1,gateway.networking.k8s.io/v1,gateway.networking.k8s.io/v1beta1,grafana.integreatly.org/v1beta1,external-secrets.io/v1,volsync.backube/v1alpha1,snapshot.storage.k8s.io/v1"
-FLATE_ALLOW_MISSING_SECRETS = "true"
-FLATE_SKIP_CRDS = "false"
+FLATE_API_VERSIONS = "cert-manager.io/v1,monitoring.coreos.com/v1,monitoring.coreos.com/v1alpha1,gateway.networking.k8s.io/v1,gateway.networking.k8s.io/v1beta1,grafana.integreatly.org/v1beta1,external-secrets.io/v1,volsync.backube/v1alpha1,snapshot.storage.k8s.io/v1,gateway.networking.k8s.io/v1/HTTPRoute,cilium.io/v2/CiliumNetworkPolicy,monitoring.coreos.com/v1/ServiceMonitor,grafana.integreatly.org/v1beta1/GrafanaDashboard,admissionregistration.k8s.io/v1/ValidatingAdmissionPolicy,admissionregistration.k8s.io/v1/ValidatingAdmissionPolicyBinding,apiregistration.k8s.io/v1"
+FLATE_ALLOW_MISSING_KINDS = "Secret"
+FLATE_SKIP_KINDS = "Secret"
 
 [hooks]
 postinstall = "cd {{ env.HOME }}/home-ops 2>/dev/null || cd {{ config_root }}; lefthook install"

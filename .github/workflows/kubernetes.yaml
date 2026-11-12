@@ -83,10 +83,8 @@ jobs:
       # Each cluster renders from its own flux entrypoint so per-cluster
       # cluster-settings substitutions resolve correctly.
       - name: Render manifests
-        env:
-          FLATE_IS_UPGRADE: ${{ contains(github.event.pull_request.labels.*.name, 'upgrade') }}
         run: |
-          flate build all --path ./kubernetes/flux/${{ matrix.cluster }} --allow-missing-secrets -o yaml > /tmp/manifests.yaml
+          flate build all --path ./kubernetes/flux/${{ matrix.cluster }} -o yaml > /tmp/manifests.yaml
           echo "Rendered $(grep -c '^kind:' /tmp/manifests.yaml) document(s)"
 
       - name: Validate with kubeconform
