@@ -129,8 +129,18 @@ spec:
                   pods: 15
                 evictionLimits:
                   node: 2
+                # Also skip tuppr health-check targets: refilling a just-upgraded node stalls the next batch
                 evictableNamespaces:
-                  exclude: *excludedNamespaces
+                  exclude:
+                    - cilium
+                    - flux-system
+                    - kube-system
+                    - openebs-system
+                    - rook-ceph
+                    - tuppr
+                    - cloudnative-pg
+                    - omada-controller
+                    - pocket-id-operator
           plugins:
             balance:
               enabled:
