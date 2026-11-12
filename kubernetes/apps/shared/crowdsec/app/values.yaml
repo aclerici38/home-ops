@@ -27,6 +27,17 @@ data:
           labels:
             app.kubernetes.io/name: crowdsec
     config:
+      parsers:
+        s02-enrich:
+          # The bouncer's own 403s (bans, AppSec errors) otherwise feed 403-bf/http-probing and re-ban
+          ext-authz-whitelist.yaml: |-
+            name: custom/ext-authz-whitelist
+            description: "Drop requests the gateway bouncer denied itself"
+            filter: "evt.Meta.service == 'http' && evt.Meta.log_type == 'http_access-log'"
+            whitelist:
+              reason: "Own remediation"
+              expression:
+                - (evt.Unmarshaled.envoy?.response_code_details ?? '') startsWith 'ext_authz'
       postoverflows:
         s01-whitelist:
           01-whitelist-private.yaml: |-

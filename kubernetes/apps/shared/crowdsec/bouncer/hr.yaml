@@ -62,6 +62,7 @@ spec:
         apiKeySecretRef:
           name: crowdsec-secrets
           key: WAF_API_KEY
+        failOpen: true
       prometheus:
         enabled: true
         serviceMonitor:

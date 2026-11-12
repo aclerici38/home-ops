@@ -55,6 +55,19 @@ spec:
               cidr:
                 - "${CLOUD_NODE_V4_CIDR}"
                 - "${CLOUD_NODE_V6_CIDR}"
+    # Survive node drains (Talos upgrades); see pdb.yaml
+    appsec:
+      replicas: 2
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    k8s-app: crowdsec
+                    type: appsec
     agent:
       env:
         - name: COLLECTIONS

@@ -1,0 +1,13 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.2-standalone-strict/poddisruptionbudget-policy-v1.json
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: crowdsec-appsec
+spec:
+  minAvailable: 1
+  unhealthyPodEvictionPolicy: AlwaysAllow
+  selector:
+    matchLabels:
+      k8s-app: crowdsec
+      type: appsec
