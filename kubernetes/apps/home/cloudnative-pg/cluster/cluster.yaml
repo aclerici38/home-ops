@@ -12,6 +12,8 @@ spec:
       dormammu.internal/apiserver-client: "true"
   primaryUpdateStrategy: unsupervised
   primaryUpdateMethod: switchover
+  # Default 3600s: the final WAL archive hangs forever when versity (bonds-local) is drained alongside the primary
+  switchoverDelay: 120
   enablePDB: true
   affinity:
     podAntiAffinityType: preferred

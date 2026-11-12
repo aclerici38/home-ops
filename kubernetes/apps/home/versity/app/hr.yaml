@@ -24,8 +24,16 @@ spec:
   values:
     controllers:
       versity:
+        # DaemonSet so node drains skip it: pg18's final WAL archive needs S3 until the primary exits
+        type: daemonset
         strategy: RollingUpdate
+        rollingUpdate:
+          surge: 1
+          unavailable: 0
         pod:
+          # PV is bonds-local
+          nodeSelector:
+            kubernetes.io/hostname: bonds
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
