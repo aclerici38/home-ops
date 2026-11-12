@@ -6,6 +6,7 @@ redactions = ["ONEPASSWORD_*", "GITHUB_TOKEN"]
 [settings]
 experimental = true
 lockfile_platforms = ["linux-arm64", "linux-x64", "macos-arm64"]
+minimum_release_age = "3h"
 
 # home.nix points MISE_GLOBAL_CONFIG_FILE at this file, so it is both the
 # project config and the global one. mise loads it once, so {{ config_root }} is
