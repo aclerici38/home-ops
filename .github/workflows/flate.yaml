@@ -60,6 +60,7 @@ jobs:
 
       - name: Check new images have linux/${{ matrix.arch }}
         if: github.event_name == 'pull_request'
+        shell: bash
         env:
           ARCH: ${{ matrix.arch }}
         run: |
@@ -69,6 +70,7 @@ jobs:
                 docker buildx imagetools inspect --raw "$img" \
                   | jq -e --arg a "$ARCH" '.manifests == null or any(.manifests[]; .platform.architecture == $a)' >/dev/null \
                   || { echo "::error::$img has no linux/$ARCH manifest"; exit 1; }
+                echo "ok: $img"
               done
 
   success:
