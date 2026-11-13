@@ -37,6 +37,20 @@ spec:
       existingClaim: true
       ignoreRules:
         - /home-assistant_v2.db.corrupt.*
+    # hass-oidc-auth; public so HA never holds a secret the operator rotates
+    pocketId:
+      group: fam
+      name: Home Assistant
+      url: hass.clerici.tech
+      callbackPaths:
+        - /auth/oidc/callback
+      spec:
+        oidcClient:
+          isPublic: true
+          logo:
+            nameOverride: home-assistant
+          secret:
+            enabled: false
     machineTokens:
       llm:
         refreshInterval: 8030h
