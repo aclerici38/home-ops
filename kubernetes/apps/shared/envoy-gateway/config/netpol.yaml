@@ -20,7 +20,7 @@ spec:
             - {port: "10080", protocol: TCP}
             - {port: "10443", protocol: TCP}
   egress:
-    # Route backends, OIDC/JWKS Backends, ext_authz, ratelimit and xDS (all pods)
+    # Route backends, OIDC/JWKS Backends, ratelimit and xDS (all pods)
     - toEndpoints:
         - matchExpressions:
             - {key: 'k8s:io.kubernetes.pod.namespace', operator: Exists}

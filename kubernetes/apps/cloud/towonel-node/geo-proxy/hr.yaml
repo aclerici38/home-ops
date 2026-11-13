@@ -24,8 +24,7 @@ spec:
           # Owns the node's public :443/:80 and hands US clients to the towonel
           # edge on loopback with PROXY v2.
           hostNetwork: true
-          # Resolves the crowdsec bouncer Service
-          dnsPolicy: ClusterFirstWithHostNet
+          dnsPolicy: Default
           securityContext:
             runAsNonRoot: true
             runAsUser: 65532

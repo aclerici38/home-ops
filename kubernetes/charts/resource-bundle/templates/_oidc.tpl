@@ -14,9 +14,6 @@ targetRefs:
   - group: gateway.networking.k8s.io
     kind: HTTPRoute
     name: {{ dig "route" $app $o }}
-{{- /* Unset, a route policy replaces the Gateway's outright, dropping the
-       crowdsec-ext-auth ext_authz on the external gateway. */}}
-mergeType: StrategicMerge
 oidc:
   provider:
     issuer: {{ $issuer | quote }}

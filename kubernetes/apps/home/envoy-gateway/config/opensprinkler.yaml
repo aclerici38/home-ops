@@ -64,9 +64,6 @@ spec:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       name: opensprinkler
-  # Unset, a route policy replaces the Gateway's outright, dropping the
-  # crowdsec-ext-auth ext_authz on the external gateway.
-  mergeType: StrategicMerge
   basicAuth:
     users:
       name: opensprinkler
