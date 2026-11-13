@@ -192,8 +192,7 @@ spec:
               - name: cloud
                 cluster:
                   server: https://vps.clerici.tech:6443
-                  # update on a cloud CA roll
-                  certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJpVENDQVRDZ0F3SUJBZ0lSQU9XNzAvZDNZa0M5UU1hYkVjRVNlTll3Q2dZSUtvWkl6ajBFQXdJd0ZURVQKTUJFR0ExVUVDaE1LYTNWaVpYSnVaWFJsY3pBZUZ3MHlOakEyTVRZd05qSTROREJhRncwek5qQTJNVE13TmpJNApOREJhTUJVeEV6QVJCZ05WQkFvVENtdDFZbVZ5Ym1WMFpYTXdXVEFUQmdjcWhrak9QUUlCQmdncWhrak9QUU1CCkJ3TkNBQVJMOTBSY3BzZ2dkYVkxeVp6MThQYWMwbnNxYkh1RjdIcTl1MitDYXdPRVZjR0FYcXhFYTZmV2F0WSsKQ0pCMWo3YlFPcVVOK0lWQStQcllqZCtJZVRFNG8yRXdYekFPQmdOVkhROEJBZjhFQkFNQ0FvUXdIUVlEVlIwbApCQll3RkFZSUt3WUJCUVVIQXdFR0NDc0dBUVVGQndNQ01BOEdBMVVkRXdFQi93UUZNQU1CQWY4d0hRWURWUjBPCkJCWUVGQ2M5dmlZdURpdmNGc3hCTWRkYWhyNTR2eEdITUFvR0NDcUdTTTQ5QkFNQ0EwY0FNRVFDSUNwdXVVcnoKTm5LNXBmU2FRNGIrNFZkaTRocjFWM1VYbGNxYmxyKzlwaVphQWlBT0l2RmxvN0ZDS1gzdU5pcWVOdFAzeTBVMQpCZVhkTFl6NlpPZmRpYWwrVkE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+                  certificate-authority: /etc/kube/cloud-ca.crt
             users:
               - name: home
                 user:
@@ -201,6 +200,19 @@ spec:
               - name: cloud
                 user:
                   tokenFile: /etc/kube/cloud-token
+          # update on a cloud CA roll
+          cloud-ca.crt: |-
+            -----BEGIN CERTIFICATE-----
+            MIIBiTCCATCgAwIBAgIRAOW70/d3YkC9QMabEcESeNYwCgYIKoZIzj0EAwIwFTET
+            MBEGA1UEChMKa3ViZXJuZXRlczAeFw0yNjA2MTYwNjI4NDBaFw0zNjA2MTMwNjI4
+            NDBaMBUxEzARBgNVBAoTCmt1YmVybmV0ZXMwWTATBgcqhkjOPQIBBggqhkjOPQMB
+            BwNCAARL90RcpsggdaY1yZz18Pac0nsqbHuF7Hq9u2+CawOEVcGAXqxEa6fWatY+
+            CJB1j7bQOqUN+IVA+PrYjd+IeTE4o2EwXzAOBgNVHQ8BAf8EBAMCAoQwHQYDVR0l
+            BBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0O
+            BBYEFCc9viYuDivcFsxBMddahr54vxGHMAoGCCqGSM49BAMCA0cAMEQCICpuuUrz
+            NnK5pfSaQ4b+4Vdi4hr1V3UXlcqblr+9piZaAiAOIvFlo7FCKX3uNiqeNtP3y0U1
+            BeXdLYz6ZOfdial+VA==
+            -----END CERTIFICATE-----
     persistence:
       data:
         existingClaim: paseo
