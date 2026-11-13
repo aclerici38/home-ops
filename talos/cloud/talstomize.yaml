@@ -74,6 +74,7 @@ controlplanePatches:
   - "../global/cluster.yaml"
   - "../global/cluster-k8s.yaml"
   - "./patches/controller/etcd.yaml"
+  - "./patches/controller/authentication.yaml"
   - "../global/controller-machine-features.yaml"
 
 workerPatches: []

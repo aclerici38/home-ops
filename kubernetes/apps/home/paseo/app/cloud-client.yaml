@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/pocket-id-operator/0.16.2/pocketidapi_v1alpha1.json
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDAPI
+metadata:
+  name: cloud-kubernetes
+spec:
+  name: cloud kube-apiserver
+  resource: https://vps.clerici.tech:6443
+  # Unenforced, but the machineTokens request needs a scope
+  permissions:
+    - key: access
+      name: Access
+      description: Authenticate to the cloud cluster's apiserver
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/pocket-id-operator/0.16.2/pocketidoidcclient_v1alpha1.json
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: paseo-cloud
+spec:
+  name: paseo (cloud cluster)
+  clientID: paseo-cloud
+  accessTokenDurationMinutes: 120
+  clientSecretRotation:
+    enabled: true
+    interval: 24h
+  clientSecretOverlap: 1h
+  secret:
+    additionalLabels:
+      # ESO refuses to read a Secret for a Webhook generator without it.
+      external-secrets.io/type: webhook
+  apiAccess:
+    - apiRef:
+        name: cloud-kubernetes
+      clientPermissions:
+        - access

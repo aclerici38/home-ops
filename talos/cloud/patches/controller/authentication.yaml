@@ -1,0 +1,20 @@
+---
+apiVersion: v1alpha1
+kind: KubeAuthenticationConfig
+configuration:
+  # Replaces Talos' default wholesale, so its anonymous probes are repeated
+  anonymous:
+    enabled: true
+    conditions:
+      - path: /livez
+      - path: /readyz
+      - path: /healthz
+  jwt:
+    - issuer:
+        url: https://id.clerici.tech
+        audiences:
+          - https://vps.clerici.tech:6443
+      claimMappings:
+        username:
+          claim: sub
+          prefix: "pocket-id:"

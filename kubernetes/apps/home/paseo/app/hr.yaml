@@ -77,6 +77,7 @@ spec:
               <<: *mise
               PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/mise/bin:/home/paseo/.local/share/mise/shims
               SHELL: /bin/bash
+              KUBECONFIG: /etc/kube/config
               PASEO_HOSTNAMES: paseo.clerici.tech
               PASEO_TRUSTED_PROXIES: ${CLUSTER_POD_CIDR},${CLUSTER_POD_CIDR_V6}
               PASEO_RELAY_ENABLED: false
@@ -170,6 +171,36 @@ spec:
                   - {port: "10443", protocol: TCP}
           - toEntities:
               - world
+    configMaps:
+      kubeconfig:
+        forceRename: paseo-kubeconfig
+        data:
+          config: |-
+            apiVersion: v1
+            kind: Config
+            current-context: home
+            contexts:
+              - name: home
+                context: {cluster: home, user: home, namespace: paseo}
+              - name: cloud
+                context: {cluster: cloud, user: cloud}
+            clusters:
+              - name: home
+                cluster:
+                  server: https://kubernetes.default.svc
+                  certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              - name: cloud
+                cluster:
+                  server: https://vps.clerici.tech:6443
+                  # update on a cloud CA roll
+                  certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJpVENDQVRDZ0F3SUJBZ0lSQU9XNzAvZDNZa0M5UU1hYkVjRVNlTll3Q2dZSUtvWkl6ajBFQXdJd0ZURVQKTUJFR0ExVUVDaE1LYTNWaVpYSnVaWFJsY3pBZUZ3MHlOakEyTVRZd05qSTROREJhRncwek5qQTJNVE13TmpJNApOREJhTUJVeEV6QVJCZ05WQkFvVENtdDFZbVZ5Ym1WMFpYTXdXVEFUQmdjcWhrak9QUUlCQmdncWhrak9QUU1CCkJ3TkNBQVJMOTBSY3BzZ2dkYVkxeVp6MThQYWMwbnNxYkh1RjdIcTl1MitDYXdPRVZjR0FYcXhFYTZmV2F0WSsKQ0pCMWo3YlFPcVVOK0lWQStQcllqZCtJZVRFNG8yRXdYekFPQmdOVkhROEJBZjhFQkFNQ0FvUXdIUVlEVlIwbApCQll3RkFZSUt3WUJCUVVIQXdFR0NDc0dBUVVGQndNQ01BOEdBMVVkRXdFQi93UUZNQU1CQWY4d0hRWURWUjBPCkJCWUVGQ2M5dmlZdURpdmNGc3hCTWRkYWhyNTR2eEdITUFvR0NDcUdTTTQ5QkFNQ0EwY0FNRVFDSUNwdXVVcnoKTm5LNXBmU2FRNGIrNFZkaTRocjFWM1VYbGNxYmxyKzlwaVphQWlBT0l2RmxvN0ZDS1gzdU5pcWVOdFAzeTBVMQpCZVhkTFl6NlpPZmRpYWwrVkE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+            users:
+              - name: home
+                user:
+                  tokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              - name: cloud
+                user:
+                  tokenFile: /etc/kube/cloud-token
     persistence:
       data:
         existingClaim: paseo
@@ -192,6 +223,23 @@ spec:
         globalMounts:
           - path: /opt/mise/bin
             subPath: usr/local/bin
+      kube:
+        type: custom
+        volumeSpec:
+          projected:
+            sources:
+              - configMap:
+                  name: paseo-kubeconfig
+              - secret:
+                  name: paseo-cloud-token
+                  optional: true
+                  items:
+                    - {key: token, path: cloud-token}
+        advancedMounts:
+          paseo:
+            paseo:
+              - path: /etc/kube
+                readOnly: true
       tmp:
         type: emptyDir
       logs:
