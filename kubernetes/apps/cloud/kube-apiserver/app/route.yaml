@@ -1,0 +1,70 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.6.1/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: kube-apiserver
+spec:
+  hostnames:
+    - kube.cloud.clerici.tech
+  parentRefs:
+    - name: external
+      namespace: envoy-gateway
+      sectionName: https
+  rules:
+    - backendRefs:
+        - name: kubernetes
+          port: 443
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.6.1/backendtlspolicy_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+  name: kubernetes
+spec:
+  targetRefs:
+    - group: ""
+      kind: Service
+      name: kubernetes
+  validation:
+    caCertificateRefs:
+      - group: ""
+        kind: ConfigMap
+        name: kube-root-ca.crt
+    hostname: kubernetes.default.svc
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.10.0/securitypolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: kube-apiserver
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: kube-apiserver
+  jwt:
+    providers:
+      - name: pocket-id
+        issuer: https://id.clerici.tech
+        # Keep in sync with talos/cloud/patches/controller/authentication.yaml
+        audiences:
+          - https://vps.clerici.tech:6443
+          - kubectl
+        remoteJWKS:
+          uri: https://id.clerici.tech/.well-known/jwks.json
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.10.0/backendtrafficpolicy_v1alpha1.json
+# Replaces the gateway-wide policy: its compression and retries don't suit watch/exec streams
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: kube-apiserver
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: kube-apiserver
+  timeout:
+    http:
+      requestTimeout: 0s
