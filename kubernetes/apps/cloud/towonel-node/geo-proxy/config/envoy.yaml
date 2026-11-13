@@ -28,6 +28,11 @@ static_resources:
               address: "::"
               port_value: 443
       per_connection_buffer_limit_bytes: 32768
+      # Peek-only, for the logged SNI; the ClientHello still passes through untouched
+      listener_filters:
+        - name: envoy.filters.listener.tls_inspector
+          typed_config:
+            "@type": type.googleapis.com/envoy.extensions.filters.listener.tls_inspector.v3.TlsInspector
       # Blocked connections only
       access_log: &accessLog
         - name: envoy.access_loggers.stdout
@@ -42,7 +47,7 @@ static_resources:
             log_format:
               text_format_source:
                 inline_string: |
-                  blocked %DOWNSTREAM_REMOTE_ADDRESS% -> %DOWNSTREAM_LOCAL_ADDRESS% country=%FILTER_STATE(envoy.geoip:FIELD:country)%
+                  blocked %DOWNSTREAM_REMOTE_ADDRESS% -> %DOWNSTREAM_LOCAL_ADDRESS% country=%FILTER_STATE(envoy.geoip:FIELD:country)% sni=%REQUESTED_SERVER_NAME%
       filter_chains:
         - filters:
             - &geoip
