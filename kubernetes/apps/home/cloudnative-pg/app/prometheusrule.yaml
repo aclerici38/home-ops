@@ -4,7 +4,7 @@
 # clusters (job = <namespace>/<cluster>). Not carried over: disk space
 # (openebs-hostpath reports the node filesystem, not the PVC; node
 # alerts cover it), zone spread (no zones), logical replication (none).
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.95.1/prometheusrule_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/prometheus-operator/0.95.2/prometheusrule_v1.json
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
