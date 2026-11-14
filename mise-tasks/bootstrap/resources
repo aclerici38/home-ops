@@ -5,5 +5,5 @@
 #USAGE }
 set -euo pipefail
 source "${MISE_PROJECT_ROOT}/mise-tasks/lib/cluster.sh"
-select_cluster "$usage_cluster"
+select_cluster "$usage_cluster" admin
 mise run bootstrap:secrets "$KUBE_CONTEXT" "flux-system onepassword-connect kgateway"

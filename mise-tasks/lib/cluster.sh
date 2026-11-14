@@ -13,13 +13,15 @@ select_cluster() {
       ;;
   esac
   export KUBE_CONTEXT="admin@${CLUSTER_NAME}"
+  # cloud's apiserver is only public via Pocket ID (kube:oidc); bootstrap passes "admin" for a fresh cluster
+  if [[ "$CLUSTER" == cloud && "${2:-}" != admin ]]; then KUBE_CONTEXT=cloud; fi
   require_context "$KUBE_CONTEXT"
   export ROOT_DIR="${MISE_PROJECT_ROOT:-$(git rev-parse --show-toplevel)}"
 }
 
 require_context() {
   kubectl config get-contexts --output name | grep -qx "$1" || {
-    echo "ERROR: kube context '$1' not found; merge it first (mise run kube:talos $CLUSTER)" >&2
+    echo "ERROR: kube context '$1' not found; create it first (mise run kube:talos $CLUSTER, or kube:oidc for cloud)" >&2
     return 1
   }
   kubectl config use-context "$1" > /dev/null
