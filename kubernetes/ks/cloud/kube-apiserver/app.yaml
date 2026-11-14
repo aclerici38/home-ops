@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.0/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: kube-apiserver
+  namespace: flux-system
+spec:
+  targetNamespace: default
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kubernetes/apps/cloud/kube-apiserver/app
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: kube-apiserver

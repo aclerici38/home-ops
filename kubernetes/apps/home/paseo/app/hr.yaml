@@ -191,8 +191,7 @@ spec:
                   certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
               - name: cloud
                 cluster:
-                  server: https://vps.clerici.tech:6443
-                  certificate-authority: /etc/kube/cloud-ca.crt
+                  server: https://kube.cloud.clerici.tech
             users:
               - name: home
                 user:
@@ -200,19 +199,6 @@ spec:
               - name: cloud
                 user:
                   tokenFile: /etc/kube/cloud-token
-          # update on a cloud CA roll
-          cloud-ca.crt: |-
-            -----BEGIN CERTIFICATE-----
-            MIIBiTCCATCgAwIBAgIRAOW70/d3YkC9QMabEcESeNYwCgYIKoZIzj0EAwIwFTET
-            MBEGA1UEChMKa3ViZXJuZXRlczAeFw0yNjA2MTYwNjI4NDBaFw0zNjA2MTMwNjI4
-            NDBaMBUxEzARBgNVBAoTCmt1YmVybmV0ZXMwWTATBgcqhkjOPQIBBggqhkjOPQMB
-            BwNCAARL90RcpsggdaY1yZz18Pac0nsqbHuF7Hq9u2+CawOEVcGAXqxEa6fWatY+
-            CJB1j7bQOqUN+IVA+PrYjd+IeTE4o2EwXzAOBgNVHQ8BAf8EBAMCAoQwHQYDVR0l
-            BBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0O
-            BBYEFCc9viYuDivcFsxBMddahr54vxGHMAoGCCqGSM49BAMCA0cAMEQCICpuuUrz
-            NnK5pfSaQ4b+4Vdi4hr1V3UXlcqblr+9piZaAiAOIvFlo7FCKX3uNiqeNtP3y0U1
-            BeXdLYz6ZOfdial+VA==
-            -----END CERTIFICATE-----
     persistence:
       data:
         existingClaim: paseo

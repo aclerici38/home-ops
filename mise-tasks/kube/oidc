@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#MISE description="Add the cloud context to ~/.kube/config: Pocket ID login via kubelogin against kube.cloud.clerici.tech"
+set -euo pipefail
+
+kubectl config set-cluster cloud-oidc --server https://kube.cloud.clerici.tech > /dev/null
+kubectl config set-credentials pocket-id \
+  --exec-api-version client.authentication.k8s.io/v1 \
+  --exec-command kubelogin \
+  --exec-arg get-token \
+  --exec-arg --oidc-issuer-url=https://id.clerici.tech \
+  --exec-arg --oidc-client-id=kubectl \
+  --exec-arg --oidc-extra-scope=groups \
+  --exec-interactive-mode IfAvailable > /dev/null
+kubectl config set-context cloud --cluster cloud-oidc --user pocket-id > /dev/null
+echo "==> added context 'cloud'; first use opens a Pocket ID login"

@@ -9,12 +9,18 @@ configuration:
       - path: /livez
       - path: /readyz
       - path: /healthz
+  # The apiserver allows one authenticator per issuer, so paseo's and kubelogin's audiences share it
   jwt:
     - issuer:
         url: https://id.clerici.tech
         audiences:
           - https://vps.clerici.tech:6443
+          - kubectl
+        audienceMatchPolicy: MatchAny
       claimMappings:
         username:
           claim: sub
+          prefix: "pocket-id:"
+        groups:
+          claim: groups
           prefix: "pocket-id:"
