@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.6.1/httproute_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.7.0/httproute_v1.json
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -16,7 +16,7 @@ spec:
         - name: kubernetes
           port: 443
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.6.1/backendtlspolicy_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/gateway-api/1.7.0/backendtlspolicy_v1.json
 apiVersion: gateway.networking.k8s.io/v1
 kind: BackendTLSPolicy
 metadata:
