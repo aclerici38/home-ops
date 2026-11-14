@@ -5,8 +5,8 @@
   fetchurl,
 }:
 let
-  version = "v0.10.17";
-  sha256 = "eb8c0adf1716c085ad9fd64cac905deb841e662a609eb12c77c914324464adf0";
+  version = "v0.10.18";
+  sha256 = "ceeaabdc6caf92216f9a4ef9c1128d3309e809e4e951992975f3656c5753b95a";
 in
 stdenvNoCC.mkDerivation {
   pname = "llmkube-metal-agent";
