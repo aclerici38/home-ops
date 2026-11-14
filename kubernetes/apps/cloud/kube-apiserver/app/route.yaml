@@ -55,7 +55,6 @@ spec:
           uri: https://id.clerici.tech/.well-known/jwks.json
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/envoy-gateway/1.10.0/backendtrafficpolicy_v1alpha1.json
-# Replaces the gateway-wide policy: its compression and retries don't suit watch/exec streams
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: BackendTrafficPolicy
 metadata:
@@ -65,6 +64,6 @@ spec:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       name: kube-apiserver
-  timeout:
-    http:
-      requestTimeout: 0s
+  mergeType: StrategicMerge
+  # The apiserver negotiates h2, which can't carry exec/port-forward WebSocket upgrades
+  useClientProtocol: true
