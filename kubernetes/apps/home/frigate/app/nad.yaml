@@ -19,6 +19,12 @@ spec:
           "ipam": {
             "type": "static"
           }
+        },
+        {
+          "type": "tuning",
+          "sysctl": {
+            "net.ipv6.conf.IFNAME.accept_ra_defrtr": "0"
+          }
         }
       ]
     }
