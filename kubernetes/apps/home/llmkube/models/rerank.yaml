@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.17/model_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.18/model_v1alpha1.json
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: Model
 metadata:
@@ -25,7 +25,7 @@ spec:
     cpu: "1"
     memory: 4Gi
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.17/inferenceservice_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/llmkube/0.10.18/inferenceservice_v1alpha1.json
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: InferenceService
 metadata:
@@ -35,7 +35,7 @@ spec:
   runtime: llamacpp
   mode: rerank
   replicas: 1
-  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b12375@sha256:f885c1137a997b318eede280b76b3f35cb84b757c218f41480a33be2b129b8a9
+  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b12407@sha256:8af21639d085883fe5147a25a2ee29ce38302d950faa7e42355556d9f9a5af6c
 
   # This one is a BERT-style encoder with non-causal attention, so the whole
   # sequence has to fit in a single micro-batch — uBatchSize is a hard ceiling
