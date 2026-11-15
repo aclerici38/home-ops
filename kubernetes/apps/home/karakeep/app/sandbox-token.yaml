@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.15.0/password_v1alpha1.json
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: Password
+metadata:
+  name: karakeep-sandbox-token
+spec:
+  length: 64
+  digits: 10
+  symbols: 0
+  noUpper: false
+  allowRepeat: true
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/external-secrets/2.15.0/externalsecret_v1.json
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: karakeep-sandbox
+  labels:
+    dormammu.internal/component: external-secret
+spec:
+  refreshPolicy: OnChange
+  target:
+    name: karakeep-sandbox
+    template:
+      engineVersion: v2
+      data:
+        SANDBOX_REMOTE_TOKEN: "{{ .password }}"
+  dataFrom:
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: Password
+          name: karakeep-sandbox-token

@@ -24,19 +24,26 @@ spec:
       karakeep:
         containers:
           karakeep:
-            image:
+            image: &image
               repository: ghcr.io/karakeep-app/karakeep
               tag: 0.35.0@sha256:6f7d32ef296ddf1fc7c67ff56b8a201b7006a6a47b92b202afee1338841b353d
             env:
-              BROWSER_WEB_URL: http://karakeep-chrome:9222
-              CRAWLER_DOWNLOAD_BANNER_IMAGE: true
-              CRAWLER_ENABLE_ADBLOCKER: true
-              CRAWLER_STORE_SCREENSHOT: true
+              <<: &crawlerEnv
+                CRAWLER_DOWNLOAD_BANNER_IMAGE: true
+                CRAWLER_ENABLE_ADBLOCKER: true
+                CRAWLER_STORE_SCREENSHOT: true
+              # Crawling, video and asset parsing run in the sandbox
+              SANDBOX_REMOTE_URL: http://karakeep-sandbox:4000
+              SANDBOX_REMOTE_TOKEN: &sandboxToken
+                secretKeyRef:
+                  name: karakeep-sandbox
+                  key: SANDBOX_REMOTE_TOKEN
               DATA_DIR: /data
               MEILI_ADDR: http://karakeep-meilisearch:7700
               NEXTAUTH_URL: https://karakeep.clerici.tech
               DISABLE_NEW_RELEASE_CHECK: true
-              COREPACK_INTEGRITY_KEYS: 0
+              AUTH_TRUSTED_ORIGINS: https://karakeep.clerici.tech
+              RATE_LIMITING_ENABLED: true
               NEXTAUTH_SECRET:
                 secretKeyRef:
                   name: karakeep
@@ -83,6 +90,33 @@ spec:
                 cpu: 10m
               limits:
                 memory: 1Gi
+      sandbox:
+        containers:
+          sandbox:
+            image: *image
+            command:
+              - node
+              - dist/index.js
+            workingDir: /app/apps/workers
+            env:
+              <<: *crawlerEnv
+              SANDBOX_REMOTE_SERVER_ENABLED: true
+              SANDBOX_REMOTE_TOKEN: *sandboxToken
+              BROWSER_WEB_URL: http://karakeep-chrome:9222
+              DATA_DIR: /tmp
+              WORKERS_HOST: 0.0.0.0
+              WORKERS_PORT: &sandboxPort 4000
+            securityContext: *sec
+            probes:
+              liveness: &sandboxProbes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: *sandboxPort
+                    path: /health
+              readiness: *sandboxProbes
+            resources: *res
       chrome:
         containers:
           chrome:
@@ -151,6 +185,11 @@ spec:
         ports:
           http:
             port: *port
+      sandbox:
+        controller: sandbox
+        ports:
+          http:
+            port: *sandboxPort
       chrome:
         controller: chrome
         ports:
@@ -186,18 +225,34 @@ spec:
             toPorts:
               - ports:
                   - {port: "3000", protocol: TCP}
+        # No world egress; RSS feeds, webhooks or AI providers would need it
+        egress:
+          - toControllers:
+              - sandbox
+            toPorts:
+              - ports:
+                  - {port: "4000", protocol: TCP}
+          - toControllers:
+              - meilisearch
+            toPorts:
+              - ports:
+                  - {port: "7700", protocol: TCP}
+      sandbox:
+        type: cilium
+        controller: sandbox
+        ingress:
+          - fromControllers:
+              - karakeep
+            toPorts:
+              - ports:
+                  - {port: "4000", protocol: TCP}
         egress:
           - toControllers:
               - chrome
             toPorts:
               - ports:
                   - {port: "9222", protocol: TCP}
-          - toControllers:
-              - meilisearch
-            toPorts:
-              - ports:
-                  - {port: "7700", protocol: TCP}
-          # Link metadata, banner images, feeds, adblock lists
+          # Link metadata, banner images, adblock lists
           - toEntities:
               - world
             toPorts:
@@ -213,7 +268,7 @@ spec:
         controller: chrome
         ingress:
           - fromControllers:
-              - karakeep
+              - sandbox
             toPorts:
               - ports:
                   - {port: "9222", protocol: TCP}
