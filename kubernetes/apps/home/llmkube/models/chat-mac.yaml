@@ -3,12 +3,12 @@
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: Model
 metadata:
-  name: qwen3-14b
+  name: gpt-oss-20b
 spec:
-  source: https://huggingface.co/bartowski/Qwen_Qwen3-14B-GGUF/resolve/main/Qwen_Qwen3-14B-Q4_K_M.gguf
+  source: https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/main/gpt-oss-20b-MXFP4.gguf
   format: gguf
-  sha256: 915913e22399475dbe6c968ac014d9f1fbe08975e489279aede9d5c7b2c98eb6
-  quantization: Q4_K_M
+  sha256: 27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901
+  quantization: MXFP4
   hardware:
     # Served by the Mac mini's metal-agent (nix-config/mac-mini)
     accelerator: metal
@@ -20,21 +20,15 @@ spec:
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: InferenceService
 metadata:
-  name: qwen3-14b
+  name: gpt-oss-20b
 spec:
-  modelRef: qwen3-14b
+  modelRef: gpt-oss-20b
   runtime: llamacpp
   mode: chat
   replicas: 1
-  # ~8.4 GiB weights + ~5.3 GiB q8_0 KV, inside the agent's ~16 GiB budget.
-  # Hermes refuses <64K; YaRN 2x past the 32768 training context, slots share it via --kv-unified
+  # ~11.3 GiB weights + 3 GiB f16 KV (the agent charges every layer; half are 128-token
+  # sliding window), inside its ~16 GiB budget. Hermes needs >=64K; 128K is native
   contextSize: 65536
-  ropeScaling:
-    type: yarn
-    factor: "2.0"
-    originalContext: 32768
-  cacheTypeK: q8_0
-  cacheTypeV: q8_0
   parallelSlots: 2
   flashAttention: true
   jinja: true
@@ -43,5 +37,10 @@ spec:
     - --kv-unified
     - --cache-ram
     - "2048"
-    - --reasoning-budget
+    # OpenAI's recommended gpt-oss sampling
+    - --temp
+    - "1.0"
+    - --top-p
+    - "1.0"
+    - --top-k
     - "0"

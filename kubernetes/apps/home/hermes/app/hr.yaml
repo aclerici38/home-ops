@@ -62,6 +62,8 @@ spec:
               # Loopback only; the gateway's own cron/control plane uses it
               API_SERVER_ENABLED: true
               SEARXNG_URL: http://searxng.searxng.svc.cluster.local:8080
+              # Socket read; the remote default (120s) can expire mid-prefill
+              HERMES_STREAM_READ_TIMEOUT: 1800
             securityContext: *sec
             probes:
               liveness: &probes
@@ -160,7 +162,7 @@ spec:
           config.yaml: |-
             model:
               provider: custom:llm
-              default: qwen3-14b
+              default: gpt-oss-20b
             providers:
               llm:
                 name: Home LLM gateway
@@ -168,10 +170,16 @@ spec:
                 transport: chat_completions
                 # Pocket ID machine token, re-read as ESO rotates the Secret
                 key_cmd: cat /etc/hermes-secrets/llm/token
+                # Hermes only lifts its timeouts for local-looking hostnames; a cold ~13K-token
+                # prefill on the Mac can run a minute or more with no output
+                stale_timeout_seconds: 900
                 models:
-                  # The AI gateway's /v1/models has no context metadata
-                  qwen3-14b:
+                  # Catalogs advertise gpt-oss's native 131072; the server holds 65536
+                  gpt-oss-20b:
                     context_length: 65536
+            auxiliary:
+              title_generation:
+                timeout: 180
             timezone: ${TZ}
             terminal:
               backend: local
