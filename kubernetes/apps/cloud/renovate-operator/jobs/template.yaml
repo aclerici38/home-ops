@@ -10,8 +10,20 @@ spec:
   renovateConfig:
     inline: |
       module.exports = {
-        allowedCommands: ['pnpm run bundle'],
+        allowedCommands: ['pnpm run bundle', '^mise lock --upgrade$'],
         allowedUnsafeExecutions: ['mise'],
+        packageRules: [
+          {
+            matchManagers: ['mise'],
+            postUpgradeTasks: {
+              commands: ['mise lock --upgrade'],
+              executionMode: 'branch',
+              installTools: { mise: {} },
+              // Format upgrades can also generate native dependency sidecars.
+              fileFilters: ['**/mise.lock', '**/.mise/locks/**'],
+            },
+          },
+        ],
         customEnvVariables: {
           MISE_TRUSTED_CONFIG_PATHS: '/tmp/repos',
         },
