@@ -161,8 +161,8 @@ spec:
         data:
           config.yaml: |-
             model:
-              provider: custom:llm
-              default: gpt-oss-20b
+              provider: openai-codex
+              default: gpt-6.1-sol
             providers:
               llm:
                 name: Home LLM gateway
@@ -177,9 +177,6 @@ spec:
                   # Catalogs advertise gpt-oss's native 131072; the server holds 65536
                   gpt-oss-20b:
                     context_length: 65536
-            auxiliary:
-              title_generation:
-                timeout: 180
             timezone: ${TZ}
             terminal:
               backend: local
