@@ -357,7 +357,11 @@ spec:
               - ports:
                   - {port: "8080", protocol: TCP}
         egress:
-          - {}
+          - toControllers:
+              - silo
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
       meilisearch:
         type: cilium
         controller: meilisearch
