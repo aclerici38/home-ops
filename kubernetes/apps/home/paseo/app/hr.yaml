@@ -50,7 +50,7 @@ spec:
                 mkdir -p /home/paseo/.config/mise
                 cp /etc/home-ops/.mise.toml /home/paseo/.config/mise/config.toml
                 cp /etc/home-ops/mise.lock /home/paseo/.config/mise/mise.lock
-                exec /opt/mise/bin/mise install claude-code gh
+                exec /opt/mise/bin/mise install claude-code codex gh
             env:
               <<: &mise
                 KUBE_VERSION: ${KUBE_VERSION}
