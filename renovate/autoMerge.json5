@@ -244,8 +244,6 @@
       matchDatasources: ["docker"],
       matchPackageNames: ["ghcr.io/jdx/mise"],
       matchUpdateTypes: ["major", "minor", "patch"],
-      // Matches the mise manager's, so the image and CLI land the same night
-      minimumReleaseAge: "3 hours",
       groupName: "automerge",
       additionalBranchPrefix: "",
       minimumGroupSize: 1,
@@ -259,9 +257,11 @@
       },
     },
     {
-      // Keep last to override `minimumGroupSize: 1`
-      description: ["Don't bump the mise CLI or its image alone"],
+      // Keep last to override the mise manager's release age and earlier group sizes.
+      // GHCR does not supply release timestamps for the mise image.
+      description: ["Exempt mise CLI and image from release-age checks and keep them grouped"],
       matchDepNames: ["aqua:jdx/mise", "ghcr.io/jdx/mise"],
+      minimumReleaseAge: "0 days",
       minimumGroupSize: 2,
     },
   ],
