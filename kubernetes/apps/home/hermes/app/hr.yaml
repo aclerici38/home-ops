@@ -1,0 +1,241 @@
+---
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.0/helmrelease_v2.json?values=app-template/5.3.0
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hermes
+spec:
+  interval: 1h
+  maxHistory: 1
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  install:
+    timeout: 5m
+    remediation:
+      retries: 1
+  upgrade:
+    timeout: 5m
+    remediation:
+      retries: 1
+  dependsOn:
+    - name: hermes-resources
+  values:
+    controllers:
+      hermes:
+        pod:
+          hostUsers: false
+          securityContext:
+            # The image's baked hermes uid; its entrypoint exits on any other non-root uid
+            runAsUser: 10000
+            runAsGroup: 10000
+            runAsNonRoot: true
+            fsGroup: 10000
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: {type: RuntimeDefault}
+        initContainers:
+          # HERMES_HOME must be owned by the gateway uid, and a volume root is root-owned
+          home:
+            image: &image
+              repository: mirror.gcr.io/nousresearch/hermes-agent
+              tag: v0.23.1@sha256:276d44685c65c0cb2a25f190b63c65c8906f9dc76486fb1c05ae71b5826bda08
+            command:
+              - "mkdir"
+              - "-p"
+              - "/pvc/hermes"
+            securityContext: &sec
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+        containers:
+          hermes:
+            image: *image
+            # The image's default CMD is the interactive CLI, which exits without a TTY
+            args:
+              - "gateway"
+              - "run"
+            env:
+              S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES: 1
+              HERMES_MANAGED_DIR: /etc/hermes-managed
+              HERMES_DASHBOARD: 1
+              # Loopback only; the gateway's own cron/control plane uses it
+              API_SERVER_ENABLED: true
+              SEARXNG_URL: http://searxng.searxng.svc.cluster.local:8080
+            securityContext: *sec
+            probes:
+              liveness: &probes
+                enabled: true
+                type: HTTP
+                path: /api/status
+                port: &dashboard 9119
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 4Gi
+    service:
+      hermes:
+        controller: hermes
+        ports:
+          webapp:
+            port: &webapp 9120
+          dashboard:
+            port: *dashboard
+    route:
+      hermes:
+        hostnames:
+          - hermes.clerici.tech
+        parentRefs:
+          - name: trusted
+            namespace: envoy-gateway
+        rules:
+          - backendRefs:
+              - identifier: hermes
+                port: *webapp
+      dashboard:
+        hostnames:
+          - hermes-dashboard.clerici.tech
+        parentRefs:
+          - name: trusted
+            namespace: envoy-gateway
+        rules:
+          - backendRefs:
+              - identifier: hermes
+                port: *dashboard
+    networkpolicies:
+      hermes:
+        type: cilium
+        controller: hermes
+        # DNS from the baseline CCNP, OIDC from hermes-pocket-id
+        ingress:
+          - fromEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
+            toPorts:
+              - ports:
+                  - {port: "9119", protocol: TCP}
+                  - {port: "9120", protocol: TCP}
+        egress:
+          # llm.clerici.tech via the trusted Gateway LB IP
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: envoy-gateway
+                  gateway.envoyproxy.io/owning-gateway-name: trusted
+            toPorts:
+              - ports:
+                  - {port: "10443", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: searxng
+                  app.kubernetes.io/instance: searxng
+            toPorts:
+              - ports:
+                  - {port: "8080", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: browserless
+                  app.kubernetes.io/instance: browserless
+            toPorts:
+              - ports:
+                  - {port: "3000", protocol: TCP}
+          # Web extract, STT/skill downloads
+          - toEntities:
+              - world
+            toPorts:
+              - ports:
+                  - {port: "80", protocol: TCP}
+                  - {port: "443", protocol: TCP}
+        egressDeny:
+          # Keep the LAN out of reach (SSRF)
+          - toCIDRSet:
+              - cidrGroupRef: private-networks
+    configMaps:
+      managed:
+        # Managed scope: pinned keys beat /opt/data/config.yaml and are read-only to the agent
+        data:
+          config.yaml: |-
+            model:
+              provider: custom:llm
+              default: qwen3-14b
+            providers:
+              llm:
+                name: Home LLM gateway
+                api: https://llm.clerici.tech/v1
+                transport: chat_completions
+                # Pocket ID machine token, re-read as ESO rotates the Secret
+                key_cmd: cat /etc/hermes-secrets/llm/token
+                models:
+                  # The AI gateway's /v1/models has no context metadata
+                  qwen3-14b:
+                    context_length: 65536
+            timezone: ${TZ}
+            terminal:
+              backend: local
+            browser:
+              # The image's Chromium is left unused; timeout lifts browserless's 60s session cap
+              cdp_url: ws://browserless.browserless.svc.cluster.local:3000/chromium?timeout=600000
+              # Otherwise LAN URLs fall back to launching the bundled Chromium
+              auto_local_for_private_urls: false
+            web:
+              search_backend: searxng
+            dashboard:
+              public_url: https://hermes-dashboard.clerici.tech
+              # Envoy pods; the netpol admits nothing else
+              trusted_proxies:
+                - ${CLUSTER_POD_CIDR}
+                - ${CLUSTER_POD_CIDR_V6}
+              oauth:
+                provider: self-hosted
+                self_hosted:
+                  issuer: https://id.clerici.tech
+                  client_id: hermes
+            webapp:
+              enabled: true
+              host: 0.0.0.0
+              port: 9120
+              public_url: https://hermes.clerici.tech
+            security:
+              redact_secrets: true
+            approvals:
+              mode: smart
+            # Image-managed; Renovate bumps it
+            updates:
+              check: false
+            telemetry:
+              shared_metrics:
+                enabled: false
+                send: false
+    persistence:
+      data:
+        existingClaim: hermes
+        advancedMounts:
+          hermes:
+            home:
+              - path: /pvc
+            hermes:
+              - path: /opt/data
+                subPath: hermes
+      managed:
+        type: configMap
+        identifier: managed
+        globalMounts:
+          - path: /etc/hermes-managed
+            readOnly: true
+      llm-token:
+        type: secret
+        name: hermes-llm-token
+        globalMounts:
+          - path: /etc/hermes-secrets/llm
+            readOnly: true
+      run:
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 64Mi
+        globalMounts:
+          - path: /run
+      tmp:
+        type: emptyDir
