@@ -14,7 +14,9 @@ spec:
         allowedUnsafeExecutions: ['mise'],
         packageRules: [
           {
-            matchManagers: ['mise'],
+            // Upgrade formats only when mise itself changes, including CI pins
+            // and the container image, rather than every managed tool.
+            matchPackageNames: ['jdx/mise', 'ghcr.io/jdx/mise'],
             postUpgradeTasks: {
               commands: ['mise lock --upgrade'],
               executionMode: 'branch',
