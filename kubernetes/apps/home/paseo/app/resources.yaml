@@ -55,3 +55,11 @@ spec:
         refreshInterval: 1h
         data:
           token: "{{ .access_token }}"
+        spec:
+          externalSecret:
+            target:
+              template:
+                metadata:
+                  # kubectl re-reads tokenFile from the projected mount; rolling hourly is pointless
+                  annotations:
+                    reloader.stakater.com/ignore: "true"
