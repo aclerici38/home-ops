@@ -35,15 +35,19 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile: {type: RuntimeDefault}
         initContainers:
-          # HERMES_HOME must be owned by the gateway uid, and a volume root is root-owned
+          # HERMES_HOME must be owned by the gateway uid, and a volume root is root-owned.
+          # Hermes only scans HERMES_HOME/plugins, so repo plugins are copied in on each start.
           home:
             image: &image
               repository: mirror.gcr.io/nousresearch/hermes-agent
               tag: v0.23.1@sha256:276d44685c65c0cb2a25f190b63c65c8906f9dc76486fb1c05ae71b5826bda08
             command:
-              - "mkdir"
-              - "-p"
-              - "/pvc/hermes"
+              - "sh"
+              - "-ec"
+              - |
+                dst=/pvc/hermes/plugins/web-tika
+                rm -rf "$dst" && mkdir -p "$dst"
+                cp -L /plugin-src/web-tika/* "$dst"/
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -62,6 +66,7 @@ spec:
               # Loopback only; the gateway's own cron/control plane uses it
               API_SERVER_ENABLED: true
               SEARXNG_URL: http://searxng.searxng.svc.cluster.local:8080
+              TIKA_SERVER_URL: http://tika.tika.svc.cluster.local:9998
               # Socket read; the remote default (120s) can expire mid-prefill
               HERMES_STREAM_READ_TIMEOUT: 1800
             securityContext: *sec
@@ -139,6 +144,13 @@ spec:
                   - {port: "8080", protocol: TCP}
           - toEndpoints:
               - matchLabels:
+                  k8s:io.kubernetes.pod.namespace: tika
+                  app.kubernetes.io/instance: tika
+            toPorts:
+              - ports:
+                  - {port: "9998", protocol: TCP}
+          - toEndpoints:
+              - matchLabels:
                   k8s:io.kubernetes.pod.namespace: browserless
                   app.kubernetes.io/instance: browserless
             toPorts:
@@ -187,6 +199,13 @@ spec:
               auto_local_for_private_urls: false
             web:
               search_backend: searxng
+              # plugins/web-tika: fetched here behind the SSRF guard, parsed by Tika
+              extract_backend: tika
+              # Default 120s cuts off OCR of long scans
+              extract_timeout: 600
+            plugins:
+              enabled:
+                - web-tika
             dashboard:
               public_url: https://hermes-dashboard.clerici.tech
               # Envoy pods; the netpol admits nothing else
@@ -224,6 +243,14 @@ spec:
             hermes:
               - path: /opt/data
                 subPath: hermes
+      plugin-web-tika:
+        type: configMap
+        name: hermes-plugin-web-tika
+        advancedMounts:
+          hermes:
+            home:
+              - path: /plugin-src/web-tika
+                readOnly: true
       managed:
         type: configMap
         identifier: managed
