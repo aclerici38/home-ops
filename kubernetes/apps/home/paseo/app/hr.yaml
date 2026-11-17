@@ -40,7 +40,7 @@ spec:
           tools:
             image: &image
               repository: ghcr.io/getpaseo/paseo
-              tag: 0.16.0@sha256:13fa2676fa9706ec7096be080e33722bedf6cbc036f22b91d88b44e85506bdc8
+              tag: 0.16.1@sha256:e18728682ed3edb1c032df1e8423d4ec5ff2415bd73651f2db0abdeabdb4d072
             # Copy the repo's mise config to the default global path (writable, so mise
             # can relock it), refreshed every start to pick up bumps; works without a checkout
             command:
