@@ -36,6 +36,8 @@ spec:
       plugin_admin_enabled: "false"
       # Advisor + Logs/Traces/Profiles/Metrics Drilldown apps from grafana.com
       preinstall_disabled: "true"
+      # else retries grafana.com/api/plugins/ci/keys forever; uses bundled key
+      public_key_retrieval_disabled: "true"
     security:
       angular_support_enabled: "true"
       disable_gravatar: "true"
