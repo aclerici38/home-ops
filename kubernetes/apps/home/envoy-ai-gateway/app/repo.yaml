@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.0/ocirepository_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.1/ocirepository_v1.json
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
@@ -14,7 +14,7 @@ spec:
     digest: sha256:004cd58131089420b3f03e8610fe28231cdebccd9971164c3dba5dbb43615641
   url: oci://mirror.gcr.io/envoyproxy/ai-gateway-crds-helm
 ---
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.0/ocirepository_v1.json
+# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.1/ocirepository_v1.json
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:

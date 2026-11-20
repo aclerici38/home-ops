@@ -49,26 +49,17 @@ url_api = "https://api.github.com/repos/FiloSottile/age/releases/assets/53554189
 provenance = "github-attestations"
 
 [[tools."aqua:jdx/mise"]]
-version = "v2026.11.10"
+version = "v2026.11.11"
 backend = "aqua:jdx/mise"
-specifiers = ["v2026.11.10"]
+specifiers = ["v2026.11.11"]
 
 [tools."aqua:jdx/mise"."platforms.linux-arm64"]
-checksum = "sha256:3efbddd8b386f7b08f458bb7f6be5a098f235e4192a62ae9fca13c57ecff0a79"
-url = "https://github.com/jdx/mise/releases/download/v2026.11.10/mise-v2026.11.10-linux-arm64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/763801947"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.linux-x64"]
-checksum = "sha256:d281de4697f99dcb4192b74c5c2a023d0a6f36a8a04adc304b4b93693c65db61"
-url = "https://github.com/jdx/mise/releases/download/v2026.11.10/mise-v2026.11.10-linux-x64-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/763802580"
 provenance = "minisign"
 
 [tools."aqua:jdx/mise"."platforms.macos-arm64"]
-checksum = "sha256:0ff163f78007130393ed5303aad06bc5e793c0bd298bc77eeb5913a3748e1922"
-url = "https://github.com/jdx/mise/releases/download/v2026.11.10/mise-v2026.11.10-macos-arm64.tar.gz"
-url_api = "https://api.github.com/repos/jdx/mise/releases/assets/763802982"
 provenance = "minisign"
 
 [[tools."aqua:nklmilojevic/sofka"]]
@@ -95,60 +86,60 @@ url = "https://github.com/nklmilojevic/sofka/releases/download/v0.37.0/sofka-v0.
 url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/755002704"
 
 [[tools.atuin]]
-version = "18.24.8"
+version = "18.25.0"
 backend = "aqua:atuinsh/atuin"
-specifiers = ["18.24.8"]
+specifiers = ["18.25.0"]
 
 [tools.atuin."platforms.linux-arm64"]
-checksum = "sha256:98f643d576b236e7ea6b1232dc2761d8469a4eed619cabd9eb1b9dc38a788e90"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.8/atuin-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/741927121"
+checksum = "sha256:0cfaa7ec4bb18c894791689661d17f15ff2505d5fabf1557359d233bfc42b092"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.25.0/atuin-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/770087129"
 provenance = "github-attestations"
 
 [tools.atuin."platforms.linux-x64"]
-checksum = "sha256:7433290f39b6c4fc9ec44f4fb0ebfbc5a574a81d4234b9a7d39741f24794edbd"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.8/atuin-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/741927279"
+checksum = "sha256:1ee01017e27d5968b6b3e9c35f0e190fcec918591ec808f3f090ee7d97fc87a7"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.25.0/atuin-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/770087356"
 provenance = "github-attestations"
 
 [tools.atuin."platforms.macos-arm64"]
-checksum = "sha256:1c33bb672cf09eecf595578ad3136e415a3e54eb34de92247f637d1fa9eae688"
-url = "https://github.com/atuinsh/atuin/releases/download/v18.24.8/atuin-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/741927123"
+checksum = "sha256:fbd4f848a1620c9bcd51fd7a4292a2b1ad9a8b400967f0f7d7745b7234b3b3a3"
+url = "https://github.com/atuinsh/atuin/releases/download/v18.25.0/atuin-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/atuinsh/atuin/releases/assets/770087128"
 provenance = "github-attestations"
 
 [[tools.bun]]
-version = "1.4.4"
+version = "1.4.5"
 backend = "core:bun"
-specifiers = ["1.4.4"]
+specifiers = ["1.4.5"]
 
 [tools.bun."platforms.linux-arm64"]
-checksum = "sha256:baa6bb36f51d6e58561e02bbea825038a9df454f673d6d776e8bbf86f8c7850e"
-url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-aarch64.zip"
+checksum = "sha256:18656a3bf0ea5641f5796ae4213b75255579a70a0fded2f337933785568cdf84"
+url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.5/bun-linux-aarch64.zip"
 
 [tools.bun."platforms.linux-arm64-musl"]
-checksum = "sha256:57f01b02ac7113c61c935f28f38c2eab849e3c970dab21f8b640a87b1ef65009"
-url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-aarch64-musl.zip"
+checksum = "sha256:d655765d3a0c0fdf707e27c7aa1a4f2c84f1bbc1f759db7e6e3d3c5be414396c"
+url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.5/bun-linux-aarch64-musl.zip"
 
 [tools.bun."platforms.linux-x64"]
-checksum = "sha256:bf8ccbfb2b0b80159e0f9a6d15c55317add8077534dbc6130a3edb52fccb395c"
-url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64.zip"
+checksum = "sha256:94559b3b528995a49452f9f2404cec74f2efd7d06e0a000a8cd214b02c3666eb"
+url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.5/bun-linux-x64.zip"
 
 [tools.bun."platforms.linux-x64-baseline"]
-checksum = "sha256:e0446eb55995772eb9894bebae9a6be368d985a8b9271ee124486f9946eedd76"
-url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64-baseline.zip"
+checksum = "sha256:dcb23a18a1c2fff12d57bcef696dbbb42eb67fde29f43816ecb595459a24c463"
+url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.5/bun-linux-x64-baseline.zip"
 
 [tools.bun."platforms.linux-x64-musl"]
-checksum = "sha256:a5a8ccc5e74dcb883fe974f125a7bdb3b41e5195ed1b870e73f17effd3eb2b2d"
-url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64-musl.zip"
+checksum = "sha256:9b6bdba1fa0914b6adfe48e4438212e2c106d9199b77ba642a9b8a3968a49a59"
+url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.5/bun-linux-x64-musl.zip"
 
 [tools.bun."platforms.linux-x64-musl-baseline"]
-checksum = "sha256:6e9c37098b293920aed28bfb51ab240e26d23bfdd9bbfecb3ad428ac166549bc"
-url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-linux-x64-musl-baseline.zip"
+checksum = "sha256:96fb94108eed872ff623ed39007d6b5699a83a5d0086fcfba84921c18145e3e6"
+url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.5/bun-linux-x64-musl-baseline.zip"
 
 [tools.bun."platforms.macos-arm64"]
-checksum = "sha256:c240d7f0ccb90c263a849fcdb09b7ee62630d921348ed6aafda86b9d577bc510"
-url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.4/bun-darwin-aarch64.zip"
+checksum = "sha256:b5d6bc2e13caf14e57c89661e89efd073ff16165b41bfe43882616410609cd10"
+url = "https://github.com/oven-sh/bun/releases/download/bun-v1.4.5/bun-darwin-aarch64.zip"
 
 [[tools.cilium-cli]]
 version = "0.20.3"
@@ -174,27 +165,27 @@ url = "https://github.com/cilium/cilium-cli/releases/download/v0.20.3/cilium-dar
 url_api = "https://api.github.com/repos/cilium/cilium-cli/releases/assets/739456160"
 
 [[tools.claude-code]]
-version = "2.1.328"
+version = "2.1.329"
 backend = "aqua:anthropics/claude-code"
-specifiers = ["2.1.328"]
+specifiers = ["2.1.329"]
 
 [tools.claude-code."platforms.linux-arm64"]
-checksum = "sha256:e95be009ef9548aec0bd34fe2d2736e9b887aef7452b31a8cd3d00cfe0ed7382"
+checksum = "sha256:411de30d67dc3f4fbb37cd93f17370352dd1fd42a7d08afa41b94e0569c6198a"
 checksum_source = "mise-versions"
-url = "https://github.com/anthropics/claude-code/releases/download/v2.1.328/claude-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/765459532"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.329/claude-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/768851030"
 
 [tools.claude-code."platforms.linux-x64"]
-checksum = "sha256:4404b3dc35afe7dde16c572197f69c210dffdb038f05ee3c532e683732f5aa9f"
+checksum = "sha256:248f23231556ba4d13cc6dde6a9ed7625f36cf94aeb4c5652d05f72d093c1b46"
 checksum_source = "mise-versions"
-url = "https://github.com/anthropics/claude-code/releases/download/v2.1.328/claude-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/765460041"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.329/claude-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/768851253"
 
 [tools.claude-code."platforms.macos-arm64"]
-checksum = "sha256:04f981829d2749bac30a4fee1e533e2c8f826071926703d351fc1a30807b2655"
+checksum = "sha256:581c88b6c7363d85b56e179e9cd6831b2b9dcffebffdbdb0751ee228a296e38b"
 checksum_source = "mise-versions"
-url = "https://github.com/anthropics/claude-code/releases/download/v2.1.328/claude-darwin-arm64.tar.gz"
-url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/765459526"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.329/claude-darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/768851032"
 
 [[tools.codex]]
 version = "0.169.0"
@@ -379,27 +370,27 @@ url_api = "https://api.github.com/repos/cloudnative-pg/cloudnative-pg/releases/a
 url = "https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.30.2/multiple.intoto.jsonl"
 
 [[tools."github:home-operations/flate"]]
-version = "0.7.3"
+version = "0.8.0"
 backend = "github:home-operations/flate"
-specifiers = ["v0.7.3"]
+specifiers = ["v0.8.0"]
 
 [tools."github:home-operations/flate"."platforms.linux-arm64"]
-checksum = "sha256:345b8b679de439343003097b79aabec7d070c05e70eeca5c413193ba97aa368f"
+checksum = "sha256:4ae502e56054ee9c5019995554856c1f6f8f44b3f6fef087704b2d31c27ab9c6"
 checksum_source = "mise-versions"
-url = "https://github.com/home-operations/flate/releases/download/v0.7.3/flate_0.7.3_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/727305352"
+url = "https://github.com/home-operations/flate/releases/download/v0.8.0/flate_0.8.0_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/768879872"
 
 [tools."github:home-operations/flate"."platforms.linux-x64"]
-checksum = "sha256:05d3c79447647e95329aa45c7035e7ebac3a120942972e78819deadc3bf0afeb"
+checksum = "sha256:76940fb6ff060e09a40e1a835fc9c5cd24e18fdd29e4e79382852821e0ac01c2"
 checksum_source = "mise-versions"
-url = "https://github.com/home-operations/flate/releases/download/v0.7.3/flate_0.7.3_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/727305354"
+url = "https://github.com/home-operations/flate/releases/download/v0.8.0/flate_0.8.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/768879874"
 
 [tools."github:home-operations/flate"."platforms.macos-arm64"]
-checksum = "sha256:fb4aca650b55fb020dac039775975ef3ab753a4582bdd034dc8ad5c73ad47755"
+checksum = "sha256:b881cfbef651084d0c9b97c6c2d60103022b43a2caeddc1d06febf93c065dd7d"
 checksum_source = "mise-versions"
-url = "https://github.com/home-operations/flate/releases/download/v0.7.3/flate_0.7.3_darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/727305351"
+url = "https://github.com/home-operations/flate/releases/download/v0.8.0/flate_0.8.0_darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/home-operations/flate/releases/assets/768879873"
 
 [[tools."github:home-operations/yayamlls"]]
 version = "0.3.3"
