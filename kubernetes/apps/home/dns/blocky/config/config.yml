@@ -8,7 +8,7 @@ caching:
   prefetchExpires: 1h
   prefetchThreshold: 30
   prefetchMaxItemsCount: 0
-  cacheTimeNegative: -1
+  cacheTimeNegative: "-1m"
   exclude:
     - '/(^|\\.)clerici\\.tech$/'
     - '/\\.internal$/'
