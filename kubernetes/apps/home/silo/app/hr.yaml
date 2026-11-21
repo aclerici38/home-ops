@@ -54,7 +54,7 @@ spec:
           silo:
             image: &image
               repository: ghcr.io/silo-server/silo-server
-              tag: latest@sha256:06754ca9c0719b4ca748bc29e7310736c523b03403b355323af4b4ce30a6e892
+              tag: latest@sha256:6e8bbef8ed8d4b8d43599888cb3b51f59759205cd5649760014e3d3acaff7300
             # Skip s6 /init
             command: &command
               - silo
