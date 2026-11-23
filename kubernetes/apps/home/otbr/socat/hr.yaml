@@ -41,7 +41,7 @@ spec:
               tag: 1.8.1.3@sha256:5aa280c6fc5bee94dbd2bbdf2a58d30f50396eaa110be84b03636945b157ae68
             # TCP_USER_TIMEOUT (6:18) drops dead clients; keepalive never fires on a busy spinel stream
             args:
-              - -d
+              - -dd
               - TCP-LISTEN:7638,fork,max-children=1,nodelay,keepalive,keepidle=10,keepintvl=10,keepcnt=3,setsockopt-int=6:18:30000
               - GOPEN:/dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_d4f0088f4c1fef119b9450d0639e525b-if00-port0,rawer,b460800,crtscts=0
             # A TCP probe would grab the single serial session
