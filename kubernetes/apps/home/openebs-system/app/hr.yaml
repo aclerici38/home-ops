@@ -81,7 +81,7 @@ spec:
           image:
             registry: registry.k8s.io
             repository: sig-storage/csi-node-driver-registrar
-            tag: v2.18.0@sha256:b7fefd08651f00ac4df1a196ed4c621c2451fbb899297fe9fad9e36c667af0c0
+            tag: v2.18.1@sha256:f847fb218cdf1d0f0fa79772ca6f46e11d25635eb49c06efb5dccd00b5245ef5
       zfsPlugin:
         image:
           registry: ghcr.io/
@@ -93,7 +93,7 @@ spec:
           image:
             registry: registry.k8s.io
             repository: sig-storage/csi-snapshotter
-            tag: v8.7.0@sha256:b03d3334f8035fa42660b166f6eb819a659a14774da020eb1b6c52cd422eaadb
+            tag: v8.7.1@sha256:b534b99edb61a5f95e297da8e2a133d36e27ad098e2f643393986e86f093d425
       crds:
         csi:
           volumeSnapshots:
