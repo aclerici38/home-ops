@@ -209,6 +209,9 @@ spec:
                   - ::1/128
                   - fc00::/7
                   - fe80::/10
+          # Bambi via wireguard
+          - toCIDR:
+              - 192.168.8.0/24
           # hass.clerici.tech (self) and llm.clerici.tech via the Gateway LB IPs
           - toEndpoints:
               - matchLabels:
