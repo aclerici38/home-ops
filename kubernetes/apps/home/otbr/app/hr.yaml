@@ -121,6 +121,26 @@ spec:
             env:
               <<: *env
               NETWORK_DEVICE: house-slzb-ultima3.iot.internal:7638
+      office:
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [
+                {
+                  "name":"house",
+                  "namespace": "multus",
+                  "interface": "backbone",
+                  "ips": ["10.0.20.22/24"],
+                  "mac": "64:16:7F:2C:B8:17"
+                }
+              ]
+        initContainers: *initContainers
+        containers:
+          otbr:
+            <<: *container
+            env:
+              <<: *env
+              NETWORK_DEVICE: socat:7638
     defaultPodOptions:
       # Opts into the descheduler multus profile
       labels:
@@ -143,34 +163,16 @@ spec:
         ports:
           http:
             port: *port
-          web:
-            port: &web 8080
       house:
         controller: house
         ports:
           http:
             port: *port
-          web:
-            port: *web
-    route:
-      cottage:
-        hostnames:
-          - otbr-cottage.clerici.tech
-        parentRefs: &trusted
-          - name: trusted
-            namespace: envoy-gateway
-        rules:
-          - backendRefs:
-              - identifier: cottage
-                port: *web
-      house:
-        hostnames:
-          - otbr-house.clerici.tech
-        parentRefs: *trusted
-        rules:
-          - backendRefs:
-              - identifier: house
-                port: *web
+      office:
+        controller: office
+        ports:
+          http:
+            port: *port
     networkpolicies:
       # Only eth0 is policed: the backbone (Thread/OMR, mDNS, TREL) is multus
       cottage:
@@ -185,14 +187,6 @@ spec:
             toPorts: &rest
               - ports:
                   - {port: "8081", protocol: TCP}
-          # Web UI via the trusted Gateway
-          - fromEndpoints: &gateway
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: envoy-gateway
-                  gateway.envoyproxy.io/owning-gateway-name: trusted
-            toPorts: &webui
-              - ports:
-                  - {port: "8080", protocol: TCP}
         egress:
           - toFQDNs:
               - matchName: cottage-slzb-ultima3.iot.internal
@@ -205,11 +199,20 @@ spec:
         ingress:
           - fromEndpoints: *hass
             toPorts: *rest
-          - fromEndpoints: *gateway
-            toPorts: *webui
         egress:
           - toFQDNs:
               - matchName: house-slzb-ultima3.iot.internal
+            toPorts: *rcp
+      office:
+        type: cilium
+        controller: office
+        ingress:
+          - fromEndpoints: *hass
+            toPorts: *rest
+        egress:
+          - toEndpoints:
+              - matchLabels:
+                  app.kubernetes.io/instance: socat
             toPorts: *rcp
     persistence:
       data:
@@ -223,6 +226,10 @@ spec:
             otbr:
               - path: /data
                 subPath: house
+          office:
+            otbr:
+              - path: /data
+                subPath: office
       tmpfs:
         type: emptyDir
         globalMounts:
