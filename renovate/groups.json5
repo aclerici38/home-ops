@@ -295,6 +295,15 @@
       },
     },
     {
+      description: "CSI sidecars group",
+      groupName: "sig-storage",
+      matchPackageNames: ["**/sig-storage/**"],
+      matchDatasources: ["docker"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "Dragonfly-Operator group",
       groupName: "Dragonfly-Operator",
       matchPackageNames: ["/dragonfly-operator/"],
