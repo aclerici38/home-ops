@@ -49,8 +49,7 @@ spec:
   # per token at f16 (36 layers x 8 KV heads x 128 head_dim), so 32768 context
   # would add 2.25 GiB and overrun that margin.
   contextSize: 16384
-  # Context is divided across slots, so this is 8k each: one for HA voice, one
-  # for open-webui, so a long chat cannot block a voice command behind it.
+  # Context is divided across slots
   parallelSlots: 2
   flashAttention: true
   # f16, not q8_0. Quantised KV dequantises in the attention inner loop every

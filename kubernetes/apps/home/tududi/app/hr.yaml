@@ -128,7 +128,7 @@ spec:
         type: cilium
         controller: tududi
         ingress:
-          # UI, plus open-webui's MCP tool server via the gateway
+          # UI
           - fromEndpoints:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway

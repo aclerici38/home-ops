@@ -100,10 +100,7 @@ spec:
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: envoy-gateway
                   gateway.envoyproxy.io/owning-gateway-name: external
-              # open-webui and hermes web search (JSON API, passed by limiter.toml)
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: open-webui
-                  app.kubernetes.io/instance: open-webui
+              # hermes web search (JSON API, passed by limiter.toml)
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: hermes
                   app.kubernetes.io/instance: hermes
@@ -138,7 +135,7 @@ spec:
         data:
           # Pods are trusted proxies, so web users are limited by the client IP
           # envoy appends to X-Forwarded-For (read right to left, spoof-safe).
-          # In-cluster API callers (open-webui) send no XFF and are passed.
+          # In-cluster API callers send no XFF and are passed.
           limiter.toml: |-
             [botdetection]
             trusted_proxies = [

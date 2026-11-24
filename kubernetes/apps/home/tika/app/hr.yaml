@@ -85,9 +85,6 @@ spec:
         ingress:
           - fromEndpoints:
               - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: open-webui
-                  app.kubernetes.io/instance: open-webui
-              - matchLabels:
                   k8s:io.kubernetes.pod.namespace: hermes
                   app.kubernetes.io/instance: hermes
               # Full-text search extraction

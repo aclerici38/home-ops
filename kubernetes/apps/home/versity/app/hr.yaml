@@ -203,9 +203,6 @@ spec:
                   app.kubernetes.io/managed-by: kopiur
                 matchExpressions:
                   - {key: 'k8s:io.kubernetes.pod.namespace', operator: Exists}
-              - matchLabels:
-                  k8s:io.kubernetes.pod.namespace: open-webui
-                  app.kubernetes.io/instance: open-webui
               # decomposeds3 blobs
               - matchLabels:
                   k8s:io.kubernetes.pod.namespace: opencloud
