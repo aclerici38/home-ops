@@ -22,7 +22,7 @@ spec:
   imageCatalogRef:
     apiGroup: postgresql.cnpg.io
     kind: ClusterImageCatalog
-    major: 18
+    major: 19
     name: postgresql-minimal-trixie
   storage:
     size: 80Gi
@@ -122,7 +122,8 @@ spec:
       isWALArchiver: true
       parameters:
         barmanObjectName: pg18
-        serverName: pg18
+        # pg_upgrade resets the system ID and timeline; keep the pg18 archive separate
+        serverName: pg19
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.2/pooler_v1.json
 apiVersion: postgresql.cnpg.io/v1

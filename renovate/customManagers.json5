@@ -64,7 +64,7 @@
       versioningTemplate: "regex:^(?<major>\\d+)\\.(?<minor>\\d+)-(?<patch>\\d+)$",
     },
     {
-      // Pins follow the catalog's rolling `X.Y.Z-18-trixie` tags (not the timestamped rebuilds)
+      // Pins follow the catalog's rolling `X.Y.Z-19-trixie` tags (not the timestamped rebuilds)
       description: "Detect CNPG Database CRD pgvector/postgis extension version pins",
       customType: "regex",
       managerFilePatterns: ["/(^|/)kubernetes/apps/.+/resources\\.ya?ml$/"],
@@ -74,7 +74,7 @@
       ],
       datasourceTemplate: "docker",
       depNameTemplate: "{{#if (equals depType 'vector')}}ghcr.io/cloudnative-pg/pgvector{{else}}ghcr.io/cloudnative-pg/postgis-extension{{/if}}",
-      extractVersionTemplate: "^(?<version>\\d+\\.\\d+\\.\\d+)-18-trixie$",
+      extractVersionTemplate: "^(?<version>\\d+\\.\\d+\\.\\d+)-19-trixie$",
     },
     {
       customType: "regex",

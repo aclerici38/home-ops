@@ -20,7 +20,7 @@ enablePDB: {{ not $single }}
 imageCatalogRef:
   apiGroup: postgresql.cnpg.io
   kind: ClusterImageCatalog
-  major: 18
+  major: 19
   name: postgresql-minimal-trixie
 storage:
   size: 2Gi
