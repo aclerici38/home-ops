@@ -136,7 +136,7 @@ redis:
 
 queryLog:
   type: postgresql
-  logRetentionDays: 90
+  logRetentionDays: 30
   creationAttempts: 5
   creationCooldown: 60s
   flushInterval: 5s

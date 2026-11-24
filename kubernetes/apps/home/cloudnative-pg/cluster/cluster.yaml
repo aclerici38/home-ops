@@ -24,6 +24,9 @@ spec:
     kind: ClusterImageCatalog
     major: 19
     name: postgresql-minimal-trixie
+  # Requests only (Burstable): without them the instances are BestEffort and evicted first
+  resources:
+    requests: {cpu: 250m, memory: 3Gi}
   storage:
     size: 80Gi
     storageClass: openebs-hostpath
@@ -116,6 +119,8 @@ spec:
       autovacuum_vacuum_cost_limit: "2000"
       autovacuum_max_workers: "4"
       autovacuum_naptime: 20s
+      wal_compression: zstd
+      random_page_cost: "1.1"
   plugins:
     - name: barman-cloud.cloudnative-pg.io
       enabled: true
@@ -140,7 +145,10 @@ spec:
         dormammu.internal/apiserver-client: "true"
     # One pod per node so a single drain never takes the whole pooler
     spec:
-      containers: []
+      containers:
+        - name: pgbouncer
+          resources:
+            requests: {cpu: 10m, memory: 64Mi}
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
@@ -198,7 +206,10 @@ spec:
         dormammu.internal/apiserver-client: "true"
     # One pod per node so a single drain never takes the whole pooler
     spec:
-      containers: []
+      containers:
+        - name: pgbouncer
+          resources:
+            requests: {cpu: 10m, memory: 64Mi}
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname

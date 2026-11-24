@@ -82,7 +82,10 @@ spec:
         dormammu.internal/apiserver-client: "true"
     # One pod per node so a single drain never takes the whole pooler
     spec:
-      containers: []
+      containers:
+        - name: pgbouncer
+          resources:
+            requests: {cpu: 10m, memory: 64Mi}
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
@@ -150,7 +153,10 @@ spec:
         dormammu.internal/apiserver-client: "true"
     # One pod per node so a single drain never takes the whole pooler
     spec:
-      containers: []
+      containers:
+        - name: pgbouncer
+          resources:
+            requests: {cpu: 10m, memory: 64Mi}
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname

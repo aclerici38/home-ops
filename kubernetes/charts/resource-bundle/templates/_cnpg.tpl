@@ -22,6 +22,9 @@ imageCatalogRef:
   kind: ClusterImageCatalog
   major: 19
   name: postgresql-minimal-trixie
+# Requests only (Burstable): without them the instances are BestEffort and evicted first
+resources:
+  requests: {cpu: 100m, memory: 1Gi}
 storage:
   size: 2Gi
   storageClass: openebs-hostpath
@@ -78,6 +81,8 @@ postgresql:
     autovacuum_vacuum_cost_limit: "2000"
     autovacuum_max_workers: "3"
     autovacuum_naptime: 20s
+    wal_compression: zstd
+    random_page_cost: "1.1"
 {{- if $backup }}
 plugins:
   - name: barman-cloud.cloudnative-pg.io
@@ -110,6 +115,11 @@ template:
   metadata:
     labels:
       dormammu.internal/apiserver-client: "true"
+  spec:
+    containers:
+      - name: pgbouncer
+        resources:
+          requests: {cpu: 10m, memory: 64Mi}
 type: rw
 pgbouncer:
   {{- /* Same catalog as the cluster (spec.cluster.imageCatalogRef override included). */}}
@@ -150,7 +160,8 @@ cluster:
 {{- define "resources.cnpg.objectStoreSpec" -}}
 retentionPolicy: 14d
 configuration:
-  data: {compression: gzip, jobs: 8}
+  # gzip pins one core for the whole backup; immediateCheckpoint skips the spread checkpoint wait
+  data: {compression: zstd, jobs: 8, immediateCheckpoint: true}
   wal: {compression: zstd, maxParallel: 12}
   destinationPath: s3://cnpg
   endpointURL: https://s3.clerici.tech
@@ -158,6 +169,9 @@ configuration:
   s3Credentials:
     accessKeyId: {name: cloudnative-pg, key: versity-access-key-id}
     secretAccessKey: {name: cloudnative-pg, key: versity-secret-access-key}
+instanceSidecarConfiguration:
+  resources:
+    requests: {cpu: 20m, memory: 256Mi}
 {{- end -}}
 
 {{- define "resources.cnpg.scheduledBackupSpec" -}}

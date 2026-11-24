@@ -7,7 +7,8 @@ metadata:
 spec:
   retentionPolicy: 14d
   configuration:
-    data: {compression: gzip, jobs: 8}
+    # gzip pins one core for the whole backup; immediateCheckpoint skips the spread checkpoint wait
+    data: {compression: zstd, jobs: 8, immediateCheckpoint: true}
     wal: {compression: zstd, maxParallel: 12}
     destinationPath: s3://cnpg
     endpointURL: https://s3.clerici.tech
@@ -15,6 +16,9 @@ spec:
     s3Credentials:
       accessKeyId: {name: cloudnative-pg, key: versity-access-key-id}
       secretAccessKey: {name: cloudnative-pg, key: versity-secret-access-key}
+  instanceSidecarConfiguration:
+    resources:
+      requests: {cpu: 20m, memory: 256Mi}
 ---
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/cloudnative-pg/0.29.2/scheduledbackup_v1.json
 apiVersion: postgresql.cnpg.io/v1
