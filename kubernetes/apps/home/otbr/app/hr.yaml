@@ -121,6 +121,23 @@ spec:
             env:
               <<: *env
               NETWORK_DEVICE: house-slzb-ultima3.iot.internal:7638
+            # Same custom OMR on every house-partition BR, so a BR restart can't flip device addresses
+            lifecycle: &omrPin
+              postStart:
+                exec:
+                  command:
+                    - sh
+                    - -c
+                    - |
+                      i=0
+                      while [ $i -lt 300 ]; do
+                        if ot-ctl br omrconfig custom fdea:2ecc:71c4:1::/64 med 2>/dev/null | grep -q Done; then
+                          echo "INFO: pinned OMR prefix fdea:2ecc:71c4:1::/64 (med)" >/proc/1/fd/1
+                          exit 0
+                        fi
+                        i=$((i + 1)); sleep 1
+                      done
+                      echo "WARN: could not pin OMR prefix" >/proc/1/fd/1
       office:
         pod:
           annotations:
@@ -141,6 +158,7 @@ spec:
             env:
               <<: *env
               NETWORK_DEVICE: socat:7638
+            lifecycle: *omrPin
     defaultPodOptions:
       # Opts into the descheduler multus profile
       labels:
