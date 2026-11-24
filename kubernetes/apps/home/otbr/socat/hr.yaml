@@ -24,6 +24,7 @@ spec:
       # ZBDongle-E (ot-rcp, no flow control) on belt, which has no multus leg
       socat:
         pod:
+          priorityClassName: otbr-socat
           nodeSelector:
             kubernetes.io/hostname: belt
           securityContext:

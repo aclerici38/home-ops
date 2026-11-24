@@ -1,0 +1,10 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.37.2-standalone-strict/priorityclass-scheduling-v1.json
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: otbr-socat
+value: 10
+globalDefault: false
+preemptionPolicy: PreemptLowerPriority
+description: "Give the office Thread radio bridge priority on the node with the USB dongle."
