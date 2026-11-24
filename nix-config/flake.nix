@@ -14,7 +14,7 @@
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    opnix.url = "git+https://github.com/brizzbuzz/opnix?ref=main&rev=0ea3a9e6a94fdd0c444aa7729b98e568a0588222";
+    opnix.url = "git+https://github.com/brizzbuzz/opnix?ref=main";
     opnix.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-homebrew.url = "github:zhaofengli/nix-homebrew/main";
