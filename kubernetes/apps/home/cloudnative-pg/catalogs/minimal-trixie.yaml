@@ -9,6 +9,30 @@ spec:
     - key: pgbouncer
       image: ghcr.io/cloudnative-pg/pgbouncer:1.26.1@sha256:9738cbb7fd5f31bf83e7e351bafe33e29d8bcad5baffc876f6c2e02bcc78e37c
   images:
+    - major: 19
+      image: ghcr.io/cloudnative-pg/postgresql:19.0-minimal-trixie@sha256:12688a494f25aa0b7e1e3cd1800abe85b427fd1a09c991668a48162e3431a2af
+      extensions:
+        - name: pgvector
+          image:
+            reference: ghcr.io/cloudnative-pg/pgvector:0.8.7-19-trixie@sha256:5767e14e89a27a5a0afd258e60bec425f7560c1e033cafb669e2be2067eb4e7f
+        - name: postgis
+          image:
+            reference: ghcr.io/cloudnative-pg/postgis-extension:3.7.0-19-trixie@sha256:ce2e807286239796af2e444ae0a822dac83db35453c85cb45eab0730cfeb1234
+          ld_library_path:
+            - system
+          env:
+            - name: GDAL_DATA
+              value: $${image_root}/share/gdal
+            - name: PROJ_DATA
+              value: $${image_root}/share/proj
+        - name: vchord
+          image:
+            reference: ghcr.io/home-operations/vchord:1.5.0@sha256:97b4a1aa15b65c29fa97e84b4270cb235e7bd39e80d4a4b2e91d9fa17997566d
+          dynamic_library_path:
+            - /usr/lib/postgresql/19/lib
+          extension_control_path:
+            - /usr/share/postgresql/19/
+    # Rollback target until the pg_upgrade job succeeds; drop afterwards
     - major: 18
       image: ghcr.io/cloudnative-pg/postgresql:18.7-minimal-trixie@sha256:b98ae0b74a12f20ccff32219be0e33fdd35c7e2e8e73c8bff9173f1128e167d1
       extensions:
