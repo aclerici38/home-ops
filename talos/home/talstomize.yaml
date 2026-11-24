@@ -119,6 +119,9 @@ nodes:
             - enforcing=0
             - -selinux
             - pcie_aspm=off # NIC TX stalls (r8169/igc) under ASPM
+            # boot-time TSC refinement against HPET comes out 0.35% high, watchdog then drops TSC; never use tsc=reliable/nowatchdog here
+            - module_blacklist=sp5100_tco
+            - hpet=disable
           systemExtensions:
             officialExtensions:
               - siderolabs/amd-ucode
