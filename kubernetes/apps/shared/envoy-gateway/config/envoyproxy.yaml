@@ -40,9 +40,9 @@ spec:
     accessLog:
       settings:
         - type: Route
-          # Drop kubelet probe noise.
+          # Drop kubelet probe noise; request.useragent errors (= no log) when the header is absent.
           matches:
-            - "!(request.useragent.startsWith('kube-probe/'))"
+            - "!('user-agent' in request.headers && request.headers['user-agent'].startsWith('kube-probe/'))"
           format:
             type: JSON
             json:

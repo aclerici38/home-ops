@@ -124,12 +124,13 @@ spec:
           labels:
             severity: warning
 
-        # Envoy emits rq_time buckets in milliseconds.
+        # Envoy emits rq_time buckets in milliseconds. Apiserver watches pin p99 at
+        # minutes; KubeAPIErrorBudgetBurn covers its latency.
         - alert: EnvoyUpstreamLatencyHigh
           expr: |-
             histogram_quantile(0.99,
               sum by (le, gateway, envoy_cluster_name) (
-                rate(envoy_cluster_upstream_rq_time_bucket[10m])
+                rate(envoy_cluster_upstream_rq_time_bucket{envoy_cluster_name!~"httproute/default/kube-apiserver/.*"}[10m])
               )
             ) > 5000
           for: 20m
