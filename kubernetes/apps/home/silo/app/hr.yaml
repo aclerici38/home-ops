@@ -32,29 +32,32 @@ spec:
         seccompProfile: {type: RuntimeDefault}
     controllers:
       silo:
-        pod: &gpuPod
-          resourceClaims:
-            - name: gpu
-              resourceClaimTemplateName: silo-gpu
-          # Server and transcode node never share a GPU host
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - topologyKey: kubernetes.io/hostname
-                  labelSelector:
-                    matchLabels:
-                      app.kubernetes.io/instance: silo
-                    matchExpressions:
-                      - key: app.kubernetes.io/controller
-                        operator: In
-                        values:
-                          - silo
-                          - transcode
+        pod:
+          <<: &gpuPod
+            resourceClaims:
+              - name: gpu
+                resourceClaimTemplateName: silo-gpu
+            # Server and transcode node never share a GPU host
+            affinity:
+              podAntiAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  - topologyKey: kubernetes.io/hostname
+                    labelSelector:
+                      matchLabels:
+                        app.kubernetes.io/instance: silo
+                      matchExpressions:
+                        - key: app.kubernetes.io/controller
+                          operator: In
+                          values:
+                            - silo
+                            - transcode
+          labels:
+            dormammu.internal/smtp-relay-client: "true"
         containers:
           silo:
             image: &image
               repository: ghcr.io/silo-server/silo-server
-              tag: latest@sha256:575fb4dcd9406d2fe958526fe45f0aa7fe395c8c36cacb57ea341b99c436078d
+              tag: latest@sha256:7fe880ec77e1b9a66a3c563b27f69730cad6cf1afd79fc821a78c6d072340863
             # Skip s6 /init
             command: &command
               - silo
@@ -67,6 +70,32 @@ spec:
               SILO_PLUGIN_CACHE_DIR: /tmp/silo-plugins
               SILO_TRUSTED_PROXIES: ${CLUSTER_POD_CIDR}
               SILO_SHUTDOWN_DELAY: "0"
+              # Settings below are locked in the admin UI
+              SILO_PUBLIC_URL: https://silo.clerici.tech
+              SILO_JELLYFIN_PUBLIC_URL: https://jellyfin.clerici.tech
+              SILO_LAN_DISCOVERY: "false"
+              # NFS sends no inotify events
+              SILO_SCANNER_REALTIME_MONITORING: "false"
+              # Image's pg_dump 18 can't dump pg19, and a failed pre-migration backup blocks startup
+              SILO_BACKUP_ENABLED: "false"
+              SILO_SMTP_ENABLED: "true"
+              SILO_SMTP_HOST: smtp-relay.smtp-relay.svc.cluster.local
+              SILO_SMTP_PORT: "25"
+              SILO_SMTP_SECURITY: none
+              SILO_SMTP_FROM_ADDRESS: bot@clerici.tech
+              SILO_HW_ACCEL: qsv
+              # On the /tmp emptyDir
+              SILO_TRANSCODE_DIR: /tmp/silo-transcode
+              # Embedding lock is per model: changing it re-embeds, changing provider does not
+              SILO_RECOMMENDATIONS_ENABLED: "true"
+              SILO_RECOMMENDATIONS_PROVIDER: qwen3-embedding-0-6b
+              SILO_RECOMMENDATIONS_MODEL: qwen3-embedding-0.6b
+              SILO_CONFIG_FILE: /etc/silo/deployment.yaml
+              SILO_TRANSCODE_NODES_FILE: /etc/silo/transcode-nodes.yaml
+              TRANSCODE_0_NODE_KEY:
+                secretKeyRef:
+                  name: silo
+                  key: SILO_NODE_KEY
               REDIS_URL: redis://silo-dragonfly-db:6379
               DATABASE_URL:
                 valueFrom:
@@ -135,6 +164,7 @@ spec:
                   key: SILO_NODE_KEY
               # Stop at once instead of draining; sessions replan onto the server
               SILO_NODE_DRAIN_TIMEOUT: "0"
+              SILO_NODE_HW_ACCEL: qsv
             probes:
               liveness: &nodeProbes
                 enabled: true
@@ -207,7 +237,7 @@ spec:
             port: *jfPort
           metrics:
             port: 9091
-      # Headless for the stable per-pod URLs registered in Admin > Nodes
+      # Headless for the stable per-pod URLs in config/transcode-nodes.yaml
       transcode:
         controller: transcode
         clusterIP: None
@@ -374,6 +404,14 @@ spec:
         egress:
           - {}
     persistence:
+      config:
+        type: configMap
+        name: silo-config
+        advancedMounts:
+          silo:
+            silo:
+              - path: /etc/silo
+                readOnly: true
       postgres-cert:
         type: secret
         name: silo-postgres-cert

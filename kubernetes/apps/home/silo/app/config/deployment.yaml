@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Silo-Server/silo-server/main/contracts/plugins/provisioning/v1/schema.json
+# Undeclared fields (OIDC claims/groups, plugin API keys) stay admin-managed
+apiVersion: 1
+plugins:
+  silo.auth.oidc:
+    config:
+      connection:
+        issuer_url: https://id.clerici.tech
+        client_id: silo
+    auth_binding:
+      capability_id: oidc
+      enabled: true
+      auto_provision: true
+      callback: stable
+  silo.tmdb: {}
+  silo.tvdb: {}
+  silo.theintrodb: {}
+  silo.mdblist: {}
+ai_providers:
+  # Ids allow no dots
+  qwen3-embedding-0-6b:
+    type: custom
+    name: qwen3-embedding-0.6b
+    base_url: http://qwen3-embedding-0-6b.llmkube.svc.cluster.local:8080
+    capabilities:
+      - embeddings

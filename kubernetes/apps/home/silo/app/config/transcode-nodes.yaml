@@ -1,0 +1,8 @@
+---
+# Key prefix snk1_1_ adopts the existing node 1
+apiVersion: 1
+nodes:
+  silo-transcode-0:
+    url: http://silo-transcode-0.silo-transcode.silo.svc.cluster.local:8080
+    key:
+      fromEnv: TRANSCODE_0_NODE_KEY

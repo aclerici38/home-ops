@@ -65,9 +65,8 @@ spec:
           isPublic: true
           secret:
             enabled: false
-      # Plugin installation ID isn't known until it's installed.
       callbackPaths:
-        - /api/v2/auth/oauth/*/callback
+        - /api/v2/auth/oauth/callback
     kopiur:
       cephfs: true
       capacity: 20Gi
