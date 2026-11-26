@@ -72,27 +72,27 @@ url_api = "https://api.github.com/repos/jdx/mise/releases/assets/786807667"
 provenance = "minisign"
 
 [[tools."aqua:nklmilojevic/sofka"]]
-version = "v0.38.0"
+version = "v0.39.0"
 backend = "aqua:nklmilojevic/sofka"
-specifiers = ["v0.38.0"]
+specifiers = ["v0.39.0"]
 
 [tools."aqua:nklmilojevic/sofka"."platforms.linux-arm64"]
-checksum = "sha256:9f3a39fba8c8feab22f233dd0fee6559cf4b4e08d73ec0ea9ff477acdfcbb64b"
-checksum_source = "mise-versions"
-url = "https://github.com/nklmilojevic/sofka/releases/download/v0.38.0/sofka-v0.38.0-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/783654624"
+checksum = "sha256:509610450d6f6cd777f4df2fd8e026186918fce705d1a0747c1658dc52efcdeb"
+url = "https://github.com/nklmilojevic/sofka/releases/download/v0.39.0/sofka-v0.39.0-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/791609526"
+provenance = "github-attestations"
 
 [tools."aqua:nklmilojevic/sofka"."platforms.linux-x64"]
-checksum = "sha256:e814e623543b7a400c69521cb897fdf5ed77c9ab66aad0719ca8ff0b7db6e9b9"
-checksum_source = "mise-versions"
-url = "https://github.com/nklmilojevic/sofka/releases/download/v0.38.0/sofka-v0.38.0-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/783654623"
+checksum = "sha256:3a832f2c00662860139b48e9689bfb3db097ca234f5df042a20e45bebc5561eb"
+url = "https://github.com/nklmilojevic/sofka/releases/download/v0.39.0/sofka-v0.39.0-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/791609524"
+provenance = "github-attestations"
 
 [tools."aqua:nklmilojevic/sofka"."platforms.macos-arm64"]
-checksum = "sha256:bf0854dcfd09aed13739f3bd1d1e6a025100a7f758574c123e39993066ad83e2"
-checksum_source = "mise-versions"
-url = "https://github.com/nklmilojevic/sofka/releases/download/v0.38.0/sofka-v0.38.0-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/783654625"
+checksum = "sha256:18c36fd2d2b598a1941eb5bf79aa05acddcea0cdecc14d97b9536075f6252099"
+url = "https://github.com/nklmilojevic/sofka/releases/download/v0.39.0/sofka-v0.39.0-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/nklmilojevic/sofka/releases/assets/791609536"
+provenance = "github-attestations"
 
 [[tools.atuin]]
 version = "18.25.1"
@@ -219,26 +219,26 @@ url = "https://github.com/openai/codex/releases/download/rust-v0.169.0/codex-pac
 url_api = "https://api.github.com/repos/openai/codex/releases/assets/742912926"
 
 [[tools.cosign]]
-version = "3.1.5"
+version = "3.1.6"
 backend = "aqua:sigstore/cosign"
-specifiers = ["3.1.5"]
+specifiers = ["3.1.6"]
 
 [tools.cosign."platforms.linux-arm64"]
-checksum = "sha256:516893301e9ec0f2594edfcf8f943ec3b3ba96f3aad2b507eff2b71e644e5fca"
-url = "https://github.com/sigstore/cosign/releases/download/v3.1.5/cosign-linux-arm64"
-url_api = "https://api.github.com/repos/sigstore/cosign/releases/assets/787761744"
+checksum = "sha256:bbb2ebc765f483cf9fac42da8763dddc2b55b350ee12ea0c44a520a6d6d52334"
+url = "https://github.com/sigstore/cosign/releases/download/v3.1.6/cosign-linux-arm64"
+url_api = "https://api.github.com/repos/sigstore/cosign/releases/assets/793285314"
 provenance = "cosign"
 
 [tools.cosign."platforms.linux-x64"]
-checksum = "sha256:912502def4baf810eaf36b210a4f51e1da214f9f6d664e2a9a2154cfc67ee0d6"
-url = "https://github.com/sigstore/cosign/releases/download/v3.1.5/cosign-linux-amd64"
-url_api = "https://api.github.com/repos/sigstore/cosign/releases/assets/787764286"
+checksum = "sha256:318a99ade4156a0c4113aa983b46c0a0830fa7896a096c63121ee47b610a94c6"
+url = "https://github.com/sigstore/cosign/releases/download/v3.1.6/cosign-linux-amd64"
+url_api = "https://api.github.com/repos/sigstore/cosign/releases/assets/793284664"
 provenance = "cosign"
 
 [tools.cosign."platforms.macos-arm64"]
-checksum = "sha256:35cfceffe68448019f75bcbb2c470045ee2f4264cf5ad6d564f08f327f97d13f"
-url = "https://github.com/sigstore/cosign/releases/download/v3.1.5/cosign-darwin-arm64"
-url_api = "https://api.github.com/repos/sigstore/cosign/releases/assets/787761392"
+checksum = "sha256:0ce6045c42e9f21427b3a8b70d54b130ca35cdd88a38358cc303fc6fec7366ba"
+url = "https://github.com/sigstore/cosign/releases/download/v3.1.6/cosign-darwin-arm64"
+url_api = "https://api.github.com/repos/sigstore/cosign/releases/assets/793283593"
 provenance = "cosign"
 
 [[tools.crane]]
@@ -327,26 +327,26 @@ url = "https://github.com/fluxcd/flux2/releases/download/v2.10.1/flux_2.10.1_dar
 url_api = "https://api.github.com/repos/fluxcd/flux2/releases/assets/771871028"
 
 [[tools.gh]]
-version = "2.105.0"
+version = "2.106.0"
 backend = "aqua:cli/cli"
-specifiers = ["2.105.0"]
+specifiers = ["2.106.0"]
 
 [tools.gh."platforms.linux-arm64"]
-checksum = "sha256:b1278c75107423d818f1937fd92cafc9e5e9b606631568f68d7fb816f5885a02"
-url = "https://github.com/cli/cli/releases/download/v2.105.0/gh_2.105.0_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/cli/cli/releases/assets/761188590"
+checksum = "sha256:5e8a0c51e1a8345f36bd0b8bb88604b6a5388df16f3ab3e3b9b6d794fa223a67"
+url = "https://github.com/cli/cli/releases/download/v2.106.0/gh_2.106.0_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/793444867"
 provenance = "github-attestations"
 
 [tools.gh."platforms.linux-x64"]
-checksum = "sha256:79e7ab5db738c48777b696e374f8b428f0647debfb424f44d2f426370407fe2f"
-url = "https://github.com/cli/cli/releases/download/v2.105.0/gh_2.105.0_linux_amd64.tar.gz"
-url_api = "https://api.github.com/repos/cli/cli/releases/assets/761188566"
+checksum = "sha256:a476449fa9625413c54a3734eded62e9e480e49f421ff08e7f3b3879c059a033"
+url = "https://github.com/cli/cli/releases/download/v2.106.0/gh_2.106.0_linux_amd64.tar.gz"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/793444853"
 provenance = "github-attestations"
 
 [tools.gh."platforms.macos-arm64"]
-checksum = "sha256:2a5d03103ae444927383b93d9ffd65579a26e2eb900ce1cf11f55258d5319ded"
-url = "https://github.com/cli/cli/releases/download/v2.105.0/gh_2.105.0_macOS_arm64.zip"
-url_api = "https://api.github.com/repos/cli/cli/releases/assets/761188673"
+checksum = "sha256:22b2b723dfbc69b6022b1b08604ff51c0db5aa8b6774b4ced1a47b8413a995d6"
+url = "https://github.com/cli/cli/releases/download/v2.106.0/gh_2.106.0_macOS_arm64.zip"
+url_api = "https://api.github.com/repos/cli/cli/releases/assets/793444946"
 provenance = "github-attestations"
 
 [[tools."github:cloudnative-pg/cloudnative-pg"]]
@@ -611,21 +611,21 @@ url = "https://github.com/yannh/kubeconform/releases/download/v0.8.0/kubeconform
 url_api = "https://api.github.com/repos/yannh/kubeconform/releases/assets/438612680"
 
 [[tools.kubectl]]
-version = "1.37.2"
+version = "1.37.3"
 backend = "aqua:kubernetes/kubernetes/kubectl"
-specifiers = ["1.37.2"]
+specifiers = ["1.37.3"]
 
 [tools.kubectl."platforms.linux-arm64"]
-checksum = "sha256:fcc16f63186659d9722014b7e02d5fdd2d4e669cb8c0ab66365d7d3b8ba03509"
-url = "https://dl.k8s.io/v1.37.2/bin/linux/arm64/kubectl"
+checksum = "sha256:da160b41491cc5c5e575d78bb665810fb900f70fad666d834094b24ec56d304f"
+url = "https://dl.k8s.io/v1.37.3/bin/linux/arm64/kubectl"
 
 [tools.kubectl."platforms.linux-x64"]
-checksum = "sha256:c04487523e7aa7d1493f7808174c899db93d7a9cf57531420cd76b9bd415f8f4"
-url = "https://dl.k8s.io/v1.37.2/bin/linux/amd64/kubectl"
+checksum = "sha256:9a1b55af2795b25dd288dbef62387db9b5530087ab918d28c6ad067f2e3cb07c"
+url = "https://dl.k8s.io/v1.37.3/bin/linux/amd64/kubectl"
 
 [tools.kubectl."platforms.macos-arm64"]
-checksum = "sha256:55701af0d51815ee335f240e48acf0959c3c23017ed3fa816e880c4a92bae581"
-url = "https://dl.k8s.io/v1.37.2/bin/darwin/arm64/kubectl"
+checksum = "sha256:7ac1234e7731e902e5ab2153e2ed29bbe7abddd7b0be5ffd94afb7df47da8f27"
+url = "https://dl.k8s.io/v1.37.3/bin/darwin/arm64/kubectl"
 
 [[tools.kubelogin]]
 version = "1.36.4"
