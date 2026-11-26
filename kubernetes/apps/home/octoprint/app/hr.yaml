@@ -17,11 +17,26 @@ spec:
       retries: 1
   upgrade:
     timeout: 2m
-    remediation:
-      retries: 1
   values:
     controllers:
       go2rtc:
+        # Scale to zero while the printer is off
+        horizontalPodAutoscaler: &printerGate
+          minReplicas: 0
+          maxReplicas: 1
+          metrics:
+            - type: External
+              external:
+                metric:
+                  name: printer_available
+                target:
+                  type: AverageValue
+                  averageValue: "1"
+          behavior:
+            scaleDown:
+              stabilizationWindowSeconds: 0
+            scaleUp:
+              stabilizationWindowSeconds: 30
         containers:
           go2rtc:
             image:
@@ -53,6 +68,7 @@ spec:
                 memory: 512Mi
       # Printer USB bridge so OctoPrint isn't tied to the printer's node or power state
       socat:
+        horizontalPodAutoscaler: *printerGate
         pod:
           securityContext:
             supplementalGroups:

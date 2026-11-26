@@ -5,6 +5,9 @@ kind: Kustomization
 metadata:
   name: octoprint
   namespace: flux-system
+  labels:
+    # Printer-gated pods can't go Ready while it's off; keep upgrading instead of rolling back
+    dormammu.internal/helm-upgrade: retry
 spec:
   targetNamespace: octoprint
   sourceRef:

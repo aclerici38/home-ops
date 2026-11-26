@@ -60,3 +60,24 @@ spec:
                     cleanupOnFail: true
                     strategy:
                       name: RemediateOnFailure
+    # Opt-in raphael-style upgrades: retry, never roll back
+    - target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: dormammu.internal/helm-upgrade=retry
+      patch: |-
+        - op: add
+          path: /spec/patches/-
+          value:
+            target:
+              kind: HelmRelease
+            patch: |
+              apiVersion: helm.toolkit.fluxcd.io/v2
+              kind: HelmRelease
+              metadata:
+                name: not-used
+              spec:
+                upgrade:
+                  strategy:
+                    name: RetryOnFailure
+                    retryInterval: 30m
