@@ -1,6 +1,5 @@
 ---
-# Shared base for konflate: the chart source (OCIRepository) and credentials
-# (ExternalSecret), applied once and used by every instance below.
+# The shared ExternalSecret supplies credentials for every konflate instance below.
 # yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.1/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

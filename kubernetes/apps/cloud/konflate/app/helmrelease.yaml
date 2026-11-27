@@ -7,9 +7,19 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: konflate
+    spec:
+      interval: 15m
+      ref:
+        tag: 0.6.6
+        digest: sha256:6822d86641f8b77ce52e153b080a2fd4e813511ab47b73e3a0c707296c2fede1
+      url: oci://ghcr.io/home-operations/charts/konflate
+      verify:
+        provider: cosign
+        matchOIDCIdentity:
+          - issuer: ^https://token\.actions\.githubusercontent\.com$
+            subject: ^https://github\.com/home-operations/konflate/\.github/workflows/release\.yaml@refs/tags/.*$
   install:
     timeout: 5m
     remediation:

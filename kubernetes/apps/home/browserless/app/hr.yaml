@@ -7,10 +7,19 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: app-template
-    namespace: flux-system
+    spec:
+      interval: 5m
+      ref:
+        tag: 5.3.0
+        digest: sha256:0e13b145656490310ada364d8eb708e5f4f6384c7deb60d3f5f0fa56950ff63a
+      url: oci://ghcr.io/bjw-s-labs/helm/app-template
+      verify:
+        provider: cosign
+        matchOIDCIdentity:
+          - issuer: ^https://token\.actions\.githubusercontent\.com$
+            subject: ^https://github\.com/bjw-s-labs/helm-charts.*$
   install:
     timeout: 3m
     remediation:

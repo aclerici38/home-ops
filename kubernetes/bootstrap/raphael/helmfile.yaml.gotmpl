@@ -9,8 +9,8 @@
 #
 # Chart url/version + values are read straight from the Flux manifests so this
 # file stays a thin pointer with no duplicated config:
-#   chart   <- OCIRepository .spec.url     (repo.yaml)
-#   version <- OCIRepository .spec.ref.tag (repo.yaml)
+#   chart   <- HelmRelease .spec.chart.spec.url     (hr.yaml)
+#   version <- HelmRelease .spec.chart.spec.ref.tag (hr.yaml)
 #   values  <- HelmRelease   .spec.values  (hr.yaml)
 #
 # The FluxInstance is a plain resource (flux-instance/instance.yaml), applied
@@ -29,8 +29,8 @@ helmDefaults:
 releases:
   - name: flux-operator
     namespace: flux-system
-    chart: {{ exec "yq" (list "e" ".spec.url" (printf "%s/flux-operator/repo.yaml" $base)) | trim }}
-    version: {{ exec "yq" (list "e" ".spec.ref.tag" (printf "%s/flux-operator/repo.yaml" $base)) | trim | quote }}
+    chart: {{ exec "yq" (list "e" ".spec.chart.spec.url" (printf "%s/flux-operator/hr.yaml" $base)) | trim }}
+    version: {{ exec "yq" (list "e" ".spec.chart.spec.ref.tag" (printf "%s/flux-operator/hr.yaml" $base)) | trim | quote }}
     atomic: true
     values:
       - {{ exec "bash" (list "-c" (printf "yq -o=json -I=0 '.spec.values // {}' %s/flux-operator/hr.yaml" $base)) }}

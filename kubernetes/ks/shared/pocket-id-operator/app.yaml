@@ -1,6 +1,5 @@
 ---
-# Shared base: OCIRepository + pocket-id-operator-values ConfigMap. The per-cluster
-# HelmReleases (ks/<cluster>/pocket-id-operator) consume these and dependsOn this.
+# The per-cluster HelmReleases depend on this base for the pocket-id-operator-values ConfigMap.
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:

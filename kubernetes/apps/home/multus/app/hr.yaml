@@ -7,9 +7,19 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: multus
+    spec:
+      interval: 15m
+      ref:
+        tag: 0.1.2
+        digest: sha256:05c548d9bab6ca77b294888ab1f7b0adf863bd54dc4c20ceb3be3987b83c7e83
+      url: oci://ghcr.io/home-operations/charts/multus
+      verify:
+        provider: cosign
+        matchOIDCIdentity:
+          - issuer: "^https://token\\.actions\\.githubusercontent\\.com$"
+            subject: "^https://github\\.com/home-operations/.*"
   install:
     timeout: 2m
     remediation:

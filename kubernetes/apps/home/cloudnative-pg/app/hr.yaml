@@ -7,9 +7,19 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: cloudnative-pg
+    spec:
+      interval: 5m
+      ref:
+        tag: 0.29.2
+        digest: sha256:3bfb3670ccb80c7f2e6bef3189c1599ad4b6d6f0a52fb745f986ac5b511d2fc0
+      url: oci://ghcr.io/cloudnative-pg/charts/cloudnative-pg
+      verify:
+        provider: cosign
+        matchOIDCIdentity:
+          - issuer: ^https://token\.actions\.githubusercontent\.com$
+            subject: ^https://github\.com/cloudnative-pg/charts.*$
   install:
     timeout: 2m
     remediation:

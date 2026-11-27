@@ -7,9 +7,19 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: reloader
+    spec:
+      interval: 5m
+      ref:
+        tag: 2.2.21
+        digest: sha256:d8daf25bbedcc180fa4bb35297709f9539c0e231f1d7815080541810deadaa98
+      url: oci://ghcr.io/stakater/charts/reloader
+      verify:
+        provider: cosign
+        matchOIDCIdentity:
+          - issuer: ^https://token\.actions\.githubusercontent\.com$
+            subject: ^https://github\.com/stakater/Reloader.*$
   install:
     timeout: 2m
     remediation:

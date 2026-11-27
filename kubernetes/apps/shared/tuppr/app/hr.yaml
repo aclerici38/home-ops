@@ -7,9 +7,14 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: tuppr
+    spec:
+      interval: 15m
+      ref:
+        tag: 0.5.14
+        digest: sha256:2d38c3ab5f9e23b5e1ba1b4326aa1fbe79c59ebcb0e2768b5a9781a5e108599c
+      url: oci://ghcr.io/home-operations/charts/tuppr
   install:
     timeout: 2m
     remediation:

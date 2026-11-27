@@ -8,12 +8,18 @@ spec:
   interval: 1h
   maxHistory: 1
   chart:
+    kind: OCIRepository
     spec:
-      chart: external-dns
-      sourceRef:
-        kind: HelmRepository
-        name: external-dns-cloudflare
-      version: 1.24.0
+      interval: 8760h
+      ref:
+        tag: 1.24.0
+        digest: sha256:1273036048cd516dfd077a27b653c15c28aba69b676ec3b081e00be90abec8a5
+      url: oci://registry.k8s.io/external-dns/charts/external-dns
+      verify:
+        provider: cosign
+        matchOIDCIdentity:
+          - issuer: ^https://accounts\.google\.com$
+            subject: ^krel-trust@k8s-releng-prod\.iam\.gserviceaccount\.com$
   install:
     timeout: 10m
   upgrade:

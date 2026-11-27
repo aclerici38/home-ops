@@ -1,9 +1,0 @@
----
-# yaml-language-server: $schema=https://k8s-versioned-schemas.pages.dev/flux/2.10.1/helmrepository_v1.json
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: external-dns-cloudflare
-spec:
-  interval: 8760h
-  url: https://kubernetes-sigs.github.io/external-dns/
