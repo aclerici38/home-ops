@@ -43,7 +43,7 @@ kustomize = "5.8.3"
 flux2 = "2.10.1"
 kind = "0.33.0"
 kubebuilder = "4.16.0"
-helmfile = "1.8.5"
+helmfile = "1.8.6"
 helm-docs = "1.14.2"
 cilium-cli = "0.20.3"
 kubeconform = "0.8.0"
@@ -79,13 +79,13 @@ yamllint = { version = "1.38.0", python = "3.14" }  # pyyaml has no Python 3.15 
 yq = "4.54.3"
 zizmor = "1.33.1"
 
-"github:mirceanton/talstomize" = "v1.0.4"
+"github:mirceanton/talstomize" = "v1.0.5"
 
 # Verify kubectl-cnpg with the SLSA signer used by CloudNativePG's release workflow.
 "github:cloudnative-pg/cloudnative-pg" = { version = "v1.30.2", slsa_signer_identity = "https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@refs/tags/v2.1.0", slsa_signer_issuer = "https://token.actions.githubusercontent.com" }
 "github:home-operations/yayamlls" = "0.3.3"
 "github:home-operations/flate" = "v0.8.0"
-"aqua:nklmilojevic/sofka" = "v0.39.0"
+"aqua:nklmilojevic/sofka" = "v0.40.0"
 bun = "1.4.5"
 python = "3.15.2"
 viddy = "v1.3.1"
