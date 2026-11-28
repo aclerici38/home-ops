@@ -6,9 +6,14 @@ metadata:
   name: silence-operator
 spec:
   interval: 1h
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: silence-operator
+    spec:
+      interval: 15m
+      ref:
+        tag: 0.22.0
+        digest: sha256:f8d727fe09855019235a7b98ea635006cc0b6ec12835015ab21d17f1de943738
+      url: oci://gsoci.azurecr.io/charts/giantswarm/silence-operator
   install:
     timeout: 2m
     remediation:

@@ -7,9 +7,14 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: llmkube
+    spec:
+      interval: 5m
+      ref:
+        tag: 0.10.19
+        digest: sha256:13380f7e22f5132249261eecab5dc71f899080966c220ea5122f2cee045cd2ee
+      url: oci://ghcr.io/defilantech/charts/llmkube
   install:
     timeout: 5m
     remediation:

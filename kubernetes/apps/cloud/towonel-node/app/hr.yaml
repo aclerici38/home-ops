@@ -5,9 +5,14 @@ kind: HelmRelease
 metadata:
   name: towonel-node
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: towonel-node
+    spec:
+      interval: 1h
+      ref:
+        tag: 1.15.1
+        digest: sha256:2470f95fb45d5dfd4af98764e548f3758a39d3fe2097c0da326bf5b45a19f121
+      url: oci://git.ow-ops.eu/towonel/charts/towonel-node
   interval: 30m
   dependsOn:
     - name: towonel-node-resources

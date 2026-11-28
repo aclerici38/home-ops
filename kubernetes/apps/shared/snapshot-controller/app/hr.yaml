@@ -7,9 +7,19 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: snapshot-controller
+    spec:
+      interval: 5m
+      ref:
+        tag: 0.1.2
+        digest: sha256:392cd2f3e093bc87e4b2ec29c31f444f860a5a222a94cba035b3ab0069877f01
+      url: oci://ghcr.io/home-operations/charts/snapshot-controller
+      verify:
+        provider: cosign
+        matchOIDCIdentity:
+          - issuer: "^https://token\\.actions\\.githubusercontent\\.com$"
+            subject: "^https://github\\.com/home-operations/.*"
   install:
     timeout: 2m
     remediation:

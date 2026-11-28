@@ -7,9 +7,19 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: miroir
+    spec:
+      interval: 8760h
+      ref:
+        tag: 0.12.13
+        digest: sha256:f415b7c76cd7009b56e8df407ce77024dab038780099b78f5d26cce013f0cc81
+      url: oci://ghcr.io/home-operations/charts/miroir
+      verify:
+        provider: cosign
+        matchOIDCIdentity:
+          - issuer: "^https://token\\.actions\\.githubusercontent\\.com$"
+            subject: "^https://github\\.com/home-operations/.*"
   install:
     timeout: 10m
   upgrade:

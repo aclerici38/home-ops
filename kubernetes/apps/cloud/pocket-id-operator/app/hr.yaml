@@ -7,9 +7,18 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: pocket-id-operator
+    spec:
+      interval: 5m
+      ref:
+        tag: 0.16.3
+      url: oci://ghcr.io/aclerici38/charts/pocket-id-operator
+      verify:
+        provider: cosign
+        matchOIDCIdentity:
+          - issuer: ^https://token\.actions\.githubusercontent\.com$
+            subject: ^https://github\.com/aclerici38/pocket-id-operator/.*$
   install:
     timeout: 2m
     remediation:

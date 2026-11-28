@@ -7,9 +7,19 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: rook-ceph
+    spec:
+      interval: 5m
+      ref:
+        tag: 1.21.3
+        digest: sha256:ffc5eb1170123bcf9deea103b183cc1de49e0f11516e6e5aebfb356ee600b014
+      url: oci://ghcr.io/rook/rook-ceph
+      verify:
+        provider: cosign
+        matchOIDCIdentity:
+          - issuer: ^https://token\.actions\.githubusercontent\.com$
+            subject: ^https://github\.com/rook/rook.*$
   install:
     timeout: 5m
     remediation:

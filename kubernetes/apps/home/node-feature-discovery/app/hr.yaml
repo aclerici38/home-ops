@@ -7,9 +7,19 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: node-feature-discovery
+    spec:
+      interval: 1h
+      ref:
+        tag: 0.20.1
+        digest: sha256:5c4df0919041454a3a2095965e3ada6bb514095731921f3055aa539669e79e54
+      url: oci://registry.k8s.io/nfd/charts/node-feature-discovery
+      verify:
+        provider: cosign
+        matchOIDCIdentity:
+          - issuer: ^https://accounts\.google\.com$
+            subject: ^krel-trust@k8s-releng-prod\.iam\.gserviceaccount\.com$
   install:
     timeout: 2m
   upgrade:

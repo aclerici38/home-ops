@@ -6,9 +6,14 @@ metadata:
   name: grafana-operator
 spec:
   interval: 1h
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: grafana-operator
+    spec:
+      interval: 15m
+      ref:
+        tag: 5.26.0
+        digest: sha256:ed199fff9f727777762762496c5663047d46fc208889ba568420e3f11e490539
+      url: oci://ghcr.io/grafana/helm-charts/grafana-operator
   install:
     timeout: 2m
     remediation:

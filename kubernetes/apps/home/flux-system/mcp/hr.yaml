@@ -7,9 +7,19 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: flux-mcp
+    spec:
+      interval: 5m
+      ref:
+        tag: 0.64.0
+        digest: sha256:e91bd4ccfe3ba68717e4d4cd0d19fb966aa402c5c78d3989a7bc973eac9533ed
+      url: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator-mcp
+      verify:
+        provider: cosign
+        matchOIDCIdentity:
+          - issuer: ^https://token.actions.githubusercontent.com$
+            subject: ^https://github.com/controlplaneio-fluxcd/charts.*$
   install:
     timeout: 2m
     remediation:

@@ -7,9 +7,19 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: kopiur
+    spec:
+      interval: 1h
+      ref:
+        tag: 0.11.2
+        digest: sha256:a24feb1e2b1004ca7178d22ff7a8549ef7167e80c0c98381e92a7250b8cbd4d3
+      url: oci://ghcr.io/home-operations/charts/kopiur
+      verify:
+        provider: cosign
+        matchOIDCIdentity:
+          - issuer: "^https://token\\.actions\\.githubusercontent\\.com$"
+            subject: "^https://github\\.com/home-operations/.*"
   install:
     timeout: 5m
     remediation:

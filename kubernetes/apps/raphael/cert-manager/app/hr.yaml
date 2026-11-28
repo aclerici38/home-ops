@@ -7,9 +7,14 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: cert-manager
+    spec:
+      interval: 8760h
+      ref:
+        tag: v1.21.3
+        digest: sha256:e482675aec32862d323a9218293ff7de81192337998615e4378c56498473f240
+      url: oci://quay.io/jetstack/charts/cert-manager
   install:
     timeout: 10m
   upgrade:

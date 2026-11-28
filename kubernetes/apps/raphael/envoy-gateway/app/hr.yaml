@@ -7,9 +7,14 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: envoy-gateway
+    spec:
+      interval: 8760h
+      ref:
+        tag: 1.10.0
+        digest: sha256:62fe8cca72a8770bb33900dd5c0990011ab98f2d6f4420c449ce44b1ca4eebe6
+      url: oci://mirror.gcr.io/envoyproxy/gateway-helm
   install:
     timeout: 10m
   upgrade:

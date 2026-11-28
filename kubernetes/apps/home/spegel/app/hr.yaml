@@ -7,9 +7,20 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: spegel
+    spec:
+      interval: 15m
+      ref:
+        tag: 0.8.2
+        digest: sha256:2449e91ce3ae949433126f2a3293270937be23391798b486b26c173043ee759f
+      url: oci://ghcr.io/spegel-org/helm-charts/spegel
+      # Restore verification once upstream publishes a signed chart: https://github.com/spegel-org/spegel/issues/1618
+      # verify:
+      #   provider: cosign
+      #   matchOIDCIdentity:
+      #     - issuer: ^https://token\.actions\.githubusercontent\.com$
+      #       subject: ^https://github\.com/spegel-org/spegel.*$
   install:
     timeout: 2m
     remediation:

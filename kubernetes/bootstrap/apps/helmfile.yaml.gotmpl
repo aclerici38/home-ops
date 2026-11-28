@@ -6,8 +6,8 @@
 #
 # Chart url/version and values are read straight out of the Flux manifests so
 # there's a single source of truth:
-#   - chart  <- OCIRepository .spec.url      (repo.yaml)
-#   - version<- OCIRepository .spec.ref.tag  (repo.yaml)
+#   - chart  <- HelmRelease .spec.chart.spec.url      (hr.yaml)
+#   - version<- HelmRelease .spec.chart.spec.ref.tag  (hr.yaml)
 #   - values <- ConfigMap .data."values.yaml" (base, optional) then
 #               HelmRelease .spec.values       (overlay, wins)
 # `yq -o=json -I=0` emits single-line JSON (valid YAML) so it drops in after a
@@ -21,19 +21,16 @@
 {{ $apps := list
   (dict
     "name" "cilium" "namespace" "cilium" "atomic" false
-    "repo"  "kubernetes/apps/shared/cilium/app/repo.yaml"
     "base"  "kubernetes/apps/shared/cilium/app/values.yaml"
     "hr"    (printf "kubernetes/apps/%s/cilium/app/hr.yaml" $cluster)
     "needs" (list))
   (dict
     "name" "coredns" "namespace" "kube-system" "atomic" true
-    "repo"  "kubernetes/apps/shared/kube-system/coredns/repo.yaml"
     "base"  "kubernetes/apps/shared/kube-system/coredns/values.yaml"
     "hr"    (printf "kubernetes/apps/%s/kube-system/coredns/hr.yaml" $cluster)
     "needs" (list))
   (dict
     "name" "flux-operator" "namespace" "flux-system" "atomic" true
-    "repo"  "kubernetes/apps/shared/flux-system/flux-operator/repo.yaml"
     "base"  ""
     "hr"    "kubernetes/apps/shared/flux-system/flux-operator/hr.yaml"
     "needs" (list "kube-system/coredns"))
@@ -48,12 +45,11 @@ helmDefaults:
 
 releases:
 {{- range $apps }}
-{{- $repo := printf "%s/%s" $root .repo }}
 {{- $hr   := printf "%s/%s" $root .hr }}
   - name: {{ .name }}
     namespace: {{ .namespace }}
-    chart: {{ exec "yq" (list "e" ".spec.url" $repo) | trim }}
-    version: {{ exec "yq" (list "e" ".spec.ref.tag" $repo) | trim | quote }}
+    chart: {{ exec "yq" (list "e" ".spec.chart.spec.url" $hr) | trim }}
+    version: {{ exec "yq" (list "e" ".spec.chart.spec.ref.tag" $hr) | trim | quote }}
     atomic: {{ .atomic }}
     {{- if .needs }}
     needs:

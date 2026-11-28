@@ -7,9 +7,14 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: grafana-mcp
+    spec:
+      interval: 5m
+      ref:
+        tag: 0.38.0
+        digest: sha256:52d2b82c51a68a8ce98ead3590666b353e2d1d9e4a1f8b1a9f9069759fda2b9a
+      url: oci://ghcr.io/grafana-community/helm-charts/grafana-mcp
   install:
     timeout: 2m
     remediation:

@@ -7,9 +7,19 @@ metadata:
 spec:
   interval: 1h
   maxHistory: 1
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: gatus-sidecar
+    spec:
+      interval: 5m
+      ref:
+        tag: 0.6.1
+        digest: sha256:4546dff67b99ad3cc5cbe5c142758bf9b8349de088b8f58df5f8d2c21dba40f8
+      url: oci://ghcr.io/home-operations/charts/gatus-sidecar
+      verify:
+        provider: cosign
+        matchOIDCIdentity:
+          - issuer: "^https://token.actions.githubusercontent.com$"
+            subject: "^https://github.com/home-operations/gatus-sidecar.*$"
   install:
     timeout: 2m
     remediation:

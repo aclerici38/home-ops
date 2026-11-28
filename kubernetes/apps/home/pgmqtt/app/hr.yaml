@@ -6,9 +6,14 @@ metadata:
   name: pgmqtt
 spec:
   interval: 1h
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: pgmqtt
+    spec:
+      interval: 15m
+      ref:
+        tag: 0.3.0
+        digest: sha256:273544f3600a7dbc3d2880f145c570aba76fef12cb6d58a9c69756f670cecc34
+      url: oci://ghcr.io/bo0tzz/charts/pgmqtt
   install:
     timeout: 5m
     remediation:

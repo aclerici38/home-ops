@@ -6,9 +6,14 @@ metadata:
   name: prometheus-adapter
 spec:
   interval: 1h
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: prometheus-adapter
+    spec:
+      interval: 5m
+      ref:
+        tag: 5.4.2
+        digest: sha256:6dcf6e798f300048cfd079c1792d76ab39138629579a5236c24a11228c235310
+      url: oci://ghcr.io/prometheus-community/charts/prometheus-adapter
   install:
     timeout: 2m
     remediation:
